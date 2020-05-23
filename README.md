@@ -69,7 +69,9 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### Define process of Regularization? and how does it works?### 	
 #### What is Naive Bayes? How does it works?	
 #### What is KNN how does it works? what is neigbouring criteria? How you can change it ?	
-#### What is Conditional Probability? what is distributive Probability?	
+#### What is Conditional Probability? what is distributive Probability?
+#### How would you define Cross Entropy?
+#### Which one would you prefer low FN or FP's based on Fraudial Transaction?
 #### Differentiate between KNN and KMean?	
 #### What is Attention ? Give Example ?	
 #### What are AutoEncoders? and what are transformers?	
