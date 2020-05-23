@@ -28,7 +28,10 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### Why are the above algorithms are High biased or high variance?	
 #### What is Randomforest and Decision Trees?	
 #### How does RandomForest Works and Decition Trees?	
-#### What is Gini Index? Explain the concept	
+#### What is Gini Index? Explain the concept?
+        The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
+        Imagine, you want to draw a decision tree and wants to decide which feature/column you should use for your first split?, this is probably defined
+        by your gini index.
 #### What is probability? How would you define Likelihood?	
 #### What is Entropy? and Information Gain ? there difference ?### 	
 #### How would you define ROC Curve?	
@@ -45,8 +48,8 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### How would you resolve Overfitting or Underfitting? 	
 #### Mention some techniques which are to avoid Overfitting?	
 #### What is a Neuron?	
-#### What is Hidden Layers and INput Layers?	
-#### What is Output Layers?	
+#### What are Hidden Layers and INput Layers?	
+#### What are Output Layers?	
 #### What are activation functions ? 	
 #### What is Convolotional Neural Network?	
 #### What is recurrent Neural Network?	
@@ -58,8 +61,8 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### What is poster analysis?	
 #### What is Forward propagation?	
 #### What is backward propagation?	
-#### what is dropout neurons?	
-#### what is flattening layers?	
+#### what are dropout neurons?	
+#### what are flattening layers?	
 #### How is backward propagation dealing an improvment in the model?	
 #### What is correlation? and covariance?	
 #### What is Anova? when to use Anova?	
