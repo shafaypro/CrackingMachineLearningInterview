@@ -32,6 +32,17 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
         The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
         Imagine, you want to draw a decision tree and wants to decide which feature/column you should use for your first split?, this is probably defined
         by your gini index.
+#### What is the process of gini index calculation?
+        Gini Index:
+        for each branch in split:
+            Calculate percent branch represents #Used for weighting
+            for each class in branch:
+                Calculate probability of class in the given branch.
+                Square the class probability.
+            Sum the squared class probabilities.
+            Subtract the sum from 1. #This is the Ginin Index for branch
+        Weight each branch based on the baseline probability.
+        Sum the weighted gini index for each split.
 #### What is probability? How would you define Likelihood?	
 #### What is Entropy? and Information Gain ? there difference ?### 	
 #### How would you define ROC Curve?	
