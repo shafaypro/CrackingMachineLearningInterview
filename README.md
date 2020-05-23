@@ -10,21 +10,22 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### Difference between SuperVised and Unsupervised Learning?
         Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown a new image, the model compares it to the training examples to predict the correct label.
 #### What is Reinforcment Learning and how would you define it?
+        A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty criteria whether to give model positive points or negative points and based on that penalizing the model.
 #### What is Deep Learning ?	
 #### Difference between Machine Learning and Deep Learning?	
 #### Difference between Bias and Variance?	
 #### What is Linear Regressions ? How does it work?	
 #### What is Logistic Regression? How does it work?	
-#### What is Logit Function? or Sigmoid function/ where in ML ### and DL you can use it	
-#### What is Support Vector Machine ? how is it different from ### OVR classifiers?	
-#### What is different type of Evauation metrics in Regression?### 	
-#### How would you define Mean absolute error vs Mean squared ### error?	
+#### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
+#### What is Support Vector Machine ? how is it different from  OVR classifiers?	
+#### What is different type of Evauation metrics in Regression?
+#### How would you define Mean absolute error vs Mean squared error?	
 #### How would you evaluate your classifier?	
 #### What is Classification? 	
-#### How would you differentiate between Multilabel and ### MultiClass classification?	
+#### How would you differentiate between Multilabel and MultiClass classification?	
 #### Which Algorithms are High Biased Algorithms?	
 #### Which Algorithms are High Variance Algorithms?	
-#### Why are the above algorithms are High biased or high ### variance?	
+#### Why are the above algorithms are High biased or high variance?	
 #### What is Randomforest and Decision Trees?	
 #### How does RandomForest Works and Decition Trees?	
 #### What is Gini Index? Explain the concept	
@@ -33,13 +34,13 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### How would you define ROC Curve?	
 #### How would you define True positives and True Negatives?	
 #### How would you define precision and Recall ?	
-#### Which one would you prefer for you classification model ### Precision or Recall?	
+#### Which one would you prefer for you classification model Precision or Recall?	
 #### What is F1 Score? which intution does it gives ?	
 #### What is difference between Preceptron and SVM?	
-#### What is the difference between Logsitic and Liner ### Regressions? 	
+#### What is the difference between Logsitic and Liner Regressions? 	
 #### What are outliers and How would you remove them?	
 #### What are different Technique of Sampling your data?	
-#### Can you define the concept of Undersampling and ### Oversampling?	
+#### Can you define the concept of Undersampling and Oversampling?	
 #### What is SMOTE?	
 #### How would you resolve Overfitting or Underfitting? 	
 #### Mention some techniques which are to avoid Overfitting?	
@@ -59,25 +60,25 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### What is backward propagation?	
 #### what is dropout neurons?	
 #### what is flattening layers?	
-#### How is backward propagation dealing an improvment in the ### model?	
+#### How is backward propagation dealing an improvment in the model?	
 #### What is correlation? and covariance?	
 #### What is Anova? when to use Anova?	
-#### How would you define dimentionality reduction? why we use ### dimentionality reduction?	
-#### What is Principle componenet analysis? how does PCA work ### in Dimentonality reduction?	
+#### How would you define dimentionality reduction? why we use dimentionality reduction?	
+#### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?	
 #### What is Maximum Likelihood estimation?	
 #### Define process of Regularization? and how does it works?### 	
 #### What is Naive Bayes? How does it works?	
-#### What is KNN how does it works? what is neigbouring ### criteria? How you can change it ?	
-#### What is Conditional Probability? what is distributive ### Probability?	
+#### What is KNN how does it works? what is neigbouring criteria? How you can change it ?	
+#### What is Conditional Probability? what is distributive Probability?	
 #### Differentiate between KNN and KMean?	
 #### What is Attention ? Give Example ?	
 #### What are AutoEncoders? and what are transformers?	
-#### How would you define GAN(Generative Adversarial Networks) ### ?	
+#### How would you define GAN(Generative Adversarial Networks) ?	
 #### What are Gausian Processes?	
 #### What is Graph Neural Network?	
 #### Define Text Classification, Give some usecase examples?	
 #### What is Language Modelling(LM), give examples?	
-#### Define Named Entity recognition? Give some usecases where ### it can come in handy?	
+#### Define Named Entity recognition? Give some usecases where it can come in handy?	
 #### What is Image Captioning?	
 #### Give some example of Text summarization.	
 #### Define Style Transfer?	
