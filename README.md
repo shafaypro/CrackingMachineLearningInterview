@@ -62,8 +62,13 @@ Helpful for:
             Whether the transaction is fraud or not (1 or 0)
         The prediction is based on probabilties of specified classes 
         Works the same way as linear regression but uses logit function to scale down the values between 0 and 1 and get the probabilities.
+
+#### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it?
+        The sigmoid might be useful if you want to transform a real valued variable into something that represents a probability. While the Logit function
+        is to map probaliticvalues from -Inf to +inf to either real numbers representing True or False towards 1 or 0 (real number). This is commonly used
+        in Classification having base in  Logistic Regression along with Sigmoid based functions in Deep learning used to find a nominal outcome in a
+        layer or output of a layer.
         
-#### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?	
 #### What is different type of Evauation metrics in Regression?
 #### How would you define Mean absolute error vs Mean squared error?	
