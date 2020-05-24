@@ -16,9 +16,18 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### Difference between Machine Learning and Deep Learning?	
         Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
 #### Difference between Bias and Variance?
-        Bias is definned as over simpliciation assumption assumed by the model, while variance is definned as ability of a model to learn from Noise as 
-        well
-#### What is Linear Regressions ? How does it work?	
+        Bias is definned as over simpliciation assumption assumed by the model, 
+        Variance is definned as ability of a model to learn from Noise as well, making it highly variant.
+        There is always a tradeoff between these both, hence its recommended to find a balance between these two and always use cross validation to 
+        determine the best fit.
+#### What is Linear Regressions ? How does it work?
+        Fitting a Line in the respectable dataset when drawn to a plane, in a way that it actually defines the correlation between your dependent
+        variables and your independent variable. Using a simple Line/Slope Formulae. Famously, representing f(X) = M(x) + b.
+        Where b represents bias
+        X represent the input variable (independent ones)
+        f(X) represents Y which is dependent(outcome).
+
+        The working of linear regression is 
 #### What is Logistic Regression? How does it work?	
 #### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?	
@@ -66,7 +75,12 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### What is the difference between Logsitic and Liner Regressions? 	
 #### What are outliers and How would you remove them?	
 #### What are different Technique of Sampling your data?	
-#### Can you define the concept of Undersampling and Oversampling?	
+#### Can you define the concept of Undersampling and Oversampling?
+#### What is Imbalanced Class?
+#### How would you resolve the issue of Imbalancment data set?
+#### How would you define Weighted Moving Averages ?
+#### What is meant by ARIMA Models?
+#### What is IQR, how can these help in Outliers removal?
 #### What is SMOTE?	
 #### How would you resolve Overfitting or Underfitting? 	
 #### Mention some techniques which are to avoid Overfitting?	
