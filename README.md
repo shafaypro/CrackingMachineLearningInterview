@@ -51,7 +51,18 @@ Helpful for:
         Logistic regression and probit regression for binary data.
         Multinomial logistic regression and multinomial probit regression for categorical data.
         Ordered logit and ordered probit regression for ordinal data.
-#### What is Logistic Regression? How does it work?	
+#### What is Logistic Regression? How does it work?
+        Logistic regression is a statistical technique used to predict probability of binary response based on one or more independent variables. 
+        It means that, given a certain factors, logistic regression is used to predict an outcome which has two values such as 0 or 1, pass or fail,
+        yes or no etc
+        Logistic Regression is used when the dependent variable (target) is categorical.
+        For example,
+            To predict whether an email is spam (1) or (0)
+            Whether the tumor is malignant (1) or not (0)
+            Whether the transaction is fraud or not (1 or 0)
+        The prediction is based on probabilties of specified classes 
+        Works the same way as linear regression but uses logit function to scale down the values between 0 and 1 and get the probabilities.
+        
 #### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?	
 #### What is different type of Evauation metrics in Regression?
