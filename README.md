@@ -73,19 +73,27 @@ Helpful for:
     Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
     fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
     SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
+    One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
+    well on multi class problems and solve the problem in hand.
 
+    The algorithms which uses OVO are:
+        1) Extreme learning Machines(ELM's)
+        2) Support Vector Machine(Classifiers)
+        3) K Nearest Neighbours.(for neighbouring classes based on distances)
+        4) Naive Bayes (based on MAP : Maximum Posterior )
+        5) Decision Trees(decision in subnodes after parent node has one feature)
+        6) Neural Networks (different nets)
+        
 #### Types of SVM kernels
     Think of kernels as definned filters each for their own specific usecases.
 
     1) Polynomial Kernels (used for image processing)
     2) Gaussian Kernel (When there is no prior knowledge for data)
     3) Gaussian Radial Basis Function(same as 2)
-    4) Laplace RBF Kernel
+    4) Laplace RBF Kernel ( recommend for higher training set more than million)
     5) Hyperbolic Tangent Kernel (neural network based kernel)
     6) Sigmoid Kernel(proxy for Neural network)
     7) Anova Radial Basis Kernel (for Regression Problems)
-
-
 
 #### What is different type of Evauation metrics in Regression?
 #### How would you define Mean absolute error vs Mean squared error?	
