@@ -15,6 +15,8 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
         Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
 #### Difference between Machine Learning and Deep Learning?	
         Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
+#### Difference between SemiSupervised and Reinforcment Leanring?
+
 #### Difference between Bias and Variance?
         Bias is definned as over simpliciation assumption assumed by the model, 
         Variance is definned as ability of a model to learn from Noise as well, making it highly variant.
@@ -80,6 +82,7 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### How would you resolve the issue of Imbalancment data set?
 #### How would you define Weighted Moving Averages ?
 #### What is meant by ARIMA Models?
+#### How would you define Bagging and Boosting? How would XGBoost differ from RandomForest?
 #### What is IQR, how can these help in Outliers removal?
 #### What is SMOTE?	
 #### How would you resolve Overfitting or Underfitting? 	
@@ -114,7 +117,8 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### Which one would you prefer low FN or FP's based on Fraudial Transaction?
 #### Differentiate between KNN and KMean?	
 #### What is Attention ? Give Example ?	
-#### What are AutoEncoders? and what are transformers?	
+#### What are AutoEncoders? and what are transformers?
+        Autoencoders take input data, compress it into a code, then try to recreate the input data from that summarized code. It’s like starting with Moby Dick, creating a SparkNotes version and then trying to rewrite the original story using only SparkNotes for reference. While a neat deep learning trick, there are fewer real-world cases where a simple autocoder is useful. But add a layer of complexity and the possibilities multiply: by using both noisy and clean versions of an image during training, autoencoders can remove noise from visual data like images, video or medical scans to improve picture quality.
 #### How would you define GAN(Generative Adversarial Networks) ?	
 #### What are Gausian Processes?	
 #### What is Graph Neural Network?	
