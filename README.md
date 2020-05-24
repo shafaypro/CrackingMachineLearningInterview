@@ -15,7 +15,7 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
         Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
 #### Difference between Machine Learning and Deep Learning?	
         Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
-#### Difference between SemiSupervised and Reinforcment Leanring?
+#### Difference between SemiSupervised and Reinforcment Learning?
 
 #### Difference between Bias and Variance?
         Bias is definned as over simpliciation assumption assumed by the model, 
@@ -29,7 +29,17 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
         X represent the input variable (independent ones)
         f(X) represents Y which is dependent(outcome).
 
-        The working of linear regression is 
+        The working of linear regression is Given a data set of n statistical units, a linear regression model assumes that the relationship between the dependent variable y and the p-vector of regressors x is linear. This relationship is modeled through a disturbance term or error variable ε — an unobserved random variable that adds "noise" to the linear relationship between the dependent variable and regressors. Thus the model takes the form Y = B0 + B1X1 + B2X2 + ..... + BNXN
+        This also emplies : Y(i) = X(i) ^ T + B(i)
+        Where T : denotes Transpose
+        X(i) : denotes input at the I'th record in form of vector
+        B(i) : denotes vector B which is bias vector.
+
+#### UseCases of Regressions:
+        Poisson regression for count data.
+        Logistic regression and probit regression for binary data.
+        Multinomial logistic regression and multinomial probit regression for categorical data.
+        Ordered logit and ordered probit regression for ordinal data.
 #### What is Logistic Regression? How does it work?	
 #### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?	
