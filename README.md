@@ -68,8 +68,25 @@ Helpful for:
         is to map probaliticvalues from -Inf to +inf to either real numbers representing True or False towards 1 or 0 (real number). This is commonly used
         in Classification having base in  Logistic Regression along with Sigmoid based functions in Deep learning used to find a nominal outcome in a
         layer or output of a layer.
-        
-#### What is Support Vector Machine ? how is it different from  OVR classifiers?	
+
+#### What is Support Vector Machine ? how is it different from  OVR classifiers?
+    Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
+    fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
+    SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
+
+#### Types of SVM kernels
+    Think of kernels as definned filters each for their own specific usecases.
+
+    1) Polynomial Kernels (used for image processing)
+    2) Gaussian Kernel (When there is no prior knowledge for data)
+    3) Gaussian Radial Basis Function(same as 2)
+    4) Laplace RBF Kernel
+    5) Hyperbolic Tangent Kernel (neural network based kernel)
+    6) Sigmoid Kernel(proxy for Neural network)
+    7) Anova Radial Basis Kernel (for Regression Problems)
+
+
+
 #### What is different type of Evauation metrics in Regression?
 #### How would you define Mean absolute error vs Mean squared error?	
 #### How would you evaluate your classifier?	
