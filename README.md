@@ -11,9 +11,13 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
         Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown a new image, the model compares it to the training examples to predict the correct label.
 #### What is Reinforcment Learning and how would you define it?
         A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty criteria whether to give model positive points or negative points and based on that penalizing the model.
-#### What is Deep Learning ?	
+#### What is Deep Learning ?
+        Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
 #### Difference between Machine Learning and Deep Learning?	
-#### Difference between Bias and Variance?	
+        Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
+#### Difference between Bias and Variance?
+        Bias is definned as over simpliciation assumption assumed by the model, while variance is definned as ability of a model to learn from Noise as 
+        well
 #### What is Linear Regressions ? How does it work?	
 #### What is Logistic Regression? How does it work?	
 #### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it	
@@ -35,7 +39,7 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
 #### What is the process of gini index calculation?
         Gini Index:
         for each branch in split:
-            Calculate percent branch represents #Used for weighting
+            Calculate percent branch represents .Used for weighting
             for each class in branch:
                 Calculate probability of class in the given branch.
                 Square the class probability.
@@ -43,8 +47,16 @@ These questions are guranteed to be asked in Machine Learning Engineer or ML bas
             Subtract the sum from 1. #This is the Ginin Index for branch
         Weight each branch based on the baseline probability.
         Sum the weighted gini index for each split.
+#### What is the formulation of Gini Split / Gini Index?
+        Favors larger partitions.
+        Uses squared proportion of classes.
+        Perfectly classified, Gini Index would be zero.
+        Evenly distributed would be 1 – (1/# Classes).
+        You want a variable split that has a low Gini Index.
+        The algorithm works as 1 – ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
 #### What is probability? How would you define Likelihood?	
-#### What is Entropy? and Information Gain ? there difference ?### 	
+#### What is Entropy? and Information Gain ? there difference ?
+        Information Gain multiplies the probability of the class times the log (base=2) of that class probability.  Information Gain favors smaller partitions with many distinct values.  Ultimately, you have to experiment with your data and the splitting criterion.
 #### How would you define ROC Curve?	
 #### How would you define True positives and True Negatives?	
 #### How would you define precision and Recall ?	
