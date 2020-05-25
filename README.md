@@ -304,7 +304,30 @@ Helpful for:
         Outliers can be removed by following:
             1) Use Inter Quantile Range (IQR * 1.5)
             2) Use Z-score Scale removal (so that any point much away from mean gets removed)
-#### What are different Technique of Sampling your data?	
+            3) Combination of Z Score and IQR (custom scores)
+
+#### What is Regulization?
+        Regularizations are techniques used to reduce the error by fitting a function appropriately on the given training set and avoid overfitting.
+
+#### Difference between L1 and L2 Regulization?
+        1) L1 Regulization (Lasso Regression)
+            (Least Absolute Shrinkage and Selection Operator) adds “absolute value of magnitude” of coefficient as penalty term to the loss function.
+
+        2) L2 Regulization (Ridge Regression)
+            (adds “squared magnitude” of coefficient as penalty term to the loss function. Here the highlighted part represents L2 regularization element.)
+
+        The key difference between these techniques is that Lasso shrinks the less important feature’s coefficient to zero thus, removing some feature
+        altogether. So, this works well for feature selection in case we have a huge number of features.
+
+#### What are different Technique of Sampling your data?
+        Data Sampling statistical analysis technique used to select, manipulate and analyze a representative subset of data points to identify patterns and trends in the larger data set being examined.
+        There are different techniques of sampling your data
+        1) Simple Random Sampling (records are picked at random)
+        2) Stratified Sampling (subsets based on common factor with equal ratio distribution)
+        3) Cluster Sampling (largest set is breaken down in form of clusters based on defined factors and SRS is applied)
+        4) MultiStage Sampling (cluster on Cluster sampling)
+        5) Symentaic Sampling (Sample created by setting interval)
+        
 #### Can you define the concept of Undersampling and Oversampling?
 #### What is Imbalanced Class?
 #### How would you resolve the issue of Imbalancment data set?
