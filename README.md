@@ -242,15 +242,33 @@ Helpful for:
         Cross-entropy can be calculated using the probabilities of the events from P and Q, as follows:
                 H(P, Q) = – sum x in X P(x) * log(Q(x))
 #### How would you define AUC - ROC Curve?
-        ROC is a probability curve and AUC represents degree or measure of separability. It tells how much model is capable of distinguishing between
-        classes. Mainly used in classification problems for measure at different thresholds.
-        Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
-        
-#### How would you define False positive and False Negative?
+        ROC is a probability curve and AUC represents degree or measure of separability. AUC - ROC curve is a performance measurement for classification problem at various thresholds settings.
 
-#### How would you define True positives Rates and False Negative Rates?	
-#### How would you define precision and Recall ?	
-#### Which one would you prefer for you classification model Precision or Recall?	
+        It tells how much model is capable of distinguishing between classes. Mainly used in classification problems for measure at different thresholds.
+        Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
+
+#### How would you define False positive and False Negative?
+        False positive : A false positive is an outcome where the model incorrectly predicts the positive class.(was A but got predicted B)
+        
+        False Negative : A false negative is an outcome where the model incorrectly predicts the negative class. (was not A but predicted A)
+
+#### How would you define precision() and Recall(True positive Rate) ?
+        Take a simple Classification example of "Classifying email messages as spam or not spam"
+
+        Precision measures the percentage of emails flagged as spam that were correctly classified—that is, the percentage of dots to the right of the threshold line, it is also defined as % of event being Called at positive rates e.g 
+                Precision = True Positive / (True Positive + False positive) 
+        
+        Recall measures the percentage of actual spam emails that were correctly classified
+                Recall = True Postives / (True Positive + False Negative)
+        
+        There is always a tradeoff between precision and Recall same is the case of Bias and Variance.
+
+
+#### Which one would you prefer for you classification model Precision or Recall?
+        This totally depends on Business Usecase or SME usecase. In case of Fraud Detection Business domains such as banks, online ecommerce websites
+        recommends of better recall score than precision. While in other cases such as word suggestions or Multi label Categorization it can be precision.
+        In general, totally dependent on your use case.
+
 #### What is F1 Score? which intution does it gives ?	
 #### What is difference between Preceptron and SVM?	
 #### What is the difference between Logsitic and Liner Regressions? 	
