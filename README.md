@@ -131,7 +131,56 @@ Helpful for:
         Nonlinear machine learning algorithms often have a low bias but a high variance.
 
 #### What is Randomforest and Decision Trees?
-#### How does RandomForest Works and Decition Trees?	
+        A decision tree is a decision support tool that uses a tree-like model of decisions and their possible consequences, including chance event
+        outcomes, resource costs, and utility. It is one way to display an algorithm that only contains conditional control statements.
+
+        Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by
+        constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean
+        prediction (regression) of the individual trees. Used to remove the Overfitting occured due to single Decision Trees.
+#### What is Process of Splitting?
+        Splitting up your data in to subsets based on provided data facts. (can come in handy for decision Trees)
+
+#### What is the process prunning?
+        The Shortening of branches of Decision Trees is termed as Prunning. The process is done in case to reach the decision quite earlier than
+        expected. Reducing the size of the tree by turning some branch nodes into leaf nodes, and removing the leaf nodes under the original branch.
+
+#### How do you do Tree Selection?
+        Tree selection is mainly done from the following
+        1) Entropy 
+                A decision tree is built top-down from a root node and involves partitioning the data into subsets that contain instances with similar 
+                values (homogeneous). ID 3 algorithm uses entropy to calculate the homogeneity of a sample. If the sample is completely homogeneous the
+                entropy is zero and if the sample is an equally divided it has entropy of one.
+                Entropy(x) -> -p log(p) - qlog(q)  with log of base 2
+        2) Information Gain  
+                The information gain is based on the decrease in entropy after a dataset is split on an attribute. Constructing a decision tree is all about finding attribute that returns the highest information gain (i.e., the most homogeneous branches).
+
+                2.1) Calculate entropy of the target.
+                2.2) The dataset is then split on the different attributes. The entropy for each branch is calculated. Then it is added proportionally, to get total entropy for the split. The resulting entropy is subtracted from the entropy before the split. The result is the Information Gain, or decrease in entropy.
+                2.3) Choose attribute with the largest information gain as the decision node, divide the dataset by its branches and repeat the same process on every branch.
+
+#### Pseudocode for Entropy in Decision Trees:
+        '''      
+        from math import log
+
+        def calculateEntropy(dataSet):
+        number = len(dataSet)
+        labelCounts = {}
+        for featureVector in dataSet:
+            currentLabel = featureVector[-1]
+            if currentLabel not in labelCounts.keys():
+            labelCounts[currentLabel] = 0
+            labelCounts[currentLabel] +=1
+        entropy = 0
+        for i in labelCounts:
+            probability = float(labelCounts[keys])/number
+            entropy -=probability*log(probability,2)
+        return entropy
+        '''
+#### How does RandomForest Works and Decition Trees?
+        -* Decision Tree *- A Simple Tree compromising of the process defined in selection of Trees.
+        -* RandomForest *- Combination of Multiple N number of Decision Trees and using the aggregation to determine the final outcome.
+        
+
 #### What is Gini Index? Explain the concept?
         The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
         Imagine, you want to draw a decision tree and wants to decide which feature/column you should use for your first split?, this is probably defined
