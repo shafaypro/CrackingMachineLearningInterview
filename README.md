@@ -413,15 +413,53 @@ Helpful for:
         Hidden layers vary depending on the function of the neural network, and similarly, the layers may vary depending 
         on their associated weights.
 
-#### What are Output Layers?	
+#### What are Output Layers?
+        Output layer in ANN determines the final layer which is responsible for the final outcome, the outcome totally depends
+        on the usecase provided and the function which is being used to scale the values. By default, Linear, Sigmoid and Relu are 
+        most common choices.
+        Linear for Regression.
+        Sigmoid/Softmax for Classification.
 
+#### What are activation functions ?
+        Activation functions perform a transformation on the input received, in order to keep values within a manageable range depending
+        on the limitation of the activation function. Its more of a mathematical scale filter applied to a complete layer (Vector)
+        to scale out values.
+        Some common examples for AF are:
+            1) Sigmoid or SoftMax Function (has Vanish Gradient problem)
+                Softmax outputs produce a vector that is non-negative and sums to 1. It's useful when you have mutually exclusive categories 
+                ("these images only contain cats or dogs, not both"). You can use softmax if you have 2,3,4,5,... mutually exclusive labels.
 
-#### What are activation functions ? 	
+            2) Tanh function (has Vanish Garident problem)
+                if the outputs are somehow constrained to lie in [−1,1], tanh could make sense.
+            3) Relu Function
+                ReLU units or similar variants can be helpful when the output is bounded above or below. 
+                If the output is only restricted to be non-negative, it would make sense to use a ReLU 
+                activation as the output function. (0 to Max(x))
 
-#### What is Convolotional Neural Network?	
+            4) Leaky Relu Function (to fix the dying relu problem in the Relu function within hidden layers)
+
+#### What is Convolotional Neural Network?
+        convolutional-neural-network is a subclass of neural-networks which have at least one convolution layer. 
+        They are great for capturing local information (e.g. neighbor pixels in an image or surrounding words in a text) 
+        as well as reducing the complexity of the model (faster training, needs fewer samples, reduces the chance of overfitting).
+        . A convolution unit receives its input from multiple units from the previous layer which together create a proximity.
+        Therefore, the input units (that form a small neighborhood) share their weights.
+![](https://miro.medium.com/max/3288/1*uAeANQIOQPqWZnnuH-VEyw.jpeg)
 
 #### What is recurrent Neural Network?	
+        A class of artificial neural networks where connections between nodes form a directed graph along a temporal sequence.
+        This allows it to exhibit temporal dynamic behavior. Derived from feedforward neural networks, RNNs can use their 
+        internal state (memory) to process variable length sequences of inputs. This makes them applicable to tasks such 
+        as unsegmented, connected handwriting recognition or speech recognition.
+![ImageAddress](https://www.i2tutorials.com/wp-content/uploads/2019/09/Neural-network-62-i2tutorials.png)
 
+#### What is LSTM network?
+        Long short-term memory (LSTM) is an artificial recurrent neural network (RNN) architecture.
+        Unlike standard feedforward neural networks, LSTM has feedback connections. It can not only process single
+        data points (such as images), but also entire sequences of data (such as speech or video). 
+        For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, Anomly detection in network
+        traffic or IDS.
+![](https://miro.medium.com/max/1400/1*qn_quuUSYzozyH3CheoQsA.png)
 #### What is Convolotional Layer?	
 
 #### What is MaxPooling Layer? How does it work?	
