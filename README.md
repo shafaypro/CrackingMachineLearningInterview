@@ -256,7 +256,8 @@ Helpful for:
 
         It tells how much model is capable of distinguishing between classes. Mainly used in classification problems for measure at different thresholds.
         Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
-
+    
+![](https://miro.medium.com/max/722/1*pk05QGzoWhCgRiiFbz-oKQ.png)
 #### How would you define False positive and False Negative?
         False positive : A false positive is an outcome where the model incorrectly predicts the positive class.(was A but got predicted B)
         
@@ -279,7 +280,10 @@ Helpful for:
         recommends of better recall score than precision. While in other cases such as word suggestions or Multi label Categorization it can be precision.
         In general, totally dependent on your use case.
 
-#### What is F1 Score? which intution does it gives ?	
+#### What is F1 Score? which intution does it gives ?
+        The F1 score is the harmonic mean of the precision and recall, where an F1 score reaches its best value at 1 (perfect precision and recall).
+        Also known as Dice Similarity Coefficent.
+        
 #### What is difference between Preceptron and SVM?	
 #### What is the difference between Logsitic and Liner Regressions? 	
 #### What are outliers and How would you remove them?	
