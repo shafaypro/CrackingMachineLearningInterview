@@ -258,12 +258,12 @@ Helpful for:
         Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
     
 ![](https://miro.medium.com/max/722/1*pk05QGzoWhCgRiiFbz-oKQ.png)
-#### How would you define False positive and False Negative?
-        False positive : A false positive is an outcome where the model incorrectly predicts the positive class.(was A but got predicted B)
-        
-        False Negative : A false negative is an outcome where the model incorrectly predicts the negative class. (was not A but predicted A)
+#### How would you define False positive or Type I error and False Negative or Type II Error ?
+        False positive : A false positive is an outcome where the model incorrectly predicts the positive class.(was A but got predicted B) aka Type I error.
 
-#### How would you define precision() and Recall(True positive Rate) ?
+        False Negative : A false negative is an outcome where the model incorrectly predicts the negative class. (was not A but predicted A) aka Type II error.
+
+#### How would you define precision() and Recall(True positive Rate)?
         Take a simple Classification example of "Classifying email messages as spam or not spam"
 
         Precision measures the percentage of emails flagged as spam that were correctly classified—that is, the percentage of dots to the right of the threshold line, it is also defined as % of event being Called at positive rates e.g 
@@ -282,11 +282,28 @@ Helpful for:
 
 #### What is F1 Score? which intution does it gives ?
         The F1 score is the harmonic mean of the precision and recall, where an F1 score reaches its best value at 1 (perfect precision and recall).
-        Also known as Dice Similarity Coefficent.
+        Also known as Dice Similarity Coefficent. 
+
+        David (Scientist Statistician): The widespread use of the F1 score since it gives equal importance to precision and recall. In practice, different types of mis-classifications incur different costs. In other words, the relative importance of precision and recall is an aspect of the problem
+
+#### What is difference between Preceptron and SVM?
+        The major practical difference between a (kernel) perceptron and SVM is that perceptrons can be trained online (i.e. their weights can be updated
+        as new examples arrive one at a time) whereas SVMs cannot be. Perceptron is no more than hinge loss (loss function) + stochastic gradient descent (optimization).
         
-#### What is difference between Preceptron and SVM?	
-#### What is the difference between Logsitic and Liner Regressions? 	
-#### What are outliers and How would you remove them?	
+        SVM has almost the same goal as L2-regularized perceptron.
+        SVM can be seen as hinge loss + l2 regularization (loss + regularization) + quadratic programming or other fancier optimization algorithms like SMO (optimization).
+
+#### What is the difference between Logsitic and Liner Regressions?
+        LogR is Classifier, LR is Regression.
+        LogR values are between 0 and 1 and probabilty in between as well.
+        LR values are in realnumbers from 1 to postive N (where N is known)
+#### What are outliers and How would you remove them?
+        An outlier is an observation that lies an abnormal distance from other values in a random sample from a population.
+![](https://www2.southeastern.edu/Academics/Faculty/dgurney/Outlier.jpg)
+
+        Outliers can be removed by following:
+            1) Use Inter Quantile Range (IQR * 1.5)
+            2) Use Z-score Scale removal (so that any point much away from mean gets removed)
 #### What are different Technique of Sampling your data?	
 #### Can you define the concept of Undersampling and Oversampling?
 #### What is Imbalanced Class?
