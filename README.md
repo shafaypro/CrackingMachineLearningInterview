@@ -70,38 +70,57 @@ Helpful for:
         layer or output of a layer.
 
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?
-    Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
-    fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
-    SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
-    One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
-    well on multi class problems and solve the problem in hand.
+        Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
+        fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
+        SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
+        One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
+        well on multi class problems and solve the problem in hand.
 
-    The algorithms which uses OVO are:
-        1) Extreme learning Machines(ELM's)
-        2) Support Vector Machine(Classifiers)
-        3) K Nearest Neighbours.(for neighbouring classes based on distances)
-        4) Naive Bayes (based on MAP : Maximum Posterior )
-        5) Decision Trees(decision in subnodes after parent node has one feature)
-        6) Neural Networks (different nets)
-        
+        The algorithms which uses OVO are:
+            1) Extreme learning Machines(ELM's)
+            2) Support Vector Machine(Classifiers)
+            3) K Nearest Neighbours.(for neighbouring classes based on distances)
+            4) Naive Bayes (based on MAP : Maximum Posterior )
+            5) Decision Trees(decision in subnodes after parent node has one feature)
+            6) Neural Networks (different nets)
+
 #### Types of SVM kernels
-    Think of kernels as definned filters each for their own specific usecases.
+        Think of kernels as definned filters each for their own specific usecases.
 
-    1) Polynomial Kernels (used for image processing)
-    2) Gaussian Kernel (When there is no prior knowledge for data)
-    3) Gaussian Radial Basis Function(same as 2)
-    4) Laplace RBF Kernel ( recommend for higher training set more than million)
-    5) Hyperbolic Tangent Kernel (neural network based kernel)
-    6) Sigmoid Kernel(proxy for Neural network)
-    7) Anova Radial Basis Kernel (for Regression Problems)
+        1) Polynomial Kernels (used for image processing)
+        2) Gaussian Kernel (When there is no prior knowledge for data)
+        3) Gaussian Radial Basis Function(same as 2)
+        4) Laplace RBF Kernel ( recommend for higher training set more than million)
+        5) Hyperbolic Tangent Kernel (neural network based kernel)
+        6) Sigmoid Kernel(proxy for Neural network)
+        7) Anova Radial Basis Kernel (for Regression Problems)
 
 #### What is different type of Evauation metrics in Regression?
-#### How would you define Mean absolute error vs Mean squared error?	
-#### How would you evaluate your classifier?	
-#### What is Classification? 	
-#### How would you differentiate between Multilabel and MultiClass classification?	
-#### Which Algorithms are High Biased Algorithms?	
+        There are multiple evaluation metrics for Regression Analysis
+        1) Mean Squared Error ( the average squared difference between the estimated values and the actual value)
+        2) Mean Absolute Error (Absolute of the Average difference)
+
+#### How would you define Mean absolute error vs Mean squared error?
+        MAE : Use MAE when you are doing regression and don’t want outliers to play a big role. It can also be useful if you know that your distribution is multimodal, and it’s desirable to have predictions at one of the modes, rather than at the mean of them.
+        MSE : use MSE the other way around, when you want to punish the outliers.
+
+#### How would you evaluate your classifier?
+        A classifier can be evaluated through multiple case, having the base case around its confusion metrics and its attributes which are TP, TN , FP and FN. Along with the Accuracy metrics which can be derived alongside Precision, Recall scores.
+
+#### What is Classification?
+        Classification is defined as categorizing classes or entities based on the specified categories either that category exists or not in the respectable data. The concept is quite common for Image based classification or Data Based Classification. The answer in form of Yes or No;
+        alongside answers in form of types of objects/classes.
+
+#### How would you differentiate between Multilabel and MultiClass classification?
+        A multiclass defines as a classification outcome which can be of multiple classes either A or B or C but not   two or more than one.
+        While in MultiLabel classification, An outcome can be of either one or more than two classes i.e A or A and B or A and B and C. 
+
+#### Which Algorithms are High Biased Algorithms?
+        High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
+        Linear, Logistic or Linear Discrimenant Analysis.
+
 #### Which Algorithms are High Variance Algorithms?	
+        High Variance Algorithms are Decision Trees, 
 #### Why are the above algorithms are High biased or high variance?	
 #### What is Randomforest and Decision Trees?	
 #### How does RandomForest Works and Decition Trees?	
