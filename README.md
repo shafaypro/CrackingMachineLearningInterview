@@ -116,13 +116,21 @@ Helpful for:
         While in MultiLabel classification, An outcome can be of either one or more than two classes i.e A or A and B or A and B and C. 
 
 #### Which Algorithms are High Biased Algorithms?
-        High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
-        Linear, Logistic or Linear Discrimenant Analysis.
+        Bias is the simplifying assumptions made by the model to make the target function easier to approximate.
+        1) High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
+        2) Linear, Logistic or Linear Discrimenant Analysis.
 
-#### Which Algorithms are High Variance Algorithms?	
-        High Variance Algorithms are Decision Trees, 
-#### Why are the above algorithms are High biased or high variance?	
-#### What is Randomforest and Decision Trees?	
+#### Which Algorithms are High and low Variance Algorithms?	
+        Variance is the amount that the estimate of the target function will change given different training data
+
+        1) High Variance Algorithms are Decision Trees, K Nearest Neigbours and SVMs
+        2) Low Variance Algorithms are Linear Regression, Logistic Regression and LDA's
+
+#### Why are the above algorithms are High biased or high variance?
+        Linear machine learning algorithms often have a high bias but a low variance.
+        Nonlinear machine learning algorithms often have a low bias but a high variance.
+
+#### What is Randomforest and Decision Trees?
 #### How does RandomForest Works and Decition Trees?	
 #### What is Gini Index? Explain the concept?
         The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
