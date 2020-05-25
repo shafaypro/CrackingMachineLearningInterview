@@ -414,45 +414,84 @@ Helpful for:
         on their associated weights.
 
 #### What are Output Layers?	
+
+
 #### What are activation functions ? 	
+
 #### What is Convolotional Neural Network?	
+
 #### What is recurrent Neural Network?	
+
 #### What is Convolotional Layer?	
+
 #### What is MaxPooling Layer? How does it work?	
+
 #### What is Kernel or Filter?	
+
 #### What is Activation functions?	
+
 #### What is Segmentation?	
+
 #### What is poster analysis?	
+
 #### What is Forward propagation?	
+
 #### What is backward propagation?	
+
 #### what are dropout neurons?	
+
 #### what are flattening layers?	
+
 #### How is backward propagation dealing an improvment in the model?	
+
 #### What is correlation? and covariance?	
+
 #### What is Anova? when to use Anova?	
+
 #### How would you define dimentionality reduction? why we use dimentionality reduction?	
+
 #### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?	
+
 #### What is Maximum Likelihood estimation?	
-#### Define process of Regularization? and how does it works?### 	
+
 #### What is Naive Bayes? How does it works?	
+
 #### What is KNN how does it works? what is neigbouring criteria? How you can change it ?	
+
 #### What is Conditional Probability? what is distributive Probability?
-#### How would you define Cross Entropy?
+
 #### Which one would you prefer low FN or FP's based on Fraudial Transaction?
+
 #### Differentiate between KNN and KMean?	
+
 #### What is Attention ? Give Example ?	
+
 #### What are AutoEncoders? and what are transformers?
+
         Autoencoders take input data, compress it into a code, then try to recreate the input data from that summarized code. It’s like starting with Moby Dick, creating a SparkNotes version and then trying to rewrite the original story using only SparkNotes for reference. While a neat deep learning trick, there are fewer real-world cases where a simple autocoder is useful. But add a layer of complexity and the possibilities multiply: by using both noisy and clean versions of an image during training, autoencoders can remove noise from visual data like images, video or medical scans to improve picture quality.
+
 #### How would you define GAN(Generative Adversarial Networks) ?	
+
 #### What are Gausian Processes?	
+
 #### What is Graph Neural Network?	
+
 #### Define Text Classification, Give some usecase examples?	
+
 #### What is Language Modelling(LM), give examples?	
+
 #### Define Named Entity recognition? Give some usecases where it can come in handy?	
+
 #### What is Image Captioning?	
+
 #### Give some example of Text summarization.	
-#### Define Style Transfer?	
+
+#### Define Style Transfer?
+
 #### Define Image Segmentation and Pose Analysis?	
+
 #### Define Semantic Segmentation?	
+
 #### What is Instance Segmentation?	
+
 #### What is Imperative and Symbolic Programming?	
