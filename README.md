@@ -16,16 +16,24 @@ Helpful for:
 ## About:
 * Github Profile :  [Shafaypro](https://github.com/shafaypro)
 * ML Interview Questions repository : [ML interview Repository Link](https://github.com/shafaypro/CrackingMachineLearningInterview "ML Interview Repository")
+
+#### Images References
+* The Image references are only for Educational Purposes. These are totally made by the creators, specified in the reference.md file.
+
 ## Questions
 
 #### Difference between SuperVised and Unsupervised Learning?
         Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown a new image, the model compares it to the training examples to predict the correct label.
+![](https://miro.medium.com/max/2800/0*Uzqy-gqZg77Wun0e.jpg)
 #### What is Reinforcment Learning and how would you define it?
         A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty criteria whether to give model positive points or negative points and based on that penalizing the model.
+
 #### What is Deep Learning ?
         Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
+
 #### Difference between Machine Learning and Deep Learning?	
         Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
+
 #### Difference between SemiSupervised and Reinforcment Learning?
 
 #### Difference between Bias and Variance?
@@ -33,6 +41,7 @@ Helpful for:
         Variance is definned as ability of a model to learn from Noise as well, making it highly variant.
         There is always a tradeoff between these both, hence its recommended to find a balance between these two and always use cross validation to 
         determine the best fit.
+
 #### What is Linear Regressions ? How does it work?
         Fitting a Line in the respectable dataset when drawn to a plane, in a way that it actually defines the correlation between your dependent
         variables and your independent variable. Using a simple Line/Slope Formulae. Famously, representing f(X) = M(x) + b.
@@ -51,6 +60,7 @@ Helpful for:
         Logistic regression and probit regression for binary data.
         Multinomial logistic regression and multinomial probit regression for categorical data.
         Ordered logit and ordered probit regression for ordinal data.
+
 #### What is Logistic Regression? How does it work?
         Logistic regression is a statistical technique used to predict probability of binary response based on one or more independent variables. 
         It means that, given a certain factors, logistic regression is used to predict an outcome which has two values such as 0 or 1, pass or fail,
@@ -297,6 +307,7 @@ Helpful for:
         LogR is Classifier, LR is Regression.
         LogR values are between 0 and 1 and probabilty in between as well.
         LR values are in realnumbers from 1 to postive N (where N is known)
+
 #### What are outliers and How would you remove them?
         An outlier is an observation that lies an abnormal distance from other values in a random sample from a population.
 ![](https://www2.southeastern.edu/Academics/Faculty/dgurney/Outlier.jpg)
@@ -366,6 +377,7 @@ Helpful for:
                 Example : Random Forest  (uses random Sampling subsets)
         Boosting: An iterative technique which adjusts the weight of an observation based on the last classification
                 Example: AdaBoost, XGboost  (using gradient descent as main method)
+
 #### What is IQR, how can these help in Outliers removal?
         IQR is interquantile range which specifies the range between your third quantile and the first one.
         Quantile are 4 points of your data represented by percentage(should be four equal parts )
@@ -460,24 +472,58 @@ Helpful for:
         For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, Anomly detection in network
         traffic or IDS.
 ![](https://miro.medium.com/max/1400/1*qn_quuUSYzozyH3CheoQsA.png)
+
 #### What is Convolotional Layer?	
+        A convolution is the simple application of a filter to an input that results in an activation. Repeated application of the 
+        same filter to an input results in a map of activations called a feature map, indicating the locations and strength of a 
+        detected feature in an input, such as an image.
+        You can use Filters which are based on Horizental Lines or Verticial Lines or Gray Scale conversion or other conversion filters.
+![](https://qph.fs.quoracdn.net/main-qimg-29982be98b548e9a3256b68c6ecbcb60.webp)
 
-#### What is MaxPooling Layer? How does it work?	
+#### What is Pooling Layer?
+        Pooling layers provide an approach to down sampling feature maps by summarizing the presence of features in patches of the feature map.
+        Two common pooling methods are average pooling and max pooling that summarize the average presence of a feature and the most activated 
+        presence of a feature respectively.      
 
-#### What is Kernel or Filter?	
+        This is required to downsize your feature scale (e.g You have detected vertical lines, now remove some of the feature to go in grain)
+![](https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/image_folder_4/Pooling_Simple_max.png)
 
-#### What is Activation functions?	
+#### What is MaxPooling Layer? How does it work?
+        Max polling uses the Maximum value found in a considered size metrics. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.in a way.
 
-#### What is Segmentation?	
+#### What is Kernel or Filter?
+        kernel methods are a class of algorithms for pattern analysis, whose best known member is the support vector machine (SVM)
+        Kernel functions have been introduced for sequence data, graphs, text, images, as well as vectors.
+        A Kernel is used to solve Non- Linear problem by Linear Classifiers in a way that its useable.
+![](https://2.bp.blogspot.com/-iNPVcxMHMNg/WdDnyLPY9QI/AAAAAAAAAZU/hgwQOQ1liyE4nhKVYzOyuUprjHNEx7aygCLcBGAs/s1600/kernel.png)
 
-#### What is poster analysis?	
+
+#### What is Segmentation?
+        The process of partitioning a digital source into multiple segments.
+        If you refer Image, Imagine Image source being converted into multiple segments such as Airplane object.
+        The goal of segmentation is to simplify and/or change the representation of an image into something that
+         is more meaningful and easier to analyze.
+
+#### What is Pose Estimation?	
+        Detection of poster from an Image is represented as Post Estimation.
 
 #### What is Forward propagation?	
+        The input data is fed in the forward direction through the network. Each hidden layer accepts the input data,
+        processes it as per the activation function and passes to the successive layer.
+![](https://miro.medium.com/max/3652/1*FczAiD6e8zWjWupOQkP_-Q.png)
 
-#### What is backward propagation?	
+#### What is backward propagation?
+        Back-propagation is the essence of neural net training. It is the practice of fine-tuning the weights 
+        of a neural net based on the error rate (i.e. loss) obtained in the previous epoch (i.e. iteration).
+        Proper tuning of the weights ensures lower error rates, making the model reliable by increasing its generalization
+![](https://i.ytimg.com/vi/An5z8lR8asY/maxresdefault.jpg)
 
 #### what are dropout neurons?	
-
+        The term “dropout” refers to dropping out units (both hidden and visible) in a neural network.
+        Simply put, dropout refers to ignoring units (i.e. neurons) during the training phase of certain 
+        set of neurons which is chosen at random. By “ignoring”, I mean these units are not considered during
+        a particular forward or backward pass.
+        
 #### what are flattening layers?	
 
 #### How is backward propagation dealing an improvment in the model?	
