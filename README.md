@@ -490,7 +490,7 @@ Helpful for:
 
 #### What is MaxPooling Layer? How does it work?
         Max polling uses the Maximum value found in a considered size metrics. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.in a way.
-
+!()[https://computersciencewiki.org/images/8/8a/MaxpoolSample2.png]
 #### What is Kernel or Filter?
         kernel methods are a class of algorithms for pattern analysis, whose best known member is the support vector machine (SVM)
         Kernel functions have been introduced for sequence data, graphs, text, images, as well as vectors.
@@ -523,17 +523,42 @@ Helpful for:
         Simply put, dropout refers to ignoring units (i.e. neurons) during the training phase of certain 
         set of neurons which is chosen at random. By “ignoring”, I mean these units are not considered during
         a particular forward or backward pass.
-        
+        More technically, At each training stage, individual nodes are either dropped out of the net with 
+        probability 1-p or kept with probability p, so that a reduced network is left; incoming and 
+        outgoing edges to a dropped-out node are also removed.
+
 #### what are flattening layers?	
+        A flatten layer collapses the spatial dimensions of the input into the channel dimension. 
+        For example, if the input to the layer is an H-by-W-by-C-by-N-by-S array (sequences of images),
+        then the flattened output is an (H*W*C)-by-N-by-S array.
 
-#### How is backward propagation dealing an improvment in the model?	
+#### How is backward propagation dealing an improvment in the model?
+        practice of fine-tuning the weights of a neural net based on the error rate (i.e. loss) 
+        obtained in the previous epoch (i.e. iteration). Proper tuning of the weights ensures lower error rates, 
+        making the model reliable by increasing its generalization
 
-#### What is correlation? and covariance?	
+#### What is correlation? and covariance?
+        “Covariance” indicates the direction of the linear relationship between variables. 
+        “Correlation” on the other hand measures both the strength and direction of the linear relationship between two variables.
+
+        When comparing data samples from different populations, covariance is used to determine how much two random variables
+        vary together, whereas correlation is used to determine when a change in one variable can result in a change in another. 
+        Both covariance and correlation measure linear relationships between variables.
+![](https://miro.medium.com/max/716/1*T52-LSuLQyq-6I2c1lkj-A.png)
 
 #### What is Anova? when to use Anova?	
+        Analysis of variance (ANOVA) is a collection of statistical models and their associated estimation procedures 
+        (such as the "variation" among and between groups) used to analyze the differences among group means in a sample.
+
+        Use a one-way ANOVA when you have collected data about one categorical independent variable and 
+        one quantitative dependent variable. The independent variable should have at least three levels
+         (i.e. at least three different groups or categories)
 
 #### How would you define dimentionality reduction? why we use dimentionality reduction?	
-
+        Dimensionality reduction or dimension reduction is the process of reducing the number of random variables 
+        under consideration by obtaining a set of principal variables. Approaches can be divided into feature 
+        selection and feature extraction.
+        
 #### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?	
 
 #### What is Maximum Likelihood estimation?	
