@@ -186,6 +186,7 @@ Helpful for:
         The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
         Imagine, you want to draw a decision tree and wants to decide which feature/column you should use for your first split?, this is probably defined
         by your gini index.
+
 #### What is the process of gini index calculation?
         Gini Index:
         for each branch in split:
@@ -197,6 +198,7 @@ Helpful for:
             Subtract the sum from 1. #This is the Ginin Index for branch
         Weight each branch based on the baseline probability.
         Sum the weighted gini index for each split.
+
 #### What is the formulation of Gini Split / Gini Index?
         Favors larger partitions.
         Uses squared proportion of classes.
@@ -204,16 +206,37 @@ Helpful for:
         Evenly distributed would be 1 – (1/# Classes).
         You want a variable split that has a low Gini Index.
         The algorithm works as 1 – ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
+
 #### What is probability? How would you define Likelihood?
         Probability defines the percentage of Succes occured. or Success of an event. Can be described Chance of having an event is 70% or etc.
         We suppose that the event that we get the face of coin in success, so the probability of success now is 0.5 because the probability of face and back of a coin is equal. 0.5 is the probability of a success.
 
-#### What is Entropy? and Information Gain ? there difference ?
-        Information Gain multiplies the probability of the class times the log (base=2) of that class probability.  Information Gain favors smaller partitions with many distinct values.  Ultimately, you have to experiment with your data and the splitting criterion.
-        
-#### What is KL divergence, how would you define its usecase in ML?
+        Likelihood is the conditional probability. The same example, we toss the coin 10 times ,and we suppose that we get 7 success ( show the face) and
+        3 failed ( show the back). The likelihood is calculated (for binomial distribution, it can be vary depend on the distributions).
 
+
+        Likelihood(Event(success)) - > L(0.5|7)= 10C7 * 0.5^7 * (1-0.5)^3 = 0.1171 
+
+        L(0.5 | 7) : means event likelihood of back( given number of successes)
+        10C7 -> Combination based on total 10 Events, and having the success outcome be 7 events
+        In general:
+            Event(X | Y)  -> C(Total Event| Success Event) * [(Prob of X) ^ (Success Event X)] * [(1 - Prob of X) ^ (1 - Success Event X)]
+
+#### What is Entropy? and Information Gain ? there difference ?
+        Entropy: Randomness of information being processed.
+
+        Information Gain multiplies the probability of the class times the log (base=2) of that class probability.  Information Gain favors smaller partitions with many distinct values.  Ultimately, you have to experiment with your data and the splitting criterion.
+        IG depends on Entropy Change (decrease represent increase in IG)
+
+
+#### What is KL divergence, how would you define its usecase in ML?
+        Kullback-Leibler divergence calculates a score that measures the divergence of one probability distribution from another
+        
 #### How would you define Cross Entropy, What is the main purpose of it ? 
+        Entropy: Randomness of information being processed.
+        Cross Entropy: A measure from the field of information theory, building upon entropy and generally calculating the difference between two
+        probability distributions. It is closely related to but is different from KL divergence that calculates the relative entropy between two
+        probability distributions, whereas cross-entropy can be thought to calculate the total entropy between the distributions.
 
 #### How would you define ROC Curve?	
 #### How would you define True positives and True Negatives?	
