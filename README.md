@@ -130,6 +130,15 @@ Helpful for:
         Linear machine learning algorithms often have a high bias but a low variance.
         Nonlinear machine learning algorithms often have a low bias but a high variance.
 
+#### What are root case of Prediction Bias?
+        Possible root causes of prediction bias are:
+
+        1) Incomplete feature set
+        2) Noisy data set
+        3) Buggy pipeline
+        4) Biased training sample
+        5) Overly strong regularization
+
 #### What is Randomforest and Decision Trees?
         A decision tree is a decision support tool that uses a tree-like model of decisions and their possible consequences, including chance event
         outcomes, resource costs, and utility. It is one way to display an algorithm that only contains conditional control statements.
@@ -231,6 +240,7 @@ Helpful for:
 
 #### What is KL divergence, how would you define its usecase in ML?
         Kullback-Leibler divergence calculates a score that measures the divergence of one probability distribution from another
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/4958785faae58310ca5ab69de1310e3aafd12b32)
 
 #### How would you define Cross Entropy, What is the main purpose of it ? 
         Entropy: Randomness of information being processed.
