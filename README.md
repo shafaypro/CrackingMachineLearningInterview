@@ -176,10 +176,11 @@ Helpful for:
             entropy -=probability*log(probability,2)
         return entropy
         '''
-#### How does RandomForest Works and Decition Trees?
+#### How does RandomForest Works and Decision Trees?
         -* Decision Tree *- A Simple Tree compromising of the process defined in selection of Trees.
         -* RandomForest *- Combination of Multiple N number of Decision Trees and using the aggregation to determine the final outcome.
-        
+        The classifier outcome is based on Voting of each tree within random forest while in case of regression it is based on the 
+        averaging of the tree outcome.
 
 #### What is Gini Index? Explain the concept?
         The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
@@ -203,9 +204,17 @@ Helpful for:
         Evenly distributed would be 1 – (1/# Classes).
         You want a variable split that has a low Gini Index.
         The algorithm works as 1 – ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
-#### What is probability? How would you define Likelihood?	
+#### What is probability? How would you define Likelihood?
+        Probability defines the percentage of Succes occured. or Success of an event. Can be described Chance of having an event is 70% or etc.
+        We suppose that the event that we get the face of coin in success, so the probability of success now is 0.5 because the probability of face and back of a coin is equal. 0.5 is the probability of a success.
+
 #### What is Entropy? and Information Gain ? there difference ?
         Information Gain multiplies the probability of the class times the log (base=2) of that class probability.  Information Gain favors smaller partitions with many distinct values.  Ultimately, you have to experiment with your data and the splitting criterion.
+        
+#### What is KL divergence, how would you define its usecase in ML?
+
+#### How would you define Cross Entropy, What is the main purpose of it ? 
+
 #### How would you define ROC Curve?	
 #### How would you define True positives and True Negatives?	
 #### How would you define precision and Recall ?	
