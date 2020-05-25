@@ -375,7 +375,10 @@ Helpful for:
             Q4: 75- 100%
         IQR :- Q3 - Q1
 #### What is SMOTE?	
-        Synthetic Minority Over-sampling TEchnique also known as SMOTE. A very popular oversampling method that was proposed to improve random oversampling but its behavior on high-dimensional data has not been thoroughly investigated. KNN algorithm gets benefits from SMOTE.
+        Synthetic Minority Over-sampling TEchnique also known as SMOTE. 
+        A very popular oversampling method that was proposed to improve random oversampling but 
+        its behavior on high-dimensional data has not been thoroughly investigated. 
+        KNN algorithm gets benefits from SMOTE.
 #### How would you resolve Overfitting or Underfitting? 
         Underfitting
             1) Increase complexity of model
@@ -396,12 +399,20 @@ Helpful for:
         5) Bring in More data
         6) Remove Features
 #### What is a Neuron?
-        A "neuron" in an artificial neural network is a mathematical approximation of a biological neuron. It takes a vector of inputs, performs a transformation\
-        on them, and outputs a single scalar value. It can be thought of as a filter. Typically we use nonlinear filters in neural networks.
+        A "neuron" in an artificial neural network is a mathematical approximation of a biological neuron.
+        It takes a vector of inputs, performs a transformation on them, and outputs a single scalar value.
+         It can be thought of as a filter. Typically we use nonlinear filters in neural networks.
 
 #### What are Hidden Layers and Input layer?
-Input Layer: Initial input for your neural network
-Hiddent layear
+![](https://www.i2tutorials.com/wp-content/uploads/2019/05/Hidden-layrs-1-i2tutorials.jpg)
+
+        1) Input Layer: Initial input for your neural network
+        2) Hiddent layers: a hidden layer is located between the input and output of the algorithm, 
+        in which the function applies weights to the inputs and directs them through an activation function as the output.
+        In short, the hidden layers perform nonlinear transformations of the inputs entered into the network. 
+        Hidden layers vary depending on the function of the neural network, and similarly, the layers may vary depending 
+        on their associated weights.
+
 #### What are Output Layers?	
 #### What are activation functions ? 	
 #### What is Convolotional Neural Network?	
