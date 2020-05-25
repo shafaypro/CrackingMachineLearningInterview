@@ -231,15 +231,24 @@ Helpful for:
 
 #### What is KL divergence, how would you define its usecase in ML?
         Kullback-Leibler divergence calculates a score that measures the divergence of one probability distribution from another
-        
+
 #### How would you define Cross Entropy, What is the main purpose of it ? 
         Entropy: Randomness of information being processed.
+
         Cross Entropy: A measure from the field of information theory, building upon entropy and generally calculating the difference between two
         probability distributions. It is closely related to but is different from KL divergence that calculates the relative entropy between two
         probability distributions, whereas cross-entropy can be thought to calculate the total entropy between the distributions.
 
-#### How would you define ROC Curve?	
-#### How would you define True positives and True Negatives?	
+        Cross-entropy can be calculated using the probabilities of the events from P and Q, as follows:
+                H(P, Q) = – sum x in X P(x) * log(Q(x))
+#### How would you define AUC - ROC Curve?
+        ROC is a probability curve and AUC represents degree or measure of separability. It tells how much model is capable of distinguishing between
+        classes. Mainly used in classification problems for measure at different thresholds.
+        Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
+        
+#### How would you define False positive and False Negative?
+
+#### How would you define True positives Rates and False Negative Rates?	
 #### How would you define precision and Recall ?	
 #### Which one would you prefer for you classification model Precision or Recall?	
 #### What is F1 Score? which intution does it gives ?	
