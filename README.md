@@ -329,17 +329,79 @@ Helpful for:
         5) Symentaic Sampling (Sample created by setting interval)
         
 #### Can you define the concept of Undersampling and Oversampling?
+        Undersampling is the concept of downsizing the class based sample from a Bigger range to smaller range i.e 1Million records to 0.1 Million records,
+        keeping the ratio of information intact
+
+        Oversampling represents the concept of using a smaller class sample i.e 100K to scale upto million keeping the trend and the property to make up
+        datasets.
+
 #### What is Imbalanced Class?
+        Imbalancment is when you don't have balance in between classes.
+        Imabalnced class is when the normal distribution/support count of multiple classes or classes being considered are not the same or almost same.
+        E.G:
+            Class A has 1 Million Record
+            Class B has 1000 Record
+        This is imbalanced data set and Class B is UnderBalanced Class.
+
 #### How would you resolve the issue of Imbalancment data set?
+        The techniques such as 
+            1) OverSampling
+            2) UnderSampling
+            3) Smote combination of both
+            4) bringing in more dataset
+            5) doing more trend analysis
+        can resolve the issue of Imbalancment dataset
+
 #### How would you define Weighted Moving Averages ?
+        A incremental increase of Moving Average having a Weighted Multiple to keep the values which gets repeated during a certain time with High 
+        priority/ Impact.
+
 #### What is meant by ARIMA Models?
+        A Regressive and Moving Average Model combination is termed as ARIMA. To be exact, Auto Regressive Intergerated Moving Avearges.
+        A techniques which does regression analysis along with moving averages which fits time series analysis and gets trend analysis with 
+        acceptable scores.
+
 #### How would you define Bagging and Boosting? How would XGBoost differ from RandomForest?
+        Bagging : A way to decrease the variance in the prediction by generating additional data for training from dataset using combinations with repetitions to produce multi-sets of the original data. 
+                Example : Random Forest  (uses random Sampling subsets)
+        Boosting: An iterative technique which adjusts the weight of an observation based on the last classification
+                Example: AdaBoost, XGboost  (using gradient descent as main method)
 #### What is IQR, how can these help in Outliers removal?
+        IQR is interquantile range which specifies the range between your third quantile and the first one.
+        Quantile are 4 points of your data represented by percentage(should be four equal parts )
+            Q1: 0-25%
+            Q2: 25-50%
+            Q3: 50-75%
+            Q4: 75- 100%
+        IQR :- Q3 - Q1
 #### What is SMOTE?	
-#### How would you resolve Overfitting or Underfitting? 	
-#### Mention some techniques which are to avoid Overfitting?	
-#### What is a Neuron?	
-#### What are Hidden Layers and INput Layers?	
+        Synthetic Minority Over-sampling TEchnique also known as SMOTE. A very popular oversampling method that was proposed to improve random oversampling but its behavior on high-dimensional data has not been thoroughly investigated. KNN algorithm gets benefits from SMOTE.
+#### How would you resolve Overfitting or Underfitting? 
+        Underfitting
+            1) Increase complexity of model
+            2) Increasing training time
+            3) decrease learning rate
+        Overfitting:
+            1) Cross Validation
+            2) Early Stops
+            3) increased learning rates(hops)
+            4) Ensembling 
+            5) Bring in More data
+            6) Remove Features
+#### Mention some techniques which are to avoid Overfitting?
+        1) Cross Validation
+        2) Early Stops
+        3) increased learning rates(hops)
+        4) Ensembling 
+        5) Bring in More data
+        6) Remove Features
+#### What is a Neuron?
+        A "neuron" in an artificial neural network is a mathematical approximation of a biological neuron. It takes a vector of inputs, performs a transformation\
+        on them, and outputs a single scalar value. It can be thought of as a filter. Typically we use nonlinear filters in neural networks.
+
+#### What are Hidden Layers and Input layer?
+Input Layer: Initial input for your neural network
+Hiddent layear
 #### What are Output Layers?	
 #### What are activation functions ? 	
 #### What is Convolotional Neural Network?	
