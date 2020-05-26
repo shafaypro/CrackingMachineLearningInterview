@@ -558,20 +558,89 @@ Helpful for:
         Dimensionality reduction or dimension reduction is the process of reducing the number of random variables 
         under consideration by obtaining a set of principal variables. Approaches can be divided into feature 
         selection and feature extraction.
-        
-#### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?	
+        The reason we use it is because
+                1) Immensive dataset 
+                2) Longer Trainnig time/gathering time
+                3) Too much complex assumptions/ Model overfitting
+        Types of Dimentionality reductions are 
+                1) Feature Selection
+                2) Feature Projection( transform data from higher dimention to lower space of fewer dimention)
+                3) Principle component Analysis
+                        Linear Technique for DR, performs linear mapping of data to lower dimention
+                        space in such a way variance is maximized.
+                4) Non Negative Metrics Factorization
+                5) Kernel PCA ( Non linear way of utilization of Kernel Trick)
+                6) Graph Based Kernel PCA ( locally linear embedding, Eigen Embeddings)
 
-#### What is Maximum Likelihood estimation?	
+                7) Linear Discrimenant Analysis
+                        A method used in statistics, pattern recognition and machine learning to find a 
+                        linear combination of features that characterizes or separates two or more 
+                        classes of objects or events.
+                8) Generalized Discrimenant Analysis 
+                8) TSNE (is a non-linear dimensionality reduction technique useful for visualization of high-dimensional datasets.)
+                9) U-Map
+                        Uniform manifold approximation and projection (UMAP) is a nonlinear dimensionality reduction technique. 
+                        Visually, it is similar to t-SNE, but it assumes that the data is uniformly distributed on a locally 
+                        connected Riemannian manifold and that the Riemannian metric 
+                        is locally constant or approximately locally constant.
+                10) Autoencoders (can learn from Non Linear dimention reduction function)
 
-#### What is Naive Bayes? How does it works?	
+#### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?
 
-#### What is KNN how does it works? what is neigbouring criteria? How you can change it ?	
+        The main linear technique for dimensionality reduction, principal component analysis, performs
+         a linear mapping of the data to a lower-dimensional space in such a way that the variance of 
+         the data in the low-dimensional representation is maximized. In practice, the covariance (and 
+         sometimes the correlation) matrix of the data is constructed and the eigenvectors on this 
+         matrix are computed. The eigenvectors that correspond to the largest eigenvalues (the 
+         principal components) can now be used to reconstruct a large fraction of the variance of the 
+         original data. The original space (with dimension of the number of points) has been reduced 
+         (with data loss, but hopefully retaining the most important variance) to the space spanned by 
+         a few eigenvectors
+
+#### What is Maximum Likelihood estimation?
+        A method of estimating the parameters of a probability distribution by maximizing a likelihood function, so that under the assumed statistical '
+        model the observed data is most probable
+
+#### What is Naive Bayes? How does it works?
+        A method of estimating the parameters of a probability distribution by maximizing a likelihood function, 
+        so that under the assumed statistical model the observed data is most probable
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/52bd0ca5938da89d7f9bf388dc7edcbd546c118e)
+
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/d0d9f596ba491384422716b01dbe74472060d0d7)
+
+
+#### What is Bayes Theorm?
+        The probability of an event, based on prior knowledge of conditions that might be related to the event.
+
+#### What is Probability?
+        Probability is a number between 0 and 1, where, roughly speaking, 0 indicates impossibility and 1 indicates certainty.
+        The higher the probability of an event, the more likely it is that the event will occur. 
+        Example:
+        A simple example is the tossing of a fair (unbiased) 
+        coin. Since the coin is fair, the two outcomes ("heads" and "tails") are both equally probable; the probability of "heads" equals the probability 
+        of "tails"; and since no other outcomes are possible, the probability of either "heads" or "tails" is 1/2 (which could also be written as 0.5 or 
+        50%).
+#### What is Joint Probability?
+        Joint probability is a statistical measure that calculates the likelihood of two events occurring together and at the same point in time.
+![](https://image.slidesharecdn.com/probabilitydistribution-150117052614-conversion-gate02/95/probabilitydistribution-14-638.jpg?cb=1421494048)
 
 #### What is Conditional Probability? what is distributive Probability?
 
+#### What is KNN how does it works? what is neigbouring criteria? How you can change it ?
+        KNN is dependent on distancing estimation from the points of a Class to respectable points in class, thus acting as a Vote Based Neigbouring
+        Classifier, where you conclude the outcome of your input to be predicted by measuring which points come close to it.
+        You can have as much as neigbours you want, the more you specify neigbours the more classes it will use to evaluate the final outcome.
+
+        Working is quite similar than a distancing algorithm, although you draw the point and calculate all the neigbouring by looking which
+        are close, when you are done with it you go with as votes, E.g Class A were 5 classes and Class B were 2 classes in that neigbour hood.
+        Hence the vote would be class A.
+
+
 #### Which one would you prefer low FN or FP's based on Fraudial Transaction?
 
-#### Differentiate between KNN and KMean?	
+#### Differentiate between KNN and KMean?
+        KMean: Unsupervised, Random points drawn, each uses distance based averages for prediction.
+        KNN: Supervised, neigbouring, C values , Voting 
 
 #### What is Attention ? Give Example ?	
 
