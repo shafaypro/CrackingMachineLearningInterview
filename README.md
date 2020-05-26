@@ -307,7 +307,7 @@ Helpful for:
         LogR is Classifier, LR is Regression.
         LogR values are between 0 and 1 and probabilty in between as well.
         LR values are in realnumbers from 1 to postive N (where N is known)
-
+![](https://miro.medium.com/proxy/0*gKOV65tvGfY8SMem.png)
 #### What are outliers and How would you remove them?
         An outlier is an observation that lies an abnormal distance from other values in a random sample from a population.
 ![](https://www2.southeastern.edu/Academics/Faculty/dgurney/Outlier.jpg)
@@ -319,7 +319,7 @@ Helpful for:
 
 #### What is Regulization?
         Regularizations are techniques used to reduce the error by fitting a function appropriately on the given training set and avoid overfitting.
-
+        Add Lambda * Biasness value at the end.
 #### Difference between L1 and L2 Regulization?
         1) L1 Regulization (Lasso Regression)
             (Least Absolute Shrinkage and Selection Operator) adds “absolute value of magnitude” of coefficient as penalty term to the loss function.
@@ -652,36 +652,59 @@ Helpful for:
 #### Differentiate between KNN and KMean?
         KMean: Unsupervised, Random points drawn, each uses distance based averages for prediction.
         KNN: Supervised, neigbouring, C values , Voting 
-
+![](https://qph.fs.quoracdn.net/main-qimg-e50401a4bdaf033ef6b451ea72334f8b)
 #### What is Attention ? Give Example ?
-
+        A neural attention mechanism equips a neural network with the ability to focus on a subset of its inputs (or features).
+        1) Hard Attention (Image Cropping)
+        2) Soft Attention (Highlight attentional area keeping the image size same)
+![](https://distill.pub/2016/augmented-rnns/assets/show-attend-tell.png)
 
 #### What are AutoEncoders? and what are transformers?
 
         Autoencoders take input data, compress it into a code, then try to recreate the input data from that summarized code. It’s like starting with Moby Dick, creating a SparkNotes version and then trying to rewrite the original story using only SparkNotes for reference. While a neat deep learning trick, there are fewer real-world cases where a simple autocoder is useful. But add a layer of complexity and the possibilities multiply: by using both noisy and clean versions of an image during training, autoencoders can remove noise from visual data like images, video or medical scans to improve picture quality.
 
-#### How would you define GAN(Generative Adversarial Networks) ?	
+#### What is Image Captioning?	
+        Image Captioning is the process of generating textual description of an image. It uses both Natural Language Processing and Computer Vision to
+        generate the captions
+![](https://cdn.analyticsvidhya.com/wp-content/uploads/2018/03/example.png)
+
+#### Give some example of Text summarization.	
+        Summarization is the task of condensing a piece of text to a shorter version, reducing the size of the initial text while preserving the meaning.
+        Some examples are :
+                1) Essay Summarization
+                2) Document Summarization
+                etc
+
+#### Define Style Transfer?
+
+#### Define Image Segmentation and Pose Analysis?	
+        Image Segmentation : In digital image processing and computer vision, image segmentation is the process of partitioning a digital image into 
+        multiple segments (sets of pixels, also known as image objects). The goal of segmentation is to simplify and/or change the representation of 
+        an image into something that is more meaningful and easier to analyze.
+
+        Pose Analysis:
+                The process of determining the location and the orientation of a Human Entity (pose).
+
+![PoseSegmentation](https://i.ytimg.com/vi/KYNDzlcQMWA/maxresdefault.jpg)
+
+
+#### Define Semantic Segmentation?
+
+#### What is Instance Segmentation?
+
+#### What is Imperative and Symbolic Programming?
+
+
+#### How would you define GAN(Generative Adversarial Networks) ?
 
 #### What are Gausian Processes?
 
 #### What is Graph Neural Network?
 
-#### Define Text Classification, Give some usecase examples?	
+#### Define Text Classification, Give some usecase examples?
 
-#### What is Language Modelling(LM), give examples?	
+#### What is Language Modelling(LM), give examples?
 
-#### Define Named Entity recognition? Give some usecases where it can come in handy?	
 
-#### What is Image Captioning?	
 
-#### Give some example of Text summarization.	
-
-#### Define Style Transfer?
-
-#### Define Image Segmentation and Pose Analysis?	
-
-#### Define Semantic Segmentation?	
-
-#### What is Instance Segmentation?	
-
-#### What is Imperative and Symbolic Programming?	
+#### Define Named Entity recognition? Give some usecases where it can come in handy?
