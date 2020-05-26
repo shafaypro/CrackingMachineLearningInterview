@@ -490,7 +490,7 @@ Helpful for:
 
 #### What is MaxPooling Layer? How does it work?
         Max polling uses the Maximum value found in a considered size metrics. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.in a way.
-!()[https://computersciencewiki.org/images/8/8a/MaxpoolSample2.png]
+![](https://computersciencewiki.org/images/8/8a/MaxpoolSample2.png)
 #### What is Kernel or Filter?
         kernel methods are a class of algorithms for pattern analysis, whose best known member is the support vector machine (SVM)
         Kernel functions have been introduced for sequence data, graphs, text, images, as well as vectors.
@@ -620,6 +620,7 @@ Helpful for:
         coin. Since the coin is fair, the two outcomes ("heads" and "tails") are both equally probable; the probability of "heads" equals the probability 
         of "tails"; and since no other outcomes are possible, the probability of either "heads" or "tails" is 1/2 (which could also be written as 0.5 or 
         50%).
+[ReferenceLink](https://machinelearningmastery.com/joint-marginal-and-conditional-probability-for-machine-learning/)
 #### What is Joint Probability?
         Joint probability is a statistical measure that calculates the likelihood of two events occurring together and at the same point in time.
 ![](https://image.slidesharecdn.com/probabilitydistribution-150117052614-conversion-gate02/95/probabilitydistribution-14-638.jpg?cb=1421494048)
@@ -650,9 +651,9 @@ Helpful for:
 
 #### How would you define GAN(Generative Adversarial Networks) ?	
 
-#### What are Gausian Processes?	
+#### What are Gausian Processes?
 
-#### What is Graph Neural Network?	
+#### What is Graph Neural Network?
 
 #### Define Text Classification, Give some usecase examples?	
 
