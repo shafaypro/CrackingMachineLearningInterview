@@ -27,13 +27,13 @@ Helpful for:
 ![](https://miro.medium.com/max/2800/0*Uzqy-gqZg77Wun0e.jpg)
 #### What is Reinforcment Learning and how would you define it?
         A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty criteria whether to give model positive points or negative points and based on that penalizing the model.
-
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reinforcement_learning_diagram.svg/250px-Reinforcement_learning_diagram.svg.png)
 #### What is Deep Learning ?
         Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
 
 #### Difference between Machine Learning and Deep Learning?	
         Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
-
+![](https://lawtomated.com/wp-content/uploads/2019/04/MLvsDL.png)
 #### Difference between SemiSupervised and Reinforcment Learning?
 
 #### Difference between Bias and Variance?
@@ -623,9 +623,17 @@ Helpful for:
 [ReferenceLink](https://machinelearningmastery.com/joint-marginal-and-conditional-probability-for-machine-learning/)
 #### What is Joint Probability?
         Joint probability is a statistical measure that calculates the likelihood of two events occurring together and at the same point in time.
+                P(A and B) or P (A ^ B) or P(A & B)
+                The joint probability is detremeinded as :
+                P(A and B) = P(A given B) * P(B)       
 ![](https://image.slidesharecdn.com/probabilitydistribution-150117052614-conversion-gate02/95/probabilitydistribution-14-638.jpg?cb=1421494048)
 
+#### What is Marginal Probability?
+        Probability of event X=A given variable Y. Single Random event probability 
+        P(A) , A single probability of an independent event.
+
 #### What is Conditional Probability? what is distributive Probability?
+        Probability of event A given event B is termed as Conditional Probability.
 
 #### What is KNN how does it works? what is neigbouring criteria? How you can change it ?
         KNN is dependent on distancing estimation from the points of a Class to respectable points in class, thus acting as a Vote Based Neigbouring
@@ -638,12 +646,15 @@ Helpful for:
 
 
 #### Which one would you prefer low FN or FP's based on Fraudial Transaction?
+        Recommended is low FN's, the reason is because if you consider Fraudly Transaction being occured and counting it as not being occured 
+        This has huge impact on the Business model.
 
 #### Differentiate between KNN and KMean?
         KMean: Unsupervised, Random points drawn, each uses distance based averages for prediction.
         KNN: Supervised, neigbouring, C values , Voting 
 
-#### What is Attention ? Give Example ?	
+#### What is Attention ? Give Example ?
+
 
 #### What are AutoEncoders? and what are transformers?
 
