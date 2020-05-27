@@ -20,8 +20,9 @@ Helpful for:
 
 #### Images References
 * The Image references are only for Educational Purposes. These are totally made by the creators, specified in the reference.md file.
-#### CopyRights Permission:
-Please don't use it to refer into your blogs or copy and paste questions in your Blogs without asking permissions &copy;
+
+#### Sharing is Caring:
+        Feel Free to Share the Questions/References Link into your blog.
 
 
 ## Questions
