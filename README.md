@@ -14,11 +14,15 @@ Helpful for:
 * Software Development Engineer (focused on AI/ML)
 
 ## About:
-* Github Profile :  [Shafaypro](https://github.com/shafaypro)
+* Github Profile :  [Shafaypro](https://github.com/shafaypro) &copy;
+* Linkedin Profile : [MShafayAmjad]() 
 * ML Interview Questions repository : [ML interview Repository Link](https://github.com/shafaypro/CrackingMachineLearningInterview "ML Interview Repository")
 
 #### Images References
 * The Image references are only for Educational Purposes. These are totally made by the creators, specified in the reference.md file.
+#### CopyRights Permission:
+Please don't use it to refer into your blogs or copy and paste questions in your Blogs without asking permissions &copy;
+
 
 ## Questions
 
