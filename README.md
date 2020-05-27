@@ -639,6 +639,10 @@ Helpful for:
 #### What is Conditional Probability? what is distributive Probability?
         Probability of event A given event B is termed as Conditional Probability.
 
+#### What is Z score?
+        Z score (also called the standard score) represents the number of standard deviations with which the 
+        value of an observation point or data differ than the mean value of what is observed
+
 #### What is KNN how does it works? what is neigbouring criteria? How you can change it ?
         KNN is dependent on distancing estimation from the points of a Class to respectable points in class, thus acting as a Vote Based Neigbouring
         Classifier, where you conclude the outcome of your input to be predicted by measuring which points come close to it.
@@ -657,6 +661,7 @@ Helpful for:
         KMean: Unsupervised, Random points drawn, each uses distance based averages for prediction.
         KNN: Supervised, neigbouring, C values , Voting 
 ![](https://qph.fs.quoracdn.net/main-qimg-e50401a4bdaf033ef6b451ea72334f8b)
+
 #### What is Attention ? Give Example ?
         A neural attention mechanism equips a neural network with the ability to focus on a subset of its inputs (or features).
         1) Hard Attention (Image Cropping)
