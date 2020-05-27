@@ -631,6 +631,7 @@ Feel Free to Share the Questions/References Link into your blog.
          original data. The original space (with dimension of the number of points) has been reduced 
          (with data loss, but hopefully retaining the most important variance) to the space spanned by 
          a few eigenvectors
+![](https://kindsonthegenius.com/blog/wp-content/uploads/2018/11/Principal-2BComponents-2BAnalysis-2BTutorial.jpg)
 
 #### What is Maximum Likelihood estimation?
         Maximum likelihood estimation is a method that determines values for the parameters of a model. 
