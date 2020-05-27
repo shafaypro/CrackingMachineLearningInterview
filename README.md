@@ -15,7 +15,7 @@ Helpful for:
 
 ## About:
 * Github Profile :  [Shafaypro](https://github.com/shafaypro) &copy;
-* Linkedin Profile : [MShafayAmjad]() 
+* Linkedin Profile : [MShafayAmjad](https://www.linkedin.com/in/imshafay/) 
 * ML Interview Questions repository : [ML interview Repository Link](https://github.com/shafaypro/CrackingMachineLearningInterview "ML Interview Repository")
 
 #### Images References
