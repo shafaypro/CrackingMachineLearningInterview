@@ -85,7 +85,7 @@ Helpful for:
         SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
         One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
         well on multi class problems and solve the problem in hand.
-
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/300px-SVM_margin.png)
         The algorithms which uses OVO are:
             1) Extreme learning Machines(ELM's)
             2) Support Vector Machine(Classifiers)
@@ -93,7 +93,7 @@ Helpful for:
             4) Naive Bayes (based on MAP : Maximum Posterior )
             5) Decision Trees(decision in subnodes after parent node has one feature)
             6) Neural Networks (different nets)
-
+![](https://i.ytimg.com/vi/OmTu0fqUsQk/maxresdefault.jpg)
 #### Types of SVM kernels
         Think of kernels as definned filters each for their own specific usecases.
 
@@ -109,7 +109,7 @@ Helpful for:
         There are multiple evaluation metrics for Regression Analysis
         1) Mean Squared Error ( the average squared difference between the estimated values and the actual value)
         2) Mean Absolute Error (Absolute of the Average difference)
-
+![](https://econbrowser.com/wp-content/uploads/2019/07/msemae.png)
 #### How would you define Mean absolute error vs Mean squared error?
         MAE : Use MAE when you are doing regression and don’t want outliers to play a big role. It can also be useful if you know that your distribution is multimodal, and it’s desirable to have predictions at one of the modes, rather than at the mean of them.
         MSE : use MSE the other way around, when you want to punish the outliers.
@@ -124,6 +124,7 @@ Helpful for:
 #### How would you differentiate between Multilabel and MultiClass classification?
         A multiclass defines as a classification outcome which can be of multiple classes either A or B or C but not   two or more than one.
         While in MultiLabel classification, An outcome can be of either one or more than two classes i.e A or A and B or A and B and C. 
+![](https://4.bp.blogspot.com/-sCcOrQsTH9Q/XG1yv7mhERI/AAAAAAAAAJI/aEj6Jf1lookERHqPQS_Y6Q9bxBcTV7TIwCLcBGAs/s1600/multiclass-multilabel.png)
 
 #### Which Algorithms are High Biased Algorithms?
         Bias is the simplifying assumptions made by the model to make the target function easier to approximate.
@@ -156,6 +157,8 @@ Helpful for:
         Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by
         constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean
         prediction (regression) of the individual trees. Used to remove the Overfitting occured due to single Decision Trees.
+
+![](https://miro.medium.com/max/1200/1*5dq_1hnqkboZTcKFfwbO9A.png)
 #### What is Process of Splitting?
         Splitting up your data in to subsets based on provided data facts. (can come in handy for decision Trees)
 
@@ -598,8 +601,9 @@ Helpful for:
          a few eigenvectors
 
 #### What is Maximum Likelihood estimation?
-        A method of estimating the parameters of a probability distribution by maximizing a likelihood function, so that under the assumed statistical '
-        model the observed data is most probable
+        Maximum likelihood estimation is a method that determines values for the parameters of a model. 
+        The parameter values are found such that they maximise the likelihood that the process described by the model
+        produced the data that were actually observed.
 
 #### What is Naive Bayes? How does it works?
         A method of estimating the parameters of a probability distribution by maximizing a likelihood function, 
@@ -709,6 +713,9 @@ Helpful for:
                 4) OCR
                 etc
 ![](https://www.researchgate.net/profile/Raghava_Rao_Mukkamala/publication/321892732/figure/fig3/AS:574016848764930@1513867689381/Text-Classification-Architecture.png)
+
+#### which algorithms to use for Missing Data?
+![](https://www.researchgate.net/publication/330704615/figure/fig2/AS:720385997815812@1548764814471/Machine-learning-with-missing-data-Conventional-single-imputation-methods-for-handling.ppm)
 
 #### How would you define GAN(Generative Adversarial Networks) ?
 
