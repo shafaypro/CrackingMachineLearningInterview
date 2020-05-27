@@ -689,11 +689,26 @@ Helpful for:
 
 
 #### Define Semantic Segmentation?
-
+        Semantic Segmentation is the Segmentation of an image based on Type of Objects
+![](https://miro.medium.com/max/2436/0*QeOs5RvXlkbDkLOy.png)
 #### What is Instance Segmentation?
+        Same as Semantic, although with Objects (with respectable ID's)
 
 #### What is Imperative and Symbolic Programming?
+![](https://slideplayer.com/slide/14913960/91/images/17/Imperative+vs+Symbolic+Programming.jpg)
 
+
+#### Define Text Classification, Give some usecase examples?
+        Text classification also known as text tagging or text categorization is the process of categorizing text into organized groups. 
+        By using Natural Language Processing (NLP), text classifiers can automatically analyze text and then assign a set of pre-defined
+        tags or categories based on its content.
+        UseCases:
+                1) Document Classification
+                2) Document Categorization
+                3) Point of Interest in Document
+                4) OCR
+                etc
+![](https://www.researchgate.net/profile/Raghava_Rao_Mukkamala/publication/321892732/figure/fig3/AS:574016848764930@1513867689381/Text-Classification-Architecture.png)
 
 #### How would you define GAN(Generative Adversarial Networks) ?
 
@@ -701,10 +716,9 @@ Helpful for:
 
 #### What is Graph Neural Network?
 
-#### Define Text Classification, Give some usecase examples?
+
 
 #### What is Language Modelling(LM), give examples?
-
 
 
 #### Define Named Entity recognition? Give some usecases where it can come in handy?
