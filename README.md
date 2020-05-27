@@ -133,6 +133,16 @@ Helpful for:
         While in MultiLabel classification, An outcome can be of either one or more than two classes i.e A or A and B or A and B and C. 
 ![](https://4.bp.blogspot.com/-sCcOrQsTH9Q/XG1yv7mhERI/AAAAAAAAAJI/aEj6Jf1lookERHqPQS_Y6Q9bxBcTV7TIwCLcBGAs/s1600/multiclass-multilabel.png)
 
+
+#### What is Confusion Matrics?
+        A confusion matrix, also known as an error matrix, is a specific table layout that allows visualization of
+         the performance of an algorithm, typically a supervised learning one (in unsupervised learning it is
+          usually called a matching matrix). Each row of the matrix represents the instances in a predicted class
+           while each column represents the instances in an actual class (or vice versa).
+        The name stems from the fact that it makes it easy to see if the system is confusing two classes 
+        (i.e. commonly mislabeling one as another).
+![](https://www.unite.ai/wp-content/uploads/2019/12/Preventive_Medicine-e1576294312614.png)
+
 #### Which Algorithms are High Biased Algorithms?
         Bias is the simplifying assumptions made by the model to make the target function easier to approximate.
         1) High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
