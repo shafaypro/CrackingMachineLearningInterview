@@ -91,6 +91,8 @@ Helpful for:
         One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
         well on multi class problems and solve the problem in hand.
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/300px-SVM_margin.png)
+
+
         The algorithms which uses OVO are:
             1) Extreme learning Machines(ELM's)
             2) Support Vector Machine(Classifiers)
