@@ -22,10 +22,10 @@ Helpful for:
 * The Image references are only for Educational Purposes. These are totally made by the creators, specified in the reference.md file.
 
 #### Sharing is Caring:
-        Feel Free to Share the Questions/References Link into your blog.
+Feel Free to Share the Questions/References Link into your blog.
 
 
-## Questions
+# Questions
 
 #### Difference between SuperVised and Unsupervised Learning?
         Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown a new image, the model compares it to the training examples to predict the correct label.
