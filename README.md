@@ -1,6 +1,8 @@
 ## CrackingMachineLearningInterview
 
-These questions are guranteed to be asked in Machine Learning Engineer or ML based interviews for upto 80% of your job interviews. Make sure that you cover and know about machine learning. These questions can Ace your interviews regarding ML even if you are a fresh graduate or upto 5 years of experience.
+These questions are guranteed to be asked in Machine Learning Engineer or ML based interviews for upto 80% of your job interviews.
+Make sure that you cover and know about machine learning. These questions can Ace your interviews regarding ML even 
+if you are a fresh graduate or upto 5 years of experience.
 ##### Ultimate Machine Learning Engineer Interview Questions.
 Helpful for:
 * Machine Learning Engineer
@@ -28,16 +30,26 @@ Feel Free to Share the Questions/References Link into your blog.
 # Questions
 
 #### Difference between SuperVised and Unsupervised Learning?
-        Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown a new image, the model compares it to the training examples to predict the correct label.
+        Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not 
+        provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should 
+        come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown 
+        a new image, the model compares it to the training examples to predict the correct label.
 ![](https://miro.medium.com/max/2800/0*Uzqy-gqZg77Wun0e.jpg)
 #### What is Reinforcment Learning and how would you define it?
-        A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty criteria whether to give model positive points or negative points and based on that penalizing the model.
+        A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be 
+        explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current 
+        knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty 
+        criteria whether to give model positive points or negative points and based on that penalizing the model.
+
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reinforcement_learning_diagram.svg/250px-Reinforcement_learning_diagram.svg.png)
 #### What is Deep Learning ?
-        Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
+        Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning 
+        most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
 
 #### Difference between Machine Learning and Deep Learning?	
-        Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
+        Since DL is a subset of ML and both being subset of AI.While basic machine learning models do become progressively better at whatever their 
+        function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make 
+        adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
 ![](https://lawtomated.com/wp-content/uploads/2019/04/MLvsDL.png)
 #### Difference between SemiSupervised and Reinforcment Learning?
 
@@ -54,7 +66,10 @@ Feel Free to Share the Questions/References Link into your blog.
         X represent the input variable (independent ones)
         f(X) represents Y which is dependent(outcome).
 
-        The working of linear regression is Given a data set of n statistical units, a linear regression model assumes that the relationship between the dependent variable y and the p-vector of regressors x is linear. This relationship is modeled through a disturbance term or error variable ε — an unobserved random variable that adds "noise" to the linear relationship between the dependent variable and regressors. Thus the model takes the form Y = B0 + B1X1 + B2X2 + ..... + BNXN
+        The working of linear regression is Given a data set of n statistical units, a linear regression model assumes that the relationship between the 
+        dependent variable y and the p-vector of regressors x is linear. This relationship is modeled through a disturbance term or error variable ε — an 
+        unobserved random variable that adds "noise" to the linear relationship between the dependent variable and regressors. Thus the model takes the 
+        form Y = B0 + B1X1 + B2X2 + ..... + BNXN
         This also emplies : Y(i) = X(i) ^ T + B(i)
         Where T : denotes Transpose
         X(i) : denotes input at the I'th record in form of vector
