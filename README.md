@@ -99,6 +99,13 @@ Feel Free to Share the Questions/References Link into your blog.
         in Classification having base in  Logistic Regression along with Sigmoid based functions in Deep learning used to find a nominal outcome in a
         layer or output of a layer.
 
+#### What is Gradient Decent Formula to Linear Regression Equation?
+
+![](https://media.geeksforgeeks.org/wp-content/uploads/gradiant_descent.jpg)
+
+
+
+
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?
         Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
         fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
@@ -181,6 +188,18 @@ Feel Free to Share the Questions/References Link into your blog.
         3) Buggy pipeline
         4) Biased training sample
         5) Overly strong regularization
+
+
+
+#### What is Gradient Decent? Difference between SGD and GD? 
+        Gradient Descent is an iterative method to solve the optimization problem. There is no concept of "epoch" or "batch" in classical gradient decent. The key of gradient decent are
+        * Update the weights by the gradient direction.
+        * The gradient is calculated precisely from all the data points.
+        Stochastic Gradient Descent can be explained as: 
+        * Quick and dirty way to "approximate gradient" from one single data point. 
+        * If we relax on this "one single data point" to "a subset of data", then the concepts of batch and epoch come.
+
+![OneVariableSGD](https://cdn-images-1.medium.com/fit/t/1600/480/1*7LbtloKtsBZW1P0DmR4UDA.png)
 
 #### What is Randomforest and Decision Trees?
         A decision tree is a decision support tool that uses a tree-like model of decisions and their possible consequences, including chance event
