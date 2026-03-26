@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a25;
+    --border: #2a2a3a;
+    --accent: #ff3d00;
+    --accent2: #ff6d3a;
+    --accent3: #ffa040;
+    --blue: #4d9fff;
+    --green: #00e5a0;
+    --purple: #a855f7;
+    --text: #e8e8f0;
+    --text-muted: #7070a0;
+    --text-dim: #404060;
+    --mono: 'Space Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .logo h1 {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .logo p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
+  .nav-section {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    padding: 8px 20px 4px;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .nav-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+    border-left-color: var(--border);
+  }
+
+  .nav-item.active {
+    background: rgba(255,61,0,0.1);
+    color: var(--accent2);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active .nav-dot { opacity: 1; }
+
+  .level-tag {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+
+  .level-beginner { background: rgba(0,229,160,0.15); color: var(--green); }
+  .level-intermediate { background: rgba(77,159,255,0.15); color: var(--blue); }
+  .level-advanced { background: rgba(168,85,247,0.15); color: var(--purple); }
+
+  .progress-bar {
+    padding: 16px 20px;
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* MAIN */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 60px 50px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,61,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: 'DATABRICKS';
+    position: absolute;
+    bottom: -20px; right: 40px;
+    font-family: var(--display);
+    font-size: 120px;
+    font-weight: 800;
+    color: var(--border);
+    opacity: 0.3;
+    pointer-events: none;
+    letter-spacing: -4px;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .eyebrow-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .eyebrow-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h2 {
+    font-family: var(--display);
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .hero h2 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    color: var(--text-muted);
+    max-width: 520px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 40px;
+    margin-top: 36px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-value {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 48px 60px;
+  }
+
+  /* SECTION */
+  .section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    min-width: 32px;
+  }
+
+  .section-title-block h3 {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .section-title-block p {
+    color: var(--text-muted);
+    font-size: 14px;
+    max-width: 500px;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h4 {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #0d0d15;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-lang {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+
+  .code-copy {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: transparent;
+    transition: all 0.15s;
+  }
+
+  .code-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: #c8d3f5;
+  }
+
+  pre::-webkit-scrollbar { height: 4px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .kw { color: #c099ff; }
+  .str { color: #c3e88d; }
+  .num { color: #ff9e64; }
+  .cm { color: #4a5568; }
+  .fn { color: #82aaff; }
+  .cls { color: #ffc777; }
+  .op { color: #89ddff; }
+  .var { color: #e8e8f0; }
+
+  /* CONCEPT BLOCKS */
+  .concept {
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    background: rgba(255,61,0,0.05);
+    border-radius: 0 6px 6px 0;
+    margin: 20px 0;
+  }
+
+  .concept.blue { border-color: var(--blue); background: rgba(77,159,255,0.05); }
+  .concept.green { border-color: var(--green); background: rgba(0,229,160,0.05); }
+  .concept.purple { border-color: var(--purple); background: rgba(168,85,247,0.05); }
+
+  .concept-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .concept p, .concept li { font-size: 13px; color: var(--text-muted); }
+  .concept ul { padding-left: 16px; margin-top: 8px; }
+  .concept li { margin-bottom: 4px; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 20px 0;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+
+  tr:hover td { background: var(--surface2); color: var(--text); }
+
+  td strong { color: var(--text); font-weight: 600; }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin: 1px;
+  }
+
+  .tag-red { background: rgba(255,61,0,0.15); color: var(--accent2); }
+  .tag-blue { background: rgba(77,159,255,0.15); color: var(--blue); }
+  .tag-green { background: rgba(0,229,160,0.15); color: var(--green); }
+
+  /* SECTION HEADINGS */
+  .sh {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sh::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .sh2 {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: var(--text);
+  }
+
+  p.body { color: var(--text-muted); margin-bottom: 14px; font-size: 14px; }
+
+  .highlight { color: var(--accent2); font-weight: 600; }
+  .highlight-blue { color: var(--blue); font-weight: 500; }
+  .highlight-green { color: var(--green); font-weight: 500; }
+
+  /* ARCH DIAGRAM */
+  .arch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .arch-layer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .arch-box {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+
+  .arch-box:hover { border-color: var(--accent); }
+  .arch-box sub { display: block; font-weight: 400; font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  .arch-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+    color: var(--text-dim);
+    font-size: 16px;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .arch-box.red { border-color: rgba(255,61,0,0.4); background: rgba(255,61,0,0.08); }
+  .arch-box.blue { border-color: rgba(77,159,255,0.4); background: rgba(77,159,255,0.08); }
+  .arch-box.green { border-color: rgba(0,229,160,0.4); background: rgba(0,229,160,0.08); }
+  .arch-box.purple { border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.08); }
+
+  /* STEP FLOW */
+  .steps { counter-reset: steps; margin: 16px 0; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    counter-increment: steps;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .step-body h5 {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .step-body p { font-size: 13px; color: var(--text-muted); }
+
+  /* PILL NAV */
+  .pill-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: transparent;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* QUIZ */
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+
+  .quiz h4 { font-family: var(--display); font-weight: 700; margin-bottom: 16px; font-size: 15px; }
+
+  .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .quiz-option:hover { border-color: var(--blue); color: var(--text); }
+  .quiz-option.correct { border-color: var(--green); background: rgba(0,229,160,0.1); color: var(--green); }
+  .quiz-option.wrong { border-color: var(--accent); background: rgba(255,61,0,0.1); color: var(--accent); }
+
+  .quiz-letter {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    color: var(--text-dim);
+  }
+
+  .quiz-result {
+    margin-top: 12px;
+    font-size: 13px;
+    display: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+  }
+
+  /* BREADCRUMB */
+  .breadcrumb {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb-sep { color: var(--text-dim); }
+  .breadcrumb span:last-child { color: var(--text-muted); }
+
+  /* MOBILE TOGGLE */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px; right: 20px;
+    width: 48px; height: 48px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(255,61,0,0.4);
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .mobile-toggle { display: flex; }
+    .hero { padding: 32px 24px; }
+    .hero h2 { font-size: 32px; }
+    .hero::after { display: none; }
+    .content { padding: 32px 24px; }
+    .stats-row { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-badge">Complete Guide</div>
+    <h1>Databricks<br>Mastery</h1>
+    <p>Beginner → Advanced</p>
+  </div>
+
+  <nav>
+    <div class="nav-section">
+      <div class="nav-section-label">Foundation</div>
+      <div class="nav-item active" onclick="showSection('intro', this)">
+        <div class="nav-dot"></div> Introduction & Setup
+        <span class="level-tag level-beginner">BEGINNER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('architecture', this)">
+        <div class="nav-dot"></div> Architecture
+        <span class="level-tag level-beginner">BEGINNER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('notebooks', this)">
+        <div class="nav-dot"></div> Notebooks & Clusters
+        <span class="level-tag level-beginner">BEGINNER</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Core Concepts</div>
+      <div class="nav-item" onclick="showSection('spark', this)">
+        <div class="nav-dot"></div> Apache Spark Basics
+        <span class="level-tag level-beginner">BEGINNER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('dataframes', this)">
+        <div class="nav-dot"></div> DataFrames & SQL
+        <span class="level-tag level-beginner">BEGINNER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('delta', this)">
+        <div class="nav-dot"></div> Delta Lake
+        <span class="level-tag level-intermediate">INTER</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Intermediate</div>
+      <div class="nav-item" onclick="showSection('etl', this)">
+        <div class="nav-dot"></div> ETL Pipelines
+        <span class="level-tag level-intermediate">INTER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('streaming', this)">
+        <div class="nav-dot"></div> Structured Streaming
+        <span class="level-tag level-intermediate">INTER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('mlflow', this)">
+        <div class="nav-dot"></div> MLflow & ML
+        <span class="level-tag level-intermediate">INTER</span>
+      </div>
+      <div class="nav-item" onclick="showSection('unity', this)">
+        <div class="nav-dot"></div> Unity Catalog
+        <span class="level-tag level-intermediate">INTER</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Advanced</div>
+      <div class="nav-item" onclick="showSection('performance', this)">
+        <div class="nav-dot"></div> Performance Tuning
+        <span class="level-tag level-advanced">ADV</span>
+      </div>
+      <div class="nav-item" onclick="showSection('workflows', this)">
+        <div class="nav-dot"></div> Workflows & Orchestration
+        <span class="level-tag level-advanced">ADV</span>
+      </div>
+      <div class="nav-item" onclick="showSection('security', this)">
+        <div class="nav-dot"></div> Security & Governance
+        <span class="level-tag level-advanced">ADV</span>
+      </div>
+      <div class="nav-item" onclick="showSection('lakehouse', this)">
+        <div class="nav-dot"></div> Lakehouse Architecture
+        <span class="level-tag level-advanced">ADV</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="progress-bar">
+    <div class="progress-label">
+      <span>Progress</span>
+      <span id="progress-pct">8%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:8%"></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-tag">Complete Learning Path</div>
+      <div class="eyebrow-line"></div>
+    </div>
+    <h2>Master <span>Databricks</span><br>End to End</h2>
+    <p>From zero to production-ready — covering Spark, Delta Lake, MLflow, streaming, performance tuning, and enterprise-grade Lakehouse architecture.</p>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Modules</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Levels</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">100+</div>
+        <div class="stat-label">Code Examples</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Potential</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== INTRO ===== -->
+    <div class="section active" id="section-intro">
+      <div class="breadcrumb">
+        <span>Foundation</span><span class="breadcrumb-sep">›</span><span>Introduction & Setup</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">01</div>
+        <div class="section-title-block">
+          <h3>Introduction & Setup</h3>
+          <p>Understand what Databricks is, where it fits, and how to get your environment running.</p>
+        </div>
+      </div>
+
+      <div class="sh">What is Databricks?</div>
+      <p class="body">Databricks is a unified <span class="highlight">data analytics platform</span> built on top of Apache Spark. It was founded by the original creators of Apache Spark and provides a cloud-based environment for big data processing, machine learning, and analytics at scale.</p>
+      <p class="body">Databricks implements the <span class="highlight">Lakehouse architecture</span> — combining the best of data warehouses (structured queries, ACID transactions) with data lakes (low-cost storage, flexibility, ML support).</p>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">⚡</span>
+          <h4>Unified Analytics</h4>
+          <p>One platform for data engineering, SQL analytics, data science, and machine learning workflows.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">☁️</span>
+          <h4>Cloud-Native</h4>
+          <p>Runs on AWS, Azure, and GCP. Managed clusters spin up automatically — no infrastructure headaches.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔥</span>
+          <h4>Apache Spark Core</h4>
+          <p>Built on Spark — the industry-standard distributed computing engine for processing petabytes of data.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🏔️</span>
+          <h4>Delta Lake</h4>
+          <p>Open-source storage layer that brings ACID transactions, schema enforcement, and time travel to data lakes.</p>
+        </div>
+      </div>
+
+      <div class="sh">Databricks vs. Traditional Tools</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th><th>Traditional Warehouse</th><th>Plain Data Lake</th><th>Databricks Lakehouse</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>ACID Transactions</strong></td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes (Delta)</td></tr>
+          <tr><td><strong>Scalability</strong></td><td>Limited</td><td>Infinite</td><td>Infinite</td></tr>
+          <tr><td><strong>ML Support</strong></td><td>Poor</td><td>Good</td><td>Excellent</td></tr>
+          <tr><td><strong>Cost</strong></td><td>High</td><td>Low</td><td>Medium</td></tr>
+          <tr><td><strong>Real-time</strong></td><td>Limited</td><td>Yes</td><td>Yes (Streaming)</td></tr>
+          <tr><td><strong>Schema Enforcement</strong></td><td>Strict</td><td>None</td><td>Flexible + Enforced</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sh">Getting Started — Community Edition</div>
+      <p class="body">The <span class="highlight">Databricks Community Edition</span> is free and perfect for learning. Sign up at <code style="color:var(--accent2); font-family:var(--mono); font-size:12px;">community.cloud.databricks.com</code>.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h5>Create Account</h5>
+            <p>Visit community.cloud.databricks.com → Sign Up → Verify email. No credit card required.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h5>Create Your First Cluster</h5>
+            <p>Go to Compute → Create Cluster → Select runtime version → Start. Community edition provides a single-node cluster.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h5>Create a Notebook</h5>
+            <p>Workspace → Create → Notebook → Choose Python/SQL/Scala/R → Attach to your cluster.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h5>Run Your First Cell</h5>
+            <p>Type <code style="font-family:var(--mono); color:var(--accent2); font-size:12px;">spark.version</code> and press Shift+Enter. You're live!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept green">
+        <div class="concept-title">💡 Key Terminology</div>
+        <ul>
+          <li><strong>Workspace:</strong> Your personal environment for notebooks, experiments, models, and data.</li>
+          <li><strong>Cluster:</strong> A group of VMs that run your Spark computations.</li>
+          <li><strong>Runtime:</strong> The Databricks Runtime (DBR) — Spark + libraries + optimizations.</li>
+          <li><strong>DBFS:</strong> Databricks File System — an abstraction layer over cloud object storage.</li>
+          <li><strong>Catalog:</strong> The metadata store for databases, tables, and views.</li>
+        </ul>
+      </div>
+
+      <div class="quiz">
+        <h4>🧠 Quick Check: What is Databricks primarily built on?</h4>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">A</span> Hadoop MapReduce</div>
+        <div class="quiz-option" onclick="checkQuiz(this, true)"><span class="quiz-letter">B</span> Apache Spark</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">C</span> PostgreSQL</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">D</span> Apache Kafka</div>
+        <div class="quiz-result" id="quiz-result-intro"></div>
+      </div>
+    </div>
+
+    <!-- ===== ARCHITECTURE ===== -->
+    <div class="section" id="section-architecture">
+      <div class="breadcrumb">
+        <span>Foundation</span><span class="breadcrumb-sep">›</span><span>Architecture</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">02</div>
+        <div class="section-title-block">
+          <h3>Architecture Deep Dive</h3>
+          <p>Understand the Control Plane, Data Plane, and how Databricks components work together.</p>
+        </div>
+      </div>
+
+      <div class="sh">Two-Plane Architecture</div>
+      <p class="body">Databricks uses a <span class="highlight">two-plane architecture</span> separating the control infrastructure from your data:</p>
+
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="arch-box red">🎛️ Control Plane<sub>Databricks Cloud (managed by Databricks)</sub></div>
+        </div>
+        <div class="arch-arrow">↕ Secure API calls</div>
+        <div class="arch-layer">
+          <div class="arch-box blue">☁️ Data Plane<sub>Your Cloud Account (AWS/Azure/GCP)</sub></div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-box green">📦 Storage<sub>S3 / ADLS / GCS</sub></div>
+          <div class="arch-box purple">⚙️ Compute<sub>EC2 / VMs / GCE</sub></div>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🎛️</span>
+          <h4>Control Plane</h4>
+          <p>Hosts the web application, cluster manager, job scheduler, and REST APIs. Managed entirely by Databricks. Stores metadata, configs, and notebook source code.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">☁️</span>
+          <h4>Data Plane</h4>
+          <p>Runs in YOUR cloud account. All actual data processing happens here. Your data never leaves your cloud account — Databricks only orchestrates, not stores.</p>
+        </div>
+      </div>
+
+      <div class="sh">Spark Architecture Inside a Cluster</div>
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="arch-box red">Driver Node<sub>Runs SparkContext & DAG Scheduler</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Task distribution</div>
+        <div class="arch-layer">
+          <div class="arch-box blue">Worker 1<sub>Executor + Tasks</sub></div>
+          <div class="arch-box blue">Worker 2<sub>Executor + Tasks</sub></div>
+          <div class="arch-box blue">Worker N<sub>Executor + Tasks</sub></div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-box green">Distributed Storage (S3/ADLS/GCS)</div>
+        </div>
+      </div>
+
+      <div class="concept blue">
+        <div class="concept-title">🔵 Key Components Explained</div>
+        <ul>
+          <li><strong>Driver:</strong> Coordinates all Spark jobs. Runs your main program. One per cluster.</li>
+          <li><strong>Executor:</strong> JVM process on each worker node. Runs tasks and stores data in memory/disk.</li>
+          <li><strong>Task:</strong> The smallest unit of work. A single executor runs one task at a time per CPU core.</li>
+          <li><strong>Stage:</strong> Group of tasks that can run in parallel. Stages are separated by shuffle operations.</li>
+          <li><strong>Job:</strong> Complete computation triggered by an action (like .count() or .collect()).</li>
+          <li><strong>DAG:</strong> Directed Acyclic Graph — Spark's execution plan. Built lazily and optimized by Catalyst.</li>
+        </ul>
+      </div>
+
+      <div class="sh">Cluster Types</div>
+      <table>
+        <thead><tr><th>Type</th><th>Use Case</th><th>Auto-terminate</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td><strong>All-Purpose</strong></td><td>Interactive notebooks, development</td><td>Configurable</td><td>Higher (DBU rate)</td></tr>
+          <tr><td><strong>Job Clusters</strong></td><td>Automated pipelines, scheduled jobs</td><td>After job ends</td><td>Lower (Job DBU rate)</td></tr>
+          <tr><td><strong>SQL Warehouse</strong></td><td>Business intelligence, SQL analytics</td><td>After idle period</td><td>Pay-per-query</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sh">Databricks Runtime Versions</div>
+      <p class="body">DBR versions bundle Spark with pre-installed libraries and Databricks-specific optimizations:</p>
+      <div class="concept">
+        <div class="concept-title">📦 Runtime Flavors</div>
+        <ul>
+          <li><strong>DBR X.Y:</strong> Standard runtime — Spark + Python/R/Scala/Java</li>
+          <li><strong>DBR X.Y ML:</strong> Includes TensorFlow, PyTorch, scikit-learn, MLflow</li>
+          <li><strong>DBR X.Y Photon:</strong> Vectorized query engine written in C++ — up to 12x faster SQL</li>
+          <li><strong>DBR X.Y GPU:</strong> CUDA-enabled for deep learning workloads</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== NOTEBOOKS ===== -->
+    <div class="section" id="section-notebooks">
+      <div class="breadcrumb">
+        <span>Foundation</span><span class="breadcrumb-sep">›</span><span>Notebooks & Clusters</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">03</div>
+        <div class="section-title-block">
+          <h3>Notebooks & Clusters</h3>
+          <p>Master the Databricks notebook interface and cluster configuration best practices.</p>
+        </div>
+      </div>
+
+      <div class="sh">Notebook Magic Commands</div>
+      <p class="body">Databricks notebooks support magic commands to switch languages within a single notebook:</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Python/SQL/Scala/R</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Default cell language (Python in this case)</span>
+<span class="var">df</span> <span class="op">=</span> spark.read.csv(<span class="str">"/data/sales.csv"</span>)
+
+<span class="cm">%sql -- Switch to SQL in this cell</span>
+SELECT * FROM sales_table LIMIT 10;
+
+<span class="cm">%scala -- Switch to Scala</span>
+<span class="kw">val</span> data <span class="op">=</span> spark.range(<span class="num">100</span>)
+
+<span class="cm">%r -- Switch to R</span>
+library(ggplot2)
+
+<span class="cm">%sh -- Run shell commands</span>
+ls /dbfs/data/
+
+<span class="cm">%md -- Markdown for documentation</span>
+## This is a heading
+
+<span class="cm">%fs -- File system operations</span>
+ls /mnt/datalake/</pre>
+      </div>
+
+      <div class="sh">Cluster Configuration Best Practices</div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Cluster Config (JSON)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre>{
+  <span class="str">"cluster_name"</span>: <span class="str">"prod-etl-cluster"</span>,
+  <span class="str">"spark_version"</span>: <span class="str">"14.3.x-scala2.12"</span>,
+  <span class="str">"node_type_id"</span>: <span class="str">"i3.xlarge"</span>,
+  <span class="str">"driver_node_type_id"</span>: <span class="str">"i3.xlarge"</span>,
+  <span class="str">"autoscale"</span>: {
+    <span class="str">"min_workers"</span>: <span class="num">2</span>,
+    <span class="str">"max_workers"</span>: <span class="num">8</span>
+  },
+  <span class="str">"auto_termination_minutes"</span>: <span class="num">30</span>,
+  <span class="str">"spark_conf"</span>: {
+    <span class="str">"spark.databricks.delta.preview.enabled"</span>: <span class="str">"true"</span>,
+    <span class="str">"spark.sql.adaptive.enabled"</span>: <span class="str">"true"</span>
+  },
+  <span class="str">"init_scripts"</span>: [{
+    <span class="str">"dbfs"</span>: { <span class="str">"destination"</span>: <span class="str">"dbfs:/init/setup.sh"</span> }
+  }]
+}</pre>
+      </div>
+
+      <div class="concept green">
+        <div class="concept-title">💡 Cluster Sizing Tips</div>
+        <ul>
+          <li>Start with 4-8 workers, then scale based on job duration</li>
+          <li>Enable autoscaling for unpredictable workloads</li>
+          <li>Use i3 instances (SSD) for shuffle-heavy jobs</li>
+          <li>Use r4/r5 instances (high memory) for ML/large DataFrames</li>
+          <li>Always set auto-termination to avoid runaway costs</li>
+          <li>Use spot/preemptible instances for worker nodes (60-80% savings)</li>
+        </ul>
+      </div>
+
+      <div class="sh">Databricks Utilities (dbutils)</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Python — dbutils</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># File system operations</span>
+dbutils.fs.ls(<span class="str">"/mnt/datalake/"</span>)
+dbutils.fs.cp(<span class="str">"/source/file.csv"</span>, <span class="str">"/dest/file.csv"</span>)
+dbutils.fs.rm(<span class="str">"/path/to/delete"</span>, recurse=<span class="kw">True</span>)
+dbutils.fs.mkdirs(<span class="str">"/new/directory"</span>)
+
+<span class="cm"># Secrets — retrieve stored credentials</span>
+<span class="var">token</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"my-scope"</span>, key=<span class="str">"api-token"</span>)
+<span class="var">password</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"db-secrets"</span>, key=<span class="str">"db-password"</span>)
+
+<span class="cm"># Widget parameters — parameterize notebooks</span>
+dbutils.widgets.text(<span class="str">"date"</span>, <span class="str">"2024-01-01"</span>, <span class="str">"Processing Date"</span>)
+dbutils.widgets.dropdown(<span class="str">"env"</span>, <span class="str">"dev"</span>, [<span class="str">"dev"</span>, <span class="str">"staging"</span>, <span class="str">"prod"</span>])
+<span class="var">date_param</span> <span class="op">=</span> dbutils.widgets.get(<span class="str">"date"</span>)
+
+<span class="cm"># Notebook workflow — run other notebooks</span>
+<span class="var">result</span> <span class="op">=</span> dbutils.notebook.run(
+  <span class="str">"/path/to/notebook"</span>,
+  timeout_seconds=<span class="num">3600</span>,
+  arguments={<span class="str">"param1"</span>: <span class="str">"value1"</span>}
+)
+
+<span class="cm"># Mount cloud storage</span>
+dbutils.fs.mount(
+  source=<span class="str">"s3a://my-bucket/data"</span>,
+  mount_point=<span class="str">"/mnt/my-data"</span>,
+  extra_configs={<span class="str">"fs.s3a.access.key"</span>: access_key}
+)</pre>
+      </div>
+    </div>
+
+    <!-- ===== SPARK ===== -->
+    <div class="section" id="section-spark">
+      <div class="breadcrumb">
+        <span>Core</span><span class="breadcrumb-sep">›</span><span>Apache Spark Basics</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">04</div>
+        <div class="section-title-block">
+          <h3>Apache Spark Fundamentals</h3>
+          <p>Understand RDDs, transformations, actions, and the lazy evaluation model.</p>
+        </div>
+      </div>
+
+      <div class="sh">Spark Execution Model</div>
+      <div class="concept blue">
+        <div class="concept-title">🔵 Lazy Evaluation — The Core Concept</div>
+        <p>Spark does NOT execute code immediately. <strong>Transformations</strong> build a logical plan (DAG). <strong>Actions</strong> trigger actual execution. This allows Spark to optimize the full computation before running anything.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark — Transformations vs Actions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># ── TRANSFORMATIONS (lazy — nothing runs yet) ──</span>
+<span class="var">df</span> <span class="op">=</span> spark.read.parquet(<span class="str">"/data/sales"</span>)           <span class="cm"># lazy</span>
+<span class="var">df_filtered</span> <span class="op">=</span> df.filter(df.amount <span class="op">></span> <span class="num">100</span>)           <span class="cm"># lazy</span>
+<span class="var">df_grouped</span> <span class="op">=</span> df_filtered.groupBy(<span class="str">"region"</span>)        <span class="cm"># lazy</span>
+<span class="var">df_agg</span> <span class="op">=</span> df_grouped.agg({<span class="str">"amount"</span>: <span class="str">"sum"</span>})        <span class="cm"># lazy</span>
+
+<span class="cm"># ── ACTIONS (trigger execution) ──</span>
+<span class="var">count</span> <span class="op">=</span> df_agg.count()              <span class="cm"># NOW it runs!</span>
+<span class="var">rows</span> <span class="op">=</span> df_agg.collect()            <span class="cm"># Bring to driver</span>
+df_agg.show(<span class="num">20</span>)                    <span class="cm"># Print to console</span>
+df_agg.write.parquet(<span class="str">"/output"</span>)    <span class="cm"># Write to storage</span>
+
+<span class="cm"># Common transformations</span>
+df.select(<span class="str">"col1"</span>, <span class="str">"col2"</span>)          <span class="cm"># Select columns</span>
+df.filter(df.age <span class="op">></span> <span class="num">18</span>)            <span class="cm"># Filter rows</span>
+df.withColumn(<span class="str">"tax"</span>, df.price <span class="op">*</span> <span class="num">0.2</span>) <span class="cm"># Add column</span>
+df.drop(<span class="str">"unwanted_col"</span>)            <span class="cm"># Drop column</span>
+df.distinct()                       <span class="cm"># Remove duplicates</span>
+df.orderBy(<span class="str">"date"</span>, ascending=<span class="kw">False</span>) <span class="cm"># Sort</span>
+df.limit(<span class="num">1000</span>)                      <span class="cm"># Limit rows</span>
+df.cache()                          <span class="cm"># Cache in memory</span></pre>
+      </div>
+
+      <div class="sh">RDDs vs DataFrames vs Datasets</div>
+      <table>
+        <thead><tr><th>API</th><th>Language</th><th>Type Safety</th><th>Optimization</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RDD</strong></td><td>All</td><td>None</td><td>None</td><td>Low-level control, legacy code</td></tr>
+          <tr><td><strong>DataFrame</strong></td><td>Python/R/SQL</td><td>Runtime</td><td>Catalyst + Tungsten</td><td>Most use cases — default choice</td></tr>
+          <tr><td><strong>Dataset</strong></td><td>Scala/Java only</td><td>Compile-time</td><td>Catalyst + Tungsten</td><td>Typed transformations in Scala</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sh">SparkSession — Entry Point</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> SparkSession
+<span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+<span class="kw">from</span> pyspark.sql.types <span class="kw">import</span> <span class="op">*</span>
+
+<span class="cm"># In Databricks, spark is pre-created. In standalone:</span>
+<span class="var">spark</span> <span class="op">=</span> SparkSession.builder \
+    .appName(<span class="str">"MyApp"</span>) \
+    .config(<span class="str">"spark.executor.memory"</span>, <span class="str">"4g"</span>) \
+    .config(<span class="str">"spark.sql.shuffle.partitions"</span>, <span class="str">"200"</span>) \
+    .getOrCreate()
+
+<span class="cm"># Read data in various formats</span>
+df_csv    <span class="op">=</span> spark.read.csv(<span class="str">"/path"</span>, header=<span class="kw">True</span>, inferSchema=<span class="kw">True</span>)
+df_json   <span class="op">=</span> spark.read.json(<span class="str">"/path/data.json"</span>)
+df_parq   <span class="op">=</span> spark.read.parquet(<span class="str">"/path/data.parquet"</span>)
+df_delta  <span class="op">=</span> spark.read.format(<span class="str">"delta"</span>).load(<span class="str">"/path/delta_table"</span>)
+df_jdbc   <span class="op">=</span> spark.read.jdbc(url=<span class="str">"jdbc:postgresql://..."</span>, table=<span class="str">"users"</span>)
+
+<span class="cm"># Create from Python collections</span>
+<span class="var">data</span> <span class="op">=</span> [(<span class="str">"Alice"</span>, <span class="num">30</span>, <span class="str">"NYC"</span>), (<span class="str">"Bob"</span>, <span class="num">25</span>, <span class="str">"LA"</span>)]
+<span class="var">schema</span> <span class="op">=</span> <span class="cls">StructType</span>([
+    <span class="cls">StructField</span>(<span class="str">"name"</span>, StringType(), nullable=<span class="kw">False</span>),
+    <span class="cls">StructField</span>(<span class="str">"age"</span>,  IntegerType(), nullable=<span class="kw">True</span>),
+    <span class="cls">StructField</span>(<span class="str">"city"</span>, StringType(), nullable=<span class="kw">True</span>)
+])
+<span class="var">df</span> <span class="op">=</span> spark.createDataFrame(data, schema)</pre>
+      </div>
+    </div>
+
+    <!-- ===== DATAFRAMES ===== -->
+    <div class="section" id="section-dataframes">
+      <div class="breadcrumb">
+        <span>Core</span><span class="breadcrumb-sep">›</span><span>DataFrames & SQL</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">05</div>
+        <div class="section-title-block">
+          <h3>DataFrames & Spark SQL</h3>
+          <p>Master data manipulation with the DataFrame API and Spark SQL for analytics.</p>
+        </div>
+      </div>
+
+      <div class="pill-nav">
+        <button class="pill active" onclick="switchTab(this, 'df-api')">DataFrame API</button>
+        <button class="pill" onclick="switchTab(this, 'df-sql')">Spark SQL</button>
+        <button class="pill" onclick="switchTab(this, 'df-joins')">Joins</button>
+        <button class="pill" onclick="switchTab(this, 'df-windows')">Window Functions</button>
+        <button class="pill" onclick="switchTab(this, 'df-udf')">UDFs</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-df-api">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PySpark — DataFrame Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+
+df <span class="op">=</span> spark.read.delta(<span class="str">"/mnt/data/orders"</span>)
+
+<span class="cm"># Column operations</span>
+df.select(
+    <span class="str">"order_id"</span>,
+    <span class="str">"customer_id"</span>,
+    F.col(<span class="str">"amount"</span>) <span class="op">*</span> <span class="num">1.1</span>.alias(<span class="str">"amount_with_tax"</span>),
+    F.upper(F.col(<span class="str">"region"</span>)).alias(<span class="str">"region_upper"</span>),
+    F.to_date(<span class="str">"order_date"</span>, <span class="str">"yyyy-MM-dd"</span>).alias(<span class="str">"date"</span>)
+)
+
+<span class="cm"># Aggregations</span>
+df.groupBy(<span class="str">"region"</span>, <span class="str">"product_category"</span>).agg(
+    F.sum(<span class="str">"amount"</span>).alias(<span class="str">"total_revenue"</span>),
+    F.count(<span class="str">"order_id"</span>).alias(<span class="str">"order_count"</span>),
+    F.avg(<span class="str">"amount"</span>).alias(<span class="str">"avg_order_value"</span>),
+    F.max(<span class="str">"order_date"</span>).alias(<span class="str">"last_order_date"</span>),
+    F.countDistinct(<span class="str">"customer_id"</span>).alias(<span class="str">"unique_customers"</span>)
+).orderBy(F.desc(<span class="str">"total_revenue"</span>))
+
+<span class="cm"># Conditional expressions</span>
+df.withColumn(<span class="str">"tier"</span>,
+    F.when(F.col(<span class="str">"amount"</span>) <span class="op">></span> <span class="num">1000</span>, <span class="str">"Gold"</span>)
+     .when(F.col(<span class="str">"amount"</span>) <span class="op">></span> <span class="num">500</span>,  <span class="str">"Silver"</span>)
+     .otherwise(<span class="str">"Bronze"</span>)
+)
+
+<span class="cm"># Handling nulls</span>
+df.dropna(subset=[<span class="str">"customer_id"</span>, <span class="str">"amount"</span>])
+df.fillna({<span class="str">"region"</span>: <span class="str">"Unknown"</span>, <span class="str">"amount"</span>: <span class="num">0</span>})
+df.filter(F.col(<span class="str">"name"</span>).isNotNull())
+
+<span class="cm"># String functions</span>
+df.withColumn(<span class="str">"email_domain"</span>,
+    F.split(F.col(<span class="str">"email"</span>), <span class="str">"@"</span>).getItem(<span class="num">1</span>))
+df.filter(F.col(<span class="str">"name"</span>).like(<span class="str">"%John%"</span>))
+df.withColumn(<span class="str">"clean_name"</span>, F.regexp_replace(<span class="str">"name"</span>, <span class="str">"[^a-zA-Z ]"</span>, <span class="str">""</span>))</pre>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-df-sql">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Spark SQL</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <pre><span class="cm">-- Register DataFrame as temp view</span>
+df.createOrReplaceTempView(<span class="str">"orders"</span>)
+
+<span class="cm">-- Run SQL queries</span>
+<span class="kw">SELECT</span>
+    region,
+    product_category,
+    <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total_revenue,
+    <span class="fn">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> order_count,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(amount), <span class="num">2</span>) <span class="kw">AS</span> avg_order,
+    <span class="fn">PERCENTILE_APPROX</span>(amount, <span class="num">0.5</span>) <span class="kw">AS</span> median_amount
+<span class="kw">FROM</span> orders
+<span class="kw">WHERE</span> order_date >= <span class="str">'2024-01-01'</span>
+    <span class="kw">AND</span> status <span class="kw">NOT IN</span> (<span class="str">'CANCELLED'</span>, <span class="str">'RETURNED'</span>)
+<span class="kw">GROUP BY</span> <span class="num">1</span>, <span class="num">2</span>
+<span class="kw">HAVING</span> total_revenue > <span class="num">10000</span>
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">50</span>;
+
+<span class="cm">-- CTEs (Common Table Expressions)</span>
+<span class="kw">WITH</span> monthly_summary <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, order_date) <span class="kw">AS</span> month,
+        customer_id,
+        <span class="fn">SUM</span>(amount) <span class="kw">AS</span> monthly_spend
+    <span class="kw">FROM</span> orders
+    <span class="kw">GROUP BY</span> <span class="num">1</span>, <span class="num">2</span>
+),
+top_customers <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> customer_id, <span class="fn">SUM</span>(monthly_spend) <span class="kw">AS</span> total
+    <span class="kw">FROM</span> monthly_summary
+    <span class="kw">GROUP BY</span> <span class="num">1</span>
+    <span class="kw">HAVING</span> total > <span class="num">5000</span>
+)
+<span class="kw">SELECT</span> c.name, t.total
+<span class="kw">FROM</span> top_customers t
+<span class="kw">JOIN</span> customers c <span class="kw">ON</span> t.customer_id <span class="op">=</span> c.id;
+
+<span class="cm">-- Use SQL result back in Python</span>
+result_df <span class="op">=</span> spark.sql(<span class="str">"""
+    SELECT * FROM orders WHERE amount > 1000
+"""</span>)</pre>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-df-joins">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PySpark — Join Types</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <pre><span class="cm"># Standard joins</span>
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"inner"</span>)
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left"</span>)
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"right"</span>)
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"full"</span>)
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left_anti"</span>)   <span class="cm"># in orders, NOT in customers</span>
+orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left_semi"</span>)   <span class="cm"># in orders, matched in customers</span>
+orders.crossJoin(products)                            <span class="cm"># Cartesian product — use carefully!</span>
+
+<span class="cm"># Multi-column join</span>
+orders.join(products,
+    (orders.product_id <span class="op">==</span> products.id) <span class="op">&</span>
+    (orders.region <span class="op">==</span> products.region),
+    <span class="str">"inner"</span>
+)
+
+<span class="cm"># Broadcast join (for small tables — avoids shuffle!)</span>
+<span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> broadcast
+
+large_df.join(broadcast(small_lookup), <span class="str">"id"</span>)
+
+<span class="cm"># Avoid column name conflicts after join</span>
+<span class="var">result</span> <span class="op">=</span> orders.alias(<span class="str">"o"</span>).join(
+    customers.alias(<span class="str">"c"</span>), F.col(<span class="str">"o.customer_id"</span>) <span class="op">==</span> F.col(<span class="str">"c.id"</span>)
+).select(
+    F.col(<span class="str">"o.order_id"</span>),
+    F.col(<span class="str">"c.name"</span>).alias(<span class="str">"customer_name"</span>),
+    F.col(<span class="str">"o.amount"</span>)
+)</pre>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-df-windows">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PySpark — Window Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> Window
+<span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+
+<span class="cm"># Define window specifications</span>
+<span class="var">window_by_customer</span> <span class="op">=</span> Window.partitionBy(<span class="str">"customer_id"</span>).orderBy(<span class="str">"order_date"</span>)
+<span class="var">window_rolling</span>     <span class="op">=</span> Window.partitionBy(<span class="str">"customer_id"</span>).orderBy(<span class="str">"order_date"</span>).rowsBetween(<span class="op">-</span><span class="num">6</span>, <span class="num">0</span>)
+<span class="var">window_all</span>         <span class="op">=</span> Window.partitionBy(<span class="str">"region"</span>)
+
+df.withColumn(<span class="str">"row_num"</span>,    F.row_number().over(window_by_customer)) \
+  .withColumn(<span class="str">"rank"</span>,       F.rank().over(window_by_customer)) \
+  .withColumn(<span class="str">"dense_rank"</span>, F.dense_rank().over(window_by_customer)) \
+  .withColumn(<span class="str">"running_total"</span>, F.sum(<span class="str">"amount"</span>).over(window_by_customer)) \
+  .withColumn(<span class="str">"rolling_7day"</span>,  F.sum(<span class="str">"amount"</span>).over(window_rolling)) \
+  .withColumn(<span class="str">"pct_of_region"</span>,
+      F.col(<span class="str">"amount"</span>) <span class="op">/</span> F.sum(<span class="str">"amount"</span>).over(window_all)) \
+  .withColumn(<span class="str">"prev_amount"</span>,   F.lag(<span class="str">"amount"</span>, <span class="num">1</span>).over(window_by_customer)) \
+  .withColumn(<span class="str">"next_amount"</span>,   F.lead(<span class="str">"amount"</span>, <span class="num">1</span>).over(window_by_customer)) \
+  .withColumn(<span class="str">"pct_change"</span>,
+      (F.col(<span class="str">"amount"</span>) <span class="op">-</span> F.lag(<span class="str">"amount"</span>, <span class="num">1</span>).over(window_by_customer))
+      <span class="op">/</span> F.lag(<span class="str">"amount"</span>, <span class="num">1</span>).over(window_by_customer))
+
+<span class="cm"># Get latest record per group (common pattern)</span>
+latest <span class="op">=</span> df.withColumn(
+    <span class="str">"rn"</span>, F.row_number().over(
+        Window.partitionBy(<span class="str">"customer_id"</span>).orderBy(F.desc(<span class="str">"updated_at"</span>))
+    )
+).filter(F.col(<span class="str">"rn"</span>) <span class="op">==</span> <span class="num">1</span>).drop(<span class="str">"rn"</span>)</pre>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-df-udf">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PySpark — User Defined Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <pre><span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> udf, pandas_udf
+<span class="kw">from</span> pyspark.sql.types <span class="kw">import</span> StringType, DoubleType
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Standard UDF (slower — Python serialization per row)</span>
+<span class="kw">def</span> <span class="fn">classify_amount</span>(amount):
+    <span class="kw">if</span> amount <span class="kw">is</span> <span class="kw">None</span>: <span class="kw">return</span> <span class="str">"Unknown"</span>
+    <span class="kw">if</span> amount <span class="op">></span> <span class="num">1000</span>: <span class="kw">return</span> <span class="str">"High"</span>
+    <span class="kw">if</span> amount <span class="op">></span> <span class="num">100</span>:  <span class="kw">return</span> <span class="str">"Medium"</span>
+    <span class="kw">return</span> <span class="str">"Low"</span>
+
+<span class="var">classify_udf</span> <span class="op">=</span> udf(classify_amount, StringType())
+df.withColumn(<span class="str">"tier"</span>, classify_udf(F.col(<span class="str">"amount"</span>)))
+
+<span class="cm"># Pandas UDF (MUCH faster — vectorized via Apache Arrow)</span>
+<span class="op">@</span>pandas_udf(DoubleType())
+<span class="kw">def</span> <span class="fn">apply_discount</span>(amounts: pd.Series) -> pd.Series:
+    <span class="kw">return</span> amounts <span class="op">*</span> <span class="num">0.9</span>  <span class="cm"># Vectorized operation</span>
+
+df.withColumn(<span class="str">"discounted"</span>, apply_discount(F.col(<span class="str">"amount"</span>)))
+
+<span class="cm"># Register UDF for SQL use</span>
+spark.udf.register(<span class="str">"classify_amount_sql"</span>, classify_amount, StringType())
+spark.sql(<span class="str">"SELECT classify_amount_sql(amount) FROM orders"</span>)
+
+<span class="cm"># ⚠️ Best Practices:</span>
+<span class="cm"># 1. Prefer built-in functions (F.*) over UDFs — they run in JVM</span>
+<span class="cm"># 2. Use Pandas UDFs over Python UDFs for better performance</span>
+<span class="cm"># 3. Never use UDFs for simple transformations (null handling, math, strings)</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DELTA LAKE ===== -->
+    <div class="section" id="section-delta">
+      <div class="breadcrumb">
+        <span>Core</span><span class="breadcrumb-sep">›</span><span>Delta Lake</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">06</div>
+        <div class="section-title-block">
+          <h3>Delta Lake</h3>
+          <p>ACID transactions, time travel, schema evolution, and DML operations on data lakes.</p>
+        </div>
+      </div>
+
+      <div class="sh">What Makes Delta Lake Special?</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🔒</span>
+          <h4>ACID Transactions</h4>
+          <p>Full transactional support. Concurrent reads and writes without corruption. No more partial writes or dirty reads.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⏱️</span>
+          <h4>Time Travel</h4>
+          <p>Query any historical version of your data. Roll back mistakes instantly. Audit every change.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📋</span>
+          <h4>Schema Enforcement</h4>
+          <p>Prevents bad data from corrupting your tables. Schema evolution lets you safely add columns.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🗂️</span>
+          <h4>DML Operations</h4>
+          <p>Full UPDATE, DELETE, and MERGE (upsert) support — impossible with plain Parquet files.</p>
+        </div>
+      </div>
+
+      <div class="concept blue">
+        <div class="concept-title">🔵 Delta Log — How It Works</div>
+        <p>Delta Lake stores data as Parquet files + a <strong>transaction log</strong> (_delta_log directory). Every operation is recorded as a JSON commit. Spark reads the log to reconstruct the current and historical state of the table. This is how time travel and ACID transactions work.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark / SQL — Delta Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># ── CREATE DELTA TABLE ──</span>
+df.write.format(<span class="str">"delta"</span>) \
+    .mode(<span class="str">"overwrite"</span>) \
+    .partitionBy(<span class="str">"year"</span>, <span class="str">"month"</span>) \
+    .save(<span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># Or create managed table</span>
+df.write.saveAsTable(<span class="str">"default.orders"</span>)
+
+<span class="cm"># ── READ DELTA ──</span>
+df <span class="op">=</span> spark.read.format(<span class="str">"delta"</span>).load(<span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># ── TIME TRAVEL ──</span>
+<span class="cm"># Read specific version</span>
+df_v5 <span class="op">=</span> spark.read.format(<span class="str">"delta"</span>) \
+    .option(<span class="str">"versionAsOf"</span>, <span class="num">5</span>) \
+    .load(<span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># Read at specific timestamp</span>
+df_yesterday <span class="op">=</span> spark.read.format(<span class="str">"delta"</span>) \
+    .option(<span class="str">"timestampAsOf"</span>, <span class="str">"2024-01-15 10:00:00"</span>) \
+    .load(<span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># ── DML OPERATIONS ──</span>
+<span class="kw">from</span> delta.tables <span class="kw">import</span> DeltaTable
+
+<span class="var">delta_table</span> <span class="op">=</span> DeltaTable.forPath(spark, <span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># UPDATE</span>
+delta_table.update(
+    condition=<span class="str">"status = 'PENDING'"</span>,
+    set={<span class="str">"status"</span>: <span class="str">"'PROCESSING'"</span>}
+)
+
+<span class="cm"># DELETE</span>
+delta_table.delete(<span class="str">"order_date < '2020-01-01'"</span>)
+
+<span class="cm"># MERGE (upsert)</span>
+delta_table.alias(<span class="str">"target"</span>).merge(
+    new_data.alias(<span class="str">"source"</span>),
+    <span class="str">"target.order_id = source.order_id"</span>
+).whenMatchedUpdate(set={
+    <span class="str">"status"</span>: <span class="str">"source.status"</span>,
+    <span class="str">"updated_at"</span>: <span class="str">"source.updated_at"</span>
+}).whenNotMatchedInsertAll().execute()
+
+<span class="cm"># ── HISTORY & RESTORE ──</span>
+delta_table.history().show(truncate=<span class="kw">False</span>)   <span class="cm"># View all commits</span>
+delta_table.restoreToVersion(<span class="num">3</span>)               <span class="cm"># Roll back to version 3</span>
+
+<span class="cm"># ── OPTIMIZE & VACUUM ──</span>
+delta_table.optimize().executeCompaction()     <span class="cm"># Compact small files</span>
+delta_table.optimize().executeZOrderBy(<span class="str">"customer_id"</span>, <span class="str">"order_date"</span>) <span class="cm"># Co-locate</span>
+delta_table.vacuum(<span class="num">168</span>)                       <span class="cm"># Delete files > 7 days old</span></pre>
+      </div>
+
+      <div class="sh">Schema Evolution</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark — Schema Evolution</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Enable schema evolution — allows adding new columns</span>
+df_new.write.format(<span class="str">"delta"</span>) \
+    .mode(<span class="str">"append"</span>) \
+    .option(<span class="str">"mergeSchema"</span>, <span class="str">"true"</span>) \
+    .save(<span class="str">"/mnt/delta/orders"</span>)
+
+<span class="cm"># Or via Spark conf</span>
+spark.conf.set(<span class="str">"spark.databricks.delta.schema.autoMerge.enabled"</span>, <span class="str">"true"</span>)
+
+<span class="cm"># Manually alter schema with SQL</span>
+spark.sql(<span class="str">"""
+  ALTER TABLE orders
+  ADD COLUMNS (discount_amount DOUBLE, promo_code STRING)
+"""</span>)
+
+spark.sql(<span class="str">"ALTER TABLE orders RENAME COLUMN old_col TO new_col"</span>)
+spark.sql(<span class="str">"ALTER TABLE orders DROP COLUMN deprecated_col"</span>)</pre>
+      </div>
+    </div>
+
+    <!-- ===== ETL ===== -->
+    <div class="section" id="section-etl">
+      <div class="breadcrumb">
+        <span>Intermediate</span><span class="breadcrumb-sep">›</span><span>ETL Pipelines</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">07</div>
+        <div class="section-title-block">
+          <h3>ETL Pipelines</h3>
+          <p>Build robust, idempotent data pipelines using Delta Live Tables and medallion architecture.</p>
+        </div>
+      </div>
+
+      <div class="sh">Medallion Architecture</div>
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="arch-box">Raw Sources<sub>S3 / Kafka / JDBC / APIs</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Ingest (auto-loader)</div>
+        <div class="arch-layer">
+          <div class="arch-box red">🥉 Bronze Layer<sub>Raw, unfiltered data — full history</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Validate & Clean</div>
+        <div class="arch-layer">
+          <div class="arch-box blue">🥈 Silver Layer<sub>Cleaned, validated, conformed</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Aggregate & Enrich</div>
+        <div class="arch-layer">
+          <div class="arch-box green">🥇 Gold Layer<sub>Business-ready aggregates & star schema</sub></div>
+        </div>
+      </div>
+
+      <div class="sh">Auto Loader — Incremental Ingestion</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark — Auto Loader</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Auto Loader — efficiently ingests new files from cloud storage</span>
+<span class="cm"># Scales to billions of files, tracks processed files automatically</span>
+
+<span class="var">raw_df</span> <span class="op">=</span> spark.readStream \
+    .format(<span class="str">"cloudFiles"</span>) \
+    .option(<span class="str">"cloudFiles.format"</span>, <span class="str">"json"</span>) \
+    .option(<span class="str">"cloudFiles.schemaLocation"</span>, <span class="str">"/mnt/checkpoints/schema"</span>) \
+    .option(<span class="str">"cloudFiles.inferColumnTypes"</span>, <span class="str">"true"</span>) \
+    .load(<span class="str">"s3://raw-bucket/events/"</span>)
+
+<span class="cm"># Write to Bronze Delta table</span>
+raw_df.writeStream \
+    .format(<span class="str">"delta"</span>) \
+    .outputMode(<span class="str">"append"</span>) \
+    .option(<span class="str">"checkpointLocation"</span>, <span class="str">"/mnt/checkpoints/bronze_events"</span>) \
+    .trigger(availableNow=<span class="kw">True</span>) \
+    .toTable(<span class="str">"bronze.events"</span>)</pre>
+      </div>
+
+      <div class="sh">Delta Live Tables (DLT)</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Python — Delta Live Tables</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="kw">import</span> dlt
+<span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+
+<span class="cm"># ── BRONZE: Raw ingestion ──</span>
+<span class="op">@</span>dlt.table(comment=<span class="str">"Raw orders from S3"</span>)
+<span class="kw">def</span> <span class="fn">bronze_orders</span>():
+    <span class="kw">return</span> spark.readStream.format(<span class="str">"cloudFiles"</span>) \
+        .option(<span class="str">"cloudFiles.format"</span>, <span class="str">"json"</span>) \
+        .load(<span class="str">"s3://raw-bucket/orders/"</span>)
+
+<span class="cm"># ── SILVER: Cleaned & validated ──</span>
+<span class="op">@</span>dlt.table
+<span class="op">@</span>dlt.expect_or_drop(<span class="str">"valid_amount"</span>, <span class="str">"amount > 0"</span>)
+<span class="op">@</span>dlt.expect_or_drop(<span class="str">"valid_customer"</span>, <span class="str">"customer_id IS NOT NULL"</span>)
+<span class="kw">def</span> <span class="fn">silver_orders</span>():
+    <span class="kw">return</span> dlt.read_stream(<span class="str">"bronze_orders"</span>) \
+        .withColumn(<span class="str">"order_date"</span>, F.to_date(<span class="str">"order_timestamp"</span>)) \
+        .withColumn(<span class="str">"amount"</span>, F.col(<span class="str">"amount"</span>).cast(<span class="str">"double"</span>)) \
+        .drop(<span class="str">"_rescued_data"</span>)
+
+<span class="cm"># ── GOLD: Business aggregates ──</span>
+<span class="op">@</span>dlt.table(comment=<span class="str">"Daily revenue by region"</span>)
+<span class="kw">def</span> <span class="fn">gold_daily_revenue</span>():
+    <span class="kw">return</span> dlt.read(<span class="str">"silver_orders"</span>) \
+        .groupBy(<span class="str">"order_date"</span>, <span class="str">"region"</span>) \
+        .agg(
+            F.sum(<span class="str">"amount"</span>).alias(<span class="str">"revenue"</span>),
+            F.count(<span class="str">"*"</span>).alias(<span class="str">"order_count"</span>)
+        )</pre>
+      </div>
+
+      <div class="concept green">
+        <div class="concept-title">💡 DLT Quality Expectations</div>
+        <ul>
+          <li><strong>@dlt.expect("msg", "condition"):</strong> Track violations as metrics but keep data</li>
+          <li><strong>@dlt.expect_or_drop("msg", "condition"):</strong> Drop rows that fail</li>
+          <li><strong>@dlt.expect_or_fail("msg", "condition"):</strong> Fail the entire pipeline on violation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== STREAMING ===== -->
+    <div class="section" id="section-streaming">
+      <div class="breadcrumb">
+        <span>Intermediate</span><span class="breadcrumb-sep">›</span><span>Structured Streaming</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">08</div>
+        <div class="section-title-block">
+          <h3>Structured Streaming</h3>
+          <p>Process real-time data streams with exactly-once semantics and fault tolerance.</p>
+        </div>
+      </div>
+
+      <div class="concept blue">
+        <div class="concept-title">🔵 Streaming Mental Model</div>
+        <p>Think of a stream as an <strong>unbounded table</strong> that keeps growing. Spark Structured Streaming treats streaming data the same as batch DataFrames — same API, but with checkpointing for fault tolerance and exactly-once processing guarantees.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark — Kafka Streaming</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Read from Kafka</span>
+<span class="var">stream_df</span> <span class="op">=</span> spark.readStream \
+    .format(<span class="str">"kafka"</span>) \
+    .option(<span class="str">"kafka.bootstrap.servers"</span>, <span class="str">"broker1:9092,broker2:9092"</span>) \
+    .option(<span class="str">"subscribe"</span>, <span class="str">"orders-topic"</span>) \
+    .option(<span class="str">"startingOffsets"</span>, <span class="str">"latest"</span>) \
+    .load()
+
+<span class="cm"># Deserialize JSON payload</span>
+<span class="kw">from</span> pyspark.sql.types <span class="kw">import</span> StructType, StringType, DoubleType
+<span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> from_json, col
+
+<span class="var">schema</span> <span class="op">=</span> StructType() \
+    .add(<span class="str">"order_id"</span>, StringType()) \
+    .add(<span class="str">"amount"</span>, DoubleType()) \
+    .add(<span class="str">"timestamp"</span>, StringType())
+
+<span class="var">parsed</span> <span class="op">=</span> stream_df \
+    .select(from_json(col(<span class="str">"value"</span>).cast(<span class="str">"string"</span>), schema).alias(<span class="str">"data"</span>)) \
+    .select(<span class="str">"data.*"</span>)
+
+<span class="cm"># Windowed aggregation with watermark</span>
+<span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> window, to_timestamp
+
+<span class="var">windowed</span> <span class="op">=</span> parsed \
+    .withColumn(<span class="str">"event_time"</span>, to_timestamp(<span class="str">"timestamp"</span>)) \
+    .withWatermark(<span class="str">"event_time"</span>, <span class="str">"10 minutes"</span>) \  <span class="cm"># Handle late data</span>
+    .groupBy(window(<span class="str">"event_time"</span>, <span class="str">"5 minutes"</span>)) \
+    .agg(F.sum(<span class="str">"amount"</span>).alias(<span class="str">"revenue_5min"</span>))
+
+<span class="cm"># Write stream to Delta table</span>
+<span class="var">query</span> <span class="op">=</span> windowed.writeStream \
+    .format(<span class="str">"delta"</span>) \
+    .outputMode(<span class="str">"append"</span>) \
+    .option(<span class="str">"checkpointLocation"</span>, <span class="str">"/mnt/checkpoints/orders"</span>) \
+    .trigger(processingTime=<span class="str">"30 seconds"</span>) \
+    .toTable(<span class="str">"streaming.order_windows"</span>)
+
+query.awaitTermination()
+
+<span class="cm"># Trigger options</span>
+<span class="cm"># .trigger(processingTime="30 seconds") — micro-batch every 30s</span>
+<span class="cm"># .trigger(once=True)           — run once then stop</span>
+<span class="cm"># .trigger(availableNow=True)   — process all available, then stop</span>
+<span class="cm"># .trigger(continuous="1 second") — true continuous (low latency)</span></pre>
+      </div>
+    </div>
+
+    <!-- ===== MLFLOW ===== -->
+    <div class="section" id="section-mlflow">
+      <div class="breadcrumb">
+        <span>Intermediate</span><span class="breadcrumb-sep">›</span><span>MLflow & Machine Learning</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">09</div>
+        <div class="section-title-block">
+          <h3>MLflow & Machine Learning</h3>
+          <p>Track experiments, register models, and deploy ML at scale with MLflow.</p>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">📊</span>
+          <h4>MLflow Tracking</h4>
+          <p>Log parameters, metrics, and artifacts. Compare experiments. Visualize training curves.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🗃️</span>
+          <h4>Model Registry</h4>
+          <p>Version models, manage lifecycle (staging → production). Team collaboration on models.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🚀</span>
+          <h4>Model Serving</h4>
+          <p>One-click REST API deployment. Auto-scale, A/B testing, real-time inference.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚡</span>
+          <h4>Feature Store</h4>
+          <p>Centralized feature repository. Reuse features across teams. Point-in-time lookups.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Python — MLflow End-to-End</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="kw">import</span> mlflow
+<span class="kw">import</span> mlflow.sklearn
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score, f1_score
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+mlflow.set_experiment(<span class="str">"/Users/you@co.com/churn-prediction"</span>)
+
+<span class="kw">with</span> mlflow.start_run(run_name=<span class="str">"RF-v2"</span>) <span class="kw">as</span> run:
+    <span class="cm"># Log parameters</span>
+    <span class="var">params</span> <span class="op">=</span> {<span class="str">"n_estimators"</span>: <span class="num">200</span>, <span class="str">"max_depth"</span>: <span class="num">8</span>, <span class="str">"min_samples_leaf"</span>: <span class="num">5</span>}
+    mlflow.log_params(params)
+
+    <span class="cm"># Train model</span>
+    <span class="var">model</span> <span class="op">=</span> RandomForestClassifier(<span class="op">**</span>params, random_state=<span class="num">42</span>)
+    model.fit(X_train, y_train)
+
+    <span class="cm"># Log metrics</span>
+    <span class="var">y_pred</span> <span class="op">=</span> model.predict(X_test)
+    mlflow.log_metric(<span class="str">"accuracy"</span>, accuracy_score(y_test, y_pred))
+    mlflow.log_metric(<span class="str">"f1"</span>,       f1_score(y_test, y_pred))
+
+    <span class="cm"># Log model with signature</span>
+    <span class="kw">from</span> mlflow.models.signature <span class="kw">import</span> infer_signature
+    <span class="var">signature</span> <span class="op">=</span> infer_signature(X_train, y_pred)
+    mlflow.sklearn.log_model(
+        model, <span class="str">"model"</span>,
+        signature=signature,
+        registered_model_name=<span class="str">"ChurnPredictor"</span>
+    )
+
+    <span class="cm"># Log artifacts (plots, data samples, etc.)</span>
+    mlflow.log_artifact(<span class="str">"feature_importance.png"</span>)
+    mlflow.log_dict({<span class="str">"features"</span>: feature_names}, <span class="str">"features.json"</span>)
+
+<span class="cm"># Promote model to production</span>
+<span class="kw">from</span> mlflow.tracking <span class="kw">import</span> MlflowClient
+<span class="var">client</span> <span class="op">=</span> MlflowClient()
+client.transition_model_version_stage(
+    name=<span class="str">"ChurnPredictor"</span>, version=<span class="num">3</span>, stage=<span class="str">"Production"</span>
+)
+
+<span class="cm"># Load production model for inference</span>
+<span class="var">prod_model</span> <span class="op">=</span> mlflow.pyfunc.load_model(<span class="str">"models:/ChurnPredictor/Production"</span>)
+predictions <span class="op">=</span> prod_model.predict(new_data)</pre>
+      </div>
+
+      <div class="sh">Distributed ML with Spark</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Python — Hyperopt + SparkTrials</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="kw">from</span> hyperopt <span class="kw">import</span> fmin, tpe, hp, SparkTrials, STATUS_OK
+<span class="kw">import</span> mlflow
+
+<span class="kw">def</span> <span class="fn">objective</span>(params):
+    <span class="kw">with</span> mlflow.start_run(nested=<span class="kw">True</span>):
+        mlflow.log_params(params)
+        model <span class="op">=</span> RandomForestClassifier(
+            n_estimators=<span class="fn">int</span>(params[<span class="str">"n_estimators"</span>]),
+            max_depth=<span class="fn">int</span>(params[<span class="str">"max_depth"</span>])
+        )
+        model.fit(X_train, y_train)
+        score <span class="op">=</span> accuracy_score(y_test, model.predict(X_test))
+        mlflow.log_metric(<span class="str">"accuracy"</span>, score)
+        <span class="kw">return</span> {<span class="str">"loss"</span>: <span class="op">-</span>score, <span class="str">"status"</span>: STATUS_OK}
+
+<span class="var">search_space</span> <span class="op">=</span> {
+    <span class="str">"n_estimators"</span>: hp.quniform(<span class="str">"n_estimators"</span>, <span class="num">50</span>, <span class="num">500</span>, <span class="num">50</span>),
+    <span class="str">"max_depth"</span>:    hp.quniform(<span class="str">"max_depth"</span>, <span class="num">3</span>, <span class="num">15</span>, <span class="num">1</span>)
+}
+
+<span class="cm"># SparkTrials runs trials in parallel across workers!</span>
+<span class="var">best</span> <span class="op">=</span> fmin(
+    fn=objective,
+    space=search_space,
+    algo=tpe.suggest,
+    max_evals=<span class="num">50</span>,
+    trials=SparkTrials(parallelism=<span class="num">4</span>)
+)</pre>
+      </div>
+    </div>
+
+    <!-- ===== UNITY CATALOG ===== -->
+    <div class="section" id="section-unity">
+      <div class="breadcrumb">
+        <span>Intermediate</span><span class="breadcrumb-sep">›</span><span>Unity Catalog</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">10</div>
+        <div class="section-title-block">
+          <h3>Unity Catalog</h3>
+          <p>Unified governance, access control, and data discovery across all your data assets.</p>
+        </div>
+      </div>
+
+      <div class="sh">3-Level Namespace</div>
+      <div class="arch">
+        <div class="arch-layer"><div class="arch-box red">Catalog<sub>Top-level organizational unit (e.g., "prod", "dev")</sub></div></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-layer"><div class="arch-box blue">Schema / Database<sub>Logical grouping (e.g., "sales", "marketing")</sub></div></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-layer">
+          <div class="arch-box green">Table<sub>Delta table, view, or external</sub></div>
+          <div class="arch-box green">View<sub>Logical view over tables</sub></div>
+          <div class="arch-box green">Function<sub>UDF / table function</sub></div>
+          <div class="arch-box green">Volume<sub>Unstructured data (files)</sub></div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">SQL — Unity Catalog Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm">-- Create catalog</span>
+<span class="kw">CREATE</span> CATALOG IF NOT EXISTS prod;
+
+<span class="cm">-- Create schema</span>
+<span class="kw">CREATE</span> SCHEMA IF NOT EXISTS prod.sales;
+
+<span class="cm">-- Create managed table (3-level namespace)</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> prod.sales.orders (
+    order_id STRING <span class="kw">NOT NULL</span>,
+    customer_id STRING,
+    amount DOUBLE,
+    order_date DATE
+) USING DELTA;
+
+<span class="cm">-- Query with 3-level namespace</span>
+<span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> prod.sales.orders;
+
+<span class="cm">-- ── ACCESS CONTROL ──</span>
+<span class="cm">-- Grant table access</span>
+GRANT <span class="kw">SELECT</span> ON <span class="kw">TABLE</span> prod.sales.orders TO <span class="str">`data-analysts`</span>;
+GRANT MODIFY  ON <span class="kw">TABLE</span> prod.sales.orders TO <span class="str">`data-engineers`</span>;
+
+<span class="cm">-- Grant schema-level access</span>
+GRANT <span class="kw">CREATE</span> <span class="kw">TABLE</span>, <span class="kw">SELECT</span> ON SCHEMA prod.sales TO <span class="str">`data-team`</span>;
+
+<span class="cm">-- Column-level security (masking)</span>
+<span class="kw">CREATE</span> FUNCTION prod.security.mask_email(email STRING)
+  RETURNS STRING
+  RETURN CASE
+    WHEN is_member(<span class="str">'pii-readers'</span>) THEN email
+    ELSE CONCAT(LEFT(email, <span class="num">2</span>), <span class="str">'***@***.com'</span>)
+  END;
+
+ALTER TABLE prod.customers
+  ALTER COLUMN email
+  SET MASK prod.security.mask_email;
+
+<span class="cm">-- Row-level security (filters)</span>
+<span class="kw">CREATE</span> FUNCTION prod.security.filter_by_region(region STRING)
+  RETURNS BOOLEAN
+  RETURN is_member(<span class="str">'global-access'</span>) OR
+         array_contains(current_groups(), CONCAT(<span class="str">'region-'</span>, region));
+
+ALTER TABLE prod.sales.orders
+  ADD ROW FILTER prod.security.filter_by_region ON (region);
+
+<span class="cm">-- Data lineage</span>
+DESCRIBE HISTORY prod.sales.orders;
+DESCRIBE EXTENDED prod.sales.orders;</pre>
+      </div>
+    </div>
+
+    <!-- ===== PERFORMANCE ===== -->
+    <div class="section" id="section-performance">
+      <div class="breadcrumb">
+        <span>Advanced</span><span class="breadcrumb-sep">›</span><span>Performance Tuning</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">11</div>
+        <div class="section-title-block">
+          <h3>Performance Tuning</h3>
+          <p>Diagnose and eliminate bottlenecks — partitioning, caching, AQE, and Photon.</p>
+        </div>
+      </div>
+
+      <div class="sh">Common Performance Issues</div>
+      <table>
+        <thead><tr><th>Issue</th><th>Symptom</th><th>Solution</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Data Skew</strong></td><td>One task takes 100x longer</td><td>Salting, skew hints, AQE</td></tr>
+          <tr><td><strong>Too Many Small Files</strong></td><td>Slow reads, many tasks</td><td>OPTIMIZE (compaction)</td></tr>
+          <tr><td><strong>Shuffle Overhead</strong></td><td>Slow after groupBy/join</td><td>Broadcast joins, reduce partitions</td></tr>
+          <tr><td><strong>No Partition Pruning</strong></td><td>Full table scan</td><td>Filter on partition columns</td></tr>
+          <tr><td><strong>GC Pressure</strong></td><td>Executor OOM, slowdown</td><td>Increase memory, use off-heap</td></tr>
+          <tr><td><strong>Serialization</strong></td><td>Slow UDFs</td><td>Use Pandas UDFs or built-in functions</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">PySpark — Performance Configurations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># ── ADAPTIVE QUERY EXECUTION (AQE) — enable always ──</span>
+spark.conf.set(<span class="str">"spark.sql.adaptive.enabled"</span>,                   <span class="str">"true"</span>)
+spark.conf.set(<span class="str">"spark.sql.adaptive.coalescePartitions.enabled"</span>, <span class="str">"true"</span>)  <span class="cm"># Merge small partitions</span>
+spark.conf.set(<span class="str">"spark.sql.adaptive.skewJoin.enabled"</span>,           <span class="str">"true"</span>)  <span class="cm"># Auto-fix skew</span>
+
+<span class="cm"># ── PARTITIONING ──</span>
+<span class="cm"># Rule: target 128MB–200MB per partition</span>
+spark.conf.set(<span class="str">"spark.sql.shuffle.partitions"</span>, <span class="str">"400"</span>)           <span class="cm"># Default 200, tune to data size</span>
+spark.conf.set(<span class="str">"spark.default.parallelism"</span>, <span class="str">"400"</span>)
+
+df.repartition(<span class="num">200</span>)                       <span class="cm"># Full shuffle</span>
+df.repartition(<span class="num">200</span>, <span class="str">"customer_id"</span>)        <span class="cm"># Shuffle by column</span>
+df.coalesce(<span class="num">10</span>)                            <span class="cm"># Reduce partitions (no shuffle)</span>
+
+<span class="cm"># ── CACHING ──</span>
+df.cache()                  <span class="cm"># Memory only (MEMORY_AND_DISK)</span>
+df.persist(StorageLevel.MEMORY_ONLY)
+df.persist(StorageLevel.DISK_ONLY)
+df.unpersist()              <span class="cm"># Always unpersist when done!</span>
+
+<span class="cm"># ── BROADCAST JOINS ──</span>
+<span class="cm"># Auto if table < spark.sql.autoBroadcastJoinThreshold (10MB)</span>
+spark.conf.set(<span class="str">"spark.sql.autoBroadcastJoinThreshold"</span>, <span class="str">"50MB"</span>)
+
+<span class="cm"># Force broadcast</span>
+large.join(broadcast(small), <span class="str">"id"</span>)
+
+<span class="cm"># ── SALTING for data skew ──</span>
+<span class="kw">import</span> random
+<span class="var">N</span> <span class="op">=</span> <span class="num">10</span>  <span class="cm"># Number of salt buckets</span>
+skewed_df.withColumn(<span class="str">"salt"</span>, (F.rand() <span class="op">*</span> N).cast(<span class="str">"int"</span>)) \
+         .withColumn(<span class="str">"salted_key"</span>, F.concat(<span class="str">"skewed_col"</span>, F.lit(<span class="str">"_"</span>), <span class="str">"salt"</span>))
+
+<span class="cm"># ── Z-ORDER for Delta (co-locate related data) ──</span>
+<span class="cm">-- SQL: OPTIMIZE orders ZORDER BY (customer_id, order_date)</span>
+
+<span class="cm"># ── PHOTON ENGINE ──</span>
+<span class="cm"># Enable in cluster config: select Photon runtime</span>
+<span class="cm"># Automatically speeds up SQL queries 2-12x with no code changes</span></pre>
+      </div>
+
+      <div class="sh">Reading the Spark UI</div>
+      <div class="concept purple">
+        <div class="concept-title">🟣 Spark UI Cheat Sheet</div>
+        <ul>
+          <li><strong>Jobs tab:</strong> Top-level jobs triggered by actions. Click in for stages.</li>
+          <li><strong>Stages tab:</strong> See individual stage timing, task distribution, shuffle read/write.</li>
+          <li><strong>SQL/DataFrame tab:</strong> Physical query plan, scan statistics, join types chosen.</li>
+          <li><strong>Storage tab:</strong> Cached DataFrames — size, fraction cached, memory used.</li>
+          <li><strong>Executors tab:</strong> GC time, task failures, memory usage per executor.</li>
+          <li><strong>Red flags:</strong> Spill to disk, high GC time (&gt;10%), skewed task durations, shuffle spill.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== WORKFLOWS ===== -->
+    <div class="section" id="section-workflows">
+      <div class="breadcrumb">
+        <span>Advanced</span><span class="breadcrumb-sep">›</span><span>Workflows & Orchestration</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">12</div>
+        <div class="section-title-block">
+          <h3>Workflows & Orchestration</h3>
+          <p>Build, schedule, and monitor production pipelines with Databricks Workflows.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON — Workflow Job Definition (API)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre>{
+  <span class="str">"name"</span>: <span class="str">"Daily ETL Pipeline"</span>,
+  <span class="str">"schedule"</span>: {
+    <span class="str">"quartz_cron_expression"</span>: <span class="str">"0 0 6 * * ?"</span>,   <span class="cm">// 6 AM daily</span>
+    <span class="str">"timezone_id"</span>: <span class="str">"UTC"</span>
+  },
+  <span class="str">"tasks"</span>: [
+    {
+      <span class="str">"task_key"</span>: <span class="str">"ingest_raw"</span>,
+      <span class="str">"notebook_task"</span>: {
+        <span class="str">"notebook_path"</span>: <span class="str">"/pipelines/01_ingest"</span>,
+        <span class="str">"base_parameters"</span>: { <span class="str">"date"</span>: <span class="str">"{{ds}}"</span> }
+      },
+      <span class="str">"job_cluster_key"</span>: <span class="str">"etl_cluster"</span>,
+      <span class="str">"retry_on_timeout"</span>: <span class="kw">true</span>,
+      <span class="str">"max_retries"</span>: <span class="num">2</span>
+    },
+    {
+      <span class="str">"task_key"</span>: <span class="str">"transform_silver"</span>,
+      <span class="str">"depends_on"</span>: [{ <span class="str">"task_key"</span>: <span class="str">"ingest_raw"</span> }],
+      <span class="str">"notebook_task"</span>: { <span class="str">"notebook_path"</span>: <span class="str">"/pipelines/02_silver"</span> },
+      <span class="str">"job_cluster_key"</span>: <span class="str">"etl_cluster"</span>
+    },
+    {
+      <span class="str">"task_key"</span>: <span class="str">"gold_revenue"</span>,
+      <span class="str">"depends_on"</span>: [{ <span class="str">"task_key"</span>: <span class="str">"transform_silver"</span> }],
+      <span class="str">"notebook_task"</span>: { <span class="str">"notebook_path"</span>: <span class="str">"/pipelines/03_gold_revenue"</span> },
+      <span class="str">"job_cluster_key"</span>: <span class="str">"etl_cluster"</span>
+    },
+    {
+      <span class="str">"task_key"</span>: <span class="str">"gold_customers"</span>,
+      <span class="str">"depends_on"</span>: [{ <span class="str">"task_key"</span>: <span class="str">"transform_silver"</span> }],  <span class="cm">// Parallel with gold_revenue</span>
+      <span class="str">"python_wheel_task"</span>: {
+        <span class="str">"package_name"</span>: <span class="str">"my_etl"</span>,
+        <span class="str">"entry_point"</span>: <span class="str">"gold_customers"</span>
+      }
+    }
+  ],
+  <span class="str">"job_clusters"</span>: [{
+    <span class="str">"job_cluster_key"</span>: <span class="str">"etl_cluster"</span>,
+    <span class="str">"new_cluster"</span>: {
+      <span class="str">"spark_version"</span>: <span class="str">"14.3.x-scala2.12"</span>,
+      <span class="str">"node_type_id"</span>: <span class="str">"i3.xlarge"</span>,
+      <span class="str">"num_workers"</span>: <span class="num">4</span>
+    }
+  }],
+  <span class="str">"email_notifications"</span>: {
+    <span class="str">"on_failure"</span>: [<span class="str">"oncall@company.com"</span>]
+  }
+}</pre>
+      </div>
+    </div>
+
+    <!-- ===== SECURITY ===== -->
+    <div class="section" id="section-security">
+      <div class="breadcrumb">
+        <span>Advanced</span><span class="breadcrumb-sep">›</span><span>Security & Governance</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">13</div>
+        <div class="section-title-block">
+          <h3>Security & Governance</h3>
+          <p>Secrets management, network isolation, encryption, and compliance.</p>
+        </div>
+      </div>
+
+      <div class="sh">Secrets Management</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Databricks CLI — Secrets</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Create a secret scope (backed by Azure Key Vault or Databricks)</span>
+databricks secrets create-scope --scope prod-secrets
+
+<span class="cm"># Add secrets</span>
+databricks secrets put --scope prod-secrets --key db-password
+databricks secrets put --scope prod-secrets --key api-key
+
+<span class="cm"># List scopes and keys</span>
+databricks secrets list-scopes
+databricks secrets list --scope prod-secrets
+
+<span class="cm"># In notebooks — NEVER print secrets!</span>
+<span class="var">password</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"prod-secrets"</span>, key=<span class="str">"db-password"</span>)
+<span class="cm"># [REDACTED] in logs automatically</span>
+
+<span class="cm"># Use in Spark configs</span>
+spark.conf.set(
+    <span class="str">"fs.azure.account.key.mystorageaccount.dfs.core.windows.net"</span>,
+    dbutils.secrets.get(scope=<span class="str">"prod-secrets"</span>, key=<span class="str">"storage-key"</span>)
+)</pre>
+      </div>
+
+      <div class="sh">Security Best Practices</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🔐</span>
+          <h4>Network Isolation</h4>
+          <p>Deploy in your VPC/VNet. Use Private Link to prevent traffic traversing public internet. Restrict outbound with security groups.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔑</span>
+          <h4>Customer-Managed Keys</h4>
+          <p>Encrypt notebooks and Delta tables with your own KMS/Key Vault keys. Revoke access instantly by disabling keys.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📋</span>
+          <h4>Audit Logs</h4>
+          <p>Every action logged — who ran what query, accessed which table, created/deleted resources. Export to SIEM.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">👥</span>
+          <h4>SSO & SCIM</h4>
+          <p>Integrate with Okta, Azure AD, or any SAML provider. Sync groups automatically via SCIM provisioning.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LAKEHOUSE ===== -->
+    <div class="section" id="section-lakehouse">
+      <div class="breadcrumb">
+        <span>Advanced</span><span class="breadcrumb-sep">›</span><span>Lakehouse Architecture</span>
+      </div>
+      <div class="section-header">
+        <div class="section-number">14</div>
+        <div class="section-title-block">
+          <h3>Lakehouse Architecture</h3>
+          <p>Design production-grade, enterprise-scale data platforms on Databricks.</p>
+        </div>
+      </div>
+
+      <div class="sh">Complete Lakehouse Reference Architecture</div>
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="arch-box">Operational DBs<sub>PostgreSQL, MySQL, Oracle</sub></div>
+          <div class="arch-box">Event Streams<sub>Kafka, Kinesis, Event Hubs</sub></div>
+          <div class="arch-box">Files & APIs<sub>S3, SFTP, REST APIs</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Ingest (Auto Loader, Kafka, JDBC)</div>
+        <div class="arch-layer">
+          <div class="arch-box red">Bronze Zone<sub>Raw, immutable, full history</sub></div>
+        </div>
+        <div class="arch-arrow">↓ DLT / Spark ETL</div>
+        <div class="arch-layer">
+          <div class="arch-box blue">Silver Zone<sub>Cleansed, validated, standardized</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Aggregation / Feature Engineering</div>
+        <div class="arch-layer">
+          <div class="arch-box green">Gold Zone<sub>Business aggregates, star schema, features</sub></div>
+        </div>
+        <div class="arch-arrow">↓ Serve</div>
+        <div class="arch-layer">
+          <div class="arch-box">BI Tools<sub>Power BI, Tableau, Looker</sub></div>
+          <div class="arch-box">ML Models<sub>MLflow Serving</sub></div>
+          <div class="arch-box">Applications<sub>REST APIs</sub></div>
+        </div>
+      </div>
+
+      <div class="sh">Advanced Design Patterns</div>
+      <div class="concept purple">
+        <div class="concept-title">🟣 Production Checklist</div>
+        <ul>
+          <li><strong>Idempotency:</strong> Every pipeline run should produce the same result. Use MERGE over INSERT.</li>
+          <li><strong>Partitioning Strategy:</strong> Partition by low-cardinality columns used in filters (date, region).</li>
+          <li><strong>Z-Ordering:</strong> Apply to high-cardinality columns queried frequently (user_id, order_id).</li>
+          <li><strong>Vacuum Schedule:</strong> Run VACUUM weekly. Default 7-day retention for time travel.</li>
+          <li><strong>OPTIMIZE Schedule:</strong> Run after large writes. Target 128MB+ file sizes.</li>
+          <li><strong>Job Clusters:</strong> Use job clusters for production — cheaper, fresh environment, auto-terminate.</li>
+          <li><strong>Separate Environments:</strong> dev → staging → prod catalogs in Unity Catalog.</li>
+          <li><strong>CI/CD:</strong> Use Databricks Asset Bundles (DABs) with GitHub Actions or Azure DevOps.</li>
+          <li><strong>Monitoring:</strong> Track DLT expectations, MLflow metrics, workflow SLAs.</li>
+          <li><strong>Cost Management:</strong> Spot instances for workers, right-size clusters, instance pools.</li>
+        </ul>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">YAML — Databricks Asset Bundle (CI/CD)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># databricks.yml — deploy jobs as code</span>
+bundle:
+  name: my-data-platform
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-xxx.azuredatabricks.net
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-yyy.azuredatabricks.net
+
+resources:
+  jobs:
+    daily-etl:
+      name: "Daily ETL - ${bundle.target}"
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: UTC
+      tasks:
+        - task_key: ingest
+          notebook_task:
+            notebook_path: ./notebooks/01_ingest.py
+          job_cluster_key: etl
+        - task_key: transform
+          depends_on: [{task_key: ingest}]
+          notebook_task:
+            notebook_path: ./notebooks/02_transform.py
+          job_cluster_key: etl
+      job_clusters:
+        - job_cluster_key: etl
+          new_cluster:
+            spark_version: 14.3.x-scala2.12
+            node_type_id: i3.xlarge
+            num_workers: 4</pre>
+      </div>
+
+      <div class="quiz">
+        <h4>🧠 Advanced Check: Which storage format does Delta Lake use for data files?</h4>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">A</span> CSV files with a metadata sidecar</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">B</span> ORC files with transaction logs</div>
+        <div class="quiz-option" onclick="checkQuiz(this, true)"><span class="quiz-letter">C</span> Parquet files with a JSON transaction log (_delta_log)</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false)"><span class="quiz-letter">D</span> Avro files with schema registry</div>
+        <div class="quiz-result" id="quiz-result-lakehouse"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<button class="mobile-toggle" onclick="toggleSidebar()" id="mobile-btn">☰</button>
+
+<script>
+  const sections = ['intro','architecture','notebooks','spark','dataframes','delta','etl','streaming','mlflow','unity','performance','workflows','security','lakehouse'];
+  let visited = new Set(['intro']);
+
+  function showSection(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    el.classList.add('active');
+    visited.add(id);
+    updateProgress();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function updateProgress() {
+    const pct = Math.round((visited.size / sections.length) * 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  function switchTab(btn, tabId) {
+    const parent = btn.closest('.section');
+    parent.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+  }
+
+  function checkQuiz(el, correct) {
+    const parent = el.closest('.quiz');
+    parent.querySelectorAll('.quiz-option').forEach(o => {
+      o.style.pointerEvents = 'none';
+    });
+    if (correct) {
+      el.classList.add('correct');
+      const res = parent.querySelector('.quiz-result');
+      res.style.display = 'block';
+      res.style.background = 'rgba(0,229,160,0.1)';
+      res.style.color = 'var(--green)';
+      res.style.border = '1px solid var(--green)';
+      res.textContent = '✅ Correct! Great understanding of Databricks internals.';
+    } else {
+      el.classList.add('wrong');
+      const res = parent.querySelector('.quiz-result');
+      res.style.display = 'block';
+      res.style.background = 'rgba(255,61,0,0.1)';
+      res.style.color = 'var(--accent2)';
+      res.style.border = '1px solid var(--accent)';
+      res.textContent = '❌ Not quite. Look for the option about Parquet + JSON transaction log!';
+    }
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+      btn.textContent = 'COPIED!';
+      setTimeout(() => btn.textContent = 'COPY', 2000);
+    });
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

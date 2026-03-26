@@ -1,32 +1,98 @@
 ## CrackingMachineLearningInterview
 
-These questions are guranteed to be asked in Machine Learning Engineer or ML based interviews for upto 80% of your job interviews.
-Make sure that you cover and know about machine learning. These questions can Ace your interviews regarding ML even 
-if you are a fresh graduate or upto 5 years of experience.
-##### Ultimate Machine Learning Engineer Interview Questions.
-Helpful for:
+A practical interview preparation repository for Machine Learning Engineer, AI Engineer, Data Scientist, Deep Learning Engineer, Data Engineer, and DevOps or platform-focused roles.
+
+This README now serves three purposes:
+
+1. It keeps the original core ML interview questions.
+2. It adds a more organized 2026 interview-prep layer focused on modern ML engineering topics such as LLMs, RAG, evaluation, agents, safety, and production systems.
+3. It acts as the main entry point for related tracks including AI/GenAI, data engineering, and DevOps.
+
+### Who this repository is for
 * Machine Learning Engineer
-
 * Data Scientist
-
 * Deep Learning Engineer
-
 * AI Engineer
+* Software Engineer working on AI/ML products
+* Data Engineer
+* MLOps Engineer
+* DevOps / Platform Engineer
 
-* Software Development Engineer (focused on AI/ML)
+## How to use this repository
+* Start with the **2026 Interview Roadmap** if you are preparing for current AI/ML interviews.
+* Use **2026 Additional Questions and Answers** for modern interview rounds.
+* Use the **AI / GenAI**, **Data Engineering**, and **DevOps** sections for specialized interview tracks.
+* Use the **Classic Question Bank** for core ML, statistics, deep learning, and algorithms.
+* Use **Preparation Resources and References** to build a targeted study plan.
 
-## About:
-* Github Profile :  [Shafaypro](https://github.com/shafaypro) &copy;
-* ML Interview Questions repository : [ML interview Repository Link](https://github.com/shafaypro/CrackingMachineLearningInterview "ML Interview Repository")
+## Quick Navigation
+* [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
+* [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
+* [AI / GenAI Track](#ai--genai-track)
+* [Data Engineering Track](#data-engineering-track)
+* [DevOps Track](#devops-track)
+* [Preparation Resources and References](./docs/resources-and-references.md)
+* [Study Pattern](./docs/study-pattern.md)
+* [Classic Question Bank](#classic-question-bank)
+* [Contributions](#contributions)
 
-#### Images References
-* The Image references are only for Educational Purposes. These are totally made by the creators, specified in the reference.md file.
+## About
+* Github Profile: [Shafaypro](https://github.com/shafaypro) &copy;
+* Repository: [CrackingMachineLearningInterview](https://github.com/shafaypro/CrackingMachineLearningInterview)
 
-#### Sharing is Caring:
-Feel Free to Share the Questions/References Link into your blog.
+#### Image References
+* Image references are included for educational purposes. Please see the repository references for attribution where applicable.
 
+#### Sharing
+Feel free to share the repository link in your blog, study notes, or interview preparation material.
 
-# Questions
+## Repository Structure
+* [`docs/2026-interview-roadmap.md`](./docs/2026-interview-roadmap.md): current interview focus areas for ML Engineer and AI Engineer roles.
+* [`docs/2026-additional-questions.md`](./docs/2026-additional-questions.md): modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.
+* [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
+* [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics and study structure.
+* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics.
+* [`data_engineering/`](./data_engineering): data engineering interview topics and platform concepts.
+* [`devops/`](./devops): DevOps, infrastructure, and deployment topics.
+* `README.md`: repository landing page plus the original classic ML interview question bank.
+
+## AI / GenAI Track
+Use this track for AI Engineer, GenAI Engineer, LLM Engineer, Applied AI, and agent-platform interviews.
+
+Core topics:
+* [RAG](./ai_genai/intro_rag.md)
+* [Vector Databases](./ai_genai/intro_vector_databases.md)
+* [LLMOps](./ai_genai/intro_llmops.md)
+* [Agentic AI](./ai_genai/intro_agentic_ai.md)
+* [MCP](./ai_genai/intro_mcp.md)
+* [LangChain](./ai_genai/intro_langchain.md)
+* [Anthropic Overview](./ai_genai/intro_anthropic.md)
+
+## Data Engineering Track
+Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, and streaming interviews.
+
+Core topics:
+* [Apache Spark](./data_engineering/intro_apache_spark.md)
+* [Apache Kafka](./data_engineering/intro_apache_kafka.md)
+* [Apache Airflow](./data_engineering/intro_apache_airflow.md)
+* [dbt Introduction](./data_engineering/intro_dbt.md)
+* [dbt Interview Guide](./data_engineering/interview_dbt.md)
+* [Apache Iceberg](./data_engineering/intro_apache_iceberg.md)
+* [Delta Lake](./data_engineering/intro_delta_lake.md)
+* [DuckDB](./data_engineering/intro_duckdb.md)
+* [OpenClaw](./data_engineering/intro_openclaw.md)
+
+## DevOps Track
+Use this track for infrastructure, CI/CD, containers, orchestration, and IaC interviews.
+
+Core topics:
+* [Docker](./devops/intro_docker.md)
+* [Kubernetes](./devops/intro_kubernetes.md)
+* [Helm](./devops/intro_helm.md)
+* [Terraform](./devops/intro_terraform.md)
+* [GitHub Actions](./devops/intro_github_actions.md)
+
+# Classic Question Bank
 
 #### Difference between SuperVised and Unsupervised Learning?
         Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not 
@@ -1182,69 +1248,7 @@ Contributions are most welcomed.
  1. Fork the repository.
  2. Commit your *questions* or *answers*.
  3. Open **pull request**.
- 
-## Preparation Resources
-1. [All of Statistics: A Concise Course in Statistical Inference](https://amzn.to/3r87WGa) by Larry Wasserman
-2. [Machine Learning](https://amzn.to/3RdiFK3) by Tom Mitchell
-3. [Designing Machine Learning Systems: An Iterative Process for Production-Ready Applications](https://amzn.to/3LiVgD2) by Chip Huyen
 
-
-#### How would you define GAN(Generative Adversarial Networks) ?
-
-#### What are Gausian Processes?
-
-#### What is Graph Neural Network?
-
-
-
-#### What is Language Modelling(LM), give examples?
-
-
-#### Define Named Entity recognition? Give some usecases where it can come in handy?
-
-
-
-
-## Pattern to Follow : 
-### Computer Science Fundamentals and Programming
-###### Topics
-
-Data structures: Lists, stacks, queues, strings, hash maps, vectors, matrices, classes & objects, trees, graphs, etc.
-Algorithms: Recursion, searching, sorting, optimization, dynamic programming, etc.
-Computability and complexity: P vs. NP, NP-complete problems, big-O notation, approximate algorithms, etc.
-Computer architecture: Memory, cache, bandwidth, threads & processes, deadlocks, etc.
-Probability and Statistics
-Topics
-
-### Basic probability: 
-
-Conditional probability, Bayes rule, likelihood, independence, etc.
-Probabilistic models: Bayes Nets, Markov Decision Processes, Hidden Markov Models, etc.
-Statistical measures: Mean, median, mode, variance, population parameters vs. sample statistics etc.
-Proximity and error metrics: Cosine similarity, mean-squared error, Manhattan and Euclidean distance, log-loss, etc.
-Distributions and random sampling: Uniform, normal, binomial, Poisson, etc.
-Analysis methods: ANOVA, hypothesis testing, factor analysis, etc.
-Data Modeling and Evaluation
-Topics
-
-### Data preprocessing: 
-Munging/wrangling, transforming, aggregating, etc.
-Pattern recognition: Correlations, clusters, trends, outliers & anomalies, etc.
-Dimensionality reduction: Eigenvectors, Principal Component Analysis, etc.
-Prediction: Classification, regression, sequence prediction, etc.; suitable error/accuracy metrics.
-Evaluation: Training-testing split, sequential vs. randomized cross-validation, etc.
-Applying Machine Learning Algorithms and Libraries
-Topics
-
-###Models: 
-Parametric vs. nonparametric, decision tree, nearest neighbor, neural net, support vector machine, ensemble of multiple models, etc.
-Learning procedure: Linear regression, gradient descent, genetic algorithms, bagging, boosting, and other model-specific methods; regularization, hyperparameter tuning, etc.
-Tradeoffs and gotchas: Relative advantages and disadvantages, bias and variance, overfitting and underfitting, vanishing/exploding gradients, missing data, data leakage, etc.
-Software Engineering and System Design
-Topics
-
-###Software interface: 
-Library calls, REST APIs, data collection endpoints, database queries, etc.
-User interface: Capturing user inputs & application events, displaying results & visualization, etc.
-Scalability: Map-reduce, distributed processing, etc.
-Deployment: Cloud hosting, containers & instances, microservices, etc.
+## More Study Material
+* Preparation resources and modern references: [`docs/resources-and-references.md`](./docs/resources-and-references.md)
+* Recommended topic breakdown: [`docs/study-pattern.md`](./docs/study-pattern.md)
