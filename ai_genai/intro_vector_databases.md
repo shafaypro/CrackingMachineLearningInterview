@@ -399,3 +399,14 @@ results = index.query(vector=emb, namespace="customer-123")
 # Chroma collections (one per tenant)
 collection = client.get_or_create_collection(f"tenant_{customer_id}")
 ```
+
+---
+
+## Related Topics
+
+| Topic | Why It's Related |
+|-------|-----------------|
+| [RAG](./intro_rag.md) | RAG pipelines rely on vector DBs for retrieval |
+| [LLMOps](./intro_llmops.md) | Monitoring embedding drift and vector DB performance |
+| [Agentic AI](./intro_agentic_ai.md) | Agents query vector DBs as memory and knowledge stores |
+| [LangChain](./intro_langchain.md) | LangChain integrates with all major vector databases |

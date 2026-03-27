@@ -29,8 +29,11 @@ This README now serves three purposes:
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
 * [AI / GenAI Track](#ai--genai-track)
+* [Classic ML Track](#classic-ml-track)
+* [MLOps Track](#mlops-track)
 * [Data Engineering Track](#data-engineering-track)
 * [DevOps Track](#devops-track)
+* [Cloud ML Platforms](#cloud-ml-platforms)
 * [Preparation Resources and References](./docs/resources-and-references.md)
 * [Study Pattern](./docs/study-pattern.md)
 * [Classic Question Bank](#classic-question-bank)
@@ -50,8 +53,11 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/2026-interview-roadmap.md`](./docs/2026-interview-roadmap.md): current interview focus areas for ML Engineer and AI Engineer roles.
 * [`docs/2026-additional-questions.md`](./docs/2026-additional-questions.md): modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
-* [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics and study structure.
+* [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics.
+* [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
+* [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality.
+* [`cloud_ml/`](./cloud_ml): cloud ML platforms — AWS SageMaker, Google Vertex AI, Azure ML.
 * [`data_engineering/`](./data_engineering): data engineering interview topics and platform concepts.
 * [`devops/`](./devops): DevOps, infrastructure, and deployment topics.
 * `README.md`: repository landing page plus the original classic ML interview question bank.
@@ -92,6 +98,32 @@ Core topics:
 * [Terraform](./devops/intro_terraform.md)
 * [GitHub Actions](./devops/intro_github_actions.md)
 
+## Classic ML Track
+Use this track for classical ML algorithm interviews, data science roles, and as foundations for ML engineer roles.
+
+Core topics:
+* [Time Series & Forecasting](./classical_ml/intro_time_series.md)
+* [Clustering Algorithms](./classical_ml/intro_clustering.md)
+* [Dimensionality Reduction](./classical_ml/intro_dimensionality_reduction.md)
+* [Recommender Systems](./classical_ml/intro_recommender_systems.md)
+* [Feature Engineering & Selection](./classical_ml/intro_feature_engineering.md)
+
+## MLOps Track
+Use this track for MLOps Engineer, Senior ML Engineer, and production ML system interviews.
+
+Core topics:
+* [MLflow](./mlops/intro_mlflow.md)
+* [Model Explainability (SHAP, LIME)](./mlops/intro_model_explainability.md)
+* [Feature Stores](./mlops/intro_feature_stores.md)
+* [Model Serving](./mlops/intro_model_serving.md)
+* [Data Quality & Validation](./mlops/intro_data_quality.md)
+
+## Cloud ML Platforms
+Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.
+
+Core topics:
+* [Cloud ML Platforms Comparison (SageMaker vs Vertex AI vs Azure ML)](./cloud_ml/intro_cloud_ml_platforms.md)
+
 # Classic Question Bank
 
 #### Difference between SuperVised and Unsupervised Learning?
@@ -100,11 +132,11 @@ Core topics:
         come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown 
         a new image, the model compares it to the training examples to predict the correct label.
 ![](https://miro.medium.com/max/2800/0*Uzqy-gqZg77Wun0e.jpg)
-#### What is Reinforcment Learning and how would you define it?
-        A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be 
-        explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current 
-        knowledge) .Semisupervised learning is also known as Reinforcment learning, in reinforcment learning each learning steps involved a penalty 
-        criteria whether to give model positive points or negative points and based on that penalizing the model.
+#### What is Reinforcement Learning and how would you define it?
+        A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be
+        explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current
+        knowledge). In reinforcement learning each learning step involves a penalty criteria whether to give the model positive points or negative points
+        and based on that penalizing the model.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reinforcement_learning_diagram.svg/250px-Reinforcement_learning_diagram.svg.png)
 #### What is Deep Learning ?
@@ -116,11 +148,18 @@ Core topics:
         function is, they still need some guidance. If an AI algorithm returns an inaccurate prediction, then an engineer has to step in and make 
         adjustments. With a deep learning model, an algorithm can determine on its own if a prediction is accurate or not through its own neural network.
 ![](https://lawtomated.com/wp-content/uploads/2019/04/MLvsDL.png)
-#### Difference between SemiSupervised and Reinforcment Learning?
+#### Difference between SemiSupervised and Reinforcement Learning?
+        Semi-supervised learning uses a small amount of labeled data combined with a large amount of unlabeled data during training. It sits between
+        supervised (fully labeled) and unsupervised (no labels) learning. Common techniques include self-training, label propagation, and generative
+        models. Example: training an image classifier with 100 labeled images and 10,000 unlabeled ones.
+
+        Reinforcement learning (RL) is a paradigm where an agent learns by interacting with an environment, receiving rewards or penalties based on its
+        actions. Unlike semi-supervised learning which works on a fixed dataset, RL involves sequential decision making. The agent learns a policy that
+        maximizes cumulative reward over time. Example: training a robot to walk or an agent to play chess.
 
 #### Difference between Bias and Variance?
-        Bias is definned as over simpliciation assumption assumed by the model, 
-        Variance is definned as ability of a model to learn from Noise as well, making it highly variant.
+        Bias is defined as the oversimplification assumption made by the model.
+        Variance is defined as the ability of a model to learn from noise as well, making it highly variant.
         There is always a tradeoff between these both, hence its recommended to find a balance between these two and always use cross validation to 
         determine the best fit.
 
@@ -135,7 +174,7 @@ Core topics:
         dependent variable y and the p-vector of regressors x is linear. This relationship is modeled through a disturbance term or error variable ε — an 
         unobserved random variable that adds "noise" to the linear relationship between the dependent variable and regressors. Thus the model takes the 
         form Y = B0 + B1X1 + B2X2 + ..... + BNXN
-        This also emplies : Y(i) = X(i) ^ T + B(i)
+        This also implies: Y(i) = X(i) ^ T + B(i)
         Where T : denotes Transpose
         X(i) : denotes input at the I'th record in form of vector
         B(i) : denotes vector B which is bias vector.
@@ -160,7 +199,7 @@ Core topics:
 
 #### What is Logit Function? or Sigmoid function/ where in ML and DL you can use it?
         The sigmoid might be useful if you want to transform a real valued variable into something that represents a probability. While the Logit function
-        is to map probaliticvalues from -Inf to +inf to either real numbers representing True or False towards 1 or 0 (real number). This is commonly used
+        is to map probabilistic values from -Inf to +Inf to either real numbers representing True or False towards 1 or 0 (real number). This is commonly used
         in Classification having base in  Logistic Regression along with Sigmoid based functions in Deep learning used to find a nominal outcome in a
         layer or output of a layer.
 
@@ -172,11 +211,12 @@ Core topics:
 
 
 #### What is Support Vector Machine ? how is it different from  OVR classifiers?
-        Support Vector Machine is defineed as a Technique which is classification and regression model. Which uses hyper plan estimation and best hyper plane
-        fitting the estimate on linear lines drawn same a linear one. Although it can also work for non Linear using kernal tricks on SVM.
-        SVM is totally based on Marginal lines (with difference between two classes in the best way possible).
-        One Vs rest is the base classifier concept which is used in all the Ml algorithms which involves classification based on Class A vs Classes REst approach. Since here are only two heuristic approaches which are enhancment of Multiclass classificaton to make the binary classifier perform
-        well on multi class problems and solve the problem in hand.
+        Support Vector Machine is defined as a technique for both classification and regression. It uses hyperplane estimation and finds the best
+        hyperplane fitting the estimate on linear lines. Although it can also work for non-linear problems using kernel tricks on SVM.
+        SVM is based on marginal lines (maximizing the difference between two classes).
+        One Vs Rest is the base classifier concept used in all ML algorithms involving classification based on a Class A vs all other Classes approach.
+        There are two heuristic approaches which are enhancements of multiclass classification to make the binary classifier perform
+        well on multi-class problems.
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/300px-SVM_margin.png)
 
 
@@ -189,7 +229,7 @@ Core topics:
             6) Neural Networks (different nets)
 ![](https://i.ytimg.com/vi/OmTu0fqUsQk/maxresdefault.jpg)
 #### Types of SVM kernels
-        Think of kernels as definned filters each for their own specific usecases.
+        Think of kernels as defined filters each for their own specific use cases.
 
         1) Polynomial Kernels (used for image processing)
         2) Gaussian Kernel (When there is no prior knowledge for data)
@@ -199,7 +239,7 @@ Core topics:
         6) Sigmoid Kernel(proxy for Neural network)
         7) Anova Radial Basis Kernel (for Regression Problems)
 
-#### What is different type of Evauation metrics in Regression?
+#### What are the different types of Evaluation metrics in Regression?
         There are multiple evaluation metrics for Regression Analysis
         1) Mean Squared Error ( the average squared difference between the estimated values and the actual value)
         2) Mean Absolute Error (Absolute of the Average difference)
@@ -221,19 +261,19 @@ Core topics:
 ![](https://4.bp.blogspot.com/-sCcOrQsTH9Q/XG1yv7mhERI/AAAAAAAAAJI/aEj6Jf1lookERHqPQS_Y6Q9bxBcTV7TIwCLcBGAs/s1600/multiclass-multilabel.png)
 
 
-#### What is Confusion Matrics?
+#### What is a Confusion Matrix?
         A confusion matrix, also known as an error matrix, is a specific table layout that allows visualization of
          the performance of an algorithm, typically a supervised learning one (in unsupervised learning it is
           usually called a matching matrix). Each row of the matrix represents the instances in a predicted class
            while each column represents the instances in an actual class (or vice versa).
-        The name stems from the fact that it makes it easy to see if the system is confusing two classes 
+        The name stems from the fact that it makes it easy to see if the system is confusing two classes
         (i.e. commonly mislabeling one as another).
 ![](https://www.unite.ai/wp-content/uploads/2019/12/Preventive_Medicine-e1576294312614.png)
 
 #### Which Algorithms are High Biased Algorithms?
         Bias is the simplifying assumptions made by the model to make the target function easier to approximate.
         1) High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
-        2) Linear, Logistic or Linear Discrimenant Analysis.
+        2) Linear, Logistic or Linear Discriminant Analysis.
 
 #### Which Algorithms are High and low Variance Algorithms?	
         Variance is the amount that the estimate of the target function will change given different training data
@@ -278,9 +318,9 @@ Core topics:
 #### What is Process of Splitting?
         Splitting up your data in to subsets based on provided data facts. (can come in handy for decision Trees)
 
-#### What is the process prunning?
-        The Shortening of branches of Decision Trees is termed as Prunning. The process is done in case to reach the decision quite earlier than
-        expected. Reducing the size of the tree by turning some branch nodes into leaf nodes, and removing the leaf nodes under the original branch.
+#### What is the process of pruning?
+        The shortening of branches of Decision Trees is termed as pruning. The process is done in order to reach the decision earlier than
+        expected, reducing the size of the tree by turning some branch nodes into leaf nodes, and removing the leaf nodes under the original branch.
 
 #### How do you do Tree Selection?
         Tree selection is mainly done from the following
@@ -411,7 +451,7 @@ Core topics:
 
 #### What is F1 Score? which intution does it gives ?
         The F1 score is the harmonic mean of the precision and recall, where an F1 score reaches its best value at 1 (perfect precision and recall).
-        Also known as Dice Similarity Coefficent. 
+        Also known as Dice Similarity Coefficient.
 
         David (Scientist Statistician): The widespread use of the F1 score since it gives equal importance to precision and recall. In practice, different types of mis-classifications incur different costs. In other words, the relative importance of precision and recall is an aspect of the problem
 
@@ -422,10 +462,10 @@ Core topics:
         SVM has almost the same goal as L2-regularized perceptron.
         SVM can be seen as hinge loss + l2 regularization (loss + regularization) + quadratic programming or other fancier optimization algorithms like SMO (optimization).
 
-#### What is the difference between Logsitic and Liner Regressions?
+#### What is the difference between Logistic and Linear Regressions?
         LogR is Classifier, LR is Regression.
         LogR values are between 0 and 1 and probabilty in between as well.
-        LR values are in realnumbers from 1 to postive N (where N is known)
+        LR values are in real numbers from 1 to positive N (where N is known)
 ![](https://miro.medium.com/proxy/0*gKOV65tvGfY8SMem.png)
 #### What are outliers and How would you remove them?
         An outlier is an observation that lies an abnormal distance from other values in a random sample from a population.
@@ -436,15 +476,15 @@ Core topics:
             2) Use Z-score Scale removal (so that any point much away from mean gets removed)
             3) Combination of Z Score and IQR (custom scores)
 
-#### What is Regulization?
-        Regularizations are techniques used to reduce the error by fitting a function appropriately on the given training set and avoid overfitting.
-        Add Lambda * Biasness value at the end.
-#### Difference between L1 and L2 Regulization?
-        1) L1 Regulization (Lasso Regression)
+#### What is Regularization?
+        Regularization techniques are used to reduce the error by fitting a function appropriately on the given training set and avoid overfitting.
+        They add a penalty term (Lambda * weight magnitude) to the loss function to discourage overly complex models.
+#### Difference between L1 and L2 Regularization?
+        1) L1 Regularization (Lasso Regression)
             (Least Absolute Shrinkage and Selection Operator) adds “absolute value of magnitude” of coefficient as penalty term to the loss function.
 
-        2) L2 Regulization (Ridge Regression)
-            (adds “squared magnitude” of coefficient as penalty term to the loss function. Here the highlighted part represents L2 regularization element.)
+        2) L2 Regularization (Ridge Regression)
+            Adds “squared magnitude” of coefficient as penalty term to the loss function. Here the highlighted part represents L2 regularization element.
 
         The key difference between these techniques is that Lasso shrinks the less important feature’s coefficient to zero thus, removing some feature
         altogether. So, this works well for feature selection in case we have a huge number of features.
@@ -487,7 +527,7 @@ Core topics:
         priority/ Impact.
 
 #### What is meant by ARIMA Models?
-        A Regressive and Moving Average Model combination is termed as ARIMA. To be exact, Auto Regressive Intergerated Moving Avearges.
+        A Regressive and Moving Average Model combination is termed as ARIMA. To be exact, Auto Regressive Integrated Moving Averages.
         A techniques which does regression analysis along with moving averages which fits time series analysis and gets trend analysis with 
         acceptable scores.
 
@@ -569,7 +609,7 @@ Core topics:
 
             4) Leaky Relu Function (to fix the dying relu problem in the Relu function within hidden layers)
 
-#### What is Convolotional Neural Network?
+#### What is a Convolutional Neural Network?
         convolutional-neural-network is a subclass of neural-networks which have at least one convolution layer. 
         They are great for capturing local information (e.g. neighbor pixels in an image or surrounding words in a text) 
         as well as reducing the complexity of the model (faster training, needs fewer samples, reduces the chance of overfitting).
@@ -592,7 +632,7 @@ Core topics:
         traffic or IDS.
 ![](https://miro.medium.com/max/1400/1*qn_quuUSYzozyH3CheoQsA.png)
 
-#### What is Convolotional Layer?	
+#### What is a Convolutional Layer?
         A convolution is the simple application of a filter to an input that results in an activation. Repeated application of the 
         same filter to an input results in a map of activations called a feature map, indicating the locations and strength of a 
         detected feature in an input, such as an image.
@@ -608,7 +648,7 @@ Core topics:
 ![](https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/image_folder_4/Pooling_Simple_max.png)
 
 #### What is MaxPooling Layer? How does it work?
-        Max polling uses the Maximum value found in a considered size metrics. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.in a way.
+        Max pooling uses the maximum value found in a considered region. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.
 ![](https://computersciencewiki.org/images/8/8a/MaxpoolSample2.png)
 #### What is Kernel or Filter?
         kernel methods are a class of algorithms for pattern analysis, whose best known member is the support vector machine (SVM)
@@ -673,7 +713,7 @@ Core topics:
         one quantitative dependent variable. The independent variable should have at least three levels
          (i.e. at least three different groups or categories)
 
-#### How would you define dimentionality reduction? why we use dimentionality reduction?	
+#### How would you define dimensionality reduction? Why do we use dimensionality reduction?
         Dimensionality reduction or dimension reduction is the process of reducing the number of random variables 
         under consideration by obtaining a set of principal variables. Approaches can be divided into feature 
         selection and feature extraction.
@@ -681,7 +721,7 @@ Core topics:
                 1) Immensive dataset 
                 2) Longer Trainnig time/gathering time
                 3) Too much complex assumptions/ Model overfitting
-        Types of Dimentionality reductions are 
+        Types of Dimensionality reductions are 
                 1) Feature Selection
                 2) Feature Projection( transform data from higher dimention to lower space of fewer dimention)
                 3) Principle component Analysis
@@ -691,11 +731,11 @@ Core topics:
                 5) Kernel PCA ( Non linear way of utilization of Kernel Trick)
                 6) Graph Based Kernel PCA ( locally linear embedding, Eigen Embeddings)
 
-                7) Linear Discrimenant Analysis
+                7) Linear Discriminant Analysis
                         A method used in statistics, pattern recognition and machine learning to find a 
                         linear combination of features that characterizes or separates two or more 
                         classes of objects or events.
-                8) Generalized Discrimenant Analysis 
+                8) Generalized Discriminant Analysis 
                 8) TSNE (is a non-linear dimensionality reduction technique useful for visualization of high-dimensional datasets.)
                 9) U-Map
                         Uniform manifold approximation and projection (UMAP) is a nonlinear dimensionality reduction technique. 
@@ -704,7 +744,7 @@ Core topics:
                         is locally constant or approximately locally constant.
                 10) Autoencoders (can learn from Non Linear dimention reduction function)
 
-#### What is Principle componenet analysis? how does PCA work in Dimentonality reduction?
+#### What is Principal Component Analysis? How does PCA work in dimensionality reduction?
 
         The main linear technique for dimensionality reduction, principal component analysis, performs
          a linear mapping of the data to a lower-dimensional space in such a way that the variance of 
@@ -802,6 +842,12 @@ Core topics:
                 etc
 
 #### Define Style Transfer?
+        Style transfer is a computer vision technique that applies the artistic style of one image to the content of another.
+        It uses convolutional neural networks (typically VGG) to separate and recombine the content and style representations
+        of two images. The loss function combines a content loss (preserving structure of the content image) with a style loss
+        (matching Gram matrix statistics of the style image). Neural Style Transfer was introduced by Gatys et al. (2015).
+        Modern approaches use fast style transfer (pre-trained feed-forward networks) for real-time applications.
+        Use cases: photo filters, artistic image generation, creative tools.
 
 #### Define Image Segmentation and Pose Analysis?	
         Image Segmentation : In digital image processing and computer vision, image segmentation is the process of partitioning a digital image into 

@@ -308,6 +308,172 @@ os.environ["LANGCHAIN_PROJECT"] = "my-rag-app"
 
 ---
 
+## Memory Management
+
+LangChain provides several memory types for conversational applications:
+
+```python
+from langchain.memory import ConversationBufferMemory, ConversationSummaryMemory
+from langchain_anthropic import ChatAnthropic
+from langchain.chains import ConversationChain
+
+llm = ChatAnthropic(model="claude-sonnet-4-6")
+
+# Buffer memory: keeps all messages (good for short conversations)
+memory = ConversationBufferMemory()
+
+# Summary memory: summarizes older history (good for long conversations)
+memory_summary = ConversationSummaryMemory(llm=llm)
+
+chain = ConversationChain(llm=llm, memory=memory)
+response1 = chain.predict(input="My name is Alex.")
+response2 = chain.predict(input="What's my name?")   # Correctly recalls "Alex"
+print(response2)
+```
+
+### LangGraph Persistence (Production Memory)
+
+```python
+from langgraph.checkpoint.sqlite import SqliteSaver
+
+# Persist state between runs with a checkpointer
+memory_saver = SqliteSaver.from_conn_string("./memory.db")
+app = graph.compile(checkpointer=memory_saver)
+
+# Thread-based sessions (each thread_id = one conversation)
+config = {"configurable": {"thread_id": "user-123"}}
+result = app.invoke({"messages": [("user", "Hello!")]}, config=config)
+```
+
+---
+
+## Output Parsers & Structured Output
+
+```python
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+
+# Define your schema
+class ProductReview(BaseModel):
+    sentiment: str = Field(description="positive, negative, or neutral")
+    score: int = Field(description="Score from 1-10")
+    summary: str = Field(description="One-sentence summary")
+    key_points: list[str] = Field(description="List of key points")
+
+llm = ChatAnthropic(model="claude-sonnet-4-6")
+
+# Structured output via Pydantic
+structured_llm = llm.with_structured_output(ProductReview)
+
+prompt = ChatPromptTemplate.from_template("Analyze this review: {review}")
+chain = prompt | structured_llm
+
+result = chain.invoke({"review": "Great product but shipping was slow."})
+print(result.sentiment)   # "positive"
+print(result.score)       # e.g. 7
+```
+
+---
+
+## Few-Shot Prompting
+
+```python
+from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
+
+examples = [
+    {"input": "What is 2+2?", "output": "4"},
+    {"input": "What is 3*5?", "output": "15"},
+]
+
+example_prompt = ChatPromptTemplate.from_messages([
+    ("human", "{input}"),
+    ("ai", "{output}"),
+])
+
+few_shot_prompt = FewShotChatMessagePromptTemplate(
+    examples=examples,
+    example_prompt=example_prompt,
+)
+
+final_prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a math assistant."),
+    few_shot_prompt,
+    ("human", "{input}"),
+])
+
+chain = final_prompt | llm
+result = chain.invoke({"input": "What is 7+8?"})
+```
+
+---
+
+## Interview Q&A
+
+**Q1: What is LCEL and why was it introduced?**
+LCEL (LangChain Expression Language) is a declarative way to compose chains using the `|` pipe operator. It was introduced to replace the older `LLMChain`/`SequentialChain` classes. Benefits: built-in streaming, async support, batch processing, and easier observability via LangSmith.
+
+**Q2: What is the difference between LangChain and LangGraph?**
+LangChain provides components and LCEL for building linear chains (prompt → LLM → parser). LangGraph is built on top of LangChain to support **stateful, cyclic workflows** (agents with loops, conditional branching, multi-agent coordination). Use LangChain for simple RAG pipelines; use LangGraph for agents that need to loop, branch, or maintain complex state.
+
+**Q3: How does LangGraph handle state persistence across sessions?**
+LangGraph uses **checkpointers** (e.g., `SqliteSaver`, `PostgresSaver`, `RedisSaver`) to persist graph state between invocations. Each conversation is identified by a `thread_id` in the config. This enables resuming interrupted workflows and multi-turn conversations without loading full history each time.
+
+**Q4: How would you implement a ReAct agent in LangChain?**
+Use `create_tool_calling_agent` with a model that supports tool use (Claude, GPT-4, etc.) and `AgentExecutor`. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.
+
+**Q5: What are the main memory types in LangChain and when would you use each?**
+- `ConversationBufferMemory`: stores all messages verbatim. Use for short conversations.
+- `ConversationSummaryMemory`: summarizes older turns using an LLM. Use for long sessions where context window is a concern.
+- `ConversationBufferWindowMemory`: keeps the last N messages. Simple and predictable.
+- **LangGraph checkpointing**: best for production — persists full graph state (not just messages) to a database, enabling true session continuity.
+
+**Q6: What is LangSmith and how do you use it?**
+LangSmith is LangChain's observability platform. You enable it by setting `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY`. It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.
+
+**Q7: When would you choose LangChain over calling the Anthropic API directly?**
+Use LangChain when: you need many integrations quickly (vector DBs, document loaders), want LCEL's streaming/batch/async built-in, need agent orchestration (LangGraph), or want LangSmith tracing. Use the raw API when: you need maximum control, minimum dependencies, or you're building a production system where simplicity is more important than framework features.
+
+**Q8: How does LangChain's `RunnablePassthrough` work?**
+`RunnablePassthrough` passes input through unchanged. It's useful in parallel chains where you need to pass the original query alongside retrieved context:
+```python
+chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt | llm | StrOutputParser()
+)
+```
+Here the `question` key gets the raw user input while `context` gets the retrieved documents.
+
+**Q9: How would you handle errors and retries in LangChain?**
+Use `.with_retry()` on any runnable:
+```python
+llm_with_retry = llm.with_retry(stop_after_attempt=3, wait_exponential_jitter=True)
+```
+For structured handling use `.with_fallbacks()` to specify backup models/chains when the primary fails.
+
+**Q10: What are the main challenges with LangChain in production?**
+1. **Version instability** — the library moves fast; pin versions carefully
+2. **Debugging complexity** — deep chains can be hard to trace without LangSmith
+3. **Over-abstraction** — sometimes easier to call APIs directly for simple use cases
+4. **Memory management** — default in-memory state is not suitable for multi-user production; need external checkpointing
+
+---
+
+## Common Pitfalls
+
+| Pitfall | Problem | Fix |
+|---------|---------|-----|
+| Not pinning versions | LangChain changes APIs frequently | Pin `langchain==x.y.z` in requirements |
+| Using `LLMChain` (deprecated) | Old API, less features | Use LCEL: `prompt \| llm \| parser` |
+| Buffer memory in production | State lost on restart; not scalable | Use LangGraph + checkpointer (SQLite/Postgres) |
+| Ignoring streaming | Users see long waits | Use `.stream()` for real-time responses |
+| No observability | Hard to debug issues | Enable LangSmith from day one |
+| Sync in async apps | Blocks event loop | Use `.ainvoke()`, `.astream()` for async |
+| Over-engineering simple tasks | Adding LangChain for a single LLM call | Use raw API for simple use cases |
+
+---
+
 ## LangChain vs LlamaIndex vs Raw API
 
 | Feature | LangChain | LlamaIndex | Raw Anthropic API |
@@ -319,3 +485,15 @@ os.environ["LANGCHAIN_PROJECT"] = "my-rag-app"
 | Flexibility | High | Medium | Highest |
 | Observability | LangSmith | LlamaTrace | Manual |
 | Best for | Full-stack LLM apps | RAG/knowledge apps | Simple, custom apps |
+
+---
+
+## Related Topics
+
+| Topic | Why It's Related |
+|-------|-----------------|
+| [RAG](./intro_rag.md) | LangChain is the most common framework for building RAG pipelines |
+| [Vector Databases](./intro_vector_databases.md) | LangChain integrates with Pinecone, Chroma, Weaviate, etc. |
+| [Agentic AI](./intro_agentic_ai.md) | LangGraph is LangChain's agent orchestration layer |
+| [LLMOps](./intro_llmops.md) | LangSmith provides tracing and evaluation for LangChain apps |
+| [Anthropic Overview](./intro_anthropic.md) | `langchain-anthropic` is the first-class Claude integration |

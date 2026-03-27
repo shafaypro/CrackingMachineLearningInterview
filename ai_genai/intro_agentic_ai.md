@@ -581,3 +581,15 @@ Research the current state of vector databases in 2026:
 - **Evaluations matured** — LLM-as-judge and automated evals are standard
 - **Computer use** — Agents that can operate UIs (browsers, desktops)
 - **Long-horizon tasks** — Agents running for hours/days on complex engineering tasks
+
+---
+
+## Related Topics
+
+| Topic | Why It's Related |
+|-------|-----------------|
+| [RAG](./intro_rag.md) | Agentic RAG combines agents with retrieval |
+| [MCP](./intro_mcp.md) | Model Context Protocol is the standard tool interface for agents |
+| [LangChain](./intro_langchain.md) | LangGraph is the leading framework for agentic workflows |
+| [LLMOps](./intro_llmops.md) | Monitoring and evaluating agent reliability in production |
+| [Anthropic Overview](./intro_anthropic.md) | Claude's tool use and extended thinking for agents |
