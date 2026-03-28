@@ -15,6 +15,7 @@
 8. [Evaluation](#evaluation)
 9. [End-to-End Example](#end-to-end-example)
 10. [RAG in 2026](#rag-in-2026)
+11. [Related Topics](#related-topics)
 
 ---
 
@@ -439,31 +440,228 @@ rag_tools = [
 
 ## Evaluation
 
-### RAG Metrics
+Evaluating a RAG system requires assessing both the **retrieval** and **generation** components separately, then the end-to-end pipeline. This is the most overlooked part of RAG and the primary reason RAG systems fail in production.
 
-| Metric | Measures | Tool |
-|--------|---------|------|
-| **Faithfulness** | Is the answer grounded in the retrieved context? | RAGAS |
-| **Answer relevancy** | Does the answer address the question? | RAGAS |
-| **Context precision** | Are retrieved docs relevant to the question? | RAGAS |
-| **Context recall** | Did we retrieve all relevant docs? | RAGAS |
+### RAG Evaluation Framework
+
+```
+                    ┌─────────────────────────────────────────┐
+                    │           RAG Evaluation                 │
+                    └─────────────────────────────────────────┘
+                          │                         │
+               ┌──────────▼──────────┐    ┌────────▼────────────┐
+               │   Retrieval Quality  │    │  Generation Quality  │
+               └──────────────────────┘    └─────────────────────┘
+               │ - Context Precision  │    │ - Faithfulness       │
+               │ - Context Recall     │    │ - Answer Relevancy   │
+               │ - MRR / NDCG         │    │ - Correctness        │
+               │ - Hit Rate           │    │ - Hallucination Rate │
+               └──────────────────────┘    └─────────────────────┘
+```
+
+### RAGAS Metrics (Most Common)
+
+| Metric | What It Measures | Formula / Approach | Target |
+|--------|-----------------|-------------------|--------|
+| **Faithfulness** | Is the answer grounded in retrieved context? No hallucinations? | LLM judges if each claim in the answer is supported by context | > 0.9 |
+| **Answer Relevancy** | Does the answer actually address the question? | LLM generates back-questions from answer, measures similarity to original | > 0.85 |
+| **Context Precision** | What fraction of retrieved context is actually relevant? | Ground-truth verified: relevant chunks / total retrieved chunks | > 0.8 |
+| **Context Recall** | Were all ground-truth relevant docs retrieved? | Ground-truth verified: retrieved relevant / all relevant | > 0.8 |
+| **Answer Correctness** | Is the answer factually correct? | F1 between answer and ground truth (factual + semantic) | Task-specific |
+| **Context Entity Recall** | Are all key entities from ground truth present in context? | Entity overlap between context and reference | > 0.7 |
 
 ```python
 from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevancy, context_precision
+from ragas.metrics import (
+    faithfulness,
+    answer_relevancy,
+    context_precision,
+    context_recall,
+    answer_correctness,
+)
+from datasets import Dataset
 
-dataset = [
-    {
-        "question": "What is our Q4 revenue?",
-        "answer": "Q4 revenue was $4.2M",
-        "contexts": ["From Q4 report: Revenue was $4.2M in Q4 2025"],
-        "ground_truth": "Q4 2025 revenue was $4.2M"
-    }
-]
+# Evaluation dataset format
+data = {
+    "question": [
+        "What is our Q4 revenue?",
+        "Who is the CEO of the company?",
+    ],
+    "answer": [
+        "Q4 revenue was $4.2M, up 23% YoY.",
+        "Jane Smith has been CEO since 2023.",
+    ],
+    "contexts": [
+        ["From Q4 2025 report: Total revenue reached $4.2M, a 23% increase year-over-year."],
+        ["Leadership page: Jane Smith joined as CEO in January 2023."],
+    ],
+    "ground_truth": [
+        "Q4 2025 revenue was $4.2M, 23% YoY growth.",
+        "Jane Smith is the CEO.",
+    ],
+}
 
-results = evaluate(dataset, metrics=[faithfulness, answer_relevancy, context_precision])
+dataset = Dataset.from_dict(data)
+
+results = evaluate(
+    dataset,
+    metrics=[
+        faithfulness,
+        answer_relevancy,
+        context_precision,
+        context_recall,
+        answer_correctness,
+    ],
+)
 print(results)
+# Output: {'faithfulness': 0.92, 'answer_relevancy': 0.88, ...}
 ```
+
+### Retrieval-Only Evaluation
+
+```python
+# Evaluate just the retrieval component using standard IR metrics
+def evaluate_retrieval(questions, relevant_doc_ids, retrieved_doc_ids_list, k=5):
+    """
+    questions: list of questions
+    relevant_doc_ids: dict of {question: [relevant_doc_id, ...]}
+    retrieved_doc_ids_list: list of [retrieved_doc_id, ...] per question
+    """
+    hit_rate = 0
+    mrr_total = 0
+    precision_total = 0
+
+    for q, retrieved in zip(questions, retrieved_doc_ids_list):
+        relevant = set(relevant_doc_ids[q])
+        retrieved_k = retrieved[:k]
+
+        # Hit Rate@k: Did at least one relevant doc appear in top-k?
+        hit = any(doc_id in relevant for doc_id in retrieved_k)
+        hit_rate += int(hit)
+
+        # MRR (Mean Reciprocal Rank): Rank of first relevant result
+        for rank, doc_id in enumerate(retrieved_k, 1):
+            if doc_id in relevant:
+                mrr_total += 1 / rank
+                break
+
+        # Precision@k: fraction of retrieved that are relevant
+        relevant_retrieved = sum(1 for d in retrieved_k if d in relevant)
+        precision_total += relevant_retrieved / k
+
+    n = len(questions)
+    return {
+        f"hit_rate@{k}": hit_rate / n,
+        "mrr": mrr_total / n,
+        f"precision@{k}": precision_total / n,
+    }
+```
+
+### Building an Evaluation Dataset
+
+```python
+# Option 1: LLM-generated synthetic QA pairs (RAGAS TestsetGenerator)
+from ragas.testset.generator import TestsetGenerator
+from ragas.testset.evolutions import simple, reasoning, multi_context
+from langchain_anthropic import ChatAnthropic
+from langchain_community.document_loaders import DirectoryLoader
+
+loader = DirectoryLoader("./docs", glob="**/*.md")
+documents = loader.load()
+
+generator = TestsetGenerator.with_anthropic(
+    generator_llm=ChatAnthropic(model="claude-sonnet-4-6"),
+    critic_llm=ChatAnthropic(model="claude-sonnet-4-6"),
+)
+
+testset = generator.generate_with_langchain_docs(
+    documents,
+    test_size=50,
+    distributions={simple: 0.5, reasoning: 0.3, multi_context: 0.2}
+)
+testset.to_pandas().to_csv("rag_eval_dataset.csv", index=False)
+```
+
+### TruLens Evaluation (Alternative to RAGAS)
+
+```python
+from trulens_eval import Tru, TruChain, Feedback
+from trulens_eval.feedback.provider import Anthropic as TruAnthropic
+
+tru = Tru()
+provider = TruAnthropic(model_engine="claude-sonnet-4-6")
+
+# Define feedback functions
+f_groundedness = (
+    Feedback(provider.groundedness_measure_with_cot_reasons, name="Groundedness")
+    .on(TruChain.Select.RecordCalls.retriever.get_relevant_documents.rets.page_content[:].collect())
+    .on_output()
+    .aggregate(provider.grounded_statements_aggregator)
+)
+
+f_qa_relevance = Feedback(provider.relevance, name="QA Relevance").on_input_output()
+
+tru_rag = TruChain(
+    rag_chain,
+    app_id="rag-v1",
+    feedbacks=[f_groundedness, f_qa_relevance]
+)
+
+# Run and view results
+with tru_rag as recording:
+    rag_chain.invoke("What is our Q4 revenue?")
+
+tru.get_leaderboard(app_ids=["rag-v1"])
+```
+
+### Continuous Evaluation in Production
+
+```python
+# Sample a percentage of queries for automated evaluation
+import random
+
+class ProductionRAGMonitor:
+    def __init__(self, rag_system, eval_sample_rate=0.05):
+        self.rag = rag_system
+        self.sample_rate = eval_sample_rate
+        self.eval_buffer = []
+
+    def query(self, question: str) -> str:
+        answer = self.rag.query(question)
+
+        # Sample for evaluation
+        if random.random() < self.sample_rate:
+            self.eval_buffer.append({
+                "question": question,
+                "answer": answer,
+                "contexts": self.rag.last_retrieved_contexts,
+                "timestamp": datetime.now().isoformat()
+            })
+
+        return answer
+
+    def flush_evals(self):
+        """Periodically run RAGAS on the buffer and log to monitoring system."""
+        if len(self.eval_buffer) >= 50:
+            results = evaluate(
+                Dataset.from_list(self.eval_buffer),
+                metrics=[faithfulness, answer_relevancy]
+            )
+            # Log to Datadog, Grafana, etc.
+            log_metrics(results)
+            self.eval_buffer.clear()
+```
+
+### Evaluation Best Practices
+
+| Practice | Why It Matters |
+|----------|---------------|
+| **Separate retrieval and generation evals** | Isolate where failures occur (bad retrieval vs bad generation) |
+| **Use ground-truth datasets for precision/recall** | LLM-only metrics can miss factual correctness |
+| **Human eval for a sample** | Automated metrics miss nuance; validate with human judges |
+| **A/B test retrieval strategies** | Compare embedding models, chunk sizes, top-k values |
+| **Track metrics over time** | Catch embedding drift and dataset staleness |
+| **Test adversarial queries** | Off-topic, ambiguous, or unanswerable questions |
 
 ---
 
@@ -566,3 +764,16 @@ print(rag.query("How do I set up dbt incrementally?"))
 | **Corrective RAG** | Agent validates retrieved context relevance, retries if needed |
 | **Self-RAG** | Model decides when to retrieve, what to retrieve, and validates answers |
 | **Long-context alternatives** | For smaller corpora, just stuff everything in 200K context |
+
+---
+
+## Related Topics
+
+| Topic | Why It's Related |
+|-------|-----------------|
+| [Vector Databases](./intro_vector_databases.md) | RAG depends on vector DBs for semantic retrieval |
+| [LLMOps](./intro_llmops.md) | Monitoring, evaluation, and deployment of RAG pipelines |
+| [Agentic AI](./intro_agentic_ai.md) | Agentic RAG extends retrieval into multi-step reasoning |
+| [LangChain](./intro_langchain.md) | Primary framework for building RAG pipelines |
+| [Anthropic Overview](./intro_anthropic.md) | Claude models as the generation backbone in RAG |
+| [MLflow (MLOps)](../mlops/intro_mlflow.md) | Experiment tracking for RAG evaluation runs |

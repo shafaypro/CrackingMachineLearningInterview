@@ -531,3 +531,15 @@ def safe_query(user_input: str) -> str:
 | **Phoenix** | Tracing + Evals | Open-source by Arize |
 | **Guardrails AI** | Guardrails | Output validation framework |
 | **NeMo Guardrails** | Guardrails | NVIDIA's guardrail toolkit |
+
+---
+
+## Related Topics
+
+| Topic | Why It's Related |
+|-------|-----------------|
+| [RAG](./intro_rag.md) | Evaluating and monitoring RAG pipelines is a core LLMOps concern |
+| [Vector Databases](./intro_vector_databases.md) | Monitoring embedding quality and retrieval performance |
+| [Agentic AI](./intro_agentic_ai.md) | Observability for long-running agent workflows |
+| [LangChain](./intro_langchain.md) | LangSmith is LangChain's LLMOps platform |
+| [Anthropic Overview](./intro_anthropic.md) | Claude API usage patterns and rate limit management |
