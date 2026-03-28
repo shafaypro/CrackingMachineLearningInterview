@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cracking ML Interviews — 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    /* ── Reset & tokens ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --bg2:         #161b22;
+      --bg3:         #21262d;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --text2:       #8b949e;
+      --accent:      #58a6ff;
+      --accent2:     #3fb950;
+      --accent3:     #f78166;
+      --accent4:     #d2a8ff;
+      --sidebar-w:   280px;
+      --header-h:    56px;
+      --radius:      8px;
+      --transition:  .2s ease;
+    }
+    [data-theme="light"] {
+      --bg:    #ffffff;
+      --bg2:   #f6f8fa;
+      --bg3:   #eaeef2;
+      --border:#d0d7de;
+      --text:  #1f2328;
+      --text2: #57606a;
+      --accent:#0969da;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Top Bar ────────────────────────────────────────────────────── */
+    header {
+      height: var(--header-h);
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .logo {
+      font-size: 1rem;
+      font-weight: 700;
+      white-space: nowrap;
+      background: linear-gradient(135deg, var(--accent), var(--accent4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo span { font-weight: 400; color: var(--text2); -webkit-text-fill-color: var(--text2); }
+    .search-wrap {
+      flex: 1;
+      max-width: 480px;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 6px 12px 6px 34px;
+      font-size: .875rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 10px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text2);
+      pointer-events: none;
+    }
+    .search-results {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-height: 360px;
+      overflow-y: auto;
+      z-index: 200;
+    }
+    .search-results.show { display: block; }
+    .search-result-item {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--bg3); }
+    .search-result-item .title { font-size: .875rem; font-weight: 600; }
+    .search-result-item .track { font-size: .75rem; color: var(--text2); margin-top: 2px; }
+    .header-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+    .icon-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text2);
+      cursor: pointer;
+      padding: 6px 10px;
+      font-size: .8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition);
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Layout ─────────────────────────────────────────────────────── */
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────────── */
+    aside {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition);
+    }
+    aside::-webkit-scrollbar { width: 4px; }
+    aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .sidebar-section { padding: 12px 0; }
+    .sidebar-section-title {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text2);
+      padding: 4px 16px 8px;
+    }
+    .nav-group { }
+    .nav-group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-size: .83rem;
+      font-weight: 600;
+      color: var(--text);
+      border-radius: 0;
+      transition: background var(--transition);
+      user-select: none;
+    }
+    .nav-group-header:hover { background: var(--bg3); }
+    .nav-group-header .track-icon { font-size: 1rem; flex-shrink: 0; }
+    .nav-group-header .track-label { flex: 1; }
+    .nav-group-header .chevron {
+      font-size: .7rem;
+      color: var(--text2);
+      transition: transform var(--transition);
+    }
+    .nav-group.open .chevron { transform: rotate(90deg); }
+    .nav-items { display: none; padding-left: 8px; }
+    .nav-group.open .nav-items { display: block; }
+    .nav-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      color: var(--text2);
+      padding: 6px 16px 6px 32px;
+      font-size: .8rem;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: all var(--transition);
+    }
+    .nav-item:hover { color: var(--text); background: var(--bg3); }
+    .nav-item.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(88,166,255,.08);
+    }
+    .sidebar-home {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: .83rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: background var(--transition);
+    }
+    .sidebar-home:hover { background: var(--bg3); }
+    .sidebar-home.active { color: var(--accent); }
+
+    /* ── Main content ────────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    main::-webkit-scrollbar { width: 6px; }
+    main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── Home / Dashboard ─────────────────────────────────────────────── */
+    #home-view {
+      padding: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero {
+      text-align: center;
+      padding: 48px 20px 40px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: var(--text2);
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 32px 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      text-align: center;
+      min-width: 130px;
+    }
+    .stat-card .num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .stat-card .lbl {
+      font-size: .75rem;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .track-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .track-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-color, var(--accent));
+    }
+    .track-card:hover {
+      border-color: var(--card-color, var(--accent));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    }
+    .track-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .track-card-icon { font-size: 1.6rem; }
+    .track-card-title { font-size: 1rem; font-weight: 700; }
+    .track-card-desc { font-size: .8rem; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
+    .track-card-files {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .file-chip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: .72rem;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .file-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Content view ─────────────────────────────────────────────────── */
+    #content-view { display: none; }
+    .content-header {
+      position: sticky;
+      top: 0;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .82rem;
+      color: var(--text2);
+    }
+    .breadcrumb .crumb { cursor: pointer; transition: color var(--transition); }
+    .breadcrumb .crumb:hover { color: var(--accent); }
+    .breadcrumb .sep { color: var(--border); }
+    .breadcrumb .current { color: var(--text); font-weight: 600; }
+    .content-nav {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .content-body {
+      padding: 40px;
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── Markdown rendering ───────────────────────────────────────────── */
+    .markdown-body h1 { font-size: 1.8rem; font-weight: 700; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .markdown-body h2 { font-size: 1.35rem; font-weight: 700; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .markdown-body h3 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 10px; color: var(--accent4); }
+    .markdown-body h4 { font-size: .95rem; font-weight: 600; margin: 18px 0 8px; }
+    .markdown-body p { margin: 0 0 14px; line-height: 1.7; color: var(--text); }
+    .markdown-body ul, .markdown-body ol { padding-left: 24px; margin: 0 0 14px; }
+    .markdown-body li { margin: 4px 0; line-height: 1.6; }
+    .markdown-body li > ul, .markdown-body li > ol { margin: 4px 0 4px 0; }
+    .markdown-body strong { color: var(--text); font-weight: 600; }
+    .markdown-body em { color: var(--text2); }
+    .markdown-body code {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: .85em;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      color: var(--accent3);
+    }
+    .markdown-body pre {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 0 0 16px;
+    }
+    .markdown-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text);
+      font-size: .85rem;
+    }
+    .markdown-body blockquote {
+      border-left: 4px solid var(--accent);
+      padding: 8px 16px;
+      margin: 0 0 14px;
+      background: rgba(88,166,255,.06);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .markdown-body blockquote p { color: var(--text2); margin: 0; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: .875rem; }
+    .markdown-body th { background: var(--bg3); padding: 8px 12px; text-align: left; font-weight: 600; border: 1px solid var(--border); }
+    .markdown-body td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; }
+    .markdown-body tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+    .markdown-body a { color: var(--accent); text-decoration: none; }
+    .markdown-body a:hover { text-decoration: underline; }
+    .markdown-body hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .markdown-body img { max-width: 100%; border-radius: var(--radius); }
+
+    /* ── Loading spinner ──────────────────────────────────────────────── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TOC ─────────────────────────────────────────────────────────── */
+    .toc-panel {
+      position: fixed;
+      right: 0; top: var(--header-h);
+      width: 220px;
+      height: calc(100vh - var(--header-h));
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px 12px;
+      font-size: .78rem;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      z-index: 50;
+    }
+    .toc-panel.open { transform: translateX(0); }
+    .toc-panel h3 { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text2); margin-bottom: 10px; }
+    .toc-item { padding: 3px 0 3px 12px; cursor: pointer; color: var(--text2); border-left: 2px solid transparent; transition: all var(--transition); display: block; line-height: 1.4; }
+    .toc-item:hover { color: var(--accent); border-left-color: var(--accent); }
+    .toc-item.h3 { padding-left: 24px; font-size: .73rem; }
+
+    /* ── Mobile ──────────────────────────────────────────────────────── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 90;
+    }
+    .overlay.show { display: block; }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; align-items: center; }
+      aside {
+        position: fixed;
+        top: var(--header-h);
+        left: 0;
+        height: calc(100vh - var(--header-h));
+        z-index: 100;
+        transform: translateX(-100%);
+      }
+      aside.open { transform: translateX(0); }
+      #home-view { padding: 20px 16px; }
+      .hero h1 { font-size: 1.8rem; }
+      .content-body { padding: 20px 16px; }
+      .content-header { padding: 10px 16px; }
+      .search-wrap { max-width: 200px; }
+    }
+
+    /* ── Scrollbar for main ──────────────────────────────────────────── */
+    main::-webkit-scrollbar { width: 6px; }
+    main::-webkit-scrollbar-track { background: var(--bg); }
+    main::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+
+    /* ── Progress bar ────────────────────────────────────────────────── */
+    #progress {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      width: 0%;
+      transition: width .15s ease;
+      z-index: 200;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Reading progress -->
+<div id="progress"></div>
+
+<!-- Overlay for mobile -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ── Header ─────────────────────────────────────────────────────────── -->
+<header>
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="logo">Cracking ML <span>/ 2026</span></div>
+
+  <div class="search-wrap">
+    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-input" placeholder="Search topics…" autocomplete="off" />
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <div class="header-actions">
+    <button class="icon-btn" onclick="toggleTOC()" id="toc-btn" title="Table of Contents">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      TOC
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" id="theme-btn">
+      <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      Light
+    </button>
+    <a class="icon-btn" href="https://github.com/mshafei/CrackingMachineLearningInterview" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<!-- ── App Body ───────────────────────────────────────────────────────── -->
+<div class="app-body">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-home active" id="home-nav" onclick="showHome()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Learning Tracks</div>
+      <div id="nav-tree"></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main" onscroll="updateProgress()">
+
+    <!-- Home Dashboard -->
+    <div id="home-view">
+      <div class="hero">
+        <h1>Cracking ML Interviews 2026</h1>
+        <p>A comprehensive, hands-on guide for Machine Learning, AI, Data Engineering, MLOps &amp; DevOps interview preparation — from fundamentals to cutting-edge GenAI.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="num">58+</div><div class="lbl">Markdown Files</div></div>
+        <div class="stat-card"><div class="num">10</div><div class="lbl">Learning Tracks</div></div>
+        <div class="stat-card"><div class="num">200+</div><div class="lbl">Q&amp;A Topics</div></div>
+        <div class="stat-card"><div class="num">7</div><div class="lbl">Role Profiles</div></div>
+      </div>
+
+      <div class="tracks-grid" id="tracks-grid"></div>
+    </div>
+
+    <!-- Content View -->
+    <div id="content-view">
+      <div class="content-header">
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div class="content-nav">
+          <button class="icon-btn" id="prev-btn" onclick="navigateRelative(-1)" title="Previous">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="icon-btn" id="next-btn" onclick="navigateRelative(1)" title="Next">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="content-body">
+        <div class="markdown-body" id="content-area"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOC Panel -->
+<div class="toc-panel" id="toc-panel">
+  <h3>On this page</h3>
+  <div id="toc-list"></div>
+</div>
+
+<script>
+// ── Data: track definitions ───────────────────────────────────────────────
+const REPO_RAW = 'https://raw.githubusercontent.com/mshafei/CrackingMachineLearningInterview/master';
+
+// Override for local dev: detect if running from file system
+const isLocal = location.protocol === 'file:';
+const getBaseUrl = () => {
+  if (isLocal) return '';
+  // GitHub Pages URL detection
+  const path = location.pathname.replace(/\/$/, '').replace(/\/index\.html$/, '');
+  return REPO_RAW;
+};
+
+const TRACKS = [
+  {
+    id: 'home-readme',
+    icon: '📋',
+    title: 'Interview Q&A Bank',
+    desc: 'Classic ML fundamentals, supervised/unsupervised learning, regression, classification, and more — your core interview questions.',
+    color: '#58a6ff',
+    files: [
+      { label: 'Main Q&A', path: 'README.md' },
+    ]
+  },
+  {
+    id: 'docs',
+    icon: '🗺️',
+    title: 'Study Roadmap & Guides',
+    desc: '2026 interview focus areas, structured study patterns by role, and curated resources.',
+    color: '#3fb950',
+    files: [
+      { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
+      { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
+      { label: 'Study Pattern', path: 'docs/study-pattern.md' },
+      { label: 'Resources & References', path: 'docs/resources-and-references.md' },
+    ]
+  },
+  {
+    id: 'ai_genai',
+    icon: '🤖',
+    title: 'AI & GenAI',
+    desc: 'RAG, vector databases, LLMOps, agentic AI, Model Context Protocol, LangChain, and Anthropic Claude API.',
+    color: '#d2a8ff',
+    files: [
+      { label: 'Intro to RAG', path: 'ai_genai/intro_rag.md' },
+      { label: 'Vector Databases', path: 'ai_genai/intro_vector_databases.md' },
+      { label: 'LLMOps', path: 'ai_genai/intro_llmops.md' },
+      { label: 'Agentic AI', path: 'ai_genai/intro_agentic_ai.md' },
+      { label: 'MCP Protocol', path: 'ai_genai/intro_mcp.md' },
+      { label: 'LangChain', path: 'ai_genai/intro_langchain.md' },
+      { label: 'Anthropic & Claude', path: 'ai_genai/intro_anthropic.md' },
+    ]
+  },
+  {
+    id: 'classical_ml',
+    icon: '📊',
+    title: 'Classical ML',
+    desc: 'Clustering, dimensionality reduction, feature engineering, recommender systems, and time series.',
+    color: '#f78166',
+    files: [
+      { label: 'Overview', path: 'classical_ml/README.md' },
+      { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
+      { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
+      { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
+      { label: 'Recommender Systems', path: 'classical_ml/intro_recommender_systems.md' },
+      { label: 'Time Series', path: 'classical_ml/intro_time_series.md' },
+    ]
+  },
+  {
+    id: 'deep_learning',
+    icon: '🧠',
+    title: 'Deep Learning',
+    desc: 'Transformer architecture, attention mechanisms, BERT, GPT, and modern neural network architectures.',
+    color: '#ffa657',
+    files: [
+      { label: 'Overview', path: 'deep_learning/README.md' },
+      { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
+    ]
+  },
+  {
+    id: 'frameworks',
+    icon: '⚙️',
+    title: 'Frameworks & Tools',
+    desc: 'PyTorch, HuggingFace, Ollama, vLLM, Unsloth, and LangChain for production ML.',
+    color: '#79c0ff',
+    files: [
+      { label: 'Overview', path: 'frameworks/README.md' },
+      { label: 'PyTorch', path: 'frameworks/intro_pytorch.md' },
+      { label: 'HuggingFace', path: 'frameworks/intro_huggingface.md' },
+      { label: 'Ollama', path: 'frameworks/intro_ollama.md' },
+      { label: 'vLLM', path: 'frameworks/intro_vllm.md' },
+      { label: 'Unsloth', path: 'frameworks/intro_unsloth.md' },
+    ]
+  },
+  {
+    id: 'mlops',
+    icon: '🔧',
+    title: 'MLOps',
+    desc: 'MLflow, feature stores, model serving, explainability, data quality, and model monitoring.',
+    color: '#56d364',
+    files: [
+      { label: 'Overview', path: 'mlops/README.md' },
+      { label: 'MLflow', path: 'mlops/intro_mlflow.md' },
+      { label: 'Feature Stores', path: 'mlops/intro_feature_stores.md' },
+      { label: 'Model Serving', path: 'mlops/intro_model_serving.md' },
+      { label: 'Explainability', path: 'mlops/intro_model_explainability.md' },
+      { label: 'Data Quality', path: 'mlops/intro_data_quality.md' },
+      { label: 'Model Monitoring', path: 'mlops/intro_model_monitoring.md' },
+    ]
+  },
+  {
+    id: 'data_engineering',
+    icon: '🗄️',
+    title: 'Data Engineering',
+    desc: 'Apache Spark, Kafka, Airflow, dbt, Iceberg, Delta Lake, DuckDB, and Databricks.',
+    color: '#e3b341',
+    files: [
+      { label: 'Apache Spark', path: 'data_engineering/intro_apache_spark.md' },
+      { label: 'Apache Kafka', path: 'data_engineering/intro_apache_kafka.md' },
+      { label: 'Apache Airflow', path: 'data_engineering/intro_apache_airflow.md' },
+      { label: 'dbt', path: 'data_engineering/intro_dbt.md' },
+      { label: 'dbt Interview Q&A', path: 'data_engineering/interview_dbt.md' },
+      { label: 'Apache Iceberg', path: 'data_engineering/intro_apache_iceberg.md' },
+      { label: 'Delta Lake', path: 'data_engineering/intro_delta_lake.md' },
+      { label: 'DuckDB', path: 'data_engineering/intro_duckdb.md' },
+    ]
+  },
+  {
+    id: 'devops',
+    icon: '🐳',
+    title: 'DevOps & Infrastructure',
+    desc: 'Docker, Kubernetes, Helm, Terraform, and GitHub Actions for ML infrastructure.',
+    color: '#2ea043',
+    files: [
+      { label: 'Docker', path: 'devops/intro_docker.md' },
+      { label: 'Kubernetes', path: 'devops/intro_kubernetes.md' },
+      { label: 'Helm', path: 'devops/intro_helm.md' },
+      { label: 'Terraform', path: 'devops/intro_terraform.md' },
+      { label: 'GitHub Actions', path: 'devops/intro_github_actions.md' },
+    ]
+  },
+  {
+    id: 'system_design',
+    icon: '🏗️',
+    title: 'ML System Design',
+    desc: 'System design frameworks and case studies: recommendation systems, fraud detection, and more.',
+    color: '#ff7b72',
+    files: [
+      { label: 'Design Framework', path: 'system_design/README.md' },
+      { label: 'Recommendation System', path: 'system_design/recommendation_system.md' },
+      { label: 'Fraud Detection', path: 'system_design/fraud_detection.md' },
+    ]
+  },
+  {
+    id: 'cloud_ml',
+    icon: '☁️',
+    title: 'Cloud ML Platforms',
+    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML — comparison and interview prep.',
+    color: '#79c0ff',
+    files: [
+      { label: 'Cloud ML Platforms', path: 'cloud_ml/intro_cloud_ml_platforms.md' },
+    ]
+  },
+];
+
+// Flat list of all files for navigation
+const ALL_FILES = TRACKS.flatMap(t => t.files.map(f => ({ ...f, track: t.title, trackId: t.id })));
+
+// ── State ──────────────────────────────────────────────────────────────────
+let currentPath = null;
+let currentIndex = -1;
+let tocOpen = false;
+
+// ── Build sidebar nav tree ─────────────────────────────────────────────────
+function buildNav() {
+  const tree = document.getElementById('nav-tree');
+  TRACKS.forEach(track => {
+    const grp = document.createElement('div');
+    grp.className = 'nav-group';
+    grp.id = 'grp-' + track.id;
+    grp.innerHTML = `
+      <div class="nav-group-header" onclick="toggleGroup('${track.id}')">
+        <span class="track-icon">${track.icon}</span>
+        <span class="track-label">${track.title}</span>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="nav-items" id="nav-items-${track.id}">
+        ${track.files.map(f => `
+          <button class="nav-item" id="nav-${f.path.replace(/\//g,'-').replace(/\./g,'-')}"
+                  onclick="loadFile('${f.path}', '${track.id}')">${f.label}</button>
+        `).join('')}
+      </div>
+    `;
+    tree.appendChild(grp);
+  });
+}
+
+function toggleGroup(id) {
+  const grp = document.getElementById('grp-' + id);
+  grp.classList.toggle('open');
+}
+
+// ── Build home dashboard cards ────────────────────────────────────────────
+function buildCards() {
+  const grid = document.getElementById('tracks-grid');
+  TRACKS.forEach(track => {
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.style.setProperty('--card-color', track.color);
+    card.innerHTML = `
+      <div class="track-card-header">
+        <span class="track-card-icon">${track.icon}</span>
+        <span class="track-card-title">${track.title}</span>
+      </div>
+      <div class="track-card-desc">${track.desc}</div>
+      <div class="track-card-files">
+        ${track.files.map(f => `<span class="file-chip" onclick="event.stopPropagation();loadFile('${f.path}','${track.id}')">${f.label}</span>`).join('')}
+      </div>
+    `;
+    card.onclick = () => loadFile(track.files[0].path, track.id);
+    grid.appendChild(card);
+  });
+}
+
+// ── Navigation ──────────────────────────────────────────────────────────────
+function showHome() {
+  document.getElementById('home-view').style.display = 'block';
+  document.getElementById('content-view').style.display = 'none';
+  document.getElementById('home-nav').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  currentPath = null;
+  currentIndex = -1;
+  updateProgress();
+  closeSidebar();
+}
+
+async function loadFile(path, trackId) {
+  // Update state
+  currentPath = path;
+  currentIndex = ALL_FILES.findIndex(f => f.path === path);
+
+  // Show content view
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('content-view').style.display = 'flex';
+  document.getElementById('content-view').style.flexDirection = 'column';
+  document.getElementById('home-nav').classList.remove('active');
+
+  // Highlight nav item
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const navId = 'nav-' + path.replace(/\//g,'-').replace(/\./g,'-');
+  const navEl = document.getElementById(navId);
+  if (navEl) {
+    navEl.classList.add('active');
+    // Open group
+    const grp = document.getElementById('grp-' + trackId);
+    if (grp && !grp.classList.contains('open')) grp.classList.add('open');
+  }
+
+  // Update breadcrumb
+  const track = TRACKS.find(t => t.id === trackId);
+  const file = track?.files.find(f => f.path === path);
+  updateBreadcrumb(track, file);
+
+  // Update prev/next buttons
+  document.getElementById('prev-btn').disabled = currentIndex <= 0;
+  document.getElementById('next-btn').disabled = currentIndex >= ALL_FILES.length - 1;
+
+  // Show loading
+  const area = document.getElementById('content-area');
+  area.innerHTML = `<div class="loading"><div class="spinner"></div><span style="color:var(--text2)">Loading…</span></div>`;
+  document.getElementById('main').scrollTop = 0;
+
+  // Fetch content
+  try {
+    let content;
+    if (isLocal) {
+      // Try relative path for local file serving
+      const resp = await fetch(path);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      content = await resp.text();
+    } else {
+      const url = `${REPO_RAW}/${path}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      content = await resp.text();
+    }
+    renderMarkdown(content);
+  } catch (err) {
+    area.innerHTML = `
+      <div style="padding:40px;text-align:center;color:var(--text2)">
+        <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px">Could not load file</div>
+        <div style="font-size:.85rem">${path}</div>
+        <div style="font-size:.8rem;margin-top:8px;color:var(--accent3)">${err.message}</div>
+        <div style="font-size:.75rem;margin-top:16px;color:var(--text2)">
+          When running locally, start a local server: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">python -m http.server 8080</code>
+        </div>
+      </div>`;
+  }
+
+  closeSidebar();
+}
+
+function renderMarkdown(text) {
+  marked.setOptions({ gfm: true, breaks: false });
+  const html = marked.parse(text);
+  const area = document.getElementById('content-area');
+  area.innerHTML = html;
+  // Syntax highlighting
+  area.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+  // Build TOC
+  buildTOC(area);
+  // Scroll top
+  document.getElementById('main').scrollTop = 0;
+}
+
+function updateBreadcrumb(track, file) {
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = `
+    <span class="crumb" onclick="showHome()">Home</span>
+    <span class="sep">›</span>
+    <span class="crumb" onclick="openTrack('${track?.id}')">${track?.icon} ${track?.title}</span>
+    <span class="sep">›</span>
+    <span class="current">${file?.label}</span>
+  `;
+}
+
+function openTrack(id) {
+  const track = TRACKS.find(t => t.id === id);
+  if (track) loadFile(track.files[0].path, id);
+}
+
+function navigateRelative(dir) {
+  const next = ALL_FILES[currentIndex + dir];
+  if (next) loadFile(next.path, next.trackId);
+}
+
+// ── TOC ───────────────────────────────────────────────────────────────────
+function buildTOC(container) {
+  const headings = container.querySelectorAll('h2, h3');
+  const list = document.getElementById('toc-list');
+  list.innerHTML = '';
+  headings.forEach((h, i) => {
+    const id = 'heading-' + i;
+    h.id = id;
+    const item = document.createElement('a');
+    item.className = 'toc-item' + (h.tagName === 'H3' ? ' h3' : '');
+    item.textContent = h.textContent;
+    item.onclick = () => {
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    list.appendChild(item);
+  });
+}
+
+function toggleTOC() {
+  tocOpen = !tocOpen;
+  document.getElementById('toc-panel').classList.toggle('open', tocOpen);
+}
+
+// ── Search ────────────────────────────────────────────────────────────────
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) { searchResults.classList.remove('show'); return; }
+  const matches = ALL_FILES.filter(f =>
+    f.label.toLowerCase().includes(q) || f.track.toLowerCase().includes(q) || f.path.toLowerCase().includes(q)
+  ).slice(0, 8);
+  if (!matches.length) {
+    searchResults.innerHTML = `<div class="search-result-item"><div class="title" style="color:var(--text2)">No results found</div></div>`;
+  } else {
+    searchResults.innerHTML = matches.map(f => `
+      <div class="search-result-item" onclick="selectSearch('${f.path}','${f.trackId}')">
+        <div class="title">${f.label}</div>
+        <div class="track">${f.track}</div>
+      </div>`).join('');
+  }
+  searchResults.classList.add('show');
+});
+
+function selectSearch(path, trackId) {
+  searchInput.value = '';
+  searchResults.classList.remove('show');
+  loadFile(path, trackId);
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrap')) searchResults.classList.remove('show');
+});
+
+// ── Theme ─────────────────────────────────────────────────────────────────
+let isDark = true;
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-btn').innerHTML = isDark
+    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light`
+    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Dark`;
+  const hljsTheme = document.getElementById('hljs-theme');
+  hljsTheme.href = isDark
+    ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+    : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+}
+
+// ── Progress bar ──────────────────────────────────────────────────────────
+function updateProgress() {
+  const el = document.getElementById('main');
+  const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+}
+
+// ── Mobile sidebar ────────────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') {
+    searchResults.classList.remove('show');
+    searchInput.blur();
+    if (tocOpen) { tocOpen = false; document.getElementById('toc-panel').classList.remove('open'); }
+  }
+  if (e.altKey && e.key === 'ArrowLeft' && currentIndex > 0) navigateRelative(-1);
+  if (e.altKey && e.key === 'ArrowRight' && currentIndex < ALL_FILES.length - 1) navigateRelative(1);
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────
+buildNav();
+buildCards();
+</script>
+</body>
+</html>
