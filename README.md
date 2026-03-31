@@ -2,11 +2,7 @@
 
 A practical interview preparation repository for Machine Learning Engineer, AI Engineer, Data Scientist, Deep Learning Engineer, Data Engineer, and DevOps or platform-focused roles.
 
-This README now serves three purposes:
-
-1. It keeps the original core ML interview questions.
-2. It adds a more organized 2026 interview-prep layer focused on modern ML engineering topics such as LLMs, RAG, evaluation, agents, safety, and production systems.
-3. It acts as the main entry point for related tracks including AI/GenAI, data engineering, and DevOps.
+Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/CrackingMachineLearningInterview/) GitPage(for Ui/UX experience).
 
 ### Who this repository is for
 * Machine Learning Engineer
