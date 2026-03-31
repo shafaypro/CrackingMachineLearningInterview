@@ -654,6 +654,7 @@ const TRACKS = [
     color: '#3fb950',
     files: [
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
+      { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
       { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
       { label: 'Study Pattern', path: 'docs/study-pattern.md' },
       { label: 'Resources & References', path: 'docs/resources-and-references.md' },
@@ -663,15 +664,20 @@ const TRACKS = [
     id: 'ai_genai',
     icon: '🤖',
     title: 'AI & GenAI',
-    desc: 'RAG, vector databases, LLMOps, agentic AI, Model Context Protocol, LangChain, and Anthropic Claude API.',
+    desc: 'RAG, vector databases, LLMOps, agentic AI, multi-agent systems, MCP, LangChain, LangGraph, LangSmith, CrewAI, and Anthropic Claude API.',
     color: '#d2a8ff',
     files: [
       { label: 'Intro to RAG', path: 'ai_genai/intro_rag.md' },
       { label: 'Vector Databases', path: 'ai_genai/intro_vector_databases.md' },
+      { label: 'Vector Databases (Advanced)', path: 'ai_genai/intro_vector_databases_advanced.md' },
       { label: 'LLMOps', path: 'ai_genai/intro_llmops.md' },
       { label: 'Agentic AI', path: 'ai_genai/intro_agentic_ai.md' },
+      { label: 'Multi-Agent Systems', path: 'ai_genai/intro_multi_agent_systems.md' },
       { label: 'MCP Protocol', path: 'ai_genai/intro_mcp.md' },
       { label: 'LangChain', path: 'ai_genai/intro_langchain.md' },
+      { label: 'LangGraph', path: 'ai_genai/intro_langgraph.md' },
+      { label: 'LangSmith', path: 'ai_genai/intro_langsmith.md' },
+      { label: 'CrewAI', path: 'ai_genai/intro_crewai.md' },
       { label: 'Anthropic & Claude', path: 'ai_genai/intro_anthropic.md' },
     ]
   },
@@ -705,7 +711,7 @@ const TRACKS = [
     id: 'frameworks',
     icon: '⚙️',
     title: 'Frameworks & Tools',
-    desc: 'PyTorch, HuggingFace, Ollama, vLLM, Unsloth, and LangChain for production ML.',
+    desc: 'PyTorch, HuggingFace, Ollama, vLLM, Unsloth, FastAPI, and Pydantic for production ML.',
     color: '#79c0ff',
     files: [
       { label: 'Overview', path: 'frameworks/README.md' },
@@ -714,13 +720,15 @@ const TRACKS = [
       { label: 'Ollama', path: 'frameworks/intro_ollama.md' },
       { label: 'vLLM', path: 'frameworks/intro_vllm.md' },
       { label: 'Unsloth', path: 'frameworks/intro_unsloth.md' },
+      { label: 'FastAPI', path: 'frameworks/intro_fastapi.md' },
+      { label: 'Pydantic', path: 'frameworks/intro_pydantic.md' },
     ]
   },
   {
     id: 'mlops',
     icon: '🔧',
     title: 'MLOps',
-    desc: 'MLflow, feature stores, model serving, explainability, data quality, and model monitoring.',
+    desc: 'MLflow, feature stores, model serving, explainability, data quality, model monitoring, and LLM evaluation.',
     color: '#56d364',
     files: [
       { label: 'Overview', path: 'mlops/README.md' },
@@ -730,13 +738,14 @@ const TRACKS = [
       { label: 'Explainability', path: 'mlops/intro_model_explainability.md' },
       { label: 'Data Quality', path: 'mlops/intro_data_quality.md' },
       { label: 'Model Monitoring', path: 'mlops/intro_model_monitoring.md' },
+      { label: 'LLM Evaluation', path: 'mlops/intro_llm_evaluation.md' },
     ]
   },
   {
     id: 'data_engineering',
     icon: '🗄️',
     title: 'Data Engineering',
-    desc: 'Apache Spark, Kafka, Airflow, dbt, Iceberg, Delta Lake, DuckDB, and Databricks.',
+    desc: 'Apache Spark, Kafka, Airflow, dbt, Iceberg, Delta Lake, DuckDB, Geospatial AI, and OpenClaw.',
     color: '#e3b341',
     files: [
       { label: 'Apache Spark', path: 'data_engineering/intro_apache_spark.md' },
@@ -747,13 +756,15 @@ const TRACKS = [
       { label: 'Apache Iceberg', path: 'data_engineering/intro_apache_iceberg.md' },
       { label: 'Delta Lake', path: 'data_engineering/intro_delta_lake.md' },
       { label: 'DuckDB', path: 'data_engineering/intro_duckdb.md' },
+      { label: 'Geospatial AI', path: 'data_engineering/intro_geospatial.md' },
+      { label: 'OpenClaw', path: 'data_engineering/intro_openclaw.md' },
     ]
   },
   {
     id: 'devops',
     icon: '🐳',
     title: 'DevOps & Infrastructure',
-    desc: 'Docker, Kubernetes, Helm, Terraform, and GitHub Actions for ML infrastructure.',
+    desc: 'Docker, Kubernetes, Helm, Terraform, GitHub Actions, and Testing AI Systems.',
     color: '#2ea043',
     files: [
       { label: 'Docker', path: 'devops/intro_docker.md' },
@@ -761,18 +772,20 @@ const TRACKS = [
       { label: 'Helm', path: 'devops/intro_helm.md' },
       { label: 'Terraform', path: 'devops/intro_terraform.md' },
       { label: 'GitHub Actions', path: 'devops/intro_github_actions.md' },
+      { label: 'Testing AI Systems', path: 'devops/intro_testing_ai.md' },
     ]
   },
   {
     id: 'system_design',
     icon: '🏗️',
     title: 'ML System Design',
-    desc: 'System design frameworks and case studies: recommendation systems, fraud detection, and more.',
+    desc: 'System design frameworks and case studies: recommendation systems, fraud detection, and ML design patterns.',
     color: '#ff7b72',
     files: [
       { label: 'Design Framework', path: 'system_design/README.md' },
       { label: 'Recommendation System', path: 'system_design/recommendation_system.md' },
       { label: 'Fraud Detection', path: 'system_design/fraud_detection.md' },
+      { label: 'ML System Design Patterns', path: 'system_design/ml_system_design_patterns.md' },
     ]
   },
   {
