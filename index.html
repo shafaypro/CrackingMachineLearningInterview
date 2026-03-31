@@ -943,6 +943,7 @@ function renderMarkdown(text) {
   const html = marked.parse(text);
   const area = document.getElementById('content-area');
   area.innerHTML = html;
+  assignHeadingIds(area);
   wireContentLinks(area);
   // Syntax highlighting
   area.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
@@ -999,10 +1000,50 @@ function getTrackIdForPath(path) {
   return file ? file.trackId : null;
 }
 
+function slugifyHeading(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function assignHeadingIds(container) {
+  const usedIds = new Set();
+
+  container.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(heading => {
+    const baseId = slugifyHeading(heading.textContent || 'section') || 'section';
+    let id = baseId;
+    let suffix = 2;
+
+    while (usedIds.has(id) || document.getElementById(id)) {
+      id = `${baseId}-${suffix}`;
+      suffix += 1;
+    }
+
+    heading.id = id;
+    usedIds.add(id);
+  });
+}
+
 function wireContentLinks(container) {
   container.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
-    if (!href || href.startsWith('#')) return;
+    if (!href) return;
+
+    if (href.startsWith('#')) {
+      const hash = href.slice(1);
+      if (!hash) return;
+
+      link.addEventListener('click', event => {
+        const target = document.getElementById(hash);
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return;
+    }
 
     if (/^(https?:)?\/\//i.test(href) || href.startsWith('mailto:')) {
       link.target = '_blank';
@@ -1054,9 +1095,7 @@ function buildTOC(container) {
   const headings = container.querySelectorAll('h2, h3');
   const list = document.getElementById('toc-list');
   list.innerHTML = '';
-  headings.forEach((h, i) => {
-    const id = 'heading-' + i;
-    h.id = id;
+  headings.forEach(h => {
     const item = document.createElement('a');
     item.className = 'toc-item' + (h.tagName === 'H3' ? ' h3' : '');
     item.textContent = h.textContent;
