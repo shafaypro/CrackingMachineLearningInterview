@@ -1,0 +1,2 @@
+# Test dependencies for content quality checks
+pytest>=8.0
