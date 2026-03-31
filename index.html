@@ -551,7 +551,7 @@
       <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       Light
     </button>
-    <a class="icon-btn" href="https://github.com/mshafei/CrackingMachineLearningInterview" target="_blank" rel="noopener">
+    <a class="icon-btn" href="https://github.com/shafaypro/CrackingMachineLearningInterview" target="_blank" rel="noopener">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       GitHub
     </a>
@@ -624,16 +624,11 @@
 
 <script>
 // ── Data: track definitions ───────────────────────────────────────────────
-const REPO_RAW = 'https://raw.githubusercontent.com/mshafei/CrackingMachineLearningInterview/master';
+const REPO_URL = 'https://github.com/shafaypro/CrackingMachineLearningInterview';
 
-// Override for local dev: detect if running from file system
+// Fetch is blocked for local file:// pages, but works from any normal HTTP server
+// including GitHub Pages once the markdown files are served directly.
 const isLocal = location.protocol === 'file:';
-const getBaseUrl = () => {
-  if (isLocal) return '';
-  // GitHub Pages URL detection
-  const path = location.pathname.replace(/\/$/, '').replace(/\/index\.html$/, '');
-  return REPO_RAW;
-};
 
 const TRACKS = [
   {
@@ -909,18 +904,9 @@ async function loadFile(path, trackId) {
 
   // Fetch content
   try {
-    let content;
-    if (isLocal) {
-      // Try relative path for local file serving
-      const resp = await fetch(path);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      content = await resp.text();
-    } else {
-      const url = `${REPO_RAW}/${path}`;
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      content = await resp.text();
-    }
+    if (isLocal) throw new Error('Browsers block reading local files via fetch() on file:// pages');
+
+    const content = await fetchMarkdown(path);
     renderMarkdown(content);
   } catch (err) {
     area.innerHTML = `
@@ -943,12 +929,89 @@ function renderMarkdown(text) {
   const html = marked.parse(text);
   const area = document.getElementById('content-area');
   area.innerHTML = html;
+  wireContentLinks(area);
   // Syntax highlighting
   area.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
   // Build TOC
   buildTOC(area);
   // Scroll top
   document.getElementById('main').scrollTop = 0;
+}
+
+async function fetchMarkdown(path) {
+  const attempts = [path];
+  const repoSegment = '/CrackingMachineLearningInterview/';
+
+  if (location.pathname.includes(repoSegment)) {
+    attempts.unshift(`${repoSegment}${path}`);
+  }
+
+  let lastError = null;
+  for (const candidate of [...new Set(attempts)]) {
+    try {
+      const resp = await fetch(candidate);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return await resp.text();
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw lastError || new Error(`Failed to load ${path}`);
+}
+
+function normalizePath(path) {
+  const isAbsolute = path.startsWith('/');
+  const baseParts = isAbsolute || !currentPath
+    ? []
+    : currentPath.split('/').slice(0, -1);
+  const parts = `${isAbsolute ? '' : baseParts.join('/')}${isAbsolute ? path : `/${path}`}`.split('/');
+  const normalized = [];
+
+  for (const part of parts) {
+    if (!part || part === '.') continue;
+    if (part === '..') {
+      normalized.pop();
+      continue;
+    }
+    normalized.push(part);
+  }
+
+  return normalized.join('/');
+}
+
+function getTrackIdForPath(path) {
+  const file = ALL_FILES.find(item => item.path === path);
+  return file ? file.trackId : null;
+}
+
+function wireContentLinks(container) {
+  container.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+
+    if (/^(https?:)?\/\//i.test(href) || href.startsWith('mailto:')) {
+      link.target = '_blank';
+      link.rel = 'noopener';
+      return;
+    }
+
+    const [rawPath, hash = ''] = href.split('#');
+    if (!rawPath || !rawPath.toLowerCase().endsWith('.md')) return;
+
+    const resolvedPath = normalizePath(rawPath);
+    const targetTrackId = getTrackIdForPath(resolvedPath) || getTrackIdForPath(currentPath);
+
+    link.href = '#';
+    link.addEventListener('click', async (event) => {
+      event.preventDefault();
+      await loadFile(resolvedPath, targetTrackId);
+      if (!hash) return;
+
+      const target = document.getElementById(hash) || document.querySelector(`[id="${hash}"]`);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 }
 
 function updateBreadcrumb(track, file) {
