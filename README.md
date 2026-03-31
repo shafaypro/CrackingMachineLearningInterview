@@ -131,7 +131,11 @@ Core topics:
 Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.
 
 Core topics:
+* [Cloud ML Platforms Overview](./cloud_ml/README.md) **(New)**
 * [Cloud ML Platforms Comparison (SageMaker vs Vertex AI vs Azure ML)](./cloud_ml/intro_cloud_ml_platforms.md)
+* [AWS SageMaker Interview Guide](./cloud_ml/intro_sagemaker.md) **(New)**
+* [Google Vertex AI Interview Guide](./cloud_ml/intro_vertex_ai.md) **(New)**
+* [Azure Machine Learning Interview Guide](./cloud_ml/intro_azure_ml.md) **(New)**
 
 ## System Design Track
 Use this track for senior ML engineer, staff engineer, and principal engineer interviews requiring system design depth.
