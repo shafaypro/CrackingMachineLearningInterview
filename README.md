@@ -28,12 +28,14 @@ This README now serves three purposes:
 ## Quick Navigation
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
+* [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [MLOps Track](#mlops-track)
 * [Data Engineering Track](#data-engineering-track)
 * [DevOps Track](#devops-track)
 * [Cloud ML Platforms](#cloud-ml-platforms)
+* [System Design Track](#system-design-track)
 * [Preparation Resources and References](./docs/resources-and-references.md)
 * [Study Pattern](./docs/study-pattern.md)
 * [Classic Question Bank](#classic-question-bank)
@@ -52,14 +54,17 @@ Feel free to share the repository link in your blog, study notes, or interview p
 ## Repository Structure
 * [`docs/2026-interview-roadmap.md`](./docs/2026-interview-roadmap.md): current interview focus areas for ML Engineer and AI Engineer roles.
 * [`docs/2026-additional-questions.md`](./docs/2026-additional-questions.md): modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.
+* [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design. **(New)**
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
-* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics.
+* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
-* [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality.
+* [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, LLM evaluation. **(Expanded)**
 * [`cloud_ml/`](./cloud_ml): cloud ML platforms — AWS SageMaker, Google Vertex AI, Azure ML.
-* [`data_engineering/`](./data_engineering): data engineering interview topics and platform concepts.
-* [`devops/`](./devops): DevOps, infrastructure, and deployment topics.
+* [`data_engineering/`](./data_engineering): data engineering interview topics, platform concepts, and geospatial AI. **(Expanded)**
+* [`devops/`](./devops): DevOps, infrastructure, deployment, and AI testing topics. **(Expanded)**
+* [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving. **(Expanded)**
+* [`system_design/`](./system_design): ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems. **(Expanded)**
 * `README.md`: repository landing page plus the original classic ML interview question bank.
 
 ## AI / GenAI Track
@@ -68,14 +73,19 @@ Use this track for AI Engineer, GenAI Engineer, LLM Engineer, Applied AI, and ag
 Core topics:
 * [RAG](./ai_genai/intro_rag.md)
 * [Vector Databases](./ai_genai/intro_vector_databases.md)
+* [Vector Databases — Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
 * [LLMOps](./ai_genai/intro_llmops.md)
 * [Agentic AI](./ai_genai/intro_agentic_ai.md)
+* [Multi-Agent Systems (Patterns, Memory, Tool Calling, Failure Handling)](./ai_genai/intro_multi_agent_systems.md) **(New)**
+* [CrewAI](./ai_genai/intro_crewai.md) **(New)**
+* [LangGraph](./ai_genai/intro_langgraph.md) **(New)**
+* [LangSmith — Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
 * [MCP](./ai_genai/intro_mcp.md)
 * [LangChain](./ai_genai/intro_langchain.md)
 * [Anthropic Overview](./ai_genai/intro_anthropic.md)
 
 ## Data Engineering Track
-Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, and streaming interviews.
+Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, streaming, and geospatial interviews.
 
 Core topics:
 * [Apache Spark](./data_engineering/intro_apache_spark.md)
@@ -87,9 +97,10 @@ Core topics:
 * [Delta Lake](./data_engineering/intro_delta_lake.md)
 * [DuckDB](./data_engineering/intro_duckdb.md)
 * [OpenClaw](./data_engineering/intro_openclaw.md)
+* [Geospatial AI Systems (Google Solar API, ArcGIS, PostGIS, H3)](./data_engineering/intro_geospatial.md) **(New)**
 
 ## DevOps Track
-Use this track for infrastructure, CI/CD, containers, orchestration, and IaC interviews.
+Use this track for infrastructure, CI/CD, containers, orchestration, IaC, and AI system testing interviews.
 
 Core topics:
 * [Docker](./devops/intro_docker.md)
@@ -97,6 +108,7 @@ Core topics:
 * [Helm](./devops/intro_helm.md)
 * [Terraform](./devops/intro_terraform.md)
 * [GitHub Actions](./devops/intro_github_actions.md)
+* [Testing AI Systems (Playwright, Puppeteer, LLM E2E Testing)](./devops/intro_testing_ai.md) **(New)**
 
 ## Classic ML Track
 Use this track for classical ML algorithm interviews, data science roles, and as foundations for ML engineer roles.
@@ -117,12 +129,35 @@ Core topics:
 * [Feature Stores](./mlops/intro_feature_stores.md)
 * [Model Serving](./mlops/intro_model_serving.md)
 * [Data Quality & Validation](./mlops/intro_data_quality.md)
+* [LLM Evaluation (Evals, Benchmarks, Hallucination Detection, HITL)](./mlops/intro_llm_evaluation.md) **(New)**
 
 ## Cloud ML Platforms
 Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.
 
 Core topics:
 * [Cloud ML Platforms Comparison (SageMaker vs Vertex AI vs Azure ML)](./cloud_ml/intro_cloud_ml_platforms.md)
+
+## System Design Track
+Use this track for senior ML engineer, staff engineer, and principal engineer interviews requiring system design depth.
+
+Core topics:
+* [ML System Design Framework & Patterns](./system_design/README.md)
+* [Recommendation System Design](./system_design/recommendation_system.md)
+* [Fraud Detection System Design](./system_design/fraud_detection.md)
+* [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
+
+## Frameworks Track
+Use this track for roles requiring hands-on Python API development and AI framework expertise.
+
+Core topics:
+* [PyTorch](./frameworks/intro_pytorch.md)
+* [HuggingFace](./frameworks/intro_huggingface.md)
+* [LangChain](./frameworks/intro_langchain.md)
+* [Ollama](./frameworks/intro_ollama.md)
+* [vLLM](./frameworks/intro_vllm.md)
+* [Unsloth](./frameworks/intro_unsloth.md)
+* [FastAPI — Production AI Backend Engineering](./frameworks/intro_fastapi.md) **(New)**
+* [Pydantic — Data Validation for AI Systems](./frameworks/intro_pydantic.md) **(New)**
 
 # Classic Question Bank
 
