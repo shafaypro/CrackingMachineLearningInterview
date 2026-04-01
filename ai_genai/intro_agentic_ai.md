@@ -558,6 +558,7 @@ Research the current state of vector databases in 2026:
 |-----------|----------|-------------|
 | **LangGraph** | Python | Stateful multi-agent graphs |
 | **CrewAI** | Python | Role-based agent crews |
+| **n8n** | TypeScript | Visual workflow automation with AI integrations |
 | **AutoGen** | Python | Multi-agent conversations (Microsoft) |
 | **Claude Code** | TypeScript | Agentic coding assistant |
 | **Composio** | Python | 250+ tool integrations for agents |
@@ -589,6 +590,7 @@ Research the current state of vector databases in 2026:
 | Topic | Why It's Related |
 |-------|-----------------|
 | [RAG](./intro_rag.md) | Agentic RAG combines agents with retrieval |
+| [n8n](./intro_n8n.md) | n8n is useful when agent workflows need triggers, approvals, and SaaS integrations |
 | [MCP](./intro_mcp.md) | Model Context Protocol is the standard tool interface for agents |
 | [LangChain](./intro_langchain.md) | LangGraph is the leading framework for agentic workflows |
 | [LLMOps](./intro_llmops.md) | Monitoring and evaluating agent reliability in production |

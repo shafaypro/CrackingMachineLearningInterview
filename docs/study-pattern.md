@@ -75,6 +75,7 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 | Embedding Models | 🟡 | Dense vs sparse, embedding drift | [Vector DBs Guide](../ai_genai/intro_vector_databases.md) |
 | LLMOps | 🔴 | Tracing, evals, cost tracking, deployment | [LLMOps Guide](../ai_genai/intro_llmops.md) |
 | Agentic AI | 🔴 | ReAct, Plan-Execute, multi-agent systems | [Agentic AI Guide](../ai_genai/intro_agentic_ai.md) |
+| n8n / AI Workflow Automation | 🟡 | Webhooks, approval flows, AI-enabled business automation | [n8n Guide](../ai_genai/intro_n8n.md) |
 | MCP (Model Context Protocol) | 🔴 | Tool servers, client-server architecture | [MCP Guide](../ai_genai/intro_mcp.md) |
 | LangChain / LangGraph | 🟡 | LCEL, chains, agents, memory | [LangChain Guide](../ai_genai/intro_langchain.md) |
 | Anthropic / Claude API | 🟡 | Tool use, caching, extended thinking | [Anthropic Guide](../ai_genai/intro_anthropic.md) |

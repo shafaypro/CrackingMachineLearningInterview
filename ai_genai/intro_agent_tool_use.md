@@ -65,6 +65,7 @@ Real systems need stable state transitions, audit logs, and explicit checkpoints
 | LangGraph | Stateful graph orchestration for agents | Production agent flows with branches and recovery |
 | AutoGen | Multi-agent conversation framework | Research-style agent collaboration experiments |
 | CrewAI | Role-based multi-agent task coordination | Lightweight multi-agent business workflows |
+| n8n | Visual workflow automation for triggers, approvals, and integrations | Operational AI workflows and business automation |
 | MCP | Standardized tool and context protocol | Secure tool integration across apps and agents |
 
 ---
@@ -82,7 +83,7 @@ Real systems need stable state transitions, audit logs, and explicit checkpoints
 
 - Goal: Automate internal repetitive workflows like ticket triage or runbook generation.
 - Key components: workflow triggers, tool registry, approval gates, retry logic, audit logs.
-- Suggested tech stack: FastAPI, LangGraph, Postgres, Redis.
+- Suggested tech stack: n8n or FastAPI, LangGraph, Postgres, Redis.
 - Difficulty: Advanced.
 
 ### AI coding assistant
@@ -148,6 +149,7 @@ planner-executor-agent/
 ## Related Topics
 
 - [Multi-Agent Systems](./intro_multi_agent_systems.md)
+- [n8n](./intro_n8n.md)
 - [LangGraph](./intro_langgraph.md)
 - [MCP](./intro_mcp.md)
 - [Backend & System Design for AI](../system_design/intro_backend_ai_system_design.md)
