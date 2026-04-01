@@ -31,6 +31,7 @@ Airflow defines this as a **DAG** (Directed Acyclic Graph) in Python.
 | **Dagster** | Asset-centric, typed | Data assets, lineage, testing |
 | **Mage** | Notebook-style | Data engineers who love notebooks |
 | **Temporal** | Workflow engine | Long-running, stateful workflows |
+| **n8n** | Visual workflow automation | App integrations, webhooks, approval flows, operational AI workflows |
 
 ---
 

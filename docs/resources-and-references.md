@@ -20,6 +20,8 @@ These references are especially useful for 2025-2026 style interviews focused on
 5. [Full Stack Deep Learning](https://fullstackdeeplearning.com/)
 6. [Made With ML](https://madewithml.com/)
 7. [Chip Huyen blog](https://huyenchip.com/blog/)
+8. [n8n official site](https://n8n.io/)
+9. [n8n documentation](https://docs.n8n.io/)
 
 ## Additional Topics
 
@@ -57,3 +59,6 @@ Named Entity Recognition (NER) is an NLP task where a model identifies and class
 * tagging organizations and locations in news articles,
 * compliance and document review,
 * search enrichment and knowledge graph construction.
+
+#### What is workflow automation for AI systems?
+Workflow automation for AI systems is the operational layer that connects triggers, approvals, APIs, models, and downstream business systems into a repeatable execution path. In practice, teams often use tools like n8n for event-driven business automation, Airflow for scheduled data workflows, and code-first frameworks such as LangGraph when they need deeper stateful agent control.

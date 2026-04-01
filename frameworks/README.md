@@ -29,6 +29,7 @@ A comprehensive reference for all major ML/AI frameworks, local LLM runners, fin
 | TensorFlow/Keras | Training Framework | Build and train neural networks | Production deployment, mobile |
 | JAX | Training Framework | High-performance ML research | Google infra, research labs |
 | [LangChain](./intro_langchain.md) | LLM Orchestration | Chain LLM calls, agents, RAG | LLM application development |
+| [n8n](../ai_genai/intro_n8n.md) | Workflow Automation | Connect apps, webhooks, approvals, and AI steps | Operational AI automation and business workflows |
 | LlamaIndex | RAG Framework | Document indexing and retrieval | Document Q&A, knowledge bases |
 | Haystack | NLP Pipeline | Search and NLP pipelines | Enterprise search, NLP products |
 | [Unsloth](./intro_unsloth.md) | Fine-tuning | Fast LoRA/QLoRA fine-tuning | Efficient custom model training |
@@ -103,6 +104,7 @@ For building LLM applications, RAG pipelines, and AI agents.
 | Framework | Description | Strengths | Weaknesses | Best For |
 |-----------|-------------|-----------|------------|----------|
 | **[LangChain](./intro_langchain.md)** | LLM application framework | Huge community, many integrations | Abstraction overhead, breaking changes | Rapid LLM app prototyping |
+| **[n8n](../ai_genai/intro_n8n.md)** | Visual workflow automation | Fast integrations, approvals, business workflow visibility | Less suited for deep agent state management | AI-enabled operations and internal tooling |
 | **LlamaIndex** | Data indexing + RAG | Best-in-class RAG, document handling | More limited for general agents | Document Q&A, knowledge bases |
 | **Haystack** | NLP pipeline framework | Enterprise-ready, production-focused | Smaller community | Enterprise search pipelines |
 | **DSPy** | LLM programming | Automatic prompt optimization | New, smaller community | Research, optimized pipelines |
@@ -154,7 +156,17 @@ In practice, many teams use LlamaIndex for the RAG layer and LangChain for agent
 
 ---
 
-**Q4: Compare PyTorch and TensorFlow for production ML.** 🟡 Intermediate
+**Q4: When would you choose n8n over LangChain or LangGraph?** 🟡 Intermediate
+
+Choose **n8n** when the problem is mostly workflow automation: webhooks, SaaS integrations, approvals, routing, and AI calls embedded inside business processes.
+
+Choose **LangChain** for general LLM application development and **LangGraph** when you need deeper control over state, loops, and agent execution.
+
+In many production systems, n8n handles the outer operational workflow while LangChain or LangGraph powers the reasoning-heavy backend.
+
+---
+
+**Q5: Compare PyTorch and TensorFlow for production ML.** 🟡 Intermediate
 
 **PyTorch** is dominant in research and has strong production tools (TorchServe, ONNX export, TorchScript). `torch.compile` in PyTorch 2.0 makes it competitive on performance.
 
@@ -164,7 +176,7 @@ For new projects in 2025: choose PyTorch — it has the largest research communi
 
 ---
 
-**Q5: What is the difference between Chroma and Pinecone for vector search?** 🟡 Intermediate
+**Q6: What is the difference between Chroma and Pinecone for vector search?** 🟡 Intermediate
 
 **Chroma** is an open-source, embedded vector database ideal for local development and prototyping. Zero infrastructure setup — runs in-process or as a local server.
 
@@ -174,7 +186,7 @@ For development/prototyping: Chroma. For production at scale: Pinecone, Qdrant (
 
 ---
 
-**Q6: What is Unsloth and how is it different from standard LoRA training?** 🟡 Intermediate
+**Q7: What is Unsloth and how is it different from standard LoRA training?** 🟡 Intermediate
 
 Unsloth is a Python library that provides optimized LoRA/QLoRA fine-tuning for LLMs. It achieves 2-5x speed improvements and 50-60% memory reduction compared to standard Hugging Face PEFT+Transformers training.
 
@@ -188,7 +200,7 @@ Standard LoRA uses the Hugging Face PEFT library which works well but is not opt
 
 ---
 
-**Q7: What is the difference between pgvector and dedicated vector databases?** 🔴 Advanced
+**Q8: What is the difference between pgvector and dedicated vector databases?** 🔴 Advanced
 
 **pgvector** adds vector similarity search to PostgreSQL using an extension. Strengths: no new infrastructure, SQL interface, ACID transactions, join with relational data, familiar tooling. Weaknesses: slower for large-scale (100M+ vectors), limited indexing options (IVFFlat, HNSW).
 
@@ -205,6 +217,7 @@ Choose pgvector if you already use PostgreSQL and have < 10M vectors. Choose a d
 - [Hugging Face Documentation](https://huggingface.co/docs)
 - [PyTorch Documentation](https://pytorch.org/docs/)
 - [LangChain Documentation](https://python.langchain.com/docs/)
+- [n8n Documentation](https://docs.n8n.io/)
 - [LlamaIndex Documentation](https://docs.llamaindex.ai/)
 - [Unsloth GitHub](https://github.com/unslothai/unsloth)
 - [Chroma Documentation](https://docs.trychroma.com/)

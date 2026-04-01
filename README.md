@@ -58,7 +58,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design. **(New)**
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
-* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
+* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, LLM evaluation. **(Expanded)**
 * [`cloud_ml/`](./cloud_ml): cloud ML platforms — AWS SageMaker, Google Vertex AI, Azure ML.
@@ -89,6 +89,7 @@ Use these to turn the repo into a portfolio, not just a reading list:
 * [Multi-Agent Research Assistant](./ai_genai/intro_agent_tool_use.md)
 * [Multi-Model Router](./ai_genai/intro_multi_model_orchestration.md)
 * [Document Understanding System](./ai_genai/intro_multimodal_ai.md)
+* [AI Workflow Automation with n8n](./ai_genai/intro_n8n.md)
 * [Eval Pipeline](./mlops/intro_evaluation_guardrails.md)
 * [CI/CD for AI App](./mlops/intro_llmops_mlops_engineering.md)
 * [Scalable AI API](./system_design/intro_backend_ai_system_design.md)
@@ -110,6 +111,8 @@ Core topics:
 * [Multi-Model & AI Orchestration](./ai_genai/intro_multi_model_orchestration.md) **(New)**
 * [Multimodal AI](./ai_genai/intro_multimodal_ai.md) **(New)**
 * [CrewAI](./ai_genai/intro_crewai.md) **(New)**
+* [n8n - AI Workflow Automation](./ai_genai/intro_n8n.md) **(New)**
+* [n8n - Advanced AI Workflows](./ai_genai/intro_n8n_advanced.md) **(New)**
 * [LangGraph](./ai_genai/intro_langgraph.md) **(New)**
 * [LangSmith — Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
 * [MCP](./ai_genai/intro_mcp.md)

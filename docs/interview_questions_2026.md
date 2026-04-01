@@ -408,6 +408,19 @@ Monitoring:
 
 ---
 
+## Section 8: AI Workflow Automation
+
+**Q20: When would you use n8n in an AI system, and when would you avoid it?**
+
+**Strong Answer:**
+> Use **n8n** when the system is driven by operational workflows: webhooks, SaaS integrations, approvals, notifications, CRM updates, or internal back-office automation. It is especially strong when product and operations teams need visibility into the workflow.
+
+> Avoid using n8n as the only orchestration layer when the AI core needs complex state machines, agent loops, custom recovery logic, deep testing, or highly optimized retrieval and reasoning. In those cases, use n8n as the outer workflow shell and call a code-first backend such as a FastAPI or LangGraph service.
+
+> A good interview answer also mentions idempotency, approval gates, retries, audit logs, and policy checks before executing any AI-suggested action.
+
+---
+
 ## Quick Reference: Interview Pattern Cheatsheet
 
 | Topic | 30-second answer | Full answer depth |
@@ -418,4 +431,5 @@ Monitoring:
 | Hallucination | LLM generates false information confidently | Detection (NLI, LLM judge), mitigation (RAG, CoT, grounding prompts) |
 | Class imbalance | Class weights, resampling, threshold adjustment | Metrics: PR-AUC, F1; SMOTE, focal loss |
 | Agent vs LLM chain | Agents have loops, conditionals, tool use; chains are fixed | LangGraph vs LCEL vs direct API calls |
+| n8n vs LangGraph vs Airflow | n8n for operational automation, LangGraph for agent control, Airflow for scheduled data pipelines | Tradeoffs in state, approvals, integrations, retries, and ownership |
 | Embedding vs fine-tuning | Embedding: fast, cheap, good for similarity; FT: slow, expensive, changes model behavior | When each wins |

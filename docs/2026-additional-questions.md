@@ -74,3 +74,6 @@ A strong answer is not "just use a better prompt." It should mention grounding w
 
 #### 25) What 2026 topics are most likely to appear in ML engineer interviews?
 The highest-probability modern topics are RAG design, LLM evaluation, embeddings, vector search, reranking, prompt injection, tool or function calling, agent orchestration, fine-tuning tradeoffs, inference optimization, monitoring, and AI system design under latency and cost constraints.
+
+#### 26) When would you use n8n instead of LangGraph or Airflow?
+Use n8n when the main problem is event-driven workflow automation across SaaS tools, APIs, approvals, and AI calls. Use LangGraph when you need code-first control over stateful agent behavior, loops, and complex branching. Use Airflow when the primary workload is scheduled data or batch pipeline orchestration. In many production systems, n8n handles the outer business workflow while LangGraph or a custom backend handles the reasoning-heavy AI core.
