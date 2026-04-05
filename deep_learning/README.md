@@ -305,6 +305,25 @@ See [Transformers Deep Dive](./intro_transformers.md) for detailed coverage.
 - **GPT (decoder-only):** Autoregressive generation, text completion
 - **T5/BART (encoder-decoder):** Seq2Seq, translation, summarization
 
+### Fine-Tuning LLMs (LoRA / QLoRA / PEFT)
+
+See [Fine-Tuning Guide](./intro_fine_tuning.md) for detailed coverage.
+
+- **LoRA** — low-rank adaptation, trains only A·B matrices, <1% of parameters
+- **QLoRA** — NF4 quantization + LoRA, fine-tune 7B models on a single GPU
+- **Instruction tuning** — teach models to follow natural language instructions
+- **DPO** — preference optimization without RL infrastructure
+
+### Computer Vision
+
+See [Computer Vision Guide](./intro_computer_vision.md) for detailed coverage.
+
+- **CNNs** — convolutions, residual blocks, receptive fields
+- **Architectures** — ResNet, EfficientNet, MobileNet, ViT
+- **Object detection** — Faster R-CNN, YOLO, mAP, NMS, IoU
+- **Segmentation** — U-Net, semantic vs instance
+- **Augmentation** — CutMix, MixUp, RandAugment
+
 ### Diffusion Models
 
 Generative models that learn to reverse a gradual noising process.
