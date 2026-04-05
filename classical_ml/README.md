@@ -570,6 +570,20 @@ Accuracy = (TP + TN) / Total — works well for balanced classes. F1 = 2·(Preci
 
 ---
 
+---
+
+## Statistics & Probability
+
+See [Statistics & Probability Guide](./intro_statistics_probability.md) for detailed coverage.
+
+- **Hypothesis testing** — t-test, chi-square, ANOVA, multiple comparisons correction
+- **Probability distributions** — Normal, Binomial, Poisson, Beta and when to use each
+- **Bayesian statistics** — Bayes' theorem, MLE vs MAP, priors and posteriors
+- **Confidence intervals** — frequentist CI vs Bayesian credible intervals, bootstrap CI
+- **Correlation** — Pearson vs Spearman, covariance, correlation ≠ causation
+
+---
+
 ## References
 
 - [Scikit-learn Documentation](https://scikit-learn.org/stable/)
