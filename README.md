@@ -115,6 +115,9 @@ Core topics:
 * [n8n - Advanced AI Workflows](./ai_genai/intro_n8n_advanced.md) **(New)**
 * [LangGraph](./ai_genai/intro_langgraph.md) **(New)**
 * [LangSmith — Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
+* [Prompt Engineering (CoT, ReAct, Few-Shot, Self-Consistency, ToT, Output Control)](./ai_genai/intro_prompt_engineering.md) **(New)**
+* [Structured Outputs & Function Calling (JSON Mode, Tool Use, Pydantic, Instructor)](./ai_genai/intro_structured_outputs.md) **(New)**
+* [LLM Security (Prompt Injection, Jailbreaks, Red-Teaming, Defenses)](./ai_genai/intro_llm_security.md) **(New)**
 * [MCP](./ai_genai/intro_mcp.md)
 * [LangChain](./ai_genai/intro_langchain.md)
 * [Anthropic Overview](./ai_genai/intro_anthropic.md)
