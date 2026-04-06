@@ -116,7 +116,13 @@ PSI ≥ 0.25: Significant change — retrain required
 
 ## A/B Testing and Deployment Strategies
 
-### A/B Testing
+See [A/B Testing Guide](./intro_ab_testing.md) for comprehensive coverage including:
+- Sample size calculation, statistical tests (z-test, t-test), and CUPED variance reduction
+- Common pitfalls: peeking problem, multiple testing, Simpson's paradox, SRM
+- Multi-armed bandits vs fixed A/B testing trade-offs
+- Interleaving for ranking systems and shadow mode testing
+
+### A/B Testing Overview
 
 Split traffic between two model versions to compare performance using real user interactions.
 
