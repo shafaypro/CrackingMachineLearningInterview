@@ -132,6 +132,8 @@ Use this track alongside:
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
+| Data Modeling | 🔴 | Grain, keys, SCDs, dimensional vs Data Vault, modeling for BI and ML | [Data Modeling Guide](../data_engineering/data-modeling.md) |
+| Data Architecture | 🔴 | Batch vs streaming, lakehouse, medallion, Lambda/Kappa, governance | [Data Architecture Guide](../data_engineering/data-architecture.md) |
 | Apache Spark | 🟡 | RDDs vs DataFrames, partitioning, joins | [Spark Guide](../data_engineering/intro_apache_spark.md) |
 | Apache Kafka | 🟡 | Topics, partitions, consumer groups, exactly-once | [Kafka Guide](../data_engineering/intro_apache_kafka.md) |
 | Apache Airflow | 🟡 | DAGs, operators, XComs, sensors | [Airflow Guide](../data_engineering/intro_apache_airflow.md) |

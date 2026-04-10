@@ -130,6 +130,8 @@ Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, streaming
 
 Core topics:
 * [Data Engineering for AI](./data_engineering/intro_data_engineering_for_ai.md) **(New)**
+* [Data Modeling](./data_engineering/data-modeling.md) **(New)**
+* [Data Architecture](./data_engineering/data-architecture.md) **(New)**
 * [Apache Spark](./data_engineering/intro_apache_spark.md)
 * [Apache Kafka](./data_engineering/intro_apache_kafka.md)
 * [Apache Airflow](./data_engineering/intro_apache_airflow.md)
