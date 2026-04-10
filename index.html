@@ -586,10 +586,10 @@
       </div>
 
       <div class="stats-row">
-        <div class="stat-card"><div class="num">58+</div><div class="lbl">Markdown Files</div></div>
-        <div class="stat-card"><div class="num">10</div><div class="lbl">Learning Tracks</div></div>
-        <div class="stat-card"><div class="num">200+</div><div class="lbl">Q&amp;A Topics</div></div>
-        <div class="stat-card"><div class="num">7</div><div class="lbl">Role Profiles</div></div>
+        <div class="stat-card"><div class="num" id="stat-files">0</div><div class="lbl">Study Files</div></div>
+        <div class="stat-card"><div class="num" id="stat-tracks">0</div><div class="lbl">Learning Tracks</div></div>
+        <div class="stat-card"><div class="num" id="stat-system-design">0</div><div class="lbl">System Design Guides</div></div>
+        <div class="stat-card"><div class="num" id="stat-practice">0</div><div class="lbl">Practice Guides</div></div>
       </div>
 
       <div class="tracks-grid" id="tracks-grid"></div>
@@ -684,6 +684,18 @@ const TRACKS = [
     ]
   },
   {
+    id: 'coding_challenges',
+    icon: '</>',
+    title: 'Coding Challenges',
+    desc: 'Python and SQL practice for coding rounds, data interviews, and algorithmic screening.',
+    color: '#c297ff',
+    files: [
+      { label: 'Overview', path: 'coding_challenges/README.md' },
+      { label: 'Python Coding Challenges', path: 'coding_challenges/python_coding_challenges.md' },
+      { label: 'SQL Coding Challenges', path: 'coding_challenges/sql_coding_challenges.md' },
+    ]
+  },
+  {
     id: 'classical_ml',
     icon: '📊',
     title: 'Classical ML',
@@ -691,6 +703,7 @@ const TRACKS = [
     color: '#f78166',
     files: [
       { label: 'Overview', path: 'classical_ml/README.md' },
+      { label: 'Statistics & Probability', path: 'classical_ml/intro_statistics_probability.md' },
       { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
       { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
       { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
@@ -790,6 +803,7 @@ const TRACKS = [
     files: [
       { label: 'Design Framework', path: 'system_design/README.md' },
       { label: 'Backend AI Systems', path: 'system_design/intro_backend_ai_system_design.md' },
+      { label: 'Backend Interview Guide', path: 'system_design/backend_system_design_interview_guide.md' },
       { label: 'Recommendation System', path: 'system_design/recommendation_system.md' },
       { label: 'Fraud Detection', path: 'system_design/fraud_detection.md' },
       { label: 'ML System Design Patterns', path: 'system_design/ml_system_design_patterns.md' },
@@ -813,6 +827,22 @@ const TRACKS = [
 
 // Flat list of all files for navigation
 const ALL_FILES = TRACKS.flatMap(t => t.files.map(f => ({ ...f, track: t.title, trackId: t.id })));
+
+function populateHomeStats() {
+  const studyFiles = ALL_FILES.length;
+  const learningTracks = TRACKS.length;
+  const systemDesignGuides = ALL_FILES.filter(f => f.path.startsWith('system_design/')).length;
+  const practiceGuides = ALL_FILES.filter(f =>
+    f.path.startsWith('coding_challenges/') ||
+    f.path.includes('interview_') ||
+    f.path.includes('interview_questions')
+  ).length;
+
+  document.getElementById('stat-files').textContent = `${studyFiles}+`;
+  document.getElementById('stat-tracks').textContent = learningTracks;
+  document.getElementById('stat-system-design').textContent = systemDesignGuides;
+  document.getElementById('stat-practice').textContent = `${practiceGuides}+`;
+}
 
 // ── State ──────────────────────────────────────────────────────────────────
 let currentPath = null;
@@ -1193,6 +1223,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────
+populateHomeStats();
 buildNav();
 buildCards();
 </script>

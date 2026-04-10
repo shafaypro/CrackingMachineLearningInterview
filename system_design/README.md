@@ -7,10 +7,11 @@ A guide to approaching ML system design interview questions with structured fram
 ## Table of Contents
 
 1. [Framework for ML System Design](#framework-for-ml-system-design)
-2. [Key Components](#key-components)
-3. [Scalability Considerations](#scalability-considerations)
-4. [System Design Q&A](#system-design-qa)
-5. [References](#references)
+2. [Backend Interview Guide](#backend-interview-guide)
+3. [Key Components](#key-components)
+4. [Scalability Considerations](#scalability-considerations)
+5. [System Design Q&A](#system-design-qa)
+6. [References](#references)
 
 ---
 
@@ -62,6 +63,22 @@ Ask these questions:
 - What metrics to monitor?
 - When to retrain?
 - How to handle concept/data drift?
+
+---
+
+## Backend Interview Guide
+
+If you want the broader non-ML backend concepts that often get mixed into ML system design interviews, use this companion page:
+
+- [Backend System Design Interview Guide](./backend_system_design_interview_guide.md)
+
+It adds a structured review of:
+- scalability primitives such as load balancing, auto-scaling, and rate limiting
+- data-system fundamentals such as indexing, replication, and sharding
+- caching, messaging, and distributed transaction patterns
+- reliability topics such as circuit breakers, idempotency, timeouts, and quorum
+
+Use this page for the ML-specific framework and design examples, then use the backend guide as the general system design revision sheet.
 
 ---
 

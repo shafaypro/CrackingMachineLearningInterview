@@ -41,6 +41,28 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 
 ---
 
+## Coding Challenge Prep
+
+**Recommended for:** ML Engineer, Data Engineer, Analytics Engineer, AI Engineer
+**Estimated prep time:** 1-2 weeks in parallel with the main track
+
+| Topic | Difficulty | Key Questions to Master | Guide |
+|-------|-----------|------------------------|-------|
+| Python fundamentals for interviews | 🟢 Beginner | Lists, dicts, sets, strings, edge cases | [Python Coding Challenges](../coding_challenges/python_coding_challenges.md) |
+| Sliding window / two pointers | 🟡 Intermediate | Substrings, contiguous ranges, rolling windows | [Python Coding Challenges](../coding_challenges/python_coding_challenges.md) |
+| Trees, graphs, BFS, DFS | 🟡 Intermediate | Dependencies, traversal, cycle detection | [Python Coding Challenges](../coding_challenges/python_coding_challenges.md) |
+| SQL aggregations and joins | 🟢 Beginner | Grouping, nulls, output grain | [SQL Coding Challenges](../coding_challenges/sql_coding_challenges.md) |
+| SQL windows and ranking | 🟡 Intermediate | Running totals, top-N per group, lag/lead | [SQL Coding Challenges](../coding_challenges/sql_coding_challenges.md) |
+| SQL retention and funnel patterns | 🔴 Advanced | Cohorts, sessionization, staged CTE logic | [SQL Coding Challenges](../coding_challenges/sql_coding_challenges.md) |
+
+Use this track alongside:
+
+- [Statistics & Probability Guide](../classical_ml/intro_statistics_probability.md)
+- [DuckDB Complete Guide](../data_engineering/intro_duckdb.md)
+- [dbt Interview Q&A](../data_engineering/interview_dbt.md)
+
+---
+
 ## Track 2: Deep Learning & Neural Networks
 
 **Recommended for:** ML Engineer, DL Engineer, AI Engineer

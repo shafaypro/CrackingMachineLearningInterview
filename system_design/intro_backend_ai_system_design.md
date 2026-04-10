@@ -10,6 +10,8 @@ AI systems fail in production for backend reasons as often as for model reasons.
 
 This matters because models only create value when the surrounding system is stable under real traffic.
 
+For a broader interview-prep view of backend concepts that sit around ML systems, see the dedicated [Backend System Design Interview Guide](./backend_system_design_interview_guide.md). It expands the general system design layer with 32 interview concepts spanning scalability, databases, caching, distributed systems, messaging, networking, storage, reliability, and search.
+
 ---
 
 ## Core Concepts
@@ -137,6 +139,7 @@ scalable-ai-api/
 
 ## Related Topics
 
+- [Backend System Design Interview Guide](./backend_system_design_interview_guide.md)
 - [ML System Design Framework](./README.md)
 - [Model Serving](../mlops/intro_model_serving.md)
 - [Agent Systems and Tool Use](../ai_genai/intro_agent_tool_use.md)
