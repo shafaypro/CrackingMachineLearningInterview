@@ -10,6 +10,8 @@ AI systems depend on reliable data pipelines more than model demos usually revea
 
 It matters because model quality, latency, and reliability are all downstream of data quality.
 
+For senior data engineering interviews, that foundation is not enough by itself. You also need to explain how the platform is architected, how domains are modeled, how keys and history are managed, and how the data layer stays governable as scale and organizational complexity grow.
+
 ---
 
 ## Core Concepts
@@ -116,6 +118,8 @@ feature-pipeline/
 
 ## Related Topics
 
+- [Data Modeling](./data-modeling.md)
+- [Data Architecture](./data-architecture.md)
 - [Apache Airflow](./intro_apache_airflow.md)
 - [Apache Spark](./intro_apache_spark.md)
 - [Apache Kafka](./intro_apache_kafka.md)

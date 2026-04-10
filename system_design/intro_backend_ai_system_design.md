@@ -28,6 +28,10 @@ Good AI APIs expose clear request and response contracts, idempotency where need
 
 Many AI tasks are too slow or expensive for synchronous request-response design. Distributed systems patterns like queues, workers, and event-driven processing become necessary.
 
+### Data modeling and domain boundaries
+
+Production AI systems still need clean entities, ownership boundaries, and data contracts. You should be able to explain which service owns which data, what the write model looks like, and where denormalized read models or analytics views come from.
+
 ### Caching strategies
 
 Caching reduces cost and latency for repeated work: prompt-response cache, embedding cache, feature cache, and retrieval result cache.
@@ -51,6 +55,10 @@ You should know when to use async APIs, worker queues, batch processing, and bac
 ### Load balancing
 
 This includes balancing across stateless API replicas and sometimes across different inference backends.
+
+### Data-driven development
+
+A strong backend engineer also designs observability and product feedback loops: event schemas, experiment variants, funnel metrics, feature freshness, and operational telemetry.
 
 ### Fault tolerance
 
@@ -141,6 +149,7 @@ scalable-ai-api/
 
 - [Backend System Design Interview Guide](./backend_system_design_interview_guide.md)
 - [ML System Design Framework](./README.md)
+- [Data Engineering for AI](../data_engineering/intro_data_engineering_for_ai.md)
 - [Model Serving](../mlops/intro_model_serving.md)
 - [Agent Systems and Tool Use](../ai_genai/intro_agent_tool_use.md)
 - [Multi-Model Orchestration](../ai_genai/intro_multi_model_orchestration.md)
