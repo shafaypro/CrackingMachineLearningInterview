@@ -13,20 +13,21 @@ This guide adapts the provided standalone HTML system design guide into the repo
 5. [How to Explain Architecture in an Interview](#how-to-explain-architecture-in-an-interview)
 6. [Scalability](#1-scalability)
 7. [Databases](#2-databases)
-8. [Caching](#3-caching)
-9. [Distributed Systems](#4-distributed-systems)
-10. [Messaging and Events](#5-messaging-and-events)
-11. [Networking and APIs](#6-networking-and-apis)
-12. [Storage](#7-storage)
-13. [Reliability and Fault Tolerance](#8-reliability-and-fault-tolerance)
-14. [Search and Real-Time Systems](#9-search-and-real-time-systems)
-15. [Worked Architecture Examples](#worked-architecture-examples)
-16. [Operational Review Checklist](#operational-review-checklist)
-17. [Key Trade-Off Cheat Sheet](#key-trade-off-cheat-sheet)
-18. [Suggested Interview Walkthrough](#suggested-interview-walkthrough)
-19. [Common Mistakes in Backend Interviews](#common-mistakes-in-backend-interviews)
-20. [References](#references)
-21. [Recommended Follow-Ups in This Repo](#recommended-follow-ups-in-this-repo)
+8. [Data Modeling, DDD, and Data-Driven Development](#data-modeling-ddd-and-data-driven-development)
+9. [Caching](#3-caching)
+10. [Distributed Systems](#4-distributed-systems)
+11. [Messaging and Events](#5-messaging-and-events)
+12. [Networking and APIs](#6-networking-and-apis)
+13. [Storage](#7-storage)
+14. [Reliability and Fault Tolerance](#8-reliability-and-fault-tolerance)
+15. [Search and Real-Time Systems](#9-search-and-real-time-systems)
+16. [Worked Architecture Examples](#worked-architecture-examples)
+17. [Operational Review Checklist](#operational-review-checklist)
+18. [Key Trade-Off Cheat Sheet](#key-trade-off-cheat-sheet)
+19. [Suggested Interview Walkthrough](#suggested-interview-walkthrough)
+20. [Common Mistakes in Backend Interviews](#common-mistakes-in-backend-interviews)
+21. [References](#references)
+22. [Recommended Follow-Ups in This Repo](#recommended-follow-ups-in-this-repo)
 
 ---
 
@@ -267,6 +268,272 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Example: User data can be distributed by hashed user ID across many shards.
 - Common prompts: "One database is too large. What now?" "How do you scale writes?"
 - Trade-off: Sharding removes single-node limits but complicates joins, resharding, and hot key management.
+
+---
+
+## Data Modeling, DDD, and Data-Driven Development
+
+These topics sit between "database choice" and "service design." Strong candidates do not just pick Postgres or Kafka; they define the domain, model the data correctly, and design feedback loops so the product can improve with evidence.
+
+### Data Modeling Fundamentals
+
+Good backend design starts with the right data model.
+
+Core questions:
+
+- What are the main entities?
+- What is the system-of-record for each entity?
+- What is the write path and source of truth?
+- What is the read pattern and access pattern?
+- What is the grain of the data?
+
+Example entities for an e-commerce system:
+
+- `users`
+- `products`
+- `orders`
+- `order_items`
+- `payments`
+- `shipments`
+
+Typical relational model:
+
+```text
+users (user_id)
+orders (order_id, user_id, status, created_at)
+order_items (order_item_id, order_id, product_id, quantity, unit_price)
+payments (payment_id, order_id, provider, amount, status)
+shipments (shipment_id, order_id, carrier, status, tracking_number)
+```
+
+Why this matters:
+
+- It makes ownership and consistency boundaries explicit.
+- It helps you reason about transactions and failure recovery.
+- It prevents mixing user-level, order-level, and item-level facts incorrectly.
+
+### Normalized versus Read-Optimized Models
+
+Operational systems usually begin with normalized data because:
+
+- writes are simpler to keep correct
+- duplication is reduced
+- transactional guarantees are easier to reason about
+
+Read-heavy systems often add denormalized views because:
+
+- user-facing pages need fewer joins
+- analytics or dashboard queries become cheaper
+- cache keys and search documents often want pre-joined shapes
+
+A strong answer distinguishes:
+
+- write model: optimized for correctness
+- read model: optimized for latency and query simplicity
+
+This is one reason patterns like CQRS, materialized views, and search indexes appear so often.
+
+### Data Modeling Pitfalls to Call Out
+
+- using one table for multiple unrelated entity types
+- unclear primary key or business key
+- storing mutable aggregate state without an event trail where audit matters
+- mixing transactional tables and analytics tables as if they serve the same purpose
+- ignoring timestamps, versioning, or status transitions
+
+### Domain-Driven Design (DDD)
+
+DDD is useful when the domain is complex and the hardest problems are not technical primitives but business rules and model boundaries.
+
+Key ideas:
+
+- ubiquitous language: use the same terms in code, docs, and conversations
+- bounded context: each domain area owns its own model and vocabulary
+- aggregate: a consistency boundary for related entities
+- entity versus value object: persistent identity versus descriptive structure
+- domain service: logic that spans multiple entities but belongs to the domain
+
+### Bounded Contexts
+
+A common backend mistake is to pretend the whole company shares one global model.
+
+Example:
+
+- Ordering context: cart, checkout, order lifecycle
+- Payment context: authorization, capture, refund, chargeback
+- Fulfillment context: warehouse picking, packing, shipment, delivery
+- Recommendation context: candidate generation, ranking, experimentation
+
+`Order status` in the ordering context does not need to mean the same thing as `payment status` in the payments context.
+
+That separation gives you:
+
+- cleaner service ownership
+- fewer accidental coupling points
+- more explicit integration contracts
+
+### Aggregates and Consistency Boundaries
+
+An aggregate defines what must be changed together atomically.
+
+Example:
+
+- `Order` plus its `order_items` may be one aggregate for checkout integrity
+- `Payment` is often a separate aggregate because it follows a different lifecycle and interacts with external systems
+
+Strong interview point:
+
+- not everything that relates conceptually should be in one transaction
+- choose small consistency boundaries, then coordinate bigger workflows asynchronously when possible
+
+### Context Mapping
+
+When domains talk to each other, define the contract clearly.
+
+Common choices:
+
+- synchronous API call
+- asynchronous event publication
+- replicated read model
+- anti-corruption layer when integrating with legacy systems
+
+Example:
+
+- Payments emits `payment_authorized`
+- Ordering consumes it and moves the order to the next state
+- Fulfillment only starts after the ordering context publishes `order_confirmed`
+
+This is where DDD and event-driven architecture connect naturally.
+
+### Data-Driven Development
+
+Data-driven development means product and engineering decisions are shaped by instrumentation, experiments, and observed behavior rather than intuition alone.
+
+In backend interviews, this usually shows up as:
+
+- event schema design
+- metric definitions
+- experiment support
+- observability and product analytics
+- feedback loops into ranking, recommendations, or abuse detection
+
+### What to Instrument
+
+At minimum, track:
+
+- request received
+- request succeeded or failed
+- key domain actions completed
+- downstream retries or fallback paths triggered
+- user-visible outcomes
+
+Example for checkout:
+
+- `checkout_started`
+- `payment_attempted`
+- `payment_authorized`
+- `order_confirmed`
+- `notification_sent`
+
+Why this matters:
+
+- you can debug conversion drops
+- you can distinguish product issues from infrastructure issues
+- you can support A/B tests and funnel analysis
+
+### Event Schema Design
+
+A good event usually includes:
+
+- event name
+- event timestamp
+- entity identifiers
+- user identifier when appropriate
+- correlation or trace identifier
+- version number
+- context metadata such as device, region, provider, experiment variant
+
+Example:
+
+```json
+{
+  "event_name": "payment_authorized",
+  "event_time": "2026-04-10T10:15:00Z",
+  "order_id": "ord_123",
+  "payment_id": "pay_456",
+  "user_id": "usr_789",
+  "provider": "stripe",
+  "experiment_variant": "checkout_v2",
+  "schema_version": 3
+}
+```
+
+Strong interview point:
+
+- event schemas need versioning just like APIs do
+
+### Metrics and Product Feedback Loops
+
+Data-driven systems usually define:
+
+- north-star metrics
+- guardrail metrics
+- operational metrics
+
+Example for search:
+
+- north-star: successful search sessions
+- guardrail: latency and zero-result rate
+- operational: index freshness lag, query errors, cache hit rate
+
+Example for recommendations:
+
+- north-star: watch time or conversion
+- guardrail: diversity, complaint rate, latency
+- operational: feature freshness, model timeout rate, serving cost
+
+### Data-Driven Development in Practice
+
+A mature backend answer may include:
+
+- feature flags to roll out safely
+- A/B testing support in request or event metadata
+- warehouse or stream pipelines for analytics
+- dashboards for funnel health and regressions
+- batch jobs or online learning loops informed by observed outcomes
+
+### Example: Checkout Domain with DDD and Data-Driven Design
+
+```text
+Ordering Context
+  - owns cart, checkout, order lifecycle
+
+Payments Context
+  - owns authorization, capture, refund
+
+Fulfillment Context
+  - owns shipping and delivery workflow
+
+Shared Data / Events
+  - checkout_started
+  - payment_authorized
+  - order_confirmed
+  - shipment_dispatched
+```
+
+How this helps:
+
+- DDD gives clean ownership and consistency boundaries
+- the data model gives clear tables and keys
+- instrumentation gives funnel visibility and experiment support
+
+### Interview Questions These Topics Help With
+
+- "How would you model the data for this system?"
+- "What should be one service and what should be multiple services?"
+- "What would you store in the transactional database versus the warehouse?"
+- "How would you support experiments and product iteration?"
+- "How do you keep your event schema maintainable over time?"
 
 ---
 

@@ -75,10 +75,17 @@ If you want the broader non-ML backend concepts that often get mixed into ML sys
 It adds a structured review of:
 - scalability primitives such as load balancing, auto-scaling, and rate limiting
 - data-system fundamentals such as indexing, replication, and sharding
+- data modeling, DDD boundaries, and data-driven development patterns
 - caching, messaging, and distributed transaction patterns
 - reliability topics such as circuit breakers, idempotency, timeouts, and quorum
 
 Use this page for the ML-specific framework and design examples, then use the backend guide as the general system design revision sheet.
+
+For design-heavy rounds, especially senior backend, platform, or applied AI interviews, pay special attention to:
+
+- data modeling and transactional versus analytical data shapes
+- bounded contexts and aggregate boundaries
+- instrumentation, event schemas, and experiment-friendly backend design
 
 ---
 
