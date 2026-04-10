@@ -4,6 +4,32 @@ This guide adapts the provided standalone HTML system design guide into the repo
 
 ---
 
+## Table of Contents
+
+1. [At a Glance](#at-a-glance)
+2. [Top 10 to Memorize First](#top-10-to-memorize-first)
+3. [How to Use This Guide](#how-to-use-this-guide)
+4. [Reference Backend Architecture](#reference-backend-architecture)
+5. [How to Explain Architecture in an Interview](#how-to-explain-architecture-in-an-interview)
+6. [Scalability](#1-scalability)
+7. [Databases](#2-databases)
+8. [Caching](#3-caching)
+9. [Distributed Systems](#4-distributed-systems)
+10. [Messaging and Events](#5-messaging-and-events)
+11. [Networking and APIs](#6-networking-and-apis)
+12. [Storage](#7-storage)
+13. [Reliability and Fault Tolerance](#8-reliability-and-fault-tolerance)
+14. [Search and Real-Time Systems](#9-search-and-real-time-systems)
+15. [Worked Architecture Examples](#worked-architecture-examples)
+16. [Operational Review Checklist](#operational-review-checklist)
+17. [Key Trade-Off Cheat Sheet](#key-trade-off-cheat-sheet)
+18. [Suggested Interview Walkthrough](#suggested-interview-walkthrough)
+19. [Common Mistakes in Backend Interviews](#common-mistakes-in-backend-interviews)
+20. [References](#references)
+21. [Recommended Follow-Ups in This Repo](#recommended-follow-ups-in-this-repo)
+
+---
+
 ## At a Glance
 
 - Scope: 32 high-yield backend system design concepts
@@ -42,6 +68,133 @@ For each concept, focus on five things:
 3. Example: where it appears in real systems
 4. Common prompts: how it shows up in interview questions
 5. Trade-off: when it helps and what it costs
+
+---
+
+## Reference Backend Architecture
+
+Most interview systems can be explained as a variation of this baseline:
+
+```text
+Client
+  |
+  v
+DNS / CDN / Edge
+  |
+  v
+Load Balancer / API Gateway
+  |
+  v
+Stateless Application Services
+  |                 \
+  |                  \--> Cache (Redis / Memcached)
+  |
+  +--> Primary Database / Search Index / Object Store
+  |
+  +--> Message Queue / Event Stream
+          |
+          v
+       Async Workers / Consumers
+          |
+          v
+   Secondary Stores / Notifications / Analytics / ML Pipelines
+```
+
+### What each layer does
+
+- Client: browser, mobile app, internal service, or batch producer making requests
+- DNS / CDN / Edge: routes the request and offloads static assets or geo-distributed traffic
+- Load Balancer / API Gateway: terminates TLS, routes traffic, applies auth, rate limits, and observability hooks
+- Stateless application services: enforce business logic and stay horizontally scalable
+- Cache: reduces read latency and protects the database from repeated hot queries
+- Primary datastore: holds the source of truth for transactional or user-facing state
+- Queue / event bus: moves slow, high-volume, or decoupled work off the synchronous path
+- Workers: process async jobs such as notifications, indexing, retries, or media processing
+- Secondary systems: analytics stores, search indexes, object stores, ML pipelines, or third-party integrations
+
+### Hot path versus async path
+
+A strong answer usually distinguishes:
+
+- the latency-sensitive path: what must happen before the user gets a response
+- the deferred path: what can happen after the response
+
+Examples:
+
+- In checkout, charging the card may be on the hot path, but sending an email is async.
+- In a feed system, writing the post may be synchronous, but fan-out and ranking can be async.
+- In media upload, generating thumbnails and indexing metadata are usually async.
+
+### A simple request lifecycle
+
+For a read-heavy endpoint:
+
+1. Client sends request
+2. Load balancer routes to an app instance
+3. App checks cache
+4. On cache hit, return immediately
+5. On cache miss, query database
+6. Store result in cache
+7. Return response
+
+For a write-heavy endpoint:
+
+1. Client sends mutation request
+2. App validates auth and business rules
+3. App writes durable state to source-of-truth store
+4. App emits event to queue or stream
+5. Background workers update search, notifications, analytics, or downstream materialized views
+
+---
+
+## How to Explain Architecture in an Interview
+
+Interviewers are not looking for a giant diagram first. They want a sequence of defensible decisions.
+
+### Good explanation order
+
+1. Clarify requirements
+2. State system APIs or core entities
+3. Draw the happy path
+4. Choose storage
+5. Add scale controls
+6. Add failure handling
+7. Add observability and operations
+
+### Questions you should ask first
+
+- What is the scale in users, QPS, write rate, and storage growth?
+- What latency matters: p50 only, or p95/p99?
+- Is the system read-heavy or write-heavy?
+- Is correctness strict or is eventual consistency acceptable?
+- Do we need multi-region or is one region enough?
+- Are there compliance, privacy, or audit constraints?
+
+### What strong answers sound like
+
+Instead of saying:
+
+- "I'll use microservices and Kafka and Redis."
+
+Say:
+
+- "The API tier stays stateless behind a load balancer so we can scale horizontally."
+- "The primary write goes to a transactional store because correctness matters."
+- "Search indexing and notifications are moved to Kafka consumers so the user-facing path stays under 100 ms."
+- "We'll place Redis in front of the hot read endpoints because traffic is skewed and repeated."
+
+### Capacity estimation you should be able to do quickly
+
+Even rough math earns points if it is directionally correct.
+
+Examples:
+
+- `10M` daily active users with `5` requests per day is about `50M` requests/day.
+- `50M / 86400` is roughly `580` requests/sec average.
+- If peak is `5x` average, design for about `3K` requests/sec.
+- If each write is `2 KB`, and there are `20M` writes/day, raw write volume is about `40 GB/day` before replication and indexing overhead.
+
+You do not need exact precision. You need enough math to justify architecture choices.
 
 ---
 
@@ -337,6 +490,190 @@ For each concept, focus on five things:
 
 ---
 
+## Worked Architecture Examples
+
+These are compact examples of how the concepts in this guide fit together in actual interview answers.
+
+### Example 1: URL Shortener
+
+#### Requirements
+
+- Create short links quickly
+- Redirect with low latency
+- Handle read traffic much higher than write traffic
+- Avoid collisions in short-code generation
+
+#### High-level design
+
+```text
+Client -> LB/API -> Shortener Service -> SQL/NoSQL Store
+                               |
+                               +-> Cache for hot short codes
+                               +-> Async analytics event stream
+```
+
+#### Key decisions
+
+- Use a durable primary store for mapping `short_code -> long_url`
+- Cache the hottest short codes because redirect traffic is skewed
+- Keep analytics off the hot redirect path by sending click events asynchronously
+- Pre-generate IDs or use a central ID service to avoid short-code collisions
+
+#### Trade-offs to discuss
+
+- SQL is fine early because the entity is simple and correctness matters
+- NoSQL becomes more attractive if partitioned key lookups dominate at very large scale
+- Redirect latency should take priority over perfect real-time analytics
+
+### Example 2: Notification System
+
+#### Requirements
+
+- Accept notification requests from many upstream services
+- Support email, push, SMS, and in-app notifications
+- Handle spikes without losing requests
+- Support retries and provider fallback
+
+#### High-level design
+
+```text
+Producer Services
+    |
+    v
+Notification API -> Queue / Topic -> Channel Workers -> External Providers
+                         |
+                         +-> Status Store / Retry DLQ / Audit Log
+```
+
+#### Key decisions
+
+- Use a queue because notifications are naturally asynchronous
+- Separate workers by channel to isolate provider issues
+- Store delivery attempts and status transitions for debugging and audit
+- Use retry with backoff and dead-letter queues for poison messages
+
+#### Failure cases to discuss
+
+- external SMS provider times out
+- push provider rate-limits requests
+- duplicate requests arrive from upstream callers
+- user preference service is temporarily unavailable
+
+Strong interview point:
+- mention idempotency early because notification systems are retry-heavy and duplicate sends are a common production failure
+
+### Example 3: Chat or Real-Time Messaging
+
+#### Requirements
+
+- Low-latency send and receive
+- Message persistence
+- Online presence
+- Ordering within a conversation
+
+#### High-level design
+
+```text
+Client <-> WebSocket Gateway <-> Chat Service
+                               |      \
+                               |       \-> Presence Store (Redis)
+                               |
+                               +-> Message Store
+                               +-> Stream / Queue for fan-out, push, analytics
+```
+
+#### Key decisions
+
+- Use WebSockets for bidirectional real-time communication
+- Store message history durably in a database
+- Use Redis or similar for ephemeral presence state
+- Use async fan-out to notify other connected users or devices
+
+#### Trade-offs to discuss
+
+- strict global ordering is expensive; per-conversation ordering is often enough
+- presence is ephemeral and can tolerate some inaccuracy
+- multi-device sync may require sequence numbers or message offsets
+
+### Example 4: Search and Discovery Service
+
+#### Requirements
+
+- Full-text search with filters
+- Relevance ranking
+- Near-real-time updates
+- Support typo tolerance or stemming
+
+#### High-level design
+
+```text
+Writers -> Primary DB -> Change Events -> Indexer -> Search Engine
+Clients -> API -> Search Service -> Search Engine
+```
+
+#### Key decisions
+
+- Keep source-of-truth writes in the primary database
+- Build the search index asynchronously
+- Accept eventual consistency between DB and index
+- Use specialized search infrastructure instead of stretching an OLTP database
+
+#### Common follow-up
+
+Interviewers often ask how stale the index can be. Your answer should tie staleness budget to product expectations.
+
+---
+
+## Operational Review Checklist
+
+Before finishing a backend design answer, quickly review these dimensions.
+
+### Functional shape
+
+- What are the core APIs?
+- What are the main entities and their relationships?
+- What is the read path?
+- What is the write path?
+
+### Scale
+
+- expected QPS and peak QPS
+- storage growth over time
+- read/write ratio
+- request and payload size
+
+### Reliability
+
+- timeouts
+- retries with backoff and jitter
+- circuit breakers
+- dead-letter queues
+- graceful degradation path
+
+### Data correctness
+
+- consistency model
+- idempotency strategy
+- deduplication strategy
+- backup and restore plan
+- replication and failover
+
+### Operations
+
+- metrics: QPS, latency, error rate, queue depth
+- logs: structured request and failure logs
+- tracing: cross-service call visibility
+- alerts: SLO-based rather than noise-based
+
+### Security
+
+- auth and authz model
+- rate limiting and abuse controls
+- encryption in transit and at rest
+- audit logging where needed
+
+---
+
 ## Key Trade-Off Cheat Sheet
 
 | Trade-Off | Choose A When... | Choose B When... |
@@ -362,6 +699,32 @@ When answering a system design problem, move in this order:
 5. Explain scaling: load balancers, sharding, replication, and auto-scaling.
 6. Explain failure handling: retries, timeouts, circuit breakers, idempotency, and fallback behavior.
 7. Close with observability, cost, and the key trade-offs you deliberately chose.
+
+---
+
+## Common Mistakes in Backend Interviews
+
+- jumping into microservices before establishing the core data model and traffic shape
+- naming tools without explaining why they are needed
+- forgetting the difference between the synchronous user path and the background path
+- ignoring failure modes and only describing the happy path
+- choosing strong consistency everywhere without discussing latency and availability cost
+- choosing eventual consistency everywhere without checking whether correctness permits it
+- omitting idempotency in retry-heavy workflows
+- skipping observability entirely
+- never mentioning backpressure, queue depth, or hot keys in high-scale designs
+
+---
+
+## References
+
+- Designing Data-Intensive Applications, Martin Kleppmann
+- System Design Interview, Alex Xu
+- Web Scalability for Startup Engineers, Artur Ejsmont
+- Release It!, Michael T. Nygard
+- Site Reliability Engineering, Google
+- The Architecture of Open Source Applications
+- Kafka, Redis, PostgreSQL, and Elasticsearch official documentation
 
 ---
 
