@@ -32,6 +32,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * [MLOps Track](#mlops-track)
 * [Data Engineering Track](#data-engineering-track)
 * [DevOps Track](#devops-track)
+* [Coding Challenges Track](#coding-challenges-track)
 * [Cloud ML Platforms](#cloud-ml-platforms)
 * [System Design Track](#system-design-track)
 * [Frameworks Track](#frameworks-track)
@@ -67,6 +68,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving. **(Expanded)**
 * [`system_design/`](./system_design): ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems. **(Expanded)**
 * [`deep_learning/`](./deep_learning): deep learning fundamentals, transformers, and applied training pipelines. **(Expanded)**
+* [`coding_challenges/`](./coding_challenges): Python and SQL interview practice guides for coding screens and data problem solving. **(New)**
 * `README.md`: repository landing page plus the original classic ML interview question bank.
 
 ## Suggested Learning Order
@@ -79,7 +81,8 @@ Use this order if you want to move from theory to production-grade AI engineerin
 5. [MLOps Track](#mlops-track)
 6. [Frameworks Track](#frameworks-track)
 7. [System Design Track](#system-design-track)
-8. [Cloud ML Platforms](#cloud-ml-platforms)
+8. [Coding Challenges Track](#coding-challenges-track)
+9. [Cloud ML Platforms](#cloud-ml-platforms)
 
 ## Highlighted Projects
 Use these to turn the repo into a portfolio, not just a reading list:
@@ -199,6 +202,14 @@ Core topics:
 * [Recommendation System Design](./system_design/recommendation_system.md)
 * [Fraud Detection System Design](./system_design/fraud_detection.md)
 * [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
+
+## Coding Challenges Track
+Use this track for interview rounds that require live coding, take-home problem solving, or SQL assessments.
+
+Core topics:
+* [Coding Challenges Overview](./coding_challenges/README.md) **(New)**
+* [Python Coding Challenges](./coding_challenges/python_coding_challenges.md) **(New)**
+* [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md) **(New)**
 
 ## Frameworks Track
 Use this track for roles requiring hands-on Python API development and AI framework expertise.
