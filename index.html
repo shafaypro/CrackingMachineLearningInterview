@@ -3,650 +3,890 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cracking ML Interviews — 2026</title>
+  <title>Cracking ML Interviews — 2026 Study Hub</title>
+  <meta name="description" content="A premium, hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps & DevOps interview preparation — from fundamentals to frontier." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Markdown + syntax highlighting -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
   <style>
-    /* ── Reset & tokens ─────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════
+       Reset & Design Tokens
+       ════════════════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #0d1117;
-      --bg2:         #161b22;
-      --bg3:         #21262d;
-      --border:      #30363d;
-      --text:        #e6edf3;
-      --text2:       #8b949e;
-      --accent:      #58a6ff;
-      --accent2:     #3fb950;
-      --accent3:     #f78166;
-      --accent4:     #d2a8ff;
-      --sidebar-w:   280px;
-      --header-h:    56px;
-      --radius:      8px;
-      --transition:  .2s ease;
+      /* Dark theme (default) */
+      --bg:          #07080f;
+      --bg-elev:     #0e1019;
+      --surface:     rgba(22, 25, 38, 0.55);
+      --surface-2:   rgba(30, 34, 52, 0.6);
+      --surface-solid: #11131f;
+      --border:      rgba(255, 255, 255, 0.08);
+      --border-str:  rgba(255, 255, 255, 0.14);
+      --text:        #eef1f8;
+      --text-2:      #a6adc4;
+      --text-3:      #6f7691;
+
+      --violet:      #8b5cf6;
+      --indigo:      #6366f1;
+      --cyan:        #22d3ee;
+      --emerald:     #34d399;
+      --amber:       #fbbf24;
+      --rose:        #fb7185;
+
+      --accent:      var(--violet);
+      --accent-2:    var(--cyan);
+      --grad:        linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #22d3ee 100%);
+      --grad-warm:   linear-gradient(120deg, #fb7185 0%, #fbbf24 100%);
+
+      --glow:        0 0 0 1px rgba(139,92,246,.0), 0 8px 40px -12px rgba(99,102,241,.45);
+      --shadow:      0 10px 40px -16px rgba(0,0,0,.7);
+      --shadow-lg:   0 24px 70px -24px rgba(0,0,0,.8);
+
+      --sidebar-w:   292px;
+      --header-h:    60px;
+      --radius:      14px;
+      --radius-sm:   10px;
+      --radius-lg:   20px;
+      --transition:  .22s cubic-bezier(.4,0,.2,1);
+
+      --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+      --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+      --aurora-1: rgba(139, 92, 246, 0.5);
+      --aurora-2: rgba(34, 211, 238, 0.35);
+      --aurora-3: rgba(52, 211, 153, 0.28);
     }
+
     [data-theme="light"] {
-      --bg:    #ffffff;
-      --bg2:   #f6f8fa;
-      --bg3:   #eaeef2;
-      --border:#d0d7de;
-      --text:  #1f2328;
-      --text2: #57606a;
-      --accent:#0969da;
+      --bg:          #f4f5fb;
+      --bg-elev:     #ffffff;
+      --surface:     rgba(255, 255, 255, 0.72);
+      --surface-2:   rgba(255, 255, 255, 0.9);
+      --surface-solid: #ffffff;
+      --border:      rgba(15, 23, 42, 0.09);
+      --border-str:  rgba(15, 23, 42, 0.16);
+      --text:        #14172b;
+      --text-2:      #4b5169;
+      --text-3:      #8a90a8;
+
+      --accent:      #7c3aed;
+      --accent-2:    #0891b2;
+
+      --glow:        0 8px 36px -14px rgba(124,58,237,.35);
+      --shadow:      0 10px 34px -18px rgba(30,41,59,.45);
+      --shadow-lg:   0 26px 60px -28px rgba(30,41,59,.4);
+
+      --aurora-1: rgba(139, 92, 246, 0.28);
+      --aurora-2: rgba(14, 165, 233, 0.2);
+      --aurora-3: rgba(16, 185, 129, 0.16);
     }
 
     html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
       height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* ── Top Bar ────────────────────────────────────────────────────── */
+    /* ── Aurora background ───────────────────────────────────────────── */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .aurora::before,
+    .aurora::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .85;
+    }
+    .aurora::before {
+      width: 60vw; height: 60vw;
+      top: -22vw; left: -12vw;
+      background: radial-gradient(circle at 30% 30%, var(--aurora-1), transparent 62%);
+      animation: drift1 22s ease-in-out infinite alternate;
+    }
+    .aurora::after {
+      width: 55vw; height: 55vw;
+      bottom: -24vw; right: -14vw;
+      background: radial-gradient(circle at 60% 60%, var(--aurora-2), transparent 60%);
+      animation: drift2 26s ease-in-out infinite alternate;
+    }
+    .aurora .blob3 {
+      position: absolute;
+      width: 42vw; height: 42vw;
+      top: 30%; left: 45%;
+      border-radius: 50%;
+      filter: blur(100px);
+      background: radial-gradient(circle, var(--aurora-3), transparent 60%);
+      animation: drift3 30s ease-in-out infinite alternate;
+    }
+    .grain {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @keyframes drift1 { to { transform: translate(8vw, 6vw) scale(1.15); } }
+    @keyframes drift2 { to { transform: translate(-6vw, -5vw) scale(1.1); } }
+    @keyframes drift3 { to { transform: translate(-8vw, 4vw) scale(1.2); } }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora .blob3 { animation: none; }
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       Header
+       ════════════════════════════════════════════════════════════════ */
     header {
       height: var(--header-h);
-      background: var(--bg2);
+      background: color-mix(in srgb, var(--bg-elev) 72%, transparent);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      padding: 0 16px;
-      gap: 12px;
+      padding: 0 18px;
+      gap: 14px;
       z-index: 100;
       flex-shrink: 0;
     }
     .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      cursor: pointer;
-      padding: 4px;
+      display: none; background: none; border: none;
+      color: var(--text); cursor: pointer; padding: 6px;
     }
-    .logo {
-      font-size: 1rem;
-      font-weight: 700;
-      white-space: nowrap;
-      background: linear-gradient(135deg, var(--accent), var(--accent4));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .brand { display: flex; align-items: center; gap: 11px; white-space: nowrap; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: var(--grad);
+      display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+      color: #fff;
+      box-shadow: 0 6px 20px -6px rgba(99,102,241,.7);
+      flex-shrink: 0;
     }
-    .logo span { font-weight: 400; color: var(--text2); -webkit-text-fill-color: var(--text2); }
-    .search-wrap {
-      flex: 1;
-      max-width: 480px;
-      position: relative;
+    .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .brand-text .t1 {
+      font-family: var(--font-display); font-weight: 700; font-size: .98rem;
+      letter-spacing: -.01em;
     }
-    .search-wrap input {
-      width: 100%;
-      background: var(--bg3);
+    .brand-text .t2 { font-size: .68rem; color: var(--text-3); font-weight: 500; letter-spacing: .02em; }
+
+    .header-spacer { flex: 1; }
+
+    .cmd-trigger {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      padding: 6px 12px 6px 34px;
-      font-size: .875rem;
-      outline: none;
-      transition: border-color var(--transition);
-    }
-    .search-wrap input:focus { border-color: var(--accent); }
-    .search-wrap .search-icon {
-      position: absolute;
-      left: 10px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--text2);
-      pointer-events: none;
-    }
-    .search-results {
-      display: none;
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0; right: 0;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      max-height: 360px;
-      overflow-y: auto;
-      z-index: 200;
-    }
-    .search-results.show { display: block; }
-    .search-result-item {
-      padding: 10px 14px;
+      border-radius: 11px;
+      color: var(--text-3);
+      padding: 8px 12px;
+      font-size: .82rem; font-family: var(--font-body);
       cursor: pointer;
-      border-bottom: 1px solid var(--border);
-      transition: background var(--transition);
-    }
-    .search-result-item:last-child { border-bottom: none; }
-    .search-result-item:hover { background: var(--bg3); }
-    .search-result-item .title { font-size: .875rem; font-weight: 600; }
-    .search-result-item .track { font-size: .75rem; color: var(--text2); margin-top: 2px; }
-    .header-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
-    .icon-btn {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text2);
-      cursor: pointer;
-      padding: 6px 10px;
-      font-size: .8rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      min-width: 230px;
       transition: all var(--transition);
     }
-    .icon-btn:hover { border-color: var(--accent); color: var(--text); }
-
-    /* ── Layout ─────────────────────────────────────────────────────── */
-    .app-body {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
+    .cmd-trigger:hover { border-color: var(--border-str); color: var(--text-2); background: var(--surface-2); }
+    .cmd-trigger .kbd {
+      margin-left: auto;
+      display: flex; gap: 3px;
     }
+    .cmd-trigger .kbd span {
+      background: var(--bg-elev); border: 1px solid var(--border);
+      border-radius: 5px; padding: 1px 6px; font-size: .7rem; font-family: var(--font-mono);
+      color: var(--text-3);
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .icon-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-2);
+      cursor: pointer;
+      padding: 8px 11px;
+      font-size: .8rem;
+      font-family: var(--font-body);
+      display: flex; align-items: center; gap: 7px;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+    .icon-btn.compact { padding: 8px; }
+
+    /* ════════════════════════════════════════════════════════════════
+       Layout
+       ════════════════════════════════════════════════════════════════ */
+    .app-body { display: flex; flex: 1; overflow: hidden; position: relative; }
 
     /* ── Sidebar ─────────────────────────────────────────────────────── */
     aside {
       width: var(--sidebar-w);
       flex-shrink: 0;
-      background: var(--bg2);
+      background: color-mix(in srgb, var(--bg-elev) 55%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-right: 1px solid var(--border);
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      padding: 12px 12px 32px;
       transition: transform var(--transition);
     }
-    aside::-webkit-scrollbar { width: 4px; }
-    aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    aside::-webkit-scrollbar { width: 6px; }
+    aside::-webkit-scrollbar-thumb { background: var(--border-str); border-radius: 6px; }
 
-    .sidebar-section { padding: 12px 0; }
-    .sidebar-section-title {
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--text2);
-      padding: 4px 16px 8px;
-    }
-    .nav-group { }
-    .nav-group-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 16px;
-      cursor: pointer;
-      font-size: .83rem;
-      font-weight: 600;
+    .nav-home {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; margin-bottom: 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer; font-weight: 600; font-size: .86rem;
       color: var(--text);
-      border-radius: 0;
+      transition: background var(--transition);
+    }
+    .nav-home:hover { background: var(--surface); }
+    .nav-home.active { background: var(--surface-2); color: var(--accent); }
+    .nav-home svg { color: var(--accent); }
+
+    .phase-label {
+      font-size: .66rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text-3);
+      padding: 16px 12px 7px; display: flex; align-items: center; gap: 7px;
+    }
+    .phase-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--phase-color, var(--accent)); }
+
+    .nav-group { margin-bottom: 1px; }
+    .nav-group-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; cursor: pointer;
+      font-size: .84rem; font-weight: 550; color: var(--text);
+      border-radius: var(--radius-sm);
       transition: background var(--transition);
       user-select: none;
     }
-    .nav-group-header:hover { background: var(--bg3); }
-    .nav-group-header .track-icon { font-size: 1rem; flex-shrink: 0; }
-    .nav-group-header .track-label { flex: 1; }
+    .nav-group-header:hover { background: var(--surface); }
+    .nav-group-header .track-icon { font-size: 1.02rem; flex-shrink: 0; width: 22px; text-align: center; }
+    .nav-group-header .track-label { flex: 1; line-height: 1.2; }
+    .nav-group-header .mini-ring { flex-shrink: 0; }
     .nav-group-header .chevron {
-      font-size: .7rem;
-      color: var(--text2);
-      transition: transform var(--transition);
+      font-size: .62rem; color: var(--text-3);
+      transition: transform var(--transition); flex-shrink: 0;
     }
     .nav-group.open .chevron { transform: rotate(90deg); }
-    .nav-items { display: none; padding-left: 8px; }
+    .nav-items { display: none; padding: 2px 0 6px 0; }
     .nav-group.open .nav-items { display: block; }
     .nav-item {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: none;
-      border: none;
-      color: var(--text2);
-      padding: 6px 16px 6px 32px;
-      font-size: .8rem;
+      display: flex; align-items: center; gap: 9px;
+      width: 100%; text-align: left;
+      background: none; border: none;
+      color: var(--text-2);
+      padding: 7px 12px 7px 16px;
+      margin-left: 21px;
+      font-size: .8rem; font-family: var(--font-body);
       cursor: pointer;
-      border-left: 2px solid transparent;
+      border-left: 2px solid var(--border);
       transition: all var(--transition);
+      line-height: 1.3;
     }
-    .nav-item:hover { color: var(--text); background: var(--bg3); }
+    .nav-item:hover { color: var(--text); border-left-color: var(--text-3); }
     .nav-item.active {
-      color: var(--accent);
-      border-left-color: var(--accent);
-      background: rgba(88,166,255,.08);
+      color: var(--accent); border-left-color: var(--accent);
+      background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent);
+      font-weight: 550;
     }
-    .sidebar-home {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      cursor: pointer;
-      font-size: .83rem;
-      font-weight: 600;
-      color: var(--text);
-      transition: background var(--transition);
+    .nav-item .check {
+      width: 14px; height: 14px; flex-shrink: 0; opacity: 0;
+      color: var(--emerald); transition: opacity var(--transition);
     }
-    .sidebar-home:hover { background: var(--bg3); }
-    .sidebar-home.active { color: var(--accent); }
+    .nav-item.done .check { opacity: 1; }
+    .nav-item.done .ni-label { color: var(--text-3); }
+    .nav-item .ni-label { flex: 1; }
 
-    /* ── Main content ────────────────────────────────────────────────── */
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    main::-webkit-scrollbar { width: 6px; }
-    main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    /* ════════════════════════════════════════════════════════════════
+       Main
+       ════════════════════════════════════════════════════════════════ */
+    main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; scroll-behavior: smooth; }
+    main::-webkit-scrollbar { width: 9px; }
+    main::-webkit-scrollbar-track { background: transparent; }
+    main::-webkit-scrollbar-thumb { background: var(--border-str); border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
 
-    /* ── Home / Dashboard ─────────────────────────────────────────────── */
-    #home-view {
-      padding: 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    /* ── Home / Hero ─────────────────────────────────────────────────── */
+    #home-view { padding: 0 40px 80px; max-width: 1180px; margin: 0 auto; width: 100%; }
+
     .hero {
       text-align: center;
-      padding: 48px 20px 40px;
+      padding: 70px 20px 30px;
+      position: relative;
+    }
+    .hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 100px;
+      background: var(--surface); border: 1px solid var(--border-str);
+      font-size: .74rem; font-weight: 550; color: var(--text-2);
+      margin-bottom: 24px;
+    }
+    .hero .eyebrow .pulse {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--emerald);
+      box-shadow: 0 0 0 0 var(--emerald);
+      animation: pulse 2.4s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--emerald) 70%, transparent); }
+      70% { box-shadow: 0 0 0 8px transparent; }
+      100% { box-shadow: 0 0 0 0 transparent; }
     }
     .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent4));
-      -webkit-background-clip: text;
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.05;
+      margin-bottom: 18px;
+    }
+    .hero h1 .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
     }
     .hero p {
-      color: var(--text2);
-      font-size: 1.05rem;
-      max-width: 620px;
-      margin: 0 auto;
-      line-height: 1.6;
+      color: var(--text-2); font-size: 1.06rem; line-height: 1.65;
+      max-width: 640px; margin: 0 auto 30px;
     }
-    .stats-row {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin: 32px 0;
-      flex-wrap: wrap;
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 12px 22px; border-radius: 12px;
+      font-size: .9rem; font-weight: 600; font-family: var(--font-body);
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all var(--transition);
     }
-    .stat-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 28px;
-      text-align: center;
-      min-width: 130px;
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 30px -10px rgba(99,102,241,.7); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(99,102,241,.8); }
+    .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border-str); }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    /* ── Stats band ──────────────────────────────────────────────────── */
+    .stats-band {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      margin: 36px 0 8px;
     }
-    .stat-card .num {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--accent);
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
     }
-    .stat-card .lbl {
-      font-size: .75rem;
-      color: var(--text2);
-      margin-top: 4px;
+    .stat .num {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+      background: var(--grad); -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; line-height: 1;
     }
+    .stat .lbl { font-size: .76rem; color: var(--text-2); margin-top: 7px; font-weight: 500; }
+
+    /* ── Progress card ───────────────────────────────────────────────── */
+    .progress-card {
+      background: var(--surface); border: 1px solid var(--border-str);
+      border-radius: var(--radius-lg); padding: 22px 26px;
+      margin: 24px 0 12px;
+      display: flex; align-items: center; gap: 24px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .progress-ring-lg { flex-shrink: 0; position: relative; }
+    .progress-ring-lg .pct {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+    }
+    .progress-meta { flex: 1; }
+    .progress-meta h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+    .progress-meta p { font-size: .84rem; color: var(--text-2); line-height: 1.5; }
+    .progress-meta .reset-btn {
+      background: none; border: none; color: var(--text-3); font-size: .76rem;
+      cursor: pointer; margin-top: 8px; text-decoration: underline; font-family: var(--font-body);
+    }
+    .progress-meta .reset-btn:hover { color: var(--rose); }
+
+    /* ── Phase timeline ──────────────────────────────────────────────── */
+    .journey { margin-top: 44px; position: relative; }
+    .section-head { margin-bottom: 22px; }
+    .section-head h2 {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -.01em; display: flex; align-items: center; gap: 12px;
+    }
+    .section-head p { color: var(--text-2); font-size: .92rem; margin-top: 6px; }
+
+    .phase { position: relative; padding-left: 52px; padding-bottom: 14px; }
+    .phase::before {
+      content: ''; position: absolute; left: 17px; top: 40px; bottom: -14px;
+      width: 2px; background: linear-gradient(var(--phase-color, var(--accent)), transparent);
+      opacity: .4;
+    }
+    .phase:last-child::before { display: none; }
+    .phase-node {
+      position: absolute; left: 0; top: 2px;
+      width: 36px; height: 36px; border-radius: 11px;
+      display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: .95rem;
+      color: #fff;
+      background: var(--phase-color, var(--accent));
+      box-shadow: 0 8px 22px -8px var(--phase-color, var(--accent));
+    }
+    .phase-title { font-family: var(--font-display); font-size: 1.18rem; font-weight: 600; }
+    .phase-tagline { font-size: .85rem; color: var(--text-2); margin: 3px 0 18px; }
 
     .tracks-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
       gap: 16px;
-      margin-top: 8px;
     }
     .track-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      cursor: pointer;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      cursor: pointer; position: relative; overflow: hidden;
       transition: all var(--transition);
-      position: relative;
-      overflow: hidden;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
     .track-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--card-color, var(--accent));
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--card-color) 14%, transparent), transparent 55%);
+      opacity: 0; transition: opacity var(--transition);
     }
     .track-card:hover {
-      border-color: var(--card-color, var(--accent));
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+      border-color: color-mix(in srgb, var(--card-color) 60%, var(--border));
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
     }
-    .track-card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+    .track-card:hover::before { opacity: 1; }
+    .track-card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; position: relative; }
+    .track-card-icon {
+      width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 1.35rem;
+      background: color-mix(in srgb, var(--card-color) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--card-color) 28%, transparent);
     }
-    .track-card-icon { font-size: 1.6rem; }
-    .track-card-title { font-size: 1rem; font-weight: 700; }
-    .track-card-desc { font-size: .8rem; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
-    .track-card-files {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .file-chip {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: .72rem;
-      color: var(--text2);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .file-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .track-card-titles { flex: 1; min-width: 0; }
+    .track-card-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: -.01em; }
+    .track-card-count { font-size: .74rem; color: var(--text-3); margin-top: 2px; }
+    .track-card-desc { font-size: .82rem; color: var(--text-2); line-height: 1.55; margin-bottom: 16px; position: relative; }
+    .track-card-foot { display: flex; align-items: center; justify-content: space-between; position: relative; }
+    .track-progress-bar { flex: 1; height: 5px; border-radius: 5px; background: var(--border); overflow: hidden; margin-right: 12px; }
+    .track-progress-bar .fill { height: 100%; border-radius: 5px; background: var(--card-color); width: 0%; transition: width .5s cubic-bezier(.4,0,.2,1); }
+    .track-progress-label { font-size: .72rem; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .track-card-arrow { color: var(--card-color); opacity: 0; transform: translateX(-4px); transition: all var(--transition); }
+    .track-card:hover .track-card-arrow { opacity: 1; transform: translateX(0); }
 
-    /* ── Content view ─────────────────────────────────────────────────── */
-    #content-view { display: none; }
-    .content-header {
-      position: sticky;
-      top: 0;
-      background: var(--bg2);
+    /* ════════════════════════════════════════════════════════════════
+       Content View
+       ════════════════════════════════════════════════════════════════ */
+    #content-view { display: none; flex-direction: column; min-height: 100%; }
+    .content-topbar {
+      position: sticky; top: 0; z-index: 20;
+      background: color-mix(in srgb, var(--bg-elev) 80%, transparent);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       padding: 12px 40px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 10;
+      display: flex; align-items: center; gap: 14px;
     }
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: .82rem;
-      color: var(--text2);
-    }
+    .breadcrumb { display: flex; align-items: center; gap: 7px; font-size: .82rem; color: var(--text-2); flex-wrap: wrap; }
     .breadcrumb .crumb { cursor: pointer; transition: color var(--transition); }
     .breadcrumb .crumb:hover { color: var(--accent); }
-    .breadcrumb .sep { color: var(--border); }
+    .breadcrumb .sep { color: var(--text-3); }
     .breadcrumb .current { color: var(--text); font-weight: 600; }
-    .content-nav {
-      display: flex;
-      gap: 8px;
-      margin-left: auto;
-    }
-    .content-body {
-      padding: 40px;
-      max-width: 860px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    .content-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
 
-    /* ── Markdown rendering ───────────────────────────────────────────── */
-    .markdown-body h1 { font-size: 1.8rem; font-weight: 700; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-    .markdown-body h2 { font-size: 1.35rem; font-weight: 700; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-    .markdown-body h3 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 10px; color: var(--accent4); }
-    .markdown-body h4 { font-size: .95rem; font-weight: 600; margin: 18px 0 8px; }
-    .markdown-body p { margin: 0 0 14px; line-height: 1.7; color: var(--text); }
-    .markdown-body ul, .markdown-body ol { padding-left: 24px; margin: 0 0 14px; }
-    .markdown-body li { margin: 4px 0; line-height: 1.6; }
-    .markdown-body li > ul, .markdown-body li > ol { margin: 4px 0 4px 0; }
-    .markdown-body strong { color: var(--text); font-weight: 600; }
-    .markdown-body em { color: var(--text2); }
+    .mark-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border-str);
+      border-radius: 10px; color: var(--text-2); font-size: .8rem; font-weight: 550;
+      padding: 8px 13px; cursor: pointer; font-family: var(--font-body);
+      transition: all var(--transition); white-space: nowrap;
+    }
+    .mark-btn:hover { border-color: var(--emerald); color: var(--text); }
+    .mark-btn.done { background: color-mix(in srgb, var(--emerald) 16%, transparent); border-color: var(--emerald); color: var(--emerald); }
+
+    .content-shell { display: flex; gap: 36px; max-width: 1180px; margin: 0 auto; width: 100%; padding: 36px 40px 90px; }
+    .content-body { flex: 1; min-width: 0; max-width: 800px; }
+
+    .doc-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; font-size: .8rem; color: var(--text-3); flex-wrap: wrap; }
+    .doc-meta .chip { display: inline-flex; align-items: center; gap: 6px; }
+    .doc-meta .chip svg { width: 14px; height: 14px; }
+
+    /* Right rail TOC */
+    .toc-rail {
+      width: 220px; flex-shrink: 0;
+      position: sticky; top: 88px; align-self: flex-start;
+      max-height: calc(100vh - 130px); overflow-y: auto;
+      padding-left: 18px; border-left: 1px solid var(--border);
+    }
+    .toc-rail::-webkit-scrollbar { width: 4px; }
+    .toc-rail::-webkit-scrollbar-thumb { background: var(--border-str); border-radius: 4px; }
+    .toc-rail h4 { font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-3); margin-bottom: 12px; font-weight: 700; }
+    .toc-item {
+      display: block; padding: 5px 0 5px 12px; cursor: pointer;
+      color: var(--text-3); font-size: .8rem; line-height: 1.45;
+      border-left: 2px solid transparent; margin-left: -1px;
+      transition: all var(--transition);
+    }
+    .toc-item:hover { color: var(--text); }
+    .toc-item.active { color: var(--accent); border-left-color: var(--accent); font-weight: 550; }
+    .toc-item.lvl3 { padding-left: 24px; font-size: .76rem; }
+
+    /* Prev/next footer */
+    .doc-nav { display: flex; gap: 14px; margin-top: 50px; }
+    .doc-nav a {
+      flex: 1; padding: 16px 18px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      text-decoration: none; color: var(--text); cursor: pointer;
+      transition: all var(--transition);
+    }
+    .doc-nav a:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .doc-nav a.next { text-align: right; }
+    .doc-nav .dir { font-size: .72rem; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    .doc-nav a.next .dir { justify-content: flex-end; }
+    .doc-nav .lbl { font-weight: 600; font-size: .9rem; font-family: var(--font-display); }
+
+    /* ── Markdown ─────────────────────────────────────────────────────── */
+    .markdown-body { font-size: .95rem; line-height: 1.75; color: var(--text); }
+    .markdown-body h1 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin: 0 0 20px; letter-spacing: -.02em; line-height: 1.15; }
+    .markdown-body h2 { font-family: var(--font-display); font-size: 1.45rem; font-weight: 600; margin: 40px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); letter-spacing: -.01em; scroll-margin-top: 84px; }
+    .markdown-body h3 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin: 28px 0 10px; color: var(--accent); scroll-margin-top: 84px; }
+    .markdown-body h4 { font-size: 1rem; font-weight: 650; margin: 20px 0 8px; }
+    .markdown-body p { margin: 0 0 16px; }
+    .markdown-body ul, .markdown-body ol { padding-left: 26px; margin: 0 0 16px; }
+    .markdown-body li { margin: 6px 0; }
+    .markdown-body li::marker { color: var(--accent); }
+    .markdown-body strong { color: var(--text); font-weight: 650; }
+    .markdown-body em { color: var(--text-2); }
     .markdown-body code {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-size: .85em;
-      font-family: "SFMono-Regular", Consolas, monospace;
-      color: var(--accent3);
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.5px 6px; font-size: .85em;
+      font-family: var(--font-mono); color: var(--accent-2);
     }
     .markdown-body pre {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      overflow-x: auto;
-      margin: 0 0 16px;
+      background: var(--surface-solid); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; overflow-x: auto;
+      margin: 0 0 18px; position: relative; box-shadow: var(--shadow);
     }
-    .markdown-body pre code {
-      background: none;
-      border: none;
-      padding: 0;
-      color: var(--text);
-      font-size: .85rem;
+    .markdown-body pre code { background: none; border: none; padding: 0; color: var(--text); font-size: .85rem; line-height: 1.6; }
+    .code-copy {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--surface-2); border: 1px solid var(--border-str);
+      border-radius: 7px; color: var(--text-2); font-size: .72rem;
+      padding: 4px 10px; cursor: pointer; opacity: 0;
+      transition: all var(--transition); font-family: var(--font-body);
     }
+    .markdown-body pre:hover .code-copy { opacity: 1; }
+    .code-copy:hover { color: var(--text); border-color: var(--accent); }
+    .code-copy.copied { color: var(--emerald); border-color: var(--emerald); }
     .markdown-body blockquote {
-      border-left: 4px solid var(--accent);
-      padding: 8px 16px;
-      margin: 0 0 14px;
-      background: rgba(88,166,255,.06);
-      border-radius: 0 var(--radius) var(--radius) 0;
+      border-left: 3px solid var(--accent);
+      padding: 12px 18px; margin: 0 0 16px;
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     }
-    .markdown-body blockquote p { color: var(--text2); margin: 0; }
-    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: .875rem; }
-    .markdown-body th { background: var(--bg3); padding: 8px 12px; text-align: left; font-weight: 600; border: 1px solid var(--border); }
-    .markdown-body td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; }
-    .markdown-body tr:nth-child(even) td { background: rgba(255,255,255,.02); }
-    .markdown-body a { color: var(--accent); text-decoration: none; }
-    .markdown-body a:hover { text-decoration: underline; }
-    .markdown-body hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-    .markdown-body img { max-width: 100%; border-radius: var(--radius); }
+    .markdown-body blockquote p { color: var(--text-2); margin: 0; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: .87rem; display: block; overflow-x: auto; }
+    .markdown-body th { background: var(--surface-2); padding: 10px 14px; text-align: left; font-weight: 650; border: 1px solid var(--border); white-space: nowrap; }
+    .markdown-body td { padding: 10px 14px; border: 1px solid var(--border); vertical-align: top; }
+    .markdown-body tr:nth-child(even) td { background: color-mix(in srgb, var(--text) 3%, transparent); }
+    .markdown-body a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); transition: all var(--transition); }
+    .markdown-body a:hover { border-bottom-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .markdown-body hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .markdown-body img { max-width: 100%; border-radius: var(--radius); margin: 8px 0; border: 1px solid var(--border); }
 
-    /* ── Loading spinner ──────────────────────────────────────────────── */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 40px;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
+    /* ── Loading / error ─────────────────────────────────────────────── */
+    .loading { display: flex; align-items: center; justify-content: center; padding: 100px 40px; flex-direction: column; gap: 18px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .err-box { padding: 60px 40px; text-align: center; color: var(--text-2); }
+    .err-box .ico { font-size: 2.4rem; margin-bottom: 14px; }
+    .err-box h3 { color: var(--text); font-family: var(--font-display); margin-bottom: 8px; }
+    .err-box code { background: var(--surface-2); padding: 3px 8px; border-radius: 6px; font-family: var(--font-mono); font-size: .82rem; }
 
-    /* ── TOC ─────────────────────────────────────────────────────────── */
-    .toc-panel {
-      position: fixed;
-      right: 0; top: var(--header-h);
-      width: 220px;
-      height: calc(100vh - var(--header-h));
-      background: var(--bg2);
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 16px 12px;
-      font-size: .78rem;
-      transform: translateX(100%);
-      transition: transform var(--transition);
-      z-index: 50;
+    /* ════════════════════════════════════════════════════════════════
+       Command Palette
+       ════════════════════════════════════════════════════════════════ */
+    .cmd-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(4, 5, 12, .6);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: none; align-items: flex-start; justify-content: center;
+      padding-top: 12vh;
     }
-    .toc-panel.open { transform: translateX(0); }
-    .toc-panel h3 { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text2); margin-bottom: 10px; }
-    .toc-item { padding: 3px 0 3px 12px; cursor: pointer; color: var(--text2); border-left: 2px solid transparent; transition: all var(--transition); display: block; line-height: 1.4; }
-    .toc-item:hover { color: var(--accent); border-left-color: var(--accent); }
-    .toc-item.h3 { padding-left: 24px; font-size: .73rem; }
+    .cmd-overlay.show { display: flex; }
+    .cmd-box {
+      width: min(620px, 92vw);
+      background: var(--surface-solid);
+      border: 1px solid var(--border-str);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), var(--glow);
+      overflow: hidden;
+      animation: cmdIn .18s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes cmdIn { from { opacity: 0; transform: translateY(-12px) scale(.98); } }
+    .cmd-input-wrap { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .cmd-input-wrap svg { color: var(--text-3); flex-shrink: 0; }
+    .cmd-input-wrap input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text); font-size: 1.02rem; font-family: var(--font-body);
+    }
+    .cmd-input-wrap input::placeholder { color: var(--text-3); }
+    .cmd-esc { font-size: .68rem; font-family: var(--font-mono); color: var(--text-3); border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px; }
+    .cmd-results { max-height: 52vh; overflow-y: auto; padding: 8px; }
+    .cmd-results::-webkit-scrollbar { width: 6px; }
+    .cmd-results::-webkit-scrollbar-thumb { background: var(--border-str); border-radius: 6px; }
+    .cmd-group-label { font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-3); padding: 10px 12px 5px; font-weight: 700; }
+    .cmd-item {
+      display: flex; align-items: center; gap: 13px;
+      padding: 10px 12px; border-radius: var(--radius-sm); cursor: pointer;
+    }
+    .cmd-item .ci-icon {
+      width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 1.05rem;
+      background: color-mix(in srgb, var(--ci-color, var(--accent)) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ci-color, var(--accent)) 26%, transparent);
+    }
+    .cmd-item .ci-text { flex: 1; min-width: 0; }
+    .cmd-item .ci-title { font-size: .88rem; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cmd-item .ci-track { font-size: .73rem; color: var(--text-3); }
+    .cmd-item .ci-enter { opacity: 0; color: var(--text-3); font-size: .72rem; }
+    .cmd-item.sel { background: var(--surface-2); }
+    .cmd-item.sel .ci-enter { opacity: 1; }
+    .cmd-item .ci-done { color: var(--emerald); width: 15px; height: 15px; flex-shrink: 0; }
+    .cmd-empty { padding: 36px; text-align: center; color: var(--text-3); font-size: .88rem; }
+
+    /* ── Progress bar (reading) ──────────────────────────────────────── */
+    #read-progress {
+      position: fixed; top: var(--header-h); left: 0; height: 2.5px;
+      background: var(--grad); width: 0%; z-index: 200; transition: width .12s ease;
+    }
+
+    /* ── Scroll-to-top ───────────────────────────────────────────────── */
+    .to-top {
+      position: fixed; bottom: 26px; right: 26px; z-index: 60;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface-solid); border: 1px solid var(--border-str);
+      color: var(--text); cursor: pointer; display: grid; place-items: center;
+      box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+      transform: translateY(10px); transition: all var(--transition);
+    }
+    .to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .to-top:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ── Mobile ──────────────────────────────────────────────────────── */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.5);
-      z-index: 90;
-    }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 90; backdrop-filter: blur(2px); }
     .overlay.show { display: block; }
 
+    @media (max-width: 1100px) { .toc-rail { display: none; } }
+    @media (max-width: 880px) {
+      .stats-band { grid-template-columns: repeat(2, 1fr); }
+      .cmd-trigger { min-width: 0; }
+      .cmd-trigger .label-text, .cmd-trigger .kbd { display: none; }
+    }
     @media (max-width: 768px) {
-      .hamburger { display: flex; align-items: center; }
+      .hamburger { display: flex; }
       aside {
-        position: fixed;
-        top: var(--header-h);
-        left: 0;
-        height: calc(100vh - var(--header-h));
-        z-index: 100;
-        transform: translateX(-100%);
+        position: fixed; top: var(--header-h); left: 0;
+        height: calc(100vh - var(--header-h)); z-index: 100;
+        transform: translateX(-100%); width: 280px;
       }
-      aside.open { transform: translateX(0); }
-      #home-view { padding: 20px 16px; }
-      .hero h1 { font-size: 1.8rem; }
-      .content-body { padding: 20px 16px; }
-      .content-header { padding: 10px 16px; }
-      .search-wrap { max-width: 200px; }
+      aside.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+      #home-view { padding: 0 18px 60px; }
+      .hero { padding: 44px 8px 20px; }
+      .content-shell { padding: 24px 18px 70px; }
+      .content-topbar { padding: 12px 18px; }
+      .brand-text .t2 { display: none; }
+      .header-actions .label-text { display: none; }
+      .progress-card { flex-direction: column; text-align: center; }
     }
-
-    /* ── Scrollbar for main ──────────────────────────────────────────── */
-    main::-webkit-scrollbar { width: 6px; }
-    main::-webkit-scrollbar-track { background: var(--bg); }
-    main::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
-
-    /* ── Progress bar ────────────────────────────────────────────────── */
-    #progress {
-      position: fixed;
-      top: var(--header-h);
-      left: 0;
-      height: 2px;
-      background: var(--accent);
-      width: 0%;
-      transition: width .15s ease;
-      z-index: 200;
-    }
+    @media (max-width: 480px) { .stats-band { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
-<!-- Reading progress -->
-<div id="progress"></div>
+<div class="aurora"><div class="blob3"></div></div>
+<div class="grain"></div>
+<div id="read-progress"></div>
+<div class="overlay" id="overlay"></div>
 
-<!-- Overlay for mobile -->
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-<!-- ── Header ─────────────────────────────────────────────────────────── -->
+<!-- ── Header ──────────────────────────────────────────────────────────── -->
 <header>
-  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-  <div class="logo">Cracking ML <span>/ 2026</span></div>
-
-  <div class="search-wrap">
-    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="search-input" placeholder="Search topics…" autocomplete="off" />
-    <div class="search-results" id="search-results"></div>
+  <div class="brand" id="brand" style="cursor:pointer">
+    <div class="brand-mark">ML</div>
+    <div class="brand-text">
+      <span class="t1">Cracking ML</span>
+      <span class="t2">Interview Study Hub · 2026</span>
+    </div>
   </div>
 
+  <div class="header-spacer"></div>
+
+  <button class="cmd-trigger" id="cmd-trigger">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span class="label-text">Search guides…</span>
+    <span class="kbd"><span>⌘</span><span>K</span></span>
+  </button>
+
   <div class="header-actions">
-    <button class="icon-btn" onclick="toggleTOC()" id="toc-btn" title="Table of Contents">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      TOC
+    <button class="icon-btn compact" id="theme-btn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
     </button>
-    <button class="icon-btn" onclick="toggleTheme()" id="theme-btn">
-      <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      Light
-    </button>
-    <a class="icon-btn" href="https://github.com/shafaypro/CrackingMachineLearningInterview" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-      GitHub
+    <a class="icon-btn" href="https://github.com/shafaypro/CrackingMachineLearningInterview" target="_blank" rel="noopener" title="GitHub repository">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      <span class="label-text">GitHub</span>
     </a>
   </div>
 </header>
 
-<!-- ── App Body ───────────────────────────────────────────────────────── -->
+<!-- ── App Body ────────────────────────────────────────────────────────── -->
 <div class="app-body">
 
-  <!-- Sidebar -->
   <aside id="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-home active" id="home-nav" onclick="showHome()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Home
-      </div>
+    <div class="nav-home active" id="home-nav">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Learning Tracks</div>
-      <div id="nav-tree"></div>
-    </div>
+    <div id="nav-tree"></div>
   </aside>
 
-  <!-- Main -->
-  <main id="main" onscroll="updateProgress()">
-
-    <!-- Home Dashboard -->
+  <main id="main">
+    <!-- Home -->
     <div id="home-view">
-      <div class="hero">
-        <h1>Cracking ML Interviews 2026</h1>
-        <p>A comprehensive, hands-on guide for Machine Learning, AI, Data Engineering, MLOps &amp; DevOps interview preparation — from fundamentals to cutting-edge GenAI.</p>
+      <section class="hero">
+        <span class="eyebrow"><span class="pulse"></span> Updated for 2026 · 95+ guides</span>
+        <h1>Crack your next <span class="grad-text">ML / AI interview</span></h1>
+        <p>A structured, hands-on study hub spanning classical ML, deep learning, generative AI, data &amp; ML engineering, and system design — organized as a guided journey from fundamentals to frontier.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" id="cta-start">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Start with the Q&amp;A Bank
+          </button>
+          <button class="btn btn-ghost" id="cta-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Browse all guides
+          </button>
+        </div>
+      </section>
+
+      <div class="stats-band">
+        <div class="stat"><div class="num" id="stat-files">0</div><div class="lbl">Study guides</div></div>
+        <div class="stat"><div class="num" id="stat-tracks">0</div><div class="lbl">Learning tracks</div></div>
+        <div class="stat"><div class="num" id="stat-phases">0</div><div class="lbl">Journey phases</div></div>
+        <div class="stat"><div class="num" id="stat-design">0</div><div class="lbl">System design guides</div></div>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-card"><div class="num" id="stat-files">0</div><div class="lbl">Study Files</div></div>
-        <div class="stat-card"><div class="num" id="stat-tracks">0</div><div class="lbl">Learning Tracks</div></div>
-        <div class="stat-card"><div class="num" id="stat-system-design">0</div><div class="lbl">System Design Guides</div></div>
-        <div class="stat-card"><div class="num" id="stat-practice">0</div><div class="lbl">Practice Guides</div></div>
+      <div class="progress-card" id="progress-card">
+        <div class="progress-ring-lg" id="overall-ring"></div>
+        <div class="progress-meta">
+          <h3 id="progress-title">Your progress</h3>
+          <p id="progress-sub">Mark guides as complete while you study — your progress is saved in this browser.</p>
+          <button class="reset-btn" id="reset-progress">Reset progress</button>
+        </div>
       </div>
 
-      <div class="tracks-grid" id="tracks-grid"></div>
+      <div class="journey">
+        <div class="section-head">
+          <h2>The learning journey</h2>
+          <p>Follow the phases in order, or jump to any track that matches your interview.</p>
+        </div>
+        <div id="phases"></div>
+      </div>
     </div>
 
-    <!-- Content View -->
+    <!-- Content -->
     <div id="content-view">
-      <div class="content-header">
+      <div class="content-topbar">
         <div class="breadcrumb" id="breadcrumb"></div>
-        <div class="content-nav">
-          <button class="icon-btn" id="prev-btn" onclick="navigateRelative(-1)" title="Previous">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        <div class="content-actions">
+          <button class="mark-btn" id="mark-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="mark-label">Mark complete</span>
           </button>
-          <button class="icon-btn" id="next-btn" onclick="navigateRelative(1)" title="Next">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          <button class="icon-btn compact" id="prev-btn" title="Previous (Alt+←)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="icon-btn compact" id="next-btn" title="Next (Alt+→)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       </div>
-      <div class="content-body">
-        <div class="markdown-body" id="content-area"></div>
+      <div class="content-shell">
+        <div class="content-body">
+          <div class="doc-meta" id="doc-meta"></div>
+          <div class="markdown-body" id="content-area"></div>
+          <div class="doc-nav" id="doc-nav"></div>
+        </div>
+        <nav class="toc-rail" id="toc-rail" style="display:none">
+          <h4>On this page</h4>
+          <div id="toc-list"></div>
+        </nav>
       </div>
     </div>
-
   </main>
 </div>
 
-<!-- TOC Panel -->
-<div class="toc-panel" id="toc-panel">
-  <h3>On this page</h3>
-  <div id="toc-list"></div>
+<button class="to-top" id="to-top" title="Back to top">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ── Command Palette ─────────────────────────────────────────────────── -->
+<div class="cmd-overlay" id="cmd-overlay">
+  <div class="cmd-box">
+    <div class="cmd-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="cmd-input" placeholder="Search 95+ guides across all tracks…" autocomplete="off" spellcheck="false" />
+      <span class="cmd-esc">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+  </div>
 </div>
 
 <script>
-// ── Data: track definitions ───────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  Data
+// ════════════════════════════════════════════════════════════════════════
 const REPO_URL = 'https://github.com/shafaypro/CrackingMachineLearningInterview';
-
-// Fetch is blocked for local file:// pages, but works from any normal HTTP server
-// including GitHub Pages once the markdown files are served directly.
 const isLocal = location.protocol === 'file:';
+const STORE_KEY = 'cml-progress-v1';
+const THEME_KEY = 'cml-theme';
+
+const PHASES = [
+  { id: 'start',       num: 1, title: 'Start Here',             tagline: 'Get oriented and build a study plan.',            color: '#22d3ee' },
+  { id: 'foundations', num: 2, title: 'ML Foundations',         tagline: 'Core algorithms, statistics, and neural nets.',   color: '#34d399' },
+  { id: 'genai',       num: 3, title: 'Generative AI',          tagline: 'LLMs, RAG, agents, and orchestration.',           color: '#8b5cf6' },
+  { id: 'production',  num: 4, title: 'Production Engineering',  tagline: 'Ship, serve, and scale ML systems in the cloud.', color: '#fbbf24' },
+  { id: 'mastery',     num: 5, title: 'Interview Mastery',       tagline: 'System design, coding rounds, and shipping work.',color: '#fb7185' },
+];
 
 const TRACKS = [
   {
-    id: 'home-readme',
-    icon: '📋',
+    id: 'home-readme', phase: 'start', icon: '📋', color: '#22d3ee',
     title: 'Interview Q&A Bank',
-    desc: 'Classic ML fundamentals, supervised/unsupervised learning, regression, classification, and more — your core interview questions.',
-    color: '#58a6ff',
-    files: [
-      { label: 'Main Q&A', path: 'README.md' },
-    ]
+    desc: 'Classic ML fundamentals — supervised/unsupervised, regression, classification, and 100+ core interview questions.',
+    files: [ { label: 'Main Q&A Bank', path: 'README.md' } ]
   },
   {
-    id: 'docs',
-    icon: '🗺️',
-    title: 'Study Roadmap & Guides',
+    id: 'docs', phase: 'start', icon: '🗺️', color: '#38bdf8',
+    title: 'Roadmap & Study Guides',
     desc: '2026 interview focus areas, structured study patterns by role, and curated resources.',
-    color: '#3fb950',
     files: [
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
       { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
@@ -656,23 +896,35 @@ const TRACKS = [
     ]
   },
   {
-    id: 'project_setup',
-    icon: '🚀',
-    title: 'Project Setup & Engineering',
-    desc: 'How to set up a project on GitHub the right way (git, branching, pull requests, CI, GitHub Pages, secrets) and how to structure real ML, deep-learning, LLM, agent, and data-engineering projects.',
-    color: '#3fb950',
+    id: 'classical_ml', phase: 'foundations', icon: '📊', color: '#34d399',
+    title: 'Classical ML',
+    desc: 'Statistics, clustering, dimensionality reduction, feature engineering, recommender systems, and time series.',
     files: [
-      { label: 'Overview', path: 'project_setup/README.md' },
-      { label: 'GitHub Project Setup Tutorial', path: 'project_setup/intro_github_project_setup.md' },
-      { label: 'ML/AI Project Folder Structures', path: 'project_setup/intro_project_structure.md' },
+      { label: 'Overview', path: 'classical_ml/README.md' },
+      { label: 'Statistics & Probability', path: 'classical_ml/intro_statistics_probability.md' },
+      { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
+      { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
+      { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
+      { label: 'Recommender Systems', path: 'classical_ml/intro_recommender_systems.md' },
+      { label: 'Time Series', path: 'classical_ml/intro_time_series.md' },
     ]
   },
   {
-    id: 'ai_genai',
-    icon: '🤖',
+    id: 'deep_learning', phase: 'foundations', icon: '🧠', color: '#10b981',
+    title: 'Deep Learning',
+    desc: 'Transformer architecture, attention, computer vision, fine-tuning, and modern neural network design.',
+    files: [
+      { label: 'Overview', path: 'deep_learning/README.md' },
+      { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
+      { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
+      { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
+      { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
+    ]
+  },
+  {
+    id: 'ai_genai', phase: 'genai', icon: '🤖', color: '#8b5cf6',
     title: 'AI & GenAI',
-    desc: 'LLM fundamentals, prompt engineering, structured outputs, RAG, vector databases, LLMOps, agentic AI, multi-agent systems, MCP, LangChain/LangGraph/LangSmith, CrewAI, LLM security, and the Anthropic Claude API.',
-    color: '#d2a8ff',
+    desc: 'LLM fundamentals, prompting, RAG, vector DBs, LLMOps, agents, multi-agent systems, MCP, LangChain, and the Claude API.',
     files: [
       { label: 'Agentic AI Engineer Roadmap', path: 'ai_genai/intro_agentic_ai_engineering_roadmap.md' },
       { label: 'LLM Fundamentals', path: 'ai_genai/intro_llm_fundamentals.md' },
@@ -700,53 +952,9 @@ const TRACKS = [
     ]
   },
   {
-    id: 'coding_challenges',
-    icon: '</>',
-    title: 'Coding Challenges',
-    desc: 'Python and SQL practice for coding rounds, data interviews, and algorithmic screening.',
-    color: '#c297ff',
-    files: [
-      { label: 'Overview', path: 'coding_challenges/README.md' },
-      { label: 'Python Coding Challenges', path: 'coding_challenges/python_coding_challenges.md' },
-      { label: 'SQL Coding Challenges', path: 'coding_challenges/sql_coding_challenges.md' },
-    ]
-  },
-  {
-    id: 'classical_ml',
-    icon: '📊',
-    title: 'Classical ML',
-    desc: 'Clustering, dimensionality reduction, feature engineering, recommender systems, and time series.',
-    color: '#f78166',
-    files: [
-      { label: 'Overview', path: 'classical_ml/README.md' },
-      { label: 'Statistics & Probability', path: 'classical_ml/intro_statistics_probability.md' },
-      { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
-      { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
-      { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
-      { label: 'Recommender Systems', path: 'classical_ml/intro_recommender_systems.md' },
-      { label: 'Time Series', path: 'classical_ml/intro_time_series.md' },
-    ]
-  },
-  {
-    id: 'deep_learning',
-    icon: '🧠',
-    title: 'Deep Learning',
-    desc: 'Transformer architecture, attention mechanisms, computer vision, fine-tuning, and modern neural network architectures.',
-    color: '#ffa657',
-    files: [
-      { label: 'Overview', path: 'deep_learning/README.md' },
-      { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
-      { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
-      { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
-      { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
-    ]
-  },
-  {
-    id: 'frameworks',
-    icon: '⚙️',
+    id: 'frameworks', phase: 'production', icon: '⚙️', color: '#fbbf24',
     title: 'Frameworks & Tools',
     desc: 'PyTorch, HuggingFace, Ollama, vLLM, Unsloth, FastAPI, and Pydantic for production ML.',
-    color: '#79c0ff',
     files: [
       { label: 'Overview', path: 'frameworks/README.md' },
       { label: 'Python for AI Engineering', path: 'frameworks/intro_python_for_ai.md' },
@@ -761,11 +969,9 @@ const TRACKS = [
     ]
   },
   {
-    id: 'mlops',
-    icon: '🔧',
+    id: 'mlops', phase: 'production', icon: '🔧', color: '#f59e0b',
     title: 'MLOps',
-    desc: 'MLflow, feature stores, model serving, explainability, data quality, model monitoring, and LLM evaluation.',
-    color: '#56d364',
+    desc: 'MLflow, feature stores, model serving, explainability, data quality, monitoring, and LLM evaluation.',
     files: [
       { label: 'Overview', path: 'mlops/README.md' },
       { label: 'LLMOps / MLOps Engineering', path: 'mlops/intro_llmops_mlops_engineering.md' },
@@ -781,11 +987,9 @@ const TRACKS = [
     ]
   },
   {
-    id: 'data_engineering',
-    icon: '🗄️',
+    id: 'data_engineering', phase: 'production', icon: '🗄️', color: '#eab308',
     title: 'Data Engineering',
-    desc: 'Data architecture, data modeling, Spark, Kafka, Airflow, dbt, Iceberg, Delta Lake, DuckDB, Geospatial AI, and OpenClaw.',
-    color: '#e3b341',
+    desc: 'Data architecture & modeling, Spark, Kafka, Airflow, dbt, Iceberg, Delta Lake, DuckDB, and geospatial AI.',
     files: [
       { label: 'Data Engineering for AI', path: 'data_engineering/intro_data_engineering_for_ai.md' },
       { label: 'Data Modeling', path: 'data_engineering/data-modeling.md' },
@@ -803,11 +1007,9 @@ const TRACKS = [
     ]
   },
   {
-    id: 'devops',
-    icon: '🐳',
+    id: 'devops', phase: 'production', icon: '🐳', color: '#84cc16',
     title: 'DevOps & Infrastructure',
-    desc: 'Docker, Kubernetes, Helm, Terraform, GitHub Actions, and Testing AI Systems.',
-    color: '#2ea043',
+    desc: 'Docker, Kubernetes, Helm, Terraform, GitHub Actions, and testing AI systems.',
     files: [
       { label: 'Docker', path: 'devops/intro_docker.md' },
       { label: 'Kubernetes', path: 'devops/intro_kubernetes.md' },
@@ -818,11 +1020,21 @@ const TRACKS = [
     ]
   },
   {
-    id: 'system_design',
-    icon: '🏗️',
+    id: 'cloud_ml', phase: 'production', icon: '☁️', color: '#facc15',
+    title: 'Cloud ML Platforms',
+    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML — comparison and interview prep.',
+    files: [
+      { label: 'Overview', path: 'cloud_ml/README.md' },
+      { label: 'Cloud ML Platforms', path: 'cloud_ml/intro_cloud_ml_platforms.md' },
+      { label: 'AWS SageMaker', path: 'cloud_ml/intro_sagemaker.md' },
+      { label: 'Google Vertex AI', path: 'cloud_ml/intro_vertex_ai.md' },
+      { label: 'Azure Machine Learning', path: 'cloud_ml/intro_azure_ml.md' },
+    ]
+  },
+  {
+    id: 'system_design', phase: 'mastery', icon: '🏗️', color: '#fb7185',
     title: 'ML System Design',
-    desc: 'System design frameworks and case studies: recommendation systems, fraud detection, and ML design patterns.',
-    color: '#ff7b72',
+    desc: 'Design frameworks and case studies: recommendation systems, fraud detection, and ML design patterns.',
     files: [
       { label: 'Design Framework', path: 'system_design/README.md' },
       { label: 'Backend AI Systems', path: 'system_design/intro_backend_ai_system_design.md' },
@@ -833,252 +1045,332 @@ const TRACKS = [
     ]
   },
   {
-    id: 'cloud_ml',
-    icon: '☁️',
-    title: 'Cloud ML Platforms',
-    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML — comparison and interview prep.',
-    color: '#79c0ff',
+    id: 'coding_challenges', phase: 'mastery', icon: '⌨️', color: '#f472b6',
+    title: 'Coding Challenges',
+    desc: 'Python and SQL practice for coding rounds, data interviews, and algorithmic screening.',
     files: [
-      { label: 'Overview', path: 'cloud_ml/README.md' },
-      { label: 'Cloud ML Platforms', path: 'cloud_ml/intro_cloud_ml_platforms.md' },
-      { label: 'AWS SageMaker', path: 'cloud_ml/intro_sagemaker.md' },
-      { label: 'Google Vertex AI', path: 'cloud_ml/intro_vertex_ai.md' },
-      { label: 'Azure Machine Learning', path: 'cloud_ml/intro_azure_ml.md' },
+      { label: 'Overview', path: 'coding_challenges/README.md' },
+      { label: 'Python Coding Challenges', path: 'coding_challenges/python_coding_challenges.md' },
+      { label: 'SQL Coding Challenges', path: 'coding_challenges/sql_coding_challenges.md' },
+    ]
+  },
+  {
+    id: 'project_setup', phase: 'mastery', icon: '🚀', color: '#e879f9',
+    title: 'Project Setup & Engineering',
+    desc: 'Set up projects on GitHub the right way (git, branching, PRs, CI, Pages, secrets) and structure real ML/AI repos.',
+    files: [
+      { label: 'Overview', path: 'project_setup/README.md' },
+      { label: 'GitHub Project Setup', path: 'project_setup/intro_github_project_setup.md' },
+      { label: 'ML/AI Folder Structures', path: 'project_setup/intro_project_structure.md' },
     ]
   },
 ];
 
-// Flat list of all files for navigation
-const ALL_FILES = TRACKS.flatMap(t => t.files.map(f => ({ ...f, track: t.title, trackId: t.id })));
+const ALL_FILES = TRACKS.flatMap(t => t.files.map(f => ({ ...f, track: t.title, trackId: t.id, icon: t.icon, color: t.color })));
+const TRACK_BY_ID = Object.fromEntries(TRACKS.map(t => [t.id, t]));
 
-function populateHomeStats() {
-  const studyFiles = ALL_FILES.length;
-  const learningTracks = TRACKS.length;
-  const systemDesignGuides = ALL_FILES.filter(f => f.path.startsWith('system_design/')).length;
-  const practiceGuides = ALL_FILES.filter(f =>
-    f.path.startsWith('coding_challenges/') ||
-    f.path.includes('interview_') ||
-    f.path.includes('interview_questions')
-  ).length;
-
-  document.getElementById('stat-files').textContent = `${studyFiles}+`;
-  document.getElementById('stat-tracks').textContent = learningTracks;
-  document.getElementById('stat-system-design').textContent = systemDesignGuides;
-  document.getElementById('stat-practice').textContent = `${practiceGuides}+`;
+// ── Progress store ────────────────────────────────────────────────────────
+function loadProgress() {
+  try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || '[]')); }
+  catch { return new Set(); }
 }
+function saveProgress(set) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify([...set])); } catch {}
+}
+let completed = loadProgress();
 
-// ── State ──────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  State
+// ════════════════════════════════════════════════════════════════════════
 let currentPath = null;
 let currentIndex = -1;
-let tocOpen = false;
 
-// ── Build sidebar nav tree ─────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  Helpers
+// ════════════════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const navIdFor = path => 'nav-' + path.replace(/[\/.]/g, '-');
+
+function ring(pct, size, stroke, color) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - pct / 100);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg)">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--border)" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+      stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
+      style="transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)"/>
+  </svg>`;
+}
+
+function trackProgress(track) {
+  const done = track.files.filter(f => completed.has(f.path)).length;
+  return { done, total: track.files.length, pct: Math.round((done / track.files.length) * 100) };
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Build: Sidebar
+// ════════════════════════════════════════════════════════════════════════
 function buildNav() {
-  const tree = document.getElementById('nav-tree');
+  const tree = $('nav-tree');
+  tree.innerHTML = '';
+  PHASES.forEach(phase => {
+    const label = document.createElement('div');
+    label.className = 'phase-label';
+    label.style.setProperty('--phase-color', phase.color);
+    label.innerHTML = `<span class="dot"></span> ${phase.title}`;
+    tree.appendChild(label);
+
+    TRACKS.filter(t => t.phase === phase.id).forEach(track => {
+      const grp = document.createElement('div');
+      grp.className = 'nav-group';
+      grp.id = 'grp-' + track.id;
+      grp.innerHTML = `
+        <div class="nav-group-header">
+          <span class="track-icon">${track.icon}</span>
+          <span class="track-label">${track.title}</span>
+          <span class="mini-ring" id="ring-${track.id}"></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="nav-items">
+          ${track.files.map(f => `
+            <button class="nav-item" id="${navIdFor(f.path)}" data-path="${f.path}" data-track="${track.id}">
+              <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="ni-label">${f.label}</span>
+            </button>`).join('')}
+        </div>`;
+      tree.appendChild(grp);
+
+      grp.querySelector('.nav-group-header').addEventListener('click', () => grp.classList.toggle('open'));
+      grp.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => loadFile(btn.dataset.path, btn.dataset.track));
+      });
+    });
+  });
+  refreshNavState();
+}
+
+function refreshNavState() {
   TRACKS.forEach(track => {
-    const grp = document.createElement('div');
-    grp.className = 'nav-group';
-    grp.id = 'grp-' + track.id;
-    grp.innerHTML = `
-      <div class="nav-group-header" onclick="toggleGroup('${track.id}')">
-        <span class="track-icon">${track.icon}</span>
-        <span class="track-label">${track.title}</span>
-        <span class="chevron">▶</span>
-      </div>
-      <div class="nav-items" id="nav-items-${track.id}">
-        ${track.files.map(f => `
-          <button class="nav-item" id="nav-${f.path.replace(/\//g,'-').replace(/\./g,'-')}"
-                  onclick="loadFile('${f.path}', '${track.id}')">${f.label}</button>
-        `).join('')}
-      </div>
-    `;
-    tree.appendChild(grp);
+    const p = trackProgress(track);
+    const el = $('ring-' + track.id);
+    if (el) el.innerHTML = p.done > 0 ? ring(p.pct, 18, 2.5, track.color) : '';
+    track.files.forEach(f => {
+      const item = $(navIdFor(f.path));
+      if (item) item.classList.toggle('done', completed.has(f.path));
+    });
   });
 }
 
-function toggleGroup(id) {
-  const grp = document.getElementById('grp-' + id);
-  grp.classList.toggle('open');
+// ════════════════════════════════════════════════════════════════════════
+//  Build: Home
+// ════════════════════════════════════════════════════════════════════════
+function buildStats() {
+  $('stat-files').textContent = ALL_FILES.length + '+';
+  $('stat-tracks').textContent = TRACKS.length;
+  $('stat-phases').textContent = PHASES.length;
+  $('stat-design').textContent = ALL_FILES.filter(f => f.path.startsWith('system_design/')).length;
 }
 
-// ── Build home dashboard cards ────────────────────────────────────────────
-function buildCards() {
-  const grid = document.getElementById('tracks-grid');
-  TRACKS.forEach(track => {
-    const card = document.createElement('div');
-    card.className = 'track-card';
-    card.style.setProperty('--card-color', track.color);
-    card.innerHTML = `
-      <div class="track-card-header">
-        <span class="track-card-icon">${track.icon}</span>
-        <span class="track-card-title">${track.title}</span>
-      </div>
-      <div class="track-card-desc">${track.desc}</div>
-      <div class="track-card-files">
-        ${track.files.map(f => `<span class="file-chip" onclick="event.stopPropagation();loadFile('${f.path}','${track.id}')">${f.label}</span>`).join('')}
-      </div>
-    `;
-    card.onclick = () => loadFile(track.files[0].path, track.id);
-    grid.appendChild(card);
+function buildPhases() {
+  const wrap = $('phases');
+  wrap.innerHTML = '';
+  PHASES.forEach(phase => {
+    const tracks = TRACKS.filter(t => t.phase === phase.id);
+    const sec = document.createElement('div');
+    sec.className = 'phase';
+    sec.style.setProperty('--phase-color', phase.color);
+    sec.innerHTML = `
+      <div class="phase-node">${phase.num}</div>
+      <div class="phase-title">${phase.title}</div>
+      <div class="phase-tagline">${phase.tagline}</div>
+      <div class="tracks-grid"></div>`;
+    const grid = sec.querySelector('.tracks-grid');
+
+    tracks.forEach(track => {
+      const card = document.createElement('div');
+      card.className = 'track-card';
+      card.style.setProperty('--card-color', track.color);
+      card.innerHTML = `
+        <div class="track-card-top">
+          <div class="track-card-icon">${track.icon}</div>
+          <div class="track-card-titles">
+            <div class="track-card-title">${track.title}</div>
+            <div class="track-card-count">${track.files.length} guide${track.files.length > 1 ? 's' : ''}</div>
+          </div>
+        </div>
+        <div class="track-card-desc">${track.desc}</div>
+        <div class="track-card-foot">
+          <div class="track-progress-bar"><div class="fill" id="bar-${track.id}"></div></div>
+          <span class="track-progress-label" id="lbl-${track.id}">0%</span>
+          <svg class="track-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>`;
+      card.addEventListener('click', () => loadFile(track.files[0].path, track.id));
+      grid.appendChild(card);
+    });
+    wrap.appendChild(sec);
   });
+  refreshHomeProgress();
 }
 
-// ── Navigation ──────────────────────────────────────────────────────────────
-function showHome() {
-  document.getElementById('home-view').style.display = 'block';
-  document.getElementById('content-view').style.display = 'none';
-  document.getElementById('home-nav').classList.add('active');
+function refreshHomeProgress() {
+  TRACKS.forEach(track => {
+    const p = trackProgress(track);
+    const bar = $('bar-' + track.id);
+    const lbl = $('lbl-' + track.id);
+    if (bar) bar.style.width = p.pct + '%';
+    if (lbl) lbl.textContent = p.done === p.total ? '✓ Done' : `${p.done}/${p.total}`;
+  });
+  const pct = Math.round((completed.size / ALL_FILES.length) * 100);
+  const r = $('overall-ring');
+  if (r) r.innerHTML = ring(pct, 84, 7, 'url(#g)').replace('<svg', '<svg style="transform:rotate(-90deg)"')
+    + `<div class="pct">${pct}%</div>`;
+  // gradient stroke fallback: use violet
+  if (r) {
+    r.querySelectorAll('circle')[1]?.setAttribute('stroke', 'var(--accent)');
+  }
+  const title = $('progress-title'), sub = $('progress-sub');
+  if (title) title.textContent = completed.size === 0 ? 'Start your journey' :
+    completed.size === ALL_FILES.length ? '🎉 All guides complete!' : `${completed.size} of ${ALL_FILES.length} guides complete`;
+  if (sub) sub.textContent = completed.size === 0
+    ? 'Mark guides as complete while you study — your progress is saved in this browser.'
+    : `You're ${pct}% through the full study hub. Keep going!`;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Navigation
+// ════════════════════════════════════════════════════════════════════════
+function showHome(updateHash = true) {
+  $('home-view').style.display = 'block';
+  $('content-view').style.display = 'none';
+  $('home-nav').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  currentPath = null;
-  currentIndex = -1;
-  updateProgress();
+  currentPath = null; currentIndex = -1;
+  if (updateHash && location.hash) history.pushState('', '', location.pathname + location.search);
+  $('main').scrollTop = 0;
+  updateReadProgress();
   closeSidebar();
 }
 
-async function loadFile(path, trackId) {
-  // Update state
+async function loadFile(path, trackId, updateHash = true) {
+  trackId = trackId || (ALL_FILES.find(f => f.path === path) || {}).trackId;
   currentPath = path;
   currentIndex = ALL_FILES.findIndex(f => f.path === path);
 
-  // Show content view
-  document.getElementById('home-view').style.display = 'none';
-  document.getElementById('content-view').style.display = 'flex';
-  document.getElementById('content-view').style.flexDirection = 'column';
-  document.getElementById('home-nav').classList.remove('active');
+  $('home-view').style.display = 'none';
+  $('content-view').style.display = 'flex';
+  $('home-nav').classList.remove('active');
 
-  // Highlight nav item
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  const navId = 'nav-' + path.replace(/\//g,'-').replace(/\./g,'-');
-  const navEl = document.getElementById(navId);
+  const navEl = $(navIdFor(path));
   if (navEl) {
     navEl.classList.add('active');
-    // Open group
-    const grp = document.getElementById('grp-' + trackId);
-    if (grp && !grp.classList.contains('open')) grp.classList.add('open');
+    const grp = $('grp-' + trackId);
+    if (grp) grp.classList.add('open');
+    navEl.scrollIntoView({ block: 'nearest' });
   }
 
-  // Update breadcrumb
-  const track = TRACKS.find(t => t.id === trackId);
+  const track = TRACK_BY_ID[trackId];
   const file = track?.files.find(f => f.path === path);
   updateBreadcrumb(track, file);
+  updateMarkButton();
 
-  // Update prev/next buttons
-  document.getElementById('prev-btn').disabled = currentIndex <= 0;
-  document.getElementById('next-btn').disabled = currentIndex >= ALL_FILES.length - 1;
+  $('prev-btn').disabled = currentIndex <= 0;
+  $('next-btn').disabled = currentIndex >= ALL_FILES.length - 1;
 
-  // Show loading
-  const area = document.getElementById('content-area');
-  area.innerHTML = `<div class="loading"><div class="spinner"></div><span style="color:var(--text2)">Loading…</span></div>`;
-  document.getElementById('main').scrollTop = 0;
+  if (updateHash) location.hash = path;
 
-  // Fetch content
+  const area = $('content-area');
+  $('doc-meta').innerHTML = '';
+  $('doc-nav').innerHTML = '';
+  $('toc-rail').style.display = 'none';
+  area.innerHTML = `<div class="loading"><div class="spinner"></div><span style="color:var(--text-2)">Loading guide…</span></div>`;
+  $('main').scrollTop = 0;
+
   try {
-    if (isLocal) throw new Error('Browsers block reading local files via fetch() on file:// pages');
-
+    if (isLocal) throw new Error('Browsers block fetch() on file:// pages.');
     const content = await fetchMarkdown(path);
-    renderMarkdown(content);
+    renderMarkdown(content, track, file);
   } catch (err) {
     area.innerHTML = `
-      <div style="padding:40px;text-align:center;color:var(--text2)">
-        <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
-        <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px">Could not load file</div>
-        <div style="font-size:.85rem">${path}</div>
-        <div style="font-size:.8rem;margin-top:8px;color:var(--accent3)">${err.message}</div>
-        <div style="font-size:.75rem;margin-top:16px;color:var(--text2)">
-          When running locally, start a local server: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">python -m http.server 8080</code>
-        </div>
+      <div class="err-box">
+        <div class="ico">⚠️</div>
+        <h3>Could not load this guide</h3>
+        <div style="font-size:.85rem;margin-bottom:6px">${path}</div>
+        <div style="font-size:.8rem;color:var(--rose);margin-bottom:18px">${err.message}</div>
+        <div style="font-size:.82rem">Running locally? Start a server first:<br><br>
+          <code>python -m http.server 8080</code><br><br>then open <code>http://localhost:8080</code></div>
       </div>`;
   }
-
   closeSidebar();
 }
 
-function renderMarkdown(text) {
+function renderMarkdown(text, track, file) {
   marked.setOptions({ gfm: true, breaks: false });
-  const html = marked.parse(text);
-  const area = document.getElementById('content-area');
-  area.innerHTML = html;
+  const area = $('content-area');
+  area.innerHTML = marked.parse(text);
+
+  // Reading meta
+  const words = (text.match(/\S+/g) || []).length;
+  const mins = Math.max(1, Math.round(words / 220));
+  $('doc-meta').innerHTML = `
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${mins} min read</span>
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> ${words.toLocaleString()} words</span>
+    <a class="chip" href="${REPO_URL}/blob/master/${file?.path || ''}" target="_blank" rel="noopener" style="color:var(--text-3);border-bottom:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> View source</a>`;
+
   assignHeadingIds(area);
   wireContentLinks(area);
-  // Syntax highlighting
-  area.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
-  // Build TOC
+  addCopyButtons(area);
+  area.querySelectorAll('pre code').forEach(b => { try { hljs.highlightElement(b); } catch {} });
   buildTOC(area);
-  // Scroll top
-  document.getElementById('main').scrollTop = 0;
+  buildDocNav();
+  $('main').scrollTop = 0;
 }
 
 async function fetchMarkdown(path) {
   const attempts = [path];
-  const repoSegment = '/CrackingMachineLearningInterview/';
-
-  if (location.pathname.includes(repoSegment)) {
-    attempts.unshift(`${repoSegment}${path}`);
-  }
-
+  const seg = '/CrackingMachineLearningInterview/';
+  if (location.pathname.includes(seg)) attempts.unshift(`${seg}${path}`);
   let lastError = null;
   for (const candidate of [...new Set(attempts)]) {
     try {
       const resp = await fetch(candidate);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       return await resp.text();
-    } catch (err) {
-      lastError = err;
-    }
+    } catch (err) { lastError = err; }
   }
-
   throw lastError || new Error(`Failed to load ${path}`);
 }
 
 function normalizePath(path) {
   const isAbsolute = path.startsWith('/');
-  const baseParts = isAbsolute || !currentPath
-    ? []
-    : currentPath.split('/').slice(0, -1);
+  const baseParts = isAbsolute || !currentPath ? [] : currentPath.split('/').slice(0, -1);
   const parts = `${isAbsolute ? '' : baseParts.join('/')}${isAbsolute ? path : `/${path}`}`.split('/');
-  const normalized = [];
-
+  const out = [];
   for (const part of parts) {
     if (!part || part === '.') continue;
-    if (part === '..') {
-      normalized.pop();
-      continue;
-    }
-    normalized.push(part);
+    if (part === '..') { out.pop(); continue; }
+    out.push(part);
   }
-
-  return normalized.join('/');
+  return out.join('/');
 }
 
 function getTrackIdForPath(path) {
-  const file = ALL_FILES.find(item => item.path === path);
-  return file ? file.trackId : null;
+  const f = ALL_FILES.find(i => i.path === path);
+  return f ? f.trackId : null;
 }
 
-function slugifyHeading(text) {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+function slugify(text) {
+  return (text || 'section').toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-') || 'section';
 }
 
 function assignHeadingIds(container) {
-  const usedIds = new Set();
-
-  container.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(heading => {
-    const baseId = slugifyHeading(heading.textContent || 'section') || 'section';
-    let id = baseId;
-    let suffix = 2;
-
-    while (usedIds.has(id) || document.getElementById(id)) {
-      id = `${baseId}-${suffix}`;
-      suffix += 1;
-    }
-
-    heading.id = id;
-    usedIds.add(id);
+  const used = new Set();
+  container.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
+    let base = slugify(h.textContent), id = base, i = 2;
+    while (used.has(id)) { id = `${base}-${i++}`; }
+    h.id = id; used.add(id);
   });
 }
 
@@ -1086,58 +1378,61 @@ function wireContentLinks(container) {
   container.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
-
     if (href.startsWith('#')) {
       const hash = href.slice(1);
       if (!hash) return;
-
-      link.addEventListener('click', event => {
-        const target = document.getElementById(hash);
-        if (!target) return;
-        event.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      link.addEventListener('click', e => {
+        const t = document.getElementById(hash);
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       });
       return;
     }
-
     if (/^(https?:)?\/\//i.test(href) || href.startsWith('mailto:')) {
-      link.target = '_blank';
-      link.rel = 'noopener';
-      return;
+      link.target = '_blank'; link.rel = 'noopener'; return;
     }
-
     const [rawPath, hash = ''] = href.split('#');
     if (!rawPath || !rawPath.toLowerCase().endsWith('.md')) return;
-
-    const resolvedPath = normalizePath(rawPath);
-    const targetTrackId = getTrackIdForPath(resolvedPath) || getTrackIdForPath(currentPath);
-
-    link.href = '#';
-    link.addEventListener('click', async (event) => {
-      event.preventDefault();
-      await loadFile(resolvedPath, targetTrackId);
-      if (!hash) return;
-
-      const target = document.getElementById(hash) || document.querySelector(`[id="${hash}"]`);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const resolved = normalizePath(rawPath);
+    const tId = getTrackIdForPath(resolved) || getTrackIdForPath(currentPath);
+    link.href = '#' + resolved;
+    link.addEventListener('click', async e => {
+      e.preventDefault();
+      await loadFile(resolved, tId);
+      if (hash) { const t = document.getElementById(hash); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
 }
 
+function addCopyButtons(container) {
+  container.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'code-copy';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code')?.innerText || pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+      });
+    });
+    pre.appendChild(btn);
+  });
+}
+
 function updateBreadcrumb(track, file) {
-  const bc = document.getElementById('breadcrumb');
-  bc.innerHTML = `
-    <span class="crumb" onclick="showHome()">Home</span>
+  $('breadcrumb').innerHTML = `
+    <span class="crumb" data-home>Home</span>
     <span class="sep">›</span>
-    <span class="crumb" onclick="openTrack('${track?.id}')">${track?.icon} ${track?.title}</span>
+    <span class="crumb" data-track="${track?.id}">${track?.icon} ${track?.title}</span>
     <span class="sep">›</span>
-    <span class="current">${file?.label}</span>
-  `;
+    <span class="current">${file?.label || ''}</span>`;
+  $('breadcrumb').querySelector('[data-home]').addEventListener('click', () => showHome());
+  $('breadcrumb').querySelector('[data-track]').addEventListener('click', () => openTrack(track?.id));
 }
 
 function openTrack(id) {
-  const track = TRACKS.find(t => t.id === id);
-  if (track) loadFile(track.files[0].path, id);
+  const t = TRACK_BY_ID[id];
+  if (t) loadFile(t.files[0].path, id);
 }
 
 function navigateRelative(dir) {
@@ -1145,110 +1440,222 @@ function navigateRelative(dir) {
   if (next) loadFile(next.path, next.trackId);
 }
 
-// ── TOC ───────────────────────────────────────────────────────────────────
+function buildDocNav() {
+  const prev = ALL_FILES[currentIndex - 1];
+  const next = ALL_FILES[currentIndex + 1];
+  let html = '';
+  if (prev) html += `<a data-path="${prev.path}" data-track="${prev.trackId}">
+    <div class="dir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg> Previous</div>
+    <div class="lbl">${prev.icon} ${prev.label}</div></a>`;
+  else html += `<span style="flex:1"></span>`;
+  if (next) html += `<a class="next" data-path="${next.path}" data-track="${next.trackId}">
+    <div class="dir">Next <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+    <div class="lbl">${next.icon} ${next.label}</div></a>`;
+  const nav = $('doc-nav');
+  nav.innerHTML = html;
+  nav.querySelectorAll('a[data-path]').forEach(a => a.addEventListener('click', () => loadFile(a.dataset.path, a.dataset.track)));
+}
+
+// ── Mark complete ──────────────────────────────────────────────────────────
+function updateMarkButton() {
+  const done = completed.has(currentPath);
+  const btn = $('mark-btn');
+  btn.classList.toggle('done', done);
+  $('mark-label').textContent = done ? 'Completed' : 'Mark complete';
+}
+function toggleComplete() {
+  if (!currentPath) return;
+  if (completed.has(currentPath)) completed.delete(currentPath);
+  else completed.add(currentPath);
+  saveProgress(completed);
+  updateMarkButton(); refreshNavState(); refreshHomeProgress();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  TOC (right rail) with scroll-spy
+// ════════════════════════════════════════════════════════════════════════
+let tocLinks = [];
 function buildTOC(container) {
-  const headings = container.querySelectorAll('h2, h3');
-  const list = document.getElementById('toc-list');
+  const headings = [...container.querySelectorAll('h2, h3')];
+  const list = $('toc-list');
   list.innerHTML = '';
+  tocLinks = [];
+  if (headings.length < 2) { $('toc-rail').style.display = 'none'; return; }
+  $('toc-rail').style.display = 'block';
   headings.forEach(h => {
-    const item = document.createElement('a');
-    item.className = 'toc-item' + (h.tagName === 'H3' ? ' h3' : '');
-    item.textContent = h.textContent;
-    item.onclick = () => {
-      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-    list.appendChild(item);
+    const a = document.createElement('a');
+    a.className = 'toc-item' + (h.tagName === 'H3' ? ' lvl3' : '');
+    a.textContent = h.textContent;
+    a.addEventListener('click', () => h.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    list.appendChild(a);
+    tocLinks.push({ a, h });
   });
 }
-
-function toggleTOC() {
-  tocOpen = !tocOpen;
-  document.getElementById('toc-panel').classList.toggle('open', tocOpen);
-}
-
-// ── Search ────────────────────────────────────────────────────────────────
-const searchInput = document.getElementById('search-input');
-const searchResults = document.getElementById('search-results');
-
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLowerCase();
-  if (!q) { searchResults.classList.remove('show'); return; }
-  const matches = ALL_FILES.filter(f =>
-    f.label.toLowerCase().includes(q) || f.track.toLowerCase().includes(q) || f.path.toLowerCase().includes(q)
-  ).slice(0, 8);
-  if (!matches.length) {
-    searchResults.innerHTML = `<div class="search-result-item"><div class="title" style="color:var(--text2)">No results found</div></div>`;
-  } else {
-    searchResults.innerHTML = matches.map(f => `
-      <div class="search-result-item" onclick="selectSearch('${f.path}','${f.trackId}')">
-        <div class="title">${f.label}</div>
-        <div class="track">${f.track}</div>
-      </div>`).join('');
+function spyTOC() {
+  if (!tocLinks.length) return;
+  const scrollY = $('main').scrollTop;
+  let active = tocLinks[0];
+  for (const link of tocLinks) {
+    if (link.h.offsetTop - 110 <= scrollY) active = link; else break;
   }
-  searchResults.classList.add('show');
-});
-
-function selectSearch(path, trackId) {
-  searchInput.value = '';
-  searchResults.classList.remove('show');
-  loadFile(path, trackId);
+  tocLinks.forEach(l => l.a.classList.toggle('active', l === active));
 }
 
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrap')) searchResults.classList.remove('show');
-});
+// ════════════════════════════════════════════════════════════════════════
+//  Command palette
+// ════════════════════════════════════════════════════════════════════════
+let cmdResults = [], cmdSel = 0;
+function openCmd() {
+  $('cmd-overlay').classList.add('show');
+  $('cmd-input').value = '';
+  renderCmd('');
+  setTimeout(() => $('cmd-input').focus(), 30);
+}
+function closeCmd() { $('cmd-overlay').classList.remove('show'); }
 
-// ── Theme ─────────────────────────────────────────────────────────────────
-let isDark = true;
-function toggleTheme() {
-  isDark = !isDark;
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.getElementById('theme-btn').innerHTML = isDark
-    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light`
-    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Dark`;
-  const hljsTheme = document.getElementById('hljs-theme');
-  hljsTheme.href = isDark
+function scoreMatch(f, q) {
+  const hay = (f.label + ' ' + f.track + ' ' + f.path).toLowerCase();
+  if (!q) return 0;
+  if (f.label.toLowerCase().startsWith(q)) return 3;
+  if (f.label.toLowerCase().includes(q)) return 2;
+  if (hay.includes(q)) return 1;
+  return -1;
+}
+function renderCmd(q) {
+  q = q.trim().toLowerCase();
+  let items;
+  if (!q) {
+    items = ALL_FILES.slice(0, 7);
+  } else {
+    items = ALL_FILES.map(f => ({ f, s: scoreMatch(f, q) }))
+      .filter(x => x.s >= 0).sort((a, b) => b.s - a.s).slice(0, 12).map(x => x.f);
+  }
+  cmdResults = items; cmdSel = 0;
+  const box = $('cmd-results');
+  if (!items.length) { box.innerHTML = `<div class="cmd-empty">No guides match “${q}”.</div>`; return; }
+  box.innerHTML = (q ? '' : '<div class="cmd-group-label">Jump to</div>') +
+    items.map((f, i) => `
+      <div class="cmd-item ${i === 0 ? 'sel' : ''}" data-i="${i}" style="--ci-color:${f.color}">
+        <div class="ci-icon">${f.icon}</div>
+        <div class="ci-text">
+          <div class="ci-title">${f.label}</div>
+          <div class="ci-track">${f.track}</div>
+        </div>
+        ${completed.has(f.path) ? '<svg class="ci-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+        <span class="ci-enter">↵</span>
+      </div>`).join('');
+  box.querySelectorAll('.cmd-item').forEach(el => {
+    el.addEventListener('click', () => pickCmd(+el.dataset.i));
+    el.addEventListener('mousemove', () => setCmdSel(+el.dataset.i));
+  });
+}
+function setCmdSel(i) {
+  cmdSel = i;
+  $('cmd-results').querySelectorAll('.cmd-item').forEach((el, idx) => el.classList.toggle('sel', idx === i));
+}
+function pickCmd(i) {
+  const f = cmdResults[i];
+  if (!f) return;
+  closeCmd();
+  loadFile(f.path, f.trackId);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Theme
+// ════════════════════════════════════════════════════════════════════════
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const dark = theme === 'dark';
+  $('theme-icon').outerHTML = dark
+    ? `<svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
+    : `<svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`;
+  $('hljs-theme').href = dark
     ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
     : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+  try { localStorage.setItem(THEME_KEY, theme); } catch {}
+}
+function toggleTheme() {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
 
-// ── Progress bar ──────────────────────────────────────────────────────────
-function updateProgress() {
-  const el = document.getElementById('main');
-  const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
-  document.getElementById('progress').style.width = (pct || 0) + '%';
+// ════════════════════════════════════════════════════════════════════════
+//  Scroll: reading progress, scroll-spy, to-top
+// ════════════════════════════════════════════════════════════════════════
+function updateReadProgress() {
+  const el = $('main');
+  const max = el.scrollHeight - el.clientHeight;
+  const pct = max > 0 ? (el.scrollTop / max) * 100 : 0;
+  $('read-progress').style.width = (pct || 0) + '%';
+  $('to-top').classList.toggle('show', el.scrollTop > 600 && currentPath);
+}
+$('main').addEventListener('scroll', () => { updateReadProgress(); spyTOC(); }, { passive: true });
+
+// ════════════════════════════════════════════════════════════════════════
+//  Sidebar mobile
+// ════════════════════════════════════════════════════════════════════════
+function toggleSidebar() { $('sidebar').classList.toggle('open'); $('overlay').classList.toggle('show'); }
+function closeSidebar() { $('sidebar').classList.remove('open'); $('overlay').classList.remove('show'); }
+
+// ════════════════════════════════════════════════════════════════════════
+//  Events
+// ════════════════════════════════════════════════════════════════════════
+$('home-nav').addEventListener('click', () => showHome());
+$('brand').addEventListener('click', () => showHome());
+$('hamburger').addEventListener('click', toggleSidebar);
+$('overlay').addEventListener('click', closeSidebar);
+$('theme-btn').addEventListener('click', toggleTheme);
+$('cmd-trigger').addEventListener('click', openCmd);
+$('cta-search').addEventListener('click', openCmd);
+$('cta-start').addEventListener('click', () => loadFile('README.md', 'home-readme'));
+$('mark-btn').addEventListener('click', toggleComplete);
+$('prev-btn').addEventListener('click', () => navigateRelative(-1));
+$('next-btn').addEventListener('click', () => navigateRelative(1));
+$('to-top').addEventListener('click', () => $('main').scrollTo({ top: 0, behavior: 'smooth' }));
+$('reset-progress').addEventListener('click', () => {
+  if (confirm('Reset all reading progress? This cannot be undone.')) {
+    completed = new Set(); saveProgress(completed);
+    refreshNavState(); refreshHomeProgress(); updateMarkButton();
+  }
+});
+$('cmd-overlay').addEventListener('click', e => { if (e.target === $('cmd-overlay')) closeCmd(); });
+$('cmd-input').addEventListener('input', e => renderCmd(e.target.value));
+$('cmd-input').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); setCmdSel(Math.min(cmdSel + 1, cmdResults.length - 1)); ensureCmdVisible(); }
+  if (e.key === 'ArrowUp')   { e.preventDefault(); setCmdSel(Math.max(cmdSel - 1, 0)); ensureCmdVisible(); }
+  if (e.key === 'Enter')     { e.preventDefault(); pickCmd(cmdSel); }
+});
+function ensureCmdVisible() {
+  $('cmd-results').querySelector('.cmd-item.sel')?.scrollIntoView({ block: 'nearest' });
 }
 
-// ── Mobile sidebar ────────────────────────────────────────────────────────
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-}
-
-// ── Keyboard shortcuts ────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    searchInput.focus();
-    searchInput.select();
-  }
-  if (e.key === 'Escape') {
-    searchResults.classList.remove('show');
-    searchInput.blur();
-    if (tocOpen) { tocOpen = false; document.getElementById('toc-panel').classList.remove('open'); }
-  }
-  if (e.altKey && e.key === 'ArrowLeft' && currentIndex > 0) navigateRelative(-1);
-  if (e.altKey && e.key === 'ArrowRight' && currentIndex < ALL_FILES.length - 1) navigateRelative(1);
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmd(); return; }
+  if (e.key === 'Escape') { closeCmd(); closeSidebar(); return; }
+  if ($('cmd-overlay').classList.contains('show')) return;
+  if (e.altKey && e.key === 'ArrowLeft')  navigateRelative(-1);
+  if (e.altKey && e.key === 'ArrowRight') navigateRelative(1);
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────
-populateHomeStats();
-buildNav();
-buildCards();
+// ── Hash routing ────────────────────────────────────────────────────────
+function routeFromHash() {
+  const hash = decodeURIComponent(location.hash.slice(1));
+  if (hash && ALL_FILES.some(f => f.path === hash)) loadFile(hash, getTrackIdForPath(hash), false);
+  else showHome(false);
+}
+window.addEventListener('hashchange', routeFromHash);
+
+// ════════════════════════════════════════════════════════════════════════
+//  Init
+// ════════════════════════════════════════════════════════════════════════
+(function init() {
+  let theme = 'dark';
+  try { theme = localStorage.getItem(THEME_KEY) || 'dark'; } catch {}
+  applyTheme(theme);
+  buildStats();
+  buildNav();
+  buildPhases();
+  routeFromHash();
+})();
 </script>
 </body>
 </html>
