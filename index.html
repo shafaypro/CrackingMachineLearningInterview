@@ -656,13 +656,28 @@ const TRACKS = [
     ]
   },
   {
+    id: 'project_setup',
+    icon: '🚀',
+    title: 'Project Setup & Engineering',
+    desc: 'How to set up a project on GitHub the right way (git, branching, pull requests, CI, GitHub Pages, secrets) and how to structure real ML, deep-learning, LLM, agent, and data-engineering projects.',
+    color: '#3fb950',
+    files: [
+      { label: 'Overview', path: 'project_setup/README.md' },
+      { label: 'GitHub Project Setup Tutorial', path: 'project_setup/intro_github_project_setup.md' },
+      { label: 'ML/AI Project Folder Structures', path: 'project_setup/intro_project_structure.md' },
+    ]
+  },
+  {
     id: 'ai_genai',
     icon: '🤖',
     title: 'AI & GenAI',
-    desc: 'RAG, vector databases, LLMOps, agentic AI, multi-agent systems, n8n, MCP, LangChain, LangGraph, LangSmith, CrewAI, and Anthropic Claude API.',
+    desc: 'LLM fundamentals, prompt engineering, structured outputs, RAG, vector databases, LLMOps, agentic AI, multi-agent systems, MCP, LangChain/LangGraph/LangSmith, CrewAI, LLM security, and the Anthropic Claude API.',
     color: '#d2a8ff',
     files: [
+      { label: 'Agentic AI Engineer Roadmap', path: 'ai_genai/intro_agentic_ai_engineering_roadmap.md' },
       { label: 'LLM Fundamentals', path: 'ai_genai/intro_llm_fundamentals.md' },
+      { label: 'Prompt Engineering', path: 'ai_genai/intro_prompt_engineering.md' },
+      { label: 'Structured Outputs', path: 'ai_genai/intro_structured_outputs.md' },
       { label: 'Intro to RAG', path: 'ai_genai/intro_rag.md' },
       { label: 'RAG Engineering', path: 'ai_genai/intro_rag_engineering.md' },
       { label: 'Vector Databases', path: 'ai_genai/intro_vector_databases.md' },
@@ -681,6 +696,7 @@ const TRACKS = [
       { label: 'LangSmith', path: 'ai_genai/intro_langsmith.md' },
       { label: 'CrewAI', path: 'ai_genai/intro_crewai.md' },
       { label: 'Anthropic & Claude', path: 'ai_genai/intro_anthropic.md' },
+      { label: 'LLM Security', path: 'ai_genai/intro_llm_security.md' },
     ]
   },
   {
@@ -715,12 +731,14 @@ const TRACKS = [
     id: 'deep_learning',
     icon: '🧠',
     title: 'Deep Learning',
-    desc: 'Transformer architecture, attention mechanisms, BERT, GPT, and modern neural network architectures.',
+    desc: 'Transformer architecture, attention mechanisms, computer vision, fine-tuning, and modern neural network architectures.',
     color: '#ffa657',
     files: [
       { label: 'Overview', path: 'deep_learning/README.md' },
       { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
       { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
+      { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
+      { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
     ]
   },
   {
@@ -731,7 +749,9 @@ const TRACKS = [
     color: '#79c0ff',
     files: [
       { label: 'Overview', path: 'frameworks/README.md' },
+      { label: 'Python for AI Engineering', path: 'frameworks/intro_python_for_ai.md' },
       { label: 'PyTorch', path: 'frameworks/intro_pytorch.md' },
+      { label: 'LangChain (LCEL & Advanced)', path: 'frameworks/intro_langchain.md' },
       { label: 'HuggingFace', path: 'frameworks/intro_huggingface.md' },
       { label: 'Ollama', path: 'frameworks/intro_ollama.md' },
       { label: 'vLLM', path: 'frameworks/intro_vllm.md' },
@@ -757,6 +777,7 @@ const TRACKS = [
       { label: 'Model Monitoring', path: 'mlops/intro_model_monitoring.md' },
       { label: 'LLM Evaluation', path: 'mlops/intro_llm_evaluation.md' },
       { label: 'Evaluation & Guardrails', path: 'mlops/intro_evaluation_guardrails.md' },
+      { label: 'A/B Testing', path: 'mlops/intro_ab_testing.md' },
     ]
   },
   {

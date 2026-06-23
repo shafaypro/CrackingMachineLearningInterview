@@ -585,6 +585,141 @@ Research the current state of vector databases in 2026:
 
 ---
 
+## Production Agent Engineering
+
+Building a demo agent is easy; making one reliable, cheap, and debuggable in
+production is the actual job. This section covers the decisions interviewers
+probe most.
+
+### Should You Even Build an Agent?
+
+Before reaching for an agent, check four criteria. If any answer is "no," use a
+simpler tier — a single LLM call or a code-orchestrated **workflow**.
+
+| Criterion | Question |
+|-----------|----------|
+| **Complexity** | Is the task multi-step and hard to fully specify up front? |
+| **Value** | Does the outcome justify higher cost and latency? |
+| **Viability** | Is the model actually capable at this task type? |
+| **Cost of error** | Can mistakes be caught and recovered (tests, review, rollback)? |
+
+> **Rule of thumb:** Single call → classification/extraction/Q&A. Workflow →
+> multi-step pipeline with logic *you* control. Agent → open-ended task where the
+> model must decide its own trajectory.
+
+### Designing the Tool Surface
+
+The shape of your tools determines what your harness can do. A **bash tool** gives
+the model maximum leverage but hands the harness only an opaque command string. A
+**dedicated tool** (`send_email`, `edit_file`) gives the harness a typed, named
+hook it can gate, validate, render, or run in parallel.
+
+**Promote an action from bash to a dedicated tool when you need to:**
+- **Gate it** — hard-to-reverse actions (sending messages, deleting data, external
+  API writes) should be confirmable. `send_email` is easy to gate; `bash -c "curl -X POST..."` is not.
+- **Enforce invariants** — a dedicated `edit` tool can reject a write if the file
+  changed since the model last read it.
+- **Render it** — some actions deserve custom UI (an approval modal, a diff view).
+- **Parallelize it** — mark read-only tools (`grep`, `glob`) parallel-safe; the
+  harness can't tell a safe `grep` from an unsafe `git push` inside bash.
+
+**Tool definition best practices:** clear names, descriptions that say *when* to
+call the tool (not just what it does), `enum` for fixed-value params, and only
+truly-required fields in `required`. On recent models that call tools more
+conservatively, an explicit "Call this when…" trigger in the description measurably
+raises the should-call rate.
+
+### Context Management for Long-Running Agents
+
+Agents accumulate context across many turns and will blow the context window if
+unmanaged. Three complementary strategies:
+
+| Strategy | What it does | Use when |
+|----------|--------------|----------|
+| **Context editing** | Prunes stale tool results / thinking blocks | Old tool outputs are no longer relevant |
+| **Compaction** | Summarizes earlier history into a compact block | Conversation approaches the window limit |
+| **Memory** | Persists state to files/DB across sessions | State must survive process restarts |
+
+Many long-horizon agents use all three. Compaction summarizes *within* a session;
+memory persists *across* sessions.
+
+**Prompt caching for agents** — caching is a prefix match, so:
+- Keep the system prompt and tool list **frozen** (don't interpolate timestamps,
+  don't reorder tools) — any change at the front invalidates everything after it.
+- To change behavior mid-run, append an instruction as a message rather than
+  editing the system prompt.
+- To use a cheaper model for a sub-task, spawn a **subagent** instead of swapping
+  the model mid-conversation (a model switch invalidates the cache).
+
+### Managed vs. Self-Hosted Agents
+
+| | **Self-hosted loop** (your code runs the loop) | **Managed agents** (provider runs the loop) |
+|---|---|---|
+| Control | Maximum — custom logging, approval gates | Provider orchestrates; you stream events |
+| Tool execution | Your infrastructure | Provider-hosted container (or your own) |
+| State | You manage | Persisted, versioned agent configs + sessions |
+| Best for | Custom runtimes, on-prem, fine-grained control | Stateful agents, file mounts, fast time-to-prod |
+
+Anthropic's **Managed Agents** is one example of the managed pattern: you create a
+persisted, versioned Agent config (model, system prompt, tools), then start
+Sessions that reference it; the provider runs the loop and hosts a per-session
+container where tools execute.
+
+### Evaluating Agents
+
+Don't evaluate agents only on final-answer quality — evaluate the **trajectory**:
+
+- **Task success rate** — did it achieve the goal? (the headline metric)
+- **Trajectory quality** — were the tool calls sensible, or did it flail?
+- **Efficiency** — number of steps, tokens, and tool calls per task.
+- **Failure analysis** — categorize *why* tasks fail (wrong tool, bad parse, loop).
+
+Maintain a **task suite** the agent must pass on every change, and use
+LLM-as-judge for graded rubrics. See [LLM Evaluation](../mlops/intro_llm_evaluation.md).
+
+### Cost & Latency Optimization
+
+| Lever | Effect |
+|-------|--------|
+| **Right-size the model** | Use a smaller model (e.g. Haiku-tier) for routing/subagents, a larger one (Opus-tier) for hard reasoning |
+| **Prompt caching** | Cache the stable system prompt + tools (~10× cheaper on cache reads) |
+| **Effort/thinking controls** | Lower the reasoning effort for routine steps; raise it for hard ones |
+| **Parallel tool calls** | Execute independent tools concurrently, return all results in one turn |
+| **Cap the loop** | Set a max-steps / token budget so a runaway agent fails gracefully |
+| **Batch offline work** | Use batch APIs (≈50% cheaper) for non-latency-sensitive jobs |
+
+### Failure Modes & Guardrails
+
+| Failure mode | Mitigation |
+|--------------|-----------|
+| Infinite / repetitive loops | Max-step cap; detect repeated states |
+| Hallucinated tool arguments | Strict schemas (`additionalProperties: false`), validate before executing |
+| Destructive actions | Human-in-the-loop approval for irreversible tools |
+| Prompt injection via tool output | Treat tool/retrieved content as untrusted; don't let it override system instructions |
+| Silent quality drift | Continuous evals + tracing on every tool call |
+| Cost blowout | Token/step budgets; alerting on per-task spend |
+
+### Interview Questions
+
+1. **When should you NOT build an agent?** → When the task is single-step or fully
+   specifiable — a single call or a code-orchestrated workflow is cheaper, faster,
+   and more reliable.
+2. **Bash tool vs dedicated tools — trade-offs?** → Bash = max capability, opaque
+   to the harness; dedicated tools = gateable, validatable, parallelizable, but
+   you must build each one. Promote to dedicated when you need to gate/render/parallelize.
+3. **How do you keep a long-running agent within the context window?** → Context
+   editing (prune), compaction (summarize), and memory (persist across sessions).
+4. **How do you evaluate an agent?** → Task success rate + trajectory quality +
+   efficiency, on a fixed task suite, often with LLM-as-judge.
+5. **How do you defend against prompt injection in an agentic RAG system?** →
+   Treat retrieved/tool content as untrusted data, never as instructions; separate
+   the system/operator channel; validate and sandbox tool execution.
+6. **How do you cut agent cost without hurting quality?** → Right-size models per
+   sub-task, prompt-cache the stable prefix, lower effort on routine steps,
+   parallelize tool calls, and batch offline work.
+
+---
+
 ## Related Topics
 
 | Topic | Why It's Related |
