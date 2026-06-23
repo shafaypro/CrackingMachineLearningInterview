@@ -36,6 +36,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * [Cloud ML Platforms](#cloud-ml-platforms)
 * [System Design Track](#system-design-track)
 * [Frameworks Track](#frameworks-track)
+* [Project Setup & Engineering Track](#project-setup--engineering-track)
 * [Suggested Learning Order](#suggested-learning-order)
 * [Highlighted Projects](#highlighted-projects)
 * [Preparation Resources and References](./docs/resources-and-references.md)
@@ -69,6 +70,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`system_design/`](./system_design): ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems. **(Expanded)**
 * [`deep_learning/`](./deep_learning): deep learning fundamentals, transformers, and applied training pipelines. **(Expanded)**
 * [`coding_challenges/`](./coding_challenges): Python and SQL interview practice guides for coding screens and data problem solving. **(New)**
+* [`project_setup/`](./project_setup): how to set up a project on GitHub and structure real ML/AI/agent/data-engineering repositories. **(New)**
 * `README.md`: repository landing page plus the original classic ML interview question bank.
 
 ## Suggested Learning Order
@@ -83,6 +85,7 @@ Use this order if you want to move from theory to production-grade AI engineerin
 7. [System Design Track](#system-design-track)
 8. [Coding Challenges Track](#coding-challenges-track)
 9. [Cloud ML Platforms](#cloud-ml-platforms)
+10. [Project Setup & Engineering Track](#project-setup--engineering-track) — ship it the right way
 
 ## Highlighted Projects
 Use these to turn the repo into a portfolio, not just a reading list:
@@ -150,6 +153,8 @@ Core topics:
 * [Deep Learning Overview](./deep_learning/README.md)
 * [Applied Deep Learning Roadmap](./deep_learning/intro_applied_deep_learning.md) **(New)**
 * [Transformers](./deep_learning/intro_transformers.md)
+* [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
+* [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md) **(New)**
 
 ## DevOps Track
 Use this track for infrastructure, CI/CD, containers, orchestration, IaC, and AI system testing interviews.
@@ -184,6 +189,7 @@ Core topics:
 * [Data Quality & Validation](./mlops/intro_data_quality.md)
 * [LLM Evaluation (Evals, Benchmarks, Hallucination Detection, HITL)](./mlops/intro_llm_evaluation.md) **(New)**
 * [Evaluation & Guardrails](./mlops/intro_evaluation_guardrails.md) **(New)**
+* [A/B Testing for ML (Experiment Design, Stats, Online Metrics)](./mlops/intro_ab_testing.md) **(New)**
 
 ## Cloud ML Platforms
 Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.
@@ -225,6 +231,14 @@ Core topics:
 * [Unsloth](./frameworks/intro_unsloth.md)
 * [FastAPI — Production AI Backend Engineering](./frameworks/intro_fastapi.md) **(New)**
 * [Pydantic — Data Validation for AI Systems](./frameworks/intro_pydantic.md) **(New)**
+
+## Project Setup & Engineering Track
+Use this track to learn the engineering hygiene every ML/AI Engineer is expected to have: shipping projects on GitHub and structuring real repositories.
+
+Core topics:
+* [Project Setup & Engineering Overview](./project_setup/README.md) **(New)**
+* [How to Set Up a Project on GitHub (Git, Branching, PRs, CI, Pages, Secrets)](./project_setup/intro_github_project_setup.md) **(New)**
+* [ML/AI Project Folder Structures (ML, DL, LLM, Agents, Data Eng)](./project_setup/intro_project_structure.md) **(New)**
 
 # Classic Question Bank
 
