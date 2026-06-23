@@ -105,6 +105,7 @@ Use these to turn the repo into a portfolio, not just a reading list:
 Use this track for AI Engineer, GenAI Engineer, LLM Engineer, Applied AI, and agent-platform interviews.
 
 Core topics:
+* [The Agentic AI Engineer Roadmap (34-topic curriculum: foundation → frontier)](./ai_genai/intro_agentic_ai_engineering_roadmap.md) **(New)**
 * [LLM & Generative AI Fundamentals](./ai_genai/intro_llm_fundamentals.md) **(New)**
 * [RAG](./ai_genai/intro_rag.md)
 * [RAG Engineering](./ai_genai/intro_rag_engineering.md) **(New)**
@@ -223,6 +224,7 @@ Core topics:
 Use this track for roles requiring hands-on Python API development and AI framework expertise.
 
 Core topics:
+* [Python for AI Engineering (async, type hints, Pydantic, APIs, logging)](./frameworks/intro_python_for_ai.md) **(New)**
 * [PyTorch](./frameworks/intro_pytorch.md)
 * [HuggingFace](./frameworks/intro_huggingface.md)
 * [LangChain](./frameworks/intro_langchain.md)
