@@ -564,4 +564,4 @@ SHAP explains what the model learned, not what is correct. A model that perfectl
 - [Intro to Model Serving](intro_model_serving.md) — Deploying models and logging predictions for explanation storage
 - [Intro to Data Quality](intro_data_quality.md) — Data drift detection and validation
 - [Intro to Feature Stores](intro_feature_stores.md) — Managing features that feed into explainability analyses
-- [Fairness and Bias in ML](../ml_concepts/fairness_bias.md) — Algorithmic fairness metrics and mitigation strategies
+- [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md) — Metric choice, calibration, and slicing metrics by segment to surface bias
