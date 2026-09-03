@@ -585,9 +585,9 @@ The default MLflow server has no authentication. Anyone with network access can 
 
 ## Related Topics
 
-- [Intro to Kubeflow Pipelines](intro_kubeflow.md) — Orchestrating ML pipelines on Kubernetes
+- [Kubernetes](../devops/intro_kubernetes.md) — Orchestrating ML workloads and pipelines on Kubernetes
 - [Intro to Model Serving](intro_model_serving.md) — TF Serving, Triton, BentoML, and serving strategies
 - [Intro to Feature Stores](intro_feature_stores.md) — Feast, Tecton, and managing ML features
 - [Intro to Model Explainability](intro_model_explainability.md) — SHAP, LIME, and interpretability
 - [Intro to Data Quality](intro_data_quality.md) — Great Expectations, data contracts, and drift detection
-- [Intro to CI/CD for ML](intro_cicd_ml.md) — Automating ML pipelines with GitHub Actions and Jenkins
+- [GitHub Actions](../devops/intro_github_actions.md) — Automating ML pipelines and model CI/CD

@@ -886,22 +886,25 @@ const TRACKS = [
   {
     id: 'docs', phase: 'start', icon: '🗺️', color: '#38bdf8',
     title: 'Roadmap & Study Guides',
-    desc: '2026 interview focus areas, structured study patterns by role, and curated resources.',
+    desc: '2026 interview focus areas, role-by-role study plans, behavioral and project deep-dive prep, and curated resources.',
     files: [
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
       { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
       { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
       { label: 'Study Pattern', path: 'docs/study-pattern.md' },
+      { label: 'Behavioral & Project Deep-Dive', path: 'docs/behavioral-interview-guide.md' },
       { label: 'Resources & References', path: 'docs/resources-and-references.md' },
     ]
   },
   {
     id: 'classical_ml', phase: 'foundations', icon: '📊', color: '#34d399',
     title: 'Classical ML',
-    desc: 'Statistics, clustering, dimensionality reduction, feature engineering, recommender systems, and time series.',
+    desc: 'Statistics, evaluation metrics, ensembles and gradient boosting, clustering, dimensionality reduction, feature engineering, and time series.',
     files: [
       { label: 'Overview', path: 'classical_ml/README.md' },
       { label: 'Statistics & Probability', path: 'classical_ml/intro_statistics_probability.md' },
+      { label: 'Model Evaluation & Metrics', path: 'classical_ml/intro_model_evaluation.md' },
+      { label: 'Ensemble Methods & Boosting', path: 'classical_ml/intro_ensemble_methods.md' },
       { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
       { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
       { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
@@ -912,19 +915,20 @@ const TRACKS = [
   {
     id: 'deep_learning', phase: 'foundations', icon: '🧠', color: '#10b981',
     title: 'Deep Learning',
-    desc: 'Transformer architecture, attention, computer vision, fine-tuning, and modern neural network design.',
+    desc: 'Transformer architecture, attention, training dynamics and optimization, computer vision, and fine-tuning.',
     files: [
       { label: 'Overview', path: 'deep_learning/README.md' },
       { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
       { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
       { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
       { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
+      { label: 'NN Training & Optimization', path: 'deep_learning/intro_neural_network_training.md' },
     ]
   },
   {
     id: 'ai_genai', phase: 'genai', icon: '🤖', color: '#8b5cf6',
     title: 'AI & GenAI',
-    desc: 'LLM fundamentals, prompting, RAG, vector DBs, LLMOps, agents, multi-agent systems, MCP, LangChain, and the Claude API.',
+    desc: 'LLM fundamentals, prompting, RAG, embeddings, vector DBs, inference optimization, LLMOps, agents, MCP, LangChain, and the Claude API.',
     files: [
       { label: 'Agentic AI Engineer Roadmap', path: 'ai_genai/intro_agentic_ai_engineering_roadmap.md' },
       { label: 'LLM Fundamentals', path: 'ai_genai/intro_llm_fundamentals.md' },
@@ -934,6 +938,8 @@ const TRACKS = [
       { label: 'RAG Engineering', path: 'ai_genai/intro_rag_engineering.md' },
       { label: 'Vector Databases', path: 'ai_genai/intro_vector_databases.md' },
       { label: 'Vector Databases (Advanced)', path: 'ai_genai/intro_vector_databases_advanced.md' },
+      { label: 'Embeddings', path: 'ai_genai/intro_embeddings.md' },
+      { label: 'LLM Inference Optimization', path: 'ai_genai/intro_llm_inference_optimization.md' },
       { label: 'LLMOps', path: 'ai_genai/intro_llmops.md' },
       { label: 'Agentic AI', path: 'ai_genai/intro_agentic_ai.md' },
       { label: 'Agent Tool Use', path: 'ai_genai/intro_agent_tool_use.md' },
@@ -1048,10 +1054,11 @@ const TRACKS = [
   {
     id: 'coding_challenges', phase: 'mastery', icon: '⌨️', color: '#f472b6',
     title: 'Coding Challenges',
-    desc: 'Python and SQL practice for coding rounds, data interviews, and algorithmic screening.',
+    desc: 'Python, SQL, and implement-from-scratch ML practice for coding rounds and data interviews.',
     files: [
       { label: 'Overview', path: 'coding_challenges/README.md' },
       { label: 'Python Coding Challenges', path: 'coding_challenges/python_coding_challenges.md' },
+      { label: 'ML Coding Challenges', path: 'coding_challenges/ml_coding_challenges.md' },
       { label: 'SQL Coding Challenges', path: 'coding_challenges/sql_coding_challenges.md' },
     ]
   },

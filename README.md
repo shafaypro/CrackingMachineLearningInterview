@@ -26,6 +26,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
 * [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
+* [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -60,6 +61,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design. **(New)**
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
+* [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations. **(New)**
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, LLM evaluation. **(Expanded)**
@@ -109,8 +111,10 @@ Core topics:
 * [LLM & Generative AI Fundamentals](./ai_genai/intro_llm_fundamentals.md) **(New)**
 * [RAG](./ai_genai/intro_rag.md)
 * [RAG Engineering](./ai_genai/intro_rag_engineering.md) **(New)**
+* [Embeddings (models, chunking, fine-tuning, quantization)](./ai_genai/intro_embeddings.md) **(New)**
 * [Vector Databases](./ai_genai/intro_vector_databases.md)
 * [Vector Databases — Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
+* [LLM Inference Optimization (KV cache, batching, quantization, speculative decoding)](./ai_genai/intro_llm_inference_optimization.md) **(New)**
 * [LLMOps](./ai_genai/intro_llmops.md)
 * [Agentic AI](./ai_genai/intro_agentic_ai.md)
 * [Agent Systems & Tool Use](./ai_genai/intro_agent_tool_use.md) **(New)**
@@ -155,6 +159,7 @@ Core topics:
 * [Deep Learning Overview](./deep_learning/README.md)
 * [Applied Deep Learning Roadmap](./deep_learning/intro_applied_deep_learning.md) **(New)**
 * [Transformers](./deep_learning/intro_transformers.md)
+* [Neural Network Training (optimizers, normalization, regularization, debugging)](./deep_learning/intro_neural_network_training.md) **(New)**
 * [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
 * [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md) **(New)**
 
@@ -173,6 +178,9 @@ Core topics:
 Use this track for classical ML algorithm interviews, data science roles, and as foundations for ML engineer roles.
 
 Core topics:
+* [Model Evaluation & Metrics (ROC vs PR, calibration, thresholds, CV)](./classical_ml/intro_model_evaluation.md) **(New)**
+* [Ensemble Methods & Gradient Boosting (RF, XGBoost, LightGBM, CatBoost)](./classical_ml/intro_ensemble_methods.md) **(New)**
+* [Statistics & Probability](./classical_ml/intro_statistics_probability.md)
 * [Time Series & Forecasting](./classical_ml/intro_time_series.md)
 * [Clustering Algorithms](./classical_ml/intro_clustering.md)
 * [Dimensionality Reduction](./classical_ml/intro_dimensionality_reduction.md)
@@ -220,6 +228,7 @@ Core topics:
 * [Coding Challenges Overview](./coding_challenges/README.md) **(New)**
 * [Python Coding Challenges](./coding_challenges/python_coding_challenges.md) **(New)**
 * [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md) **(New)**
+* [ML Coding Challenges — Implement From Scratch](./coding_challenges/ml_coding_challenges.md) **(New)**
 
 ## Frameworks Track
 Use this track for roles requiring hands-on Python API development and AI framework expertise.
