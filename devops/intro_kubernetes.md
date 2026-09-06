@@ -15,7 +15,7 @@ Kubernetes (K8s) is the de-facto standard for **container orchestration** — au
 8. [Configuration](#configuration)
 9. [Namespaces & RBAC](#namespaces--rbac)
 10. [Ingress](#ingress)
-11. [Helm](#helm)
+11. [Helm](./intro_helm.md) — covered in its own guide
 12. [Scaling & Auto-scaling](#scaling--auto-scaling)
 13. [Observability](#observability)
 14. [Kubernetes in 2026](#kubernetes-in-2026)
