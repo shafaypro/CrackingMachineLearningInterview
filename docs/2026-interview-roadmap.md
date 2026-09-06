@@ -2,6 +2,10 @@
 
 A plan, not a reading list. This page tells you **what is being tested in 2026**, **which topics matter for your specific role**, and **what to study in what order given how much time you have**.
 
+> **Not sure which role you're aiming for yet?** Start with [Choose Your Track](./choose-your-track.md),
+> which picks a track from what you want to build and gives you a staged path through the repo. Come back
+> here once you know the role, or when you're within a few weeks of interviewing.
+
 ---
 
 ## Table of Contents

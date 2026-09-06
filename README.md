@@ -4,6 +4,12 @@ A practical interview preparation repository for Machine Learning Engineer, AI E
 
 Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/CrackingMachineLearningInterview/) GitPage(for Ui/UX experience).
 
+### New here? Start by picking a track
+**→ [Choose Your Track](./docs/choose-your-track.md)** — answer one question about what you want to build, and get an
+ordered path through this repo for your role: ML Engineer, AI/GenAI Engineer, Data Scientist, Data Engineer,
+MLOps, or Deep Learning. Each track lists prerequisites, a stage-by-stage reading order, a project to build,
+and how to tell when you're interview-ready.
+
 ### Who this repository is for
 * Machine Learning Engineer
 * Data Scientist
@@ -15,6 +21,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * DevOps / Platform Engineer
 
 ## How to use this repository
+* **New to the repo, or unsure where to begin?** Start with **[Choose Your Track](./docs/choose-your-track.md)**.
 * Start with the **2026 Interview Roadmap** if you are preparing for current AI/ML interviews.
 * Use **2026 Additional Questions and Answers** for modern interview rounds.
 * Use the **AI / GenAI**, **Data Engineering**, and **DevOps** sections for specialized interview tracks.
@@ -23,6 +30,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * Use **Suggested Learning Order** if you want a clean path from fundamentals to production AI systems.
 
 ## Quick Navigation
+* [**Choose Your Track** — start here (New)](./docs/choose-your-track.md)
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
 * [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
@@ -57,6 +65,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 Feel free to share the repository link in your blog, study notes, or interview preparation material.
 
 ## Repository Structure
+* [`docs/choose-your-track.md`](./docs/choose-your-track.md): pick a track by goal or background, then follow a staged path through the repo for that role. **(New)**
 * [`docs/2026-interview-roadmap.md`](./docs/2026-interview-roadmap.md): current interview focus areas for ML Engineer and AI Engineer roles.
 * [`docs/2026-additional-questions.md`](./docs/2026-additional-questions.md): modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.
 * [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design. **(New)**
