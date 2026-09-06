@@ -27,6 +27,7 @@ Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
 * [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
 * [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
+* [ML Take-Home Projects & Case Studies (New)](./docs/take-home-projects.md)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -62,6 +63,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
 * [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations. **(New)**
+* [`docs/take-home-projects.md`](./docs/take-home-projects.md): what reviewers score, time budgeting, repository structure, and the follow-up presentation round. **(New)**
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, LLM evaluation. **(Expanded)**
@@ -111,6 +113,7 @@ Core topics:
 * [LLM & Generative AI Fundamentals](./ai_genai/intro_llm_fundamentals.md) **(New)**
 * [RAG](./ai_genai/intro_rag.md)
 * [RAG Engineering](./ai_genai/intro_rag_engineering.md) **(New)**
+* [Context Engineering (budgets, ordering, caching, memory, compaction)](./ai_genai/intro_context_engineering.md) **(New)**
 * [Embeddings (models, chunking, fine-tuning, quantization)](./ai_genai/intro_embeddings.md) **(New)**
 * [Vector Databases](./ai_genai/intro_vector_databases.md)
 * [Vector Databases — Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
@@ -158,6 +161,7 @@ Use this track for ML engineer, deep learning engineer, and applied AI interview
 Core topics:
 * [Deep Learning Overview](./deep_learning/README.md)
 * [Applied Deep Learning Roadmap](./deep_learning/intro_applied_deep_learning.md) **(New)**
+* [Sequence Models (RNN, LSTM, GRU, Seq2Seq, Attention)](./deep_learning/intro_sequence_models.md) **(New)**
 * [Transformers](./deep_learning/intro_transformers.md)
 * [Neural Network Training (optimizers, normalization, regularization, debugging)](./deep_learning/intro_neural_network_training.md) **(New)**
 * [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
@@ -192,6 +196,7 @@ Use this track for MLOps Engineer, Senior ML Engineer, and production ML system 
 
 Core topics:
 * [LLMOps / MLOps Engineering](./mlops/intro_llmops_mlops_engineering.md) **(New)**
+* [CI/CD for Machine Learning (registry, gates, canary, rollback)](./mlops/intro_cicd_for_ml.md) **(New)**
 * [MLflow](./mlops/intro_mlflow.md)
 * [Model Explainability (SHAP, LIME)](./mlops/intro_model_explainability.md)
 * [Feature Stores](./mlops/intro_feature_stores.md)

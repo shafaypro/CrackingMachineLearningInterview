@@ -133,3 +133,13 @@ You are in good shape if you can do the following without much hesitation:
 - reason about time-bucketed analytics queries
 
 If not, start with the two practice guides in this track and follow the linked concept guides.
+
+---
+
+## Guides in This Track
+
+Every guide in `coding_challenges/`. Start with the overview above, then work through these.
+
+- [ML Coding Challenges — Implement From Scratch](./ml_coding_challenges.md)
+- [Python Coding Challenges for Interviews](./python_coding_challenges.md)
+- [SQL Coding Challenges for Interviews](./sql_coding_challenges.md)

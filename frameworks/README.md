@@ -210,6 +210,22 @@ Choose pgvector if you already use PostgreSQL and have < 10M vectors. Choose a d
 
 ---
 
+## Guides in This Track
+
+Every guide in `frameworks/`. Start with the overview above, then work through these.
+
+- [FastAPI — Production-Grade AI Backend Engineering](./intro_fastapi.md)
+- [Hugging Face Guide](./intro_huggingface.md)
+- [LangChain Guide](./intro_langchain.md)
+- [Ollama — Run LLMs Locally](./intro_ollama.md)
+- [Pydantic — Data Validation for AI Systems](./intro_pydantic.md)
+- [Python for AI Engineering (2026 Edition)](./intro_python_for_ai.md)
+- [PyTorch Guide](./intro_pytorch.md)
+- [Unsloth — Fast LoRA Fine-Tuning](./intro_unsloth.md)
+- [vLLM — High-Throughput LLM Serving](./intro_vllm.md)
+
+---
+
 ## References
 
 - [Ollama Documentation](https://ollama.com/docs)

@@ -584,6 +584,21 @@ See [Statistics & Probability Guide](./intro_statistics_probability.md) for deta
 
 ---
 
+## Guides in This Track
+
+Every guide in `classical_ml/`. Start with the overview above, then work through these.
+
+- [Clustering Algorithms](./intro_clustering.md)
+- [Dimensionality Reduction (Deep Dive)](./intro_dimensionality_reduction.md)
+- [Ensemble Methods and Gradient Boosting](./intro_ensemble_methods.md)
+- [Feature Engineering & Selection](./intro_feature_engineering.md)
+- [Model Evaluation and Metrics](./intro_model_evaluation.md)
+- [Recommender Systems](./intro_recommender_systems.md)
+- [Statistics & Probability for ML Interviews](./intro_statistics_probability.md)
+- [Time Series Analysis & Forecasting](./intro_time_series.md)
+
+---
+
 ## References
 
 - [Scikit-learn Documentation](https://scikit-learn.org/stable/)

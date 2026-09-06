@@ -170,7 +170,7 @@ Rollback:      All traffic → Blue (v1) — instant
 
 ## Feature Stores
 
-A feature store is a centralized repository for storing, versioning, and serving ML features. See [Feature Store Guide](./intro_feature_store.md) for details.
+A feature store is a centralized repository for storing, versioning, and serving ML features. See [Feature Stores](./intro_feature_stores.md) and the [Feature Store Guide](./intro_feature_store.md) for details — the two guides cover the topic from complementary angles.
 
 **Key concepts:**
 - **Online store:** Low-latency feature retrieval for real-time inference (Redis, DynamoDB)
@@ -380,6 +380,25 @@ Training-serving skew occurs when the features used during training are computed
 11. Full rollout: 100% traffic if metrics are stable
 12. Alerting: PagerDuty alerts for degradation
 ```
+
+---
+
+## Guides in This Track
+
+Every guide in `mlops/`. Start with the overview above, then work through these.
+
+- [A/B Testing & Experimentation for ML Systems](./intro_ab_testing.md)
+- [CI/CD for Machine Learning](./intro_cicd_for_ml.md)
+- [Data Quality & Validation](./intro_data_quality.md)
+- [Evaluation and Guardrails for AI Systems](./intro_evaluation_guardrails.md)
+- [Feature Store Guide](./intro_feature_store.md)
+- [Feature Stores](./intro_feature_stores.md)
+- [LLM Evaluation — Testing, Benchmarks & Production Evals](./intro_llm_evaluation.md)
+- [LLMOps and MLOps Engineering](./intro_llmops_mlops_engineering.md)
+- [MLflow: Experiment Tracking, Model Registry, and Deployment](./intro_mlflow.md)
+- [Model Explainability: SHAP, LIME, and Interpretability Techniques](./intro_model_explainability.md)
+- [Model Monitoring Guide](./intro_model_monitoring.md)
+- [Model Serving](./intro_model_serving.md)
 
 ---
 

@@ -2,6 +2,10 @@
 
 A feature store is a centralized repository for storing, sharing, and serving ML features. It bridges the gap between data engineering and model training/serving, solving the consistency problem between offline training and online inference.
 
+> **Related guide:** this track also has the [Feature Store Guide](./intro_feature_store.md), which covers the
+> same topic with more emphasis on why feature stores exist, a tool comparison, and a Feast walkthrough.
+> This guide leans toward point-in-time correctness, when to adopt one, and common pitfalls.
+
 ---
 
 ## Table of Contents

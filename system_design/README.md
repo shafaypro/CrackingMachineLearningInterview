@@ -429,6 +429,18 @@ Latency directly impacts user experience (100ms slowdown = 1% drop in conversion
 
 ---
 
+## Guides in This Track
+
+Every guide in `system_design/`. Start with the overview above, then work through these.
+
+- [Backend System Design Interview Guide](./backend_system_design_interview_guide.md)
+- [Fraud Detection System Design](./fraud_detection.md)
+- [Backend and System Design for AI](./intro_backend_ai_system_design.md)
+- [ML System Design Patterns — 2026 Production Guide](./ml_system_design_patterns.md)
+- [Recommendation System Design](./recommendation_system.md)
+
+---
+
 ## References
 
 - [Designing Machine Learning Systems — Chip Huyen (O'Reilly)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)

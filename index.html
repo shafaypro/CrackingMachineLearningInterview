@@ -886,13 +886,14 @@ const TRACKS = [
   {
     id: 'docs', phase: 'start', icon: '🗺️', color: '#38bdf8',
     title: 'Roadmap & Study Guides',
-    desc: '2026 interview focus areas, role-by-role study plans, behavioral and project deep-dive prep, and curated resources.',
+    desc: '2026 interview focus areas, role-by-role study plans, behavioral, take-home and project deep-dive prep, and curated resources.',
     files: [
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
       { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
       { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
       { label: 'Study Pattern', path: 'docs/study-pattern.md' },
       { label: 'Behavioral & Project Deep-Dive', path: 'docs/behavioral-interview-guide.md' },
+      { label: 'Take-Home Projects', path: 'docs/take-home-projects.md' },
       { label: 'Resources & References', path: 'docs/resources-and-references.md' },
     ]
   },
@@ -915,10 +916,11 @@ const TRACKS = [
   {
     id: 'deep_learning', phase: 'foundations', icon: '🧠', color: '#10b981',
     title: 'Deep Learning',
-    desc: 'Transformer architecture, attention, training dynamics and optimization, computer vision, and fine-tuning.',
+    desc: 'Sequence models, transformer architecture, attention, training dynamics and optimization, computer vision, and fine-tuning.',
     files: [
       { label: 'Overview', path: 'deep_learning/README.md' },
       { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
+      { label: 'Sequence Models (RNN/LSTM/GRU)', path: 'deep_learning/intro_sequence_models.md' },
       { label: 'Transformers', path: 'deep_learning/intro_transformers.md' },
       { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
       { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
@@ -928,11 +930,12 @@ const TRACKS = [
   {
     id: 'ai_genai', phase: 'genai', icon: '🤖', color: '#8b5cf6',
     title: 'AI & GenAI',
-    desc: 'LLM fundamentals, prompting, RAG, embeddings, vector DBs, inference optimization, LLMOps, agents, MCP, LangChain, and the Claude API.',
+    desc: 'LLM fundamentals, prompting, context engineering, RAG, embeddings, vector DBs, inference optimization, LLMOps, agents, MCP, and the Claude API.',
     files: [
       { label: 'Agentic AI Engineer Roadmap', path: 'ai_genai/intro_agentic_ai_engineering_roadmap.md' },
       { label: 'LLM Fundamentals', path: 'ai_genai/intro_llm_fundamentals.md' },
       { label: 'Prompt Engineering', path: 'ai_genai/intro_prompt_engineering.md' },
+      { label: 'Context Engineering', path: 'ai_genai/intro_context_engineering.md' },
       { label: 'Structured Outputs', path: 'ai_genai/intro_structured_outputs.md' },
       { label: 'Intro to RAG', path: 'ai_genai/intro_rag.md' },
       { label: 'RAG Engineering', path: 'ai_genai/intro_rag_engineering.md' },
@@ -977,10 +980,11 @@ const TRACKS = [
   {
     id: 'mlops', phase: 'production', icon: '🔧', color: '#f59e0b',
     title: 'MLOps',
-    desc: 'MLflow, feature stores, model serving, explainability, data quality, monitoring, and LLM evaluation.',
+    desc: 'MLflow, CI/CD for ML, feature stores, model serving, explainability, data quality, monitoring, and LLM evaluation.',
     files: [
       { label: 'Overview', path: 'mlops/README.md' },
       { label: 'LLMOps / MLOps Engineering', path: 'mlops/intro_llmops_mlops_engineering.md' },
+      { label: 'CI/CD for ML', path: 'mlops/intro_cicd_for_ml.md' },
       { label: 'MLflow', path: 'mlops/intro_mlflow.md' },
       { label: 'Feature Stores', path: 'mlops/intro_feature_stores.md' },
       { label: 'Model Serving', path: 'mlops/intro_model_serving.md' },

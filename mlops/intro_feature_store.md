@@ -2,6 +2,11 @@
 
 A comprehensive guide to feature stores — centralized repositories for storing, versioning, and serving ML features.
 
+> **Related guide:** this track also has [Feature Stores](./intro_feature_stores.md), which covers the same
+> topic from a different angle — point-in-time correctness, when a feature store is and isn't worth it, and
+> common pitfalls. This guide leans toward the motivation, tool comparison, and a Feast walkthrough.
+> Read both if you are preparing the topic for an interview.
+
 ---
 
 ## Table of Contents
