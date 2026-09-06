@@ -550,6 +550,19 @@ Gradient accumulation delays optimizer updates for multiple forward/backward pas
 
 ---
 
+## Guides in This Track
+
+Every guide in `deep_learning/`. Start with the overview above, then work through these.
+
+- [Applied Deep Learning Roadmap](./intro_applied_deep_learning.md)
+- [Computer Vision for ML Interviews](./intro_computer_vision.md)
+- [Fine-Tuning Large Language Models: LoRA, QLoRA & PEFT](./intro_fine_tuning.md)
+- [Neural Network Training: Optimization and Regularization](./intro_neural_network_training.md)
+- [Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq](./intro_sequence_models.md)
+- [Transformers Deep Dive](./intro_transformers.md)
+
+---
+
 ## References
 
 - [Deep Learning — Ian Goodfellow, Yoshua Bengio, Aaron Courville (free online)](https://www.deeplearningbook.org/)

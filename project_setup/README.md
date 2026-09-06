@@ -24,3 +24,12 @@ is the most common reason good prototypes never ship.
 - Experiment tracking & registries → [MLflow](../mlops/intro_mlflow.md)
 - Production AI engineering → [LLMOps / MLOps Engineering](../mlops/intro_llmops_mlops_engineering.md)
 - Agent architecture → [Agentic AI](../ai_genai/intro_agentic_ai.md)
+
+---
+
+## Guides in This Track
+
+Every guide in `project_setup/`. Start with the overview above, then work through these.
+
+- [How to Set Up a Project on GitHub — Complete Tutorial (2026 Edition)](./intro_github_project_setup.md)
+- [ML / AI Project Folder Structures (2026 Edition)](./intro_project_structure.md)
