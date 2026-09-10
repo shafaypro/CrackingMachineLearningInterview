@@ -588,11 +588,14 @@ See [Statistics & Probability Guide](./intro_statistics_probability.md) for deta
 
 Every guide in `classical_ml/`. Start with the overview above, then work through these.
 
+- [Anomaly Detection](./intro_anomaly_detection.md)
+- [Causal Inference and Uplift Modeling](./intro_causal_inference.md)
 - [Clustering Algorithms](./intro_clustering.md)
 - [Dimensionality Reduction (Deep Dive)](./intro_dimensionality_reduction.md)
 - [Ensemble Methods and Gradient Boosting](./intro_ensemble_methods.md)
 - [Feature Engineering & Selection](./intro_feature_engineering.md)
 - [Model Evaluation and Metrics](./intro_model_evaluation.md)
+- [NLP Fundamentals](./intro_nlp_fundamentals.md)
 - [Recommender Systems](./intro_recommender_systems.md)
 - [Statistics & Probability for ML Interviews](./intro_statistics_probability.md)
 - [Time Series Analysis & Forecasting](./intro_time_series.md)
