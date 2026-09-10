@@ -889,6 +889,7 @@ const TRACKS = [
     desc: 'Pick a track for your role, then follow 2026 interview focus areas, role-by-role study plans, behavioral, take-home and project deep-dive prep.',
     files: [
       { label: 'Choose Your Track', path: 'docs/choose-your-track.md' },
+      { label: 'Glossary', path: 'docs/glossary.md' },
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
       { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
       { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
@@ -901,12 +902,15 @@ const TRACKS = [
   {
     id: 'classical_ml', phase: 'foundations', icon: '📊', color: '#34d399',
     title: 'Classical ML',
-    desc: 'Statistics, evaluation metrics, ensembles and gradient boosting, clustering, dimensionality reduction, feature engineering, and time series.',
+    desc: 'Statistics, evaluation metrics, ensembles, causal inference and uplift, anomaly detection, NLP fundamentals, clustering, feature engineering, and time series.',
     files: [
       { label: 'Overview', path: 'classical_ml/README.md' },
       { label: 'Statistics & Probability', path: 'classical_ml/intro_statistics_probability.md' },
       { label: 'Model Evaluation & Metrics', path: 'classical_ml/intro_model_evaluation.md' },
       { label: 'Ensemble Methods & Boosting', path: 'classical_ml/intro_ensemble_methods.md' },
+      { label: 'Causal Inference & Uplift', path: 'classical_ml/intro_causal_inference.md' },
+      { label: 'Anomaly Detection', path: 'classical_ml/intro_anomaly_detection.md' },
+      { label: 'NLP Fundamentals', path: 'classical_ml/intro_nlp_fundamentals.md' },
       { label: 'Clustering', path: 'classical_ml/intro_clustering.md' },
       { label: 'Dimensionality Reduction', path: 'classical_ml/intro_dimensionality_reduction.md' },
       { label: 'Feature Engineering', path: 'classical_ml/intro_feature_engineering.md' },
@@ -917,7 +921,7 @@ const TRACKS = [
   {
     id: 'deep_learning', phase: 'foundations', icon: '🧠', color: '#10b981',
     title: 'Deep Learning',
-    desc: 'Sequence models, transformer architecture, attention, training dynamics and optimization, computer vision, and fine-tuning.',
+    desc: 'Sequence models, transformers, training dynamics, generative models, graph neural networks, model compression, computer vision, and fine-tuning.',
     files: [
       { label: 'Overview', path: 'deep_learning/README.md' },
       { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
@@ -926,6 +930,9 @@ const TRACKS = [
       { label: 'Computer Vision', path: 'deep_learning/intro_computer_vision.md' },
       { label: 'Fine-Tuning', path: 'deep_learning/intro_fine_tuning.md' },
       { label: 'NN Training & Optimization', path: 'deep_learning/intro_neural_network_training.md' },
+      { label: 'Generative Models (VAE/GAN/Diffusion)', path: 'deep_learning/intro_generative_models.md' },
+      { label: 'Graph Neural Networks', path: 'deep_learning/intro_graph_neural_networks.md' },
+      { label: 'Model Compression', path: 'deep_learning/intro_model_compression.md' },
     ]
   },
   {
@@ -1006,6 +1013,7 @@ const TRACKS = [
       { label: 'Data Modeling', path: 'data_engineering/data-modeling.md' },
       { label: 'Data Architecture', path: 'data_engineering/data-architecture.md' },
       { label: 'Data Processing Pipelines', path: 'data_engineering/intro_data_processing_pipelines.md' },
+      { label: 'SQL Query Optimization', path: 'data_engineering/intro_sql_optimization.md' },
       { label: 'Apache Spark', path: 'data_engineering/intro_apache_spark.md' },
       { label: 'Apache Kafka', path: 'data_engineering/intro_apache_kafka.md' },
       { label: 'Apache Airflow', path: 'data_engineering/intro_apache_airflow.md' },
@@ -1021,13 +1029,14 @@ const TRACKS = [
   {
     id: 'devops', phase: 'production', icon: '🐳', color: '#84cc16',
     title: 'DevOps & Infrastructure',
-    desc: 'Docker, Kubernetes, Helm, Terraform, GitHub Actions, and testing AI systems.',
+    desc: 'Docker, Kubernetes, Helm, Terraform, GitHub Actions, observability, and testing AI systems.',
     files: [
       { label: 'Docker', path: 'devops/intro_docker.md' },
       { label: 'Kubernetes', path: 'devops/intro_kubernetes.md' },
       { label: 'Helm', path: 'devops/intro_helm.md' },
       { label: 'Terraform', path: 'devops/intro_terraform.md' },
       { label: 'GitHub Actions', path: 'devops/intro_github_actions.md' },
+      { label: 'Observability', path: 'devops/intro_observability.md' },
       { label: 'Testing AI Systems', path: 'devops/intro_testing_ai.md' },
     ]
   },
@@ -1046,12 +1055,14 @@ const TRACKS = [
   {
     id: 'system_design', phase: 'mastery', icon: '🏗️', color: '#fb7185',
     title: 'ML System Design',
-    desc: 'Design frameworks and case studies: recommendation systems, fraud detection, and ML design patterns.',
+    desc: 'Design frameworks and case studies: recommendation, search and ranking, LLM assistants, fraud detection, and ML design patterns.',
     files: [
       { label: 'Design Framework', path: 'system_design/README.md' },
       { label: 'Backend AI Systems', path: 'system_design/intro_backend_ai_system_design.md' },
       { label: 'Backend Interview Guide', path: 'system_design/backend_system_design_interview_guide.md' },
       { label: 'Recommendation System', path: 'system_design/recommendation_system.md' },
+      { label: 'Search & Ranking System', path: 'system_design/search_ranking_system.md' },
+      { label: 'LLM Assistant System', path: 'system_design/llm_assistant_system.md' },
       { label: 'Fraud Detection', path: 'system_design/fraud_detection.md' },
       { label: 'ML System Design Patterns', path: 'system_design/ml_system_design_patterns.md' },
     ]
@@ -1059,11 +1070,12 @@ const TRACKS = [
   {
     id: 'coding_challenges', phase: 'mastery', icon: '⌨️', color: '#f472b6',
     title: 'Coding Challenges',
-    desc: 'Python, SQL, and implement-from-scratch ML practice for coding rounds and data interviews.',
+    desc: 'Python, SQL, pandas/NumPy, and implement-from-scratch ML practice for coding rounds and data interviews.',
     files: [
       { label: 'Overview', path: 'coding_challenges/README.md' },
       { label: 'Python Coding Challenges', path: 'coding_challenges/python_coding_challenges.md' },
       { label: 'ML Coding Challenges', path: 'coding_challenges/ml_coding_challenges.md' },
+      { label: 'Pandas & NumPy Challenges', path: 'coding_challenges/pandas_numpy_challenges.md' },
       { label: 'SQL Coding Challenges', path: 'coding_challenges/sql_coding_challenges.md' },
     ]
   },

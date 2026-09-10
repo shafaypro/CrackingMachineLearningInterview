@@ -36,6 +36,7 @@ and how to tell when you're interview-ready.
 * [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
 * [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
 * [ML Take-Home Projects & Case Studies (New)](./docs/take-home-projects.md)
+* [ML & AI Glossary (New)](./docs/glossary.md)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -73,6 +74,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
 * [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations. **(New)**
 * [`docs/take-home-projects.md`](./docs/take-home-projects.md): what reviewers score, time budgeting, repository structure, and the follow-up presentation round. **(New)**
+* [`docs/glossary.md`](./docs/glossary.md): every term in the repo defined in a sentence or two, with the practical point attached. **(New)**
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms — time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, LLM evaluation. **(Expanded)**
@@ -173,6 +175,9 @@ Core topics:
 * [Sequence Models (RNN, LSTM, GRU, Seq2Seq, Attention)](./deep_learning/intro_sequence_models.md) **(New)**
 * [Transformers](./deep_learning/intro_transformers.md)
 * [Neural Network Training (optimizers, normalization, regularization, debugging)](./deep_learning/intro_neural_network_training.md) **(New)**
+* [Generative Models (VAEs, GANs, Diffusion, Latent Diffusion)](./deep_learning/intro_generative_models.md) **(New)**
+* [Graph Neural Networks (message passing, GCN, GraphSAGE, GAT)](./deep_learning/intro_graph_neural_networks.md) **(New)**
+* [Model Compression (distillation, pruning, quantization)](./deep_learning/intro_model_compression.md) **(New)**
 * [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
 * [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md) **(New)**
 
@@ -185,6 +190,7 @@ Core topics:
 * [Helm](./devops/intro_helm.md)
 * [Terraform](./devops/intro_terraform.md)
 * [GitHub Actions](./devops/intro_github_actions.md)
+* [Observability (metrics, logs, traces, SLOs, Prometheus, OpenTelemetry)](./devops/intro_observability.md) **(New)**
 * [Testing AI Systems (Playwright, Puppeteer, LLM E2E Testing)](./devops/intro_testing_ai.md) **(New)**
 
 ## Classic ML Track
@@ -193,6 +199,9 @@ Use this track for classical ML algorithm interviews, data science roles, and as
 Core topics:
 * [Model Evaluation & Metrics (ROC vs PR, calibration, thresholds, CV)](./classical_ml/intro_model_evaluation.md) **(New)**
 * [Ensemble Methods & Gradient Boosting (RF, XGBoost, LightGBM, CatBoost)](./classical_ml/intro_ensemble_methods.md) **(New)**
+* [Causal Inference & Uplift Modeling (DiD, IV, RDD, CATE, Qini)](./classical_ml/intro_causal_inference.md) **(New)**
+* [Anomaly Detection (Isolation Forest, LOF, autoencoders, time series)](./classical_ml/intro_anomaly_detection.md) **(New)**
+* [NLP Fundamentals (tokenization, TF-IDF, embeddings, NER)](./classical_ml/intro_nlp_fundamentals.md) **(New)**
 * [Statistics & Probability](./classical_ml/intro_statistics_probability.md)
 * [Time Series & Forecasting](./classical_ml/intro_time_series.md)
 * [Clustering Algorithms](./classical_ml/intro_clustering.md)
@@ -232,6 +241,8 @@ Core topics:
 * [ML System Design Framework & Patterns](./system_design/README.md)
 * [Backend & System Design for AI](./system_design/intro_backend_ai_system_design.md) **(New)**
 * [Recommendation System Design](./system_design/recommendation_system.md)
+* [Search & Ranking System Design](./system_design/search_ranking_system.md) **(New)**
+* [Designing a Production LLM Assistant](./system_design/llm_assistant_system.md) **(New)**
 * [Fraud Detection System Design](./system_design/fraud_detection.md)
 * [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
 
@@ -243,6 +254,7 @@ Core topics:
 * [Python Coding Challenges](./coding_challenges/python_coding_challenges.md) **(New)**
 * [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md) **(New)**
 * [ML Coding Challenges — Implement From Scratch](./coding_challenges/ml_coding_challenges.md) **(New)**
+* [Pandas & NumPy Challenges](./coding_challenges/pandas_numpy_challenges.md) **(New)**
 
 ## Frameworks Track
 Use this track for roles requiring hands-on Python API development and AI framework expertise.

@@ -1,3 +1,9 @@
+# OpenClaw — Data Pipeline Lineage and Orchestration
+
+A guide to OpenClaw: defining pipelines, tracking dataset lineage, and running them in production.
+
+---
+
 
 ## 📋 Table of Contents
 
