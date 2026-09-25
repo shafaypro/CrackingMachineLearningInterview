@@ -1,4 +1,4 @@
-# LLMOps – Deploying & Operating LLMs in Production (2026 Edition)
+# LLMOps: Deploying and Operating LLMs in Production
 
 **LLMOps** is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific concerns: prompt management, evals, hallucination detection, cost control, and guardrails.
 

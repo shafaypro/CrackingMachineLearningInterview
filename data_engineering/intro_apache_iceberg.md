@@ -1,4 +1,4 @@
-# Apache Iceberg – Complete Guide (2026 Edition)
+# Apache Iceberg
 
 **Apache Iceberg** is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden partitioning, and time travel) to data lake files on S3/GCS/ADLS. In 2026, Iceberg has become the **default open table format** for the data lakehouse.
 

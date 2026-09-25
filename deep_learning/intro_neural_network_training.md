@@ -220,8 +220,8 @@ Dropout and BatchNorm interact badly (dropout changes the variance BatchNorm est
 
 | Batch size | Gradient noise | Steps/epoch | Generalization | Hardware use |
 |---|---|---|---|---|
-| Small (8–64) | High | Many | Often better (noise regularizes) | Underutilized GPU |
-| Large (1k–8k+) | Low | Few | Needs LR scaling and warmup | Efficient |
+| Small (8-64) | High | Many | Often better (noise regularizes) | Underutilized GPU |
+| Large (1k-8k+) | Low | Few | Needs LR scaling and warmup | Efficient |
 
 The **linear scaling rule**: multiply the batch size by `k`, multiply the learning rate by `k` (with warmup). It holds well up to a point and then breaks: beyond a critical batch size, extra examples per step stop improving the gradient estimate and you're just burning compute.
 
@@ -341,7 +341,7 @@ Escalating in order of cost:
 2. **Mixed precision (bf16)**: halves weight and activation memory, usually faster too.
 3. **Gradient checkpointing**: store only some activations and recompute the rest in the backward pass; roughly 30% slower for a large memory saving.
 4. **8-bit optimizer states** (bitsandbytes): cuts the 8 bytes/param of Adam state to 2.
-5. **Parameter-efficient fine-tuning (LoRA/QLoRA)**: train small adapter matrices while the base model stays frozen and quantized; this is what makes 7B–70B fine-tuning possible on consumer GPUs.
+5. **Parameter-efficient fine-tuning (LoRA/QLoRA)**: train small adapter matrices while the base model stays frozen and quantized; this is what makes 7B-70B fine-tuning possible on consumer GPUs.
 6. **Sharding across GPUs**: ZeRO/FSDP partitions optimizer state, gradients, then parameters; tensor and pipeline parallelism for models too large for one device even at inference.
 
 #### What does weight decay actually do, and why exclude biases from it?
@@ -358,7 +358,7 @@ Small batches inject noise that acts as a regularizer and often generalizes slig
 
 #### What is gradient checkpointing and what does it cost?
 
-During the forward pass, activations are normally kept for the backward pass, and they often dominate memory. Gradient checkpointing stores activations only at chosen boundaries and recomputes the intermediate ones during backward. Memory for activations drops from `O(n)` to roughly `O(√n)` with optimal placement; the cost is one extra forward pass through the checkpointed segments, typically 25–40% slower wall-clock. It's the standard first move when you want a larger batch or longer sequences and are activation-bound rather than parameter-bound.
+During the forward pass, activations are normally kept for the backward pass, and they often dominate memory. Gradient checkpointing stores activations only at chosen boundaries and recomputes the intermediate ones during backward. Memory for activations drops from `O(n)` to roughly `O(√n)` with optimal placement; the cost is one extra forward pass through the checkpointed segments, typically 25-40% slower wall-clock. It's the standard first move when you want a larger batch or longer sequences and are activation-bound rather than parameter-bound.
 
 #### Why is bf16 usually preferred over fp16 for training?
 

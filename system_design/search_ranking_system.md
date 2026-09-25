@@ -34,7 +34,7 @@ Spend the first three minutes here. Interviewers score this heavily, and the ans
 **Scale numbers to ask for:**
 - Corpus size: 1M documents is one machine; 10B needs sharding
 - QPS: peak and average
-- Latency SLO: search is typically 100–300 ms end to end
+- Latency SLO: search is typically 100-300 ms end to end
 - Update freshness: how fast must a new item become searchable?
 
 **Constraints:** personalization allowed? Multi-language? Permissions (enterprise search must filter by ACL)? Do results need explanations?

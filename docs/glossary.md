@@ -82,7 +82,7 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Cross-encoder**: Jointly encodes query and document for a relevance score. Far more accurate than a bi-encoder, far too slow for retrieval, hence reranking.
 
-**CUPED**: Variance reduction using a pre-experiment covariate. Typically 30–50% less variance, meaning shorter experiments for free.
+**CUPED**: Variance reduction using a pre-experiment covariate. Typically 30-50% less variance, meaning shorter experiments for free.
 
 ---
 
@@ -94,7 +94,7 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Data leakage**: Training on information unavailable at prediction time. The most common cause of "great offline, useless in production". See [Model Evaluation](../classical_ml/intro_model_evaluation.md).
 
-**DDIM**: Deterministic diffusion sampler that skips steps, enabling 20–50 step generation and reproducible outputs.
+**DDIM**: Deterministic diffusion sampler that skips steps, enabling 20-50 step generation and reproducible outputs.
 
 **Demographic parity**: Fairness criterion: the positive-prediction rate is equal across groups, `P(ŷ=1 | A=a) = P(ŷ=1 | A=b)`. Ignores the true labels. See [Responsible AI](../mlops/intro_responsible_ai_fairness.md).
 
@@ -144,7 +144,7 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **GNN**: Neural network over graph structure via message passing. Each layer extends the receptive field one hop. See [Graph Neural Networks](../deep_learning/intro_graph_neural_networks.md).
 
-**GQA (grouped-query attention)**: Query heads share key/value heads, shrinking the KV cache 4–8×. The highest-impact efficiency change in modern LLMs.
+**GQA (grouped-query attention)**: Query heads share key/value heads, shrinking the KV cache 4-8×. The highest-impact efficiency change in modern LLMs.
 
 **Gradient clipping**: Capping gradient norm. Optional hygiene for transformers, mandatory for RNNs.
 
@@ -338,7 +338,7 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **VAE**: Autoencoder with a probabilistic latent and a KL term, making the latent space samplable. Blurry samples because pixel-wise MSE optimizes the conditional mean.
 
-**Vectorization**: Replacing Python loops with array operations. Typically 100–1000× faster; `apply(axis=1)` is the usual culprit.
+**Vectorization**: Replacing Python loops with array operations. Typically 100-1000× faster; `apply(axis=1)` is the usual culprit.
 
 **vLLM**: Serving engine with PagedAttention and continuous batching. The default self-hosted choice. See [vLLM](../frameworks/intro_vllm.md).
 

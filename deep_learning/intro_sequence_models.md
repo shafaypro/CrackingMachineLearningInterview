@@ -73,7 +73,7 @@ def run_sequence(cell, xs, hidden_size):
 
 **Backpropagation Through Time (BPTT)** is ordinary backprop on this unrolled graph. Its cost is what motivates everything that follows: the gradient at step 1 must pass through `T` multiplications by `W_hh`.
 
-**Truncated BPTT** caps that by backpropagating only `k` steps (commonly 32–256) instead of the full sequence. It bounds memory and compute at the price of never learning dependencies longer than `k`.
+**Truncated BPTT** caps that by backpropagating only `k` steps (commonly 32-256) instead of the full sequence. It bounds memory and compute at the price of never learning dependencies longer than `k`.
 
 ---
 
@@ -159,7 +159,7 @@ h_t = (1 - z_t) ⊙ h_{t-1} + z_t ⊙ h̃_t        convex blend of old and new
 | Gates | 3 (forget, input, output) | 2 (update, reset) |
 | State | Separate cell + hidden | Hidden only |
 | Parameters | ~4 × (d_in + d_h) × d_h | ~3 × (d_in + d_h) × d_h (**25% fewer**) |
-| Speed | Slower | ~20–30% faster |
+| Speed | Slower | ~20-30% faster |
 | Typical edge | Long sequences, large data | Small data, tight compute |
 
 Empirically the two are close, and which wins is task-dependent rather than principled. The defensible interview answer: try GRU first because it is cheaper and trains faster; move to LSTM if the task has long dependencies and you have the data to support the extra parameters.
@@ -248,9 +248,9 @@ Without packing, `h_n` is the state after consuming trailing `<pad>` tokens: a c
 
 **Dropout across time.** PyTorch's `dropout` argument applies *between layers*, not between time steps, and it is silently ignored when `num_layers=1`. Applying independent dropout at each time step is harmful: it resamples the mask every step and destroys the memory the recurrence is meant to carry. Variational dropout (the same mask at every step) is the correct form when you want recurrent regularization.
 
-**Gradient clipping is not optional.** Unlike transformers, where it is good hygiene, RNNs explode without it. Clip global norm at 1.0–5.0.
+**Gradient clipping is not optional.** Unlike transformers, where it is good hygiene, RNNs explode without it. Clip global norm at 1.0-5.0.
 
-**Sort or bucket by length.** Batching sequences of wildly different lengths wastes compute on padding. Length-bucketed batching often gives a 2–3x throughput win for free.
+**Sort or bucket by length.** Batching sequences of wildly different lengths wastes compute on padding. Length-bucketed batching often gives a 2-3x throughput win for free.
 
 ---
 
@@ -264,7 +264,7 @@ The LSTM adds a cell state updated **additively**: `C_t = f_t ⊙ C_{t-1} + i_t 
 
 #### LSTM or GRU: how do you choose?
 
-GRU has two gates instead of three and no separate cell state, so roughly 25% fewer parameters and 20–30% faster training. LSTM's extra output gate gives finer control over what is exposed versus stored, which tends to help on long sequences with lots of data.
+GRU has two gates instead of three and no separate cell state, so roughly 25% fewer parameters and 20-30% faster training. LSTM's extra output gate gives finer control over what is exposed versus stored, which tends to help on long sequences with lots of data.
 
 In practice the accuracy difference is small and task-dependent, so I'd start with GRU for the cheaper iteration loop and switch to LSTM if I have long dependencies and enough data to support the extra capacity. What I would not do is claim one is universally better: the literature does not support that, and the honest answer is that it is an empirical choice.
 

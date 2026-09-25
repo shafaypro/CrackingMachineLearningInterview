@@ -1,4 +1,4 @@
-# LangChain & LangGraph – Guide (2026 Edition)
+# LangChain & LangGraph
 
 **LangChain** is the most widely used framework for building LLM-powered applications. **LangGraph** is its stateful, graph-based extension for building complex agents and multi-agent workflows.
 
@@ -19,7 +19,7 @@ pip install langchain langchain-anthropic langchain-community
 
 ---
 
-## LCEL – LangChain Expression Language
+## LCEL: LangChain Expression Language
 
 LCEL uses the `|` pipe operator to compose chains:
 
@@ -173,7 +173,7 @@ print(result["output"])
 
 ---
 
-## LangGraph – Stateful Agent Graphs
+## LangGraph: Stateful Agent Graphs
 
 LangGraph is the evolution beyond simple chains. It models workflows as **graphs** with nodes (LLM calls, tools) and edges (conditional routing, loops).
 

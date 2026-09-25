@@ -188,7 +188,7 @@ must. A useful mental model across providers:
 - **Rough heuristic:** ~1 token ≈ 4 characters ≈ 0.75 English words. Code and
   non-English text tokenize *less* efficiently.
 - **Don't estimate with the wrong tokenizer.** OpenAI's `tiktoken` undercounts
-  Claude tokens by ~15–20%+. Use the provider's own token-counting endpoint.
+  Claude tokens by ~15-20%+. Use the provider's own token-counting endpoint.
 - **Budget the whole request:** `prompt + few-shot + retrieved context + reasoning + output ≤ window`.
   Reserve headroom for the output (`max_tokens`) and for reasoning/thinking tokens.
 

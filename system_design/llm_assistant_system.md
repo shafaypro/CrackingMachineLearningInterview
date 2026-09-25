@@ -35,7 +35,7 @@ This walks the full design for a concrete brief and flags the decisions intervie
 - **What's the corpus?** Size, formats, update rate, sensitivity.
 - **Read-only or can it act?** Answering questions is one system; taking actions in other systems is a much harder one.
 - **What does failure cost?** A wrong answer in an HR FAQ versus a wrong answer about drug dosage.
-- **Latency expectation?** Chat tolerates 1–2 s to first token if streaming; an API integration may not.
+- **Latency expectation?** Chat tolerates 1-2 s to first token if streaming; an API integration may not.
 - **Scale?** DAU, queries per user per day, peak concurrency.
 - **Budget?** This bounds model choice more than anything else.
 
@@ -86,7 +86,7 @@ That's ~50k queries/day, roughly 1 QPS average with peaks around 10 QPS: modest 
 | Strategy | Use |
 |---|---|
 | Structural (headers, functions) | Default: respects document semantics |
-| Fixed size + 10–20% overlap | Fallback for unstructured prose |
+| Fixed size + 10-20% overlap | Fallback for unstructured prose |
 | Small-to-big | Embed small chunks, return the parent section |
 | Contextual retrieval | Prepend an LLM-written document summary to each chunk |
 
@@ -116,7 +116,7 @@ def ingest(doc):
 
 **Hybrid, always.** Dense retrieval handles paraphrase; BM25 handles the exact identifiers that dominate internal corpora: ticket numbers, error codes, function names, internal project codenames that no embedding model has ever seen. Fuse with Reciprocal Rank Fusion.
 
-**Then rerank.** A cross-encoder over the top ~30 candidates, returning the top 3–5. This is consistently the highest-value single addition to a naive RAG system, because retrieval gets the right document into the candidate set but often ranks it 8th, below the cutoff.
+**Then rerank.** A cross-encoder over the top ~30 candidates, returning the top 3-5. This is consistently the highest-value single addition to a naive RAG system, because retrieval gets the right document into the candidate set but often ranks it 8th, below the cutoff.
 
 ```python
 def retrieve(query, user, k=5):
@@ -217,9 +217,9 @@ The section that separates strong candidates. "How do you know it works?" is the
 | **End to end** | Task success rate | Fixed regression suite |
 | **Abstention** | Correct refusal rate on out-of-corpus questions | Adversarial set |
 
-**Build the golden set from real traffic**, not from questions the team invented: team-written questions are systematically too clean and miss the ambiguous, multi-part, and typo-laden queries real users send. 100–300 labeled examples is enough to start.
+**Build the golden set from real traffic**, not from questions the team invented: team-written questions are systematically too clean and miss the ambiguous, multi-part, and typo-laden queries real users send. 100-300 labeled examples is enough to start.
 
-**Validate the LLM judge before trusting it**: label a few hundred examples by hand, measure agreement (and specifically agreement on the *disagreement* cases), and test for position bias, verbosity bias, and self-preference. Prefer pairwise comparison over absolute 1–10 scoring, which compresses badly.
+**Validate the LLM judge before trusting it**: label a few hundred examples by hand, measure agreement (and specifically agreement on the *disagreement* cases), and test for position bias, verbosity bias, and self-preference. Prefer pairwise comparison over absolute 1-10 scoring, which compresses badly.
 
 **Run the suite on every change**: prompt, model version, chunking, embedding model, retrieval parameters. Non-determinism means running each case several times and tracking the *pass rate* rather than a single pass/fail.
 
@@ -261,7 +261,7 @@ Levers, in order of impact:
 5. **Cap `max_tokens`** and instruct for concision.
 
 ```
-With caching + routing + tighter context: ≈ $3–4k/month  ✓
+With caching + routing + tighter context: ≈ $3-4k/month  ✓
 ```
 
 **Latency budget for 2 s TTFT:**
@@ -293,7 +293,7 @@ Prefill scales with prompt length, so trimming context helps latency and cost si
 ## Rollout Plan
 
 1. **Offline eval** against the golden set: establish the baseline before anyone sees it.
-2. **Internal dogfood** with the team that built it, for 1–2 weeks.
+2. **Internal dogfood** with the team that built it, for 1-2 weeks.
 3. **Limited beta**: one department, feedback captured, failure clusters analyzed.
 4. **Staged rollout** by department, watching quality signals and cost per query.
 5. **Full rollout** with a kill switch retained.
@@ -326,7 +326,7 @@ I'd start by pinning the requirements, because they change the design: audience 
 
 Offline: CDC-driven connectors pull from each source, format-aware parsing, structure-aware chunking with metadata including ACLs, batched embedding with content hashing to skip unchanged chunks, into a hybrid index.
 
-Online: input guardrails, query understanding (rewrite follow-ups into standalone queries), hybrid retrieval with ACL filters applied *inside* the search, RRF fusion, cross-encoder reranking down to 3–5 chunks, cache-friendly context assembly with the best chunk last, streamed generation with mandatory citations, then output guardrails and citation validation.
+Online: input guardrails, query understanding (rewrite follow-ups into standalone queries), hybrid retrieval with ACL filters applied *inside* the search, RRF fusion, cross-encoder reranking down to 3-5 chunks, cache-friendly context assembly with the best chunk last, streamed generation with mandatory citations, then output guardrails and citation validation.
 
 Cross-cutting, and the part that decides whether it actually works: span-level tracing, a continuously-run eval suite, cost metering per request, and feedback capture.
 
@@ -368,7 +368,7 @@ Input tokens dominate RAG, so I'd start there rather than trimming outputs.
 
 **Send fewer, better chunks**: retrieve 30, rerank, pass 4. This cuts cost *and* usually improves accuracy, since irrelevant context measurably degrades answers.
 
-**Model routing**: a small model handles lookup-style questions, escalating only for synthesis. Typically 60–80% of traffic never touches the expensive model.
+**Model routing**: a small model handles lookup-style questions, escalating only for synthesis. Typically 60-80% of traffic never touches the expensive model.
 
 **Semantic caching**: internal assistants have very repetitive questions, so this pays well, provided the threshold is tuned carefully and the cache key includes the permission set.
 

@@ -1,4 +1,4 @@
-# Anthropic AI – Complete Guide (2026 Edition)
+# Anthropic AI
 
 Anthropic is an AI safety company and the creator of **Claude**: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide covers Claude's capabilities, the Anthropic API, key AI concepts, and how to build with Claude in 2026.
 

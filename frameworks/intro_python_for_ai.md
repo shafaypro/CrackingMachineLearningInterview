@@ -1,4 +1,4 @@
-# Python for AI Engineering (2026 Edition)
+# Python for AI Engineering
 
 The foundation under every LLM app and agent. Before RAG, tools, or multi-agent
 orchestration, you need fluent, idiomatic, *production* Python. This guide covers

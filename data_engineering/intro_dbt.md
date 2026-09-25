@@ -415,7 +415,7 @@ models:
       - name: amount
         description: "Order total in USD."
       - name: order_tier
-        description: "high_value (≥$100), mid_value ($50–$99), low_value (<$50)."
+        description: "high_value (≥$100), mid_value ($50-$99), low_value (<$50)."
 ```
 
 </details>
@@ -446,7 +446,7 @@ For long descriptions, write them in a `.md` file and reference them:
 {% docs order_tier %}
 Bucketed order value:
 - **high_value**: order total ≥ $100
-- **mid_value**: order total $50–$99
+- **mid_value**: order total $50-$99
 - **low_value**: order total < $50
 {% enddocs %}
 ```

@@ -106,7 +106,7 @@ Remove weights or structures deemed unimportant.
 | | Unstructured | Structured |
 |---|---|---|
 | Removes | Individual weights | Whole neurons, channels, heads, layers |
-| Sparsity achievable | 80–95% | 30–50% |
+| Sparsity achievable | 80-95% | 30-50% |
 | Accuracy at equal sparsity | **Better** | Worse |
 | **Actual speedup on GPU** | **~None** without special kernels | **Real**: the tensor is smaller |
 | Result | Sparse matrix, same shape | Smaller dense model |
@@ -198,10 +198,10 @@ Applied post-hoc via SVD it tends to lose accuracy, because trained weight matri
 
 Often better than compressing a bad architecture. Worth naming because it shows breadth:
 
-- **GQA / MQA**: share key/value heads across query heads, shrinking the KV cache by 4–8× with minimal quality loss. This is the highest-impact efficiency change in modern LLMs.
+- **GQA / MQA**: share key/value heads across query heads, shrinking the KV cache by 4-8× with minimal quality loss. This is the highest-impact efficiency change in modern LLMs.
 - **Mixture of Experts**: many parameters, few active per token; high capacity at low inference FLOPs, at the cost of memory and routing complexity.
-- **Depthwise separable convolutions**: MobileNet's core trick, factorizing a convolution into depthwise + pointwise for ~8–9× fewer operations.
-- **Early exit / cascades**: a cheap model handles the easy majority and escalates only uncertain cases. Frequently a 60–80% cost reduction for negligible quality change, and it requires no model surgery at all.
+- **Depthwise separable convolutions**: MobileNet's core trick, factorizing a convolution into depthwise + pointwise for ~8-9× fewer operations.
+- **Early exit / cascades**: a cheap model handles the easy majority and escalates only uncertain cases. Frequently a 60-80% cost reduction for negligible quality change, and it requires no model surgery at all.
 
 Cascading deserves emphasis: it's the cheapest big win available, purely a serving-layer change, and candidates routinely forget it while reaching for exotic compression.
 
@@ -213,10 +213,10 @@ No accuracy cost at all: do these before touching the weights.
 
 | Technique | Typical gain | Mechanism |
 |---|---|---|
-| **Operator fusion** | 1.2–2× | Fewer kernel launches and memory round-trips |
-| **`torch.compile` / TensorRT / ONNX Runtime** | 1.3–3× | Graph optimization, kernel selection, fusion |
+| **Operator fusion** | 1.2-2× | Fewer kernel launches and memory round-trips |
+| **`torch.compile` / TensorRT / ONNX Runtime** | 1.3-3× | Graph optimization, kernel selection, fusion |
 | **CUDA graphs** | Meaningful at small batch | Removes per-launch overhead |
-| **FlashAttention** | 2–4× on attention | Tiling in SRAM; avoids materializing the score matrix |
+| **FlashAttention** | 2-4× on attention | Tiling in SRAM; avoids materializing the score matrix |
 | **Batching** | Large on throughput | Amortizes weight reads across requests |
 
 ```python
@@ -318,7 +318,7 @@ If several techniques are stacked, I'd evaluate after each step rather than only
 
 #### What's the cheapest way to cut inference cost without touching the model?
 
-**Cascading**, and it's routinely overlooked. Route every request to a small cheap model first, and escalate to the large one only when a confidence signal, schema check, or verifier says the cheap answer isn't good enough. For typical traffic where most requests are easy, 60–80% of volume never touches the expensive model, and quality is essentially preserved because hard cases still escalate.
+**Cascading**, and it's routinely overlooked. Route every request to a small cheap model first, and escalate to the large one only when a confidence signal, schema check, or verifier says the cheap answer isn't good enough. For typical traffic where most requests are easy, 60-80% of volume never touches the expensive model, and quality is essentially preserved because hard cases still escalate.
 
 Alongside that: **batching**, which amortizes the memory-bandwidth cost of reading weights across requests and is the largest single throughput lever; **caching**, both exact-match and prefix/prompt caching; and **compilation** via `torch.compile` or TensorRT, which is a pure win with no accuracy change. All of these are serving-layer changes with zero risk to model quality, so they should be exhausted before any weight surgery.
 

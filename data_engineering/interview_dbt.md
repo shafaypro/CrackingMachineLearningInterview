@@ -8,7 +8,7 @@
 ## Table of Contents
 
 - [Mid-level / Engineer: Design & Modelling](#mid-level--engineer-design--modelling)
-- [Mid–Senior: Jinja, Macros & Packages](#midsenior-jinja-macros--packages)
+- [Mid-Senior: Jinja, Macros & Packages](#mid-senior-jinja-macros--packages)
 - [Senior / Lead: Performance, Testing & CI/CD](#senior--lead-performance-testing--cicd)
 - [Scenario / Situational Questions](#scenario--situational-questions)
 
@@ -342,7 +342,7 @@ The `state:modified+` selector is the foundation of **slim CI**: you only build 
 
 ---
 
-## Mid–Senior: Jinja, Macros & Packages
+## Mid-Senior: Jinja, Macros & Packages
 
 ---
 
@@ -1102,7 +1102,7 @@ The dashboards are unaffected: they select specific columns and a new one doesn'
 A stored procedure is usually a monolith: one giant block doing ten things. The goal is to decompose it into a graph of small, testable, named models.
 
 **Step 1: Read and map the procedure:**
-Annotate every logical step: "lines 1–50 join customers and orders, lines 51–100 calculate revenue tiers, lines 101–200 pivot by region…"
+Annotate every logical step: "lines 1-50 join customers and orders, lines 51-100 calculate revenue tiers, lines 101-200 pivot by region…"
 
 **Step 2: Identify layers:**
 - Steps that clean/rename raw tables → `staging` models

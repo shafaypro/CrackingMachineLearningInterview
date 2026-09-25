@@ -6,8 +6,8 @@ Dimensionality reduction reduces the number of features while preserving meaning
 
 ## Table of Contents
 1. [Why Dimensionality Reduction?](#why-dimensionality-reduction)
-2. [PCA – Principal Component Analysis](#pca--principal-component-analysis)
-3. [LDA – Linear Discriminant Analysis](#lda--linear-discriminant-analysis)
+2. [PCA: Principal Component Analysis](#pca-principal-component-analysis)
+3. [LDA: Linear Discriminant Analysis](#lda-linear-discriminant-analysis)
 4. [t-SNE](#t-sne)
 5. [UMAP](#umap)
 6. [Autoencoders](#autoencoders)
@@ -30,7 +30,7 @@ Dimensionality reduction reduces the number of features while preserving meaning
 
 ---
 
-## PCA – Principal Component Analysis
+## PCA: Principal Component Analysis
 
 PCA is a **linear, unsupervised** technique that finds orthogonal directions of maximum variance.
 
@@ -124,7 +124,7 @@ X_reduced = ipca.transform(X_large)
 
 ---
 
-## LDA – Linear Discriminant Analysis
+## LDA: Linear Discriminant Analysis
 
 LDA is a **linear, supervised** technique that finds directions maximizing class separability. Unlike PCA (maximizes variance), LDA maximizes the ratio of between-class to within-class scatter.
 
@@ -188,10 +188,10 @@ plt.colorbar(label='Class')
 
 | Parameter | Effect | Typical Range |
 |-----------|--------|--------------|
-| **perplexity** | Controls local vs global structure tradeoff | 5–50 |
-| **learning_rate** | Step size for optimization | 10–1000 (or 'auto') |
-| **n_iter** | Number of optimization steps | 500–5000 |
-| **early_exaggeration** | Spread between clusters | 4–12 |
+| **perplexity** | Controls local vs global structure tradeoff | 5-50 |
+| **learning_rate** | Step size for optimization | 10-1000 (or 'auto') |
+| **n_iter** | Number of optimization steps | 500-5000 |
+| **early_exaggeration** | Spread between clusters | 4-12 |
 
 **Warning**: t-SNE is **non-deterministic** and **non-parametric**: you cannot transform new data points without re-running the full algorithm. Use for exploration only.
 
@@ -289,7 +289,7 @@ PCA is linear, deterministic, unsupervised, and maximizes variance. It's interpr
 Perplexity roughly corresponds to the number of effective nearest neighbors considered for each point. Low perplexity (5-10) focuses on very local structure; high perplexity (30-50) considers broader neighborhoods. The optimal value depends on dataset size and density. Always try multiple values and compare.
 
 **Q3: Why must you standardize before PCA?**
-PCA finds directions of maximum variance. If one feature has range 0–1000 and another 0–1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler ensures all features contribute equally.
+PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler ensures all features contribute equally.
 
 **Q4: How many principal components should you keep?**
 Two common rules:

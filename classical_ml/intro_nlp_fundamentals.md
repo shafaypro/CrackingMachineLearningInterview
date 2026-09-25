@@ -62,7 +62,7 @@ How text becomes model inputs, and the source of many practical surprises.
 |---|---|---|---|
 | **Character** | `c,a,t` | ~100 | Sequences far too long |
 | **Word** | `cat` | 100k+ | Out-of-vocabulary words; huge embedding table |
-| **Subword** | `un,happi,ness` | 30–100k | **The standard**: best of both |
+| **Subword** | `un,happi,ness` | 30-100k | **The standard**: best of both |
 
 **Subword tokenization** solves the out-of-vocabulary problem: any unseen word decomposes into known pieces, so nothing is ever `<UNK>`, while common words stay single tokens.
 
@@ -157,7 +157,7 @@ Sentence-BERT    →  fine-tuned so vector distance means semantic similarity
 |---|---|---|
 | **TF-IDF + linear model** | 100s | Baseline; small data; interpretability required |
 | **FastText classifier** | 1000s | Fast, strong, handles typos |
-| **Fine-tuned transformer** | 1000s–10,000s | Best accuracy when data supports it |
+| **Fine-tuned transformer** | 1000s-10,000s | Best accuracy when data supports it |
 | **Zero/few-shot LLM** | **0** | No labels; rapid prototyping; rare classes |
 | **Embedding + classifier** | 100s | Sentence embeddings + logistic regression: strong and cheap |
 
@@ -253,7 +253,7 @@ The framing I'd use: TF-IDF isn't the answer, it's the number the answer has to 
 
 Word-level tokenization has two fatal problems: any word not in the vocabulary becomes `<UNK>`, destroying information, and covering enough words requires an enormous embedding table.
 
-Subword tokenization splits rare words into known pieces while keeping common words whole. `tokenization` becomes `token` + `##ization`. Nothing is ever out-of-vocabulary because worst case you fall back to characters, morphology is partially captured for free, and vocabulary stays around 30–100k.
+Subword tokenization splits rare words into known pieces while keeping common words whole. `tokenization` becomes `token` + `##ization`. Nothing is ever out-of-vocabulary because worst case you fall back to characters, morphology is partially captured for free, and vocabulary stays around 30-100k.
 
 BPE merges the most frequent adjacent pair iteratively; WordPiece merges the pair that most improves likelihood; Unigram starts large and prunes by loss impact. The practical consequences are worth knowing: token count doesn't track word count, non-English text costs substantially more tokens because tokenizers are English-dominant, numbers split awkwardly (part of why LLMs struggle with arithmetic), and trailing whitespace changes the tokenization.
 

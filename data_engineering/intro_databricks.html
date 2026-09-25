@@ -2032,7 +2032,7 @@ spark.conf.set(<span class="str">"spark.sql.adaptive.coalescePartitions.enabled"
 spark.conf.set(<span class="str">"spark.sql.adaptive.skewJoin.enabled"</span>,           <span class="str">"true"</span>)  <span class="cm"># Auto-fix skew</span>
 
 <span class="cm"># ── PARTITIONING ──</span>
-<span class="cm"># Rule: target 128MB–200MB per partition</span>
+<span class="cm"># Rule: target 128MB-200MB per partition</span>
 spark.conf.set(<span class="str">"spark.sql.shuffle.partitions"</span>, <span class="str">"400"</span>)           <span class="cm"># Default 200, tune to data size</span>
 spark.conf.set(<span class="str">"spark.default.parallelism"</span>, <span class="str">"400"</span>)
 

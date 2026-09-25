@@ -1,4 +1,4 @@
-# The Agentic AI Engineer Roadmap (2026 Edition)
+# The Agentic AI Engineer Roadmap
 
 A complete, layered curriculum for becoming a production-grade **Agentic AI
 Engineer**: from Python foundations to frontier topics like agent platforms and
@@ -336,14 +336,14 @@ to worker agents (researcher, coder, reviewer), each with its own focused prompt
 Specialization typically beats a single overloaded agent on reliability.
 
 **Key points:**
-- **Orchestrator–worker** and **supervisor** patterns route, delegate, monitor, aggregate.
+- **Orchestrator-worker** and **supervisor** patterns route, delegate, monitor, aggregate.
 - Agents don't share memory unless you wire it: pass context explicitly in handoffs.
 - Communication via message passing / structured handoffs / a shared blackboard.
 
 **Interview questions:**
 1. **Why use multiple agents instead of one?** → Focused prompts/tools per role give
    higher reliability and easier debugging than one agent juggling everything.
-2. **What is the orchestrator–worker pattern?** → A coordinator breaks the task into
+2. **What is the orchestrator-worker pattern?** → A coordinator breaks the task into
    subtasks and delegates each to a specialized worker, then aggregates the results.
 3. **How do agents share state?** → Not automatically: via explicit message passing, a
    shared store/blackboard, or by writing to a common workspace.
@@ -743,7 +743,7 @@ junior engineers.
 
 | Pattern | Use when |
 |---------|----------|
-| **Orchestrator–worker** | A coordinator delegates to specialists |
+| **Orchestrator-worker** | A coordinator delegates to specialists |
 | **Pipeline** | Fixed sequential stages |
 | **Blackboard** | Agents share a common workspace/state |
 | **Event-driven** | React to external events |

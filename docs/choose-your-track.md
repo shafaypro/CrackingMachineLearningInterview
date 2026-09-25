@@ -61,7 +61,7 @@ You can also just start with the [Common Core](#the-common-core) below: the firs
 
 ## The Common Core
 
-Every track needs these. If you are early, do this first and decide afterwards: roughly **1–2 weeks**.
+Every track needs these. If you are early, do this first and decide afterwards: roughly **1-2 weeks**.
 
 1. [Python for AI Engineering](../frameworks/intro_python_for_ai.md): async, typing, Pydantic, APIs, logging
 2. [Statistics & Probability](../classical_ml/intro_statistics_probability.md): distributions, hypothesis testing, the CLT
@@ -77,28 +77,28 @@ Everything after this is track-specific.
 
 **Job titles**: Machine Learning Engineer, Applied Scientist, ML Software Engineer
 **Prerequisites**: comfortable Python; basic linear algebra and probability helps but can be learned alongside
-**Realistic time to interview-ready**: 3–4 months from the Common Core, part-time
+**Realistic time to interview-ready**: 3-4 months from the Common Core, part-time
 
-### Stage 1: Foundations (3–4 weeks)
+### Stage 1: Foundations (3-4 weeks)
 - [Classical ML Overview](../classical_ml/README.md): algorithms, when each applies
 - [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md)
 - [Feature Engineering & Selection](../classical_ml/intro_feature_engineering.md)
 - [Ensemble Methods and Gradient Boosting](../classical_ml/intro_ensemble_methods.md): what actually wins on tabular data
 - [Clustering](../classical_ml/intro_clustering.md) and [Dimensionality Reduction](../classical_ml/intro_dimensionality_reduction.md)
 
-### Stage 2: Deep learning (3–4 weeks)
+### Stage 2: Deep learning (3-4 weeks)
 - [Deep Learning Overview](../deep_learning/README.md)
 - [Neural Network Training](../deep_learning/intro_neural_network_training.md): optimizers, normalization, debugging
 - [Sequence Models](../deep_learning/intro_sequence_models.md) → [Transformers](../deep_learning/intro_transformers.md)
 - [PyTorch](../frameworks/intro_pytorch.md)
 
-### Stage 3: Production (3–4 weeks)
+### Stage 3: Production (3-4 weeks)
 - [MLOps Overview](../mlops/README.md)
 - [Model Serving](../mlops/intro_model_serving.md) and [Model Monitoring](../mlops/intro_model_monitoring.md)
 - [CI/CD for Machine Learning](../mlops/intro_cicd_for_ml.md)
 - [MLflow](../mlops/intro_mlflow.md) · [Docker](../devops/intro_docker.md)
 
-### Stage 4: Interview prep (2–3 weeks)
+### Stage 4: Interview prep (2-3 weeks)
 - [ML System Design Framework](../system_design/README.md) + both case studies
 - [ML Coding Challenges](../coding_challenges/ml_coding_challenges.md)
 - [2026 Interview Roadmap](./2026-interview-roadmap.md) · [Behavioral Guide](./behavioral-interview-guide.md) · [Take-Home Projects](./take-home-projects.md)
@@ -113,25 +113,25 @@ Everything after this is track-specific.
 
 **Job titles**: AI Engineer, GenAI Engineer, LLM Engineer, Applied AI Engineer
 **Prerequisites**: solid Python and API work. **You do not need to know how to train a model.**
-**Realistic time to interview-ready**: 2–3 months, part-time: the shortest path here
+**Realistic time to interview-ready**: 2-3 months, part-time: the shortest path here
 
-### Stage 1: LLM foundations (2–3 weeks)
+### Stage 1: LLM foundations (2-3 weeks)
 - [LLM & Generative AI Fundamentals](../ai_genai/intro_llm_fundamentals.md)
 - [Prompt Engineering](../ai_genai/intro_prompt_engineering.md)
 - [Context Engineering](../ai_genai/intro_context_engineering.md): what actually goes in the window, and what it costs
 - [Structured Outputs & Function Calling](../ai_genai/intro_structured_outputs.md)
 
-### Stage 2: Retrieval (2–3 weeks)
+### Stage 2: Retrieval (2-3 weeks)
 - [Intro to RAG](../ai_genai/intro_rag.md) → [RAG Engineering](../ai_genai/intro_rag_engineering.md)
 - [Embeddings](../ai_genai/intro_embeddings.md): chunking and retrieval quality live here
 - [Vector Databases](../ai_genai/intro_vector_databases.md) → [Advanced](../ai_genai/intro_vector_databases_advanced.md)
 
-### Stage 3: Agents (2–3 weeks)
+### Stage 3: Agents (2-3 weeks)
 - [Agentic AI](../ai_genai/intro_agentic_ai.md) → [Agent Systems & Tool Use](../ai_genai/intro_agent_tool_use.md)
 - [Multi-Agent Systems](../ai_genai/intro_multi_agent_systems.md)
 - [MCP Protocol](../ai_genai/intro_mcp.md) · [LangGraph](../ai_genai/intro_langgraph.md)
 
-### Stage 4: Production (2–3 weeks)
+### Stage 4: Production (2-3 weeks)
 - [LLM Evaluation](../mlops/intro_llm_evaluation.md) and [Evaluation & Guardrails](../mlops/intro_evaluation_guardrails.md): **the most-tested area in these interviews**
 - [LLM Inference Optimization](../ai_genai/intro_llm_inference_optimization.md): cost and latency
 - [LLM Security](../ai_genai/intro_llm_security.md): prompt injection is a real round
@@ -153,9 +153,9 @@ Everything after this is track-specific.
 
 **Job titles**: Data Scientist, Product Data Scientist, Quantitative Analyst
 **Prerequisites**: SQL, and genuine comfort with statistics
-**Realistic time to interview-ready**: 2–3 months, part-time
+**Realistic time to interview-ready**: 2-3 months, part-time
 
-### Stage 1: Statistical foundation (3–4 weeks)
+### Stage 1: Statistical foundation (3-4 weeks)
 - [Statistics & Probability](../classical_ml/intro_statistics_probability.md): go deep; this is the whole round
 - [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md)
 - [SQL Coding Challenges](../coding_challenges/sql_coding_challenges.md): window functions until they're automatic
@@ -165,7 +165,7 @@ Everything after this is track-specific.
 - [Feature Engineering](../classical_ml/intro_feature_engineering.md) · [Ensemble Methods](../classical_ml/intro_ensemble_methods.md)
 - [Time Series](../classical_ml/intro_time_series.md) · [Clustering](../classical_ml/intro_clustering.md)
 
-### Stage 3: Experimentation and communication (2–3 weeks)
+### Stage 3: Experimentation and communication (2-3 weeks)
 - [A/B Testing](../mlops/intro_ab_testing.md): **the defining skill of this role**
 - [Model Explainability](../mlops/intro_model_explainability.md): SHAP for stakeholder conversations
 - [Data Quality](../mlops/intro_data_quality.md)
@@ -184,9 +184,9 @@ Everything after this is track-specific.
 
 **Job titles**: Data Engineer, Analytics Engineer, Data Platform Engineer
 **Prerequisites**: strong SQL, comfortable Python
-**Realistic time to interview-ready**: 2–3 months, part-time
+**Realistic time to interview-ready**: 2-3 months, part-time
 
-### Stage 1: Modeling and architecture (2–3 weeks)
+### Stage 1: Modeling and architecture (2-3 weeks)
 - [Data Modeling](../data_engineering/data-modeling.md): star schemas, slowly changing dimensions
 - [Data Architecture](../data_engineering/data-architecture.md): warehouse, lake, lakehouse
 - [SQL Coding Challenges](../coding_challenges/sql_coding_challenges.md)
@@ -196,12 +196,12 @@ Everything after this is track-specific.
 - [Apache Spark](../data_engineering/intro_apache_spark.md) · [Apache Airflow](../data_engineering/intro_apache_airflow.md)
 - [dbt](../data_engineering/intro_dbt.md) → [dbt Interview Q&A](../data_engineering/interview_dbt.md)
 
-### Stage 3: Modern stack (2–3 weeks)
+### Stage 3: Modern stack (2-3 weeks)
 - [Apache Kafka](../data_engineering/intro_apache_kafka.md): streaming
 - [Delta Lake](../data_engineering/intro_delta_lake.md) · [Apache Iceberg](../data_engineering/intro_apache_iceberg.md) · [DuckDB](../data_engineering/intro_duckdb.md)
 - [Data Quality](../mlops/intro_data_quality.md)
 
-### Stage 4: Serving ML (1–2 weeks)
+### Stage 4: Serving ML (1-2 weeks)
 - [Data Engineering for AI](../data_engineering/intro_data_engineering_for_ai.md): point-in-time correctness, training/serving skew
 - [Feature Stores](../mlops/intro_feature_stores.md)
 
@@ -219,19 +219,19 @@ Everything after this is track-specific.
 
 **Job titles**: MLOps Engineer, ML Platform Engineer, ML Infrastructure Engineer
 **Prerequisites**: real software engineering experience; Linux and containers
-**Realistic time to interview-ready**: 2–3 months if you already do DevOps
+**Realistic time to interview-ready**: 2-3 months if you already do DevOps
 
 ### Stage 1: ML literacy (2 weeks)
 You need enough to reason about models, not to build them.
 - [Classical ML Overview](../classical_ml/README.md) · [Model Evaluation](../classical_ml/intro_model_evaluation.md)
 
-### Stage 2: The MLOps core (3–4 weeks)
+### Stage 2: The MLOps core (3-4 weeks)
 - [MLOps Overview](../mlops/README.md)
 - [CI/CD for Machine Learning](../mlops/intro_cicd_for_ml.md): registry, gates, canary, rollback
 - [Model Serving](../mlops/intro_model_serving.md) · [Model Monitoring](../mlops/intro_model_monitoring.md)
 - [MLflow](../mlops/intro_mlflow.md) · [Feature Stores](../mlops/intro_feature_stores.md) · [Data Quality](../mlops/intro_data_quality.md)
 
-### Stage 3: Infrastructure (2–3 weeks)
+### Stage 3: Infrastructure (2-3 weeks)
 - [Docker](../devops/intro_docker.md) → [Kubernetes](../devops/intro_kubernetes.md) → [Helm](../devops/intro_helm.md)
 - [Terraform](../devops/intro_terraform.md) · [GitHub Actions](../devops/intro_github_actions.md)
 - [Cloud ML Platforms](../cloud_ml/intro_cloud_ml_platforms.md), then your employer's cloud
@@ -254,7 +254,7 @@ You need enough to reason about models, not to build them.
 
 **Job titles**: Deep Learning Engineer, Research Engineer, Applied Scientist
 **Prerequisites**: linear algebra, calculus, probability. This track is the most mathematically demanding.
-**Realistic time to interview-ready**: 4–5 months, part-time
+**Realistic time to interview-ready**: 4-5 months, part-time
 
 ### Stage 1: Fundamentals (4 weeks)
 - [Deep Learning Overview](../deep_learning/README.md)
@@ -289,7 +289,7 @@ You need enough to reason about models, not to build them.
 |---|---|---|---|---|---|---|
 | **Maths required** | Medium | Low | High | Low | Low | **High** |
 | **Coding required** | High | High | Medium | High | **High** | High |
-| **Time to job-ready** | 3–4 mo | **2–3 mo** | 2–3 mo | 2–3 mo | 2–3 mo | 4–5 mo |
+| **Time to job-ready** | 3-4 mo | **2-3 mo** | 2-3 mo | 2-3 mo | 2-3 mo | 4-5 mo |
 | **Fastest for a SWE** | - | **Yes** | - | - | **Yes** | - |
 | **Guides in the track** | ~20 | ~22 | ~13 | ~16 | ~18 | ~14 |
 | **Core interview round** | System design | Evaluation | Statistics & experiments | Data modeling | Reliability & rollback | Architecture depth |
@@ -323,7 +323,7 @@ When you're within a few weeks of interviewing, switch to the [2026 Interview Ro
 
 **Do I have to read every guide in my track?** No. The stages are the path; the rest of the directory is reference. Use the "Guides in This Track" index in each directory's README when you need something specific.
 
-**How long does this really take?** The estimates assume 10–15 hours a week and existing programming ability. Full-time roughly halves them. Starting from no programming background, add 2–3 months for Python first.
+**How long does this really take?** The estimates assume 10-15 hours a week and existing programming ability. Full-time roughly halves them. Starting from no programming background, add 2-3 months for Python first.
 
 **Is the AI/GenAI track a shortcut?** It is faster to a first job, and that is real. It is also a shallower foundation: if the tooling shifts, ML Engineer fundamentals transfer and prompt-level knowledge does not. Many people start with AI/GenAI for the job and backfill fundamentals afterwards, which is a perfectly reasonable order.
 

@@ -98,9 +98,9 @@ query_vec = model.encode("query: how do I reset my password", normalize_embeddin
 doc_vecs  = model.encode(["passage: To reset your password, go to..."], normalize_embeddings=True)
 ```
 
-`e5` and `bge` families use prefixes like `query:` / `passage:` (or a BGE query instruction). Check the model card: the same model can lose 5–10 points of recall@10 when prefixes are applied inconsistently between indexing and querying.
+`e5` and `bge` families use prefixes like `query:` / `passage:` (or a BGE query instruction). Check the model card: the same model can lose 5-10 points of recall@10 when prefixes are applied inconsistently between indexing and querying.
 
-**MTEB caveat for interviews**: the leaderboard is useful for a shortlist, not a decision. Models are sometimes tuned on tasks close to the benchmark, and your corpus is not MTEB. Always run a small internal eval set (100–300 real queries with known-relevant documents) before committing: the ranking often changes.
+**MTEB caveat for interviews**: the leaderboard is useful for a shortlist, not a decision. Models are sometimes tuned on tasks close to the benchmark, and your corpus is not MTEB. Always run a small internal eval set (100-300 real queries with known-relevant documents) before committing: the ranking often changes.
 
 ---
 
@@ -110,7 +110,7 @@ A chunk is what gets embedded, retrieved, and shown to the model, so the chunkin
 
 | Strategy | How | Best for |
 |---|---|---|
-| **Fixed-size + overlap** | N tokens, 10–20% overlap | Baseline; simple and surprisingly hard to beat |
+| **Fixed-size + overlap** | N tokens, 10-20% overlap | Baseline; simple and surprisingly hard to beat |
 | **Recursive/structural** | Split on `\n\n`, then `\n`, then sentences | Prose documents with structure |
 | **Document-aware** | Split on markdown headers, code functions, table rows | Technical docs, code, structured content |
 | **Semantic** | Split where consecutive-sentence similarity drops | Long unstructured text; costs an extra embedding pass |
@@ -158,7 +158,7 @@ model.fit(train_objectives=[(loader, loss)], epochs=3, warmup_steps=100)
 
 Where to get pairs without a labeling budget:
 - **Click logs**: (query, clicked document) is a positive; log them from day one.
-- **Synthetic queries**: have an LLM generate 3–5 questions each chunk answers, then train query → chunk.
+- **Synthetic queries**: have an LLM generate 3-5 questions each chunk answers, then train query → chunk.
 - **Existing structure**: FAQ question/answer pairs, ticket title/resolution, doc title/body.
 
 **Hard negatives** are the difference between a small gain and a large one: retrieve the top-20 for each query with the current model, drop the true positive, and use the remaining plausible-but-wrong documents as explicit negatives. Random negatives are too easy: the model learns to separate "unrelated topic", which it already could.
@@ -185,7 +185,7 @@ candidates = index_256d.search(query_256, top_k=200)     # fast, small memory fo
 final = rescore_with_full_vectors(query_1536, candidates)[:10]
 ```
 
-**Quantization** trades a little recall for large savings: int8 (scalar quantization) typically loses ~1–2% recall for 4x compression; binary quantization loses more but is 32x smaller and enables Hamming-distance search, usually paired with a float rescoring pass over the top few hundred candidates.
+**Quantization** trades a little recall for large savings: int8 (scalar quantization) typically loses ~1-2% recall for 4x compression; binary quantization loses more but is 32x smaller and enables Hamming-distance search, usually paired with a float rescoring pass over the top few hundred candidates.
 
 ---
 
@@ -219,7 +219,7 @@ The diagnostic that matters in a RAG debugging interview: **measure retrieval an
 - **Versioning.** Store the model name and version alongside every vector. When you upgrade, reindex into a new collection and cut over atomically; mixing spaces produces plausible-looking garbage that no test catches.
 - **Incremental updates.** Deletes and updates must propagate to the index, or the system confidently cites documents that no longer exist. Tie index mutations to the source-of-truth change stream.
 - **Caching.** Embedding the same text repeatedly is pure waste: cache by content hash. Query embeddings for frequent queries are worth caching too.
-- **Batching.** Encoding throughput is dominated by batch size; encode in batches of 32–256 rather than one at a time. This is often a 10x+ ingest speedup.
+- **Batching.** Encoding throughput is dominated by batch size; encode in batches of 32-256 rather than one at a time. This is often a 10x+ ingest speedup.
 - **Access control.** Filter by permission metadata *inside* the vector search, not after: post-filtering can return an empty page when a user lacks access to the top-k, and silently leaks the existence of documents through result counts.
 - **Multi-tenancy.** Either separate collections per tenant (clean isolation, more overhead) or a mandatory `tenant_id` filter (cheaper, one bug away from a data leak). For regulated data, choose separation.
 
@@ -241,9 +241,9 @@ The choice matters when vectors are *not* normalized. Then dot product rewards m
 
 #### How do you choose a chunk size?
 
-I'd start from the retrieval unit, not a number: a chunk should be the smallest span that fully answers a typical question. Then I'd measure. Set up 100 real queries with known-good answers, sweep chunk sizes (256/512/1024 tokens) with 10–20% overlap, and compare recall@10.
+I'd start from the retrieval unit, not a number: a chunk should be the smallest span that fully answers a typical question. Then I'd measure. Set up 100 real queries with known-good answers, sweep chunk sizes (256/512/1024 tokens) with 10-20% overlap, and compare recall@10.
 
-Structure beats size where it exists: splitting on markdown headers or function boundaries preserves coherence far better than a token count. When both context and precision are needed, I'd use small-to-big: embed small chunks for matching, return the parent section for generation. Empirically 300–800 tokens is the usual sweet spot for prose.
+Structure beats size where it exists: splitting on markdown headers or function boundaries preserves coherence far better than a token count. When both context and precision are needed, I'd use small-to-big: embed small chunks for matching, return the parent section for generation. Empirically 300-800 tokens is the usual sweet spot for prose.
 
 #### Your RAG system gives wrong answers. How do you tell if it's retrieval or generation?
 
@@ -283,7 +283,7 @@ It wins because the two methods fail in complementary ways. Vectors handle parap
 
 Layered, from cheapest to most invasive:
 1. **Smaller dimension**: a 768-dim model instead of 3072 is a 4x cut and often loses very little; with a Matryoshka model, truncation is free.
-2. **Scalar (int8) quantization**: 4x smaller for roughly 1–2% recall loss.
+2. **Scalar (int8) quantization**: 4x smaller for roughly 1-2% recall loss.
 3. **Binary quantization + rescoring**: 32x smaller, Hamming search, then rescore the top few hundred with full vectors to recover most of the accuracy.
 4. **ANN index tuning**: HNSW's `M` and `ef_construction` trade memory and build time for recall; IVF-PQ is far more memory-efficient at large scale.
 5. **Tiered storage**: keep hot partitions in memory and cold ones on disk, partitioned by tenant or recency.
@@ -300,8 +300,8 @@ I'd measure recall@10 at each step against a fixed eval set rather than assuming
 | Different embedding models for indexing and querying | Vectors are not comparable; results are noise | Pin the model version in metadata; reindex on change |
 | Omitting `query:` / `passage:` prefixes | Asymmetric models lose significant recall | Follow the model card exactly on both paths |
 | Unnormalized vectors with dot-product search | Long documents win on magnitude, not relevance | Normalize at write and query time |
-| Chunks too large | The vector averages several topics and matches none | 300–800 tokens, or small-to-big retrieval |
-| No overlap between chunks | Answers spanning a boundary become unretrievable | 10–20% overlap |
+| Chunks too large | The vector averages several topics and matches none | 300-800 tokens, or small-to-big retrieval |
+| No overlap between chunks | Answers spanning a boundary become unretrievable | 10-20% overlap |
 | Evaluating by eyeballing similarity scores | Scores aren't comparable across models or queries | Recall@k / NDCG on a labeled eval set |
 | Pure vector search for identifiers | Exact codes and names get blurred | Hybrid BM25 + vector with RRF |
 | Post-filtering by permissions | Empty pages and leaked existence of documents | Filter inside the vector search |

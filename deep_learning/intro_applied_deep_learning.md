@@ -212,7 +212,7 @@ Two caveats worth raising: beyond a task-dependent critical batch size, larger b
 
 Profile first: most "slow training" is a starved GPU, not a slow model. Check GPU utilization: if it's below 80%, the bottleneck is data loading, and the fixes are more `num_workers`, `pin_memory=True`, `persistent_workers=True`, pre-decoded or pre-tokenized data, and removing synchronization points like `.item()` inside the loop.
 
-Once the GPU is saturated: mixed precision (bf16) for a near-free 1.5–2x, larger batches, `torch.compile` for kernel fusion, and gradient accumulation only if you need a larger effective batch. Then algorithmic wins: a smaller model that meets the requirement, fewer epochs with early stopping, or a subset of the data for hyperparameter search before the full run. Distributed training is the last resort because it adds the most complexity per unit of speedup.
+Once the GPU is saturated: mixed precision (bf16) for a near-free 1.5-2x, larger batches, `torch.compile` for kernel fusion, and gradient accumulation only if you need a larger effective batch. Then algorithmic wins: a smaller model that meets the requirement, fewer epochs with early stopping, or a subset of the data for hyperparameter search before the full run. Distributed training is the last resort because it adds the most complexity per unit of speedup.
 
 #### What do you monitor during a long training run?
 

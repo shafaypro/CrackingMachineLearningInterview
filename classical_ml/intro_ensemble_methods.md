@@ -78,7 +78,7 @@ Each bootstrap sample leaves out roughly `1/e ≈ 36.8%` of rows. Those out-of-b
 
 ### Extremely Randomized Trees (Extra Trees)
 
-Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains 2–5x faster.
+Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains 2-5x faster.
 
 ---
 
@@ -142,7 +142,7 @@ class TinyGradientBoosting:
 Three ideas carry over to every production implementation:
 
 1. **Shrinkage** (`learning_rate`): small steps generalize better. Lower learning rate needs more trees: they trade off roughly inversely.
-2. **Shallow trees**: depth 3–8. Each tree only needs to capture a bit of remaining signal.
+2. **Shallow trees**: depth 3-8. Each tree only needs to capture a bit of remaining signal.
 3. **Additive, sequential**: cannot be parallelized across trees (only within a tree's split search), unlike bagging.
 
 For non-squared losses (log loss, Huber, ranking objectives), the residual is replaced by the loss gradient and the leaf values by a Newton step using the second derivative, that second-order step is XGBoost's core contribution.
@@ -214,7 +214,7 @@ stack.fit(X_tr, y_tr)
 
 The `cv=5` is the whole trick. If you train base models and the meta-learner on the same rows, the base models' in-sample predictions are near-perfect, the meta-learner learns to trust them completely, and the stack collapses at inference time. This is the single most common stacking bug.
 
-Stacking wins Kaggle competitions and rarely survives production review: 3–8x the inference cost and 3–8x the models to monitor, for perhaps 0.3% AUC. Bring it up in interviews as a tradeoff you can articulate, not a default.
+Stacking wins Kaggle competitions and rarely survives production review: 3-8x the inference cost and 3-8x the models to monitor, for perhaps 0.3% AUC. Bring it up in interviews as a tradeoff you can articulate, not a default.
 
 ---
 
@@ -224,12 +224,12 @@ Tune in this order: later parameters matter less than earlier ones.
 
 | Order | Parameter | Range | Effect |
 |---|---|---|---|
-| 1 | `learning_rate` | 0.01–0.1 | Lower = better generalization, more trees needed |
+| 1 | `learning_rate` | 0.01-0.1 | Lower = better generalization, more trees needed |
 | 2 | `n_estimators` | Use early stopping | Let validation decide, don't grid-search it |
-| 3 | `max_depth` / `num_leaves` | 3–10 / 15–255 | Main capacity control |
-| 4 | `min_child_weight` / `min_data_in_leaf` | 1–100 | Prevents leaves fit to a handful of rows |
-| 5 | `subsample`, `colsample_bytree` | 0.6–1.0 | Adds randomness, reduces variance |
-| 6 | `reg_lambda`, `reg_alpha` | 0–10 | L2 / L1 on leaf weights |
+| 3 | `max_depth` / `num_leaves` | 3-10 / 15-255 | Main capacity control |
+| 4 | `min_child_weight` / `min_data_in_leaf` | 1-100 | Prevents leaves fit to a handful of rows |
+| 5 | `subsample`, `colsample_bytree` | 0.6-1.0 | Adds randomness, reduces variance |
+| 6 | `reg_lambda`, `reg_alpha` | 0-10 | L2 / L1 on leaf weights |
 
 ```python
 import optuna
@@ -365,7 +365,7 @@ Each tree takes a smaller step toward the gradient direction, so the ensemble ex
 
 Measure first: latency is `n_trees × average_depth` memory-bound traversals. Then, in order:
 - Reduce `n_estimators`: the accuracy/latency curve is steeply diminishing, and 200 trees is often within 0.2% of 2000.
-- Compile the model: Treelite, ONNX Runtime, or `xgboost`'s native inplace prediction give 2–10x over Python-loop scoring.
+- Compile the model: Treelite, ONNX Runtime, or `xgboost`'s native inplace prediction give 2-10x over Python-loop scoring.
 - Batch requests so the traversal amortizes across rows.
 - Cache predictions for repeated entities.
 - As a last resort, distill the ensemble into a single shallow tree or a small neural network trained on the ensemble's outputs.

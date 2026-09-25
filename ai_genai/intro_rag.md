@@ -1,4 +1,4 @@
-# RAG – Retrieval-Augmented Generation (2026 Edition)
+# RAG: Retrieval-Augmented Generation
 
 **RAG** (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them in the prompt. It's the primary way to give LLMs access to private, up-to-date, or domain-specific knowledge.
 

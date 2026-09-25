@@ -407,7 +407,7 @@ Data drift (covariate shift) is when the input feature distribution P(X) changes
 6. Automated alerts to Slack/PagerDuty with severity levels
 
 **Q3: What is PSI (Population Stability Index) and how do you interpret it?**
-PSI measures how much a distribution has shifted relative to a reference. Compute by bucketing both distributions, then PSI = Σ (actual% - reference%) × ln(actual% / reference%). Interpretation: < 0.1 no significant change; 0.1–0.2 slight change, monitor; > 0.2 significant drift, investigate and likely retrain.
+PSI measures how much a distribution has shifted relative to a reference. Compute by bucketing both distributions, then PSI = Σ (actual% - reference%) × ln(actual% / reference%). Interpretation: < 0.1 no significant change; 0.1-0.2 slight change, monitor; > 0.2 significant drift, investigate and likely retrain.
 
 **Q4: What are data contracts and why are they important?**
 A data contract is a formal SLA between data producers (e.g., an engineering team) and data consumers (e.g., ML team or analytics). It specifies schema, quality expectations (null rates, uniqueness), freshness SLAs, and versioning. Without contracts, producers change schemas silently, breaking downstream ML pipelines, often discovered only when models produce wrong predictions.

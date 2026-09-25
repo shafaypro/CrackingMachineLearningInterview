@@ -1,4 +1,4 @@
-# Model Context Protocol (MCP) – Complete Guide (2026 Edition)
+# Model Context Protocol (MCP)
 
 **Model Context Protocol (MCP)** is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services. Launched in November 2024, MCP has become the **USB-C of AI integrations**: one protocol to connect any LLM to any tool.
 

@@ -1,4 +1,4 @@
-# Apache Airflow – Complete Guide (2026 Edition)
+# Apache Airflow
 
 **Apache Airflow** is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.
 

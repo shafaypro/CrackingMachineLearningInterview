@@ -147,7 +147,7 @@ Then fix a **regression suite**: a versioned set of cases with expected properti
 
 Treat it as a model you're deploying, because it is. Label a few hundred examples by hand, then measure the judge's agreement with those labels: Cohen's kappa or simple agreement rate, and especially agreement on the *disagreement cases*, since a judge that only agrees on obvious examples is useless.
 
-Then test for the known biases: **position bias** (swap the order of two compared answers and check the verdict flips at chance rate, not systematically), **verbosity bias** (longer answers scoring higher regardless of quality), **self-preference** (a judge favoring outputs from its own model family), and score compression (everything lands at 4/5). Use a rubric with concrete criteria rather than "rate 1–10", and prefer pairwise comparison over absolute scoring: it's substantially more reliable.
+Then test for the known biases: **position bias** (swap the order of two compared answers and check the verdict flips at chance rate, not systematically), **verbosity bias** (longer answers scoring higher regardless of quality), **self-preference** (a judge favoring outputs from its own model family), and score compression (everything lands at 4/5). Use a rubric with concrete criteria rather than "rate 1-10", and prefer pairwise comparison over absolute scoring: it's substantially more reliable.
 
 #### What guardrails would you put around a customer-facing LLM feature?
 
@@ -169,7 +169,7 @@ Record every successful attack as a permanent regression test. The measure of a 
 
 No single signal is sufficient, so combine cheap ones: **groundedness checking** (does each claim appear in the retrieved context, an NLI model or a judge call on a sample), **self-consistency** (sample the answer several times and flag high disagreement), **citation validation** (do the cited spans actually exist and support the claim), and **user signals** (thumbs-down, rephrasing, escalation to a human).
 
-For rate-limited cost, sample rather than checking everything: score 1–5% of traffic continuously and alert on the rate rather than individual cases. And monitor the abstention rate: a fall in "I don't know" responses often precedes a rise in confident fabrication.
+For rate-limited cost, sample rather than checking everything: score 1-5% of traffic continuously and alert on the rate rather than individual cases. And monitor the abstention rate: a fall in "I don't know" responses often precedes a rise in confident fabrication.
 
 #### What do you do when evaluation results and user feedback disagree?
 

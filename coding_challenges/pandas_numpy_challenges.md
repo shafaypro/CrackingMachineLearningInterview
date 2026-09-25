@@ -394,7 +394,7 @@ The `reindex` on one-hot encoding is a real production bug source: an unseen cat
 | Operation | Cost | Note |
 |---|---|---|
 | Vectorized arithmetic | `O(n)`, C speed | Baseline |
-| `apply(axis=1)` | `O(n)` Python calls | ~100–1000× slower |
+| `apply(axis=1)` | `O(n)` Python calls | ~100-1000× slower |
 | `groupby.agg` | `O(n)` | Hash-based, fast |
 | `merge` on unsorted keys | `O(n + m)` | Hash join |
 | `sort_values` | `O(n log n)` | Consider `nlargest` for top-k |
@@ -409,7 +409,7 @@ The `reindex` on one-hot encoding is a real production bug source: an unseen cat
 
 #### Why is `apply(axis=1)` slow, and what do you use instead?
 
-It calls a Python function once per row, and each call constructs a Series object for that row. So you pay Python interpreter overhead plus object allocation `n` times, with no opportunity for the underlying C loops or SIMD to help. On a million rows that's typically 100–1000× slower than the vectorized equivalent.
+It calls a Python function once per row, and each call constructs a Series object for that row. So you pay Python interpreter overhead plus object allocation `n` times, with no opportunity for the underlying C loops or SIMD to help. On a million rows that's typically 100-1000× slower than the vectorized equivalent.
 
 Instead: plain vectorized arithmetic for math, `np.where` for two-branch conditionals, `np.select` for multi-branch, `pd.cut` for binning, `map` for dictionary lookups, and `groupby().transform()` for group-relative computations. If the logic can't vectorize (calling an external service, say) `apply` is fine, but I'd name that explicitly rather than defaulting to it.
 
@@ -451,7 +451,7 @@ The general habit is to write down, for each feature, "what would I actually hav
 
 In order of effort:
 
-**Dtypes first**: usually the biggest win for the least work. `category` for low-cardinality strings often gives 10–50× on those columns; downcast `int64` → `int32`/`int16` and `float64` → `float32` where precision allows. Check with `df.memory_usage(deep=True)`.
+**Dtypes first**: usually the biggest win for the least work. `category` for low-cardinality strings often gives 10-50× on those columns; downcast `int64` → `int32`/`int16` and `float64` → `float32` where precision allows. Check with `df.memory_usage(deep=True)`.
 
 **Load less**: `usecols` to read only needed columns, `dtype=` on read so you never materialize the wide version, and Parquet instead of CSV since it's columnar (read only the columns you need) and compressed.
 
@@ -481,7 +481,7 @@ The failure mode this prevents is nasty because it often doesn't raise: the mode
 
 | Pitfall | Why it hurts | Fix |
 |---|---|---|
-| `apply(axis=1)` by default | 100–1000× slower than vectorized | `np.where`, `np.select`, arithmetic, `transform` |
+| `apply(axis=1)` by default | 100-1000× slower than vectorized | `np.where`, `np.select`, arithmetic, `transform` |
 | Chained assignment `df[m]["c"] = v` | May write to a temporary; silently no-ops | Single `.loc[m, "c"] = v` |
 | `merge` without `validate=` | Silent fan-out inflates every downstream sum | `validate="many_to_one"`; check `.shape` |
 | `groupby` with NaN keys | Rows silently dropped; totals don't reconcile | `dropna=False` |

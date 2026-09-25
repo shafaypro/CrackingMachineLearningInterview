@@ -210,7 +210,7 @@ agent = Agent(
 
 4. **Tool errors cascade**: If a tool fails, the agent retries by default. Add `exception_on_tool_error=True` to fail fast.
 
-5. **Cost estimation**: A 5-agent crew with web search can cost $0.50–$5 per run. Monitor with LangSmith or Literal AI.
+5. **Cost estimation**: A 5-agent crew with web search can cost $0.50-$5 per run. Monitor with LangSmith or Literal AI.
 
 ---
 

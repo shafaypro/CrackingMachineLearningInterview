@@ -234,7 +234,7 @@ def iou(box_a, box_b):
 - Average Precision (AP) = area under PR curve
 - mAP = mean AP over all classes
 - mAP@0.5: IoU threshold 0.5 (PASCAL VOC)
-- mAP@[0.5:0.95]: average over IoU thresholds 0.5–0.95 (COCO standard)
+- mAP@[0.5:0.95]: average over IoU thresholds 0.5-0.95 (COCO standard)
 
 **Non-Maximum Suppression (NMS):**
 ```python

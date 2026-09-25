@@ -57,7 +57,7 @@ The second version demonstrates metric selection, leakage detection, stakeholder
 
 ## Building Your Story Bank
 
-Prepare **6–8 stories** covering the axes below. Most stories cover two or three axes, so you don't need one per row.
+Prepare **6-8 stories** covering the axes below. Most stories cover two or three axes, so you don't need one per row.
 
 | Axis | Prompt to prepare for |
 |---|---|

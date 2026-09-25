@@ -1,4 +1,4 @@
-# DuckDB – Complete Guide (2026 Edition)
+# DuckDB
 
 **DuckDB** is an in-process OLAP database that runs directly inside your application: no server, no setup, no cluster. It's fast, embeddable, and can query Parquet, CSV, JSON, Arrow, Iceberg, and Delta Lake files directly. In 2026, DuckDB has become the go-to tool for local data analytics and the "SQLite of OLAP."
 
@@ -590,7 +590,7 @@ SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY latency) FROM requests;
 
 | Feature | DuckDB | PySpark | Pandas |
 |---------|--------|---------|--------|
-| **Data scale** | GBs–~500GB | TBs–PBs | MBs–GBs |
+| **Data scale** | GBs-~500GB | TBs-PBs | MBs-GBs |
 | **Setup** | Zero (pip install) | Complex (cluster) | Zero |
 | **SQL** | Full SQL | SQL + Python | Limited |
 | **Streaming** | No (batch) | Yes | No |
@@ -602,7 +602,7 @@ SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY latency) FROM requests;
 
 **Rule of thumb:**
 - `< 10GB` → Pandas (simple) or DuckDB (SQL)
-- `10GB – 500GB` → **DuckDB** (fastest, easiest)
+- `10GB to 500GB` → **DuckDB** (fastest, easiest)
 - `> 500GB` → **Spark**
 
 ---

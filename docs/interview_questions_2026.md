@@ -1,4 +1,4 @@
-# Common ML Interview Questions: 2026 Edition
+# Common ML Interview Questions (2026)
 
 > Focus areas in 2026: LLM applications, agent systems, RAG, production AI, evaluation, and classical ML at depth.
 

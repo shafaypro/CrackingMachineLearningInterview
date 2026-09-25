@@ -376,7 +376,7 @@ Training-serving skew occurs when the features used during training are computed
 7. Model registration: Push to MLflow Registry with metadata
 8. Integration tests: Deploy to staging, run smoke tests
 9. Canary deployment: Route 5% prod traffic to new model
-10. Monitor: Watch metrics for 24–48 hours
+10. Monitor: Watch metrics for 24-48 hours
 11. Full rollout: 100% traffic if metrics are stable
 12. Alerting: PagerDuty alerts for degradation
 ```

@@ -46,7 +46,7 @@ The single most common mis-calibration is spending 80% of the time on the model 
 
 If the brief says "about 4 hours," treat that as a real constraint. Reviewers compare submissions against the stated budget, and a 30-hour submission signals poor prioritization as much as it signals effort: it also disadvantages candidates who respected the limit, which reviewers notice.
 
-For a nominal 4–6 hours:
+For a nominal 4-6 hours:
 
 | Phase | Share | Output |
 |---|---|---|
@@ -96,7 +96,7 @@ Two things reviewers check immediately and that cost you nothing:
 
 ## The README Is the Deliverable
 
-Most reviewers spend 10–15 minutes on a submission, and much of it in the README. Write it for someone who will not run your code.
+Most reviewers spend 10-15 minutes on a submission, and much of it in the README. Write it for someone who will not run your code.
 
 A structure that works:
 
@@ -186,7 +186,7 @@ Two type-specific notes worth knowing. For **NLP**, a TF-IDF plus linear model b
 
 ## The Follow-Up Presentation
 
-Most take-homes are followed by a 30–45 minute discussion. It is a real round with its own score, and it is where a mid-tier submission can be rescued or a strong one undermined.
+Most take-homes are followed by a 30-45 minute discussion. It is a real round with its own score, and it is where a mid-tier submission can be rescued or a strong one undermined.
 
 **Structure a 10-minute walkthrough**: problem framing and metric choice (2 min), data findings (2 min), approach and baseline comparison (3 min), results and error analysis (2 min), limitations and next steps (1 min). Lead with framing, not with the model.
 

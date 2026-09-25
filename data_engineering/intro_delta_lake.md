@@ -1,4 +1,4 @@
-# Delta Lake – Complete Guide (2026 Edition)
+# Delta Lake
 
 **Delta Lake** is an open-source storage layer that brings **ACID transactions**, **schema enforcement**, **time travel**, and **scalable metadata** to data lakes on cloud object storage (S3, GCS, ADLS). It's the backbone of the **Lakehouse** architecture.
 

@@ -1,4 +1,4 @@
-# Vector Databases – Complete Guide (2026 Edition)
+# Vector Databases
 
 **Vector databases** store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI models. They're foundational to RAG, semantic search, recommendation systems, and AI applications.
 

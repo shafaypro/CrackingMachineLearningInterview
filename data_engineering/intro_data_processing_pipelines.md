@@ -1,4 +1,4 @@
-# Types of Data Processing Pipelines – Complete Guide (2026 Edition)
+# Types of Data Processing Pipelines
 
 **Data processing pipelines** sit on a spectrum from **batch** (high latency, low engineering complexity, strong data quality) to **streaming** (sub-second latency, high engineering complexity, hardest to get right). Choosing the correct point on that spectrum is one of the most common (and most revealing) data engineering interview questions.
 
@@ -13,7 +13,7 @@
   HIGHER COMPLEXITY ────────────────────────────────────────►  (harder to build)
 
   BATCH        MICROBATCH      NEAR REAL-TIME     REAL-TIME        STREAMING
-  hours          hours           2–5 min          ~seconds         ms–seconds
+  hours          hours           2-5 min          ~seconds         ms-seconds
   ┌────────┐   ┌──────────┐    ┌────────────┐    ┌──────────┐    ┌──────────┐
   │ once   │   │ assembly │    │ rapid batch│    │ conveyor │    │  river   │
   │ a day  │   │  line    │    │  assembly  │    │  belt    │    │ (always  │
@@ -25,11 +25,11 @@
 
 | Pipeline | Typical latency | Processing model | Data quality (DQ) | Eng. complexity | Primary tech |
 |----------|----------------|------------------|-------------------|-----------------|--------------|
-| **Batch** | 4–6 hours (daily) | Full dataset, partition-based | ⭐⭐⭐⭐⭐ Strongest | ⭐ Lowest | Spark |
-| **Microbatch** | 4–6 hours / shorter windows | Larger scheduled batches | ⭐⭐⭐⭐ Strong | ⭐⭐ Low | Spark, Spark Structured Streaming |
-| **Near real-time** | 2–5 minutes | Small micro-batches | ⭐⭐⭐ Good | ⭐⭐⭐ Medium | Spark Structured Streaming |
-| **Real-time** | seconds (100ms–2s) | Event-driven w/ inherent latency | ⭐⭐ Harder | ⭐⭐⭐⭐ High | Flink, Kafka |
-| **Streaming** | ms–seconds | Event-by-event, continuous | ⭐⭐ Hardest | ⭐⭐⭐⭐⭐ Highest | Kafka, Flink |
+| **Batch** | 4-6 hours (daily) | Full dataset, partition-based | ⭐⭐⭐⭐⭐ Strongest | ⭐ Lowest | Spark |
+| **Microbatch** | 4-6 hours / shorter windows | Larger scheduled batches | ⭐⭐⭐⭐ Strong | ⭐⭐ Low | Spark, Spark Structured Streaming |
+| **Near real-time** | 2-5 minutes | Small micro-batches | ⭐⭐⭐ Good | ⭐⭐⭐ Medium | Spark Structured Streaming |
+| **Real-time** | seconds (100ms-2s) | Event-driven w/ inherent latency | ⭐⭐ Harder | ⭐⭐⭐⭐ High | Flink, Kafka |
+| **Streaming** | ms-seconds | Event-by-event, continuous | ⭐⭐ Hardest | ⭐⭐⭐⭐⭐ Highest | Kafka, Flink |
 
 > *Inspired by the "Types of Data Processing Pipelines" framing from Zach Wilson / Zach Morris' Data Engineering Bootcamp. Expanded here into an interview-prep guide.*
 
@@ -50,7 +50,7 @@ Data is collected over a window (usually a day) and processed together in a sing
 **Latency components**
 - Job scheduling: minutes
 - Full dataset processing: hours
-- Typical total: **4–6 hours daily**
+- Typical total: **4-6 hours daily**
 - Usually runs at midnight UTC (after the day closes)
 
 **Use when**
@@ -81,7 +81,7 @@ Microbatch shrinks the batch window but keeps the batch *mental model*. The tech
 **Latency components**
 - Job scheduling: minutes
 - Full dataset processing: hours
-- Typical total: **4–6 hours**
+- Typical total: **4-6 hours**
 - Usually runs midnight UTC
 
 **Use when**
@@ -110,7 +110,7 @@ The bridge between batch and streaming. You process small batches every few minu
 - Better DQ capability vs pure streaming
 
 **Latency components**
-- Collection window: 2–5 min
+- Collection window: 2-5 min
 - Processing time: variable
 - Writing time: depends on the sink
 
@@ -139,8 +139,8 @@ True event-driven processing with low (but not zero) latency. Once you cross int
 - State management requirements
 
 **Latency components**
-- Network time: 100–200 ms
-- Processing overhead: 1–2 sec
+- Network time: 100-200 ms
+- Processing overhead: 1-2 sec
 - Total: seconds (end-to-end can stretch to minutes under load)
 
 **Use when**
@@ -170,7 +170,7 @@ The lowest-latency end of the spectrum: each event is processed the moment it is
 
 **Latency components**
 - Event capture: ~150 ms
-- Flink processing: ~100 ms – 2 sec
+- Flink processing: ~100 ms to 2 sec
 - Sink writing: variable, based on destination
 
 **Use when**
@@ -249,7 +249,7 @@ Because latency is expensive. Streaming adds 24/7 operations, continuous state s
 When the consumer doesn't need sub-hour freshness (reports, ML training, financial reconciliation), when you need strong data-quality guarantees over the full dataset, when you want cheap reprocessing/backfills, or when the team can't operate a streaming system reliably.
 
 **Q: What is near real-time and when is it the right choice?**
-Small micro-batches every 2–5 minutes: the bridge between batch and streaming. Pick it when you need intraday freshness (operational dashboards, monitoring) and complex transformations, but millisecond latency isn't required and you still want decent DQ. It avoids streaming's complexity while beating batch's staleness.
+Small micro-batches every 2-5 minutes: the bridge between batch and streaming. Pick it when you need intraday freshness (operational dashboards, monitoring) and complex transformations, but millisecond latency isn't required and you still want decent DQ. It avoids streaming's complexity while beating batch's staleness.
 
 **Q: What makes data quality harder in streaming than in batch?**
 Batch sees the entire bounded dataset, so it can dedupe, validate against totals, and reconcile. Streaming sees one event at a time with no end, so you must handle out-of-order and late-arriving events (via watermarks), maintain correct windowed state, and accept that some checks (e.g., "does today's total reconcile?") simply can't be done until the window closes.

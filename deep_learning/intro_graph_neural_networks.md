@@ -183,13 +183,13 @@ def graph_readout(h, batch_index):
 
 ## Over-Smoothing and Depth
 
-GNNs don't get deeper the way CNNs do. Beyond 2–4 layers, performance usually degrades.
+GNNs don't get deeper the way CNNs do. Beyond 2-4 layers, performance usually degrades.
 
 **Over-smoothing**: each layer averages a node with its neighbours. Repeat enough times and every node's representation converges toward the same value: the graph equivalent of blurring an image until it's uniform grey. Nodes become indistinguishable, so classification collapses.
 
 **Over-squashing** is the complementary problem: after `k` layers a node's receptive field contains exponentially many nodes, all compressed into one fixed-size vector. Information from distant nodes is squashed through bottleneck edges and effectively lost.
 
-Mitigations: **residual/skip connections** (as in ResNets), **jumping knowledge** (concatenate or max-pool representations from all layers so the model can use shallow ones), normalization layers, and **graph rewiring** to add shortcut edges. But the honest answer is that 2–3 layers is the norm, and most real graphs have small diameter so 2–3 hops covers most of the useful signal anyway.
+Mitigations: **residual/skip connections** (as in ResNets), **jumping knowledge** (concatenate or max-pool representations from all layers so the model can use shallow ones), normalization layers, and **graph rewiring** to add shortcut edges. But the honest answer is that 2-3 layers is the norm, and most real graphs have small diameter so 2-3 hops covers most of the useful signal anyway.
 
 ---
 
@@ -280,7 +280,7 @@ Aggregation must be permutation-invariant because nodes have no canonical orderi
 
 There's a second, complementary problem: **over-squashing**. A node's `k`-hop receptive field grows exponentially, and all that information must be compressed into a fixed-size vector, often passing through bottleneck edges. Distant information is effectively lost regardless of depth.
 
-Mitigations exist (residual connections, jumping knowledge, normalization, graph rewiring), but the practical answer is that 2–3 layers is standard, and most real graphs have small diameter, so 2–3 hops already covers the useful signal. Depth simply isn't the axis you scale on with GNNs.
+Mitigations exist (residual connections, jumping knowledge, normalization, graph rewiring), but the practical answer is that 2-3 layers is standard, and most real graphs have small diameter, so 2-3 hops already covers the useful signal. Depth simply isn't the axis you scale on with GNNs.
 
 #### What does GraphSAGE add over GCN?
 
@@ -330,7 +330,7 @@ Node classification is different and simpler: you mask *nodes* rather than remov
 |---|---|---|
 | Test edges left in the message-passing graph | Model sees the answer; scores are meaningless | Build the graph from training edges only |
 | Random split on a temporal graph | Uses future edges to predict the past | Split by time |
-| Stacking many layers | Over-smoothing collapses representations | 2–3 layers; residuals; jumping knowledge |
+| Stacking many layers | Over-smoothing collapses representations | 2-3 layers; residuals; jumping knowledge |
 | Random negatives for link prediction | Too easy; model learns degree | Hard negatives (2-hop, degree-matched) |
 | Full-neighbourhood aggregation on a hub node | One celebrity node explodes the batch | Neighbour sampling with fixed fan-out |
 | Mean aggregation when multiplicity matters | Can't distinguish 2 neighbours from 4 | Sum aggregation (GIN) |

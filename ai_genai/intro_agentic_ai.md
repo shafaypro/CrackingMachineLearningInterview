@@ -1,4 +1,4 @@
-# Agentic AI & Multi-Agent Systems (2026 Edition)
+# Agentic AI & Multi-Agent Systems
 
 **Agentic AI** refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering single questions.
 
@@ -40,7 +40,7 @@ Agent:
 
 ### Why Agentic AI Now?
 
-Three things converged in 2024–2026:
+Three things converged in 2024-2026:
 1. **Large context windows** (200K tokens): agents can hold entire codebases in mind
 2. **Reliable tool use**: models accurately call functions with correct parameters
 3. **Better instruction following**: models stay on task across many steps

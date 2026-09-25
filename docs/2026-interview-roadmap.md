@@ -85,12 +85,12 @@ Priority: **●●● critical** · **●● important** · **● useful**
 
 | Stage | Format | What determines the outcome |
 |---|---|---|
-| **Recruiter screen** | 20–30 min | Can you describe your work in plain language? Level calibration. |
-| **Technical screen** | 45–60 min | Coding (Python/SQL) or an ML fundamentals rapid-fire round |
-| **Coding round** | 45–60 min | Data manipulation, occasionally [ML from scratch](../coding_challenges/ml_coding_challenges.md) |
-| **ML/AI depth round** | 60 min | Fundamentals with follow-ups going 3–4 layers deep |
+| **Recruiter screen** | 20-30 min | Can you describe your work in plain language? Level calibration. |
+| **Technical screen** | 45-60 min | Coding (Python/SQL) or an ML fundamentals rapid-fire round |
+| **Coding round** | 45-60 min | Data manipulation, occasionally [ML from scratch](../coding_challenges/ml_coding_challenges.md) |
+| **ML/AI depth round** | 60 min | Fundamentals with follow-ups going 3-4 layers deep |
 | **System design** | 60 min | An open-ended "design X": the highest-variance round |
-| **Project deep-dive** | 45–60 min | Your own past work, interrogated in detail |
+| **Project deep-dive** | 45-60 min | Your own past work, interrogated in detail |
 | **Behavioral / hiring manager** | 45 min | Ownership, judgment, collaboration |
 
 Two rounds are under-prepared by almost everyone: the **project deep-dive** and **system design**. They are also the two with the widest score spread, which means they decide most loops. See [Behavioral and Project Deep-Dive](./behavioral-interview-guide.md) and the [System Design framework](../system_design/README.md).

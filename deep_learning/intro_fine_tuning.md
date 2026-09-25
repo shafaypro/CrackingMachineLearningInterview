@@ -351,13 +351,13 @@ output_b = model.generate(...)
 
 | Hyperparameter | Typical Range | Notes |
 |---------------|--------------|-------|
-| LoRA rank (r) | 4–64 | Higher r = more capacity, more memory |
+| LoRA rank (r) | 4-64 | Higher r = more capacity, more memory |
 | LoRA alpha | r or 2×r | Scales gradient updates |
 | Learning rate | 1e-4 to 3e-4 | Higher than full fine-tuning |
-| Batch size | 4–32 (effective) | Use gradient accumulation |
-| Epochs | 1–5 | Overfit risk increases with more epochs |
-| Dropout | 0.05–0.1 | Light regularization |
-| Warmup ratio | 0.03–0.05 | Warmup prevents early instability |
+| Batch size | 4-32 (effective) | Use gradient accumulation |
+| Epochs | 1-5 | Overfit risk increases with more epochs |
+| Dropout | 0.05-0.1 | Light regularization |
+| Warmup ratio | 0.03-0.05 | Warmup prevents early instability |
 
 ---
 

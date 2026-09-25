@@ -9,7 +9,7 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 | Level | Label | Description |
 |-------|-------|-------------|
 | 🟢 Beginner | Entry-level | Conceptual understanding; expected from all candidates |
-| 🟡 Intermediate | Mid-level | Applied knowledge; expected for 2–5 YOE roles |
+| 🟡 Intermediate | Mid-level | Applied knowledge; expected for 2-5 YOE roles |
 | 🔴 Advanced | Senior-level | Deep technical; expected for senior/staff roles |
 
 ---
@@ -17,7 +17,7 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 ## Track 1: Classic ML Foundations
 
 **Recommended for:** All ML/AI/DS roles
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master |
 |-------|-----------|------------------------|
@@ -87,7 +87,7 @@ Use this track alongside:
 ## Track 3: AI / GenAI Engineering
 
 **Recommended for:** AI Engineer, GenAI Engineer, LLM Engineer
-**Estimated prep time:** 3–4 weeks
+**Estimated prep time:** 3-4 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -110,7 +110,7 @@ Use this track alongside:
 ## Track 4: MLOps & Production ML
 
 **Recommended for:** MLOps Engineer, Senior ML Engineer
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -128,7 +128,7 @@ Use this track alongside:
 ## Track 5: Data Engineering
 
 **Recommended for:** Data Engineer, Analytics Engineer, Platform Engineer
-**Estimated prep time:** 3–4 weeks
+**Estimated prep time:** 3-4 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -149,7 +149,7 @@ Use this track alongside:
 ## Track 6: DevOps & Infrastructure
 
 **Recommended for:** MLOps Engineer, Platform Engineer, DevOps Engineer
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|

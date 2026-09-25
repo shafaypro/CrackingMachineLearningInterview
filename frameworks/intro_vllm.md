@@ -359,10 +359,10 @@ vLLM supports 100+ model architectures from Hugging Face. Key families:
 
 | Family | Examples |
 |--------|---------|
-| Llama | Llama 3.1, 3.2, 3.3 (1B–405B) |
+| Llama | Llama 3.1, 3.2, 3.3 (1B-405B) |
 | Mistral | Mistral 7B, Mixtral 8x7B, Mistral NeMo |
 | Gemma | Gemma 2 (9B, 27B) |
-| Qwen | Qwen2.5 (0.5B–72B) |
+| Qwen | Qwen2.5 (0.5B-72B) |
 | Phi | Phi-3, Phi-4 |
 | DeepSeek | DeepSeek-R1, DeepSeek-V2 |
 | Command R | Cohere Command R+ |

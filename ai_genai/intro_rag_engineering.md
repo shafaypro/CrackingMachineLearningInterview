@@ -180,7 +180,7 @@ Fusing with Reciprocal Rank Fusion (`score = Σ 1/(k + rank)`, k≈60) avoids ha
 #### Your RAG system is too expensive. Where do you cut?
 
 Input tokens dominate RAG cost, so start there:
-1. **Retrieve more, send less**: retrieve 20 candidates, rerank, pass the top 3–5. Usually cheaper *and* more accurate, since irrelevant context degrades answers.
+1. **Retrieve more, send less**: retrieve 20 candidates, rerank, pass the top 3-5. Usually cheaper *and* more accurate, since irrelevant context degrades answers.
 2. **Prompt caching**: put the stable system prompt and instructions first so the cached prefix is reused; cached input is typically ~10% of the price.
 3. **Semantic caching** for repeated questions, with a tuned threshold and a real invalidation strategy.
 4. **Model routing**: a small model handles simple lookups, escalating only for synthesis-heavy questions.
@@ -202,8 +202,8 @@ When the knowledge is small and static enough to fit in the prompt, just put it 
 
 | Pitfall | Why it hurts | Fix |
 |---|---|---|
-| Chunks too large | The vector averages several topics and matches none well | 300–800 tokens, or small-to-big retrieval |
-| No reranking stage | Right document retrieved but ranked below the cutoff | Cross-encoder rerank of the top 20–50 |
+| Chunks too large | The vector averages several topics and matches none well | 300-800 tokens, or small-to-big retrieval |
+| No reranking stage | Right document retrieved but ranked below the cutoff | Cross-encoder rerank of the top 20-50 |
 | Skipping metadata | No filtering, no access control, no recency preference | Attach source, section, timestamp, permissions at ingest |
 | Post-filtering by permissions | Empty result pages and leaked document existence | Filter inside the vector search |
 | Different embedding models for index and query | Vectors are incomparable; results are noise | Pin the model version; reindex on change |

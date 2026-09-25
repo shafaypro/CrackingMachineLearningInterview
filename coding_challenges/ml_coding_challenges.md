@@ -524,7 +524,7 @@ def chunk_text(text, chunk_size=500, overlap=50):
 ```
 
 **Follow-ups**
-- *Why overlap at all?* An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10–20% overlap is the usual range.
+- *Why overlap at all?* An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10-20% overlap is the usual range.
 - *Why does the `end >= len(text)` break matter?* Without it, when `overlap` is large relative to the final chunk, `start` can fail to advance and the loop never terminates. Infinite-loop edge cases are exactly what interviewers probe.
 - *Better than character-based?* Token-based chunking matches what the model actually sees; structural splitting (headers, functions) preserves coherence better than either.
 

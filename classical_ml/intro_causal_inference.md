@@ -136,7 +136,7 @@ def cuped_adjust(y, x_pre):
     return y - theta * (x_pre - x_pre.mean())
 ```
 
-Typical variance reductions of 30–50% translate directly into shorter experiments: the single most effective improvement to most experimentation platforms.
+Typical variance reductions of 30-50% translate directly into shorter experiments: the single most effective improvement to most experimentation platforms.
 
 ---
 
@@ -191,7 +191,7 @@ print(model.params["treated:post"])
 
 The identifying assumption is **parallel trends**: absent treatment, the two groups' outcomes would have moved in parallel. It's untestable for the post period, but you support it by plotting pre-treatment trends over several periods and running an event-study specification with leads and lags: a significant "effect" *before* treatment falsifies the design.
 
-Two technical points interviewers probe: **cluster standard errors** at the treatment-assignment level (serial correlation makes naive SEs far too small, which is the classic DiD error), and be careful with **staggered rollouts**: the two-way fixed effects estimator is biased when units are treated at different times with heterogeneous effects, which is why Callaway–Sant'Anna and similar estimators exist.
+Two technical points interviewers probe: **cluster standard errors** at the treatment-assignment level (serial correlation makes naive SEs far too small, which is the classic DiD error), and be careful with **staggered rollouts**: the two-way fixed effects estimator is biased when units are treated at different times with heterogeneous effects, which is why Callaway-Sant'Anna and similar estimators exist.
 
 ---
 
@@ -381,7 +381,7 @@ DiD compares the change over time in a treated group against the change in an un
 
 The identifying assumption is **parallel trends**: absent treatment, both groups would have moved together. It's untestable in the post period, so you support it with several pre-treatment periods plotted, and an event-study specification with leads: a significant "effect" before treatment falsifies the design.
 
-Two technical points that separate answers: standard errors must be **clustered at the assignment level**, because serial correlation otherwise makes them far too small; and with **staggered rollouts**, two-way fixed effects is biased under heterogeneous effects, which is why estimators like Callaway–Sant'Anna exist.
+Two technical points that separate answers: standard errors must be **clustered at the assignment level**, because serial correlation otherwise makes them far too small; and with **staggered rollouts**, two-way fixed effects is biased under heterogeneous effects, which is why estimators like Callaway-Sant'Anna exist.
 
 #### You can't run an experiment. How do you estimate the effect?
 
@@ -395,7 +395,7 @@ Whatever the choice, I'd state the identifying assumption explicitly, run the di
 
 CUPED (Controlled-experiment Using Pre-Experiment Data) reduces variance by adjusting the outcome with a pre-experiment covariate, usually the same metric measured before the test: `Y_adj = Y - θ(X_pre - E[X_pre])` with `θ = Cov(Y, X_pre)/Var(X_pre)`.
 
-Because `X_pre` is measured before randomization, it can't be affected by treatment, so the adjustment leaves the expected treatment effect unbiased while removing the component of outcome variance that the pre-period predicts. Typical reductions are 30–50%, which either shortens the experiment substantially or lets you detect smaller effects at the same duration.
+Because `X_pre` is measured before randomization, it can't be affected by treatment, so the adjustment leaves the expected treatment effect unbiased while removing the component of outcome variance that the pre-period predicts. Typical reductions are 30-50%, which either shortens the experiment substantially or lets you detect smaller effects at the same duration.
 
 That's why it's ubiquitous: it's essentially free statistical power from data you already have.
 

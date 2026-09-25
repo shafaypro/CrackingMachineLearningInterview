@@ -84,8 +84,8 @@ Fast and cheap at the bottom, slow and expensive at the top. Run the bottom on e
 | Layer | Tests | Runtime | Runs on |
 |---|---|---|---|
 | **Code** | Unit tests on transforms, feature functions, serving handlers | Seconds | Every commit |
-| **Data** | Schema, nullability, ranges, cardinality, volume, freshness, distribution vs baseline | Seconds–minutes | Every commit + every pipeline run |
-| **Model** | Trains without error, beats a baseline, meets thresholds overall **and per slice**, behavioral tests | Minutes–hours | Every model change |
+| **Data** | Schema, nullability, ranges, cardinality, volume, freshness, distribution vs baseline | Seconds-minutes | Every commit + every pipeline run |
+| **Model** | Trains without error, beats a baseline, meets thresholds overall **and per slice**, behavioral tests | Minutes-hours | Every model change |
 | **Integration** | Feature pipeline → model → API contract; train/serve parity | Minutes | Pre-deploy |
 | **Deployment** | Smoke test, latency under load, shadow comparison | Minutes | Every deploy |
 

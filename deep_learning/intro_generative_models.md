@@ -221,7 +221,7 @@ def cfg_predict(model, x_t, t, cond, uncond, guidance_scale=7.5):
     return eps_uncond + guidance_scale * (eps_cond - eps_uncond)
 ```
 
-The scale trades prompt adherence against diversity and realism: around 1 ignores the prompt, 7–8 is the usual sweet spot, and very high values produce over-saturated, artifact-heavy images that rigidly obey the prompt. It costs **two forward passes per step**, which is why it roughly doubles inference cost.
+The scale trades prompt adherence against diversity and realism: around 1 ignores the prompt, 7-8 is the usual sweet spot, and very high values produce over-saturated, artifact-heavy images that rigidly obey the prompt. It costs **two forward passes per step**, which is why it roughly doubles inference cost.
 
 Other conditioning mechanisms worth naming: **ControlNet** (a trainable copy of the encoder that injects spatial conditions like depth maps or poses), **IP-Adapter** (image prompting), and **LoRA** (the same parameter-efficient fine-tuning idea as in LLMs, used for styles and characters).
 
@@ -232,14 +232,14 @@ Other conditioning mechanisms worth naming: **ControlNet** (a trainable copy of 
 | Sampler | Steps | Notes |
 |---|---|---|
 | **DDPM** | ~1000 | Original, stochastic, slow |
-| **DDIM** | 20–50 | **Deterministic**, skips steps, enables interpolation and inversion |
-| **DPM-Solver++** | 15–25 | ODE solver; strong quality per step |
-| **Euler / Heun** | 20–40 | Simple ODE integrators, widely used |
-| **LCM / Turbo** | **1–4** | Distilled models trading some quality for speed |
+| **DDIM** | 20-50 | **Deterministic**, skips steps, enables interpolation and inversion |
+| **DPM-Solver++** | 15-25 | ODE solver; strong quality per step |
+| **Euler / Heun** | 20-40 | Simple ODE integrators, widely used |
+| **LCM / Turbo** | **1-4** | Distilled models trading some quality for speed |
 
 **DDIM** is the important conceptual jump: it reformulates the reverse process as a deterministic ODE rather than a stochastic chain, which means you can take far larger steps and get reproducible outputs from a fixed seed. Determinism also enables *inversion* mapping a real image back to a latent for editing.
 
-**Distillation** (LCM, Turbo, consistency models) trains a student to reproduce many teacher steps in one, reaching 1–4 step generation. That is what makes real-time image generation feasible, at some cost in fine detail and diversity.
+**Distillation** (LCM, Turbo, consistency models) trains a student to reproduce many teacher steps in one, reaching 1-4 step generation. That is what makes real-time image generation feasible, at some cost in fine detail and diversity.
 
 ---
 
@@ -280,7 +280,7 @@ There is no likelihood to report for GANs and no single satisfying metric anywhe
 | Training stability | **Stable** | Unstable | **Stable** |
 | Sample quality | Blurry | **Sharp** | **Sharp** |
 | Mode coverage | **Good** | Poor (collapse) | **Excellent** |
-| Sampling speed | **1 pass** | **1 pass** | 20–1000 passes |
+| Sampling speed | **1 pass** | **1 pass** | 20-1000 passes |
 | Likelihood | Lower bound (ELBO) | None | Approximate |
 | Latent space | **Structured, interpolable** | Structured (StyleGAN) | Not natively |
 | Controllability | Moderate | Moderate | **Excellent** (guidance, ControlNet) |
@@ -308,13 +308,13 @@ Diffusion defines a fixed forward process that gradually adds Gaussian noise unt
 
 They beat GANs on stability and coverage. There's no adversary, so no minimax dynamics, no mode collapse, and a loss that actually decreases and means something. Because the model must explain the whole distribution at every noise level, coverage is excellent. And splitting generation into many small denoising steps makes each step an easy problem, whereas a GAN must map noise to a photorealistic image in one shot.
 
-The cost is sampling speed: many sequential forward passes versus one. DDIM, ODE solvers, and distillation to 1–4 steps are the response to that.
+The cost is sampling speed: many sequential forward passes versus one. DDIM, ODE solvers, and distillation to 1-4 steps are the response to that.
 
 #### What is classifier-free guidance and what does it trade off?
 
 During training, the conditioning signal is randomly dropped some fraction of the time, so a single network learns both conditional and unconditional noise prediction. At sampling, you extrapolate: `ε = ε_uncond + s·(ε_cond - ε_uncond)`, pushing the prediction away from the unconditional direction and further toward the conditional one.
 
-The guidance scale trades prompt adherence against diversity and naturalness. Near 1, the prompt is barely followed; around 7–8 is typically the sweet spot; very high values give rigid prompt-following with over-saturated colours and artifacts, and noticeably less variation across seeds. It also costs two forward passes per step, roughly doubling inference cost, which is why some deployments use distilled guidance to fold it into one pass.
+The guidance scale trades prompt adherence against diversity and naturalness. Near 1, the prompt is barely followed; around 7-8 is typically the sweet spot; very high values give rigid prompt-following with over-saturated colours and artifacts, and noticeably less variation across seeds. It also costs two forward passes per step, roughly doubling inference cost, which is why some deployments use distilled guidance to fold it into one pass.
 
 #### What problem does latent diffusion solve, and how?
 
@@ -330,7 +330,7 @@ Limitations worth naming: it's biased by sample count, so comparisons are only v
 
 #### When would you still use a GAN in 2026?
 
-When single-step generation is a hard requirement. A GAN generates in one forward pass; even a heavily distilled diffusion model needs 1–4, and undistilled needs 20+. For real-time video super-resolution, live face manipulation, or on-device generation with a tight latency budget, that gap decides it.
+When single-step generation is a hard requirement. A GAN generates in one forward pass; even a heavily distilled diffusion model needs 1-4, and undistilled needs 20+. For real-time video super-resolution, live face manipulation, or on-device generation with a tight latency budget, that gap decides it.
 
 GANs also remain common as *components* the decoder in a VQGAN, or an adversarial loss added to a reconstruction objective to remove blur. What they've largely lost is text-to-image generation, where diffusion's coverage, controllability, and training stability win decisively.
 
@@ -353,10 +353,10 @@ It's most common with powerful autoregressive decoders that can model the data w
 | Using the saturating generator loss | Vanishing gradients early in training | Non-saturating: maximize `log D(G(z))` |
 | Comparing FID at different sample counts | FID is biased by N | Fix N (typically 50k) across comparisons |
 | Reporting FID alone | Hides the fidelity/coverage tradeoff | Add precision/recall and CLIP score |
-| Cranking guidance scale for "better" prompts | Over-saturation, artifacts, low diversity | Stay near 7–8; tune per model |
+| Cranking guidance scale for "better" prompts | Over-saturation, artifacts, low diversity | Stay near 7-8; tune per model |
 | Pixel-space diffusion at high resolution | Enormously expensive for no gain | Latent diffusion |
 | Ignoring posterior collapse | Latent is uninformative; model is useless as an encoder | KL annealing, free bits, weaker decoder |
-| Assuming more diffusion steps always help | Quality plateaus; cost grows linearly | Tune steps per sampler; 20–30 is often enough |
+| Assuming more diffusion steps always help | Quality plateaus; cost grows linearly | Tune steps per sampler; 20-30 is often enough |
 
 ---
 

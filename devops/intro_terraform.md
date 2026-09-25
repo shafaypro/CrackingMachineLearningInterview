@@ -1,4 +1,4 @@
-# Terraform – Complete Guide (2026 Edition)
+# Terraform
 
 Terraform (and its open-source fork **OpenTofu**) is the leading **Infrastructure as Code (IaC)** tool. It lets you define, provision, and manage cloud infrastructure using declarative configuration files: AWS, GCP, Azure, Kubernetes, and 3,000+ other providers.
 

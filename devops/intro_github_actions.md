@@ -1,4 +1,4 @@
-# GitHub Actions – CI/CD Guide (2026 Edition)
+# GitHub Actions for CI/CD
 
 GitHub Actions is GitHub's built-in **CI/CD and automation platform**. It lets you automate build, test, deploy, and any workflow directly in your repository using YAML.
 

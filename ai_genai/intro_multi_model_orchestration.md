@@ -137,7 +137,7 @@ multi-model-router/
 
 Start with the routing signal, because that's the whole design. Options in increasing sophistication: static rules by request type (cheapest, surprisingly effective), a small classifier trained on labeled easy/hard examples, a cascade where the small model attempts first and escalates on low confidence, or an LLM-based router (accurate but adds a call's latency and cost).
 
-The cascade is usually the best starting point because the escalation signal is free: you already have the small model's output and can check confidence, schema validity, or a cheap verifier. Typical result is 60–80% of traffic handled by the small model at a fraction of the cost with minimal quality impact.
+The cascade is usually the best starting point because the escalation signal is free: you already have the small model's output and can check confidence, schema validity, or a cheap verifier. Typical result is 60-80% of traffic handled by the small model at a fraction of the cost with minimal quality impact.
 
 The parts to get right: a **fallback** when the chosen provider fails, **per-route evaluation** so you can prove the small model is adequate for its slice, and **logging of which route each request took** so you can audit quality by route rather than in aggregate.
 

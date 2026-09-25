@@ -86,9 +86,9 @@ At batch size 32 that's **34 GB of KV cache**: larger than the 16 GB of model we
 | Technique | Mechanism | Saving |
 |---|---|---|
 | **MQA** (multi-query attention) | All query heads share one K/V head | `num_heads`x smaller |
-| **GQA** (grouped-query attention) | Heads share K/V in groups | 4–8x, with better quality than MQA |
+| **GQA** (grouped-query attention) | Heads share K/V in groups | 4-8x, with better quality than MQA |
 | **MLA** (multi-head latent attention) | Compress K/V to a low-rank latent | Large; used by DeepSeek models |
-| **KV cache quantization** | Store cache in int8/fp8 | 2–4x |
+| **KV cache quantization** | Store cache in int8/fp8 | 2-4x |
 | **PagedAttention** | Non-contiguous paged allocation | Eliminates fragmentation waste (~2x effective) |
 | **Sliding window / eviction** | Keep only recent + sink tokens | Bounded memory, some quality loss |
 
@@ -103,7 +103,7 @@ At batch size 32 that's **34 GB of KV cache**: larger than the 16 GB of model we
 | **No batching** | One request at a time | Wastes almost all GPU throughput |
 | **Static batching** | Wait for N requests, run them together | Whole batch waits for the longest generation |
 | **Dynamic batching** | Batch what has arrived within a time window | Still blocks on the longest sequence |
-| **Continuous / in-flight batching** | Evict finished sequences and admit new ones every step | The standard; 10–20x throughput over static |
+| **Continuous / in-flight batching** | Evict finished sequences and admit new ones every step | The standard; 10-20x throughput over static |
 
 Continuous batching matters because generation lengths in a real workload vary by 100x. With static batching, a batch of 32 where one request generates 2,000 tokens and the rest generate 20 keeps 31 slots idle for the whole run. Continuous batching frees each slot the moment its sequence emits EOS and immediately admits a queued request. This is the single largest throughput win available in LLM serving, and it is why vLLM/TGI/TensorRT-LLM exist rather than a plain `model.generate()` loop.
 
@@ -113,7 +113,7 @@ Continuous batching matters because generation lengths in a real workload vary b
 
 ## Attention Kernel Optimizations
 
-**FlashAttention** does not change the math; it changes the memory traffic. Standard attention materializes the `n × n` score matrix in HBM, so memory traffic is `O(n²)`. FlashAttention tiles the computation in SRAM and uses the online-softmax trick to never write the full matrix out, making traffic `O(n²/M)` for SRAM size `M`. The result is 2–4x faster attention and memory that scales linearly in sequence length, which is what made long-context training and inference practical at all.
+**FlashAttention** does not change the math; it changes the memory traffic. Standard attention materializes the `n × n` score matrix in HBM, so memory traffic is `O(n²)`. FlashAttention tiles the computation in SRAM and uses the online-softmax trick to never write the full matrix out, making traffic `O(n²/M)` for SRAM size `M`. The result is 2-4x faster attention and memory that scales linearly in sequence length, which is what made long-context training and inference practical at all.
 
 **PagedAttention** (memory allocation) and **FlashAttention** (kernel efficiency) are complementary and both used in modern servers. A common interview slip is treating them as alternatives.
 
@@ -130,9 +130,9 @@ Quantization reduces the numerical precision of weights and sometimes activation
 | **fp16 / bf16** | 16 | Baseline | - | Standard serving precision |
 | **fp8** | 8 | Post-training | Very small | H100+ native support |
 | **INT8 (SmoothQuant, LLM.int8)** | 8 | Post-training | Small | Handles outlier activation channels |
-| **GPTQ** | 4 | Post-training, calibrated | Small–moderate | Layer-wise second-order error correction |
+| **GPTQ** | 4 | Post-training, calibrated | Small-moderate | Layer-wise second-order error correction |
 | **AWQ** | 4 | Post-training, activation-aware | Small | Protects salient weight channels; fast kernels |
-| **GGUF (llama.cpp)** | 2–8 | Post-training | Varies by level | The CPU/edge standard |
+| **GGUF (llama.cpp)** | 2-8 | Post-training | Varies by level | The CPU/edge standard |
 | **QLoRA (NF4)** | 4 | Training-time | Small | For fine-tuning, not primarily serving |
 
 Rules of thumb worth stating in an interview: 8-bit is essentially free in quality terms and should be the default. 4-bit costs a small but measurable amount of quality, usually acceptable, and worth it when it lets you fit a larger model on the same GPU. Below 4-bit, degradation becomes obvious on reasoning tasks.
@@ -147,7 +147,7 @@ Rules of thumb worth stating in an interview: 8-bit is essentially free in quali
 
 A small, fast **draft model** proposes `k` tokens; the large **target model** verifies all `k` in a single forward pass. Accepted tokens are kept, and the first rejection resamples from a corrected distribution.
 
-Why it works: verifying `k` tokens costs almost the same as generating 1, because decode is memory-bandwidth-bound: you read the weights once either way. The speedup is roughly the mean number of accepted tokens per verification step, typically 2–3x on predictable text.
+Why it works: verifying `k` tokens costs almost the same as generating 1, because decode is memory-bandwidth-bound: you read the weights once either way. The speedup is roughly the mean number of accepted tokens per verification step, typically 2-3x on predictable text.
 
 ```
 Expected speedup ≈ (1 - α^(k+1)) / ((1 - α)(1 + c·k))
@@ -190,7 +190,7 @@ params = SamplingParams(temperature=0.7, max_tokens=512)
 outputs = llm.generate(prompts, params)   # continuous batching is automatic
 ```
 
-**Self-host vs API** is a cost-and-control question, not an ideology. Self-hosting wins on high, steady volume (a dedicated GPU amortizes well above roughly 20–30% utilization), on data residency requirements, and when you need a custom fine-tune. APIs win on spiky or low volume, on access to frontier models, and on avoiding an on-call rotation for GPU infrastructure. Model the break-even explicitly: an A100 at roughly $1–2/hour is ~$1,000/month, which buys a substantial number of API tokens.
+**Self-host vs API** is a cost-and-control question, not an ideology. Self-hosting wins on high, steady volume (a dedicated GPU amortizes well above roughly 20-30% utilization), on data residency requirements, and when you need a custom fine-tune. APIs win on spiky or low volume, on access to frontier models, and on avoiding an on-call rotation for GPU infrastructure. Model the break-even explicitly: an A100 at roughly $1-2/hour is ~$1,000/month, which buys a substantial number of API tokens.
 
 ---
 
@@ -221,10 +221,10 @@ Two structural points that matter more than the arithmetic:
 
 Often larger wins than anything at the kernel level, and cheaper to implement:
 
-- **Prompt caching**: order prompts stable-prefix-first so the cache hits. Frequently a 50–90% input cost reduction for agents and RAG.
+- **Prompt caching**: order prompts stable-prefix-first so the cache hits. Frequently a 50-90% input cost reduction for agents and RAG.
 - **Semantic caching**: embed the query, and if a near-identical past query exists, return its answer. Excellent for FAQ-style traffic; needs a similarity threshold tuned carefully and an invalidation strategy, or it will confidently serve stale answers.
-- **Model routing**: send easy requests to a small model and hard ones to a large one, with a classifier or heuristic in front. Typically 60–80% cost reduction with minimal quality impact when the routing signal is decent.
-- **Shorter outputs**: instruct the model to be concise, cap `max_tokens`, and return structured data rather than prose. Output tokens are usually 4–5x the price of input.
+- **Model routing**: send easy requests to a small model and hard ones to a large one, with a classifier or heuristic in front. Typically 60-80% cost reduction with minimal quality impact when the routing signal is decent.
+- **Shorter outputs**: instruct the model to be concise, cap `max_tokens`, and return structured data rather than prose. Output tokens are usually 4-5x the price of input.
 - **Streaming**: doesn't change cost or total time, but it slashes *perceived* latency, which is often the actual complaint.
 - **Batch APIs**: providers offer roughly 50% discounts for asynchronous batch jobs with a 24-hour window. Free money for offline workloads.
 - **Stop sequences and early termination**: stop generating the moment the useful content ends.
@@ -250,7 +250,7 @@ Its size is `2 × layers × kv_heads × head_dim × seq_len × batch × dtype_by
 
 Static batching waits for a fixed group of requests, runs them together, and returns when the *longest* generation finishes. Real workloads have generation lengths varying by 100x, so most slots sit idle for most of the batch's life.
 
-Continuous (in-flight) batching operates at the token level: after every decode step, finished sequences are evicted and queued requests are admitted into the free slots. The GPU stays saturated regardless of length variance. Measured throughput improvements over static batching are typically 10–20x, which is why it's the defining feature of vLLM, TGI, and TensorRT-LLM rather than an optional tuning knob.
+Continuous (in-flight) batching operates at the token level: after every decode step, finished sequences are evicted and queued requests are admitted into the free slots. The GPU stays saturated regardless of length variance. Measured throughput improvements over static batching are typically 10-20x, which is why it's the defining feature of vLLM, TGI, and TensorRT-LLM rather than an optional tuning knob.
 
 #### How does speculative decoding preserve output quality?
 
@@ -275,7 +275,7 @@ Independently of all this, I'd make sure the response streams: a 4-second wall b
 Layered, measuring at each step:
 1. **Prompt/prefix caching**: often the single biggest win, since input tokens dominate RAG and agent workloads and cached input is roughly 10% of the price.
 2. **Trim context**: retrieve 20, rerank, send 5. Cheaper *and* usually more accurate, since irrelevant context degrades answers.
-3. **Model routing**: a small model handles the 70–80% of easy requests; escalate only when a classifier or confidence signal says so.
+3. **Model routing**: a small model handles the 70-80% of easy requests; escalate only when a classifier or confidence signal says so.
 4. **Semantic caching** for repeated or near-repeated queries.
 5. **Cap output length** and prefer structured output over prose; output tokens cost several times input.
 6. **Batch API** (~50% discount) for anything that isn't interactive.
@@ -297,7 +297,7 @@ Validation: run the *application's* eval set, not a generic benchmark. Compare f
 
 #### What's the difference between FlashAttention and PagedAttention?
 
-They solve different problems and are used together. **FlashAttention** is a kernel optimization: it tiles attention computation in SRAM and uses online softmax so the `n × n` attention matrix is never written to HBM, reducing memory traffic and making attention 2–4x faster with memory linear rather than quadratic in sequence length. **PagedAttention** is a memory *allocator*: it stores the KV cache in fixed-size non-contiguous blocks with a block table, eliminating the internal fragmentation of preallocating max-length buffers and enabling copy-on-write sharing of common prefixes.
+They solve different problems and are used together. **FlashAttention** is a kernel optimization: it tiles attention computation in SRAM and uses online softmax so the `n × n` attention matrix is never written to HBM, reducing memory traffic and making attention 2-4x faster with memory linear rather than quadratic in sequence length. **PagedAttention** is a memory *allocator*: it stores the KV cache in fixed-size non-contiguous blocks with a block table, eliminating the internal fragmentation of preallocating max-length buffers and enabling copy-on-write sharing of common prefixes.
 
 FlashAttention makes each attention computation faster; PagedAttention lets more sequences fit in memory concurrently. Framing them as alternatives is a common mistake.
 

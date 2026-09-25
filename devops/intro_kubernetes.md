@@ -1,4 +1,4 @@
-# Kubernetes – Complete Guide (2026 Edition)
+# Kubernetes
 
 Kubernetes (K8s) is the de-facto standard for **container orchestration**, automating deployment, scaling, self-healing, and management of containerized applications at scale.
 

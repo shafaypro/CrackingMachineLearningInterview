@@ -1,4 +1,4 @@
-# ML / AI Project Folder Structures (2026 Edition)
+# ML / AI Project Folder Structures
 
 A reference for how to lay out real machine-learning, deep-learning, LLM/agent,
 and data-engineering projects. A clean structure makes a project reproducible,

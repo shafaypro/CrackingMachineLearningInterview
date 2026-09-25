@@ -1,4 +1,4 @@
-# Apache Spark – Complete Guide (2026 Edition)
+# Apache Spark
 
 **Apache Spark** is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing, streaming, ML, and SQL: all in one unified engine.
 
@@ -20,8 +20,8 @@ Single Machine         →         Spark Cluster
 | Tool | Data Size | Use Case |
 |------|-----------|---------|
 | Pandas | GBs (fits in RAM) | Local data analysis, prototyping |
-| SQL Database | GBs–TBs | OLTP, OLAP queries |
-| **Apache Spark** | TBs–PBs | Distributed processing, ETL, ML at scale |
+| SQL Database | GBs-TBs | OLTP, OLAP queries |
+| **Apache Spark** | TBs-PBs | Distributed processing, ETL, ML at scale |
 
 ---
 

@@ -1,4 +1,4 @@
-# How to Set Up a Project on GitHub: Complete Tutorial (2026 Edition)
+# How to Set Up a Project on GitHub
 
 A practical, end-to-end walkthrough for taking an ML/AI project from an empty
 folder to a clean, collaborative, CI-backed GitHub repository. This is the guide

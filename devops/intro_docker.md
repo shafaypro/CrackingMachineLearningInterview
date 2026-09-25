@@ -1,4 +1,4 @@
-# Docker – Complete Guide (2026 Edition)
+# Docker
 
 Docker is the standard for packaging applications into portable, reproducible **containers**. It is used for deploying microservices, running local dev environments, and building CI/CD pipelines, and ML model serving is almost always shipped as a container image.
 

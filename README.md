@@ -628,9 +628,9 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
         Favors larger partitions.
         Uses squared proportion of classes.
         Perfectly classified, Gini Index would be zero.
-        Evenly distributed would be 1 – (1/# Classes).
+        Evenly distributed would be 1 - (1/# Classes).
         You want a variable split that has a low Gini Index.
-        The algorithm works as 1 – ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
+        The algorithm works as 1 - ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
 
 #### What is probability? How would you define Likelihood?
         Probability treats the parameters as fixed and asks how likely the data is:
@@ -685,7 +685,7 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
         probability distributions, whereas cross-entropy can be thought to calculate the total entropy between the distributions.
 
         Cross-entropy can be calculated using the probabilities of the events from P and Q, as follows:
-                H(P, Q) = – sum x in X P(x) * log(Q(x))
+                H(P, Q) = -sum x in X P(x) * log(Q(x))
 #### How would you define AUC - ROC Curve?
         ROC is a probability curve and AUC represents degree or measure of separability. AUC - ROC curve is a performance measurement for classification problem at various thresholds settings.
 
@@ -1839,7 +1839,7 @@ in large LLM pre-training (often `p = 0` when there is enough data). It is still
 Monte Carlo dropout (keeping it on at inference) gives cheap uncertainty estimates.
 
 #### 47) Define LSTM. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
-Long Short Term Memory – are explicitly designed to address the long term dependency problem, by maintaining a state what to remember and what to forget.
+Long Short Term Memory networks are explicitly designed to address the long term dependency problem, by maintaining a state what to remember and what to forget.
 
 #### 48) List the key components of LSTM. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
 - **Cell state `c_t`**: the long-term memory, updated additively, which lets gradients flow across many steps.
@@ -1940,7 +1940,7 @@ We apply Label Encoding when:
 
 #### 58) What is the difference between LDA and PCA for dimensionality reduction?
 
-Both LDA and PCA are linear transformation techniques: LDA is a supervised whereas PCA is unsupervised – PCA ignores class labels.
+Both LDA and PCA are linear transformation techniques: LDA is supervised whereas PCA is unsupervised: PCA ignores class labels.
 
 We can picture PCA as a technique that finds the directions of maximal variance. In contrast to PCA, LDA attempts to find a feature subspace that maximizes class separability.
 

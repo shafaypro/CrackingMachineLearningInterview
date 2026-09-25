@@ -1,4 +1,4 @@
-# Apache Kafka – Complete Guide (2026 Edition)
+# Apache Kafka
 
 **Apache Kafka** is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix, powering real-time data pipelines, event-driven architectures, and streaming analytics.
 

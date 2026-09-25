@@ -370,7 +370,7 @@ if not passed:
 | PSI ≥ 0.25 on key features | Significant data drift | High |
 | Model accuracy drops > 5% | Performance degradation | High |
 | Business KPI anomaly | Conversion/revenue drop | High |
-| PSI 0.1–0.25 on multiple features | Moderate drift | Medium |
+| PSI 0.1-0.25 on multiple features | Moderate drift | Medium |
 | Scheduled interval | Weekly/monthly safeguard | Low |
 | New data available (large batch) | Proactive retraining | Low |
 

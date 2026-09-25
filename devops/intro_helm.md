@@ -1,4 +1,4 @@
-# Helm – Kubernetes Package Manager (2026 Edition)
+# Helm: The Kubernetes Package Manager
 
 **Helm** is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called **charts**.
 
