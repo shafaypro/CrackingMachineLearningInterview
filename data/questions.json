@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "generator": "tools/build_question_bank.py",
-  "count": 842,
+  "count": 875,
   "tracks": {
     "ai_genai": 106,
     "classic": 167,
@@ -14,9 +14,9 @@
     "frameworks": 62,
     "mlops": 116,
     "project_setup": 13,
-    "system_design": 66
+    "system_design": 99
   },
-  "sources": 91,
+  "sources": 95,
   "questions": [
     {
       "id": "c20b1cb1ad45",
@@ -2133,18 +2133,18 @@
     {
       "id": "e595b0977ece",
       "question": "How would you implement a ReAct agent in LangChain?",
-      "answer_md": "Use `create_tool_calling_agent` with a model that supports tool use (Claude, GPT-4, etc.) and `AgentExecutor`. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.",
+      "answer_md": "In LangChain 1.0+, use `create_agent(model, tools, system_prompt=...)` with a model that supports tool calling (Claude, GPT, Gemini, etc.); it runs the ReAct loop on LangGraph. Older code used `create_tool_calling_agent` + `AgentExecutor`, now in `langchain-classic`. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.",
       "source_path": "ai_genai/intro_langchain.md",
       "source_title": "LangChain & LangGraph",
       "track": "ai_genai",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 3
     },
     {
       "id": "156ee4d727be",
       "question": "What are the main memory types in LangChain and when would you use each?",
-      "answer_md": "- `ConversationBufferMemory`: stores all messages verbatim. Use for short conversations.\n- `ConversationSummaryMemory`: summarizes older turns using an LLM. Use for long sessions where context window is a concern.\n- `ConversationBufferWindowMemory`: keeps the last N messages. Simple and predictable.\n- **LangGraph checkpointing**: best for production: persists full graph state (not just messages) to a database, enabling true session continuity.",
+      "answer_md": "The first three are the classic memory classes (legacy since LangChain 1.0, now in `langchain-classic`); they still come up in interviews.\n- `ConversationBufferMemory`: stores all messages verbatim. Use for short conversations.\n- `ConversationSummaryMemory`: summarizes older turns using an LLM. Use for long sessions where context window is a concern.\n- `ConversationBufferWindowMemory`: keeps the last N messages. Simple and predictable.\n- **LangGraph checkpointing**: best for production: persists full graph state (not just messages) to a database, enabling true session continuity.",
       "source_path": "ai_genai/intro_langchain.md",
       "source_title": "LangChain & LangGraph",
       "track": "ai_genai",
@@ -2155,7 +2155,7 @@
     {
       "id": "495421c066fb",
       "question": "What is LangSmith and how do you use it?",
-      "answer_md": "LangSmith is LangChain's observability platform. You enable it by setting `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY`. It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.",
+      "answer_md": "LangSmith is LangChain's observability platform. You enable it by setting `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` (the older `LANGCHAIN_TRACING_V2` / `LANGCHAIN_API_KEY` names still work). It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.",
       "source_path": "ai_genai/intro_langchain.md",
       "source_title": "LangChain & LangGraph",
       "track": "ai_genai",
@@ -6500,7 +6500,7 @@
     {
       "id": "54ade6aab554",
       "question": "Compare PyTorch and TensorFlow for production ML.",
-      "answer_md": "**PyTorch** is dominant in research and has strong production tools (TorchServe, ONNX export, TorchScript). `torch.compile` in PyTorch 2.0 makes it competitive on performance.\n\n**TensorFlow** has mature production tooling: TF Serving (high-performance model serving), TFLite (mobile/edge), TF.js (browser), and tight integration with Google Cloud (Vertex AI).\n\nFor new projects in 2025: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.",
+      "answer_md": "**PyTorch** is dominant in research and has strong production paths (ONNX export, `torch.export` with AOTInductor, ExecuTorch for edge, or serving through vLLM/Triton). TorchScript is deprecated in favor of `torch.export`, and TorchServe is in limited maintenance. `torch.compile` (PyTorch 2.0+) makes it competitive on performance.\n\n**TensorFlow** has mature production tooling: TF Serving (high-performance model serving), TFLite (mobile/edge), TF.js (browser), and tight integration with Google Cloud (Vertex AI).\n\nFor new projects: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.",
       "source_path": "frameworks/README.md",
       "source_title": "Frameworks & Tools Overview",
       "track": "frameworks",
@@ -6621,7 +6621,7 @@
     {
       "id": "fd66c75a020e",
       "question": "What is the difference between LoRA and QLoRA?",
-      "answer_md": "LoRA applies low-rank adapters to the full-precision model. QLoRA (Quantized LoRA) first quantizes the base model to 4-bit precision using NF4 quantization (reducing memory by ~75%), then applies LoRA adapters on top. QLoRA makes it possible to fine-tune 65B+ parameter models on a single consumer GPU (48GB VRAM). The quality is slightly lower than full LoRA but the memory savings are massive.",
+      "answer_md": "LoRA applies low-rank adapters to the full-precision model. QLoRA (Quantized LoRA) first quantizes the base model to 4-bit precision using NF4 quantization (reducing memory by ~75%), then applies LoRA adapters on top. QLoRA makes it possible to fine-tune a 65B parameter model on a single 48GB GPU. The QLoRA paper reports quality close to 16-bit fine-tuning; in practice any gap is small relative to the memory savings.",
       "source_path": "frameworks/intro_huggingface.md",
       "source_title": "Hugging Face Guide",
       "track": "frameworks",
@@ -6654,7 +6654,7 @@
     {
       "id": "3866f1726f41",
       "question": "How do you prevent gradient issues when fine-tuning with PEFT?",
-      "answer_md": "1. Call `prepare_model_for_kbit_training(model)` when using 4-bit/8-bit quantization: it handles gradient checkpointing, casting, and disabling quantized layer grads\n2. Ensure LoRA target modules include all attention projection matrices\n3. Set `lora_dropout` to regularize training\n4. Use gradient clipping (`max_grad_norm=1.0` in `TrainingArguments`)\n5. Enable `gradient_checkpointing=True` to trade compute for memory\n6. Use `torch.cuda.amp` (mixed precision) via `fp16=True` or `bf16=True`",
+      "answer_md": "1. Call `prepare_model_for_kbit_training(model)` when using 4-bit/8-bit quantization: it handles gradient checkpointing, casting, and disabling quantized layer grads\n2. Ensure LoRA target modules include all attention projection matrices\n3. Set `lora_dropout` to regularize training\n4. Use gradient clipping (`max_grad_norm=1.0` in `TrainingArguments`)\n5. Enable `gradient_checkpointing=True` to trade compute for memory\n6. Use mixed precision (`torch.amp` under the hood) via `fp16=True` or `bf16=True`",
       "source_path": "frameworks/intro_huggingface.md",
       "source_title": "Hugging Face Guide",
       "track": "frameworks",
@@ -6764,7 +6764,7 @@
     {
       "id": "075a43997689",
       "question": "What is the difference between Ollama and vLLM for serving LLMs?",
-      "answer_md": "Ollama prioritizes simplicity and local development. It works great for single-user workloads, quick experimentation, and desktop use. vLLM uses PagedAttention for KV cache management, enabling high-throughput multi-user inference with continuous batching. vLLM is 3-10x more efficient for concurrent requests. For production APIs serving many users: vLLM. For local development and single-user tools: Ollama.",
+      "answer_md": "Ollama prioritizes simplicity and local development. It works great for single-user workloads, quick experimentation, and desktop use. vLLM uses PagedAttention for KV cache management, enabling high-throughput multi-user inference with continuous batching. vLLM typically delivers much higher throughput under many concurrent requests. For production APIs serving many users: vLLM. For local development and single-user tools: Ollama.",
       "source_path": "frameworks/intro_ollama.md",
       "source_title": "Ollama: Run LLMs Locally",
       "track": "frameworks",
@@ -6775,7 +6775,7 @@
     {
       "id": "d84b519ea142",
       "question": "What is quantization in the context of Ollama models?",
-      "answer_md": "Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (4-bit with K-means quantization, mixed precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the sweet spot: ~75% memory reduction vs F32 with minimal quality loss.",
+      "answer_md": "Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (a llama.cpp \"k-quant\": block-wise ~4-bit quantization with per-block scales, where `_M` is the medium mix that keeps some tensors at higher precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the common sweet spot: roughly 70% smaller than F16 with small quality loss.",
       "source_path": "frameworks/intro_ollama.md",
       "source_title": "Ollama: Run LLMs Locally",
       "track": "frameworks",
@@ -6808,7 +6808,7 @@
     {
       "id": "492563309059",
       "question": "How do you run a vision model with Ollama?",
-      "answer_md": "Pull a multimodal model like LLaVA (`ollama pull llava`) and pass images via the CLI (`ollama run llava --image photo.jpg`) or via the API/Python SDK. In the Python `ollama` library, include an `images` field in the message with file paths or base64-encoded image data. The model processes both the image and text prompt together.",
+      "answer_md": "Pull a multimodal model like LLaVA (`ollama pull llava`) and pass images via the CLI (include the file path in the prompt: `ollama run llava \"Describe ./photo.jpg\"`) or via the API/Python SDK. In the Python `ollama` library, include an `images` field in the message with file paths or base64-encoded image data. The model processes both the image and text prompt together.",
       "source_path": "frameworks/intro_ollama.md",
       "source_title": "Ollama: Run LLMs Locally",
       "track": "frameworks",
@@ -6841,7 +6841,7 @@
     {
       "id": "2f9205df4fa7",
       "question": "How does Pydantic v2 differ from v1 in performance?",
-      "answer_md": "Pydantic v2's core is written in Rust (via the `pydantic-core` library), making validation 10-50x faster than v1. API changes: `@validator` → `@field_validator`, `.dict()` → `.model_dump()`, `class Config` → `model_config = SettingsConfigDict(...)`.",
+      "answer_md": "Pydantic v2's core is written in Rust (via the `pydantic-core` library), making validation substantially faster than v1 (often by several times or more, depending on the workload). API changes: `@validator` → `@field_validator`, `.dict()` → `.model_dump()`, `parse_obj()` → `model_validate()`, `class Config` → `model_config = ConfigDict(...)` (or `SettingsConfigDict` in `pydantic-settings`).",
       "source_path": "frameworks/intro_pydantic.md",
       "source_title": "Pydantic: Data Validation for AI Systems",
       "track": "frameworks",
@@ -6927,9 +6927,9 @@
       "order": 4
     },
     {
-      "id": "33e7aaf450ba",
-      "question": "Sync vs async SDK client (does it matter?",
-      "answer_md": "Yes) calling a blocking sync\nclient inside an async handler stalls the event loop; use the async client or\noffload to an executor.",
+      "id": "42fcc56be1bf",
+      "question": "Sync vs async SDK client: does it matter?",
+      "answer_md": "Yes: calling a blocking sync\nclient inside an async handler stalls the event loop; use the async client or\noffload to an executor.",
       "source_path": "frameworks/intro_python_for_ai.md",
       "source_title": "Python for AI Engineering",
       "track": "frameworks",
@@ -6995,7 +6995,7 @@
     {
       "id": "b94ca4b1cee2",
       "question": "What is Mixed Precision Training and what are its benefits?",
-      "answer_md": "Mixed Precision Training uses FP16 (half-precision) for most computations and FP32 for numerically sensitive operations (loss, normalization). Benefits: ~2x memory reduction (enabling larger batches), ~2-3x faster on Tensor Core GPUs (A100, V100, RTX 3090+). PyTorch's `torch.cuda.amp.autocast()` handles this automatically, and `GradScaler` prevents gradient underflow (values too small to represent in FP16).",
+      "answer_md": "Mixed Precision Training uses FP16 (half-precision) for most computations and FP32 for numerically sensitive operations (loss, normalization). Benefits: ~2x memory reduction (enabling larger batches), ~2-3x faster on Tensor Core GPUs (A100, V100, RTX 3090+). PyTorch's `torch.amp.autocast(\"cuda\")` (formerly `torch.cuda.amp.autocast()`, now deprecated) handles this automatically, and `GradScaler` prevents gradient underflow (values too small to represent in FP16).",
       "source_path": "frameworks/intro_pytorch.md",
       "source_title": "PyTorch Guide",
       "track": "frameworks",
@@ -7006,7 +7006,7 @@
     {
       "id": "21955d7a9abf",
       "question": "What is `torch.compile` and how does it improve performance?",
-      "answer_md": "`torch.compile` (PyTorch 2.0+) applies ahead-of-time graph compilation using TorchInductor, which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Typical speedup: 10-40% on training, 2x+ on inference. The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.",
+      "answer_md": "`torch.compile` (PyTorch 2.0+) applies just-in-time graph compilation (TorchDynamo captures the graph, TorchInductor compiles it), which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Speedups vary widely by model, batch size, and hardware (the code comment above gives rough ranges). The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.",
       "source_path": "frameworks/intro_pytorch.md",
       "source_title": "PyTorch Guide",
       "track": "frameworks",
@@ -7083,7 +7083,7 @@
     {
       "id": "c70c0962763a",
       "question": "What is PagedAttention and why does it improve throughput?",
-      "answer_md": "PagedAttention manages the KV (key-value) cache in fixed-size pages similar to OS virtual memory. Traditional inference pre-allocates contiguous memory blocks based on max sequence length, wasting memory for shorter sequences and limiting batch size. PagedAttention allocates pages on demand, eliminates internal fragmentation, and allows KV cache sharing across requests (e.g., shared system prompts). This enables larger batch sizes, reducing latency and increasing throughput by 2-24x.",
+      "answer_md": "PagedAttention manages the KV (key-value) cache in fixed-size pages similar to OS virtual memory. Traditional inference pre-allocates contiguous memory blocks based on max sequence length, wasting memory for shorter sequences and limiting batch size. PagedAttention allocates pages on demand, eliminates external fragmentation (internal fragmentation is limited to the last page of each sequence), and allows KV cache sharing across requests (e.g., shared system prompts). This enables larger batch sizes and much higher throughput (the paper reports 2-4x over prior serving systems at similar latency).",
       "source_path": "frameworks/intro_vllm.md",
       "source_title": "vLLM: High-Throughput LLM Serving",
       "track": "frameworks",
@@ -7127,7 +7127,7 @@
     {
       "id": "6a2f9a2caf36",
       "question": "What quantization method would you recommend for production?",
-      "answer_md": "For NVIDIA H100/A100: FP8 gives the best balance of quality and speed with native hardware support. For older NVIDIA (A10, V100): AWQ is preferred over GPTQ as it has lower quality degradation and similar speed. AWQ uses activation-aware quantization that finds better weight quantization points. GPTQ is older and slightly lower quality at the same bit width.",
+      "answer_md": "For NVIDIA Hopper/Ada GPUs (H100, L40S): FP8 gives the best balance of quality and speed with native hardware support (A100 has no FP8 tensor cores). For older NVIDIA GPUs (A100, A10): 4-bit AWQ or GPTQ. AWQ uses activation statistics to protect the most important weights; GPTQ uses approximate second-order information to minimize layer-wise error. Quality at 4 bits is similar in practice, so benchmark both on your own task.",
       "source_path": "frameworks/intro_vllm.md",
       "source_title": "vLLM: High-Throughput LLM Serving",
       "track": "frameworks",
@@ -8731,6 +8731,193 @@
       "order": 7
     },
     {
+      "id": "7ef7affd21a9",
+      "question": "Why can't you estimate price elasticity from historical sales data?",
+      "answer_md": "Because the old pricing policy set prices in response to demand. High demand periods had high prices, so price and quantity move together for reasons that have nothing to do with the causal effect of price. A regression of quantity on price picks up both and is biased toward zero, sometimes even positive. If the old policy was a deterministic function of logged features, there is no independent price variation left after conditioning, so no model can recover the effect. You need price variation that is unrelated to demand: randomized experiments, natural experiments, or an instrument.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "f8aaf57401d5",
+      "question": "What is the optimal price under constant elasticity?",
+      "answer_md": "With demand `q = A·p^(-e)` and unit cost `c`, profit `(p - c)·A·p^(-e)` is maximized at `p* = c·e/(e - 1)` for `e > 1`, which is the Lerner condition `(p - c)/p = 1/e`. With `c = 10` and `e = 2`, `p* = 20`. The demand scale drops out, so only elasticity and cost matter. For `e ≤ 1` there is no finite optimum under this model, which signals the model is wrong over that range and the ceiling binds.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "7790b702065a",
+      "question": "How would you design surge pricing for a ride-hailing app?",
+      "answer_md": "Compute per-zone imbalance every minute from open requests, available drivers, and a short-term demand forecast. Pick a multiplier that brings expected demand in line with supply at a target pickup time, using rider elasticity for the demand side and driver supply response for the medium term. Smooth over time and across neighbouring hexagons, limit the change per interval, and cap the multiplier. Precompute a (zone, time bucket) table so quotes are a lookup. Evaluate with switchback experiments on pickup time, completion rate, driver earnings, and rider retention.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "1756fdd0fedb",
+      "question": "Why do surge prices oscillate, and how do you stop it?",
+      "answer_md": "Riders react instantly but drivers take 10 to 30 minutes to arrive. A multiplier driven by the current imbalance attracts drivers who arrive after the peak, the multiplier then drops, drivers leave, and the imbalance returns. Use forecasted imbalance instead of current, smooth the multiplier, rate-limit changes, smooth spatially, and test the rule in a simulator for stability before launch.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "ab8ec2d58935",
+      "question": "How would you run an experiment on a new pricing algorithm in a marketplace?",
+      "answer_md": "Not with user-level randomization, because treatment and control share drivers or inventory and the difference is biased. Use switchback experiments that alternate the whole zone between policies in time blocks longer than the system's carryover, with burn-in periods dropped and variance computed at the block level. For long-term effects, add geo-level holdouts that stay on the old policy for months.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "3d6dfac158d4",
+      "question": "When would you use a bandit for pricing, and what does it cost?",
+      "answer_md": "When elasticity is uncertain and conditions allow repeated decisions with fast feedback: new products, new markets, or detecting drift. Thompson sampling over a small set of price levels, or better a Bayesian parametric demand curve, balances learning and earning. The cost is regret, margin lost while trying worse prices, plus the reputational cost of customers seeing different prices. Keep arms within a narrow band, share information across arms and segments, and use priors from similar products.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 5
+    },
+    {
+      "id": "f104e0147abc",
+      "question": "Should prices be personalised?",
+      "answer_md": "Be careful. Context-based variation (time, place, inventory) and transparent opt-in discounts are widely accepted. Pricing individuals by predicted willingness to pay risks discrimination through proxy features, legal exposure under consumer protection and data protection law, and loss of trust when customers compare prices. If segments are used, audit price outcomes by group, and prefer discounts to targeted increases.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 6
+    },
+    {
+      "id": "7224a2b41d10",
+      "question": "A competitor's repricing bot and yours are both running. What can go wrong?",
+      "answer_md": "If both undercut the other, prices spiral down to the floor. If both follow each other upward, prices drift up in a way that can look like collusion even without communication. Use step limits and floors, avoid rules that mechanically match one competitor, dampen responses to competitor changes, and monitor for sustained drift and correlated price moves.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 7
+    },
+    {
+      "id": "2e7fc8dc61a0",
+      "question": "What guardrails would you put around the pricing model?",
+      "answer_md": "Floors and ceilings (cost, regulation, caps), a maximum change per interval, a maximum deviation from a reference price, emergency-mode caps, fairness audits, human overrides per zone or SKU, a kill switch that reverts to a static rule, and sanity checks against obviously wrong prices. Log every guardrail action; a rising clip rate signals model drift.",
+      "source_path": "system_design/dynamic_pricing.md",
+      "source_title": "Dynamic Pricing System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 8
+    },
+    {
+      "id": "cbbdaf4e101b",
+      "question": "Why not just use a vector database?",
+      "answer_md": "Pure dense retrieval misses exactly the queries that dominate enterprise search: ticket IDs, error codes, service names, internal codenames, people's names. The embedding model has never seen those tokens, so their vectors are close to generic noise. BM25 handles them well. I would run BM25 and dense retrieval in parallel, fuse with reciprocal rank fusion, and rerank with a cross-encoder. The vector store is one component; the index also needs keyword search, structured metadata filters, and ACL filtering that works during the ANN search, not after it.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "e4e2d6ff6ad3",
+      "question": "How do you keep the index fresh without re-crawling everything?",
+      "answer_md": "Incremental sync per connector. Webhooks give a low-latency signal, but they can be lost or arrive out of order, so they only trigger a fetch. The source of truth is cursor-based polling of each source's change or delta API, with the cursor saved only after events are enqueued. Every event carries a version, and the indexer ignores anything older than what it has, so late events cannot resurrect deleted content. Deletes travel as tombstones through the same queue. A weekly reconciliation diffs source IDs against index IDs to catch deletes the change feeds missed. Content-only and permission-only changes take different paths, since an ACL change should not trigger re-parsing and re-embedding.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "29f03580cfcc",
+      "question": "How do you enforce permissions?",
+      "answer_md": "Three layers. At ingestion, each chunk stores an ACL token representing the source principals (users and groups) allowed to read it, with container inheritance resolved and chunks split along permission boundaries. At query time, the permission service expands the user into all their principals, including nested groups, and the search filters on the readable ACL tokens inside both BM25 and ANN search, so top-k is computed over allowed content only and counts do not leak. Before display or generation, the top 10-20 results get a live check against the permission service or source, which fails closed. That last check covers the lag between a revocation and the index update. Unknown ACLs are denied.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "fe0d1e46cb13",
+      "question": "Why not filter after retrieval?",
+      "answer_md": "Post-filtering returns an unfiltered top-k and then removes what the user cannot see. For a user who can read a small part of the corpus, most or all of the top-k is removed and the page is empty even though relevant readable documents exist further down. It also leaks: result counts, facets, snippets computed before filtering, and timing differences reveal that restricted documents exist. Filtering inside the search avoids both. The live check after retrieval is a correctness backstop on a small set, not the main filter.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "c8b1bc3fbe4f",
+      "question": "A user was removed from a group but still sees its documents. What went wrong?",
+      "answer_md": "The user's expanded principal set was stale. The likely causes are a cached principal set without invalidation on membership events, a missing or delayed group change event from the identity provider, or index ACLs that stored expanded user lists rather than group principals, so the change required rewriting chunks that had not been processed yet. The late live check should have caught it for displayed results; if it did not, either it was disabled, it fails open, or it queries the same stale cache. Fixes: invalidate the principal cache on membership events with a short TTL as backup, monitor ACL sync lag against the 5-minute SLA, and run canary permission tests continuously.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "99eac5fc24c5",
+      "question": "How do you build the evaluation set and what do you measure?",
+      "answer_md": "I sample real queries from logs, stratified by source, language, and head vs tail, remove sensitive ones, then pool candidates from several retrievers so labels are not biased toward the current system. Labellers give graded relevance. Retrieval is measured with recall@k on the first stage (the ceiling for everything downstream) and NDCG@10 on the final ranking, sliced by source and language. Answers are measured on groundedness, citation accuracy, correctness where a reference exists, and abstention on unanswerable questions, using an LLM judge only after checking its agreement with human labels and its biases. Permission tests with synthetic users run in the same suite.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 5
+    },
+    {
+      "id": "c1d200d05cbe",
+      "question": "How do you know the system is helping in production?",
+      "answer_md": "Successful click rate and reformulation rate for search, zero-result rate as a coverage and bug detector, answer feedback and citation clicks for answers, and ticket deflection for business value. Deflection needs a randomized holdout in the ticket form: compare the filing rate between users who saw suggested answers and users who did not, and count re-filed tickets. For ranker changes I would use interleaving because it detects smaller differences with less traffic than an A/B test.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 6
+    },
+    {
+      "id": "05e7d59ef3d2",
+      "question": "How do you defend against prompt injection in indexed documents?",
+      "answer_md": "Assume some documents are hostile, since anyone who can write a wiki page or file a ticket controls text that reaches the prompt. Delimit retrieved content and instruct the model to treat it as data, which helps but is not sufficient. The real controls are architectural: the answer layer is read-only, or any actions run as the user with confirmation; model output is not allowed to render external images or auto-fetch links, which closes the common exfiltration channel; lower-trust sources are marked; and the eval suite includes documents with injected instructions and checks the system ignores them.",
+      "source_path": "system_design/enterprise_rag_search.md",
+      "source_title": "Enterprise Knowledge Search and RAG System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 7
+    },
+    {
       "id": "8b261a2edd84",
       "question": "Why not just use the routing engine's ETA?",
       "answer_md": "It is a strong baseline and should always be the fallback, but it has systematic errors. It does not model parking, building access, waiting at pickup, driver-specific speed, restaurant prep, or local effects that speed profiles miss. Those errors are predictable from features like location, time, and vehicle type, so a model trained on the residual between actual and routing ETA removes much of the bias. Keeping the routing ETA as an input also means the model inherits map and traffic improvements for free.",
@@ -9125,6 +9312,182 @@
       "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 6
+    },
+    {
+      "id": "b24141eef10d",
+      "question": "Why is P(open) not a good objective?",
+      "answer_md": "It rewards the wrong things. Clickbait copy raises opens and erodes trust. It counts opens from users who would have visited anyway, so it favours the most active users, where the incremental effect is smallest. And it ignores harm: a push that gets opened but increases the chance of the user disabling notifications is scored as a win. The objective should be the incremental effect on visits and downstream actions, minus a heavily weighted disable and unsubscribe risk, minus an interruption cost.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "1549d360d4b2",
+      "question": "How do you know notifications are adding value rather than taking credit for organic visits?",
+      "answer_md": "A long-running global holdout: a small random group that gets no ranked notifications. The difference in activity and retention between them and everyone else is the true incremental value. Per-decision, randomised exploration (randomly suppressing some sends the policy chose, and sending some it dropped) gives the data to train uplift models that estimate `P(visit | send) - P(visit | no send)` per user and candidate.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "224db6754feb",
+      "question": "How would you decide how many notifications a user should get?",
+      "answer_md": "Treat it as a budgeted selection. Score candidates, then pick the best under a per-user budget and a threshold below which sending is worse than nothing. The budget should be personalised: run randomised volume experiments to estimate the marginal value and marginal disable risk of the k-th notification per day for different segments, and set the budget where they cross. Layer hard caps and per-type limits on top as safety rails.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "59917c2d6815",
+      "question": "Your new policy sends 20% more pushes and raises DAU in a one-week test. Do you ship?",
+      "answer_md": "Not yet. More pushes almost always lift short-term activity. The costs (disables, unsubscribes, lower open rates as users learn to ignore pushes) accumulate slowly. I would run it for several weeks, plot the treatment effect over time, and check the cumulative disable rate per arm. If the lift decays while disables rise, the long-term effect may be negative, because a disabled user is lost for every future notification.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "9432ec4df79f",
+      "question": "How do you choose between push, email, and in-app?",
+      "answer_md": "Score each (candidate, channel) pair with its own value and harm, then pick at most one channel per candidate during selection. Push is for time-sensitive, high-relevance items because it has the highest interruption cost. Email suits digests. The in-app inbox has no interruption cost and no opt-out risk, so it receives anything that did not make the push budget. Coordinate through one cross-channel ledger so a push that was opened suppresses the matching email.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "81a62128e15a",
+      "question": "Five people liked a user's post in ten minutes. What gets sent?",
+      "answer_md": "One aggregated notification. Hold like-events for that `(recipient, post, action)` key for a short window, then send \"Alex, Sam and 3 others liked your post\", naming the actors the recipient has the highest affinity with. The ranker scores the aggregate using count and top-actor features. If the platform supports replacing a delivered notification, later updates replace the earlier one instead of alerting again.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 5
+    },
+    {
+      "id": "536d7cb3f111",
+      "question": "How do you guarantee no duplicate pushes?",
+      "answer_md": "Queues deliver at least once and workers retry, so duplicates are prevented at the send step with a deterministic idempotency key derived from recipient, dedup key, channel, and send window, set atomically in a fast store before calling the provider. Candidate-level dedup upstream removes the same event arriving through two paths. Monitor the duplicate rate as a system metric.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 6
+    },
+    {
+      "id": "050847927ea3",
+      "question": "How do you train when all your data comes from the current policy?",
+      "answer_md": "The logs only contain sends the current policy chose, so the model never sees outcomes for dropped candidates, and \"sent\" is correlated with \"likely to visit anyway\". Add a small amount of randomised exploration, log the propensity of every decision, including suppressions, and use inverse propensity weighting or doubly robust estimators for training and for off-policy evaluation. The global holdout gives the clean no-send baseline.",
+      "source_path": "system_design/notification_ranking.md",
+      "source_title": "Notification Ranking System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 7
+    },
+    {
+      "id": "f120baa10ca8",
+      "question": "How would you generate candidates for PYMK on a billion-user graph?",
+      "answer_md": "Several sources in parallel, mostly precomputed in batch. The main one is friends of friends, because most new connections close a triangle. Count common neighbours per two-hop candidate, sample or skip hub nodes so one friend with 100k connections does not dominate the work, and keep the top few thousand per user. Add personalized PageRank or random walks to reach three hops and down-weight hubs naturally, embedding ANN (node2vec or a GNN) for users with shared context but few mutual friends, and co-membership and consented contact matches for new users.\n\nEach source has a quota and is measured by recall of connections formed after the snapshot. Run it daily, with incremental refresh for new users and after big graph events.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "advanced",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "b0df6ebd02b5",
+      "question": "Why is Adamic-Adar often better than common neighbours?",
+      "answer_md": "Common neighbours treats all mutual friends equally. A mutual friend with 5,000 connections is weak evidence that two people know each other, while a mutual friend with 30 connections is strong evidence. Adamic-Adar weights each common neighbour by 1 / log(degree), so low-degree mutual friends count more. Resource allocation uses 1 / degree, a stronger discount. In practice you include all of them as features and let the ranker learn the weighting.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "5610396fe5d9",
+      "question": "What label do you train on: send, accept, or something else?",
+      "answer_md": "Several, in a multi-task model. P(send | impression) measures viewer interest but rewards curiosity about people who will not accept. P(accept | send) measures whether the recipient agrees but is only observed on sent requests, so it needs correction for selection bias. The product P(send) · P(accept | send) gives the expected accepted connection. Add a head for \"don't know this person\" or reports with a large negative weight, and, where possible, a longer-term signal such as interaction on the new edge within 28 days. Negatives come from viewed impressions, not random pairs.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "a2ab0ecf4b2e",
+      "question": "How can link-prediction features leak?",
+      "answer_md": "Features come from the graph, and the graph contains the label. If the target edge is in the snapshot, the distance is 1 and common neighbours shift. Subtler: other edges formed after the prediction time, often caused by the same event, inflate overlap features. The fix is point-in-time features from a snapshot at the cutoff (or features logged at serving time), temporal train/test splits, and embeddings trained only on the graph as of the training cutoff.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "888234dd19de",
+      "question": "Your PYMK A/B test shows +5% connections in treatment. What could be wrong?",
+      "answer_md": "Interference. Treated users send more requests, and many recipients are in control. Control users accept those requests, so control connections also rise, and connection counts are shared between arms. The measured difference can be biased in either direction, and totals across the platform are not what the test estimated.\n\nUse graph cluster randomization, attribute recipient-side outcomes to the sender's arm, and measure spillover by comparing control users with many versus few treated neighbours. Also check guardrails: a lift in connections that comes with more \"don't know\" reports or more ignored requests is not a win.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "ab23cf045961",
+      "question": "How do you handle a brand-new user with no friends?",
+      "answer_md": "Use signals that do not need edges: consented contact upload, onboarding profile (school, employer, city) scored by an inductive model, and the person who invited them. Once the first request is accepted, refresh their candidates right away, since FoF now has something to walk from. New users are the highest-value slice for PYMK, so measure it separately, and be careful with reverse contact matches, which are the easiest place to leak information.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 5
+    },
+    {
+      "id": "11ef94c67ecf",
+      "question": "What makes a suggestion \"creepy,\" and how do you prevent it?",
+      "answer_md": "A suggestion is creepy when it shows the system knows something the user did not share: a therapist, someone met at a clinic, an ex, a person whose number was uploaded by a third party. Prevent it by excluding sensitive sources from candidate generation (sensitive groups, precise location, professional-client contacts), respecting contact discoverability settings, never using profile views in explanations, and applying hard filters for blocks and minors before ranking. Track \"don't know\" and report rates by source, since a spike from one source usually points to a signal that should not be used.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 6
+    },
+    {
+      "id": "b6981db0c332",
+      "question": "How do you avoid rich-get-richer?",
+      "answer_md": "Popular users gain connections through PYMK, which makes them more central and more likely to be suggested. Use degree-discounted features, cap how often a person is shown as a suggestion, penalize candidates with large pending-request backlogs, and monitor the concentration of incoming requests. Long-term holdouts measure how much the system shapes the graph over months.",
+      "source_path": "system_design/people_you_may_know.md",
+      "source_title": "People You May Know System Design",
+      "track": "system_design",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 7
     },
     {
       "id": "f391a274b519",
