@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Practice — Cracking ML Interviews</title>
+  <meta name="description" content="Drill every interview question in the repo with spaced repetition, or run a timed mock interview. Answer out loud, reveal the model answer, grade yourself, and jump to the guide behind any question." />
+
+  <!-- Apply the saved theme before first paint (same key as the Study Hub) -->
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('cml-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Markdown + optional syntax highlighting (both have fallbacks) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       Reset & Design Tokens (shared with index.html / flashcards.html)
+       ════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #07080f;
+      --bg-elev:     #0e1019;
+      --surface:     rgba(22, 25, 38, 0.55);
+      --surface-2:   rgba(30, 34, 52, 0.6);
+      --surface-solid: #11131f;
+      --border:      rgba(255, 255, 255, 0.08);
+      --border-str:  rgba(255, 255, 255, 0.14);
+      --text:        #eef1f8;
+      --text-2:      #a6adc4;
+      --text-3:      #6f7691;
+
+      --violet:      #8b5cf6;
+      --indigo:      #6366f1;
+      --cyan:        #22d3ee;
+      --emerald:     #34d399;
+      --amber:       #fbbf24;
+      --rose:        #fb7185;
+
+      --accent:      var(--violet);
+      --accent-2:    var(--cyan);
+      --grad:        linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #22d3ee 100%);
+
+      --glow:        0 8px 40px -12px rgba(99,102,241,.45);
+      --shadow:      0 10px 40px -16px rgba(0,0,0,.7);
+      --shadow-lg:   0 24px 70px -24px rgba(0,0,0,.8);
+
+      --header-h:    60px;
+      --radius:      14px;
+      --radius-sm:   10px;
+      --radius-lg:   20px;
+      --transition:  .22s cubic-bezier(.4,0,.2,1);
+
+      --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+      --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+      --aurora-1: rgba(139, 92, 246, 0.5);
+      --aurora-2: rgba(34, 211, 238, 0.35);
+      --aurora-3: rgba(52, 211, 153, 0.28);
+
+      --known:    var(--emerald);
+      --learning: var(--amber);
+      --on-accent: #fff;
+
+      /* Self-grade colours */
+      --again: var(--rose);
+      --hard:  var(--amber);
+      --good:  var(--cyan);
+      --easy:  var(--emerald);
+    }
+
+    [data-theme="light"] {
+      --bg:          #f4f5fb;
+      --bg-elev:     #ffffff;
+      --surface:     rgba(255, 255, 255, 0.72);
+      --surface-2:   rgba(255, 255, 255, 0.9);
+      --surface-solid: #ffffff;
+      --border:      rgba(15, 23, 42, 0.09);
+      --border-str:  rgba(15, 23, 42, 0.16);
+      --text:        #14172b;
+      --text-2:      #4b5169;
+      --text-3:      #8a90a8;
+
+      --accent:      #7c3aed;
+      --accent-2:    #0891b2;
+
+      --glow:        0 8px 36px -14px rgba(124,58,237,.35);
+      --shadow:      0 10px 34px -18px rgba(30,41,59,.45);
+      --shadow-lg:   0 26px 60px -28px rgba(30,41,59,.4);
+
+      --aurora-1: rgba(139, 92, 246, 0.28);
+      --aurora-2: rgba(14, 165, 233, 0.2);
+      --aurora-3: rgba(16, 185, 129, 0.16);
+
+      --known:    #059669;
+      --learning: #d97706;
+
+      --again: #e11d48;
+      --hard:  #d97706;
+      --good:  #0891b2;
+      --easy:  #059669;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    [hidden] { display: none !important; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    kbd {
+      font-family: var(--font-mono); font-size: .7rem;
+      background: var(--bg-elev); border: 1px solid var(--border); border-bottom-width: 2px;
+      border-radius: 5px; padding: 0 5px; color: var(--text-2);
+    }
+
+    /* ── Aurora background ───────────────────────────────────────────── */
+    .aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .aurora::before, .aurora::after {
+      content: ''; position: absolute; border-radius: 50%; filter: blur(90px); opacity: .85;
+    }
+    .aurora::before {
+      width: 60vw; height: 60vw; top: -22vw; left: -12vw;
+      background: radial-gradient(circle at 30% 30%, var(--aurora-1), transparent 62%);
+      animation: drift1 22s ease-in-out infinite alternate;
+    }
+    .aurora::after {
+      width: 55vw; height: 55vw; bottom: -24vw; right: -14vw;
+      background: radial-gradient(circle at 60% 60%, var(--aurora-2), transparent 60%);
+      animation: drift2 26s ease-in-out infinite alternate;
+    }
+    .aurora .blob3 {
+      position: absolute; width: 42vw; height: 42vw; top: 30%; left: 45%;
+      border-radius: 50%; filter: blur(100px);
+      background: radial-gradient(circle, var(--aurora-3), transparent 60%);
+      animation: drift3 30s ease-in-out infinite alternate;
+    }
+    .grain {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @keyframes drift1 { to { transform: translate(8vw, 6vw) scale(1.15); } }
+    @keyframes drift2 { to { transform: translate(-6vw, -5vw) scale(1.1); } }
+    @keyframes drift3 { to { transform: translate(-8vw, 4vw) scale(1.2); } }
+
+    /* ════════════════════════════════════════════════════════════════
+       Header
+       ════════════════════════════════════════════════════════════════ */
+    header {
+      position: sticky; top: 0;
+      height: var(--header-h);
+      background: color-mix(in srgb, var(--bg-elev) 72%, transparent);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 18px; gap: 12px;
+      z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; white-space: nowrap; min-width: 0; text-decoration: none; color: inherit; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 10px; background: var(--grad);
+      display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: #fff;
+      box-shadow: 0 6px 20px -6px rgba(99,102,241,.7); flex-shrink: 0;
+    }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+    .brand-text .t1 { font-family: var(--font-display); font-weight: 700; font-size: .98rem; letter-spacing: -.01em; }
+    .brand-text .t2 { font-size: .68rem; color: var(--text-3); font-weight: 500; letter-spacing: .02em; }
+    .header-spacer { flex: 1; }
+
+    .icon-btn {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text-2); cursor: pointer; padding: 8px 11px;
+      font-size: .8rem; font-family: var(--font-body);
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: all var(--transition); text-decoration: none; white-space: nowrap;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+    .icon-btn.compact { padding: 8px; }
+
+    /* ════════════════════════════════════════════════════════════════
+       Page
+       ════════════════════════════════════════════════════════════════ */
+    main { max-width: 880px; margin: 0 auto; padding: 34px 20px 64px; }
+    .intro { text-align: center; margin-bottom: 26px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 5px 12px;
+      font-size: .72rem; font-weight: 600; color: var(--text-2); letter-spacing: .04em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad); }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.08;
+      margin-bottom: 10px;
+    }
+    .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .intro p { color: var(--text-2); font-size: .98rem; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+
+    .panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      min-width: 0;
+    }
+    .panel-title { font-family: var(--font-display); font-weight: 600; font-size: .95rem; }
+
+    /* ── Stats ──────────────────────────────────────────────────────── */
+    .stats { padding: 16px 18px; margin-bottom: 14px; }
+    .stats-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .tile {
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px 12px; min-width: 0;
+    }
+    .tile .v { font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; font-variant-numeric: tabular-nums; line-height: 1.15; }
+    .tile .l { font-size: .74rem; color: var(--text-3); font-weight: 500; }
+    .tile.due .v { color: var(--hard); }
+    .tile.streak .v { color: var(--easy); }
+    details.mastery { margin-top: 12px; }
+    details.mastery > summary {
+      cursor: pointer; font-size: .82rem; color: var(--text-2); font-weight: 500;
+      list-style: none; display: inline-flex; align-items: center; gap: 7px; padding: 4px 2px; border-radius: 6px;
+    }
+    details.mastery > summary::-webkit-details-marker { display: none; }
+    details.mastery > summary svg { transition: transform var(--transition); }
+    details.mastery[open] > summary svg { transform: rotate(90deg); }
+    .mastery-list { display: grid; gap: 8px; margin-top: 10px; }
+    .m-row { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 7ch; gap: 10px; align-items: center; font-size: .8rem; }
+    .m-row .name { color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+    .m-row .name i { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; display: inline-block; }
+    .m-row .num { font-family: var(--font-mono); font-size: .72rem; color: var(--text-3); white-space: nowrap; text-align: right; }
+    .bar { height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; display: flex; }
+    .bar .seg { height: 100%; transition: width .4s cubic-bezier(.4,0,.2,1); }
+    .bar .seg.known { background: var(--known); }
+    .bar .seg.learning { background: var(--learning); }
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .76rem; color: var(--text-3); margin-top: 8px; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+
+    /* ── Mode tabs ──────────────────────────────────────────────────── */
+    .mode-row { display: flex; justify-content: center; margin: 4px 0 14px; }
+    .seg-group {
+      display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border);
+      border-radius: 11px; padding: 3px; gap: 2px; flex-wrap: wrap;
+    }
+    .seg-group button {
+      background: none; border: none; cursor: pointer;
+      padding: 7px 11px; border-radius: 8px;
+      font-size: .8rem; font-weight: 500; color: var(--text-2);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all var(--transition);
+    }
+    .seg-group button:hover { color: var(--text); }
+    .seg-group button[aria-pressed="true"], .seg-group button[aria-selected="true"] {
+      background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--border-str);
+    }
+    .seg-group .count {
+      font-size: .7rem; font-family: var(--font-mono); color: var(--text-3);
+      background: var(--surface); border-radius: 6px; padding: 0 5px;
+    }
+    .mode-tabs button { padding: 9px 18px; font-size: .88rem; font-weight: 600; }
+
+    /* ── Controls ───────────────────────────────────────────────────── */
+    .controls { padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 12px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .search {
+      flex: 1 1 240px; min-width: 0;
+      display: flex; align-items: center; gap: 9px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px;
+      padding: 0 12px; color: var(--text-3);
+      transition: border-color var(--transition);
+    }
+    .search:focus-within { border-color: var(--accent); }
+    .search input {
+      flex: 1; min-width: 0; background: none; border: none; outline: none;
+      padding: 10px 0; font-size: .88rem; color: var(--text);
+    }
+    .search input::placeholder { color: var(--text-3); }
+    .search input::-webkit-search-cancel-button { display: none; }
+    .search .clear { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 4px; display: none; border-radius: 6px; }
+    .search .clear.show { display: inline-flex; }
+    .search .clear:hover { color: var(--text); }
+
+    .group-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); margin-bottom: 7px; display: block; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 10px;
+      padding: 7px 11px; font-size: .8rem; color: var(--text-2); cursor: pointer;
+      transition: all var(--transition); text-decoration: none; white-space: nowrap;
+    }
+    .chip-btn:hover { border-color: var(--accent); color: var(--text); }
+    .chip-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--text); background: color-mix(in srgb, var(--accent) 14%, var(--bg-elev)); }
+    .chip-btn .dot { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; }
+    .chip-btn .count { font-size: .7rem; font-family: var(--font-mono); color: var(--text-3); }
+    .chip-btn.danger:hover { border-color: var(--rose); color: var(--rose); }
+    .chip-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    .select-wrap { flex: 1 1 260px; min-width: 0; display: flex; align-items: center; gap: 8px; }
+    .select-wrap label { font-size: .8rem; color: var(--text-3); white-space: nowrap; }
+    select {
+      flex: 1; min-width: 0; width: 100%;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px;
+      padding: 9px 12px; font-size: .85rem; color: var(--text); cursor: pointer;
+    }
+    select:focus-visible { border-color: var(--accent); }
+    option, optgroup { background: var(--surface-solid); color: var(--text); }
+
+    /* ── Deck meta ──────────────────────────────────────────────────── */
+    .deck-meta {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: .8rem; color: var(--text-3); margin: 0 4px 10px;
+    }
+    .deck-meta b { color: var(--text-2); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* ════════════════════════════════════════════════════════════════
+       Question card
+       ════════════════════════════════════════════════════════════════ */
+    .qcard {
+      background:
+        linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
+        linear-gradient(140deg, color-mix(in srgb, var(--violet) 55%, transparent), var(--border) 38%, var(--border) 62%, color-mix(in srgb, var(--cyan) 45%, transparent)) border-box;
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), var(--glow);
+      padding: 22px 26px 20px;
+      min-width: 0;
+    }
+    .q-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; min-width: 0; }
+    .tag {
+      font-size: .7rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--text-2); background: var(--surface-2);
+      white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tag .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .tag.st-new { color: var(--accent-2); border-color: color-mix(in srgb, var(--accent-2) 45%, transparent); }
+    .tag.st-due { color: var(--hard); border-color: color-mix(in srgb, var(--hard) 45%, transparent); background: color-mix(in srgb, var(--hard) 12%, transparent); }
+    .tag.st-later { color: var(--easy); border-color: color-mix(in srgb, var(--easy) 45%, transparent); }
+    .tag.diff-beginner { color: var(--easy); }
+    .tag.diff-intermediate { color: var(--hard); }
+    .tag.diff-advanced { color: var(--again); }
+    .guide-link {
+      font-size: .8rem; color: var(--accent-2); text-decoration: none; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent-2) 40%, transparent);
+    }
+    .guide-link:hover { border-bottom-color: var(--accent-2); }
+    .q-source { font-size: .78rem; color: var(--text-3); margin-bottom: 6px; overflow-wrap: anywhere; }
+    .q-text {
+      font-family: var(--font-display); font-weight: 650;
+      font-size: clamp(1.2rem, 3.6vw, 1.6rem); letter-spacing: -.015em; line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+    .q-text:focus { outline: none; }
+    .q-text:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .q-text code { font-family: var(--font-mono); font-size: .82em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 0 6px; }
+
+    .q-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 16px; }
+    .timer-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .timer-box .lbl { font-size: .76rem; color: var(--text-3); }
+    .timer {
+      font-family: var(--font-mono); font-size: .9rem; font-variant-numeric: tabular-nums;
+      color: var(--text-2); min-width: 4.2ch; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .timer.over { color: var(--again); font-weight: 600; }
+    .timer-bar { height: 4px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin-top: 10px; }
+    .timer-bar > div { height: 100%; background: var(--grad); width: 100%; transition: width 1s linear; }
+    .timer-bar.over > div { background: var(--again); }
+
+    details.notes { margin-top: 14px; }
+    details.notes > summary {
+      cursor: pointer; font-size: .82rem; color: var(--text-2); font-weight: 500; list-style: none;
+      display: inline-flex; align-items: center; gap: 7px; padding: 4px 2px; border-radius: 6px;
+    }
+    details.notes > summary::-webkit-details-marker { display: none; }
+    details.notes > summary svg { transition: transform var(--transition); }
+    details.notes[open] > summary svg { transform: rotate(90deg); }
+    textarea {
+      display: block; width: 100%; min-height: 110px; resize: vertical; margin-top: 8px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px;
+      padding: 10px 12px; font-size: .9rem; line-height: 1.55; color: var(--text);
+    }
+    textarea:focus-visible { border-color: var(--accent); outline-offset: 0; }
+    .hint { font-size: .74rem; color: var(--text-3); margin-top: 6px; }
+
+    .reveal-row { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .reveal-row .btn { flex: 1 1 200px; }
+
+    .answer-wrap { margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--border-str); min-width: 0; }
+    .answer-label { font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .answer-wrap .answer-label:focus { outline: none; }
+
+    .grade-block { margin-top: 20px; }
+    .grade-block .prompt { font-size: .82rem; color: var(--text-2); margin-bottom: 8px; text-align: center; }
+    .grade-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .grade-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 10px 6px; border-radius: 12px; cursor: pointer;
+      background: color-mix(in srgb, var(--g) 12%, var(--surface-solid));
+      border: 1px solid color-mix(in srgb, var(--g) 50%, transparent);
+      color: var(--text); font-weight: 600; font-size: .9rem;
+      transition: all var(--transition); min-width: 0;
+    }
+    .grade-btn:hover { background: color-mix(in srgb, var(--g) 24%, var(--surface-solid)); transform: translateY(-2px); }
+    .grade-btn .ivl { font-size: .72rem; font-weight: 500; color: var(--text-2); font-family: var(--font-mono); }
+    .grade-btn .k { font-size: .66rem; font-weight: 500; color: var(--text-3); font-family: var(--font-mono); }
+    .grade-btn[data-grade="0"] { --g: var(--again); }
+    .grade-btn[data-grade="1"] { --g: var(--hard); }
+    .grade-btn[data-grade="2"] { --g: var(--good); }
+    .grade-btn[data-grade="3"] { --g: var(--easy); }
+
+    .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; font-size: .78rem; color: var(--text-3); }
+
+    /* ── Buttons ────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 18px; border-radius: 12px;
+      font-size: .9rem; font-weight: 600; font-family: var(--font-body);
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 30px -10px rgba(99,102,241,.7); }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(99,102,241,.8); }
+    .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border-str); }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
+    .btn-sm { padding: 8px 12px; font-size: .8rem; border-radius: 10px; }
+    .btn kbd { border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: inherit; }
+    .btn-ghost kbd { border-color: var(--border-str); background: var(--bg-elev); color: var(--text-2); }
+
+    /* ── Markdown answer ────────────────────────────────────────────── */
+    .markdown-body { font-size: .95rem; line-height: 1.72; color: var(--text); overflow-wrap: anywhere; min-width: 0; }
+    .markdown-body > :first-child { margin-top: 0; }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-family: var(--font-display); font-weight: 600; margin: 22px 0 10px; line-height: 1.25; }
+    .markdown-body h1 { font-size: 1.3rem; } .markdown-body h2 { font-size: 1.15rem; } .markdown-body h3 { font-size: 1.05rem; color: var(--accent); }
+    .markdown-body h4, .markdown-body h5, .markdown-body h6 { font-size: .98rem; font-weight: 650; margin: 18px 0 8px; }
+    .markdown-body p { margin: 0 0 14px; }
+    .markdown-body ul, .markdown-body ol { padding-left: 24px; margin: 0 0 14px; }
+    .markdown-body li { margin: 5px 0; }
+    .markdown-body li::marker { color: var(--accent); }
+    .markdown-body strong { color: var(--text); font-weight: 650; }
+    .markdown-body em { color: var(--text-2); }
+    .markdown-body code {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.5px 6px; font-size: .85em;
+      font-family: var(--font-mono); color: var(--accent-2);
+    }
+    .markdown-body pre {
+      background: var(--bg-elev); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; overflow-x: auto;
+      margin: 0 0 16px; max-width: 100%;
+    }
+    .markdown-body pre code { background: none; border: none; padding: 0; color: var(--text); font-size: .84rem; line-height: 1.6; overflow-wrap: normal; }
+    .markdown-body pre code.hljs { background: none; padding: 0; }
+    /* README "classic" answers are indented prose; wrap them instead of scrolling */
+    .markdown-body pre code.language-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .markdown-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 10px 16px; margin: 0 0 14px;
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .markdown-body blockquote p { color: var(--text-2); margin: 0 0 6px; }
+    .markdown-body blockquote p:last-child { margin: 0; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: .85rem; display: block; overflow-x: auto; }
+    .markdown-body th { background: var(--surface-2); padding: 8px 12px; text-align: left; font-weight: 650; border: 1px solid var(--border); }
+    .markdown-body td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; overflow-wrap: normal; }
+    .markdown-body a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+    .markdown-body a:hover { border-bottom-color: var(--accent); }
+    .markdown-body hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+    .markdown-body img { max-width: 100%; height: auto; border-radius: var(--radius-sm); margin: 6px 0; border: 1px solid var(--border); background: #fff; }
+
+    /* ── Mock interview ─────────────────────────────────────────────── */
+    .mock-setup { padding: 20px; display: grid; gap: 16px; }
+    .mock-setup .desc { font-size: .88rem; color: var(--text-2); line-height: 1.6; }
+    .mock-setup .desc b { color: var(--text); }
+    .mock-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      padding: 12px 16px; margin-bottom: 12px;
+    }
+    .mock-bar .pos { font-family: var(--font-display); font-weight: 600; font-size: .95rem; }
+    .mock-bar .right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .mock-progress { height: 6px; margin-bottom: 14px; }
+    .mock-progress .seg { background: var(--grad); }
+
+    .summary { padding: 22px; }
+    .summary:focus { outline: none; }
+    .summary h2 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 6px; }
+    .summary .sub { color: var(--text-2); font-size: .9rem; margin-bottom: 16px; }
+    .grade-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
+    .grade-tiles .tile .v { font-size: 1.25rem; }
+    .grade-tiles .t-again .v { color: var(--again); }
+    .grade-tiles .t-hard .v { color: var(--hard); }
+    .grade-tiles .t-good .v { color: var(--good); }
+    .grade-tiles .t-easy .v { color: var(--easy); }
+    .summary h3 { font-family: var(--font-display); font-size: 1rem; margin: 18px 0 8px; }
+    .weak-list, .result-list { list-style: none; display: grid; gap: 8px; }
+    .weak-list li, .result-list li {
+      display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px; padding: 10px 12px;
+      font-size: .86rem; min-width: 0;
+    }
+    .result-list .qt { flex: 1 1 260px; min-width: 0; overflow-wrap: anywhere; }
+    .result-list .qt small { display: block; color: var(--text-3); font-size: .74rem; margin-top: 2px; }
+    .g-chip { font-size: .72rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .g-chip.g0 { color: var(--again); border-color: color-mix(in srgb, var(--again) 50%, transparent); }
+    .g-chip.g1 { color: var(--hard);  border-color: color-mix(in srgb, var(--hard) 50%, transparent); }
+    .g-chip.g2 { color: var(--good);  border-color: color-mix(in srgb, var(--good) 50%, transparent); }
+    .g-chip.g3 { color: var(--easy);  border-color: color-mix(in srgb, var(--easy) 50%, transparent); }
+    .g-chip.gx { color: var(--text-3); border-color: var(--border-str); }
+    .summary .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+
+    /* ── States ─────────────────────────────────────────────────────── */
+    .state { padding: 40px 24px; text-align: center; color: var(--text-2); border-radius: var(--radius-lg); }
+    .state .ico {
+      width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 16px;
+      display: grid; place-items: center; background: var(--grad); color: #fff;
+      box-shadow: 0 10px 30px -10px rgba(99,102,241,.7);
+    }
+    .state .ico.warn { background: linear-gradient(120deg, #fb7185 0%, #fbbf24 100%); }
+    .state h2 { font-family: var(--font-display); color: var(--text); font-size: 1.3rem; margin-bottom: 8px; }
+    .state p { font-size: .9rem; line-height: 1.6; max-width: 480px; margin: 0 auto 8px; }
+    .state code { background: var(--surface-2); padding: 3px 8px; border-radius: 6px; font-family: var(--font-mono); font-size: .82rem; color: var(--text); overflow-wrap: anywhere; }
+    .state .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+    .spinner {
+      width: 30px; height: 30px; border-radius: 50%; margin: 0 auto 14px;
+      border: 3px solid var(--border-str); border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Shortcut legend ────────────────────────────────────────────── */
+    .shortcuts {
+      margin-top: 22px; padding: 12px 16px;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px;
+      font-size: .78rem; color: var(--text-3);
+    }
+    .shortcuts h2 { font-size: .78rem; font-weight: 600; color: var(--text-2); width: 100%; text-align: center; font-family: var(--font-body); }
+    .shortcuts dl { display: contents; }
+    .shortcuts div { display: inline-flex; align-items: center; gap: 6px; }
+    .shortcuts dd { margin: 0; }
+
+    footer { text-align: center; font-size: .78rem; color: var(--text-3); padding: 0 20px 36px; line-height: 1.6; }
+    footer a { color: var(--text-2); }
+
+    /* ── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      header { padding: 0 12px; gap: 8px; }
+      .brand-text .t2 { display: none; }
+      main { padding: 22px 14px 48px; }
+      .intro { margin-bottom: 16px; }
+      .intro .eyebrow, .intro p { display: none; }
+      h1 { font-size: 1.6rem; margin-bottom: 0; }
+      .stats { padding: 12px 14px; }
+      .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .tile .v { font-size: 1.25rem; }
+      .m-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .m-row .bar { grid-column: 1 / -1; order: 3; }
+      .controls { padding: 12px; gap: 10px; }
+      .qcard { padding: 18px 16px 16px; }
+      .grade-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grade-btn .k { display: none; }
+      .btn kbd { display: none; }
+      .grade-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .summary { padding: 18px 14px; }
+      .hide-sm { display: none; }
+      .select-wrap label { display: none; }
+      .seg-group.scope { width: 100%; }
+      .seg-group.scope button { flex: 1 1 auto; justify-content: center; padding: 7px 8px; }
+    }
+    @media (max-width: 380px) {
+      .back-link .lbl-long, .fc-link .lbl-long { display: none; }
+      .brand-mark { display: none; }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .shortcuts, .grade-btn .k { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .aurora::before, .aurora::after, .aurora .blob3 { animation: none; }
+      *, *::before, *::after { transition: none !important; }
+      .btn:hover, .icon-btn:hover, .grade-btn:hover { transform: none !important; }
+      .spinner { animation-duration: 2.4s; }
+    }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><div class="blob3"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header>
+  <a class="icon-btn back-link" href="index.html" aria-label="Back to the Study Hub">
+    <span aria-hidden="true">&larr;</span><span class="lbl-long">Study Hub</span>
+  </a>
+  <a class="brand" href="index.html" tabindex="-1" aria-hidden="true">
+    <div class="brand-mark">ML</div>
+    <div class="brand-text">
+      <span class="t1">Practice</span>
+      <span class="t2">Interview drills · Cracking ML 2026</span>
+    </div>
+  </a>
+  <div class="header-spacer"></div>
+  <a class="icon-btn fc-link" href="flashcards.html" aria-label="Glossary flashcards">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M7 2h13a2 2 0 012 2v12"/></svg>
+    <span class="lbl-long">Flashcards</span>
+  </a>
+  <button class="icon-btn compact" id="theme-btn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">
+    <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"></svg>
+  </button>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="eyebrow"><span class="dot"></span>Interview practice</div>
+    <h1>Say it out loud, then <span class="grad-text">grade yourself</span></h1>
+    <p>Every interview question from the guides, in one place. Answer as if you were in the room, reveal the model answer, and rate your recall. Spaced repetition brings each question back just before you would forget it.</p>
+  </section>
+
+  <section class="panel stats" aria-labelledby="stats-title">
+    <div class="stats-top">
+      <h2 class="panel-title" id="stats-title">Your progress</h2>
+      <button type="button" class="chip-btn danger" id="reset-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Reset<span class="hide-sm">&nbsp;progress</span>
+      </button>
+    </div>
+    <div class="tiles">
+      <div class="tile"><div class="v" id="s-today">0</div><div class="l">Studied today</div></div>
+      <div class="tile due"><div class="v" id="s-due">0</div><div class="l">Due now</div></div>
+      <div class="tile"><div class="v" id="s-new">0</div><div class="l">Never seen</div></div>
+      <div class="tile streak"><div class="v" id="s-streak">0</div><div class="l" id="s-streak-l">Day streak</div></div>
+    </div>
+    <details class="mastery" id="mastery">
+      <summary>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        Mastery by track
+      </summary>
+      <div class="mastery-list" id="mastery-list"></div>
+      <div class="legend">
+        <span><i style="background:var(--known)"></i>Mastered (next review 21+ days out)</span>
+        <span><i style="background:var(--learning)"></i>In rotation</span>
+        <span><i style="background:var(--border-str)"></i>Not started</span>
+      </div>
+    </details>
+  </section>
+
+  <div class="mode-row">
+    <div class="seg-group mode-tabs" role="tablist" aria-label="Practice mode">
+      <button type="button" role="tab" id="tab-drill" aria-controls="drill-view" aria-selected="true">Drill</button>
+      <button type="button" role="tab" id="tab-mock" aria-controls="mock-view" aria-selected="false" tabindex="-1">Mock interview</button>
+    </div>
+  </div>
+
+  <section class="panel controls" aria-label="Question filters" id="controls">
+    <div class="row">
+      <label class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="sr-only">Search questions and answers</span>
+        <input id="search" type="search" placeholder="Search questions…  ( / )" autocomplete="off" spellcheck="false" />
+        <button class="clear" id="search-clear" type="button" aria-label="Clear search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </label>
+      <div class="seg-group scope" role="group" aria-label="Which questions" id="scope">
+        <button type="button" data-scope="due" aria-pressed="false">Due <span class="count" id="n-due">0</span></button>
+        <button type="button" data-scope="new" aria-pressed="false">New <span class="count" id="n-new">0</span></button>
+        <button type="button" data-scope="all" aria-pressed="true">All <span class="count" id="n-all">0</span></button>
+      </div>
+    </div>
+    <div>
+      <span class="group-label" id="tracks-label">Tracks <span style="text-transform:none;letter-spacing:0;font-weight:500">(none selected = all)</span></span>
+      <div class="chips" id="tracks" role="group" aria-labelledby="tracks-label"></div>
+    </div>
+    <div class="row">
+      <div class="select-wrap">
+        <label for="source">Guide</label>
+        <select id="source"><option value="">All guides</option></select>
+      </div>
+      <button type="button" class="chip-btn" id="clear-filters">Clear filters</button>
+    </div>
+  </section>
+
+  <!-- ═════════════ Drill ═════════════ -->
+  <section id="drill-view" role="tabpanel" aria-labelledby="tab-drill">
+    <div class="deck-meta">
+      <span id="drill-desc" aria-live="off">Loading…</span>
+      <span id="drill-order"></span>
+    </div>
+    <div id="drill-state" class="panel state" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading questions…</p>
+    </div>
+  </section>
+
+  <!-- ═════════════ Mock interview ═════════════ -->
+  <section id="mock-view" role="tabpanel" aria-labelledby="tab-mock" hidden>
+    <div class="panel mock-setup" id="mock-setup">
+      <div>
+        <h2 class="panel-title">Timed mock interview</h2>
+        <p class="desc" id="mock-desc">Random questions from your current filters.</p>
+      </div>
+      <div class="row">
+        <span class="group-label" style="margin:0" id="mock-n-label">Questions</span>
+        <div class="seg-group" role="group" aria-labelledby="mock-n-label" id="mock-n">
+          <button type="button" data-n="5" aria-pressed="true">5</button>
+          <button type="button" data-n="10" aria-pressed="false">10</button>
+          <button type="button" data-n="15" aria-pressed="false">15</button>
+        </div>
+        <span class="group-label" style="margin:0 0 0 8px" id="mock-t-label">Minutes per question</span>
+        <div class="seg-group" role="group" aria-labelledby="mock-t-label" id="mock-t">
+          <button type="button" data-t="2" aria-pressed="false">2</button>
+          <button type="button" data-t="3" aria-pressed="true">3</button>
+          <button type="button" data-t="5" aria-pressed="false">5</button>
+        </div>
+      </div>
+      <div><button type="button" class="btn btn-primary" id="mock-start">Start mock interview</button></div>
+    </div>
+
+    <div id="mock-run" hidden>
+      <div class="panel mock-bar">
+        <span class="pos" id="mock-pos">Question 1 of 5</span>
+        <div class="right">
+          <span class="timer" id="mock-timer" role="timer" aria-label="Time left in session">00:00</span>
+          <button type="button" class="btn btn-ghost btn-sm" id="mock-end">End &amp; see summary</button>
+        </div>
+      </div>
+      <div class="bar mock-progress" role="progressbar" aria-label="Mock interview progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mock-progress"><div class="seg" id="mock-progress-seg" style="width:0%"></div></div>
+      <div id="mock-card-slot"></div>
+    </div>
+
+    <div class="panel summary" id="mock-summary" hidden tabindex="-1" aria-labelledby="sum-title"></div>
+  </section>
+
+  <!-- The question card, moved between the drill and mock slots -->
+  <template id="card-tpl">
+    <article class="qcard" id="qcard" aria-labelledby="q-text">
+      <div class="q-top">
+        <div class="tags" id="q-tags"></div>
+        <a class="guide-link" id="q-guide" href="index.html">
+          Open in guide
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+      <div class="q-source" id="q-source"></div>
+      <h2 class="q-text" id="q-text" tabindex="-1"></h2>
+
+      <div class="q-tools" id="q-tools">
+        <div class="timer-box" id="timer-box">
+          <span class="lbl" id="timer-label">Timer</span>
+          <div class="seg-group" role="group" aria-labelledby="timer-label" id="timer-opts">
+            <button type="button" data-min="0" aria-pressed="true">Off</button>
+            <button type="button" data-min="2" aria-pressed="false">2m</button>
+            <button type="button" data-min="5" aria-pressed="false">5m</button>
+            <button type="button" data-min="10" aria-pressed="false">10m</button>
+          </div>
+          <span class="timer" id="q-timer" role="timer" aria-label="Time left for this question" hidden>00:00</span>
+        </div>
+      </div>
+      <div class="timer-bar" id="q-timer-bar" hidden><div id="q-timer-fill"></div></div>
+
+      <details class="notes" id="notes-box">
+        <summary>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          Scratch notes
+        </summary>
+        <label class="sr-only" for="notes">Your notes for this question (not saved)</label>
+        <textarea id="notes" placeholder="Outline your answer: definition, intuition, trade-offs, an example…"></textarea>
+        <p class="hint">Not saved. Cleared when you move to the next question.</p>
+      </details>
+
+      <div class="reveal-row" id="reveal-row">
+        <button type="button" class="btn btn-primary" id="reveal-btn">Reveal answer <kbd>Space</kbd></button>
+      </div>
+
+      <div class="answer-wrap" id="answer-wrap" hidden>
+        <div class="answer-label" id="answer-label" tabindex="-1">Model answer</div>
+        <div class="markdown-body" id="answer"></div>
+        <div class="grade-block">
+          <p class="prompt" id="grade-prompt">How well did you recall it?</p>
+          <div class="grade-row" role="group" aria-labelledby="grade-prompt">
+            <button type="button" class="grade-btn" data-grade="0"><span>Again</span><span class="ivl" id="ivl-0"></span><span class="k">1</span></button>
+            <button type="button" class="grade-btn" data-grade="1"><span>Hard</span><span class="ivl" id="ivl-1"></span><span class="k">2</span></button>
+            <button type="button" class="grade-btn" data-grade="2"><span>Good</span><span class="ivl" id="ivl-2"></span><span class="k">3</span></button>
+            <button type="button" class="grade-btn" data-grade="3"><span>Easy</span><span class="ivl" id="ivl-3"></span><span class="k">4</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-foot">
+        <span id="q-foot"></span>
+        <button type="button" class="btn btn-ghost btn-sm" id="next-btn">Skip <kbd>N</kbd></button>
+      </div>
+    </article>
+  </template>
+
+  <section class="panel shortcuts" aria-labelledby="kbd-title">
+    <h2 id="kbd-title">Keyboard shortcuts</h2>
+    <dl>
+      <div><dt><kbd>Space</kbd></dt><dd>reveal answer</dd></div>
+      <div><dt><kbd>1</kbd>–<kbd>4</kbd></dt><dd>grade Again / Hard / Good / Easy</dd></div>
+      <div><dt><kbd>N</kbd></dt><dd>next (skip)</dd></div>
+      <div><dt><kbd>/</kbd></dt><dd>search</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>leave the search box</dd></div>
+    </dl>
+  </section>
+
+  <div class="sr-only" aria-live="polite" id="announcer"></div>
+  <div class="sr-only" aria-live="assertive" id="alerter"></div>
+</main>
+
+<footer>
+  Questions are extracted from every guide's <em>Interview Q&amp;A</em> section and the README's Classic Question Bank
+  by <code>tools/build_question_bank.py</code>. Your schedule is saved in this browser only.
+</footer>
+
+<script>
+'use strict';
+// ════════════════════════════════════════════════════════════════════════
+//  Constants & safe storage
+// ════════════════════════════════════════════════════════════════════════
+const THEME_KEY = 'cml-theme';          // shared with index.html / flashcards.html
+const STORE_KEY = 'cml-practice-v1';    // { v, cards: {id: {ease, interval, due, reps, lapses, last}}, days: {YYYY-MM-DD: n}, prefs }
+const DATA_PATH = 'data/questions.json';
+const DAY = 86400000, MIN = 60000;
+const MASTERED_DAYS = 21;
+const GRADES = ['Again', 'Hard', 'Good', 'Easy'];
+const isLocal = location.protocol === 'file:';
+
+const TRACK_META = {
+  classic:           { label: 'Classic Bank',     color: '#22d3ee' },
+  classical_ml:      { label: 'Classical ML',     color: '#34d399' },
+  deep_learning:     { label: 'Deep Learning',    color: '#10b981' },
+  ai_genai:          { label: 'AI & GenAI',       color: '#8b5cf6' },
+  frameworks:        { label: 'Frameworks',       color: '#fbbf24' },
+  mlops:             { label: 'MLOps',            color: '#f59e0b' },
+  data_engineering:  { label: 'Data Engineering', color: '#eab308' },
+  devops:            { label: 'DevOps',           color: '#84cc16' },
+  cloud_ml:          { label: 'Cloud ML',         color: '#facc15' },
+  system_design:     { label: 'System Design',    color: '#fb7185' },
+  coding_challenges: { label: 'Coding',           color: '#f472b6' },
+  project_setup:     { label: 'Project Setup',    color: '#e879f9' },
+};
+const trackLabel = t => (TRACK_META[t] || {}).label || t.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const trackColor = t => (TRACK_META[t] || {}).color || '#8b5cf6';
+
+const $ = id => document.getElementById(id);
+
+function loadStore() {
+  const empty = { v: 1, cards: {}, days: {}, prefs: {} };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return empty;
+    const o = JSON.parse(raw);
+    if (!o || typeof o !== 'object') return empty;
+    return {
+      v: 1,
+      cards: o.cards && typeof o.cards === 'object' ? o.cards : {},
+      days: o.days && typeof o.days === 'object' ? o.days : {},
+      prefs: o.prefs && typeof o.prefs === 'object' ? o.prefs : {},
+    };
+  } catch { return empty; }
+}
+let store = loadStore();
+function saveStore() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {}
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Theme (mirrors index.html)
+// ════════════════════════════════════════════════════════════════════════
+const SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+const MOON = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+const HLJS_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/';
+function applyTheme(theme, persist) {
+  document.documentElement.setAttribute('data-theme', theme);
+  $('theme-icon').innerHTML = theme === 'dark' ? SUN : MOON;
+  $('hljs-theme').href = HLJS_CSS + (theme === 'dark' ? 'github-dark.min.css' : 'github.min.css');
+  if (persist) { try { localStorage.setItem(THEME_KEY, theme); } catch {} }
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark', false);
+$('theme-btn').addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+});
+window.addEventListener('storage', e => {
+  if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue === 'light' ? 'light' : 'dark', false);
+});
+
+// ════════════════════════════════════════════════════════════════════════
+//  Markdown rendering (marked when available, small fallback otherwise)
+// ════════════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function safeUrl(u) { return /^\s*javascript:/i.test(u) ? '#' : u; }
+function miniInline(s) {
+  return s.split(/(`[^`]+`)/).map(p => {
+    if (/^`[^`]+`$/.test(p)) return '<code>' + escapeHtml(p.slice(1, -1)) + '</code>';
+    return escapeHtml(p)
+      .replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, (m, alt, src) => `<img src="${safeUrl(src)}" alt="${alt}" loading="lazy">`)
+      .replace(/\[([^\]]+)\]\(([^)\s]+)[^)]*\)/g, (m, t, href) => `<a href="${safeUrl(href)}">${t}</a>`)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*\w])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+  }).join('');
+}
+// Block-level fallback: fences, headings, lists, quotes, tables, hr, paragraphs.
+function miniMarkdown(src) {
+  const lines = src.replace(/\r\n?/g, '\n').split('\n');
+  const out = [];
+  let i = 0;
+  const isBlank = l => !l.trim();
+  while (i < lines.length) {
+    const line = lines[i];
+    let m;
+    if (isBlank(line)) { i++; continue; }
+    if ((m = line.match(/^\s*(`{3,}|~{3,})\s*([\w+-]*)/))) {
+      const fence = m[1], lang = m[2];
+      const buf = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith(fence)) buf.push(lines[i++]);
+      i++;
+      out.push(`<pre><code${lang ? ` class="language-${escapeHtml(lang)}"` : ''}>${escapeHtml(buf.join('\n'))}</code></pre>`);
+      continue;
+    }
+    if ((m = line.match(/^(#{1,6})\s+(.*?)\s*#*$/))) {
+      out.push(`<h${m[1].length}>${miniInline(m[2])}</h${m[1].length}>`); i++; continue;
+    }
+    if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
+    if (/^\s*>/.test(line)) {
+      const buf = [];
+      while (i < lines.length && /^\s*>/.test(lines[i])) buf.push(lines[i++].replace(/^\s*>\s?/, ''));
+      out.push('<blockquote>' + miniMarkdown(buf.join('\n')) + '</blockquote>');
+      continue;
+    }
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      const rows = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) rows.push(lines[i++]);
+      const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+      const body = rows.filter(r => !/^\s*\|[\s:|-]+\|\s*$/.test(r));
+      out.push('<table>' + body.map((r, k) => '<tr>' + cells(r).map(c => k === 0 ? `<th>${miniInline(c)}</th>` : `<td>${miniInline(c)}</td>`).join('') + '</tr>').join('') + '</table>');
+      continue;
+    }
+    if (/^ {0,3}([-*+]|\d+[.)])\s+/.test(line)) {
+      const ordered = /^ {0,3}\d/.test(line);
+      const items = [];
+      while (i < lines.length && !isBlank(lines[i])) {
+        const l = lines[i];
+        if (/^ {0,3}([-*+]|\d+[.)])\s+/.test(l)) items.push(l.replace(/^ {0,3}([-*+]|\d+[.)])\s+/, ''));
+        else if (items.length) items[items.length - 1] += ' ' + l.trim();
+        i++;
+        if (i < lines.length && isBlank(lines[i]) && i + 1 < lines.length && /^ {0,3}([-*+]|\d+[.)])\s+/.test(lines[i + 1])) i++;
+      }
+      const tag = ordered ? 'ol' : 'ul';
+      out.push(`<${tag}>` + items.map(t => `<li>${miniInline(t)}</li>`).join('') + `</${tag}>`);
+      continue;
+    }
+    if (/^( {4}|\t)/.test(line)) {
+      const buf = [];
+      while (i < lines.length && (/^( {4}|\t)/.test(lines[i]) || isBlank(lines[i]))) buf.push(lines[i++].replace(/^( {4}|\t)/, ''));
+      out.push(`<pre><code>${escapeHtml(buf.join('\n').replace(/\n+$/, ''))}</code></pre>`);
+      continue;
+    }
+    const buf = [];
+    while (i < lines.length && !isBlank(lines[i]) && !/^(#{1,6}\s|\s*(`{3,}|~{3,})|\s*>|\s*\|)/.test(lines[i])) buf.push(lines[i++].trim());
+    if (!buf.length) { buf.push(lines[i++].trim()); }
+    out.push('<p>' + miniInline(buf.join(' ')) + '</p>');
+  }
+  return out.join('\n');
+}
+function renderMd(src) {
+  if (window.marked && typeof marked.parse === 'function') {
+    try { return marked.parse(src, { gfm: true, breaks: false }); } catch {}
+  }
+  return miniMarkdown(src);
+}
+function renderInline(s) {
+  return escapeHtml(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+function decorateAnswer(root) {
+  root.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href') || '';
+    if (/^(https?:)?\/\//i.test(href)) { a.target = '_blank'; a.rel = 'noopener'; }
+  });
+  root.querySelectorAll('img').forEach(img => {
+    img.loading = 'lazy';
+    if (!img.hasAttribute('alt')) img.alt = '';
+    img.addEventListener('error', () => { img.hidden = true; }, { once: true });
+  });
+  if (window.hljs && typeof hljs.highlightElement === 'function') {
+    root.querySelectorAll('pre code').forEach(b => {
+      if (b.classList.contains('language-text')) return;
+      try { hljs.highlightElement(b); } catch {}
+    });
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Spaced repetition (SM-2 flavoured)
+// ════════════════════════════════════════════════════════════════════════
+function dayKey(t) {
+  const d = new Date(t);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function startOfDay(t) { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
+function addDays(t, n) { const d = new Date(startOfDay(t)); d.setDate(d.getDate() + n); return d.getTime(); }
+
+// grade: 0 Again, 1 Hard, 2 Good, 3 Easy. Returns a new card state.
+function schedule(prev, grade, now) {
+  const c = prev ? { ...prev } : { ease: 2.5, interval: 0, reps: 0, lapses: 0 };
+  let ease = typeof c.ease === 'number' ? c.ease : 2.5;
+  let interval = c.interval || 0;
+  let reps = c.reps || 0;
+  let due;
+  if (grade === 0) {
+    ease = Math.max(1.3, ease - 0.2);
+    if (reps > 0) c.lapses = (c.lapses || 0) + 1;
+    reps = 0; interval = 0;
+    due = now + 10 * MIN;                              // relearn in 10 minutes
+  } else {
+    if (grade === 1) {
+      ease = Math.max(1.3, ease - 0.15);
+      interval = reps === 0 ? 1 : Math.max(interval + 1, Math.round(interval * 1.2));
+    } else if (grade === 2) {
+      interval = reps === 0 ? 1 : reps === 1 ? 6 : Math.max(interval + 1, Math.round(interval * ease));
+    } else {
+      ease = ease + 0.15;
+      interval = reps === 0 ? 4 : reps === 1 ? 8 : Math.max(interval + 1, Math.round(interval * ease * 1.3));
+    }
+    interval = Math.min(interval, 365);
+    reps += 1;
+    due = addDays(now, interval);                      // due from the start of that day
+  }
+  return { ease: Math.round(ease * 100) / 100, interval, reps, lapses: c.lapses || 0, due, last: now, grade };
+}
+function fmtSpan(ms) {
+  if (ms < 60 * MIN) return Math.max(1, Math.round(ms / MIN)) + 'm';
+  if (ms < DAY) return Math.round(ms / (60 * MIN)) + 'h';
+  const d = Math.round(ms / DAY);
+  if (d < 31) return d + 'd';
+  if (d < 365) return (Math.round(d / 3) / 10).toString() + 'mo';
+  return (Math.round(d / 36.5) / 10) + 'y';
+}
+const cardOf = id => store.cards[id];
+const isNew = id => !store.cards[id];
+const isDue = (id, now) => { const c = store.cards[id]; return !!c && c.due <= now; };
+const isMastered = id => { const c = store.cards[id]; return !!c && c.interval >= MASTERED_DAYS; };
+
+function recordReview(id, grade) {
+  const now = Date.now();
+  store.cards[id] = schedule(store.cards[id], grade, now);
+  const k = dayKey(now);
+  store.days[k] = (store.days[k] || 0) + 1;
+  saveStore();
+  return store.cards[id];
+}
+
+function streak(now) {
+  let d = startOfDay(now), n = 0;
+  if (!store.days[dayKey(d)]) d = addDays(d, -1);      // today not studied yet: streak still alive
+  while (store.days[dayKey(d)]) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  State
+// ════════════════════════════════════════════════════════════════════════
+let QUESTIONS = [];
+let BY_ID = new Map();
+let TRACKS = [];                               // [id] in display order
+const prefs = Object.assign({ tracks: [], source: '', scope: 'all', timer: 0, mockN: 5, mockT: 3, mode: 'drill' }, store.prefs);
+if (!['due', 'new', 'all'].includes(prefs.scope)) prefs.scope = 'all';
+let query = '';
+let mode = prefs.mode === 'mock' ? 'mock' : 'drill';
+function savePrefs() { store.prefs = { ...prefs, mode }; saveStore(); }
+
+const drill = { currentId: null, lastId: null, revealed: false, skipped: [] };
+let mock = null;                               // { ids, i, grades, start, duration, revealed, timer, done }
+
+// Per-question countdown (drill)
+const qTimer = { end: 0, total: 0, handle: null, over: false };
+
+function announce(msg, urgent) {
+  const el = $(urgent ? 'alerter' : 'announcer');
+  el.textContent = '';
+  setTimeout(() => { el.textContent = msg; }, 30);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Filtering
+// ════════════════════════════════════════════════════════════════════════
+function matchesSearch(q) {
+  if (!query) return true;
+  return query.split(/\s+/).every(t => q._hay.includes(t));
+}
+function inTracks(q) { return !prefs.tracks.length || prefs.tracks.includes(q.track); }
+function inSource(q) { return !prefs.source || q.source_path === prefs.source; }
+function inScope(q, scope, now) {
+  if (scope === 'due') return isDue(q.id, now);
+  if (scope === 'new') return isNew(q.id);
+  return true;
+}
+function filtered(opts) {
+  const now = Date.now();
+  const o = Object.assign({ scope: prefs.scope, tracks: true, source: true }, opts);
+  return QUESTIONS.filter(q => matchesSearch(q) && (!o.tracks || inTracks(q)) && (!o.source || inSource(q)) && (!o.scope || inScope(q, o.scope, now)));
+}
+function drillQueue() {
+  const now = Date.now();
+  const list = filtered();
+  const due = [], fresh = [], rest = [];
+  for (const q of list) {
+    if (isNew(q.id)) fresh.push(q);
+    else if (isDue(q.id, now)) due.push(q);
+    else rest.push(q);
+  }
+  due.sort((a, b) => cardOf(a.id).due - cardOf(b.id).due);
+  rest.sort((a, b) => cardOf(a.id).due - cardOf(b.id).due);
+  let ids = [...due, ...fresh, ...rest].map(q => q.id);
+  if (drill.skipped.length) {
+    const sk = new Set(drill.skipped);
+    ids = [...ids.filter(id => !sk.has(id)), ...drill.skipped.filter(id => ids.includes(id))];
+  }
+  return ids;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Rendering: stats, controls
+// ════════════════════════════════════════════════════════════════════════
+function renderStats() {
+  const now = Date.now();
+  let due = 0, fresh = 0;
+  for (const q of QUESTIONS) { if (isNew(q.id)) fresh++; else if (isDue(q.id, now)) due++; }
+  $('s-today').textContent = store.days[dayKey(now)] || 0;
+  $('s-due').textContent = due;
+  $('s-new').textContent = fresh;
+  const s = streak(now);
+  $('s-streak').textContent = s;
+  $('s-streak-l').textContent = 'Day streak';
+
+  const box = $('mastery-list');
+  box.innerHTML = '';
+  for (const t of TRACKS) {
+    const qs = QUESTIONS.filter(q => q.track === t);
+    const m = qs.filter(q => isMastered(q.id)).length;
+    const l = qs.filter(q => !isNew(q.id) && !isMastered(q.id)).length;
+    const pm = qs.length ? (m / qs.length) * 100 : 0, pl = qs.length ? (l / qs.length) * 100 : 0;
+    const row = document.createElement('div');
+    row.className = 'm-row';
+    row.innerHTML = `
+      <span class="name"><i style="background:${trackColor(t)}" aria-hidden="true"></i>${escapeHtml(trackLabel(t))}</span>
+      <div class="bar" role="progressbar" aria-label="${escapeHtml(trackLabel(t))} mastery" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pm)}" aria-valuetext="${m} of ${qs.length} mastered, ${l} in rotation">
+        <div class="seg known" style="width:${pm}%"></div><div class="seg learning" style="width:${pl}%"></div>
+      </div>
+      <span class="num">${m}/${qs.length}</span>`;
+    box.appendChild(row);
+  }
+}
+
+function renderControls() {
+  const now = Date.now();
+  // Scope counts under the track/guide/search filters
+  const base = filtered({ scope: null });
+  let d = 0, n = 0;
+  for (const q of base) { if (isNew(q.id)) n++; else if (isDue(q.id, now)) d++; }
+  $('n-due').textContent = d; $('n-new').textContent = n; $('n-all').textContent = base.length;
+  $('scope').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.scope === prefs.scope)));
+
+  // Track chip counts under scope + search
+  const scoped = QUESTIONS.filter(q => matchesSearch(q) && inScope(q, prefs.scope, now));
+  const counts = {};
+  scoped.forEach(q => { counts[q.track] = (counts[q.track] || 0) + 1; });
+  $('tracks').querySelectorAll('button').forEach(b => {
+    const t = b.dataset.track;
+    b.setAttribute('aria-pressed', String(prefs.tracks.includes(t)));
+    b.querySelector('.count').textContent = counts[t] || 0;
+  });
+
+  // Guide dropdown: guides within the selected tracks
+  const sel = $('source');
+  const pool = QUESTIONS.filter(inTracks);
+  const guides = new Map();
+  pool.forEach(q => {
+    const g = guides.get(q.source_path) || { title: q.source_title, track: q.track, n: 0 };
+    g.n++; guides.set(q.source_path, g);
+  });
+  if (prefs.source && !guides.has(prefs.source)) prefs.source = '';
+  const sig = [...guides.keys()].join('|');
+  if (sel.dataset.sig !== sig) {
+    sel.dataset.sig = sig;
+    sel.innerHTML = '<option value="">All guides (' + guides.size + ')</option>';
+    for (const t of TRACKS) {
+      const entries = [...guides.entries()].filter(([, g]) => g.track === t);
+      if (!entries.length) continue;
+      const og = document.createElement('optgroup');
+      og.label = trackLabel(t);
+      entries.sort((a, b) => a[1].title.localeCompare(b[1].title)).forEach(([path, g]) => {
+        const o = document.createElement('option');
+        o.value = path;
+        o.textContent = `${g.title} (${g.n})`;
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    }
+  }
+  sel.value = prefs.source;
+  $('search-clear').classList.toggle('show', !!query);
+  $('clear-filters').disabled = !prefs.tracks.length && !prefs.source && !query && prefs.scope === 'all';
+}
+
+function buildTrackChips() {
+  const box = $('tracks');
+  box.innerHTML = '';
+  for (const t of TRACKS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip-btn';
+    b.dataset.track = t;
+    b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<span class="dot" style="background:${trackColor(t)}" aria-hidden="true"></span>${escapeHtml(trackLabel(t))} <span class="count">0</span>`;
+    box.appendChild(b);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  The question card
+// ════════════════════════════════════════════════════════════════════════
+let cardEl = null;
+function ensureCard() {
+  if (cardEl) return cardEl;
+  cardEl = $('card-tpl').content.firstElementChild.cloneNode(true);
+  cardEl.querySelector('#reveal-btn').addEventListener('click', reveal);
+  cardEl.querySelector('#next-btn').addEventListener('click', skip);
+  cardEl.querySelectorAll('.grade-btn').forEach(b => b.addEventListener('click', () => grade(+b.dataset.grade)));
+  cardEl.querySelector('#timer-opts').addEventListener('click', e => {
+    const b = e.target.closest('button[data-min]');
+    if (!b) return;
+    prefs.timer = +b.dataset.min;
+    savePrefs();
+    syncTimerOpts();
+    startQTimer();
+    announce(prefs.timer ? `Timer set to ${prefs.timer} minutes` : 'Timer off');
+  });
+  return cardEl;
+}
+function syncTimerOpts() {
+  cardEl.querySelectorAll('#timer-opts button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.min === prefs.timer)));
+}
+function statusTag(id) {
+  const c = cardOf(id), now = Date.now();
+  if (!c) return '<span class="tag st-new">New</span>';
+  if (c.due <= now) return `<span class="tag st-due">Due${c.reps === 0 ? ' · relearning' : ''}</span>`;
+  return `<span class="tag st-later">Next review in ${fmtSpan(c.due - now)}</span>`;
+}
+function fillCard(q, ctx) {
+  const el = ensureCard();
+  el.querySelector('#q-tags').innerHTML =
+    `<span class="tag"><span class="dot" style="background:${trackColor(q.track)}" aria-hidden="true"></span>${escapeHtml(trackLabel(q.track))}</span>` +
+    (q.difficulty ? `<span class="tag diff-${escapeHtml(q.difficulty)}" title="${q.difficulty_source === 'author' ? 'Difficulty set by the guide author' : 'Estimated difficulty'}">${escapeHtml(q.difficulty[0].toUpperCase() + q.difficulty.slice(1))}${q.difficulty_source === 'author' ? '' : '<span aria-hidden="true">*</span>'}</span>` : '') +
+    statusTag(q.id);
+  const guide = el.querySelector('#q-guide');
+  guide.href = 'index.html#' + q.source_path;
+  guide.setAttribute('aria-label', `Open “${q.source_title}” in the Study Hub`);
+  el.querySelector('#q-source').textContent = q.source_title + ' · ' + q.source_path;
+  el.querySelector('#q-text').innerHTML = renderInline(q.question);
+  el.querySelector('#notes').value = '';
+  el.querySelector('#answer').innerHTML = '';
+  el.querySelector('#answer-wrap').hidden = true;
+  el.querySelector('#reveal-row').hidden = false;
+  el.querySelector('#q-tools').hidden = ctx === 'mock';
+  el.querySelector('#q-foot').textContent = ctx === 'mock' ? 'Skipping counts as unanswered.' : '';
+  el.querySelector('#next-btn').innerHTML = (ctx === 'mock' ? 'Skip question' : 'Skip') + ' <kbd>N</kbd>';
+  const now = Date.now();
+  for (let g = 0; g < 4; g++) {
+    const s = schedule(cardOf(q.id), g, now);
+    el.querySelector('#ivl-' + g).textContent = g === 0 ? '<10m' : fmtSpan(s.interval * DAY);
+  }
+  syncTimerOpts();
+}
+
+function showDrillState(html) {
+  stopQTimer();
+  const st = $('drill-state');
+  st.innerHTML = html;
+  st.hidden = false;
+  if (cardEl && cardEl.parentNode === $('drill-view')) cardEl.remove();
+}
+
+function renderDrill(focusCard) {
+  if (!QUESTIONS.length) return;
+  const queue = drillQueue();
+  const total = queue.length;
+  const now = Date.now();
+  if (!total) {
+    drill.currentId = null;
+    const base = filtered({ scope: null });
+    $('drill-desc').textContent = 'No questions in this view';
+    $('drill-order').textContent = '';
+    if (prefs.scope === 'due' && base.length) {
+      const next = base.map(q => cardOf(q.id)).filter(Boolean).map(c => c.due).filter(t => t > now).sort((a, b) => a - b)[0];
+      showDrillState(`
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>All caught up</h2>
+        <p>Nothing is due in this selection${next ? `. The next review is due in <b>${fmtSpan(next - now)}</b>` : ''}.</p>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" data-act="scope-new">Learn new questions</button>
+          <button type="button" class="btn btn-ghost" data-act="scope-all">Browse all</button>
+        </div>`);
+    } else if (prefs.scope === 'new' && base.length) {
+      showDrillState(`
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>You have seen every question here</h2>
+        <p>Every question in this selection has been graded at least once.</p>
+        <div class="actions"><button type="button" class="btn btn-primary" data-act="scope-due">Review due questions</button></div>`);
+    } else {
+      showDrillState(`
+        <div class="ico warn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h2>No matching questions</h2>
+        <p>Try a different search, or clear the track and guide filters.</p>
+        <div class="actions"><button type="button" class="btn btn-ghost" data-act="clear-filters">Clear filters</button></div>`);
+    }
+    return;
+  }
+  if (!drill.currentId || !queue.includes(drill.currentId)) {
+    // Avoid showing the question that was just graded straight away again
+    drill.currentId = queue.find(id => id !== drill.lastId) || queue[0];
+    drill.revealed = false;
+  }
+  const q = BY_ID.get(drill.currentId);
+  const dueN = queue.filter(id => isDue(id, now)).length;
+  const newN = queue.filter(isNew).length;
+  $('drill-desc').innerHTML = `<b>${total}</b> question${total === 1 ? '' : 's'} in this view · <b>${dueN}</b> due · <b>${newN}</b> new`;
+  $('drill-order').textContent = prefs.scope === 'all' ? 'Due first, then new, then by next review' : prefs.scope === 'due' ? 'Most overdue first' : 'In guide order';
+  $('drill-state').hidden = true;
+  const el = ensureCard();
+  if (el.parentNode !== $('drill-view')) $('drill-view').appendChild(el);
+  fillCard(q, 'drill');
+  if (drill.revealed) showAnswer(q, false);
+  else startQTimer();
+  if (focusCard) el.querySelector('#q-text').focus({ preventScroll: false });
+}
+
+function showAnswer(q, focus) {
+  const el = ensureCard();
+  const box = el.querySelector('#answer');
+  box.innerHTML = renderMd(q.answer_md);
+  decorateAnswer(box);
+  el.querySelector('#answer-wrap').hidden = false;
+  el.querySelector('#reveal-row').hidden = true;
+  if (focus) el.querySelector('#answer-label').focus({ preventScroll: true });
+}
+
+// ── Actions shared by drill & mock ──────────────────────────────────────
+function currentQuestion() {
+  if (mode === 'mock') return mock && !mock.done ? BY_ID.get(mock.ids[mock.i]) : null;
+  return drill.currentId ? BY_ID.get(drill.currentId) : null;
+}
+function isRevealed() { return mode === 'mock' ? !!(mock && mock.revealed) : drill.revealed; }
+
+function reveal() {
+  const q = currentQuestion();
+  if (!q || isRevealed()) return;
+  if (mode === 'mock') mock.revealed = true; else drill.revealed = true;
+  stopQTimer(true);
+  showAnswer(q, true);
+  const txt = (cardEl.querySelector('#answer').textContent || '').trim().replace(/\s+/g, ' ');
+  announce('Answer revealed. ' + txt.slice(0, 220) + (txt.length > 220 ? '…' : '') + ' Grade with 1 to 4.');
+}
+
+function grade(g) {
+  const q = currentQuestion();
+  if (!q || !isRevealed()) return;
+  const c = recordReview(q.id, g);
+  const when = g === 0 ? 'again in 10 minutes' : `next in ${fmtSpan(c.due - Date.now())}`;
+  if (mode === 'mock') {
+    mock.grades[q.id] = g;
+    nextMock(`Graded ${GRADES[g]}, ${when}.`);
+  } else {
+    drill.skipped = drill.skipped.filter(id => id !== q.id);
+    drill.lastId = q.id;
+    drill.currentId = null;
+    drill.revealed = false;
+    renderStats(); renderControls(); renderDrill(true);
+    const n = currentQuestion();
+    announce(`Graded ${GRADES[g]}, ${when}.` + (n ? ` Next question: ${n.question}` : ''));
+  }
+}
+
+function skip() {
+  if (mode === 'mock') {
+    if (!mock || mock.done) return;
+    mock.grades[mock.ids[mock.i]] = null;
+    nextMock('Skipped.');
+    return;
+  }
+  const q = currentQuestion();
+  if (!q) return;
+  drill.skipped = [...drill.skipped.filter(id => id !== q.id), q.id];
+  const queue = drillQueue();
+  drill.currentId = queue.length > 1 ? queue.find(id => id !== q.id) : queue[0];
+  drill.revealed = false;
+  renderDrill(true);
+  const n = currentQuestion();
+  announce(n ? `Next question: ${n.question}` : 'No more questions');
+}
+
+// ── Per-question countdown (drill only) ─────────────────────────────────
+function fmtClock(ms) {
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+function stopQTimer(keepDisplay) {
+  clearInterval(qTimer.handle);
+  qTimer.handle = null;
+  if (!keepDisplay && cardEl) {
+    cardEl.querySelector('#q-timer').hidden = true;
+    cardEl.querySelector('#q-timer-bar').hidden = true;
+  }
+}
+function startQTimer() {
+  stopQTimer();
+  if (!cardEl || mode !== 'drill' || !prefs.timer || drill.revealed) return;
+  qTimer.total = prefs.timer * MIN;
+  qTimer.end = Date.now() + qTimer.total;
+  qTimer.over = false;
+  const t = cardEl.querySelector('#q-timer'), bar = cardEl.querySelector('#q-timer-bar');
+  t.hidden = false; bar.hidden = false;
+  t.classList.remove('over'); bar.classList.remove('over');
+  const tick = () => {
+    const left = qTimer.end - Date.now();
+    t.textContent = fmtClock(left);
+    cardEl.querySelector('#q-timer-fill').style.width = Math.max(0, (left / qTimer.total) * 100) + '%';
+    if (left <= 0 && !qTimer.over) {
+      qTimer.over = true;
+      t.textContent = "Time's up";
+      t.classList.add('over'); bar.classList.add('over');
+      clearInterval(qTimer.handle);
+      announce("Time's up. Reveal the answer when you are ready.", true);
+    }
+  };
+  tick();
+  qTimer.handle = setInterval(tick, 1000);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Mock interview
+// ════════════════════════════════════════════════════════════════════════
+function shuffle(a) {
+  const arr = a.slice();
+  for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+  return arr;
+}
+function mockPool() { return filtered({ scope: null }); }
+function renderMockSetup() {
+  const pool = mockPool();
+  const tracks = prefs.tracks.length ? prefs.tracks.map(trackLabel).join(', ') : 'all tracks';
+  const srcQ = prefs.source ? QUESTIONS.find(q => q.source_path === prefs.source) : null;
+  const src = srcQ ? srcQ.source_title : '';
+  $('mock-desc').innerHTML =
+    `Picks <b>${Math.min(prefs.mockN, pool.length)}</b> random question${Math.min(prefs.mockN, pool.length) === 1 ? '' : 's'} from <b>${pool.length}</b> matching your filters ` +
+    `(${escapeHtml(src || tracks)}${query ? `, search “${escapeHtml(query)}”` : ''}). ` +
+    `You get <b>${prefs.mockN * prefs.mockT} minutes</b> in total. Answer aloud, reveal, and grade each one; grades also update your review schedule.`;
+  $('mock-n').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.n === prefs.mockN)));
+  $('mock-t').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.t === prefs.mockT)));
+  $('mock-start').disabled = !pool.length;
+}
+function startMock(ids) {
+  const pool = mockPool();
+  const chosen = ids || shuffle(pool).slice(0, prefs.mockN).map(q => q.id);
+  if (!chosen.length) { announce('No questions match your filters.'); return; }
+  mock = { ids: chosen, i: 0, grades: {}, start: Date.now(), duration: chosen.length * prefs.mockT * MIN, revealed: false, timer: null, done: false };
+  $('mock-setup').hidden = true;
+  $('mock-summary').hidden = true;
+  $('mock-run').hidden = false;
+  $('controls').hidden = true;
+  mock.timer = setInterval(tickMock, 1000);
+  tickMock();
+  showMockQuestion(true);
+  announce(`Mock interview started: ${chosen.length} questions, ${Math.round(mock.duration / MIN)} minutes. Question 1: ${BY_ID.get(chosen[0]).question}`);
+}
+function tickMock() {
+  if (!mock || mock.done) return;
+  const left = mock.start + mock.duration - Date.now();
+  const t = $('mock-timer');
+  t.textContent = fmtClock(left);
+  t.classList.toggle('over', left <= 60000);
+  if (left <= 0) finishMock('time');
+}
+function showMockQuestion(focus) {
+  const q = BY_ID.get(mock.ids[mock.i]);
+  mock.revealed = false;
+  $('mock-pos').textContent = `Question ${mock.i + 1} of ${mock.ids.length}`;
+  const pct = (mock.i / mock.ids.length) * 100;
+  $('mock-progress-seg').style.width = pct + '%';
+  $('mock-progress').setAttribute('aria-valuenow', String(Math.round(pct)));
+  const el = ensureCard();
+  if (el.parentNode !== $('mock-card-slot')) $('mock-card-slot').appendChild(el);
+  stopQTimer();
+  fillCard(q, 'mock');
+  if (focus) el.querySelector('#q-text').focus();
+}
+function nextMock(prefix) {
+  mock.i++;
+  renderStats();
+  if (mock.i >= mock.ids.length) { finishMock('done'); return; }
+  showMockQuestion(true);
+  announce(`${prefix} Question ${mock.i + 1} of ${mock.ids.length}: ${BY_ID.get(mock.ids[mock.i]).question}`);
+}
+function finishMock(reason) {
+  if (!mock || mock.done) return;
+  mock.done = true;
+  clearInterval(mock.timer);
+  const used = Math.min(Date.now() - mock.start, mock.duration);
+  $('mock-run').hidden = true;
+  $('controls').hidden = false;
+  if (cardEl) cardEl.remove();
+  const items = mock.ids.map(id => ({ q: BY_ID.get(id), g: id in mock.grades ? mock.grades[id] : undefined }));
+  const cnt = [0, 0, 0, 0]; let skipped = 0, unanswered = 0;
+  items.forEach(it => { if (it.g == null) { it.g === null ? skipped++ : unanswered++; } else cnt[it.g]++; });
+  const graded = cnt.reduce((a, b) => a + b, 0);
+  const score = Math.round(((cnt[1] * 1 + cnt[2] * 2 + cnt[3] * 3) / (3 * items.length)) * 100);
+  // Weak areas: guides with Again/Hard/skipped/unanswered questions
+  const weak = new Map();
+  items.forEach(it => {
+    if (it.g === 2 || it.g === 3) return;
+    const w = weak.get(it.q.source_path) || { title: it.q.source_title, track: it.q.track, n: 0 };
+    w.n++; weak.set(it.q.source_path, w);
+  });
+  const gLabel = g => g == null ? (g === null ? 'Skipped' : 'Not reached') : GRADES[g];
+  const gCls = g => g == null ? 'gx' : 'g' + g;
+  const box = $('mock-summary');
+  box.innerHTML = `
+    <h2 id="sum-title">${reason === 'time' ? "Time's up. Here is how it went" : 'Mock interview complete'}</h2>
+    <p class="sub">${graded} of ${items.length} answered in ${fmtClock(used)} of ${fmtClock(mock.duration)} · self-graded score <b>${score}%</b></p>
+    <div class="grade-tiles">
+      <div class="tile t-again"><div class="v">${cnt[0]}</div><div class="l">Again</div></div>
+      <div class="tile t-hard"><div class="v">${cnt[1]}</div><div class="l">Hard</div></div>
+      <div class="tile t-good"><div class="v">${cnt[2]}</div><div class="l">Good</div></div>
+      <div class="tile t-easy"><div class="v">${cnt[3]}</div><div class="l">Easy</div></div>
+      <div class="tile"><div class="v">${skipped + unanswered}</div><div class="l">Skipped</div></div>
+    </div>
+    ${weak.size ? `<h3>Weak areas: review these guides</h3>
+    <ul class="weak-list">${[...weak.entries()].sort((a, b) => b[1].n - a[1].n).map(([p, w]) => `
+      <li><span><span class="tag"><span class="dot" style="background:${trackColor(w.track)}" aria-hidden="true"></span>${escapeHtml(trackLabel(w.track))}</span>
+        <b style="margin-left:6px">${escapeHtml(w.title)}</b> <span style="color:var(--text-3)">· ${w.n} weak</span></span>
+        <a class="guide-link" href="index.html#${escapeHtml(p)}">Open guide</a></li>`).join('')}</ul>`
+      : '<h3>No weak areas this round. Nice work.</h3>'}
+    <h3>Questions</h3>
+    <ol class="result-list">${items.map(it => `
+      <li><span class="qt">${renderInline(it.q.question)}<small>${escapeHtml(it.q.source_title)}</small></span>
+        <span style="display:flex;gap:10px;align-items:center"><span class="g-chip ${gCls(it.g)}">${gLabel(it.g)}</span>
+        <a class="guide-link" href="index.html#${escapeHtml(it.q.source_path)}" aria-label="Open ${escapeHtml(it.q.source_title)} in the Study Hub">Guide</a></span></li>`).join('')}</ol>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" data-act="mock-again">Start another mock</button>
+      ${weak.size ? '<button type="button" class="btn btn-ghost" data-act="mock-weak">Retry weak questions</button>' : ''}
+      <button type="button" class="btn btn-ghost" data-act="to-drill">Back to drill</button>
+    </div>`;
+  box.hidden = false;
+  box.focus();
+  renderStats(); renderControls();
+  announce(`Mock interview ${reason === 'time' ? 'ended, time is up' : 'complete'}. ${graded} of ${items.length} answered. Score ${score} percent.`);
+}
+$('mock-summary').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  if (b.dataset.act === 'mock-again') { showMockSetup(); }
+  else if (b.dataset.act === 'mock-weak') {
+    const ids = mock.ids.filter(id => mock.grades[id] !== 2 && mock.grades[id] !== 3);
+    startMock(shuffle(ids));
+  } else if (b.dataset.act === 'to-drill') setMode('drill', true);
+});
+function showMockSetup(focus) {
+  mock = null;
+  $('mock-summary').hidden = true;
+  $('mock-run').hidden = true;
+  $('mock-setup').hidden = false;
+  $('controls').hidden = false;
+  renderMockSetup();
+  if (focus !== false) $('mock-start').focus();
+}
+$('mock-start').addEventListener('click', () => startMock());
+$('mock-end').addEventListener('click', () => finishMock('ended'));
+$('mock-n').addEventListener('click', e => {
+  const b = e.target.closest('button[data-n]'); if (!b) return;
+  prefs.mockN = +b.dataset.n; savePrefs(); renderMockSetup();
+});
+$('mock-t').addEventListener('click', e => {
+  const b = e.target.closest('button[data-t]'); if (!b) return;
+  prefs.mockT = +b.dataset.t; savePrefs(); renderMockSetup();
+});
+
+// ════════════════════════════════════════════════════════════════════════
+//  Mode switching
+// ════════════════════════════════════════════════════════════════════════
+function setMode(m, focus) {
+  if (mode === 'mock' && m !== 'mock' && mock && !mock.done) {
+    if (!confirm('Leave the mock interview? Your progress in this session will be lost (grades already given are kept).')) return;
+    clearInterval(mock.timer); mock = null;
+  }
+  mode = m;
+  savePrefs();
+  $('tab-drill').setAttribute('aria-selected', String(m === 'drill'));
+  $('tab-mock').setAttribute('aria-selected', String(m === 'mock'));
+  $('tab-drill').tabIndex = m === 'drill' ? 0 : -1;
+  $('tab-mock').tabIndex = m === 'mock' ? 0 : -1;
+  $('drill-view').hidden = m !== 'drill';
+  $('mock-view').hidden = m !== 'mock';
+  $('controls').hidden = false;
+  if (m === 'drill') {
+    stopQTimer();
+    if (cardEl) cardEl.remove();
+    renderDrill(false);
+  } else {
+    stopQTimer();
+    if (!mock || mock.done) showMockSetup(false);
+  }
+  if (focus) $('tab-' + m).focus();
+}
+$('tab-drill').addEventListener('click', () => setMode('drill'));
+$('tab-mock').addEventListener('click', () => setMode('mock'));
+document.querySelector('.mode-tabs').addEventListener('keydown', e => {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  e.preventDefault();
+  setMode(mode === 'drill' ? 'mock' : 'drill', true);
+});
+
+// ════════════════════════════════════════════════════════════════════════
+//  Filter events
+// ════════════════════════════════════════════════════════════════════════
+function filtersChanged() {
+  savePrefs();
+  renderControls();
+  if (mode === 'drill') renderDrill(false);
+  else if (!mock) renderMockSetup();
+}
+$('tracks').addEventListener('click', e => {
+  const b = e.target.closest('button[data-track]');
+  if (!b) return;
+  const t = b.dataset.track;
+  prefs.tracks = prefs.tracks.includes(t) ? prefs.tracks.filter(x => x !== t) : [...prefs.tracks, t];
+  filtersChanged();
+  announce(`${trackLabel(t)} ${prefs.tracks.includes(t) ? 'selected' : 'deselected'}. ${$('n-all').textContent} questions match.`);
+});
+$('scope').addEventListener('click', e => {
+  const b = e.target.closest('button[data-scope]');
+  if (!b || b.dataset.scope === prefs.scope) return;
+  prefs.scope = b.dataset.scope;
+  drill.currentId = null;
+  filtersChanged();
+  announce(`Showing ${b.textContent.trim().replace(/\s+\d+$/, '').toLowerCase()} questions`);
+});
+$('source').addEventListener('change', e => {
+  prefs.source = e.target.value;
+  filtersChanged();
+});
+let searchTimer = null;
+$('search').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    query = e.target.value.trim().toLowerCase();
+    filtersChanged();
+    announce(`${$('n-all').textContent} questions match`);
+  }, 120);
+});
+$('search-clear').addEventListener('click', () => {
+  $('search').value = ''; query = '';
+  filtersChanged();
+  $('search').focus();
+});
+function clearFilters() {
+  prefs.tracks = []; prefs.source = ''; prefs.scope = 'all'; query = ''; $('search').value = '';
+  filtersChanged();
+}
+$('clear-filters').addEventListener('click', () => { clearFilters(); announce('Filters cleared'); });
+$('drill-state').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  const act = b.dataset.act;
+  if (act === 'clear-filters') clearFilters();
+  else if (act.startsWith('scope-')) { prefs.scope = act.slice(6); filtersChanged(); }
+  else if (act === 'reload') location.reload();
+  if (cardEl && cardEl.isConnected) cardEl.querySelector('#q-text').focus();
+});
+$('reset-btn').addEventListener('click', () => {
+  if (!confirm('Reset your practice progress? Every question goes back to new and your streak is cleared. This cannot be undone.')) return;
+  store.cards = {}; store.days = {};
+  saveStore();
+  drill.currentId = null; drill.skipped = []; drill.revealed = false;
+  renderStats(); renderControls();
+  if (mode === 'drill') renderDrill(false); else if (!mock) renderMockSetup();
+  announce('Progress reset');
+});
+
+// ════════════════════════════════════════════════════════════════════════
+//  Keyboard
+// ════════════════════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+  const t = e.target;
+  const typing = t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
+  if (typing) {
+    if (e.key === 'Escape') t.blur();
+    return;
+  }
+  if (e.key === '/') { e.preventDefault(); if (!$('controls').hidden) { $('search').focus(); $('search').select(); } return; }
+  if (!QUESTIONS.length) return;
+  const onControl = t instanceof HTMLElement && !!t.closest('button, a, summary, [role="tab"]');
+  const active = currentQuestion();
+  if (!active) return;
+  switch (e.key) {
+    case ' ':
+      if (onControl) return;                     // let buttons/links activate natively
+      e.preventDefault(); reveal(); break;
+    case '1': case '2': case '3': case '4':
+      if (isRevealed()) { e.preventDefault(); grade(+e.key - 1); }
+      break;
+    case 'n': case 'N':
+      e.preventDefault(); skip(); break;
+  }
+});
+
+// Refresh due counts once a minute (relearning cards come back after 10 min)
+setInterval(() => {
+  if (!QUESTIONS.length) return;
+  renderStats(); renderControls();
+  if (mode === 'drill' && !drill.currentId) renderDrill(false);
+}, 60000);
+
+// ════════════════════════════════════════════════════════════════════════
+//  Init
+// ════════════════════════════════════════════════════════════════════════
+function showLoadError(err) {
+  $('drill-desc').textContent = 'Could not load questions';
+  $('controls').hidden = true;
+  $('mock-view').hidden = true;
+  $('drill-view').hidden = false;
+  showDrillState(`
+    <div class="ico warn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <h2>Could not load the question bank</h2>
+    <p>${isLocal
+      ? 'This page was opened directly from disk (<code>file://</code>), and browsers block <code>fetch()</code> there.'
+      : 'Fetching <code>' + DATA_PATH + '</code> failed' + (err && err.message ? ': ' + escapeHtml(err.message) : '.')}</p>
+    <p>Serve the repository locally instead:</p>
+    <p><code>python3 -m http.server 8000</code></p>
+    <p>then open <code>http://localhost:8000/practice.html</code></p>
+    <p style="font-size:.8rem;color:var(--text-3)">If the file is missing, generate it with <code>python3 tools/build_question_bank.py</code>.</p>
+    ${isLocal ? '' : '<div class="actions"><button type="button" class="btn btn-ghost" data-act="reload">Try again</button></div>'}`);
+}
+
+(async function init() {
+  if (isLocal) { showLoadError(); return; }
+  try {
+    const res = await fetch(DATA_PATH, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : data && data.questions;
+    if (!Array.isArray(list) || !list.length) throw new Error('the file has no questions');
+    QUESTIONS = list.filter(q => q && q.id && q.question && q.answer_md && q.track && q.source_path);
+    if (!QUESTIONS.length) throw new Error('no valid questions found');
+  } catch (err) {
+    showLoadError(err);
+    return;
+  }
+  QUESTIONS.forEach(q => {
+    q.source_title = q.source_title || q.source_path;
+    q._hay = (q.question + ' ' + q.source_title + ' ' + q.answer_md).toLowerCase();
+    BY_ID.set(q.id, q);
+  });
+  const order = Object.keys(TRACK_META);
+  TRACKS = [...new Set(QUESTIONS.map(q => q.track))].sort((a, b) => {
+    const ia = order.indexOf(a), ib = order.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
+  });
+  prefs.tracks = prefs.tracks.filter(t => TRACKS.includes(t));
+  if (![5, 10, 15].includes(prefs.mockN)) prefs.mockN = 5;
+  if (![2, 3, 5].includes(prefs.mockT)) prefs.mockT = 3;
+  if (![0, 2, 5, 10].includes(prefs.timer)) prefs.timer = 0;
+  buildTrackChips();
+  renderStats();
+  renderControls();
+  setMode(mode, false);
+})();
+</script>
+</body>
+</html>
