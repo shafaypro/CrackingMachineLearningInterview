@@ -69,7 +69,7 @@ Download the installer from [ollama.com/download](https://ollama.com/download) a
 
 ```bash
 ollama --version
-# ollama version 0.3.x
+# ollama version is 0.x.y
 ```
 
 ---
@@ -116,8 +116,10 @@ ollama serve
 # Basic chat
 ollama run llama3.2
 
-# With system prompt
-ollama run llama3.2 --system "You are a senior Python developer"
+# With a system prompt: `ollama run` has no --system flag. Inside the
+# interactive session use /set system, or bake it into a Modelfile (below)
+ollama run llama3.2
+>>> /set system "You are a senior Python developer"
 
 # One-shot completion
 echo "Write a Python fibonacci function" | ollama run codellama
@@ -143,7 +145,7 @@ ollama run mistral:7b-instruct-q4_0  # Specific quantization
 | **mistral-nemo** | 12B | ~7GB | Multilingual, long context | `ollama run mistral-nemo` |
 | **gemma2** | 9B / 27B | ~5.5GB / ~15GB | Google's model, strong benchmarks | `ollama run gemma2` |
 | **phi3** | 3.8B / 14B | ~2.2GB / ~8GB | Microsoft, small but capable | `ollama run phi3` |
-| **phi4** | 14B | ~8.5GB | Microsoft's latest, top benchmarks | `ollama run phi4` |
+| **phi4** | 14B | ~8.5GB | Microsoft, strong reasoning for its size | `ollama run phi4` |
 | **qwen2.5** | 7B / 72B | ~4.4GB / ~44GB | Alibaba, strong in code and math | `ollama run qwen2.5` |
 | **codellama** | 7B / 13B | ~3.8GB / ~7.4GB | Meta's code-specialized model | `ollama run codellama` |
 | **deepseek-r1** | 8B / 70B | ~5GB / ~42GB | Reasoning model, chain-of-thought | `ollama run deepseek-r1` |
@@ -217,7 +219,7 @@ PARAMETER num_predict 2048
 PARAMETER stop "<|eot_id|>"
 PARAMETER stop "<|end_of_text|>"
 
-# Number of GPU layers to load (-1 = all)
+# Number of layers to offload to GPU (default: chosen automatically)
 PARAMETER num_gpu 35
 
 # Number of threads for CPU
@@ -262,10 +264,10 @@ curl http://localhost:11434/api/generate \
   }'
 ```
 
-### Chat Completion (OpenAI-Compatible)
+### Chat Completion (Native API)
 
 ```bash
-# Ollama supports the OpenAI chat completions format
+# Ollama's native chat endpoint (messages list, similar to but not the same as OpenAI's format)
 curl http://localhost:11434/api/chat \
   -d '{
     "model": "llama3.2",
@@ -292,10 +294,12 @@ curl http://localhost:11434/v1/chat/completions \
 ### Embeddings
 
 ```bash
-curl http://localhost:11434/api/embeddings \
+# /api/embed replaces the older /api/embeddings endpoint and accepts a
+# string or a list of strings in "input"
+curl http://localhost:11434/api/embed \
   -d '{
     "model": "nomic-embed-text",
-    "prompt": "Machine learning is fascinating"
+    "input": "Machine learning is fascinating"
   }'
 ```
 
@@ -405,8 +409,8 @@ import ollama
 import numpy as np
 
 def get_embedding(text: str, model: str = "nomic-embed-text") -> list[float]:
-    response = ollama.embeddings(model=model, prompt=text)
-    return response['embedding']
+    response = ollama.embed(model=model, input=text)  # ollama.embeddings() is the older API
+    return response['embeddings'][0]
 
 def cosine_similarity(a: list[float], b: list[float]) -> float:
     a, b = np.array(a), np.array(b)
@@ -426,7 +430,7 @@ print(f"ML vs pizza similarity: {cosine_similarity(emb1, emb3):.4f}")
 ## LangChain + Ollama
 
 ```bash
-pip install langchain langchain-ollama langchain-community
+pip install langchain langchain-ollama langchain-community langchain-chroma langchain-text-splitters
 ```
 
 ### Basic LangChain with Ollama
@@ -455,11 +459,11 @@ print(response.content)
 
 ```python
 from langchain_ollama import OllamaEmbeddings, ChatOllama
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 
 # 1. Load documents
@@ -506,8 +510,9 @@ print(answer)
 ```python
 from langchain_ollama import ChatOllama
 
-llm = ChatOllama(model="llama3.2", streaming=True)
+llm = ChatOllama(model="llama3.2")
 
+# .stream() streams tokens; no extra constructor flag is needed
 for chunk in llm.stream("Write a short poem about machine learning"):
     print(chunk.content, end="", flush=True)
 ```
@@ -557,8 +562,8 @@ ollama pull llava
 ### CLI Vision
 
 ```bash
-# Pass an image to the model
-ollama run llava "What is in this image?" --image /path/to/image.jpg
+# Include the image file path in the prompt (there is no --image flag)
+ollama run llava "What is in this image? /path/to/image.jpg"
 ```
 
 ### Python Vision
@@ -620,11 +625,9 @@ import numpy as np
 
 # Generate embeddings
 def embed_texts(texts: list[str], model: str = "nomic-embed-text") -> np.ndarray:
-    embeddings = []
-    for text in texts:
-        response = ollama.embeddings(model=model, prompt=text)
-        embeddings.append(response['embedding'])
-    return np.array(embeddings)
+    # ollama.embed accepts a batch of inputs in one call
+    response = ollama.embed(model=model, input=texts)
+    return np.array(response['embeddings'])
 
 # Simple semantic search
 def semantic_search(query: str, documents: list[str], top_k: int = 3):
@@ -657,25 +660,31 @@ for doc, score in results:
 
 ### GPU Layers
 
-```bash
-# Load all layers on GPU (fastest)
-OLLAMA_GPU_LAYERS=-1 ollama run llama3.2
+Ollama decides GPU offload automatically based on free VRAM. To override it,
+set the `num_gpu` option (number of layers to offload). There is no
+`OLLAMA_GPU_LAYERS` environment variable.
 
-# Specify number of layers (tune for partial GPU offload)
-OLLAMA_GPU_LAYERS=20 ollama run llama3.2
+```bash
+# Inside an interactive session
+ollama run llama3.2
+>>> /set parameter num_gpu 20
+
+# Per request via the API
+curl http://localhost:11434/api/generate \
+  -d '{"model": "llama3.2", "prompt": "Hi", "options": {"num_gpu": 20}}'
 ```
 
 In Modelfile:
 
 ```dockerfile
-PARAMETER num_gpu -1   # -1 = all layers on GPU
+PARAMETER num_gpu 999   # A value above the layer count offloads all layers
 ```
 
 ### Context Size
 
 ```dockerfile
 # Larger context = more memory, allows longer conversations
-PARAMETER num_ctx 8192   # Default is 2048
+PARAMETER num_ctx 8192   # Default varies by Ollama version (older releases used 2048)
 ```
 
 ### Threads (CPU Inference)
@@ -748,9 +757,7 @@ docker run -d \
 ### Docker Compose
 
 ```yaml
-# docker-compose.yml
-version: '3.8'
-
+# docker-compose.yml (the top-level `version:` key is obsolete in Compose v2)
 services:
   ollama:
     image: ollama/ollama
@@ -821,13 +828,13 @@ Ollama exposes an OpenAI-compatible API at `http://localhost:11434/v1`. Simply c
 
 **Q5: What is the difference between Ollama and vLLM for serving LLMs?** 🟡 Intermediate
 
-Ollama prioritizes simplicity and local development. It works great for single-user workloads, quick experimentation, and desktop use. vLLM uses PagedAttention for KV cache management, enabling high-throughput multi-user inference with continuous batching. vLLM is 3-10x more efficient for concurrent requests. For production APIs serving many users: vLLM. For local development and single-user tools: Ollama.
+Ollama prioritizes simplicity and local development. It works great for single-user workloads, quick experimentation, and desktop use. vLLM uses PagedAttention for KV cache management, enabling high-throughput multi-user inference with continuous batching. vLLM typically delivers much higher throughput under many concurrent requests. For production APIs serving many users: vLLM. For local development and single-user tools: Ollama.
 
 ---
 
 **Q6: What is quantization in the context of Ollama models?** 🟡 Intermediate
 
-Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (4-bit with K-means quantization, mixed precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the sweet spot: ~75% memory reduction vs F32 with minimal quality loss.
+Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (a llama.cpp "k-quant": block-wise ~4-bit quantization with per-block scales, where `_M` is the medium mix that keeps some tensors at higher precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the common sweet spot: roughly 70% smaller than F16 with small quality loss.
 
 ---
 
@@ -871,7 +878,7 @@ Apple Silicon (M1/M2/M3/M4) uses unified memory: RAM and VRAM are shared, making
 
 **Q9: How do you run a vision model with Ollama?** 🟡 Intermediate
 
-Pull a multimodal model like LLaVA (`ollama pull llava`) and pass images via the CLI (`ollama run llava --image photo.jpg`) or via the API/Python SDK. In the Python `ollama` library, include an `images` field in the message with file paths or base64-encoded image data. The model processes both the image and text prompt together.
+Pull a multimodal model like LLaVA (`ollama pull llava`) and pass images via the CLI (include the file path in the prompt: `ollama run llava "Describe ./photo.jpg"`) or via the API/Python SDK. In the Python `ollama` library, include an `images` field in the message with file paths or base64-encoded image data. The model processes both the image and text prompt together.
 
 ---
 

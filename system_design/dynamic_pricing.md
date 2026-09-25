@@ -197,7 +197,7 @@ p_res = log_p - cross_val_predict(model, X, log_p, cv=5)
 theta = (p_res @ q_res) / (p_res @ p_res)
 
 print(f"naive elasticity: {-naive_slope:.2f}")   # wrong sign here
-print(f"DML elasticity:   {-theta:.2f}")          # close to 2.0
+print(f"DML elasticity:   {-theta:.2f}")          # near the true 2.0; naive is far off
 ```
 
 In practice, use a library such as EconML or DoubleML for standard errors and heterogeneous effects `e(X)`, and check the result against an experiment before trusting it.
