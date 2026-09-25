@@ -389,6 +389,7 @@ Every guide in `mlops/`. Start with the overview above, then work through these.
 
 - [A/B Testing & Experimentation for ML Systems](./intro_ab_testing.md)
 - [CI/CD for Machine Learning](./intro_cicd_for_ml.md)
+- [Data Labeling, Active Learning, and Weak Supervision](./intro_data_labeling_active_learning.md)
 - [Data Quality & Validation](./intro_data_quality.md)
 - [Evaluation and Guardrails for AI Systems](./intro_evaluation_guardrails.md)
 - [Feature Store Guide](./intro_feature_store.md)
@@ -399,6 +400,7 @@ Every guide in `mlops/`. Start with the overview above, then work through these.
 - [Model Explainability: SHAP, LIME, and Interpretability Techniques](./intro_model_explainability.md)
 - [Model Monitoring Guide](./intro_model_monitoring.md)
 - [Model Serving](./intro_model_serving.md)
+- [Responsible AI: Fairness, Bias, Privacy, and Governance](./intro_responsible_ai_fairness.md)
 
 ---
 

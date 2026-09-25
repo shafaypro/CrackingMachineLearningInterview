@@ -556,11 +556,13 @@ Every guide in `deep_learning/`. Start with the overview above, then work throug
 
 - [Applied Deep Learning Roadmap](./intro_applied_deep_learning.md)
 - [Computer Vision for ML Interviews](./intro_computer_vision.md)
+- [Distributed Training: Data, Tensor, and Pipeline Parallelism](./intro_distributed_training.md)
 - [Fine-Tuning Large Language Models: LoRA, QLoRA & PEFT](./intro_fine_tuning.md)
 - [Generative Models: VAEs, GANs, and Diffusion](./intro_generative_models.md)
 - [Graph Neural Networks](./intro_graph_neural_networks.md)
 - [Model Compression: Distillation, Pruning, and Quantization](./intro_model_compression.md)
 - [Neural Network Training: Optimization and Regularization](./intro_neural_network_training.md)
+- [Reinforcement Learning: MDPs, Q-Learning, Bandits, PPO, and RLHF](./intro_reinforcement_learning.md)
 - [Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq](./intro_sequence_models.md)
 - [Transformers Deep Dive](./intro_transformers.md)
 

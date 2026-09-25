@@ -16,6 +16,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Activation function** — Nonlinearity applied after a linear layer (ReLU, GELU, SiLU). Without one, stacked layers collapse to a single linear transform.
 
+**Active learning** — Let the model pick which unlabeled examples to label next (most uncertain, most diverse) so the labeling budget goes where it helps most. See [Data Labeling & Active Learning](../mlops/intro_data_labeling_active_learning.md).
+
 **AdamW** — Adam with *decoupled* weight decay. The default optimizer for transformers; ordinary Adam applies L2 through the adaptive denominator, which distorts it. See [NN Training](../deep_learning/intro_neural_network_training.md).
 
 **Agent** — An LLM in a loop with tools, deciding actions until a goal is met. See [Agentic AI](../ai_genai/intro_agentic_ai.md).
@@ -37,6 +39,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 **Backpropagation** — Chain rule over the computation graph to get gradients. Products of many Jacobians are why gradients vanish or explode.
 
 **Bagging** — Training models on bootstrap resamples and averaging. Reduces **variance**; needs low-bias base learners. See [Ensemble Methods](../classical_ml/intro_ensemble_methods.md).
+
+**Bandit (multi-armed / contextual)** — RL with a single step: pick an action, see a reward, no state transitions. Balances exploration and exploitation (ε-greedy, UCB, Thompson sampling). Used for recommendations, ads and pricing. See [Reinforcement Learning](../deep_learning/intro_reinforcement_learning.md).
 
 **Batch normalization** — Normalizes across the batch dimension. Different train/eval behaviour, which is why forgetting `model.eval()` breaks predictions.
 
@@ -66,6 +70,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Classifier-free guidance (CFG)** — Extrapolating away from the unconditional prediction to strengthen prompt adherence in diffusion. Costs two forward passes per step. See [Generative Models](../deep_learning/intro_generative_models.md).
 
+**Cohen's kappa** — Agreement between two annotators corrected for chance: `κ = (p_o − p_e) / (1 − p_e)`. Raw percent agreement overstates quality when one class dominates. See [Data Labeling & Active Learning](../mlops/intro_data_labeling_active_learning.md).
+
 **Collider** — A common *effect* of two variables. Conditioning on one **creates** spurious association — which is why "control for everything" is wrong advice.
 
 **Confounder** — A common *cause* of treatment and outcome. This is the bias you must adjust for.
@@ -90,6 +96,10 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **DDIM** — Deterministic diffusion sampler that skips steps, enabling 20–50 step generation and reproducible outputs.
 
+**Demographic parity** — Fairness criterion: the positive-prediction rate is equal across groups, `P(ŷ=1 | A=a) = P(ŷ=1 | A=b)`. Ignores the true labels. See [Responsible AI](../mlops/intro_responsible_ai_fairness.md).
+
+**Differential privacy** — A guarantee that any single record barely changes the output distribution, controlled by `ε` (smaller means more private). DP-SGD clips per-example gradients and adds noise. See [Responsible AI](../mlops/intro_responsible_ai_fairness.md).
+
 **Diffusion model** — Generative model that learns to reverse a gradual noising process. Stable to train and excellent at coverage; slow to sample.
 
 **Distillation** — Training a small student to match a large teacher's output distribution. The one compression technique that reliably delivers real latency wins. See [Model Compression](../deep_learning/intro_model_compression.md).
@@ -106,6 +116,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Embedding** — Dense vector where geometric proximity means semantic similarity. Measures relatedness, *not* truth — "the drug works" and "the drug does not work" embed close together. See [Embeddings](../ai_genai/intro_embeddings.md).
 
+**Equalized odds** — Fairness criterion: equal true-positive *and* false-positive rates across groups. Cannot hold together with calibration when base rates differ. See [Responsible AI](../mlops/intro_responsible_ai_fairness.md).
+
 **Error budget** — `1 - SLO`. Converts reliability from an argument into arithmetic. See [Observability](../devops/intro_observability.md).
 
 **Exposure bias** — Mismatch between teacher-forced training and autoregressive inference, where a model consumes its own outputs.
@@ -121,6 +133,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 **FlashAttention** — Kernel that tiles attention in SRAM and never materializes the `n×n` score matrix. Memory becomes linear in sequence length.
 
 **F1 score** — Harmonic mean of precision and recall. Harmonic because it refuses to reward getting one by destroying the other.
+
+**FSDP (Fully Sharded Data Parallel)** — PyTorch's ZeRO-3: parameters, gradients and optimizer states are sharded across GPUs and all-gathered layer by layer when needed. See [Distributed Training](../deep_learning/intro_distributed_training.md).
 
 ---
 
@@ -198,6 +212,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Message passing** — The GNN template: build messages per edge, aggregate permutation-invariantly, update node state.
 
+**MFU (model FLOPs utilization)** — Achieved training FLOPs divided by the hardware's peak. The standard efficiency metric for large-scale training. See [Distributed Training](../deep_learning/intro_distributed_training.md).
+
 **MLOps** — Practices for deploying and operating ML: versioning, CI/CD, monitoring, retraining. See [MLOps](../mlops/README.md).
 
 **Mode collapse** — A GAN producing only a few outputs. High precision, low recall in generative terms.
@@ -236,6 +252,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **Positivity / overlap** — Every unit has non-zero probability of either treatment. No causal method extrapolates into a region with no comparison units.
 
+**PPO (Proximal Policy Optimization)** — Policy-gradient algorithm that clips the probability ratio between the new and old policy, preventing destructive updates. The classic RLHF optimizer. See [Reinforcement Learning](../deep_learning/intro_reinforcement_learning.md).
+
 **PR-AUC** — Area under the precision-recall curve. The honest metric on imbalanced problems, where ROC-AUC flatters.
 
 **Prefill vs decode** — Prompt processing (compute-bound, parallel) versus token generation (memory-bandwidth-bound, sequential). Nearly every LLM serving optimization follows from this split.
@@ -251,6 +269,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 ---
 
 ## Q
+
+**Q-learning** — Off-policy TD method that learns `Q(s, a)` by bootstrapping toward `r + γ·max_a' Q(s', a')`. DQN is the deep-network version. See [Reinforcement Learning](../deep_learning/intro_reinforcement_learning.md).
 
 **Quantization** — Reducing numerical precision. Since decode is bandwidth-bound, fewer bytes per weight means faster generation. Usually better spent fitting a *bigger* model than shrinking a fixed one.
 
@@ -288,6 +308,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 **SUTVA** — One unit's treatment doesn't affect another's outcome. Broken constantly by social and marketplace products.
 
+**SVD (singular value decomposition)** — `X = UΣVᵀ` for any matrix. Truncating it gives the best low-rank approximation; it underlies PCA, and the low-rank idea underlies LoRA. See [Math for ML](../classical_ml/intro_math_for_ml.md).
+
 ---
 
 ## T
@@ -324,6 +346,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 
 ## W
 
+**Weak supervision** — Label data with many noisy heuristics (labeling functions) and combine them with a label model instead of hand-labeling every row. See [Data Labeling & Active Learning](../mlops/intro_data_labeling_active_learning.md).
+
 **Weight decay** — Shrinking weights toward zero. Exclude biases and normalization parameters — decaying LayerNorm gains fights the normalization.
 
 **Window function** — SQL computation over a row set without collapsing rows. Replaces slow correlated subqueries.
@@ -333,6 +357,8 @@ Terms link to the guide that covers them in depth. Use `Ctrl+F`.
 ---
 
 ## Z
+
+**ZeRO** — DeepSpeed's optimizer that removes memory redundancy in data parallelism by sharding optimizer states (stage 1), plus gradients (stage 2), plus parameters (stage 3). See [Distributed Training](../deep_learning/intro_distributed_training.md).
 
 **Zero-shot** — Performing a task with no task-specific examples, relying on pretraining and instructions.
 
