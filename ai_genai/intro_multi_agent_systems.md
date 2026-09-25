@@ -61,15 +61,17 @@ A manager agent routes tasks to specialist workers:
 from langgraph_supervisor import create_supervisor
 from langchain_anthropic import ChatAnthropic
 
+# data_analyst, ml_engineer, writer: compiled agents created with a unique name,
+# e.g. create_react_agent(llm, tools=[...], name="data_analyst")
 supervisor = create_supervisor(
-    agents=["data_analyst", "ml_engineer", "writer"],
-    model=ChatAnthropic(model="claude-opus-5-5"),
+    agents=[data_analyst, ml_engineer, writer],   # agent objects, not name strings
+    model=ChatAnthropic(model="claude-opus-4-6"),
     prompt="""You are a project manager. Route each task to the right specialist:
     - data_analyst: data queries, statistics, EDA
     - ml_engineer: model design, training, evaluation
     - writer: documentation, summaries, reports
     When all tasks are done, synthesize the final answer."""
-)
+).compile()
 ```
 
 ### 2. Critic-Generator Pattern
@@ -103,7 +105,8 @@ def refiner_node(state):
 Execute subtasks concurrently, then aggregate:
 
 ```python
-from langgraph.graph import StateGraph, Send
+from langgraph.graph import StateGraph
+from langgraph.types import Send
 
 def route_to_workers(state):
     """Fan-out: send each document to a worker"""
@@ -172,7 +175,7 @@ def list_available_models() -> list[str]:
     """List all models available in the model registry."""
     return ["resnet50", "bert-base", "gpt2-medium", "llama-3.1-8b"]
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 llm_with_tools = llm.bind_tools([get_model_accuracy, list_available_models])
 
 # LLM decides which tools to call and with what arguments
@@ -282,7 +285,7 @@ relevant = memory.recall("What programming language should I use?")
 Compress old messages to stay within context:
 
 ```python
-from langchain.memory import ConversationSummaryBufferMemory
+from langchain_classic.memory import ConversationSummaryBufferMemory  # legacy API (pre-1.0: langchain.memory)
 
 memory = ConversationSummaryBufferMemory(
     llm=ChatAnthropic(model="claude-haiku-4-5"),
@@ -334,8 +337,8 @@ from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 
 # Primary: Claude Opus, Fallback: Claude Sonnet, Final fallback: GPT-4o
-primary = ChatAnthropic(model="claude-opus-5-5")
-fallback1 = ChatAnthropic(model="claude-sonnet-5")
+primary = ChatAnthropic(model="claude-opus-4-6")
+fallback1 = ChatAnthropic(model="claude-sonnet-4-6")
 fallback2 = ChatOpenAI(model="gpt-4o")
 
 llm_with_fallbacks = primary.with_fallbacks(

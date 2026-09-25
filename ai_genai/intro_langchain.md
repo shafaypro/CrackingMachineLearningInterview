@@ -30,7 +30,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 # Simple chain: prompt → LLM → parse
 chain = (
@@ -71,7 +71,7 @@ embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 vectorstore = Chroma(persist_directory="./db", embedding_function=embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 prompt = ChatPromptTemplate.from_template("""
 Answer the question based on the context below.
@@ -137,7 +137,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
 from langchain.agents import create_agent  # LangChain 1.0+
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 # Define tools with @tool decorator
 @tool
@@ -193,7 +193,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import BaseMessage, ToolMessage
 import json
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 # State schema
 class AgentState(TypedDict):
@@ -321,7 +321,7 @@ from langchain_classic.memory import ConversationBufferMemory, ConversationSumma
 from langchain_anthropic import ChatAnthropic
 from langchain_classic.chains import ConversationChain
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 # Buffer memory: keeps all messages (good for short conversations)
 memory = ConversationBufferMemory()
@@ -368,7 +368,7 @@ class ProductReview(BaseModel):
     summary: str = Field(description="One-sentence summary")
     key_points: list[str] = Field(description="List of key points")
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 
 # Structured output via Pydantic
 structured_llm = llm.with_structured_output(ProductReview)

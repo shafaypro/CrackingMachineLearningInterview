@@ -205,7 +205,7 @@ class SentimentResult(BaseModel):
     key_phrases: list[str]
     requires_escalation: bool
 
-response = client.beta.chat.completions.parse(
+response = client.chat.completions.parse(  # older SDKs: client.beta.chat.completions.parse
     model="gpt-4o-2024-08-06",  # structured outputs requires this model or newer
     messages=[
         {"role": "system", "content": "Analyze the sentiment of customer reviews."},
@@ -221,10 +221,11 @@ print(result.requires_escalation) # True
 
 ### Anthropic Structured Outputs with Pydantic
 
+Claude also supports native structured outputs (constrained decoding against your schema). The SDK's `messages.parse()` helper converts a Pydantic model to JSON Schema and validates the response:
+
 ```python
 from anthropic import Anthropic
 from pydantic import BaseModel
-import json
 
 client = Anthropic()
 
@@ -236,30 +237,16 @@ class ProductInfo(BaseModel):
     features: list[str]
 
 def extract_product_info(text: str) -> ProductInfo:
-    schema = ProductInfo.model_json_schema()
-    
-    response = client.messages.create(
+    response = client.messages.parse(
         model="claude-opus-5-5",
-        max_tokens=1024,
-        messages=[{
-            "role": "user",
-            "content": f"""Extract product information from this text and return ONLY valid JSON
-matching this schema:
-{json.dumps(schema, indent=2)}
-
-Text: {text}"""
-        }]
+        max_tokens=4096,
+        messages=[{"role": "user", "content": f"Extract product information from this text:\n\n{text}"}],
+        output_format=ProductInfo,  # Pydantic model -> JSON Schema
     )
-    
-    raw = response.content[0].text.strip()
-    # Strip markdown code blocks if present
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    
-    return ProductInfo.model_validate_json(raw)
+    return response.parsed_output  # validated ProductInfo instance
 ```
+
+With `messages.create()`, pass the schema as `output_config={"format": {"type": "json_schema", "schema": {...}}}`. For tool calls, set `strict: true` on a tool definition to guarantee its `input` matches the schema. Older code asked for JSON in the prompt and stripped markdown fences before parsing; that still works but gives no guarantee.
 
 ---
 

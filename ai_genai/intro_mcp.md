@@ -403,7 +403,17 @@ async def get_tables(schema: str = "public") -> list[dict]:
 async def get_stats(table_name: str) -> dict:
     conn = await asyncpg.connect(DB_URL)
     try:
-        count = await conn.fetchval(f"SELECT COUNT(*) FROM {table_name}")
+        # table_name comes from the model, so never interpolate it directly:
+        # confirm it is a real table, then quote it as an identifier.
+        exists = await conn.fetchval(
+            "SELECT 1 FROM information_schema.tables "
+            "WHERE table_schema = 'public' AND table_name = $1",
+            table_name,
+        )
+        if not exists:
+            raise ValueError(f"Unknown table: {table_name!r}")
+        quoted = '"' + table_name.replace('"', '""') + '"'
+        count = await conn.fetchval(f"SELECT COUNT(*) FROM {quoted}")
         return {"table": table_name, "row_count": count}
     finally:
         await conn.close()

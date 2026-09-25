@@ -36,13 +36,14 @@ LangSmith is Anthropic/LangChain's platform for **tracing, debugging, testing, a
 # pip install langsmith langchain-anthropic
 
 import os
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "your-api-key"
-os.environ["LANGCHAIN_PROJECT"] = "my-production-app"  # Project for grouping traces
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_API_KEY"] = "your-api-key"
+os.environ["LANGSMITH_PROJECT"] = "my-production-app"  # Project for grouping traces
+# (older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY / LANGCHAIN_PROJECT names still work)
 
 # That's it: all LangChain/LangGraph calls are auto-traced
 from langchain_anthropic import ChatAnthropic
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-4-6")
 result = llm.invoke("Explain RAG in 3 sentences")
 # This call now appears in LangSmith dashboard
 ```
@@ -118,7 +119,7 @@ def my_rag_app(inputs: dict) -> dict:
 # Evaluators
 correctness_evaluator = LangChainStringEvaluator(
     "qa",  # Uses LLM to judge correctness
-    config={"llm": ChatAnthropic(model="claude-opus-5-5")}
+    config={"llm": ChatAnthropic(model="claude-opus-4-6")}
 )
 
 results = evaluate(
@@ -154,7 +155,7 @@ Return JSON: {{"score": <1-5>, "reasoning": "<why>"}}
 ])
 
 def custom_judge(inputs: dict, outputs: dict, reference_outputs: dict) -> dict:
-    judge_llm = ChatAnthropic(model="claude-opus-5-5")
+    judge_llm = ChatAnthropic(model="claude-opus-4-6")
     response = judge_llm.invoke(judge_prompt.format_messages(
         input=inputs["question"],
         reference=reference_outputs["answer"],
@@ -177,17 +178,21 @@ results = evaluate(
 ## Prompt Hub: Version-Controlled Prompts
 
 ```python
-from langchain import hub
+from langsmith import Client
 
-# Pull a prompt from LangSmith Prompt Hub
-prompt = hub.pull("my-org/rag-qa-prompt:v3")  # Pin to version
+client = Client()
+
+# Pull a prompt from the LangSmith prompt hub
+prompt = client.pull_prompt("rag-qa-prompt:v3")  # Pin to a tag or commit
 
 # Use it
 chain = prompt | llm
 result = chain.invoke({"context": "...", "question": "..."})
 
-# Push updated prompt
-hub.push("my-org/rag-qa-prompt", updated_prompt, new_repo_is_public=False)
+# Push updated prompt (creates a new commit)
+client.push_prompt("rag-qa-prompt", object=updated_prompt)
+
+# Older code used `from langchain import hub`; in LangChain 1.0 that moved to langchain-classic.
 ```
 
 ---

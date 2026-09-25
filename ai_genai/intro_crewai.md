@@ -57,7 +57,7 @@ researcher = Agent(
     backstory="You are an expert AI researcher with 10 years of experience in NLP.",
     tools=[search_tool],
     verbose=True,
-    llm="anthropic/claude-opus-5-5"  # or "gpt-4o"
+    llm="anthropic/claude-opus-4-6"  # provider/model format, e.g. "openai/<model>"
 )
 
 writer = Agent(
@@ -162,7 +162,7 @@ agent = Agent(
     role="Data Scientist",
     goal="Analyze sales data and find anomalies",
     tools=[FileReadTool(), CodeInterpreterTool()],
-    llm="anthropic/claude-sonnet-5"
+    llm="anthropic/claude-sonnet-4-6"
 )
 ```
 

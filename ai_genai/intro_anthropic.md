@@ -153,7 +153,7 @@ message = client.messages.create(
     ]
 )
 
-print(message.content[0].text)
+print(next(b.text for b in message.content if b.type == "text"))
 ```
 
 ---
@@ -188,12 +188,13 @@ response.id               # message ID
 response.model            # model used
 response.role             # "assistant"
 response.stop_reason      # "end_turn" | "max_tokens" | "stop_sequence" | "tool_use" | "pause_turn" | "refusal"
-response.content          # list of content blocks
+response.content          # list of content blocks (text, thinking, tool_use, ...)
 response.usage.input_tokens
 response.usage.output_tokens
 
-# Get text
-text = response.content[0].text
+# Get text: check block types rather than assuming content[0] is text, because
+# current models can return a thinking block first
+text = next(b.text for b in response.content if b.type == "text")
 ```
 
 ### Multi-turn Conversation
@@ -210,7 +211,7 @@ def chat(messages: list, system: str = "") -> str:
         system=system,
         messages=messages,
     )
-    return response.content[0].text
+    return next(b.text for b in response.content if b.type == "text")
 
 # Build conversation
 conversation = []
@@ -403,7 +404,7 @@ response = client.messages.create(
         ]
     }]
 )
-print(response.content[0].text)
+print(next(b.text for b in response.content if b.type == "text"))
 ```
 
 ---
@@ -453,7 +454,7 @@ When writing SQL: use CTEs, proper indentation, and add comments for complex log
 
 ### Effective Prompt Patterns
 
-```python
+````python
 # 1. Role + Task + Format
 prompt = """You are a senior Python developer.
 
@@ -513,7 +514,7 @@ Analyze the following data pipeline and identify bottlenecks.
 - Identify parallelization opportunities
 - Suggest specific optimizations
 </requirements>"""
-```
+````
 
 ### Temperature Guide
 
@@ -694,7 +695,7 @@ response = client.messages.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello!"}]
 )
-text = response.content[0].text
+text = next(b.text for b in response.content if b.type == "text")
 
 # With system prompt
 response = client.messages.create(
