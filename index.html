@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <!-- Markdown + syntax highlighting -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
@@ -783,6 +783,10 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Browse all guides
           </button>
+          <a class="btn btn-ghost" href="flashcards.html" style="text-decoration:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>
+            Practice with flashcards
+          </a>
         </div>
       </section>
 
@@ -886,10 +890,12 @@ const TRACKS = [
   {
     id: 'docs', phase: 'start', icon: '🗺️', color: '#38bdf8',
     title: 'Roadmap & Study Guides',
-    desc: 'Pick a track for your role, then follow 2026 interview focus areas, role-by-role study plans, behavioral, take-home and project deep-dive prep.',
+    desc: 'Pick a track for your role, then follow 2026 interview focus areas, a formula cheat sheet, model-debugging scenarios, behavioral, take-home and project deep-dive prep.',
     files: [
       { label: 'Choose Your Track', path: 'docs/choose-your-track.md' },
       { label: 'Glossary', path: 'docs/glossary.md' },
+      { label: 'ML Cheat Sheet', path: 'docs/ml-cheat-sheet.md' },
+      { label: 'ML Debugging Scenarios', path: 'docs/ml-debugging-scenarios.md' },
       { label: '2026 Roadmap', path: 'docs/2026-interview-roadmap.md' },
       { label: '2026 Interview Questions', path: 'docs/interview_questions_2026.md' },
       { label: 'Additional Questions', path: 'docs/2026-additional-questions.md' },
@@ -922,7 +928,7 @@ const TRACKS = [
   {
     id: 'deep_learning', phase: 'foundations', icon: '🧠', color: '#10b981',
     title: 'Deep Learning',
-    desc: 'Sequence models, transformers, training dynamics, generative models, graph neural networks, model compression, distributed training, reinforcement learning, computer vision, and fine-tuning.',
+    desc: 'Sequence models, transformers, training dynamics, generative models, graph neural networks, model compression, distributed training, reinforcement learning, speech and audio, computer vision, and fine-tuning.',
     files: [
       { label: 'Overview', path: 'deep_learning/README.md' },
       { label: 'Applied Deep Learning', path: 'deep_learning/intro_applied_deep_learning.md' },
@@ -936,6 +942,7 @@ const TRACKS = [
       { label: 'Model Compression', path: 'deep_learning/intro_model_compression.md' },
       { label: 'Distributed Training', path: 'deep_learning/intro_distributed_training.md' },
       { label: 'Reinforcement Learning', path: 'deep_learning/intro_reinforcement_learning.md' },
+      { label: 'Speech & Audio', path: 'deep_learning/intro_speech_audio.md' },
     ]
   },
   {
@@ -1060,7 +1067,7 @@ const TRACKS = [
   {
     id: 'system_design', phase: 'mastery', icon: '🏗️', color: '#fb7185',
     title: 'ML System Design',
-    desc: 'Design frameworks and case studies: recommendation, search and ranking, LLM assistants, fraud detection, and ML design patterns.',
+    desc: 'Design frameworks and case studies: recommendation, search and ranking, LLM assistants, fraud detection, ads CTR prediction, content moderation, and ML design patterns.',
     files: [
       { label: 'Design Framework', path: 'system_design/README.md' },
       { label: 'Backend AI Systems', path: 'system_design/intro_backend_ai_system_design.md' },
@@ -1069,6 +1076,8 @@ const TRACKS = [
       { label: 'Search & Ranking System', path: 'system_design/search_ranking_system.md' },
       { label: 'LLM Assistant System', path: 'system_design/llm_assistant_system.md' },
       { label: 'Fraud Detection', path: 'system_design/fraud_detection.md' },
+      { label: 'Ads CTR Prediction', path: 'system_design/ads_ctr_prediction.md' },
+      { label: 'Content Moderation', path: 'system_design/content_moderation_system.md' },
       { label: 'ML System Design Patterns', path: 'system_design/ml_system_design_patterns.md' },
     ]
   },

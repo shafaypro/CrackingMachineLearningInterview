@@ -564,6 +564,7 @@ Every guide in `deep_learning/`. Start with the overview above, then work throug
 - [Neural Network Training: Optimization and Regularization](./intro_neural_network_training.md)
 - [Reinforcement Learning: MDPs, Q-Learning, Bandits, PPO, and RLHF](./intro_reinforcement_learning.md)
 - [Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq](./intro_sequence_models.md)
+- [Speech and Audio: ASR, TTS, Speaker Models, and Voice Agents](./intro_speech_audio.md)
 - [Transformers Deep Dive](./intro_transformers.md)
 
 ---
