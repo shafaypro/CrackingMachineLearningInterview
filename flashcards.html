@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glossary Flashcards — Cracking ML Interviews</title>
+  <meta name="description" content="Interactive flashcards for every term in the ML and AI glossary. Flip, shuffle, track what you know, and jump straight to the guide that covers each term." />
+
+  <!-- Apply the saved theme before first paint (same key as the Study Hub) -->
+  <script>
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('cml-theme') || 'dark'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       Reset & Design Tokens (shared with index.html)
+       ════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #07080f;
+      --bg-elev:     #0e1019;
+      --surface:     rgba(22, 25, 38, 0.55);
+      --surface-2:   rgba(30, 34, 52, 0.6);
+      --surface-solid: #11131f;
+      --border:      rgba(255, 255, 255, 0.08);
+      --border-str:  rgba(255, 255, 255, 0.14);
+      --text:        #eef1f8;
+      --text-2:      #a6adc4;
+      --text-3:      #6f7691;
+
+      --violet:      #8b5cf6;
+      --indigo:      #6366f1;
+      --cyan:        #22d3ee;
+      --emerald:     #34d399;
+      --amber:       #fbbf24;
+      --rose:        #fb7185;
+
+      --accent:      var(--violet);
+      --accent-2:    var(--cyan);
+      --grad:        linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #22d3ee 100%);
+
+      --glow:        0 8px 40px -12px rgba(99,102,241,.45);
+      --shadow:      0 10px 40px -16px rgba(0,0,0,.7);
+      --shadow-lg:   0 24px 70px -24px rgba(0,0,0,.8);
+
+      --header-h:    60px;
+      --radius:      14px;
+      --radius-sm:   10px;
+      --radius-lg:   20px;
+      --transition:  .22s cubic-bezier(.4,0,.2,1);
+
+      --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+      --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+      --aurora-1: rgba(139, 92, 246, 0.5);
+      --aurora-2: rgba(34, 211, 238, 0.35);
+      --aurora-3: rgba(52, 211, 153, 0.28);
+
+      --known:    var(--emerald);
+      --learning: var(--amber);
+      --on-accent: #fff;
+    }
+
+    [data-theme="light"] {
+      --bg:          #f4f5fb;
+      --bg-elev:     #ffffff;
+      --surface:     rgba(255, 255, 255, 0.72);
+      --surface-2:   rgba(255, 255, 255, 0.9);
+      --surface-solid: #ffffff;
+      --border:      rgba(15, 23, 42, 0.09);
+      --border-str:  rgba(15, 23, 42, 0.16);
+      --text:        #14172b;
+      --text-2:      #4b5169;
+      --text-3:      #8a90a8;
+
+      --accent:      #7c3aed;
+      --accent-2:    #0891b2;
+
+      --glow:        0 8px 36px -14px rgba(124,58,237,.35);
+      --shadow:      0 10px 34px -18px rgba(30,41,59,.45);
+      --shadow-lg:   0 26px 60px -28px rgba(30,41,59,.4);
+
+      --aurora-1: rgba(139, 92, 246, 0.28);
+      --aurora-2: rgba(14, 165, 233, 0.2);
+      --aurora-3: rgba(16, 185, 129, 0.16);
+
+      --known:    #059669;
+      --learning: #d97706;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    button, input { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Aurora background ───────────────────────────────────────────── */
+    .aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .aurora::before, .aurora::after {
+      content: ''; position: absolute; border-radius: 50%; filter: blur(90px); opacity: .85;
+    }
+    .aurora::before {
+      width: 60vw; height: 60vw; top: -22vw; left: -12vw;
+      background: radial-gradient(circle at 30% 30%, var(--aurora-1), transparent 62%);
+      animation: drift1 22s ease-in-out infinite alternate;
+    }
+    .aurora::after {
+      width: 55vw; height: 55vw; bottom: -24vw; right: -14vw;
+      background: radial-gradient(circle at 60% 60%, var(--aurora-2), transparent 60%);
+      animation: drift2 26s ease-in-out infinite alternate;
+    }
+    .aurora .blob3 {
+      position: absolute; width: 42vw; height: 42vw; top: 30%; left: 45%;
+      border-radius: 50%; filter: blur(100px);
+      background: radial-gradient(circle, var(--aurora-3), transparent 60%);
+      animation: drift3 30s ease-in-out infinite alternate;
+    }
+    .grain {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @keyframes drift1 { to { transform: translate(8vw, 6vw) scale(1.15); } }
+    @keyframes drift2 { to { transform: translate(-6vw, -5vw) scale(1.1); } }
+    @keyframes drift3 { to { transform: translate(-8vw, 4vw) scale(1.2); } }
+
+    /* ════════════════════════════════════════════════════════════════
+       Header
+       ════════════════════════════════════════════════════════════════ */
+    header {
+      position: sticky; top: 0;
+      height: var(--header-h);
+      background: color-mix(in srgb, var(--bg-elev) 72%, transparent);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 18px; gap: 12px;
+      z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; white-space: nowrap; min-width: 0; text-decoration: none; color: inherit; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 10px; background: var(--grad);
+      display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: #fff;
+      box-shadow: 0 6px 20px -6px rgba(99,102,241,.7); flex-shrink: 0;
+    }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+    .brand-text .t1 { font-family: var(--font-display); font-weight: 700; font-size: .98rem; letter-spacing: -.01em; }
+    .brand-text .t2 { font-size: .68rem; color: var(--text-3); font-weight: 500; letter-spacing: .02em; }
+    .header-spacer { flex: 1; }
+
+    .icon-btn {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text-2); cursor: pointer; padding: 8px 11px;
+      font-size: .8rem; font-family: var(--font-body);
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: all var(--transition); text-decoration: none; white-space: nowrap;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+    .icon-btn.compact { padding: 8px; }
+
+    /* ════════════════════════════════════════════════════════════════
+       Page
+       ════════════════════════════════════════════════════════════════ */
+    main {
+      max-width: 820px; margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    .intro { text-align: center; margin-bottom: 26px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 5px 12px;
+      font-size: .72rem; font-weight: 600; color: var(--text-2); letter-spacing: .04em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad); }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.08;
+      margin-bottom: 10px;
+    }
+    .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .intro p { color: var(--text-2); font-size: .98rem; line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+    .panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* ── Progress ───────────────────────────────────────────────────── */
+    .progress { padding: 16px 18px; margin-bottom: 14px; }
+    .progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .progress-title { font-family: var(--font-display); font-weight: 600; font-size: .95rem; }
+    .progress-title .pct { color: var(--text-3); font-weight: 500; margin-left: 6px; }
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .8rem; color: var(--text-2); }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+    .legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .bar { height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; display: flex; }
+    .bar .seg { height: 100%; transition: width .4s cubic-bezier(.4,0,.2,1); }
+    .bar .seg.known { background: var(--known); }
+    .bar .seg.learning { background: var(--learning); }
+
+    /* ── Controls ───────────────────────────────────────────────────── */
+    .controls { padding: 14px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .search {
+      flex: 1 1 220px; min-width: 0;
+      display: flex; align-items: center; gap: 9px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px;
+      padding: 0 12px; color: var(--text-3);
+      transition: border-color var(--transition);
+    }
+    .search:focus-within { border-color: var(--accent); }
+    .search input {
+      flex: 1; min-width: 0; background: none; border: none; outline: none;
+      padding: 10px 0; font-size: .88rem; color: var(--text);
+    }
+    .search input::placeholder { color: var(--text-3); }
+    .search .clear { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 4px; display: none; border-radius: 6px; }
+    .search .clear.show { display: inline-flex; }
+    .search .clear:hover { color: var(--text); }
+
+    .seg-group {
+      display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border);
+      border-radius: 11px; padding: 3px; gap: 2px; flex-wrap: wrap;
+    }
+    .seg-group button {
+      background: none; border: none; cursor: pointer;
+      padding: 7px 11px; border-radius: 8px;
+      font-size: .8rem; font-weight: 500; color: var(--text-2);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all var(--transition);
+    }
+    .seg-group button:hover { color: var(--text); }
+    .seg-group button[aria-pressed="true"] { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--border-str); }
+    .seg-group .count {
+      font-size: .7rem; font-family: var(--font-mono); color: var(--text-3);
+      background: var(--surface); border-radius: 6px; padding: 0 5px;
+    }
+
+    .letters { display: flex; flex-wrap: wrap; gap: 5px; }
+    .letters button {
+      min-width: 32px; height: 30px; padding: 0 8px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 8px;
+      font-family: var(--font-display); font-weight: 600; font-size: .8rem; color: var(--text-2);
+      cursor: pointer; transition: all var(--transition);
+    }
+    .letters button:hover { border-color: var(--border-str); color: var(--text); }
+    .letters button[aria-pressed="true"] { background: var(--grad); border-color: transparent; color: #fff; }
+
+    .toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 10px;
+      padding: 7px 11px; font-size: .8rem; color: var(--text-2); cursor: pointer;
+      transition: all var(--transition);
+    }
+    .chip-btn:hover { border-color: var(--accent); color: var(--text); }
+    .chip-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--text); background: color-mix(in srgb, var(--accent) 14%, var(--bg-elev)); }
+    .chip-btn.danger:hover { border-color: var(--rose); color: var(--rose); }
+    .chip-btn svg { flex-shrink: 0; }
+
+    /* ── Deck meta ──────────────────────────────────────────────────── */
+    .deck-meta {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      font-size: .8rem; color: var(--text-3); margin: 0 4px 10px;
+    }
+    .deck-meta .pos { font-family: var(--font-mono); color: var(--text-2); }
+
+    /* ════════════════════════════════════════════════════════════════
+       Flashcard
+       ════════════════════════════════════════════════════════════════ */
+    .stage { perspective: 1600px; }
+    .card {
+      display: grid;
+      position: relative;
+      min-height: 300px;
+      transform-style: preserve-3d;
+      transition: transform .55s cubic-bezier(.4,.2,.2,1);
+      cursor: pointer;
+      border-radius: var(--radius-lg);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card.flipped { transform: rotateY(180deg); }
+    .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: var(--radius-lg); }
+    .face {
+      grid-area: 1 / 1;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      background:
+        linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
+        linear-gradient(140deg, color-mix(in srgb, var(--violet) 55%, transparent), var(--border) 38%, var(--border) 62%, color-mix(in srgb, var(--cyan) 45%, transparent)) border-box;
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), var(--glow);
+      padding: 22px 26px 20px;
+      display: flex; flex-direction: column;
+      min-width: 0;
+    }
+    .face.back { transform: rotateY(180deg); }
+    .face-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .side-label {
+      font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .side-label .letter {
+      width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center;
+      background: var(--surface-2); border: 1px solid var(--border);
+      font-family: var(--font-display); font-size: .78rem; color: var(--text-2); letter-spacing: 0;
+    }
+    .status-chip {
+      font-size: .7rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--text-3); background: var(--surface-2);
+      white-space: nowrap;
+    }
+    .status-chip.known { color: var(--known); border-color: color-mix(in srgb, var(--known) 45%, transparent); background: color-mix(in srgb, var(--known) 12%, transparent); }
+    .status-chip.learning { color: var(--learning); border-color: color-mix(in srgb, var(--learning) 45%, transparent); background: color-mix(in srgb, var(--learning) 12%, transparent); }
+
+    .face-body {
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+      padding: 14px 0; min-width: 0; overflow-wrap: anywhere;
+    }
+    .term {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(1.6rem, 5.4vw, 2.5rem); letter-spacing: -.02em; line-height: 1.15;
+      text-align: center;
+    }
+    .term code { font-family: var(--font-mono); font-size: .8em; }
+    .definition { font-size: 1.04rem; line-height: 1.7; color: var(--text); }
+    .definition p + p { margin-top: .7em; }
+    .definition code, .term-sub code {
+      font-family: var(--font-mono); font-size: .86em;
+      background: var(--surface-2); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 6px;
+    }
+    .definition strong { font-weight: 650; }
+    .definition a, .guide-links a {
+      color: var(--accent-2); text-decoration: none; font-weight: 500;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent-2) 40%, transparent);
+    }
+    .definition a:hover, .guide-links a:hover { border-bottom-color: var(--accent-2); }
+    .mask {
+      display: inline-block; min-width: 3.2em; height: 1.05em; vertical-align: -0.12em;
+      border-radius: 5px; background: color-mix(in srgb, var(--accent) 28%, transparent);
+      border: 1px dashed color-mix(in srgb, var(--accent) 60%, transparent);
+    }
+    .guide-links { margin-top: 16px; text-align: center; font-size: .88rem; color: var(--text-2); }
+    .face-hint { font-size: .74rem; color: var(--text-3); text-align: center; }
+    .face-hint kbd, .shortcuts kbd {
+      font-family: var(--font-mono); font-size: .7rem;
+      background: var(--bg-elev); border: 1px solid var(--border); border-bottom-width: 2px;
+      border-radius: 5px; padding: 0 5px; color: var(--text-2);
+    }
+
+    /* Empty / done / error states */
+    .state {
+      padding: 44px 26px; text-align: center; color: var(--text-2);
+      border-radius: var(--radius-lg);
+    }
+    .state .ico {
+      width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 16px;
+      display: grid; place-items: center; background: var(--grad); color: #fff;
+      box-shadow: 0 10px 30px -10px rgba(99,102,241,.7);
+    }
+    .state .ico.warn { background: linear-gradient(120deg, #fb7185 0%, #fbbf24 100%); }
+    .state h2 { font-family: var(--font-display); color: var(--text); font-size: 1.3rem; margin-bottom: 8px; }
+    .state p { font-size: .9rem; line-height: 1.6; max-width: 460px; margin: 0 auto 8px; }
+    .state code { background: var(--surface-2); padding: 3px 8px; border-radius: 6px; font-family: var(--font-mono); font-size: .82rem; color: var(--text); }
+    .state .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+    .spinner {
+      width: 30px; height: 30px; border-radius: 50%; margin: 0 auto 14px;
+      border: 3px solid var(--border-str); border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Action bar ─────────────────────────────────────────────────── */
+    .actions-bar { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+    .nav-row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; }
+    .mark-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 18px; border-radius: 12px;
+      font-size: .9rem; font-weight: 600; font-family: var(--font-body);
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 30px -10px rgba(99,102,241,.7); }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(99,102,241,.8); }
+    .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border-str); }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
+    .btn-learning { background: color-mix(in srgb, var(--learning) 14%, var(--surface-solid)); color: var(--text); border: 1px solid color-mix(in srgb, var(--learning) 50%, transparent); }
+    .btn-learning:hover:not(:disabled) { background: color-mix(in srgb, var(--learning) 24%, var(--surface-solid)); transform: translateY(-2px); }
+    .btn-known { background: color-mix(in srgb, var(--known) 14%, var(--surface-solid)); color: var(--text); border: 1px solid color-mix(in srgb, var(--known) 50%, transparent); }
+    .btn-known:hover:not(:disabled) { background: color-mix(in srgb, var(--known) 24%, var(--surface-solid)); transform: translateY(-2px); }
+    .btn .k {
+      font-family: var(--font-mono); font-size: .7rem; font-weight: 500;
+      border: 1px solid var(--border-str); border-radius: 5px; padding: 0 5px; color: var(--text-2);
+    }
+    .btn-learning svg { color: var(--learning); }
+    .btn-known svg { color: var(--known); }
+
+    .shortcuts {
+      margin-top: 22px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px;
+      font-size: .76rem; color: var(--text-3);
+    }
+
+    footer { text-align: center; font-size: .78rem; color: var(--text-3); padding: 0 20px 36px; }
+    footer a { color: var(--text-2); }
+
+    /* ── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      header { padding: 0 12px; gap: 8px; }
+      .brand-text .t2 { display: none; }
+      main { padding: 22px 14px 48px; }
+      .face { padding: 18px 18px 16px; }
+      .card { min-height: 280px; }
+      .definition { font-size: .98rem; }
+      .btn { padding: 12px 14px; }
+      .nav-row .btn .lbl { display: none; }
+      .btn .k { display: none; }
+      .seg-group { width: 100%; }
+      .seg-group button { flex: 1 1 auto; justify-content: center; padding: 7px 8px; }
+      .letters button { min-width: 30px; height: 30px; padding: 0 6px; }
+      .shortcuts { display: none; }
+      .intro { margin-bottom: 16px; }
+      .intro .eyebrow, .intro p { display: none; }
+      h1 { font-size: 1.6rem; margin-bottom: 0; }
+      .progress { padding: 12px 14px; margin-bottom: 10px; }
+      .controls { padding: 12px; gap: 10px; margin-bottom: 14px; }
+      .letters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 2px; margin: -2px; }
+      .letters::-webkit-scrollbar { display: none; }
+      .letters button { flex: 0 0 auto; }
+      .hide-sm { display: none; }
+    }
+    @media (max-width: 380px) {
+      .back-link .lbl-long { display: none; }
+      .brand-mark { display: none; }
+    }
+    @media (hover: none) {
+      .hint-keys { display: none; }
+    }
+
+    /* ── Reduced motion: no 3D flip, simple swap ────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .aurora::before, .aurora::after, .aurora .blob3 { animation: none; }
+      .card, .card.flipped { transition: none; transform: none; }
+      .face.back { transform: none; visibility: hidden; }
+      .card.flipped .face.back { visibility: visible; }
+      .card.flipped .face.front { visibility: hidden; }
+      .btn, .icon-btn, .chip-btn, .bar .seg { transition: none; }
+      .btn:hover, .icon-btn:hover { transform: none !important; }
+      .spinner { animation-duration: 2.4s; }
+    }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><div class="blob3"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header>
+  <a class="icon-btn back-link" href="index.html" aria-label="Back to the Study Hub">
+    <span aria-hidden="true">&larr;</span><span class="lbl-long">Study Hub</span>
+  </a>
+  <a class="brand" href="index.html" tabindex="-1" aria-hidden="true">
+    <div class="brand-mark">ML</div>
+    <div class="brand-text">
+      <span class="t1">Flashcards</span>
+      <span class="t2">Glossary · Cracking ML 2026</span>
+    </div>
+  </a>
+  <div class="header-spacer"></div>
+  <button class="icon-btn compact" id="theme-btn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">
+    <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"></svg>
+  </button>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="eyebrow"><span class="dot"></span>Glossary drill</div>
+    <h1>Know every term <span class="grad-text">cold</span></h1>
+    <p>Every entry from the ML &amp; AI glossary as a flashcard. Flip, sort into <em>know it</em> and <em>still learning</em>, and jump to the guide behind any term.</p>
+  </section>
+
+  <section class="panel progress" aria-label="Progress">
+    <div class="progress-top">
+      <div class="progress-title">Your progress<span class="pct" id="pct">0%</span></div>
+      <div class="legend">
+        <span><i style="background:var(--known)"></i>Known <b id="c-known">0</b></span>
+        <span><i style="background:var(--learning)"></i>Learning <b id="c-learning">0</b></span>
+        <span><i style="background:var(--border-str)"></i>Unseen <b id="c-unseen">0</b></span>
+      </div>
+    </div>
+    <div class="bar" id="bar" role="progressbar" aria-label="Terms known" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="seg known" id="seg-known" style="width:0%"></div>
+      <div class="seg learning" id="seg-learning" style="width:0%"></div>
+    </div>
+  </section>
+
+  <section class="panel controls" aria-label="Deck options">
+    <div class="row">
+      <label class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="sr-only">Search terms and definitions</span>
+        <input id="search" type="search" placeholder="Search terms…  ( / )" autocomplete="off" spellcheck="false" />
+        <button class="clear" id="search-clear" type="button" aria-label="Clear search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </label>
+      <div class="seg-group" role="group" aria-label="Filter by status" id="status-filter">
+        <button type="button" data-filter="all" aria-pressed="true">All <span class="count" id="n-all">0</span></button>
+        <button type="button" data-filter="learning" aria-pressed="false">Still learning <span class="count" id="n-learning">0</span></button>
+        <button type="button" data-filter="unseen" aria-pressed="false">Unseen <span class="count" id="n-unseen">0</span></button>
+      </div>
+    </div>
+    <div class="letters" id="letters" role="group" aria-label="Filter by first letter"></div>
+    <div class="toggles">
+      <button type="button" class="chip-btn" id="shuffle-btn" aria-pressed="false" aria-label="Shuffle deck">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        <span id="shuffle-label">Shuffle</span>
+      </button>
+      <button type="button" class="chip-btn" id="reverse-btn" aria-pressed="false" aria-label="Reverse mode: show the definition first">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        Definition first
+      </button>
+      <button type="button" class="chip-btn danger" id="reset-btn" aria-label="Reset all flashcard progress">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Reset<span class="hide-sm">progress</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="deck-meta">
+    <span id="deck-desc">Loading…</span>
+    <span class="pos" id="deck-pos" aria-hidden="true"></span>
+  </div>
+
+  <section id="study" aria-label="Flashcard">
+    <div id="state" class="panel state" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading the glossary…</p>
+    </div>
+
+    <div id="deck-ui" hidden>
+      <div class="stage">
+        <div class="card" id="card" tabindex="0" role="group" aria-roledescription="flashcard" aria-label="Flashcard">
+          <div class="face front" id="face-front">
+            <div class="face-top">
+              <span class="side-label"><span class="letter" id="front-letter">A</span><span id="front-label">Term</span></span>
+              <span class="status-chip" id="front-status">New</span>
+            </div>
+            <div class="face-body" id="front-body"></div>
+            <div class="face-hint">Tap to flip<span class="hint-keys"> · <kbd>Space</kbd></span></div>
+          </div>
+          <div class="face back" id="face-back" aria-hidden="true" inert>
+            <div class="face-top">
+              <span class="side-label"><span class="letter" id="back-letter">A</span><span id="back-label">Definition</span></span>
+              <span class="status-chip" id="back-status">New</span>
+            </div>
+            <div class="face-body" id="back-body"></div>
+            <div class="face-hint">Tap to flip back<span class="hint-keys"> · <kbd>Space</kbd></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <div class="nav-row">
+          <button type="button" class="btn btn-ghost" id="prev-btn" aria-label="Previous card">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            <span class="lbl">Prev</span>
+          </button>
+          <button type="button" class="btn btn-primary" id="flip-btn" aria-label="Flip card">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>
+            <span id="flip-label">Reveal definition</span>
+          </button>
+          <button type="button" class="btn btn-ghost" id="next-btn" aria-label="Next card">
+            <span class="lbl">Next</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="mark-row">
+          <button type="button" class="btn btn-learning" id="learning-btn" aria-label="Mark as still learning (L)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            Still learning <span class="k" aria-hidden="true">L</span>
+          </button>
+          <button type="button" class="btn btn-known" id="known-btn" aria-label="Mark as known (K)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Know it <span class="k" aria-hidden="true">K</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="shortcuts" aria-label="Keyboard shortcuts">
+    <span><kbd>Space</kbd> / <kbd>Enter</kbd> flip</span>
+    <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> prev / next</span>
+    <span><kbd>K</kbd> know it</span>
+    <span><kbd>L</kbd> still learning</span>
+    <span><kbd>/</kbd> search</span>
+  </div>
+
+  <div class="sr-only" aria-live="polite" id="announcer"></div>
+</main>
+
+<footer>
+  Cards are generated from <a href="index.html#docs/glossary.md">docs/glossary.md</a>. Progress is saved in this browser only.
+</footer>
+
+<script>
+'use strict';
+// ════════════════════════════════════════════════════════════════════════
+//  Constants & safe storage
+// ════════════════════════════════════════════════════════════════════════
+const THEME_KEY  = 'cml-theme';            // shared with index.html
+const STATUS_KEY = 'cml-flashcards-v1';    // { [term]: 'known' | 'learning' }
+const PREFS_KEY  = 'cml-flashcards-prefs'; // { reverse: bool }
+const GLOSSARY_PATH = 'docs/glossary.md';
+const isLocal = location.protocol === 'file:';
+
+const store = {
+  get(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw == null ? fallback : JSON.parse(raw);
+    } catch { return fallback; }
+  },
+  set(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  },
+};
+
+const $ = id => document.getElementById(id);
+
+// ════════════════════════════════════════════════════════════════════════
+//  Theme (mirrors index.html)
+// ════════════════════════════════════════════════════════════════════════
+const SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+const MOON = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+function applyTheme(theme, persist) {
+  document.documentElement.setAttribute('data-theme', theme);
+  $('theme-icon').innerHTML = theme === 'dark' ? SUN : MOON;
+  if (persist) { try { localStorage.setItem(THEME_KEY, theme); } catch {} }
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark', false);
+$('theme-btn').addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+});
+// Keep in sync if the theme is changed in another tab (e.g. the Study Hub)
+window.addEventListener('storage', e => {
+  if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue === 'light' ? 'light' : 'dark', false);
+});
+
+// ════════════════════════════════════════════════════════════════════════
+//  Markdown rendering
+// ════════════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+// Minimal fallback if the marked CDN script could not be loaded.
+function miniMarkdown(s) {
+  const parts = s.split(/(`[^`]+`)/);
+  return parts.map(p => {
+    if (/^`[^`]+`$/.test(p)) return '<code>' + escapeHtml(p.slice(1, -1)) + '</code>';
+    return escapeHtml(p)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>')
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+  }).join('');
+}
+function renderMd(src, inline) {
+  if (window.marked && typeof marked.parse === 'function') {
+    try {
+      return inline && typeof marked.parseInline === 'function' ? marked.parseInline(src) : marked.parse(src);
+    } catch {}
+  }
+  const html = miniMarkdown(src);
+  return inline ? html : '<p>' + html + '</p>';
+}
+
+// Rewrite relative .md links (relative to docs/glossary.md) into Study Hub routes.
+function rewriteLinks(root) {
+  root.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href');
+    if (/^(https?:)?\/\//i.test(href)) { a.target = '_blank'; a.rel = 'noopener'; return; }
+    if (/^(mailto:|#)/i.test(href)) return;
+    const path = href.split('#')[0];
+    if (!/\.md$/i.test(path)) return;
+    let resolved;
+    try { resolved = new URL(path, 'https://hub.invalid/' + GLOSSARY_PATH).pathname.replace(/^\//, ''); }
+    catch { return; }
+    a.setAttribute('href', 'index.html#' + resolved);
+    a.classList.add('guide-link');
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Glossary parsing
+// ════════════════════════════════════════════════════════════════════════
+function parseGlossary(md) {
+  const cards = [];
+  let letter = null;
+  let current = null;
+  const entryRe = /^\*\*(.+?)\*\*\s*[—–]\s*(.*)$/;
+  for (const rawLine of md.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    const h = line.match(/^##\s+(.+?)\s*$/);
+    if (h) {
+      if (/^related topics/i.test(h[1])) break;
+      letter = /^[A-Z0-9]$/i.test(h[1]) ? h[1].toUpperCase() : null;
+      current = null;
+      continue;
+    }
+    if (!letter) continue;                       // intro text before "## A"
+    if (!line || /^-{3,}$/.test(line)) { current = null; continue; }
+    const m = line.match(entryRe);
+    if (m) {
+      current = { term: m[1].trim(), def: m[2].trim(), letter };
+      cards.push(current);
+    } else if (current) {
+      current.def += ' ' + line;                 // continuation line
+    }
+  }
+  return cards.map((c, i) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = renderMd(c.def, false);
+    rewriteLinks(tmp);
+    const termHtml = renderMd(c.term, true);
+    const termText = c.term.replace(/`/g, '');
+    return {
+      id: i,
+      key: termText,
+      letter: c.letter,
+      termHtml,
+      termText,
+      defHtml: tmp.innerHTML,
+      guides: [...tmp.querySelectorAll('a.guide-link')].map(a => ({ href: a.getAttribute('href'), text: a.textContent })),
+      haystack: (termText + ' ' + tmp.textContent).toLowerCase(),
+    };
+  });
+}
+
+// In reverse mode, hide the term (and its obvious variants) inside the definition.
+function maskTerm(root, termText) {
+  const cands = new Set([termText]);
+  const paren = termText.match(/^(.*?)\s*\((.+)\)\s*$/);
+  if (paren) { cands.add(paren[1]); cands.add(paren[2]); }
+  termText.split(/\s*\/\s*/).forEach(p => cands.add(p));
+  const list = [...cands].map(s => s.trim()).filter(s => s.length >= 2).sort((a, b) => b.length - a.length);
+  if (!list.length) return;
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp('(^|[^\\w])(' + list.map(esc).join('|') + ')(?![\\w])', 'gi');
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) {
+    const text = node.nodeValue;
+    re.lastIndex = 0;
+    if (!re.test(text)) continue;
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      const start = m.index + m[1].length;
+      frag.append(text.slice(last, start));
+      const span = document.createElement('span');
+      span.className = 'mask';
+      span.setAttribute('role', 'img');
+      span.setAttribute('aria-label', 'hidden term');
+      frag.append(span);
+      last = start + m[2].length;
+      if (re.lastIndex === m.index) re.lastIndex++;
+    }
+    frag.append(text.slice(last));
+    node.replaceWith(frag);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  State
+// ════════════════════════════════════════════════════════════════════════
+let cards = [];
+let status = {};
+{
+  const saved = store.get(STATUS_KEY, {});
+  status = saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+}
+const prefs = Object.assign({ reverse: false }, store.get(PREFS_KEY, {}) || {});
+let order = [];          // card ids in natural or shuffled order
+let shuffled = false;
+let filter = 'all';      // all | learning | unseen
+let letterFilter = null; // null = all letters
+let query = '';
+let deck = [];           // filtered ids
+let pos = 0;             // index into deck; pos === deck.length means "done"
+let flipped = false;
+
+const statusOf = c => (status[c.key] === 'known' || status[c.key] === 'learning') ? status[c.key] : null;
+function saveStatus() { store.set(STATUS_KEY, status); }
+
+function matches(c) {
+  const st = statusOf(c);
+  if (filter === 'learning' && st !== 'learning') return false;
+  if (filter === 'unseen' && st !== null) return false;
+  if (letterFilter && c.letter !== letterFilter) return false;
+  if (query && !c.haystack.includes(query)) return false;
+  return true;
+}
+function rebuildDeck() { deck = order.filter(id => matches(cards[id])); }
+
+function announce(msg) {
+  const el = $('announcer');
+  el.textContent = '';
+  setTimeout(() => { el.textContent = msg; }, 30);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Rendering
+// ════════════════════════════════════════════════════════════════════════
+function renderCounts() {
+  const total = cards.length;
+  let known = 0, learning = 0;
+  for (const c of cards) {
+    const st = statusOf(c);
+    if (st === 'known') known++;
+    else if (st === 'learning') learning++;
+  }
+  const unseen = total - known - learning;
+  const pk = total ? (known / total) * 100 : 0;
+  const pl = total ? (learning / total) * 100 : 0;
+  $('c-known').textContent = known;
+  $('c-learning').textContent = learning;
+  $('c-unseen').textContent = unseen;
+  $('n-all').textContent = total;
+  $('n-learning').textContent = learning;
+  $('n-unseen').textContent = unseen;
+  $('pct').textContent = Math.round(pk) + '% known';
+  $('seg-known').style.width = pk + '%';
+  $('seg-learning').style.width = pl + '%';
+  $('bar').setAttribute('aria-valuenow', String(Math.round(pk)));
+  $('bar').setAttribute('aria-valuetext', `${known} of ${total} known, ${learning} still learning`);
+}
+
+function renderControls() {
+  document.querySelectorAll('#status-filter button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+  document.querySelectorAll('#letters button').forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.letter || null) === letterFilter)));
+  $('shuffle-btn').setAttribute('aria-pressed', String(shuffled));
+  $('shuffle-label').textContent = shuffled ? 'Shuffled' : 'Shuffle';
+  $('reverse-btn').setAttribute('aria-pressed', String(prefs.reverse));
+  $('search-clear').classList.toggle('show', !!query);
+
+  const parts = [];
+  if (filter === 'learning') parts.push('Still learning');
+  else if (filter === 'unseen') parts.push('Unseen');
+  else parts.push('All terms');
+  if (letterFilter) parts.push('letter ' + letterFilter);
+  if (query) parts.push(`“${query}”`);
+  $('deck-desc').textContent = parts.join(' · ') + ` — ${deck.length} card${deck.length === 1 ? '' : 's'}`;
+  $('deck-pos').textContent = deck.length ? `${Math.min(pos + 1, deck.length)} / ${deck.length}` : '';
+}
+
+function statusChip(el, st) {
+  el.className = 'status-chip' + (st ? ' ' + st : '');
+  el.textContent = st === 'known' ? 'Known' : st === 'learning' ? 'Learning' : 'New';
+}
+
+function showState(html) {
+  $('state').innerHTML = html;
+  $('state').hidden = false;
+  $('deck-ui').hidden = true;
+}
+
+function renderCard() {
+  renderControls();
+  if (!deck.length) {
+    const any = filter !== 'all' || letterFilter || query;
+    showState(`
+      <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <h2>No cards here</h2>
+      <p>${filter === 'learning' && !letterFilter && !query
+        ? 'Nothing is marked “still learning” yet. Mark cards with <b>L</b> to build a review pile.'
+        : filter === 'unseen' && !letterFilter && !query
+          ? 'You have rated every card. Nice work.'
+          : 'No terms match the current filters.'}</p>
+      ${any ? '<div class="actions"><button type="button" class="btn btn-ghost" data-act="clear-filters">Show all cards</button></div>' : ''}`);
+    return;
+  }
+  if (pos >= deck.length) {
+    const learningLeft = cards.filter(c => statusOf(c) === 'learning').length;
+    showState(`
+      <div class="ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2>End of deck</h2>
+      <p>You went through all ${deck.length} card${deck.length === 1 ? '' : 's'} in this deck.
+      ${learningLeft ? `${learningLeft} term${learningLeft === 1 ? ' is' : 's are'} still marked “still learning”.` : ''}</p>
+      <div class="actions">
+        ${learningLeft && filter !== 'learning' ? '<button type="button" class="btn btn-primary" data-act="review-learning">Review still learning</button>' : ''}
+        <button type="button" class="btn btn-ghost" data-act="restart">Start over</button>
+        <button type="button" class="btn btn-ghost" data-act="back">Back to last card</button>
+      </div>`);
+    return;
+  }
+
+  $('state').hidden = true;
+  $('deck-ui').hidden = false;
+
+  const c = cards[deck[pos]];
+  const st = statusOf(c);
+  const rev = prefs.reverse;
+
+  const termBlock = `<div class="term">${c.termHtml}</div>`;
+  const defBlock = `<div class="definition">${c.defHtml}</div>`;
+
+  let frontHtml, backHtml;
+  if (!rev) {
+    frontHtml = termBlock;
+    backHtml = defBlock;
+  } else {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = defBlock;
+    // Hide guide links on the prompt side: their titles often give the answer away.
+    tmp.querySelectorAll('a.guide-link').forEach(a => {
+      const s = document.createElement('span');
+      s.textContent = 'the linked guide';
+      a.replaceWith(s);
+    });
+    maskTerm(tmp, c.termText);
+    frontHtml = tmp.innerHTML;
+    const links = c.guides.length
+      ? `<div class="guide-links">Read more: ${c.guides.map(g => `<a href="${escapeHtml(g.href)}">${escapeHtml(g.text)}</a>`).join(' · ')}</div>`
+      : '';
+    backHtml = termBlock + links;
+  }
+
+  $('front-body').innerHTML = frontHtml;
+  $('back-body').innerHTML = backHtml;
+  $('front-label').textContent = rev ? 'Definition' : 'Term';
+  $('back-label').textContent = rev ? 'Term' : 'Definition';
+  $('front-letter').textContent = c.letter;
+  $('back-letter').textContent = c.letter;
+  statusChip($('front-status'), st);
+  statusChip($('back-status'), st);
+  $('card').setAttribute('aria-label', `Flashcard ${pos + 1} of ${deck.length}`);
+
+  applyFlip();
+  $('prev-btn').disabled = pos <= 0;
+  $('next-btn').disabled = false;
+  $('learning-btn').setAttribute('aria-pressed', String(st === 'learning'));
+  $('known-btn').setAttribute('aria-pressed', String(st === 'known'));
+}
+
+function applyFlip() {
+  const card = $('card');
+  card.classList.toggle('flipped', flipped);
+  const front = $('face-front'), back = $('face-back');
+  const shown = flipped ? back : front, hidden = flipped ? front : back;
+  shown.removeAttribute('aria-hidden'); shown.inert = false; shown.removeAttribute('inert');
+  hidden.setAttribute('aria-hidden', 'true'); hidden.inert = true; hidden.setAttribute('inert', '');
+  const rev = prefs.reverse;
+  $('flip-label').textContent = flipped ? (rev ? 'Show definition' : 'Show term') : (rev ? 'Reveal term' : 'Reveal definition');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Actions
+// ════════════════════════════════════════════════════════════════════════
+function currentCard() { return pos < deck.length ? cards[deck[pos]] : null; }
+
+function flip() {
+  if (!currentCard()) return;
+  flipped = !flipped;
+  applyFlip();
+  const c = currentCard();
+  const rev = prefs.reverse;
+  announce(flipped
+    ? (rev ? `Term: ${c.termText}` : `Definition: ${$('back-body').textContent.trim()}`)
+    : (rev ? 'Definition side' : `Term: ${c.termText}`));
+}
+
+function go(delta) {
+  if (!deck.length) return;
+  const next = Math.max(0, Math.min(deck.length, pos + delta));
+  if (next === pos) return;
+  pos = next;
+  flipped = false;
+  renderCard();
+  const c = currentCard();
+  announce(c ? `Card ${pos + 1} of ${deck.length}${prefs.reverse ? '' : ': ' + c.termText}` : 'End of deck');
+}
+
+function mark(st) {
+  const c = currentCard();
+  if (!c) return;
+  const nextId = deck[pos + 1];
+  status[c.key] = st;
+  saveStatus();
+  rebuildDeck();
+  pos = nextId === undefined ? deck.length : Math.max(0, deck.indexOf(nextId));
+  flipped = false;
+  renderCounts();
+  renderCard();
+  const n = currentCard();
+  announce(`Marked ${c.termText} as ${st === 'known' ? 'known' : 'still learning'}.` +
+    (n ? ` Card ${pos + 1} of ${deck.length}${prefs.reverse ? '' : ': ' + n.termText}` : ' End of deck.'));
+}
+
+function resetView(keepCurrent) {
+  const keepId = keepCurrent ? deck[pos] : undefined;
+  rebuildDeck();
+  const i = keepId === undefined ? -1 : deck.indexOf(keepId);
+  pos = i >= 0 ? i : 0;
+  flipped = false;
+  renderCard();
+}
+
+function shuffleOrder() {
+  const arr = cards.map(c => c.id);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  Events
+// ════════════════════════════════════════════════════════════════════════
+$('card').addEventListener('click', e => {
+  if (e.target.closest('a')) return;           // let guide links navigate
+  if (window.getSelection && String(window.getSelection()).length) return; // allow text selection
+  flip();
+});
+$('flip-btn').addEventListener('click', flip);
+$('prev-btn').addEventListener('click', () => go(-1));
+$('next-btn').addEventListener('click', () => go(1));
+$('known-btn').addEventListener('click', () => mark('known'));
+$('learning-btn').addEventListener('click', () => mark('learning'));
+
+$('status-filter').addEventListener('click', e => {
+  const b = e.target.closest('button[data-filter]');
+  if (!b || b.dataset.filter === filter) return;
+  filter = b.dataset.filter;
+  resetView(false);
+});
+$('letters').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  letterFilter = b.dataset.letter || null;
+  resetView(false);
+});
+$('search').addEventListener('input', e => {
+  query = e.target.value.trim().toLowerCase();
+  resetView(false);
+});
+$('search-clear').addEventListener('click', () => {
+  $('search').value = ''; query = '';
+  resetView(false);
+  $('search').focus();
+});
+$('shuffle-btn').addEventListener('click', () => {
+  shuffled = !shuffled;
+  order = shuffled ? shuffleOrder() : cards.map(c => c.id);
+  resetView(false);
+  announce(shuffled ? 'Deck shuffled' : 'Deck in alphabetical order');
+});
+$('reverse-btn').addEventListener('click', () => {
+  prefs.reverse = !prefs.reverse;
+  store.set(PREFS_KEY, prefs);
+  flipped = false;
+  renderCard();
+  announce(prefs.reverse ? 'Definition-first mode on' : 'Term-first mode on');
+});
+$('reset-btn').addEventListener('click', () => {
+  if (!cards.length) return;
+  if (!confirm('Reset all flashcard progress? Every card will go back to unseen. This cannot be undone.')) return;
+  status = {};
+  saveStatus();
+  renderCounts();
+  resetView(false);
+  announce('Progress reset');
+});
+$('state').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  const act = b.dataset.act;
+  if (act === 'clear-filters') {
+    filter = 'all'; letterFilter = null; query = ''; $('search').value = '';
+    resetView(false);
+  } else if (act === 'review-learning') {
+    filter = 'learning'; letterFilter = null; query = ''; $('search').value = '';
+    resetView(false);
+  } else if (act === 'restart') {
+    pos = 0; flipped = false; renderCard();
+  } else if (act === 'back') {
+    pos = Math.max(0, deck.length - 1); flipped = false; renderCard();
+  } else if (act === 'reload') {
+    location.reload();
+  }
+  if (!$('deck-ui').hidden) $('card').focus({ preventScroll: true });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+  const t = e.target;
+  const typing = t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
+  if (typing) {
+    if (e.key === 'Escape' && t.id === 'search') t.blur();
+    return;
+  }
+  if (!cards.length) return;
+  const onControl = t instanceof HTMLElement && !!t.closest('button, a, summary');
+  switch (e.key) {
+    case ' ':
+    case 'Enter':
+      if (onControl) return;                     // native activation for buttons/links
+      e.preventDefault(); flip(); break;
+    case 'ArrowRight': e.preventDefault(); go(1); break;
+    case 'ArrowLeft':  e.preventDefault(); go(-1); break;
+    case 'k': case 'K': e.preventDefault(); mark('known'); break;
+    case 'l': case 'L': e.preventDefault(); mark('learning'); break;
+    case '/': e.preventDefault(); $('search').focus(); break;
+  }
+});
+
+// Horizontal swipe on touch devices: left = next, right = previous
+(function swipe() {
+  let x0 = null, y0 = null;
+  const el = $('card');
+  el.addEventListener('touchstart', e => { const p = e.touches[0]; x0 = p.clientX; y0 = p.clientY; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const p = e.changedTouches[0];
+    const dx = p.clientX - x0, dy = p.clientY - y0;
+    x0 = y0 = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+// ════════════════════════════════════════════════════════════════════════
+//  Init
+// ════════════════════════════════════════════════════════════════════════
+function buildLetters() {
+  const letters = [...new Set(cards.map(c => c.letter))];
+  const box = $('letters');
+  box.innerHTML = '';
+  const mk = (label, letter, aria) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    if (letter) b.dataset.letter = letter;
+    b.setAttribute('aria-label', aria);
+    b.setAttribute('aria-pressed', 'false');
+    box.appendChild(b);
+  };
+  mk('All', null, 'All letters');
+  letters.forEach(l => mk(l, l, `Terms starting with ${l}`));
+}
+
+function showLoadError(err) {
+  $('deck-desc').textContent = 'Could not load cards';
+  const local = isLocal;
+  showState(`
+    <div class="ico warn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <h2>Could not load the glossary</h2>
+    <p>${local
+      ? 'This page was opened directly from disk (<code>file://</code>), and browsers block <code>fetch()</code> there.'
+      : 'Fetching <code>' + GLOSSARY_PATH + '</code> failed' + (err && err.message ? ': ' + escapeHtml(err.message) : '.')}</p>
+    <p>Serve the repository locally instead:</p>
+    <p><code>python3 -m http.server 8000</code></p>
+    <p>then open <code>http://localhost:8000/flashcards.html</code></p>
+    ${local ? '' : '<div class="actions"><button type="button" class="btn btn-ghost" data-act="reload">Try again</button></div>'}`);
+}
+
+(async function init() {
+  if (isLocal) { showLoadError(); return; }
+  try {
+    const res = await fetch(GLOSSARY_PATH, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    cards = parseGlossary(text);
+    if (!cards.length) throw new Error('no glossary entries were found');
+  } catch (err) {
+    showLoadError(err);
+    return;
+  }
+  order = cards.map(c => c.id);
+  buildLetters();
+  rebuildDeck();
+  renderCounts();
+  renderCard();
+})();
+</script>
+</body>
+</html>
