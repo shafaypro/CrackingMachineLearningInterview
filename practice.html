@@ -9,9 +9,12 @@
   <!-- Apply the saved theme before first paint (same key as the Study Hub) -->
   <script>
     (function () {
-      var t = 'dark';
-      try { t = localStorage.getItem('cml-theme') || 'dark'; } catch (e) {}
-      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+      var t = null;
+      try { t = localStorage.getItem('cml-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
 
