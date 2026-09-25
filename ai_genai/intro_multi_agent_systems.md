@@ -63,7 +63,7 @@ from langchain_anthropic import ChatAnthropic
 
 supervisor = create_supervisor(
     agents=["data_analyst", "ml_engineer", "writer"],
-    model=ChatAnthropic(model="claude-opus-4-6"),
+    model=ChatAnthropic(model="claude-opus-5-5"),
     prompt="""You are a project manager. Route each task to the right specialist:
     - data_analyst: data queries, statistics, EDA
     - ml_engineer: model design, training, evaluation
@@ -172,7 +172,7 @@ def list_available_models() -> list[str]:
     """List all models available in the model registry."""
     return ["resnet50", "bert-base", "gpt2-medium", "llama-3.1-8b"]
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 llm_with_tools = llm.bind_tools([get_model_accuracy, list_available_models])
 
 # LLM decides which tools to call and with what arguments
@@ -334,8 +334,8 @@ from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 
 # Primary: Claude Opus, Fallback: Claude Sonnet, Final fallback: GPT-4o
-primary = ChatAnthropic(model="claude-opus-4-6")
-fallback1 = ChatAnthropic(model="claude-sonnet-4-6")
+primary = ChatAnthropic(model="claude-opus-5-5")
+fallback1 = ChatAnthropic(model="claude-sonnet-5")
 fallback2 = ChatOpenAI(model="gpt-4o")
 
 llm_with_fallbacks = primary.with_fallbacks(

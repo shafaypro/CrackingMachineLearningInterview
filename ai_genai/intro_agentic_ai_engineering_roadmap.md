@@ -167,7 +167,7 @@ building cost-effective, reliable systems.
 
 | Provider | Frontier / reasoning | Balanced | Fast / cheap |
 |----------|----------------------|----------|--------------|
-| Anthropic | `claude-fable-5`, `claude-opus-4-8` | `claude-sonnet-4-6` | `claude-haiku-4-5` |
+| Anthropic | `claude-fable-5`, `claude-opus-4-8` | `claude-sonnet-5` | `claude-haiku-4-5` |
 | OpenAI | GPT frontier tier | GPT mid tier | GPT mini/nano tier |
 | Google | Gemini Pro/Ultra tier | Gemini Flash | Gemini Flash-Lite |
 

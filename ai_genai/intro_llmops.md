@@ -85,7 +85,7 @@ span.end(output={"doc_count": len(docs)})
 
 generation = trace.generation(
     name="llm-call",
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     input=[{"role": "user", "content": question}],
     output=answer,
     usage={"input": 500, "output": 200}
@@ -147,7 +147,7 @@ def llm_judge(
     """Use an LLM to judge the quality of another LLM's answer."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=500,
         system="""You are an expert evaluator for LLM outputs.
 Rate the answer on a scale of 0.0 to 1.0 and explain your reasoning.
@@ -311,8 +311,8 @@ client = Anthropic()
 
 # Pricing (per million tokens, as of early 2026)
 PRICING = {
-    "claude-opus-4-6":          {"input": 15.0,  "output": 75.0},
-    "claude-sonnet-4-6":        {"input": 3.0,   "output": 15.0},
+    "claude-opus-5-5":          {"input": 15.0,  "output": 75.0},
+    "claude-sonnet-5":        {"input": 3.0,   "output": 15.0},
     "claude-haiku-4-5-20251001":{"input": 0.25,  "output": 1.25},
 }
 
@@ -341,11 +341,11 @@ class CostTracker:
 tracker = CostTracker()
 
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello"}]
 )
-tracker.track("claude-sonnet-4-6", response)
+tracker.track("claude-sonnet-5", response)
 tracker.report()
 ```
 
@@ -356,13 +356,13 @@ tracker.report()
 def route_to_model(task_complexity: str) -> str:
     return {
         "simple": "claude-haiku-4-5-20251001",   # FAQs, classification
-        "medium": "claude-sonnet-4-6",            # most tasks
-        "complex": "claude-opus-4-6",             # deep reasoning
+        "medium": "claude-sonnet-5",            # most tasks
+        "complex": "claude-opus-5-5",             # deep reasoning
     }[task_complexity]
 
 # 2. Context caching (up to 90% savings on repeated context)
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     system=[{
         "type": "text",
@@ -457,7 +457,7 @@ def safe_query(user_input: str) -> str:
     try:
         clean_input = guardrails.check_input(user_input)
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
             messages=[{"role": "user", "content": clean_input}]
         )

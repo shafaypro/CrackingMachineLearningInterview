@@ -204,7 +204,7 @@ def run_agent(task: str, max_iterations: int = 20) -> str:
 
     for iteration in range(max_iterations):
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=4096,
             system=system,
             tools=tools,
@@ -278,7 +278,7 @@ def orchestrator(user_goal: str) -> str:
 
     # Step 1: Plan
     plan_response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=1024,
         system="You are a planning agent. Break down the goal into 3-5 parallel subtasks.",
         messages=[{
@@ -302,7 +302,7 @@ def orchestrator(user_goal: str) -> str:
 
     # Step 3: Synthesize results
     synthesis = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=2048,
         system="You are a synthesis agent. Combine the work of multiple subagents into a coherent final answer.",
         messages=[{
@@ -362,7 +362,7 @@ def agent_with_confirmation(task: str):
 
     while True:
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=4096,
             tools=tools,
             messages=messages,
@@ -447,7 +447,7 @@ def agent_with_memory(user_message: str) -> str:
     memory_context = "\n".join(memories) if memories else "No relevant memories."
 
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=1024,
         system=f"""You are a helpful assistant with memory.
 

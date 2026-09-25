@@ -136,7 +136,7 @@ def run_tool_loop(user_message: str) -> str:
     
     while True:
         response = client.messages.create(
-            model="claude-opus-4-6",
+            model="claude-opus-5-5",
             max_tokens=4096,
             tools=tools,
             messages=messages
@@ -239,7 +239,7 @@ def extract_product_info(text: str) -> ProductInfo:
     schema = ProductInfo.model_json_schema()
     
     response = client.messages.create(
-        model="claude-opus-4-6",
+        model="claude-opus-5-5",
         max_tokens=1024,
         messages=[{
             "role": "user",

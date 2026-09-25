@@ -42,7 +42,7 @@ os.environ["LANGCHAIN_PROJECT"] = "my-production-app"  # Project for grouping tr
 
 # That's it: all LangChain/LangGraph calls are auto-traced
 from langchain_anthropic import ChatAnthropic
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 result = llm.invoke("Explain RAG in 3 sentences")
 # This call now appears in LangSmith dashboard
 ```
@@ -118,7 +118,7 @@ def my_rag_app(inputs: dict) -> dict:
 # Evaluators
 correctness_evaluator = LangChainStringEvaluator(
     "qa",  # Uses LLM to judge correctness
-    config={"llm": ChatAnthropic(model="claude-opus-4-6")}
+    config={"llm": ChatAnthropic(model="claude-opus-5-5")}
 )
 
 results = evaluate(
@@ -154,7 +154,7 @@ Return JSON: {{"score": <1-5>, "reasoning": "<why>"}}
 ])
 
 def custom_judge(inputs: dict, outputs: dict, reference_outputs: dict) -> dict:
-    judge_llm = ChatAnthropic(model="claude-opus-4-6")
+    judge_llm = ChatAnthropic(model="claude-opus-5-5")
     response = judge_llm.invoke(judge_prompt.format_messages(
         input=inputs["question"],
         reference=reference_outputs["answer"],

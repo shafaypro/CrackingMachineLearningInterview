@@ -306,7 +306,7 @@ def rag_query(user_question: str, collection, n_docs: int = 5) -> str:
 
     # 3. Generate
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=2048,
         system="""You are a helpful assistant that answers questions based on provided documents.
 
@@ -570,8 +570,8 @@ loader = DirectoryLoader("./docs", glob="**/*.md")
 documents = loader.load()
 
 generator = TestsetGenerator.with_anthropic(
-    generator_llm=ChatAnthropic(model="claude-sonnet-4-6"),
-    critic_llm=ChatAnthropic(model="claude-sonnet-4-6"),
+    generator_llm=ChatAnthropic(model="claude-sonnet-5"),
+    critic_llm=ChatAnthropic(model="claude-sonnet-5"),
 )
 
 testset = generator.generate_with_langchain_docs(
@@ -589,7 +589,7 @@ from trulens_eval import Tru, TruChain, Feedback
 from trulens_eval.feedback.provider import Anthropic as TruAnthropic
 
 tru = Tru()
-provider = TruAnthropic(model_engine="claude-sonnet-4-6")
+provider = TruAnthropic(model_engine="claude-sonnet-5")
 
 # Define feedback functions
 f_groundedness = (
@@ -720,7 +720,7 @@ class RAGSystem:
         # Generate
         context = "\n---\n".join(docs)
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
             system="Answer questions based on the provided context. Be concise and cite sources.",
             messages=[{

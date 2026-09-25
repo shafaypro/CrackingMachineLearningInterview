@@ -164,7 +164,7 @@ must. A useful mental model across providers:
 | Tier | Use for | Example: Claude family (2026) |
 |------|---------|-------------------------------|
 | **Frontier / reasoning** | Hardest reasoning, long-horizon agentic work, deep research | `claude-fable-5` (most capable), `claude-opus-4-8` |
-| **Balanced workhorse** | Most production traffic: strong quality at lower cost/latency | `claude-sonnet-4-6` |
+| **Balanced workhorse** | Most production traffic: strong quality at lower cost/latency | `claude-sonnet-5` |
 | **Fast / cheap** | High-volume, latency-sensitive, simple tasks (classification, routing, extraction) | `claude-haiku-4-5` |
 
 > Other providers offer the same tiering (a frontier model, a balanced model, a
@@ -178,7 +178,7 @@ must. A useful mental model across providers:
 |-------|------:|-------:|---------|-----------:|
 | Claude Fable 5 (`claude-fable-5`) | $10 | $50 | 1M | 128K |
 | Claude Opus 4.8 (`claude-opus-4-8`) | $5 | $25 | 1M | 128K |
-| Claude Sonnet 4.6 (`claude-sonnet-4-6`) | $3 | $15 | 1M | 64K |
+| Claude Sonnet 4.6 (`claude-sonnet-5`) | $3 | $15 | 1M | 64K |
 | Claude Haiku 4.5 (`claude-haiku-4-5`) | $1 | $5 | 200K | 64K |
 
 ### Context Windows & Token Budgeting

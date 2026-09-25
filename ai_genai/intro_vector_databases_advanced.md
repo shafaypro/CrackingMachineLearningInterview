@@ -121,7 +121,7 @@ client.collections.create(
     name="MLConcept",
     vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(),
     generative_config=wvc.config.Configure.Generative.anthropic(
-        model="claude-sonnet-4-6"
+        model="claude-sonnet-5"
     ),
     properties=[
         wvc.config.Property(name="concept", data_type=wvc.config.DataType.TEXT),

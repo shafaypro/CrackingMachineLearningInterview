@@ -111,7 +111,7 @@ tools = [search_web, calculate]
 tool_node = ToolNode(tools)
 
 # LLM with tools bound
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 llm_with_tools = llm.bind_tools(tools)
 
 # State
@@ -213,7 +213,7 @@ writing_graph = build_writing_subgraph()
 # Supervisor routes between sub-agents
 supervisor = create_supervisor(
     agents=["researcher", "writer"],
-    model=ChatAnthropic(model="claude-opus-4-6"),
+    model=ChatAnthropic(model="claude-opus-5-5"),
     prompt="Route tasks to the appropriate specialist agent."
 )
 
