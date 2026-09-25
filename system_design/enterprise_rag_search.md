@@ -278,7 +278,6 @@ Enterprise queries mix two kinds of need. "How do I request parental leave" is a
 |---|---|---|
 | **BM25** | Exact identifiers, rare terms, codenames, names; no training; interpretable | No synonyms or paraphrase; language-specific tokenization needed |
 | **Dense (bi-encoder)** | Paraphrase, natural-language questions, cross-lingual matching with a multilingual model | Misses rare tokens; needs a reindex when the model changes; ANN recall under filters |
-| **Learned sparse (SPLADE-style)** | Term expansion with inverted-index serving | Another model to host; less common in practice |
 
 **Multilingual.** Use language-specific analyzers for BM25 (Japanese needs a morphological tokenizer; German benefits from compound splitting), detect language per chunk, and use a multilingual embedding model so a German query can match an English document. Evaluate per language: a model that is strong on English benchmarks can be much weaker on Japanese.
 
@@ -561,7 +560,6 @@ The [LLM Security guide](../ai_genai/intro_llm_security.md) covers injection pat
 | **Freshness** | Per-connector lag from source edit to searchable (sampled with canary edits); queue depth | p95 lag above 15 min for 30 min |
 | **Permission sync** | ACL change to index lag; permission service latency; late-check removal rate | Late-check removals rising means index ACLs are stale |
 | **Completeness** | Source object count vs indexed count per connector; reconciliation deletes per run | Indexed count diverges more than 1% from source |
-| **Connector health** | API error rates, rate-limit hits, auth token expiry | Any connector with no successful sync in 1 h |
 | **Parsing** | Parse failure rate by format; OCR confidence distribution; empty-text documents | Spike in empty PDFs after a parser deploy |
 | **Retrieval quality** | Zero-result rate, reformulation rate, successful click rate, nightly recall@k and NDCG on the labelled set | NDCG drop beyond the confidence interval |
 | **Answer quality** | Abstention rate, citation validation failures, sampled groundedness from the judge, thumbs down rate | Falling abstention with flat retrieval often means more hallucination |
@@ -596,10 +594,6 @@ Post-filtering returns an unfiltered top-k and then removes what the user cannot
 
 The user's expanded principal set was stale. The likely causes are a cached principal set without invalidation on membership events, a missing or delayed group change event from the identity provider, or index ACLs that stored expanded user lists rather than group principals, so the change required rewriting chunks that had not been processed yet. The late live check should have caught it for displayed results; if it did not, either it was disabled, it fails open, or it queries the same stale cache. Fixes: invalidate the principal cache on membership events with a short TTL as backup, monitor ACL sync lag against the 5-minute SLA, and run canary permission tests continuously.
 
-#### How would you chunk Slack vs a PDF vs code?
-
-Slack messages are too short to retrieve alone, so I chunk by thread, and for unthreaded channels by windows split at time gaps, with the channel name prepended. PDFs are chunked by layout sections with tables as separate chunks and page numbers kept for citations; scanned pages go through OCR first. Code is chunked by function or class with the file path and signature included. In every case, a chunk never mixes content with different permissions, and I prepend title and section path so a chunk is understandable without its neighbours.
-
 #### How do you build the evaluation set and what do you measure?
 
 I sample real queries from logs, stratified by source, language, and head vs tail, remove sensitive ones, then pool candidates from several retrievers so labels are not biased toward the current system. Labellers give graded relevance. Retrieval is measured with recall@k on the first stage (the ceiling for everything downstream) and NDCG@10 on the final ranking, sliced by source and language. Answers are measured on groundedness, citation accuracy, correctness where a reference exists, and abstention on unanswerable questions, using an LLM judge only after checking its agreement with human labels and its biases. Permission tests with synthetic users run in the same suite.
@@ -607,10 +601,6 @@ I sample real queries from logs, stratified by source, language, and head vs tai
 #### How do you know the system is helping in production?
 
 Successful click rate and reformulation rate for search, zero-result rate as a coverage and bug detector, answer feedback and citation clicks for answers, and ticket deflection for business value. Deflection needs a randomized holdout in the ticket form: compare the filing rate between users who saw suggested answers and users who did not, and count re-filed tickets. For ranker changes I would use interleaving because it detects smaller differences with less traffic than an A/B test.
-
-#### What is the cost structure, and where would you cut?
-
-In the worked example, embedding the corpus is a one-off of hundreds of dollars and daily churn costs a few dollars. Vector storage is memory, reduced by quantization. Reranking is a few GPUs. Generation dominates, at tens of thousands of dollars a month if a large model answers 30% of queries with 4,000-token prompts. So I would trigger answers only for question-like queries, send 4-6 reranked chunks instead of many, cache the stable prompt prefix, and route easy questions to a smaller model, holding the eval suite fixed to confirm quality does not drop.
 
 #### How do you defend against prompt injection in indexed documents?
 
@@ -629,9 +619,7 @@ Assume some documents are hostile, since anyone who can write a wiki page or fil
 | Expanding ACLs to user lists on chunks | Group changes rewrite millions of chunks; slow revocations | Store principals or ACL tokens; expand the user at query time |
 | Mixing permissions within a chunk | Restricted text reaches users who can see only part of the source | Split chunks along permission boundaries |
 | One chunk size for all sources | Slack messages too short, PDFs cut mid-table | Per-source chunkers with contextual headers |
-| Naive PDF extraction | Interleaved columns, broken tables | Layout-aware parsing, OCR for scans, tables serialized with headers |
 | Team-written eval queries | Too clean; misses real vocabulary and tail queries | Sample from logs, pool candidates, graded labels |
-| Unvalidated LLM judge | Biased scores drive wrong decisions | Calibrate against human labels; check position and length bias |
 | Measuring deflection without a holdout | Overstates impact | Randomized holdout in the ticket form |
 | Autocomplete and facets on unfiltered data | Leaks titles and existence of restricted docs | Compute all side features on permission-filtered data |
 | Rendering images from model output | Exfiltration via injected URLs | No external images; domain allowlist |

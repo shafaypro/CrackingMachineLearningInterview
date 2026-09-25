@@ -163,7 +163,7 @@ must. A useful mental model across providers:
 
 | Tier | Use for | Example: Claude family (2026) |
 |------|---------|-------------------------------|
-| **Frontier / reasoning** | Hardest reasoning, long-horizon agentic work, deep research | `claude-fable-5` (most capable), `claude-opus-4-8` |
+| **Frontier / reasoning** | Hardest reasoning, long-horizon agentic work, deep research | `claude-fable-5-1` (most capable), `claude-opus-5-5` |
 | **Balanced workhorse** | Most production traffic: strong quality at lower cost/latency | `claude-sonnet-5` |
 | **Fast / cheap** | High-volume, latency-sensitive, simple tasks (classification, routing, extraction) | `claude-haiku-4-5` |
 
@@ -172,13 +172,13 @@ must. A useful mental model across providers:
 > from the provider's own docs: they change often. For Claude specifics see the
 > [Anthropic & Claude guide](./intro_anthropic.md).
 
-**Approximate Claude pricing (per 1M tokens, 2026):**
+**Approximate Claude pricing (per 1M tokens, late 2026; check Anthropic's pricing page before quoting):**
 
 | Model | Input | Output | Context | Max output |
 |-------|------:|-------:|---------|-----------:|
-| Claude Fable 5 (`claude-fable-5`) | $10 | $50 | 1M | 128K |
-| Claude Opus 4.8 (`claude-opus-4-8`) | $5 | $25 | 1M | 128K |
-| Claude Sonnet 4.6 (`claude-sonnet-5`) | $3 | $15 | 1M | 64K |
+| Claude Fable 5.1 (`claude-fable-5-1`) | $10 | $50 | 1M | 128K |
+| Claude Opus 5.5 (`claude-opus-5-5`) | $4 | $20 | 1M | 128K |
+| Claude Sonnet 5 (`claude-sonnet-5`) | $2 | $10 | 1M | 128K |
 | Claude Haiku 4.5 (`claude-haiku-4-5`) | $1 | $5 | 200K | 64K |
 
 ### Context Windows & Token Budgeting
@@ -187,8 +187,9 @@ must. A useful mental model across providers:
   one request. Modern frontier models reach **1M tokens**.
 - **Rough heuristic:** ~1 token ≈ 4 characters ≈ 0.75 English words. Code and
   non-English text tokenize *less* efficiently.
-- **Don't estimate with the wrong tokenizer.** OpenAI's `tiktoken` undercounts
-  Claude tokens by ~15-20%+. Use the provider's own token-counting endpoint.
+- **Don't estimate with the wrong tokenizer.** OpenAI's `tiktoken` does not match
+  Claude's tokenizer (and tokenizers change between model generations), so counts can
+  be noticeably off. Use the provider's own token-counting endpoint.
 - **Budget the whole request:** `prompt + few-shot + retrieved context + reasoning + output ≤ window`.
   Reserve headroom for the output (`max_tokens`) and for reasoning/thinking tokens.
 
@@ -248,8 +249,8 @@ Without caching the input alone would cost 52K/1e6 × $3 ≈ $0.156.
    and route easy traffic to a small model.
 2. **What's the single biggest lever for LLM cost at scale?** → Prompt caching of a
    stable prefix, plus right-sizing the model per task.
-3. **Why not use `tiktoken` to count Claude tokens?** → Wrong tokenizer: it
-   undercounts; use the provider's token-counting API.
+3. **Why not use `tiktoken` to count Claude tokens?** → Wrong tokenizer: its
+   counts differ from Claude's; use the provider's token-counting API.
 4. **`temperature` vs `top_p`?** → Both control randomness; temperature scales the
    distribution, top_p truncates it to a probability mass. Tune one, not both hard.
 5. **What is a context window and how do you stay within it?** → Max tokens per

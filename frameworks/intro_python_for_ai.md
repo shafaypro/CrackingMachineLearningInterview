@@ -272,7 +272,7 @@ log_event("tool_call", run_id=run_id, tool="search", args={"query": "..."})
    end-to-end tracing.
 5. **How do you keep secrets out of code?** → `.env` (git-ignored) + a settings
    loader locally, secrets manager / CI secrets in production; never hardcode.
-6. **Sync vs async SDK client (does it matter?** → Yes) calling a blocking sync
+6. **Sync vs async SDK client: does it matter?** → Yes: calling a blocking sync
    client inside an async handler stalls the event loop; use the async client or
    offload to an executor.
 

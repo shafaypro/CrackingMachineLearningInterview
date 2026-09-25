@@ -487,7 +487,7 @@ Mixed Precision Training uses FP16 (half-precision) for most computations and FP
 
 **Q7: What is `torch.compile` and how does it improve performance?** 🟡 Intermediate
 
-`torch.compile` (PyTorch 2.0+) applies just-in-time graph compilation (TorchDynamo captures the graph, TorchInductor compiles it), which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Typical speedup: 10-40% on training, 2x+ on inference. The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
+`torch.compile` (PyTorch 2.0+) applies just-in-time graph compilation (TorchDynamo captures the graph, TorchInductor compiles it), which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Speedups vary widely by model, batch size, and hardware (the code comment above gives rough ranges). The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
 
 ---
 

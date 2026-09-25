@@ -263,6 +263,10 @@ Core topics:
 * [ETA Prediction System Design (routing baseline, residual models, quantile losses)](./system_design/eta_prediction.md)
 * [News Feed Ranking System Design (value model, multi-task ranking, fan-out)](./system_design/news_feed_ranking.md)
 * [Visual Search System Design (metric learning, ANN indexes, re-ranking)](./system_design/visual_search_system.md)
+* [Enterprise RAG Search System Design (connectors, permissions, hybrid retrieval, evaluation)](./system_design/enterprise_rag_search.md)
+* [Notification Ranking System Design (send budgets, incrementality, send-time optimization)](./system_design/notification_ranking.md)
+* [Dynamic Pricing System Design (causal elasticity, surge, switchback experiments)](./system_design/dynamic_pricing.md)
+* [People You May Know System Design (link prediction, graph candidates, privacy)](./system_design/people_you_may_know.md)
 * [ML System Design Patterns: RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md)
 
 ## Coding Challenges Track
