@@ -594,6 +594,7 @@ Every guide in `classical_ml/`. Start with the overview above, then work through
 - [Dimensionality Reduction (Deep Dive)](./intro_dimensionality_reduction.md)
 - [Ensemble Methods and Gradient Boosting](./intro_ensemble_methods.md)
 - [Feature Engineering & Selection](./intro_feature_engineering.md)
+- [Math for ML: Linear Algebra, Calculus, and Optimization](./intro_math_for_ml.md)
 - [Model Evaluation and Metrics](./intro_model_evaluation.md)
 - [NLP Fundamentals](./intro_nlp_fundamentals.md)
 - [Recommender Systems](./intro_recommender_systems.md)
