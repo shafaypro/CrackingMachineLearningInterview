@@ -5,7 +5,7 @@ A practical interview preparation repository for Machine Learning Engineer, AI E
 Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/CrackingMachineLearningInterview/) GitPage(for Ui/UX experience).
 
 ### New here? Start by picking a track
-**→ [Choose Your Track](./docs/choose-your-track.md)**: answer one question about what you want to build, and get an
+**[Choose Your Track](./docs/choose-your-track.md)**: answer one question about what you want to build, and get an
 ordered path through this repo for your role: ML Engineer, AI/GenAI Engineer, Data Scientist, Data Engineer,
 MLOps, or Deep Learning. Each track lists prerequisites, a stage-by-stage reading order, a project to build,
 and how to tell when you're interview-ready.
@@ -31,16 +31,16 @@ and how to tell when you're interview-ready.
 * The night before: skim the **[ML Cheat Sheet](./docs/ml-cheat-sheet.md)**, drill the **[Glossary Flashcards](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)**, and rehearse a few **[Debugging Scenarios](./docs/ml-debugging-scenarios.md)** out loud.
 
 ## Quick Navigation
-* [**Choose Your Track**: start here (New)](./docs/choose-your-track.md)
+* [**Choose Your Track**: start here](./docs/choose-your-track.md)
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
-* [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
-* [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
-* [ML Take-Home Projects & Case Studies (New)](./docs/take-home-projects.md)
-* [ML & AI Glossary (New)](./docs/glossary.md)
-* [ML Cheat Sheet: formulas & numbers for the night before (New)](./docs/ml-cheat-sheet.md)
-* [ML Debugging Scenarios: "your model is broken, what do you do?" (New)](./docs/ml-debugging-scenarios.md)
-* [Glossary Flashcards: interactive practice (New)](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)
+* [2026 Common Interview Questions](./docs/interview_questions_2026.md)
+* [Behavioral & Project Deep-Dive Guide](./docs/behavioral-interview-guide.md)
+* [ML Take-Home Projects & Case Studies](./docs/take-home-projects.md)
+* [ML & AI Glossary](./docs/glossary.md)
+* [ML Cheat Sheet: formulas & numbers for the night before](./docs/ml-cheat-sheet.md)
+* [ML Debugging Scenarios: "your model is broken, what do you do?"](./docs/ml-debugging-scenarios.md)
+* [Glossary Flashcards: interactive practice](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -70,30 +70,30 @@ and how to tell when you're interview-ready.
 Feel free to share the repository link in your blog, study notes, or interview preparation material.
 
 ## Repository Structure
-* [`docs/choose-your-track.md`](./docs/choose-your-track.md): pick a track by goal or background, then follow a staged path through the repo for that role. **(New)**
+* [`docs/choose-your-track.md`](./docs/choose-your-track.md): pick a track by goal or background, then follow a staged path through the repo for that role.
 * [`docs/2026-interview-roadmap.md`](./docs/2026-interview-roadmap.md): current interview focus areas for ML Engineer and AI Engineer roles.
 * [`docs/2026-additional-questions.md`](./docs/2026-additional-questions.md): modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.
-* [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design. **(New)**
+* [`docs/interview_questions_2026.md`](./docs/interview_questions_2026.md): deep-dive interview Q&A covering agents, RAG, LLM scaling, production AI, and system design.
 * [`docs/resources-and-references.md`](./docs/resources-and-references.md): books, references, and additional interview topics.
 * [`docs/study-pattern.md`](./docs/study-pattern.md): recommended preparation topics, difficulty levels, and study structure.
-* [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations. **(New)**
-* [`docs/take-home-projects.md`](./docs/take-home-projects.md): what reviewers score, time budgeting, repository structure, and the follow-up presentation round. **(New)**
-* [`docs/glossary.md`](./docs/glossary.md): every term in the repo defined in a sentence or two, with the practical point attached. **(New)**
-* [`docs/ml-cheat-sheet.md`](./docs/ml-cheat-sheet.md): metrics, losses, distributions, update rules, and the numbers worth memorising, on one page. **(New)**
-* [`docs/ml-debugging-scenarios.md`](./docs/ml-debugging-scenarios.md): troubleshooting scenarios (leakage, NaN loss, offline/online gaps, drift, RAG regressions) with ranked causes and fixes. **(New)**
-* [`flashcards.html`](./flashcards.html): interactive flashcards built from the glossary, with progress saved in your browser. **(New)**
-* [`tools/check_links.py`](./tools/check_links.py): offline link and anchor checker, run in CI on every pull request. **(New)**
-* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
-* [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering. **(Expanded)**
-* [`mlops/`](./mlops): MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation. **(Expanded)**
+* [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations.
+* [`docs/take-home-projects.md`](./docs/take-home-projects.md): what reviewers score, time budgeting, repository structure, and the follow-up presentation round.
+* [`docs/glossary.md`](./docs/glossary.md): every term in the repo defined in a sentence or two, with the practical point attached.
+* [`docs/ml-cheat-sheet.md`](./docs/ml-cheat-sheet.md): metrics, losses, distributions, update rules, and the numbers worth memorising, on one page.
+* [`docs/ml-debugging-scenarios.md`](./docs/ml-debugging-scenarios.md): troubleshooting scenarios (leakage, NaN loss, offline/online gaps, drift, RAG regressions) with ranked causes and fixes.
+* [`flashcards.html`](./flashcards.html): interactive flashcards built from the glossary, with progress saved in your browser.
+* [`tools/check_links.py`](./tools/check_links.py): offline link and anchor checker, run in CI on every pull request.
+* [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG.
+* [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering.
+* [`mlops/`](./mlops): MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation.
 * [`cloud_ml/`](./cloud_ml): cloud ML platforms, AWS SageMaker, Google Vertex AI, Azure ML.
-* [`data_engineering/`](./data_engineering): data engineering interview topics, platform concepts, and geospatial AI. **(Expanded)**
-* [`devops/`](./devops): DevOps, infrastructure, deployment, and AI testing topics. **(Expanded)**
-* [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving. **(Expanded)**
-* [`system_design/`](./system_design): ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems. **(Expanded)**
-* [`deep_learning/`](./deep_learning): deep learning fundamentals, transformers, applied training pipelines, distributed training, and reinforcement learning. **(Expanded)**
-* [`coding_challenges/`](./coding_challenges): Python and SQL interview practice guides for coding screens and data problem solving. **(New)**
-* [`project_setup/`](./project_setup): how to set up a project on GitHub and structure real ML/AI/agent/data-engineering repositories. **(New)**
+* [`data_engineering/`](./data_engineering): data engineering interview topics, platform concepts, and geospatial AI.
+* [`devops/`](./devops): DevOps, infrastructure, deployment, and AI testing topics.
+* [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving.
+* [`system_design/`](./system_design): ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems.
+* [`deep_learning/`](./deep_learning): deep learning fundamentals, transformers, applied training pipelines, distributed training, and reinforcement learning.
+* [`coding_challenges/`](./coding_challenges): Python and SQL interview practice guides for coding screens and data problem solving.
+* [`project_setup/`](./project_setup): how to set up a project on GitHub and structure real ML/AI/agent/data-engineering repositories.
 * `README.md`: repository landing page plus the original classic ML interview question bank.
 
 ## Suggested Learning Order
@@ -128,29 +128,29 @@ Use these to turn the repo into a portfolio, not just a reading list:
 Use this track for AI Engineer, GenAI Engineer, LLM Engineer, Applied AI, and agent-platform interviews.
 
 Core topics:
-* [The Agentic AI Engineer Roadmap (34-topic curriculum: foundation → frontier)](./ai_genai/intro_agentic_ai_engineering_roadmap.md) **(New)**
-* [LLM & Generative AI Fundamentals](./ai_genai/intro_llm_fundamentals.md) **(New)**
+* [The Agentic AI Engineer Roadmap (34-topic curriculum: foundation → frontier)](./ai_genai/intro_agentic_ai_engineering_roadmap.md)
+* [LLM & Generative AI Fundamentals](./ai_genai/intro_llm_fundamentals.md)
 * [RAG](./ai_genai/intro_rag.md)
-* [RAG Engineering](./ai_genai/intro_rag_engineering.md) **(New)**
-* [Context Engineering (budgets, ordering, caching, memory, compaction)](./ai_genai/intro_context_engineering.md) **(New)**
-* [Embeddings (models, chunking, fine-tuning, quantization)](./ai_genai/intro_embeddings.md) **(New)**
+* [RAG Engineering](./ai_genai/intro_rag_engineering.md)
+* [Context Engineering (budgets, ordering, caching, memory, compaction)](./ai_genai/intro_context_engineering.md)
+* [Embeddings (models, chunking, fine-tuning, quantization)](./ai_genai/intro_embeddings.md)
 * [Vector Databases](./ai_genai/intro_vector_databases.md)
-* [Vector Databases: Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
-* [LLM Inference Optimization (KV cache, batching, quantization, speculative decoding)](./ai_genai/intro_llm_inference_optimization.md) **(New)**
+* [Vector Databases: Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md)
+* [LLM Inference Optimization (KV cache, batching, quantization, speculative decoding)](./ai_genai/intro_llm_inference_optimization.md)
 * [LLMOps](./ai_genai/intro_llmops.md)
 * [Agentic AI](./ai_genai/intro_agentic_ai.md)
-* [Agent Systems & Tool Use](./ai_genai/intro_agent_tool_use.md) **(New)**
-* [Multi-Agent Systems (Patterns, Memory, Tool Calling, Failure Handling)](./ai_genai/intro_multi_agent_systems.md) **(New)**
-* [Multi-Model & AI Orchestration](./ai_genai/intro_multi_model_orchestration.md) **(New)**
-* [Multimodal AI](./ai_genai/intro_multimodal_ai.md) **(New)**
-* [CrewAI](./ai_genai/intro_crewai.md) **(New)**
-* [n8n - AI Workflow Automation](./ai_genai/intro_n8n.md) **(New)**
-* [n8n - Advanced AI Workflows](./ai_genai/intro_n8n_advanced.md) **(New)**
-* [LangGraph](./ai_genai/intro_langgraph.md) **(New)**
-* [LangSmith: Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
-* [Prompt Engineering (CoT, ReAct, Few-Shot, Self-Consistency, ToT, Output Control)](./ai_genai/intro_prompt_engineering.md) **(New)**
-* [Structured Outputs & Function Calling (JSON Mode, Tool Use, Pydantic, Instructor)](./ai_genai/intro_structured_outputs.md) **(New)**
-* [LLM Security (Prompt Injection, Jailbreaks, Red-Teaming, Defenses)](./ai_genai/intro_llm_security.md) **(New)**
+* [Agent Systems & Tool Use](./ai_genai/intro_agent_tool_use.md)
+* [Multi-Agent Systems (Patterns, Memory, Tool Calling, Failure Handling)](./ai_genai/intro_multi_agent_systems.md)
+* [Multi-Model & AI Orchestration](./ai_genai/intro_multi_model_orchestration.md)
+* [Multimodal AI](./ai_genai/intro_multimodal_ai.md)
+* [CrewAI](./ai_genai/intro_crewai.md)
+* [n8n - AI Workflow Automation](./ai_genai/intro_n8n.md)
+* [n8n - Advanced AI Workflows](./ai_genai/intro_n8n_advanced.md)
+* [LangGraph](./ai_genai/intro_langgraph.md)
+* [LangSmith: Observability & Evaluation](./ai_genai/intro_langsmith.md)
+* [Prompt Engineering (CoT, ReAct, Few-Shot, Self-Consistency, ToT, Output Control)](./ai_genai/intro_prompt_engineering.md)
+* [Structured Outputs & Function Calling (JSON Mode, Tool Use, Pydantic, Instructor)](./ai_genai/intro_structured_outputs.md)
+* [LLM Security (Prompt Injection, Jailbreaks, Red-Teaming, Defenses)](./ai_genai/intro_llm_security.md)
 * [MCP](./ai_genai/intro_mcp.md)
 * [LangChain](./ai_genai/intro_langchain.md)
 * [Anthropic Overview](./ai_genai/intro_anthropic.md)
@@ -159,10 +159,10 @@ Core topics:
 Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, streaming, and geospatial interviews.
 
 Core topics:
-* [Data Engineering for AI](./data_engineering/intro_data_engineering_for_ai.md) **(New)**
-* [Data Modeling](./data_engineering/data-modeling.md) **(New)**
-* [Data Architecture](./data_engineering/data-architecture.md) **(New)**
-* [Types of Data Processing Pipelines (Batch → Streaming, When-to-Use-What)](./data_engineering/intro_data_processing_pipelines.md) **(New)**
+* [Data Engineering for AI](./data_engineering/intro_data_engineering_for_ai.md)
+* [Data Modeling](./data_engineering/data-modeling.md)
+* [Data Architecture](./data_engineering/data-architecture.md)
+* [Types of Data Processing Pipelines (Batch → Streaming, When-to-Use-What)](./data_engineering/intro_data_processing_pipelines.md)
 * [Apache Spark](./data_engineering/intro_apache_spark.md)
 * [Apache Kafka](./data_engineering/intro_apache_kafka.md)
 * [Apache Airflow](./data_engineering/intro_apache_airflow.md)
@@ -172,25 +172,25 @@ Core topics:
 * [Delta Lake](./data_engineering/intro_delta_lake.md)
 * [DuckDB](./data_engineering/intro_duckdb.md)
 * [OpenClaw](./data_engineering/intro_openclaw.md)
-* [Geospatial AI Systems (Google Solar API, ArcGIS, PostGIS, H3)](./data_engineering/intro_geospatial.md) **(New)**
+* [Geospatial AI Systems (Google Solar API, ArcGIS, PostGIS, H3)](./data_engineering/intro_geospatial.md)
 
 ## Deep Learning Track
 Use this track for ML engineer, deep learning engineer, and applied AI interviews requiring architecture and training depth.
 
 Core topics:
 * [Deep Learning Overview](./deep_learning/README.md)
-* [Applied Deep Learning Roadmap](./deep_learning/intro_applied_deep_learning.md) **(New)**
-* [Sequence Models (RNN, LSTM, GRU, Seq2Seq, Attention)](./deep_learning/intro_sequence_models.md) **(New)**
+* [Applied Deep Learning Roadmap](./deep_learning/intro_applied_deep_learning.md)
+* [Sequence Models (RNN, LSTM, GRU, Seq2Seq, Attention)](./deep_learning/intro_sequence_models.md)
 * [Transformers](./deep_learning/intro_transformers.md)
-* [Neural Network Training (optimizers, normalization, regularization, debugging)](./deep_learning/intro_neural_network_training.md) **(New)**
-* [Generative Models (VAEs, GANs, Diffusion, Latent Diffusion)](./deep_learning/intro_generative_models.md) **(New)**
-* [Graph Neural Networks (message passing, GCN, GraphSAGE, GAT)](./deep_learning/intro_graph_neural_networks.md) **(New)**
-* [Model Compression (distillation, pruning, quantization)](./deep_learning/intro_model_compression.md) **(New)**
-* [Distributed Training (DDP, FSDP/ZeRO, tensor & pipeline parallelism, mixed precision)](./deep_learning/intro_distributed_training.md) **(New)**
-* [Reinforcement Learning (MDPs, Q-learning, bandits, PPO, offline RL, RLHF)](./deep_learning/intro_reinforcement_learning.md) **(New)**
-* [Speech & Audio ML (log-mel, CTC, RNN-T, Whisper, TTS, voice agents)](./deep_learning/intro_speech_audio.md) **(New)**
-* [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
-* [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md) **(New)**
+* [Neural Network Training (optimizers, normalization, regularization, debugging)](./deep_learning/intro_neural_network_training.md)
+* [Generative Models (VAEs, GANs, Diffusion, Latent Diffusion)](./deep_learning/intro_generative_models.md)
+* [Graph Neural Networks (message passing, GCN, GraphSAGE, GAT)](./deep_learning/intro_graph_neural_networks.md)
+* [Model Compression (distillation, pruning, quantization)](./deep_learning/intro_model_compression.md)
+* [Distributed Training (DDP, FSDP/ZeRO, tensor & pipeline parallelism, mixed precision)](./deep_learning/intro_distributed_training.md)
+* [Reinforcement Learning (MDPs, Q-learning, bandits, PPO, offline RL, RLHF)](./deep_learning/intro_reinforcement_learning.md)
+* [Speech & Audio ML (log-mel, CTC, RNN-T, Whisper, TTS, voice agents)](./deep_learning/intro_speech_audio.md)
+* [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md)
+* [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md)
 
 ## DevOps Track
 Use this track for infrastructure, CI/CD, containers, orchestration, IaC, and AI system testing interviews.
@@ -201,19 +201,19 @@ Core topics:
 * [Helm](./devops/intro_helm.md)
 * [Terraform](./devops/intro_terraform.md)
 * [GitHub Actions](./devops/intro_github_actions.md)
-* [Observability (metrics, logs, traces, SLOs, Prometheus, OpenTelemetry)](./devops/intro_observability.md) **(New)**
-* [Testing AI Systems (Playwright, Puppeteer, LLM E2E Testing)](./devops/intro_testing_ai.md) **(New)**
+* [Observability (metrics, logs, traces, SLOs, Prometheus, OpenTelemetry)](./devops/intro_observability.md)
+* [Testing AI Systems (Playwright, Puppeteer, LLM E2E Testing)](./devops/intro_testing_ai.md)
 
 ## Classic ML Track
 Use this track for classical ML algorithm interviews, data science roles, and as foundations for ML engineer roles.
 
 Core topics:
-* [Math for ML (linear algebra, calculus, optimization, numerical stability)](./classical_ml/intro_math_for_ml.md) **(New)**
-* [Model Evaluation & Metrics (ROC vs PR, calibration, thresholds, CV)](./classical_ml/intro_model_evaluation.md) **(New)**
-* [Ensemble Methods & Gradient Boosting (RF, XGBoost, LightGBM, CatBoost)](./classical_ml/intro_ensemble_methods.md) **(New)**
-* [Causal Inference & Uplift Modeling (DiD, IV, RDD, CATE, Qini)](./classical_ml/intro_causal_inference.md) **(New)**
-* [Anomaly Detection (Isolation Forest, LOF, autoencoders, time series)](./classical_ml/intro_anomaly_detection.md) **(New)**
-* [NLP Fundamentals (tokenization, TF-IDF, embeddings, NER)](./classical_ml/intro_nlp_fundamentals.md) **(New)**
+* [Math for ML (linear algebra, calculus, optimization, numerical stability)](./classical_ml/intro_math_for_ml.md)
+* [Model Evaluation & Metrics (ROC vs PR, calibration, thresholds, CV)](./classical_ml/intro_model_evaluation.md)
+* [Ensemble Methods & Gradient Boosting (RF, XGBoost, LightGBM, CatBoost)](./classical_ml/intro_ensemble_methods.md)
+* [Causal Inference & Uplift Modeling (DiD, IV, RDD, CATE, Qini)](./classical_ml/intro_causal_inference.md)
+* [Anomaly Detection (Isolation Forest, LOF, autoencoders, time series)](./classical_ml/intro_anomaly_detection.md)
+* [NLP Fundamentals (tokenization, TF-IDF, embeddings, NER)](./classical_ml/intro_nlp_fundamentals.md)
 * [Statistics & Probability](./classical_ml/intro_statistics_probability.md)
 * [Time Series & Forecasting](./classical_ml/intro_time_series.md)
 * [Clustering Algorithms](./classical_ml/intro_clustering.md)
@@ -225,77 +225,77 @@ Core topics:
 Use this track for MLOps Engineer, Senior ML Engineer, and production ML system interviews.
 
 Core topics:
-* [LLMOps / MLOps Engineering](./mlops/intro_llmops_mlops_engineering.md) **(New)**
-* [CI/CD for Machine Learning (registry, gates, canary, rollback)](./mlops/intro_cicd_for_ml.md) **(New)**
+* [LLMOps / MLOps Engineering](./mlops/intro_llmops_mlops_engineering.md)
+* [CI/CD for Machine Learning (registry, gates, canary, rollback)](./mlops/intro_cicd_for_ml.md)
 * [MLflow](./mlops/intro_mlflow.md)
 * [Model Explainability (SHAP, LIME)](./mlops/intro_model_explainability.md)
 * [Feature Stores](./mlops/intro_feature_stores.md)
 * [Model Serving](./mlops/intro_model_serving.md)
 * [Data Quality & Validation](./mlops/intro_data_quality.md)
-* [LLM Evaluation (Evals, Benchmarks, Hallucination Detection, HITL)](./mlops/intro_llm_evaluation.md) **(New)**
-* [Evaluation & Guardrails](./mlops/intro_evaluation_guardrails.md) **(New)**
-* [A/B Testing for ML (Experiment Design, Stats, Online Metrics)](./mlops/intro_ab_testing.md) **(New)**
-* [Data Labeling, Active Learning & Weak Supervision](./mlops/intro_data_labeling_active_learning.md) **(New)**
-* [Responsible AI: Fairness, Bias, Privacy & Governance](./mlops/intro_responsible_ai_fairness.md) **(New)**
+* [LLM Evaluation (Evals, Benchmarks, Hallucination Detection, HITL)](./mlops/intro_llm_evaluation.md)
+* [Evaluation & Guardrails](./mlops/intro_evaluation_guardrails.md)
+* [A/B Testing for ML (Experiment Design, Stats, Online Metrics)](./mlops/intro_ab_testing.md)
+* [Data Labeling, Active Learning & Weak Supervision](./mlops/intro_data_labeling_active_learning.md)
+* [Responsible AI: Fairness, Bias, Privacy & Governance](./mlops/intro_responsible_ai_fairness.md)
 
 ## Cloud ML Platforms
 Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.
 
 Core topics:
-* [Cloud ML Platforms Overview](./cloud_ml/README.md) **(New)**
+* [Cloud ML Platforms Overview](./cloud_ml/README.md)
 * [Cloud ML Platforms Comparison (SageMaker vs Vertex AI vs Azure ML)](./cloud_ml/intro_cloud_ml_platforms.md)
-* [AWS SageMaker Interview Guide](./cloud_ml/intro_sagemaker.md) **(New)**
-* [Google Vertex AI Interview Guide](./cloud_ml/intro_vertex_ai.md) **(New)**
-* [Azure Machine Learning Interview Guide](./cloud_ml/intro_azure_ml.md) **(New)**
+* [AWS SageMaker Interview Guide](./cloud_ml/intro_sagemaker.md)
+* [Google Vertex AI Interview Guide](./cloud_ml/intro_vertex_ai.md)
+* [Azure Machine Learning Interview Guide](./cloud_ml/intro_azure_ml.md)
 
 ## System Design Track
 Use this track for senior ML engineer, staff engineer, and principal engineer interviews requiring system design depth.
 
 Core topics:
 * [ML System Design Framework & Patterns](./system_design/README.md)
-* [Backend & System Design for AI](./system_design/intro_backend_ai_system_design.md) **(New)**
+* [Backend & System Design for AI](./system_design/intro_backend_ai_system_design.md)
 * [Recommendation System Design](./system_design/recommendation_system.md)
-* [Search & Ranking System Design](./system_design/search_ranking_system.md) **(New)**
-* [Designing a Production LLM Assistant](./system_design/llm_assistant_system.md) **(New)**
+* [Search & Ranking System Design](./system_design/search_ranking_system.md)
+* [Designing a Production LLM Assistant](./system_design/llm_assistant_system.md)
 * [Fraud Detection System Design](./system_design/fraud_detection.md)
-* [Ads Click-Through-Rate Prediction System Design (auctions, calibration, delayed feedback)](./system_design/ads_ctr_prediction.md) **(New)**
-* [Content Moderation System Design (multimodal, human review, prevalence)](./system_design/content_moderation_system.md) **(New)**
-* [ETA Prediction System Design (routing baseline, residual models, quantile losses)](./system_design/eta_prediction.md) **(New)**
-* [News Feed Ranking System Design (value model, multi-task ranking, fan-out)](./system_design/news_feed_ranking.md) **(New)**
-* [Visual Search System Design (metric learning, ANN indexes, re-ranking)](./system_design/visual_search_system.md) **(New)**
-* [ML System Design Patterns: RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
+* [Ads Click-Through-Rate Prediction System Design (auctions, calibration, delayed feedback)](./system_design/ads_ctr_prediction.md)
+* [Content Moderation System Design (multimodal, human review, prevalence)](./system_design/content_moderation_system.md)
+* [ETA Prediction System Design (routing baseline, residual models, quantile losses)](./system_design/eta_prediction.md)
+* [News Feed Ranking System Design (value model, multi-task ranking, fan-out)](./system_design/news_feed_ranking.md)
+* [Visual Search System Design (metric learning, ANN indexes, re-ranking)](./system_design/visual_search_system.md)
+* [ML System Design Patterns: RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md)
 
 ## Coding Challenges Track
 Use this track for interview rounds that require live coding, take-home problem solving, or SQL assessments.
 
 Core topics:
-* [Coding Challenges Overview](./coding_challenges/README.md) **(New)**
-* [Python Coding Challenges](./coding_challenges/python_coding_challenges.md) **(New)**
-* [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md) **(New)**
-* [ML Coding Challenges: Implement From Scratch](./coding_challenges/ml_coding_challenges.md) **(New)**
-* [Pandas & NumPy Challenges](./coding_challenges/pandas_numpy_challenges.md) **(New)**
+* [Coding Challenges Overview](./coding_challenges/README.md)
+* [Python Coding Challenges](./coding_challenges/python_coding_challenges.md)
+* [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md)
+* [ML Coding Challenges: Implement From Scratch](./coding_challenges/ml_coding_challenges.md)
+* [Pandas & NumPy Challenges](./coding_challenges/pandas_numpy_challenges.md)
 
 ## Frameworks Track
 Use this track for roles requiring hands-on Python API development and AI framework expertise.
 
 Core topics:
-* [Python for AI Engineering (async, type hints, Pydantic, APIs, logging)](./frameworks/intro_python_for_ai.md) **(New)**
+* [Python for AI Engineering (async, type hints, Pydantic, APIs, logging)](./frameworks/intro_python_for_ai.md)
 * [PyTorch](./frameworks/intro_pytorch.md)
 * [HuggingFace](./frameworks/intro_huggingface.md)
 * [LangChain](./frameworks/intro_langchain.md)
 * [Ollama](./frameworks/intro_ollama.md)
 * [vLLM](./frameworks/intro_vllm.md)
 * [Unsloth](./frameworks/intro_unsloth.md)
-* [FastAPI: Production AI Backend Engineering](./frameworks/intro_fastapi.md) **(New)**
-* [Pydantic: Data Validation for AI Systems](./frameworks/intro_pydantic.md) **(New)**
+* [FastAPI: Production AI Backend Engineering](./frameworks/intro_fastapi.md)
+* [Pydantic: Data Validation for AI Systems](./frameworks/intro_pydantic.md)
 
 ## Project Setup & Engineering Track
 Use this track to learn the engineering hygiene every ML/AI Engineer is expected to have: shipping projects on GitHub and structuring real repositories.
 
 Core topics:
-* [Project Setup & Engineering Overview](./project_setup/README.md) **(New)**
-* [How to Set Up a Project on GitHub (Git, Branching, PRs, CI, Pages, Secrets)](./project_setup/intro_github_project_setup.md) **(New)**
-* [ML/AI Project Folder Structures (ML, DL, LLM, Agents, Data Eng)](./project_setup/intro_project_structure.md) **(New)**
+* [Project Setup & Engineering Overview](./project_setup/README.md)
+* [How to Set Up a Project on GitHub (Git, Branching, PRs, CI, Pages, Secrets)](./project_setup/intro_github_project_setup.md)
+* [ML/AI Project Folder Structures (ML, DL, LLM, Agents, Data Eng)](./project_setup/intro_project_structure.md)
 
 # Classic Question Bank
 

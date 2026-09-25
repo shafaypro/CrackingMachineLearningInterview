@@ -21,3 +21,5 @@ jobs:
         run: python3 tools/check_links.py
       - name: Check data/questions.json is up to date with the guides
         run: python3 tools/build_question_bank.py --check
+      - name: Check writing style (no em or en dashes)
+        run: python3 tools/check_style.py
