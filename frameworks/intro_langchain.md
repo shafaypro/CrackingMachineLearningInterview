@@ -20,7 +20,7 @@
 LCEL is a declarative way to compose LangChain components using the pipe (`|`) operator. It provides streaming, async, batching, and retries out of the box.
 
 ```bash
-pip install langchain langchain-openai langchain-community
+pip install langchain langchain-openai langchain-chroma
 ```
 
 ### Basic LCEL Chain
@@ -58,7 +58,7 @@ results = chain.batch([
 
 ```python
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma  # langchain_community.vectorstores.Chroma is deprecated
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableParallel
@@ -159,10 +159,12 @@ pip install langsmith
 ```python
 import os
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "your_langsmith_api_key"
-os.environ["LANGCHAIN_PROJECT"] = "my-project-name"
+# Current LANGSMITH_* names; the older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY
+# names are still read for backward compatibility
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_ENDPOINT"] = "https://api.smith.langchain.com"
+os.environ["LANGSMITH_API_KEY"] = "your_langsmith_api_key"
+os.environ["LANGSMITH_PROJECT"] = "my-project-name"
 
 # Now all LangChain calls are automatically traced
 from langchain_openai import ChatOpenAI
@@ -263,8 +265,11 @@ result = app.invoke({
 ### ReAct Agent with Tools
 
 ```python
-from langgraph.prebuilt import create_react_agent
+# LangChain 1.0 deprecates langgraph.prebuilt.create_react_agent in favor of
+# langchain.agents.create_agent (which runs on LangGraph under the hood).
+from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 
 @tool
@@ -284,7 +289,7 @@ def calculate(expression: str) -> str:
 model = ChatOpenAI(model="gpt-4o-mini")
 tools = [search_web, calculate]
 
-agent = create_react_agent(model, tools)
+agent = create_agent(model, tools=tools)
 
 result = agent.invoke({
     "messages": [HumanMessage(content="What is 25 * 37 + 100?")]
@@ -318,7 +323,7 @@ Best for: summarization, translation, extraction, classification: tasks with a k
 
 ```python
 # Agent: LLM decides which tools to call and in what order
-agent = create_react_agent(model, [search, calculator, database_lookup])
+agent = create_agent(model, tools=[search, calculator, database_lookup])
 result = agent.invoke({"messages": [HumanMessage("Research X and compute Y")]})
 ```
 
