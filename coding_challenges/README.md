@@ -140,7 +140,7 @@ If not, start with the two practice guides in this track and follow the linked c
 
 Every guide in `coding_challenges/`. Start with the overview above, then work through these.
 
-- [ML Coding Challenges — Implement From Scratch](./ml_coding_challenges.md)
+- [ML Coding Challenges: Implement From Scratch](./ml_coding_challenges.md)
 - [Pandas and NumPy Challenges](./pandas_numpy_challenges.md)
 - [Python Coding Challenges for Interviews](./python_coding_challenges.md)
 - [SQL Coding Challenges for Interviews](./sql_coding_challenges.md)

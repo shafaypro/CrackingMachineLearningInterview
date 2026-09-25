@@ -1,6 +1,6 @@
-# ML Debugging Scenarios: "Your Model Is Broken — What Do You Do?"
+# ML Debugging Scenarios: "Your Model Is Broken, What Do You Do?"
 
-Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom — a suspicious metric, a production regression, a latency spike — and watches how you work through it. There is rarely one correct answer. What gets graded is whether your process finds the cause quickly and cheaply, and whether you protect users while you look.
+Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a latency spike), and watches how you work through it. There is rarely one correct answer. What gets graded is whether your process finds the cause quickly and cheaply, and whether you protect users while you look.
 
 This guide covers a repeatable answer structure and 25 scenarios drawn from real loops, grouped by where the failure shows up.
 
@@ -51,7 +51,7 @@ Aim to talk for 5–8 minutes per scenario, then let the interviewer steer. They
 2. Split leakage: random split on temporal data, or the same user/patient/session in both train and validation.
 3. Duplicate rows across splits.
 4. Preprocessing (scaler, target encoder, imputer) fit on the full dataset before splitting.
-5. The problem is genuinely easy — possible, but last on the list until proven.
+5. The problem is easy: possible, but last on the list until proven.
 
 **How to investigate**
 - Look at feature importances. One feature carrying most of the importance is the classic leakage signature.
@@ -240,7 +240,7 @@ for f in feature_names:
 - Check the model hash loaded by the service against the registry.
 - Score the same request twice in the service. Different outputs mean nondeterminism (`model.eval()` missing).
 
-**Fix:** Correct the divergent stage. Feature ordering by position rather than name is a common culprit — pass features by name.
+**Fix:** Correct the divergent stage. Feature ordering by position rather than name is a common culprit: pass features by name.
 
 **Prevent it next time:** Add a golden-request test to CI: a set of fixed inputs with expected outputs that both paths must reproduce within tolerance before deploy.
 
@@ -353,7 +353,7 @@ def psi(expected, actual, bins=10):
 - Train on old data only, new data only, and both. Evaluate each on the fixed set.
 - Compare label rates and feature distributions between old and new data, and sample 50 new labels to check by hand.
 
-**Fix:** Filter or reweight the bad slice, fix the label mapping, or train separate handling for the new population if it genuinely differs.
+**Fix:** Filter or reweight the bad slice, fix the label mapping, or train separate handling for the new population if it differs.
 
 **Prevent it next time:** Keep a frozen, versioned evaluation set that is only changed deliberately. Version training data (DVC, Delta, Iceberg snapshots) so you can reproduce and diff any past training run.
 
@@ -516,7 +516,7 @@ def recall_at_k(golden, retrieve, k=5):
 
 **What the interviewer is listening for:** Understanding that logged data is biased by the policy that generated it, and naming position bias and counterfactual evaluation.
 
-### 21. "Recommendations became homogeneous — everyone sees the same popular items"
+### 21. "Recommendations became homogeneous: everyone sees the same popular items"
 
 **Likely causes**
 1. Feedback loop: the model recommends popular items, they get more clicks, the next model learns they're even more popular.

@@ -1,4 +1,4 @@
-# dbt Interview Q&A — Mid-level · Senior · Lead
+# dbt Interview Q&A: Mid-level · Senior · Lead
 
 > Complete questions and answers for Mid-Senior and Lead-level dbt interviews.
 > Covers design, Jinja/macros, performance, testing, CI/CD, and scenario questions.
@@ -7,14 +7,14 @@
 
 ## Table of Contents
 
-- [Mid-level / Engineer — Design & Modelling](#mid-level--engineer--design--modelling)
-- [Mid–Senior — Jinja, Macros & Packages](#midsenior--jinja-macros--packages)
-- [Senior / Lead — Performance, Testing & CI/CD](#senior--lead--performance-testing--cicd)
+- [Mid-level / Engineer: Design & Modelling](#mid-level--engineer-design--modelling)
+- [Mid–Senior: Jinja, Macros & Packages](#midsenior-jinja-macros--packages)
+- [Senior / Lead: Performance, Testing & CI/CD](#senior--lead-performance-testing--cicd)
 - [Scenario / Situational Questions](#scenario--situational-questions)
 
 ---
 
-## Mid-level / Engineer — Design & Modelling
+## Mid-level / Engineer: Design & Modelling
 
 ---
 
@@ -48,8 +48,8 @@ from {{ source('raw', 'events') }}
 
 | Strategy | What it does | Best for |
 |---|---|---|
-| `append` | Insert new rows only — no deduplication | Immutable event logs where duplicates are impossible |
-| `merge` | Upsert: update existing rows, insert new ones using `unique_key` | Most use cases — orders, users, any mutable entity |
+| `append` | Insert new rows only: no deduplication | Immutable event logs where duplicates are impossible |
+| `merge` | Upsert: update existing rows, insert new ones using `unique_key` | Most use cases: orders, users, any mutable entity |
 | `delete+insert` | Delete all rows matching `unique_key`, re-insert them | Warehouses that don't support `MERGE` natively |
 | `insert_overwrite` | Replace entire partitions | BigQuery/Spark partitioned tables |
 
@@ -66,13 +66,13 @@ dbt run -s my_model --full-refresh
 
 ---
 
-### Q2. Append vs merge vs delete+insert — what are the trade-offs?
+### Q2. Append vs merge vs delete+insert: what are the trade-offs?
 
 **Answer:**
 
 **`append`**
-- Fastest — just inserts new rows, no lookups
-- No deduplication — if the source resends a row, you get a duplicate
+- Fastest: just inserts new rows, no lookups
+- No deduplication: if the source resends a row, you get a duplicate
 - Only safe when data is truly immutable (e.g., raw click events that never change)
 
 **`merge`**
@@ -103,7 +103,7 @@ dbt run -s my_model --full-refresh
 
 **Answer:**
 
-Late-arriving data is the most common production problem with incremental models. It happens when events are recorded in the source *after* they actually occurred — e.g., a mobile event buffered offline, a Kafka consumer catching up, or a source DB replication lag.
+Late-arriving data is the most common production problem with incremental models. It happens when events are recorded in the source *after* they actually occurred: e.g., a mobile event buffered offline, a Kafka consumer catching up, or a source DB replication lag.
 
 **The problem:**
 ```sql
@@ -111,9 +111,9 @@ Late-arriving data is the most common production problem with incremental models
 where occurred_at > (select max(occurred_at) from {{ this }})
 ```
 
-If an event from yesterday arrives today, `occurred_at` is yesterday — the filter excludes it — and it never gets loaded.
+If an event from yesterday arrives today, `occurred_at` is yesterday (the filter excludes it), and it never gets loaded.
 
-**The fix — lookback window:**
+**The fix: lookback window:**
 ```sql
 {% if is_incremental() %}
     where occurred_at > (
@@ -126,7 +126,7 @@ If an event from yesterday arrives today, `occurred_at` is yesterday — the fil
 This reprocesses the last 3 days on every run, catching anything that arrived late. The `merge` strategy with `unique_key` ensures rows are upserted rather than duplicated.
 
 **How to choose the window size:**
-- Look at your source system's SLA — how late can data arrive?
+- Look at your source system's SLA: how late can data arrive?
 - Check your historical data for the maximum observed lag
 - Balance reprocessing cost vs. risk of missing rows
 
@@ -138,7 +138,7 @@ This reprocesses the last 3 days on every run, catching anything that arrived la
 
 **Answer:**
 
-A snapshot captures the state of a row at a point in time and tracks how it changes. This is the standard implementation of **Slowly Changing Dimension Type 2 (SCD2)** — instead of overwriting a row when it changes, you keep all historical versions with validity timestamps.
+A snapshot captures the state of a row at a point in time and tracks how it changes. This is the standard implementation of **Slowly Changing Dimension Type 2 (SCD2)**: instead of overwriting a row when it changes, you keep all historical versions with validity timestamps.
 
 dbt adds four columns automatically:
 
@@ -164,7 +164,7 @@ select * from {{ source('raw', 'orders') }}
 {% endsnapshot %}
 ```
 
-**Check strategy** (use when there's no `updated_at` — dbt hashes the columns you specify):
+**Check strategy** (use when there's no `updated_at`: dbt hashes the columns you specify):
 ```sql
 {% snapshot customers_snapshot %}
 {{
@@ -224,11 +224,11 @@ models/
 
 **Key conventions at scale:**
 - **Naming:** `stg_[source]__[table]`, `int_[entity]_[verb]`, `fct_[event]`, `dim_[entity]`
-- **One owner per folder** — declare in `schema.yml` using `owner.team`
-- **Tags per domain** — `+tags: ['finance']` lets CI run only the affected domain
-- **No raw source references in marts** — marts must go through staging
-- **Required tests on every primary key** — enforce with `dbt_project_evaluator` package
-- **Descriptions mandatory** — fail CI if models/columns have no description
+- **One owner per folder**: declare in `schema.yml` using `owner.team`
+- **Tags per domain**: `+tags: ['finance']` lets CI run only the affected domain
+- **No raw source references in marts**: marts must go through staging
+- **Required tests on every primary key**: enforce with `dbt_project_evaluator` package
+- **Descriptions mandatory**: fail CI if models/columns have no description
 
 **dbt_project.yml defaults:**
 ```yaml
@@ -265,9 +265,9 @@ But dbt doesn't just use `'finance'` directly. It calls the `generate_schema_nam
 - In dev: `dbt_yourname_finance`
 - In prod: `prod_finance`
 
-This is intentional — it prevents dev models from colliding with prod schemas.
+This is intentional: it prevents dev models from colliding with prod schemas.
 
-**Overriding the macro** (common in real projects — you usually want clean schema names in prod):
+**Overriding the macro** (common in real projects: you usually want clean schema names in prod):
 
 ```sql
 -- macros/generate_schema_name.sql
@@ -310,7 +310,7 @@ Result:
 
 ---
 
-### Q8. Explain node selectors — `+`, `@`, `tag:`, `state:`.
+### Q8. Explain node selectors: `+`, `@`, `tag:`, `state:`.
 
 **Answer:**
 
@@ -330,19 +330,19 @@ dbt run -s +orders+                # orders + upstream + downstream
 dbt run -s 1+orders                # orders + 1 level upstream only
 dbt run -s orders+1                # orders + 1 level downstream only
 
-# @ operator — upstream + all downstream of upstream
+# @ operator: upstream + all downstream of upstream
 dbt run -s @orders                 # useful for testing: build everything orders touches
 
-# state selector — only changed models (requires saved manifest)
+# state selector: only changed models (requires saved manifest)
 dbt run -s state:modified          # models whose SQL changed vs saved manifest
 dbt run -s state:modified+         # changed models + their downstream
 ```
 
-The `state:modified+` selector is the foundation of **slim CI** — you only build and test models affected by a PR, not the entire project.
+The `state:modified+` selector is the foundation of **slim CI**: you only build and test models affected by a PR, not the entire project.
 
 ---
 
-## Mid–Senior — Jinja, Macros & Packages
+## Mid–Senior: Jinja, Macros & Packages
 
 ---
 
@@ -350,17 +350,17 @@ The `state:modified+` selector is the foundation of **slim CI** — you only bui
 
 **Answer:**
 
-Jinja is a Python templating language. dbt uses it to make SQL dynamic — you can write conditionals, loops, variables, and reusable functions (macros) inside `.sql` files.
+Jinja is a Python templating language. dbt uses it to make SQL dynamic: you can write conditionals, loops, variables, and reusable functions (macros) inside `.sql` files.
 
-When you run any dbt command, Jinja is compiled first. The warehouse only ever receives plain SQL — it never sees `{{ }}` or `{% %}`.
+When you run any dbt command, Jinja is compiled first. The warehouse only ever receives plain SQL: it never sees `{{ }}` or `{% %}`.
 
 **Three Jinja delimiters:**
 
 | Syntax | Purpose | Example |
 |---|---|---|
-| `{{ }}` | Expression — outputs a value | `{{ ref('orders') }}`, `{{ var('date') }}` |
-| `{% %}` | Statement — control flow | `{% if %}`, `{% for %}`, `{% set %}` |
-| `{# #}` | Comment — stripped before SQL | `{# TODO: remove this #}` |
+| `{{ }}` | Expression: outputs a value | `{{ ref('orders') }}`, `{{ var('date') }}` |
+| `{% %}` | Statement: control flow | `{% if %}`, `{% for %}`, `{% set %}` |
+| `{# #}` | Comment: stripped before SQL | `{# TODO: remove this #}` |
 
 **Why SQL alone isn't enough:**
 - You can't parameterise environment (`dev` vs `prod`) in plain SQL
@@ -378,7 +378,7 @@ Jinja solves all of these.
 
 A macro is a Jinja function stored in `macros/*.sql`. It can return a **string** (which gets rendered into SQL), a **list**, a **dict**, or any Python-compatible value via `return()`.
 
-**Example — a safe division macro:**
+**Example: a safe division macro:**
 
 ```sql
 -- macros/safe_divide.sql
@@ -425,8 +425,8 @@ from prod.orders
 ```
 
 **What macros can return:**
-- A rendered SQL string (default — just write the SQL in the macro body)
-- An explicit value via `{{ return(value) }}` — list, dict, string, number
+- A rendered SQL string (default: just write the SQL in the macro body)
+- An explicit value via `{{ return(value) }}`: list, dict, string, number
 
 ---
 
@@ -457,8 +457,8 @@ from prod.orders
 **Why `{% if execute %}` is mandatory:**
 
 dbt processes your Jinja in two phases:
-1. **Parse phase** (`dbt parse`, `dbt ls`, dependency resolution) — Jinja is evaluated but `execute = False`. No SQL runs.
-2. **Execute phase** (`dbt run`, `dbt build`) — `execute = True`. SQL actually runs.
+1. **Parse phase** (`dbt parse`, `dbt ls`, dependency resolution): Jinja is evaluated but `execute = False`. No SQL runs.
+2. **Execute phase** (`dbt run`, `dbt build`): `execute = True`. SQL actually runs.
 
 During the parse phase, `run_query` returns `None`. If you call `.columns[0].values()` on `None`, you get a crash. The `{% if execute %}` guard returns an empty list during parse and the real result during execution.
 
@@ -483,7 +483,7 @@ packages:
 
 **Five essential macros:**
 
-**1. `generate_surrogate_key` — stable primary key from multiple columns:**
+**1. `generate_surrogate_key`: stable primary key from multiple columns:**
 ```sql
 select
     {{ dbt_utils.generate_surrogate_key(['order_id', 'line_item_id']) }} as sk,
@@ -492,7 +492,7 @@ select
 from {{ ref('stg_order_items') }}
 ```
 
-**2. `pivot` — turn row values into columns:**
+**2. `pivot`: turn row values into columns:**
 ```sql
 select
     order_id,
@@ -501,14 +501,14 @@ from {{ ref('payments') }}
 group by 1
 ```
 
-**3. `union_relations` — union multiple tables with schema reconciliation:**
+**3. `union_relations`: union multiple tables with schema reconciliation:**
 ```sql
 {{ dbt_utils.union_relations(
     relations=[ref('orders_2022'), ref('orders_2023'), ref('orders_2024')]
 ) }}
 ```
 
-**4. `date_spine` — generate one row per date (great for gap-filling):**
+**4. `date_spine`: generate one row per date (great for gap-filling):**
 ```sql
 {{ dbt_utils.date_spine(
     datepart   = 'day',
@@ -517,7 +517,7 @@ group by 1
 ) }}
 ```
 
-**5. `get_column_values` — get distinct values from a column at compile time:**
+**5. `get_column_values`: get distinct values from a column at compile time:**
 ```sql
 {% set statuses = dbt_utils.get_column_values(ref('stg_orders'), 'status') %}
 {% for status in statuses %}
@@ -580,8 +580,8 @@ models:
 `execute` is a global Jinja variable that is `True` only during the **execution phase** of a dbt command (i.e., when SQL is actually being sent to the warehouse).
 
 It is `False` during:
-- `dbt parse` — dbt reads all models to build the DAG
-- `dbt ls` — dbt lists models without running them
+- `dbt parse`: dbt reads all models to build the DAG
+- `dbt ls`: dbt lists models without running them
 - The **dependency resolution phase** at the start of `dbt run` / `dbt build`
 - Any macro call that happens during graph compilation
 
@@ -598,7 +598,7 @@ Any macro that calls `run_query`, reads from the warehouse, or manipulates query
         '{{ row[0] }}'{% if not loop.last %},{% endif %}
     {% endfor %}
 {% else %}
-    {# results is None here — don't touch it #}
+    {# results is None here: don't touch it #}
     'placeholder'
 {% endif %}
 ```
@@ -607,7 +607,7 @@ Without the guard, `dbt parse` and `dbt ls` will crash with a `NoneType` error, 
 
 ---
 
-## Senior / Lead — Performance, Testing & CI/CD
+## Senior / Lead: Performance, Testing & CI/CD
 
 ---
 
@@ -617,16 +617,16 @@ Without the guard, `dbt parse` and `dbt ls` will crash with a `NoneType` error, 
 
 Diagnose before optimising. The answer depends entirely on *why* it's slow.
 
-**Step 1 — Identify where the time is spent:**
+**Step 1: Identify where the time is spent:**
 ```bash
 dbt run -s slow_model --debug    # see exact SQL and timing
 ```
 Check your warehouse's query history/profiler (Snowflake Query Profile, BigQuery Execution Details, Redshift SVL_QUERY_REPORT).
 
-**Step 2 — Common causes and fixes:**
+**Step 2: Common causes and fixes:**
 
 **Materialization wrong:**
-The model is a `view` and BI tools query it directly — every query re-runs all the SQL.
+The model is a `view` and BI tools query it directly: every query re-runs all the SQL.
 ```sql
 {{ config(materialized='table') }}  -- or incremental for large tables
 ```
@@ -646,17 +646,17 @@ No partition pruning, no cluster key. The warehouse reads every row.
 The lookback window is too wide, or `unique_key` forces an expensive merge across billions of rows.
 Fix: tighten the filter, reduce lookback window, consider `insert_overwrite` on partitions.
 
-**View chain — views stacked on views:**
+**View chain: views stacked on views:**
 Each downstream query re-executes the entire chain from the raw table.
 Fix: materialize the base of the chain as a table.
 
-**Inefficient SQL — `select *`, non-sargable filters, cartesian joins:**
+**Inefficient SQL: `select *`, non-sargable filters, cartesian joins:**
 Review the compiled SQL (`target/compiled/`). Look for:
 - `select *` pulling 200 columns when you need 5
 - `where cast(id as varchar) = '123'` (prevents index use)
 - Implicit cross joins from missing join conditions
 
-**Step 3 — Measure the improvement:**
+**Step 3: Measure the improvement:**
 Run before/after, record bytes scanned and execution time. A good optimisation reduces bytes scanned by 10x+, not just seconds.
 
 ---
@@ -694,9 +694,9 @@ jobs:
 ```
 
 **The problem with `dbt build` in CI:**
-On a large project with 500+ models, `dbt build` rebuilds everything on every PR — wasteful and slow (can take hours).
+On a large project with 500+ models, `dbt build` rebuilds everything on every PR: wasteful and slow (can take hours).
 
-**Slim CI — only build what changed:**
+**Slim CI: only build what changed:**
 
 Slim CI uses the `state:modified+` selector with a saved production manifest to build only the models changed in the PR and their downstream dependents.
 
@@ -706,7 +706,7 @@ Slim CI uses the `state:modified+` selector with a saved production manifest to 
     # fetch the latest production manifest.json
     aws s3 cp s3://my-dbt-artifacts/manifest.json ./prod-manifest/manifest.json
 
-- name: dbt build — changed models only
+- name: dbt build: changed models only
   run: |
     dbt build \
       --select state:modified+ \
@@ -715,9 +715,9 @@ Slim CI uses the `state:modified+` selector with a saved production manifest to 
 ```
 
 **Key flags:**
-- `--select state:modified+` — only models whose SQL/config changed vs the prod manifest, plus their downstream
-- `--defer` — for models that haven't changed, use the prod version instead of rebuilding from scratch
-- `--state ./prod-manifest` — path to the saved `manifest.json` from the last prod run
+- `--select state:modified+`: only models whose SQL/config changed vs the prod manifest, plus their downstream
+- `--defer`: for models that haven't changed, use the prod version instead of rebuilding from scratch
+- `--state ./prod-manifest`: path to the saved `manifest.json` from the last prod run
 
 **Result:** A PR that changes 3 models only builds those 3 models + their children, not all 500. CI drops from 60 minutes to 5.
 
@@ -727,7 +727,7 @@ Slim CI uses the `state:modified+` selector with a saved production manifest to 
 
 **Answer:**
 
-By default, a failing dbt test exits with a non-zero code — it fails the CI run and blocks downstream models in `dbt build`. Severity lets you make some failures **warnings** (logged but non-blocking) rather than hard errors.
+By default, a failing dbt test exits with a non-zero code: it fails the CI run and blocks downstream models in `dbt build`. Severity lets you make some failures **warnings** (logged but non-blocking) rather than hard errors.
 
 **Setting severity in YAML:**
 ```yaml
@@ -737,7 +737,7 @@ models:
       - name: order_id
         tests:
           - unique:
-              severity: error       # blocks CI — primary key must be unique
+              severity: error       # blocks CI: primary key must be unique
           - not_null:
               severity: error
 
@@ -749,7 +749,7 @@ models:
               severity: warn        # logs a warning but doesn't block the pipeline
 ```
 
-**Thresholds — fail only if more than N rows fail:**
+**Thresholds: fail only if more than N rows fail:**
 ```yaml
 - not_null:
     severity: warn
@@ -758,9 +758,9 @@ models:
 ```
 
 This is valuable for:
-- **New tests on existing models** — you suspect there are existing data quality issues but don't want to block prod immediately. Start with `warn`, investigate, fix data, then promote to `error`.
-- **Non-critical fields** — a missing `phone_number` is worth logging but shouldn't stop the pipeline.
-- **Gradual rollout** — set a threshold (`error_if: ">0"`) that tightens over time.
+- **New tests on existing models**: you suspect there are existing data quality issues but don't want to block prod immediately. Start with `warn`, investigate, fix data, then promote to `error`.
+- **Non-critical fields**: a missing `phone_number` is worth logging but shouldn't stop the pipeline.
+- **Gradual rollout**: set a threshold (`error_if: ">0"`) that tightens over time.
 
 ---
 
@@ -768,7 +768,7 @@ This is valuable for:
 
 **Answer:**
 
-Exposures document what *uses* your dbt models outside of dbt — dashboards, ML models, reverse ETL pipelines, APIs. They appear as nodes in the lineage graph, letting you see the full blast radius of a model change.
+Exposures document what *uses* your dbt models outside of dbt: dashboards, ML models, reverse ETL pipelines, APIs. They appear as nodes in the lineage graph, letting you see the full blast radius of a model change.
 
 ```yaml
 # models/marts/exposures.yml
@@ -808,10 +808,10 @@ Before changing `orders.sql`, run:
 dbt ls -s orders+    # see everything downstream, including exposures
 ```
 
-The output includes `exposure:executive_orders_dashboard` — you immediately know that breaking `orders` will affect the executive dashboard and you need to notify the owner before deploying.
+The output includes `exposure:executive_orders_dashboard`: you immediately know that breaking `orders` will affect the executive dashboard and you need to notify the owner before deploying.
 
 **Types:** `dashboard`, `notebook`, `analysis`, `ml`, `application`
-**Maturity:** `low`, `medium`, `high` — signals how critical the downstream consumer is
+**Maturity:** `low`, `medium`, `high`, signals how critical the downstream consumer is
 
 ---
 
@@ -874,8 +874,8 @@ dbt sl query --metrics total_revenue --group-by ordered_at__month
 ```
 
 **What problem it solves:**
-- One definition of `total_revenue` — no more "which revenue is correct?"
-- BI tools query the semantic layer, not raw SQL — consistent results everywhere
+- One definition of `total_revenue`: no more "which revenue is correct?"
+- BI tools query the semantic layer, not raw SQL: consistent results everywhere
 - Business logic lives in dbt, not scattered across Looker LookML, Tableau calcs, and Jupyter notebooks
 
 ---
@@ -919,10 +919,10 @@ my_project:
 
 | Environment | Schema naming | Purpose |
 |---|---|---|
-| Dev | `dbt_alice`, `dbt_bob` | Each engineer has a personal sandbox — changes don't affect others |
-| CI | `dbt_ci_pr123` | Each PR gets an isolated schema — torn down after the PR closes |
-| Staging | `staging` | Mirror of prod — used for integration tests and stakeholder review |
-| Prod | `prod` (or domain name) | What BI tools read — only merged, tested code runs here |
+| Dev | `dbt_alice`, `dbt_bob` | Each engineer has a personal sandbox: changes don't affect others |
+| CI | `dbt_ci_pr123` | Each PR gets an isolated schema: torn down after the PR closes |
+| Staging | `staging` | Mirror of prod: used for integration tests and stakeholder review |
+| Prod | `prod` (or domain name) | What BI tools read: only merged, tested code runs here |
 
 **Environment-aware SQL using `target`:**
 ```sql
@@ -939,7 +939,7 @@ limit 10000   -- fast dev iterations
 
 **Answer:**
 
-dbt contracts (introduced in dbt 1.5) let you declare the **expected schema** of a model — column names, data types, and constraints — and have dbt enforce them at build time. If the model's output doesn't match the contract, the run fails before the table is swapped in.
+dbt contracts (introduced in dbt 1.5) let you declare the **expected schema** of a model (column names, data types, and constraints), and have dbt enforce them at build time. If the model's output doesn't match the contract, the run fails before the table is swapped in.
 
 ```yaml
 # models/marts/_marts.yml
@@ -974,7 +974,7 @@ models:
 - Constraints like `not_null`, `primary_key`, `foreign_key` are applied at the DB level where supported
 
 **Why they matter at senior/lead level:**
-Contracts are the foundation of **data contracts** between producer and consumer teams. The team owning `orders` promises its schema to the 5 teams consuming it. Any breaking change (dropping a column, changing a type) fails CI before it reaches prod — the producer can't silently break downstream consumers.
+Contracts are the foundation of **data contracts** between producer and consumer teams. The team owning `orders` promises its schema to the 5 teams consuming it. Any breaking change (dropping a column, changing a type) fails CI before it reaches prod: the producer can't silently break downstream consumers.
 
 ---
 
@@ -999,7 +999,7 @@ models:
 
 **Downstream consumers pin to a version:**
 ```sql
--- still using v1 — not broken by the v2 changes
+-- still using v1, not broken by the v2 changes
 select * from {{ ref('orders', v=1) }}
 
 -- opted in to v2
@@ -1010,12 +1010,12 @@ select * from {{ ref('orders') }}    -- always resolves to latest_version
 
 **Safe breaking change workflow:**
 1. Create `v2` with the breaking change (renamed column, dropped column, new type)
-2. Deploy both `v1` and `v2` to prod — consumers still use `v1`
+2. Deploy both `v1` and `v2` to prod: consumers still use `v1`
 3. Communicate the migration window to downstream teams
 4. Consumers migrate their models to `ref('orders', v=2)` one by one
 5. Once no models reference `v1`, deprecate and delete it
 
-**For non-breaking additive changes** (new columns, new rows), no versioning needed — just add the column and document it.
+**For non-breaking additive changes** (new columns, new rows), no versioning needed: just add the column and document it.
 
 ---
 
@@ -1027,7 +1027,7 @@ select * from {{ ref('orders') }}    -- always resolves to latest_version
 
 **Answer:**
 
-**Step 1 — Don't panic, assess scope:**
+**Step 1: Don't panic, assess scope:**
 ```bash
 dbt test -s orders --store-failures
 ```
@@ -1037,7 +1037,7 @@ select * from dbt_test__audit.not_null_orders_order_id limit 100;
 ```
 How many rows? Is this 5 rows or 500,000? That determines urgency.
 
-**Step 2 — Trace the null back to its source:**
+**Step 2: Trace the null back to its source:**
 ```sql
 -- is the null coming from the source, or introduced in transformation?
 select count(*) from raw.orders where id is null;
@@ -1046,15 +1046,15 @@ select count(*) from prod.orders where order_id is null;
 ```
 Walk back through the layers until you find where the null originates.
 
-**Step 3 — Determine the cause:**
+**Step 3: Determine the cause:**
 - **Source sent nulls** → data quality issue upstream. Fix the source or add a `where id is not null` filter in staging
 - **Join introduced nulls** → a `LEFT JOIN` in the mart is producing unmatched rows that become null
 - **Logic error in a CASE/COALESCE** → review the SQL
 
-**Step 4 — Fix and validate:**
+**Step 4: Fix and validate:**
 Fix the SQL, run `dbt build -s +orders` locally, confirm the test passes.
 
-**Step 5 — Prevent recurrence:**
+**Step 5: Prevent recurrence:**
 - If it was a source issue, add a source freshness test and a `not_null` test on the source itself
 - Consider setting `severity: warn` with a threshold on non-critical columns so you're alerted before it becomes a hard failure
 
@@ -1064,17 +1064,17 @@ Fix the SQL, run `dbt build -s +orders` locally, confirm the test passes.
 
 **Answer:**
 
-**Additive change (new column)** — low risk, straightforward:
+**Additive change (new column)**: low risk, straightforward:
 1. Add the column to the model SQL
 2. Add it to `schema.yml` with a description and tests
 3. Run `dbt build -s orders` in dev and confirm tests pass
-4. Open a PR, CI runs `state:modified+` — only `orders` and anything downstream in dbt gets rebuilt
+4. Open a PR, CI runs `state:modified+`: only `orders` and anything downstream in dbt gets rebuilt
 5. Communicate to dashboard owners that a new column is available
 6. Merge and deploy
 
-The dashboards are unaffected — they select specific columns and a new one doesn't break anything.
+The dashboards are unaffected: they select specific columns and a new one doesn't break anything.
 
-**Breaking change (rename/drop column)** — high risk, needs a plan:
+**Breaking change (rename/drop column)**: high risk, needs a plan:
 
 1. **Audit exposure** first:
    ```bash
@@ -1099,32 +1099,32 @@ The dashboards are unaffected — they select specific columns and a new one doe
 
 **Answer:**
 
-A stored procedure is usually a monolith — one giant block doing ten things. The goal is to decompose it into a graph of small, testable, named models.
+A stored procedure is usually a monolith: one giant block doing ten things. The goal is to decompose it into a graph of small, testable, named models.
 
-**Step 1 — Read and map the procedure:**
+**Step 1: Read and map the procedure:**
 Annotate every logical step: "lines 1–50 join customers and orders, lines 51–100 calculate revenue tiers, lines 101–200 pivot by region…"
 
-**Step 2 — Identify layers:**
+**Step 2: Identify layers:**
 - Steps that clean/rename raw tables → `staging` models
 - Steps that join or enrich → `intermediate` models
 - The final output → a `mart` model
 
-**Step 3 — Build bottom-up:**
+**Step 3: Build bottom-up:**
 Start with staging models (simplest), then intermediate, then the mart. Each step should be independently runnable and testable.
 
-**Step 4 — Validate against the existing procedure:**
+**Step 4: Validate against the existing procedure:**
 ```sql
 -- compare row counts and key metrics between old and new
 select 'old' as src, count(*), sum(revenue) from old_proc_output
 union all
 select 'new' as src, count(*), sum(revenue) from {{ ref('new_mart') }}
 ```
-Numbers should match. If they don't, the procedure had bugs — document whether you're fixing them or replicating them.
+Numbers should match. If they don't, the procedure had bugs: document whether you're fixing them or replicating them.
 
-**Step 5 — Add tests:**
+**Step 5: Add tests:**
 Every primary key gets `unique` + `not_null`. Key metrics get range tests. This gives you a regression harness before you decommission the procedure.
 
-**Step 6 — Decommission the procedure:**
+**Step 6: Decommission the procedure:**
 Once the new models are in prod and consumers are validated, remove the procedure. Don't keep both running in parallel indefinitely.
 
 ---
@@ -1135,7 +1135,7 @@ Once the new models are in prod and consumers are validated, remove the procedur
 
 Duplicates in an incremental model are one of the most common production bugs. Here are the causes in order of likelihood:
 
-**Cause 1 — No `unique_key` set, using `append` strategy:**
+**Cause 1: No `unique_key` set, using `append` strategy:**
 Without a `unique_key`, dbt just appends rows. If the same row is processed twice (e.g., a rerun after failure), it gets inserted twice.
 
 Fix: set a `unique_key` and use `merge` strategy:
@@ -1143,8 +1143,8 @@ Fix: set a `unique_key` and use `merge` strategy:
 {{ config(materialized='incremental', unique_key='order_id') }}
 ```
 
-**Cause 2 — `unique_key` is not actually unique in the source:**
-If the source table has duplicate `order_id` values, dbt's merge will try to update a single target row but finds multiple source matches — result depends on warehouse behaviour, often inserts all of them.
+**Cause 2: `unique_key` is not actually unique in the source:**
+If the source table has duplicate `order_id` values, dbt's merge will try to update a single target row but finds multiple source matches: result depends on warehouse behaviour, often inserts all of them.
 
 Fix: deduplicate before the merge:
 ```sql
@@ -1156,17 +1156,17 @@ with deduped as (
 select * from deduped where rn = 1
 ```
 
-**Cause 3 — Lookback window overlaps with already-processed rows:**
+**Cause 3: Lookback window overlaps with already-processed rows:**
 A 3-day lookback reprocesses rows that were already correctly in the table, and `append` adds them again.
 
 Fix: ensure `unique_key` is set so `merge` upserts rather than appends.
 
-**Cause 4 — `--full-refresh` was run without truncating downstream:**
+**Cause 4: `--full-refresh` was run without truncating downstream:**
 A full-refresh rebuilds the incremental model from scratch, but if a downstream model already had data derived from the old version, a partial rerun can produce inconsistency.
 
 Fix: run `--full-refresh` on the full lineage: `dbt build -s +my_model+ --full-refresh`
 
-**Cause 5 — Composite `unique_key` not granular enough:**
+**Cause 5: Composite `unique_key` not granular enough:**
 ```sql
 {{ config(unique_key=['order_id', 'event_date']) }}
 ```
@@ -1180,7 +1180,7 @@ If the actual grain is `order_id + event_date + event_type`, the composite key i
 
 Macros don't have a native unit test framework in dbt core (though `dbt-unit-testing` package adds one), so the standard approaches are:
 
-**1. `dbt compile` — inspect the rendered SQL:**
+**1. `dbt compile`: inspect the rendered SQL:**
 ```bash
 dbt compile -s model_that_uses_my_macro
 ```

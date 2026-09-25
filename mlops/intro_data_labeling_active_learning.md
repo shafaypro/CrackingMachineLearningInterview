@@ -1,6 +1,6 @@
 # Data Labeling, Active Learning & Weak Supervision
 
-Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so "you have 10 million unlabeled examples and a $50k budget — what do you do?" is a common system design and MLOps question. A good answer shows you can write a labeling spec, measure whether annotators agree, find bad labels, spend the budget where the model is weakest (active learning), stretch it with programmatic and model-generated labels (weak supervision, pseudo-labeling, LLM annotators, synthetic data), and keep the whole thing versioned and reproducible.
+Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so "you have 10 million unlabeled examples and a $50k budget: what do you do?" is a common system design and MLOps question. A good answer shows you can write a labeling spec, measure whether annotators agree, find bad labels, spend the budget where the model is weakest (active learning), stretch it with programmatic and model-generated labels (weak supervision, pseudo-labeling, LLM annotators, synthetic data), and keep the whole thing versioned and reproducible.
 
 ---
 
@@ -141,7 +141,7 @@ print(f"sklearn kappa:     {cohen_kappa_score(a, b):.3f}")
 
 For Fleiss' kappa, `statsmodels.stats.inter_rater.fleiss_kappa` takes an items × categories count table. For Krippendorff's alpha, the `krippendorff` package on PyPI handles missing ratings.
 
-**Low agreement is information.** Before blaming annotators, check whether disagreements concentrate on particular classes or item types. That usually points to a guideline gap or a genuinely ambiguous task, in which case soft labels (the distribution of annotator votes) may be a better training target than a forced majority label.
+**Low agreement is information.** Before blaming annotators, check whether disagreements concentrate on particular classes or item types. That usually points to a guideline gap or a ambiguous task, in which case soft labels (the distribution of annotator votes) may be a better training target than a forced majority label.
 
 ---
 
@@ -162,7 +162,7 @@ For Fleiss' kappa, `statsmodels.stats.inter_rater.fleiss_kappa` takes an items �
 | Weighted vote | Weight annotators by gold-question accuracy | Annotator quality varies a lot |
 | Probabilistic (Dawid-Skene style) | EM jointly estimates true labels and per-annotator confusion matrices | Many annotators, no reliable gold |
 | Expert adjudicator | A senior reviewer decides disagreements | High-stakes labels, small volume |
-| Keep the distribution | Train on soft labels | Genuinely subjective tasks |
+| Keep the distribution | Train on soft labels | Subjective tasks |
 
 A cost-saving pattern is **dynamic redundancy**: label once, get a second label only if the first annotator has low accuracy or the model disagrees with them, and escalate to a third or an expert only if the first two disagree.
 
@@ -481,7 +481,7 @@ First, spend a small fraction on a pilot: write guidelines, have several annotat
 
 #### Why use Cohen's kappa instead of percent agreement?
 
-Percent agreement ignores agreement that happens by chance. Kappa subtracts the agreement expected if both raters labeled independently at their own class rates: κ = (p_o − p_e)/(1 − p_e). With a 95/5 class split, two raters can agree 90%+ while kappa is near zero, which exposes that they don't agree on the rare class, usually the one you care about. Report both, because kappa is sensitive to prevalence and can look low even when agreement is genuinely good on skewed data.
+Percent agreement ignores agreement that happens by chance. Kappa subtracts the agreement expected if both raters labeled independently at their own class rates: κ = (p_o − p_e)/(1 − p_e). With a 95/5 class split, two raters can agree 90%+ while kappa is near zero, which exposes that they don't agree on the rare class, usually the one you care about. Report both, because kappa is sensitive to prevalence and can look low even when agreement is good on skewed data.
 
 #### When would you use Fleiss' kappa or Krippendorff's alpha instead?
 

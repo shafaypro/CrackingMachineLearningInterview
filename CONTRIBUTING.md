@@ -1,6 +1,6 @@
 # Contributing to CrackingMachineLearningInterview
 
-Thank you for helping make this repository better! Contributions of all kinds are welcome — new questions, improved answers, new guides, code examples, and bug fixes.
+Thank you for helping make this repository better! Contributions of all kinds are welcome: new questions, improved answers, new guides, code examples, and bug fixes.
 
 ---
 
@@ -44,17 +44,17 @@ git remote add upstream https://github.com/shafaypro/CrackingMachineLearningInte
 ### 2. Create a Branch
 
 ```bash
-# Always create a feature branch — never commit directly to main
+# Always create a feature branch: never commit directly to main
 git checkout -b add-transformer-architecture-guide
 # or
 git checkout -b fix-regex-typo-readme
 ```
 
 Branch naming conventions:
-- `add-<topic>` — for new content
-- `fix-<description>` — for bug fixes
-- `improve-<topic>` — for expanding existing content
-- `update-<topic>` — for updating outdated content
+- `add-<topic>`: for new content
+- `fix-<description>`: for bug fixes
+- `improve-<topic>`: for expanding existing content
+- `update-<topic>`: for updating outdated content
 
 ### 3. Make Your Changes
 
@@ -188,14 +188,14 @@ The F1 score is the harmonic mean: F1 = 2 * (precision * recall) / (precision + 
 
 New topic guides must include:
 
-1. **Title and introduction** — what the technology is and why it matters
-2. **Table of Contents** — linked to anchors
-3. **Core concepts** — definitions and diagrams/tables
-4. **Code examples** — working Python code with comments
-5. **Comparison tables** — when relevant (vs alternatives)
-6. **Interview Q&A section** — minimum 8 questions with detailed answers
-7. **Common Pitfalls section** — table format with problem + fix
-8. **Related Topics section** — links to related guides in the repo
+1. **Title and introduction**: what the technology is and why it matters
+2. **Table of Contents**: linked to anchors
+3. **Core concepts**: definitions and diagrams/tables
+4. **Code examples**: working Python code with comments
+5. **Comparison tables**: when relevant (vs alternatives)
+6. **Interview Q&A section**: minimum 8 questions with detailed answers
+7. **Common Pitfalls section**: table format with problem + fix
+8. **Related Topics section**: links to related guides in the repo
 
 ---
 
@@ -251,9 +251,9 @@ Use tables for comparisons and summaries:
 ### Difficulty Tags
 
 Tag Q&A with difficulty level:
-- 🟢 Beginner — conceptual, expected from all candidates
-- 🟡 Intermediate — applied, 2-5 YOE
-- 🔴 Advanced — deep technical, senior roles
+- 🟢 Beginner: conceptual, expected from all candidates
+- 🟡 Intermediate: applied, 2-5 YOE
+- 🔴 Advanced: deep technical, senior roles
 
 ---
 

@@ -5,7 +5,7 @@ A practical interview preparation repository for Machine Learning Engineer, AI E
 Please check out [CrackingMachineLearningInterview](https://shafaypro.github.io/CrackingMachineLearningInterview/) GitPage(for Ui/UX experience).
 
 ### New here? Start by picking a track
-**→ [Choose Your Track](./docs/choose-your-track.md)** — answer one question about what you want to build, and get an
+**→ [Choose Your Track](./docs/choose-your-track.md)**: answer one question about what you want to build, and get an
 ordered path through this repo for your role: ML Engineer, AI/GenAI Engineer, Data Scientist, Data Engineer,
 MLOps, or Deep Learning. Each track lists prerequisites, a stage-by-stage reading order, a project to build,
 and how to tell when you're interview-ready.
@@ -31,16 +31,16 @@ and how to tell when you're interview-ready.
 * The night before: skim the **[ML Cheat Sheet](./docs/ml-cheat-sheet.md)**, drill the **[Glossary Flashcards](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)**, and rehearse a few **[Debugging Scenarios](./docs/ml-debugging-scenarios.md)** out loud.
 
 ## Quick Navigation
-* [**Choose Your Track** — start here (New)](./docs/choose-your-track.md)
+* [**Choose Your Track**: start here (New)](./docs/choose-your-track.md)
 * [2026 Interview Roadmap](./docs/2026-interview-roadmap.md)
 * [2026 Additional Questions and Answers](./docs/2026-additional-questions.md)
 * [2026 Common Interview Questions (New)](./docs/interview_questions_2026.md)
 * [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
 * [ML Take-Home Projects & Case Studies (New)](./docs/take-home-projects.md)
 * [ML & AI Glossary (New)](./docs/glossary.md)
-* [ML Cheat Sheet — formulas & numbers for the night before (New)](./docs/ml-cheat-sheet.md)
-* [ML Debugging Scenarios — "your model is broken, what do you do?" (New)](./docs/ml-debugging-scenarios.md)
-* [Glossary Flashcards — interactive practice (New)](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)
+* [ML Cheat Sheet: formulas & numbers for the night before (New)](./docs/ml-cheat-sheet.md)
+* [ML Debugging Scenarios: "your model is broken, what do you do?" (New)](./docs/ml-debugging-scenarios.md)
+* [Glossary Flashcards: interactive practice (New)](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -84,9 +84,9 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`flashcards.html`](./flashcards.html): interactive flashcards built from the glossary, with progress saved in your browser. **(New)**
 * [`tools/check_links.py`](./tools/check_links.py): offline link and anchor checker, run in CI on every pull request. **(New)**
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
-* [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them — linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering. **(Expanded)**
-* [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation. **(Expanded)**
-* [`cloud_ml/`](./cloud_ml): cloud ML platforms — AWS SageMaker, Google Vertex AI, Azure ML.
+* [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering. **(Expanded)**
+* [`mlops/`](./mlops): MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation. **(Expanded)**
+* [`cloud_ml/`](./cloud_ml): cloud ML platforms, AWS SageMaker, Google Vertex AI, Azure ML.
 * [`data_engineering/`](./data_engineering): data engineering interview topics, platform concepts, and geospatial AI. **(Expanded)**
 * [`devops/`](./devops): DevOps, infrastructure, deployment, and AI testing topics. **(Expanded)**
 * [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving. **(Expanded)**
@@ -108,7 +108,7 @@ Use this order if you want to move from theory to production-grade AI engineerin
 7. [System Design Track](#system-design-track)
 8. [Coding Challenges Track](#coding-challenges-track)
 9. [Cloud ML Platforms](#cloud-ml-platforms)
-10. [Project Setup & Engineering Track](#project-setup--engineering-track) — ship it the right way
+10. [Project Setup & Engineering Track](#project-setup--engineering-track): ship it the right way
 
 ## Highlighted Projects
 Use these to turn the repo into a portfolio, not just a reading list:
@@ -135,7 +135,7 @@ Core topics:
 * [Context Engineering (budgets, ordering, caching, memory, compaction)](./ai_genai/intro_context_engineering.md) **(New)**
 * [Embeddings (models, chunking, fine-tuning, quantization)](./ai_genai/intro_embeddings.md) **(New)**
 * [Vector Databases](./ai_genai/intro_vector_databases.md)
-* [Vector Databases — Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
+* [Vector Databases: Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)](./ai_genai/intro_vector_databases_advanced.md) **(New)**
 * [LLM Inference Optimization (KV cache, batching, quantization, speculative decoding)](./ai_genai/intro_llm_inference_optimization.md) **(New)**
 * [LLMOps](./ai_genai/intro_llmops.md)
 * [Agentic AI](./ai_genai/intro_agentic_ai.md)
@@ -147,7 +147,7 @@ Core topics:
 * [n8n - AI Workflow Automation](./ai_genai/intro_n8n.md) **(New)**
 * [n8n - Advanced AI Workflows](./ai_genai/intro_n8n_advanced.md) **(New)**
 * [LangGraph](./ai_genai/intro_langgraph.md) **(New)**
-* [LangSmith — Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
+* [LangSmith: Observability & Evaluation](./ai_genai/intro_langsmith.md) **(New)**
 * [Prompt Engineering (CoT, ReAct, Few-Shot, Self-Consistency, ToT, Output Control)](./ai_genai/intro_prompt_engineering.md) **(New)**
 * [Structured Outputs & Function Calling (JSON Mode, Tool Use, Pydantic, Instructor)](./ai_genai/intro_structured_outputs.md) **(New)**
 * [LLM Security (Prompt Injection, Jailbreaks, Red-Teaming, Defenses)](./ai_genai/intro_llm_security.md) **(New)**
@@ -263,7 +263,7 @@ Core topics:
 * [ETA Prediction System Design (routing baseline, residual models, quantile losses)](./system_design/eta_prediction.md) **(New)**
 * [News Feed Ranking System Design (value model, multi-task ranking, fan-out)](./system_design/news_feed_ranking.md) **(New)**
 * [Visual Search System Design (metric learning, ANN indexes, re-ranking)](./system_design/visual_search_system.md) **(New)**
-* [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
+* [ML System Design Patterns: RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
 
 ## Coding Challenges Track
 Use this track for interview rounds that require live coding, take-home problem solving, or SQL assessments.
@@ -272,7 +272,7 @@ Core topics:
 * [Coding Challenges Overview](./coding_challenges/README.md) **(New)**
 * [Python Coding Challenges](./coding_challenges/python_coding_challenges.md) **(New)**
 * [SQL Coding Challenges](./coding_challenges/sql_coding_challenges.md) **(New)**
-* [ML Coding Challenges — Implement From Scratch](./coding_challenges/ml_coding_challenges.md) **(New)**
+* [ML Coding Challenges: Implement From Scratch](./coding_challenges/ml_coding_challenges.md) **(New)**
 * [Pandas & NumPy Challenges](./coding_challenges/pandas_numpy_challenges.md) **(New)**
 
 ## Frameworks Track
@@ -286,8 +286,8 @@ Core topics:
 * [Ollama](./frameworks/intro_ollama.md)
 * [vLLM](./frameworks/intro_vllm.md)
 * [Unsloth](./frameworks/intro_unsloth.md)
-* [FastAPI — Production AI Backend Engineering](./frameworks/intro_fastapi.md) **(New)**
-* [Pydantic — Data Validation for AI Systems](./frameworks/intro_pydantic.md) **(New)**
+* [FastAPI: Production AI Backend Engineering](./frameworks/intro_fastapi.md) **(New)**
+* [Pydantic: Data Validation for AI Systems](./frameworks/intro_pydantic.md) **(New)**
 
 ## Project Setup & Engineering Track
 Use this track to learn the engineering hygiene every ML/AI Engineer is expected to have: shipping projects on GitHub and structuring real repositories.
@@ -706,7 +706,7 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
 #### How would you define precision() and Recall(True positive Rate)?
         Take a simple Classification example of "Classifying email messages as spam or not spam"
 
-        Precision measures the percentage of emails flagged as spam that were correctly classified—that is, the percentage of dots to the right of the threshold line, it is also defined as % of event being Called at positive rates e.g 
+        Precision measures the percentage of emails flagged as spam that were correctly classified, that is, the percentage of dots to the right of the threshold line, it is also defined as % of event being Called at positive rates e.g 
                 Precision = True Positive / (True Positive + False positive) 
         
         Recall measures the percentage of actual spam emails that were correctly classified
@@ -1695,7 +1695,7 @@ We need diverse models for creating an ensemble. Diversity can be achieved by:
 Many winning solutions to data science competitions are ensembles. However, in real-life machine learning projects, engineers need to find a balance between execution time and accuracy.
 
 #### 32) What is an imbalanced dataset? Can you list some ways to deal with it? [[src](https://www.toptal.com/machine-learning/interview-questions)]
-An imbalanced dataset is one that has different proportions of target categories. For example, a dataset with medical images where we have to detect some illness will typically have many more negative samples than positive samples—say, 98% of images are without the illness and 2% of images are with the illness.
+An imbalanced dataset is one that has different proportions of target categories. For example, a dataset with medical images where we have to detect some illness will typically have many more negative samples than positive samples: say, 98% of images are without the illness and 2% of images are with the illness.
 
 There are different options to deal with imbalanced datasets:
  - Oversampling or undersampling. Instead of sampling with a uniform distribution from the training dataset, we can use other distributions so the model sees a more balanced dataset.
@@ -1954,7 +1954,7 @@ t-Distributed Stochastic Neighbor Embedding (t-SNE) is an unsupervised, non-line
 
 #### 60) What is the difference between t-SNE and PCA for dimensionality reduction?
 
-The first thing to note is that PCA was developed in 1933 while t-SNE was developed in 2008. A lot has changed in the world of data science since 1933 mainly in the realm of compute and size of data. Second, PCA is a linear dimension reduction technique that seeks to maximize variance and preserves large pairwise distances. In other words, things that are different end up far apart. This can lead to poor visualization especially when dealing with non-linear manifold structures. Think of a manifold structure as any geometric shape like: cylinder, ball, curve, etc.
+The first thing to note is that PCA was developed in 1933 while t-SNE was developed in 2008. A lot has changed in the world of data science since 1933 mainly in compute and size of data. Second, PCA is a linear dimension reduction technique that seeks to maximize variance and preserves large pairwise distances. In other words, things that are different end up far apart. This can lead to poor visualization especially when dealing with non-linear manifold structures. Think of a manifold structure as any geometric shape like: cylinder, ball, curve, etc.
 
 t-SNE differs from PCA by preserving only small pairwise distances or local similarities whereas PCA is concerned with preserving large pairwise distances to maximize variance.
 
@@ -1968,7 +1968,7 @@ UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learnin
 
 #### 62) What is the difference between t-SNE and UMAP for dimensionality reduction?
 
-The biggest difference between the output of UMAP when compared with t-SNE is this balance between local and global structure - UMAP is often better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, it's important to note that, because UMAP and t-SNE both necessarily warp the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
+The biggest difference between the output of UMAP when compared with t-SNE is this balance between local and global structure - UMAP is often better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, because UMAP and t-SNE both necessarily warp the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
 
 [[src]](https://pair-code.github.io/understanding-umap/)
 

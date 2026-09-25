@@ -136,8 +136,8 @@ eval-pipeline/
 #### How do you evaluate a system whose outputs are non-deterministic and open-ended?
 
 Convert "is this good?" into checkable claims, in layers:
-- **Deterministic checks** first — schema validity, required fields present, citation spans exist, no PII in output, length bounds. These are cheap, exact, and catch most regressions.
-- **Reference-based metrics** where a correct answer exists — exact match, F1 over extracted fields, or retrieval recall.
+- **Deterministic checks** first: schema validity, required fields present, citation spans exist, no PII in output, length bounds. These are cheap, exact, and catch most regressions.
+- **Reference-based metrics** where a correct answer exists: exact match, F1 over extracted fields, or retrieval recall.
 - **LLM-as-judge** for subjective dimensions (helpfulness, faithfulness, tone), validated against human labels on a sample before you trust it.
 - **Human review** on a rotating sample and on everything the judge scores near its threshold.
 
@@ -145,9 +145,9 @@ Then fix a **regression suite**: a versioned set of cases with expected properti
 
 #### How do you validate an LLM judge?
 
-Treat it as a model you're deploying, because it is. Label a few hundred examples by hand, then measure the judge's agreement with those labels — Cohen's kappa or simple agreement rate, and crucially agreement on the *disagreement cases*, since a judge that only agrees on obvious examples is useless.
+Treat it as a model you're deploying, because it is. Label a few hundred examples by hand, then measure the judge's agreement with those labels: Cohen's kappa or simple agreement rate, and especially agreement on the *disagreement cases*, since a judge that only agrees on obvious examples is useless.
 
-Then test for the known biases: **position bias** (swap the order of two compared answers and check the verdict flips at chance rate, not systematically), **verbosity bias** (longer answers scoring higher regardless of quality), **self-preference** (a judge favoring outputs from its own model family), and score compression (everything lands at 4/5). Use a rubric with concrete criteria rather than "rate 1–10", and prefer pairwise comparison over absolute scoring — it's substantially more reliable.
+Then test for the known biases: **position bias** (swap the order of two compared answers and check the verdict flips at chance rate, not systematically), **verbosity bias** (longer answers scoring higher regardless of quality), **self-preference** (a judge favoring outputs from its own model family), and score compression (everything lands at 4/5). Use a rubric with concrete criteria rather than "rate 1–10", and prefer pairwise comparison over absolute scoring: it's substantially more reliable.
 
 #### What guardrails would you put around a customer-facing LLM feature?
 
@@ -157,25 +157,25 @@ Output side: schema validation for structured responses, a safety/moderation cla
 
 Around both: a kill switch to disable the feature without a deploy, a fallback response for when a guardrail trips, per-user rate and spend limits, and full request/response logging with retention that legal has agreed to.
 
-The framing that matters: guardrails are a **defense-in-depth system with a failure mode of its own**. Over-blocking is a real cost — measure the false-positive rate of your guardrails, not just their catch rate, or you'll ship a feature that refuses legitimate requests.
+The framing that matters: guardrails are a **defense-in-depth system with a failure mode of its own**. Over-blocking is a real cost: measure the false-positive rate of your guardrails, not just their catch rate, or you'll ship a feature that refuses legitimate requests.
 
 #### How do you red-team an AI system before launch?
 
-Systematically, against a threat model rather than by improvising. Enumerate what an attacker wants — extract the system prompt, exfiltrate other users' data, make the model take an unauthorized action through a tool, produce harmful content, or run up cost. Then attack each: direct and indirect prompt injection (including content the system retrieves, which is the underrated vector), jailbreak patterns, role-play framing, encoding tricks, and multi-turn escalation where each message is individually benign.
+Systematically, against a threat model rather than by improvising. Enumerate what an attacker wants: extract the system prompt, exfiltrate other users' data, make the model take an unauthorized action through a tool, produce harmful content, or run up cost. Then attack each: direct and indirect prompt injection (including content the system retrieves, which is the underrated vector), jailbreak patterns, role-play framing, encoding tricks, and multi-turn escalation where each message is individually benign.
 
-Record every successful attack as a permanent regression test. The measure of a red-team exercise is not how many issues it found but whether the same attack class fails on the next release — which only happens if the findings become tests.
+Record every successful attack as a permanent regression test. The measure of a red-team exercise is not how many issues it found but whether the same attack class fails on the next release, which only happens if the findings become tests.
 
 #### How do you detect hallucination in production, not just in evals?
 
-No single signal is sufficient, so combine cheap ones: **groundedness checking** (does each claim appear in the retrieved context — an NLI model or a judge call on a sample), **self-consistency** (sample the answer several times and flag high disagreement), **citation validation** (do the cited spans actually exist and support the claim), and **user signals** (thumbs-down, rephrasing, escalation to a human).
+No single signal is sufficient, so combine cheap ones: **groundedness checking** (does each claim appear in the retrieved context, an NLI model or a judge call on a sample), **self-consistency** (sample the answer several times and flag high disagreement), **citation validation** (do the cited spans actually exist and support the claim), and **user signals** (thumbs-down, rephrasing, escalation to a human).
 
-For rate-limited cost, sample rather than checking everything: score 1–5% of traffic continuously and alert on the rate rather than individual cases. And monitor the abstention rate — a fall in "I don't know" responses often precedes a rise in confident fabrication.
+For rate-limited cost, sample rather than checking everything: score 1–5% of traffic continuously and alert on the rate rather than individual cases. And monitor the abstention rate: a fall in "I don't know" responses often precedes a rise in confident fabrication.
 
 #### What do you do when evaluation results and user feedback disagree?
 
-Trust the users and fix the eval. The disagreement means the eval set doesn't represent real traffic — usually because it was written by the team rather than sampled from production, so it under-represents ambiguous, adversarial, or multi-turn cases.
+Trust the users and fix the eval. The disagreement means the eval set doesn't represent real traffic, usually because it was written by the team rather than sampled from production, so it under-represents ambiguous, adversarial, or multi-turn cases.
 
-The fix is a feedback loop: sample real failures, label them, and add them to the eval set, so the suite converges on reality over time. Also check for the mundane explanations first — the eval runs a different prompt version, different retrieval settings, or a different model than production.
+The fix is a feedback loop: sample real failures, label them, and add them to the eval set, so the suite converges on reality over time. Also check for the mundane explanations first: the eval runs a different prompt version, different retrieval settings, or a different model than production.
 
 ---
 

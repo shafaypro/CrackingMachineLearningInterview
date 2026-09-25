@@ -1,4 +1,4 @@
-# ML System Design Patterns — 2026 Production Guide
+# ML System Design Patterns: 2026 Production Guide
 
 ## The ML System Design Framework
 
@@ -497,11 +497,11 @@ else:
 
 ## System Design Interview Tips
 
-1. **Start with requirements** — ask 2-3 clarifying questions before diving in
-2. **Define success metrics** — both business (revenue, engagement) and technical (precision, latency)
-3. **Make tradeoffs explicit** — "I'm choosing X over Y because of Z, with the tradeoff that..."
-4. **Start simple** — baseline design first, then optimize
-5. **Quantify** — "This handles 10K RPS at P99 < 100ms with 99.9% availability"
-6. **Know failure modes** — what happens when the LLM returns garbage? When the vector DB is down?
-7. **Cost awareness** — LLM costs are non-trivial; show you've thought about them
-8. **Evolve the design** — "In V1 we do X, in V2 we add Y when we hit Z scale"
+1. **Start with requirements**: ask 2-3 clarifying questions before diving in
+2. **Define success metrics**: both business (revenue, engagement) and technical (precision, latency)
+3. **Make tradeoffs explicit**: "I'm choosing X over Y because of Z, with the tradeoff that..."
+4. **Start simple**: baseline design first, then optimize
+5. **Quantify**: "This handles 10K RPS at P99 < 100ms with 99.9% availability"
+6. **Know failure modes**: what happens when the LLM returns garbage? When the vector DB is down?
+7. **Cost awareness**: LLM costs are non-trivial; show you've thought about them
+8. **Evolve the design**: "In V1 we do X, in V2 we add Y when we hit Z scale"

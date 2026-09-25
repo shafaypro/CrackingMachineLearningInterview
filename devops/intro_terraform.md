@@ -1,6 +1,6 @@
 # Terraform – Complete Guide (2026 Edition)
 
-Terraform (and its open-source fork **OpenTofu**) is the leading **Infrastructure as Code (IaC)** tool. It lets you define, provision, and manage cloud infrastructure using declarative configuration files — AWS, GCP, Azure, Kubernetes, and 3,000+ other providers.
+Terraform (and its open-source fork **OpenTofu**) is the leading **Infrastructure as Code (IaC)** tool. It lets you define, provision, and manage cloud infrastructure using declarative configuration files: AWS, GCP, Azure, Kubernetes, and 3,000+ other providers.
 
 ---
 
@@ -24,7 +24,7 @@ Terraform (and its open-source fork **OpenTofu**) is the leading **Infrastructur
 
 ## What is Terraform?
 
-Without IaC, you click around cloud consoles or write imperative scripts. This creates "snowflake servers" — unique, undocumented, unrepeatable infrastructure.
+Without IaC, you click around cloud consoles or write imperative scripts. This creates "snowflake servers": unique, undocumented, unrepeatable infrastructure.
 
 **Terraform** lets you describe infrastructure in code:
 
@@ -39,12 +39,12 @@ Run `terraform apply` and Terraform provisions the EC2 instance. The code IS the
 
 ### Why Terraform?
 
-- **Declarative** — describe *what* you want, not *how* to create it
-- **Idempotent** — running `apply` twice is safe
-- **Multi-cloud** — AWS, GCP, Azure, Kubernetes, Datadog, GitHub, etc.
-- **State tracking** — knows what exists vs. what should exist
-- **Plan before apply** — see changes before making them
-- **Modules** — reusable, composable infrastructure components
+- **Declarative**: describe *what* you want, not *how* to create it
+- **Idempotent**: running `apply` twice is safe
+- **Multi-cloud**: AWS, GCP, Azure, Kubernetes, Datadog, GitHub, etc.
+- **State tracking**: knows what exists vs. what should exist
+- **Plan before apply**: see changes before making them
+- **Modules**: reusable, composable infrastructure components
 
 ### Terraform vs Alternatives
 
@@ -69,7 +69,7 @@ Configuration Files (.tf)
          ↓
     terraform apply   (make the changes)
          ↓
-       State File     (terraform.tfstate — records real-world resources)
+       State File     (terraform.tfstate: records real-world resources)
 ```
 
 | Concept | Description |
@@ -125,7 +125,7 @@ tfenv use 1.9.0
 
 ## HCL Language Basics
 
-Terraform uses **HCL (HashiCorp Configuration Language)** — readable, declarative, JSON-compatible.
+Terraform uses **HCL (HashiCorp Configuration Language)**: readable, declarative, JSON-compatible.
 
 ### Types
 
@@ -361,7 +361,7 @@ State is Terraform's record of what infrastructure it manages. **Never manually 
 ### Remote State (required for teams)
 
 ```hcl
-# backend.tf — store state in S3
+# backend.tf: store state in S3
 terraform {
   backend "s3" {
     bucket         = "my-terraform-state"
@@ -710,7 +710,7 @@ tofu apply
 | Tool | Purpose |
 |------|---------|
 | **Terragrunt** | DRY wrapper for Terraform (keep configs DRY across envs) |
-| **Atlantis** | GitOps for Terraform — auto-plan/apply on PR |
+| **Atlantis** | GitOps for Terraform: auto-plan/apply on PR |
 | **Infracost** | Cost estimation before `terraform apply` |
 | **tflint** | Linter for Terraform configurations |
 | **Checkov** | Security scanning for IaC |

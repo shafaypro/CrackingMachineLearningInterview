@@ -1,6 +1,6 @@
-# Transformers Deep Dive
+# Transformers
 
-A comprehensive guide to the Transformer architecture — the foundation of modern NLP and AI.
+A guide to the Transformer architecture: the foundation of modern NLP and AI.
 
 ---
 
@@ -22,7 +22,7 @@ A comprehensive guide to the Transformer architecture — the foundation of mode
 
 ## "Attention is All You Need" Overview
 
-Published in 2017 by Vaswani et al. at Google, this paper introduced the Transformer architecture — replacing recurrence entirely with attention mechanisms.
+Published in 2017 by Vaswani et al. at Google, this paper introduced the Transformer architecture, replacing recurrence entirely with attention mechanisms.
 
 **Key contributions:**
 - Eliminated sequential processing (RNNs) with parallel attention
@@ -177,7 +177,7 @@ class MultiHeadAttention(nn.Module):
 
 ## Positional Encoding
 
-Self-attention is order-agnostic — it treats "cat sat mat" the same as "mat sat cat". Positional encodings add position information to token embeddings.
+Self-attention is order-agnostic: it treats "cat sat mat" the same as "mat sat cat". Positional encodings add position information to token embeddings.
 
 ### Sinusoidal Positional Encoding (original paper)
 
@@ -303,7 +303,7 @@ class EncoderLayer(nn.Module):
 ### Encoder-Only (BERT-style)
 
 - Bidirectional: each token attends to all other tokens
-- Pretraining: Masked Language Model (MLM) — predict masked tokens
+- Pretraining: Masked Language Model (MLM): predict masked tokens
 - Use case: Classification, NER, QA, embeddings
 
 ```python
@@ -324,7 +324,7 @@ class EncoderLayer(nn.Module):
 # Used in: GPT-4, Claude, Llama, Mistral, Gemma
 
 def create_causal_mask(seq_len):
-    """Upper triangular mask — prevents attending to future positions."""
+    """Upper triangular mask: prevents attending to future positions."""
     mask = torch.tril(torch.ones(seq_len, seq_len))
     return mask.unsqueeze(0).unsqueeze(0)  # (1, 1, seq, seq)
 ```
@@ -483,7 +483,7 @@ print(output.shape)  # (2, 15, 30000)
 
 **Q1: Explain the self-attention mechanism.** 🟡 Intermediate
 
-Self-attention computes `Attention(Q, K, V) = softmax(QKᵀ/√dₖ)V`. Each token creates a Query (what it's looking for), Key (what it offers), and Value (its information). Dot products between Q and K give similarity scores; softmax normalizes them to attention weights; the output is a weighted sum of Values. Dividing by √dₖ prevents vanishing gradients from large dot products. This allows each token to directly attend to any other token — unlike RNNs that must propagate information through intermediate steps.
+Self-attention computes `Attention(Q, K, V) = softmax(QKᵀ/√dₖ)V`. Each token creates a Query (what it's looking for), Key (what it offers), and Value (its information). Dot products between Q and K give similarity scores; softmax normalizes them to attention weights; the output is a weighted sum of Values. Dividing by √dₖ prevents vanishing gradients from large dot products. This allows each token to directly attend to any other token: unlike RNNs that must propagate information through intermediate steps.
 
 ---
 
@@ -495,7 +495,7 @@ For random Q and K vectors of dimension dₖ, the dot product Q·K has expected 
 
 **Q3: What is the difference between self-attention and cross-attention?** 🟡 Intermediate
 
-In **self-attention**, Q, K, and V all come from the same sequence — each position attends to all other positions in the same sequence. Used in encoders and decoder's first sublayer.
+In **self-attention**, Q, K, and V all come from the same sequence: each position attends to all other positions in the same sequence. Used in encoders and decoder's first sublayer.
 
 In **cross-attention**, Q comes from one sequence (decoder) and K, V come from another (encoder output). This allows the decoder to use encoder representations when generating the output. Used in the second sublayer of encoder-decoder architectures.
 
@@ -503,7 +503,7 @@ In **cross-attention**, Q comes from one sequence (decoder) and K, V come from a
 
 **Q4: What is masked self-attention and why is it needed in the decoder?** 🟡 Intermediate
 
-During training, the decoder receives the target sequence all at once. Without masking, each decoder position could attend to future positions — cheating by seeing the answer. Masked self-attention applies a causal mask that sets attention scores for future positions to -inf (after softmax → weight ≈ 0). This ensures each decoder position only attends to previous positions, matching the autoregressive inference behavior.
+During training, the decoder receives the target sequence all at once. Without masking, each decoder position could attend to future positions, cheating by seeing the answer. Masked self-attention applies a causal mask that sets attention scores for future positions to -inf (after softmax → weight ≈ 0). This ensures each decoder position only attends to previous positions, matching the autoregressive inference behavior.
 
 ---
 
@@ -515,25 +515,25 @@ During training, the decoder receives the target sequence all at once. Without m
 | Sequential operations | O(1) | O(n) |
 | Max path length between positions | O(1) | O(n) |
 
-Self-attention: O(n²) in sequence length (attention matrix) but O(1) sequential depth — enables full parallelization. RNN: O(n) sequential depth — cannot parallelize across the sequence. For short sequences, RNNs are competitive; for long sequences, Transformers dominate due to parallelism.
+Self-attention: O(n²) in sequence length (attention matrix) but O(1) sequential depth: enables full parallelization. RNN: O(n) sequential depth: cannot parallelize across the sequence. For short sequences, RNNs are competitive; for long sequences, Transformers dominate due to parallelism.
 
 ---
 
 **Q6: Explain multi-head attention and why it's useful.** 🟡 Intermediate
 
-Instead of one large attention computation, multi-head attention splits the model dimension into h smaller attention heads, each operating on d_model/h dimensions. Each head can learn different types of relationships — syntactic, semantic, coreference, local context. The heads' outputs are concatenated and projected back. This is more expressive than single-head attention of the same total dimension and at the same computational cost.
+Instead of one large attention computation, multi-head attention splits the model dimension into h smaller attention heads, each operating on d_model/h dimensions. Each head can learn different types of relationships: syntactic, semantic, coreference, local context. The heads' outputs are concatenated and projected back. This is more expressive than single-head attention of the same total dimension and at the same computational cost.
 
 ---
 
 **Q7: What is the feed-forward sublayer in a Transformer and what is its role?** 🟡 Intermediate
 
-The FFN sublayer applies two linear transformations with a ReLU (original) or GELU/SwiGLU (modern) between them: `FFN(x) = ReLU(xW₁ + b₁)W₂ + b₂`. It is applied independently to each position. It acts as a position-wise learned transformation — where attention mixes information across positions, the FFN processes each position's representation independently. It typically has 4× the model dimension (d_ff = 4·d_model), providing most of the model's capacity in modern LLMs.
+The FFN sublayer applies two linear transformations with a ReLU (original) or GELU/SwiGLU (modern) between them: `FFN(x) = ReLU(xW₁ + b₁)W₂ + b₂`. It is applied independently to each position. It acts as a position-wise learned transformation, where attention mixes information across positions, the FFN processes each position's representation independently. It typically has 4× the model dimension (d_ff = 4·d_model), providing most of the model's capacity in modern LLMs.
 
 ---
 
 **Q8: What is the difference between sinusoidal and learned positional encodings?** 🟡 Intermediate
 
-Sinusoidal PE uses fixed mathematical functions (sin/cos at different frequencies) — no learned parameters, generalizes to sequence lengths longer than training, relative positions have predictable relationships. Learned PE trains an embedding matrix — potentially better for the specific training distribution but doesn't generalize to longer sequences. Modern models use RoPE (Rotary Positional Embedding) which encodes relative positions by rotating Q/K vectors and generalizes better to long sequences through techniques like YaRN and RoPE scaling.
+Sinusoidal PE uses fixed mathematical functions (sin/cos at different frequencies): no learned parameters, generalizes to sequence lengths longer than training, relative positions have predictable relationships. Learned PE trains an embedding matrix: potentially better for the specific training distribution but doesn't generalize to longer sequences. Modern models use RoPE (Rotary Positional Embedding) which encodes relative positions by rotating Q/K vectors and generalizes better to long sequences through techniques like YaRN and RoPE scaling.
 
 ---
 
@@ -542,7 +542,7 @@ Sinusoidal PE uses fixed mathematical functions (sin/cos at different frequencie
 1. **Parallelization:** Transformers process all positions simultaneously on GPUs; RNNs are sequential
 2. **Gradient flow:** Direct attention connections provide O(1) gradient paths between any positions; RNNs suffer vanishing gradients over long sequences
 3. **Parameter efficiency:** Transformer layers are largely parallelizable; adding layers doesn't hurt training stability as much
-4. **Empirical observation (scaling laws):** Model performance scales predictably as a power law with parameters, compute, and data — enabling systematic scaling
+4. **Empirical observation (scaling laws):** Model performance scales predictably as a power law with parameters, compute, and data, enabling systematic scaling
 
 ---
 
@@ -554,7 +554,7 @@ Flash Attention is an IO-aware exact attention implementation that avoids materi
 
 **Q11: What is the context window of a Transformer and what limits it?** 🟡 Intermediate
 
-The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization — models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). GPT-4 supports 128K tokens; Claude 3.5 Sonnet supports 200K.
+The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). GPT-4 supports 128K tokens; Claude 3.5 Sonnet supports 200K.
 
 ---
 
@@ -570,7 +570,7 @@ The key difference: BERT sees the full context bidirectionally (knows the "futur
 
 **Q13: What is attention head pruning and why might you do it?** 🔴 Advanced
 
-Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant — some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. Can reduce model size by 20-30% with minimal performance loss. Used in model compression for deployment on resource-constrained hardware.
+Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. Can reduce model size by 20-30% with minimal performance loss. Used in model compression for deployment on resource-constrained hardware.
 
 ---
 
@@ -578,7 +578,7 @@ Research (Michel et al. 2019) showed many attention heads in trained Transformer
 
 **Absolute positional encoding** assigns a unique encoding to each absolute position (1, 2, 3, ...). Can struggle with generalization to positions not seen in training and doesn't explicitly model relative distances.
 
-**Relative positional encoding** (Shaw et al., ALiBi, RoPE) encodes the relative distance between two positions rather than absolute positions. Key advantage: "5 positions apart" means the same regardless of where in the sequence. RoPE (used in Llama, Mistral) achieves this by rotating Q and K vectors by position-dependent angles — the dot product naturally depends only on the relative position.
+**Relative positional encoding** (Shaw et al., ALiBi, RoPE) encodes the relative distance between two positions rather than absolute positions. Key advantage: "5 positions apart" means the same regardless of where in the sequence. RoPE (used in Llama, Mistral) achieves this by rotating Q and K vectors by position-dependent angles: the dot product naturally depends only on the relative position.
 
 ---
 
@@ -595,11 +595,11 @@ These laws allow prediction of model performance before training. Chinchilla (De
 
 ## References
 
-- [Attention Is All You Need — Vaswani et al. (2017)](https://arxiv.org/abs/1706.03762)
-- [BERT: Pre-training of Deep Bidirectional Transformers — Devlin et al. (2018)](https://arxiv.org/abs/1810.04805)
-- [Language Models are Few-Shot Learners (GPT-3) — Brown et al. (2020)](https://arxiv.org/abs/2005.14165)
-- [FlashAttention — Dao et al. (2022)](https://arxiv.org/abs/2205.14135)
+- [Attention Is All You Need: Vaswani et al. (2017)](https://arxiv.org/abs/1706.03762)
+- [BERT: Pre-training of Deep Bidirectional Transformers, Devlin et al. (2018)](https://arxiv.org/abs/1810.04805)
+- [Language Models are Few-Shot Learners (GPT-3): Brown et al. (2020)](https://arxiv.org/abs/2005.14165)
+- [FlashAttention: Dao et al. (2022)](https://arxiv.org/abs/2205.14135)
 - [RoFormer: Enhanced Transformer with Rotary Position Embedding (RoPE)](https://arxiv.org/abs/2104.09864)
-- [The Illustrated Transformer — Jay Alammar](http://jalammar.github.io/illustrated-transformer/)
-- [CS224n Stanford NLP — Lecture on Transformers](http://web.stanford.edu/class/cs224n/)
-- [Scaling Laws for Neural Language Models — Kaplan et al. (2020)](https://arxiv.org/abs/2001.08361)
+- [The Illustrated Transformer: Jay Alammar](http://jalammar.github.io/illustrated-transformer/)
+- [CS224n Stanford NLP: Lecture on Transformers](http://web.stanford.edu/class/cs224n/)
+- [Scaling Laws for Neural Language Models: Kaplan et al. (2020)](https://arxiv.org/abs/2001.08361)

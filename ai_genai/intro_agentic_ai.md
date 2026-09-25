@@ -1,6 +1,6 @@
 # Agentic AI & Multi-Agent Systems (2026 Edition)
 
-**Agentic AI** refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals — rather than just answering single questions.
+**Agentic AI** refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering single questions.
 
 ---
 
@@ -41,9 +41,9 @@ Agent:
 ### Why Agentic AI Now?
 
 Three things converged in 2024–2026:
-1. **Large context windows** (200K tokens) — agents can hold entire codebases in mind
-2. **Reliable tool use** — models accurately call functions with correct parameters
-3. **Better instruction following** — models stay on task across many steps
+1. **Large context windows** (200K tokens): agents can hold entire codebases in mind
+2. **Reliable tool use**: models accurately call functions with correct parameters
+3. **Better instruction following**: models stay on task across many steps
 
 ---
 
@@ -482,13 +482,13 @@ Use these memories to provide personalized, contextual responses.""",
 
 ### Safety Principles for Agents
 
-1. **Minimal footprint** — request only necessary permissions
-2. **Prefer reversible actions** — delete → trash, not permanent delete
-3. **Confirm before irreversible actions** — especially in production
-4. **Fail loudly** — surface errors rather than silently continuing
-5. **Audit trail** — log all tool calls and outcomes
-6. **Scope limiting** — constrain what the agent can access
-7. **Injection detection** — watch for prompt injection in tool results
+1. **Minimal footprint**: request only necessary permissions
+2. **Prefer reversible actions**: delete → trash, not permanent delete
+3. **Confirm before irreversible actions**: especially in production
+4. **Fail loudly**: surface errors rather than silently continuing
+5. **Audit trail**: log all tool calls and outcomes
+6. **Scope limiting**: constrain what the agent can access
+7. **Injection detection**: watch for prompt injection in tool results
 
 ```python
 # Prompt injection guard
@@ -575,13 +575,13 @@ Research the current state of vector databases in 2026:
 
 ### 2026 Trends
 
-- **Agentic loops are stable** — ReAct and Plan-Execute patterns are production-proven
-- **Multi-agent coordination** — Orchestrator patterns replacing monolithic agents
-- **Specialized models** — Small models for subagent tasks, large models for orchestration
-- **MCP standardization** — Agents share tool servers via MCP
-- **Evaluations matured** — LLM-as-judge and automated evals are standard
-- **Computer use** — Agents that can operate UIs (browsers, desktops)
-- **Long-horizon tasks** — Agents running for hours/days on complex engineering tasks
+- **Agentic loops are stable**: ReAct and Plan-Execute patterns are production-proven
+- **Multi-agent coordination**: Orchestrator patterns replacing monolithic agents
+- **Specialized models**: Small models for subagent tasks, large models for orchestration
+- **MCP standardization**: Agents share tool servers via MCP
+- **Evaluations matured**: LLM-as-judge and automated evals are standard
+- **Computer use**: Agents that can operate UIs (browsers, desktops)
+- **Long-horizon tasks**: Agents running for hours/days on complex engineering tasks
 
 ---
 
@@ -594,7 +594,7 @@ probe most.
 ### Should You Even Build an Agent?
 
 Before reaching for an agent, check four criteria. If any answer is "no," use a
-simpler tier — a single LLM call or a code-orchestrated **workflow**.
+simpler tier: a single LLM call or a code-orchestrated **workflow**.
 
 | Criterion | Question |
 |-----------|----------|
@@ -610,17 +610,17 @@ simpler tier — a single LLM call or a code-orchestrated **workflow**.
 ### Designing the Tool Surface
 
 The shape of your tools determines what your harness can do. A **bash tool** gives
-the model maximum leverage but hands the harness only an opaque command string. A
+the model maximum flexibility but hands the harness only an opaque command string. A
 **dedicated tool** (`send_email`, `edit_file`) gives the harness a typed, named
 hook it can gate, validate, render, or run in parallel.
 
 **Promote an action from bash to a dedicated tool when you need to:**
-- **Gate it** — hard-to-reverse actions (sending messages, deleting data, external
+- **Gate it**: hard-to-reverse actions (sending messages, deleting data, external
   API writes) should be confirmable. `send_email` is easy to gate; `bash -c "curl -X POST..."` is not.
-- **Enforce invariants** — a dedicated `edit` tool can reject a write if the file
+- **Enforce invariants**: a dedicated `edit` tool can reject a write if the file
   changed since the model last read it.
-- **Render it** — some actions deserve custom UI (an approval modal, a diff view).
-- **Parallelize it** — mark read-only tools (`grep`, `glob`) parallel-safe; the
+- **Render it**: some actions deserve custom UI (an approval modal, a diff view).
+- **Parallelize it**: mark read-only tools (`grep`, `glob`) parallel-safe; the
   harness can't tell a safe `grep` from an unsafe `git push` inside bash.
 
 **Tool definition best practices:** clear names, descriptions that say *when* to
@@ -643,9 +643,9 @@ unmanaged. Three complementary strategies:
 Many long-horizon agents use all three. Compaction summarizes *within* a session;
 memory persists *across* sessions.
 
-**Prompt caching for agents** — caching is a prefix match, so:
+**Prompt caching for agents**: caching is a prefix match, so:
 - Keep the system prompt and tool list **frozen** (don't interpolate timestamps,
-  don't reorder tools) — any change at the front invalidates everything after it.
+  don't reorder tools): any change at the front invalidates everything after it.
 - To change behavior mid-run, append an instruction as a message rather than
   editing the system prompt.
 - To use a cheaper model for a sub-task, spawn a **subagent** instead of swapping
@@ -655,7 +655,7 @@ memory persists *across* sessions.
 
 | | **Self-hosted loop** (your code runs the loop) | **Managed agents** (provider runs the loop) |
 |---|---|---|
-| Control | Maximum — custom logging, approval gates | Provider orchestrates; you stream events |
+| Control | Maximum: custom logging, approval gates | Provider orchestrates; you stream events |
 | Tool execution | Your infrastructure | Provider-hosted container (or your own) |
 | State | You manage | Persisted, versioned agent configs + sessions |
 | Best for | Custom runtimes, on-prem, fine-grained control | Stateful agents, file mounts, fast time-to-prod |
@@ -667,12 +667,12 @@ container where tools execute.
 
 ### Evaluating Agents
 
-Don't evaluate agents only on final-answer quality — evaluate the **trajectory**:
+Don't evaluate agents only on final-answer quality: evaluate the **trajectory**:
 
-- **Task success rate** — did it achieve the goal? (the headline metric)
-- **Trajectory quality** — were the tool calls sensible, or did it flail?
-- **Efficiency** — number of steps, tokens, and tool calls per task.
-- **Failure analysis** — categorize *why* tasks fail (wrong tool, bad parse, loop).
+- **Task success rate**: did it achieve the goal? (the headline metric)
+- **Trajectory quality**: were the tool calls sensible, or did it flail?
+- **Efficiency**: number of steps, tokens, and tool calls per task.
+- **Failure analysis**: categorize *why* tasks fail (wrong tool, bad parse, loop).
 
 Maintain a **task suite** the agent must pass on every change, and use
 LLM-as-judge for graded rubrics. See [LLM Evaluation](../mlops/intro_llm_evaluation.md).
@@ -702,9 +702,9 @@ LLM-as-judge for graded rubrics. See [LLM Evaluation](../mlops/intro_llm_evaluat
 ### Interview Questions
 
 1. **When should you NOT build an agent?** → When the task is single-step or fully
-   specifiable — a single call or a code-orchestrated workflow is cheaper, faster,
+   specifiable: a single call or a code-orchestrated workflow is cheaper, faster,
    and more reliable.
-2. **Bash tool vs dedicated tools — trade-offs?** → Bash = max capability, opaque
+2. **Bash tool vs dedicated tools: trade-offs?** → Bash = max capability, opaque
    to the harness; dedicated tools = gateable, validatable, parallelizable, but
    you must build each one. Promote to dedicated when you need to gate/render/parallelize.
 3. **How do you keep a long-running agent within the context window?** → Context

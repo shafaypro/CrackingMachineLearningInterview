@@ -16,7 +16,7 @@ Poor prompt engineering causes:
 
 ### Zero-Shot Prompting
 
-No examples — just instructions. Works well for tasks the model has seen frequently during training.
+No examples: just instructions. Works well for tasks the model has seen frequently during training.
 
 ```python
 prompt = """
@@ -53,7 +53,7 @@ Sentence: Microsoft acquired Activision Blizzard for $69 billion.
 **Few-shot tips:**
 - Order examples: put the most similar example last (closest to the actual input)
 - Balance examples across classes to avoid bias
-- 3-8 examples is usually optimal — diminishing returns beyond 10
+- 3-8 examples is usually optimal: diminishing returns beyond 10
 - Use examples that cover edge cases you care about
 
 ### Chain-of-Thought (CoT) Prompting
@@ -115,7 +115,7 @@ def self_consistent_answer(prompt: str, model, n_samples: int = 5) -> str:
     return Counter(answers).most_common(1)[0][0]
 ```
 
-**When to use:** Math problems, logic puzzles, medical reasoning — tasks where a single wrong step invalidates the answer and you can afford multiple API calls.
+**When to use:** Math problems, logic puzzles, medical reasoning, tasks where a single wrong step invalidates the answer and you can afford multiple API calls.
 
 ### ReAct (Reason + Act)
 
@@ -160,13 +160,13 @@ Branch 3: Custom in-memory  → Evaluate pros/cons → Score: 4/10
 → Explore Branch 1 further with sub-branches
 ```
 
-ToT is expensive (many model calls) — use for one-off hard problems, not production pipelines.
+ToT is expensive (many model calls): use for one-off hard problems, not production pipelines.
 
 ---
 
 ## System Prompt Design
 
-The system prompt defines the model's persona, constraints, and operating context. It is the most durable part of your prompt — it doesn't change per request.
+The system prompt defines the model's persona, constraints, and operating context. It is the most durable part of your prompt: it doesn't change per request.
 
 ```python
 system_prompt = """
@@ -190,11 +190,11 @@ Escalate to a human agent when: the customer is angry, the issue involves billin
 ```
 
 **System prompt principles:**
-1. **Role** — who is the model being?
-2. **Scope** — what topics are in/out of bounds?
-3. **Behavior** — what consistent actions should it take?
-4. **Format** — how should output be structured?
-5. **Escalation** — when should it hand off or refuse?
+1. **Role**: who is the model being?
+2. **Scope**: what topics are in/out of bounds?
+3. **Behavior**: what consistent actions should it take?
+4. **Format**: how should output be structured?
+5. **Escalation**: when should it hand off or refuse?
 
 ---
 
@@ -465,13 +465,13 @@ class DynamicFewShot:
 Zero-shot: model answers with only instructions, no examples. Use when the task is straightforward and the model generalizes well. Few-shot: provide 3-8 worked examples in the prompt. Use when zero-shot fails or you need a specific output format. Fine-tuning: train model weights on many examples. Use when few-shot is inconsistent, you need persistent behavior across all calls, or you have a high-volume task where prompt token cost matters. The cost/complexity order: zero-shot < few-shot < fine-tuning.
 
 **Q: Why does chain-of-thought prompting improve performance on reasoning tasks?**
-CoT forces the model to produce intermediate steps before the final answer. These steps are also subject to the model's next-token prediction — generating a correct intermediate step makes the next correct step more likely. The model essentially "checks its work" by reasoning aloud. For tasks where the correct answer depends on a chain of logical steps, any single wrong step cascades to a wrong final answer. CoT dramatically reduces this by making each step explicit and correctable.
+CoT forces the model to produce intermediate steps before the final answer. These steps are also subject to the model's next-token prediction: generating a correct intermediate step makes the next correct step more likely. The model essentially "checks its work" by reasoning aloud. For tasks where the correct answer depends on a chain of logical steps, any single wrong step cascades to a wrong final answer. CoT dramatically reduces this by making each step explicit and correctable.
 
 **Q: How would you prevent prompt injection in a production LLM application?**
-Prompt injection is when user input contains instructions that override the system prompt. Defenses: (1) delimiter-based isolation — wrap user input in XML tags and instruct the model never to act on instructions inside those tags; (2) input sanitization — filter or escape known injection patterns before sending to the model; (3) structured outputs — if you only accept JSON back, a prompt injection telling the model to "ignore previous instructions" won't affect a parseable JSON response; (4) output validation — validate the model's response against expected schemas and flag anomalies; (5) privileged/unprivileged tiers — distinguish system instructions from user content in your architecture.
+Prompt injection is when user input contains instructions that override the system prompt. Defenses: (1) delimiter-based isolation: wrap user input in XML tags and instruct the model never to act on instructions inside those tags; (2) input sanitization, filter or escape known injection patterns before sending to the model; (3) structured outputs, if you only accept JSON back, a prompt injection telling the model to "ignore previous instructions" won't affect a parseable JSON response; (4) output validation, validate the model's response against expected schemas and flag anomalies; (5) privileged/unprivileged tiers, distinguish system instructions from user content in your architecture.
 
 **Q: What is the "lost in the middle" problem?**
 LLMs have worse recall for information placed in the middle of long contexts compared to information at the beginning or end. This is a known limitation of attention-based models. In practice: place the most important context at the start and end of the prompt, not buried in the middle. For RAG, order retrieved documents so the most relevant is first.
 
 **Q: How do you evaluate whether a prompt change improved things?**
-Define evaluation criteria before changing the prompt (avoid HARKing). Run the old and new prompts on a fixed test set of inputs. Use multiple evaluators: exact match for structured outputs, LLM-as-judge for open-ended quality, human evaluation for subtle quality. Track failure modes separately from aggregate metrics — a prompt change might improve average quality but introduce a new failure mode.
+Define evaluation criteria before changing the prompt (avoid HARKing). Run the old and new prompts on a fixed test set of inputs. Use multiple evaluators: exact match for structured outputs, LLM-as-judge for open-ended quality, human evaluation for subtle quality. Track failure modes separately from aggregate metrics: a prompt change might improve average quality but introduce a new failure mode.

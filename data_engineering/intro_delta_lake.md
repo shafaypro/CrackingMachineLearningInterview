@@ -7,11 +7,11 @@
 ## What is Delta Lake?
 
 Before Delta Lake, data lakes had serious problems:
-- **No ACID transactions** — partial writes leave inconsistent data
-- **No schema enforcement** — garbage data corrupts your tables
-- **No updates/deletes** — append-only; can't fix mistakes
-- **Slow reads** — listing millions of files on S3 is slow
-- **No history** — can't see what data looked like yesterday
+- **No ACID transactions**: partial writes leave inconsistent data
+- **No schema enforcement**: garbage data corrupts your tables
+- **No updates/deletes**: append-only; can't fix mistakes
+- **Slow reads**: listing millions of files on S3 is slow
+- **No history**: can't see what data looked like yesterday
 
 Delta Lake solves all of these on top of Parquet files in S3.
 
@@ -28,7 +28,7 @@ Data Lake (raw S3/GCS) + Delta Lake = Lakehouse
 
 | Feature | Description |
 |---------|-------------|
-| **ACID Transactions** | Atomic commits — either all changes succeed or none |
+| **ACID Transactions** | Atomic commits: either all changes succeed or none |
 | **Schema Enforcement** | Reject writes that don't match the table schema |
 | **Schema Evolution** | Safely add new columns |
 | **Time Travel** | Query data as it was at any point in time |
@@ -100,7 +100,7 @@ spark.sql("""
 ## ACID Transactions
 
 ```python
-# Concurrent writers are safe — Delta uses optimistic concurrency control
+# Concurrent writers are safe: Delta uses optimistic concurrency control
 
 # Writer 1: append new records
 new_data = spark.createDataFrame([(3, "Charlie", 78.3, "2025-01-02")], ["id", "name", "score", "date"])
@@ -115,14 +115,14 @@ new_data.write.format("delta").mode("append").save("/data/scores")
 ## Schema Enforcement & Evolution
 
 ```python
-# Schema enforcement — this will FAIL if schema doesn't match
+# Schema enforcement: this will FAIL if schema doesn't match
 try:
     bad_df = spark.createDataFrame([(4, "Dave")], ["id", "name"])
     bad_df.write.format("delta").mode("append").save("/data/scores")
 except Exception as e:
     print("Schema mismatch blocked:", e)
 
-# Schema evolution — allow adding new columns
+# Schema evolution: allow adding new columns
 spark.conf.set("spark.databricks.delta.schema.autoMerge.enabled", "true")
 
 new_df = spark.createDataFrame(
@@ -182,7 +182,7 @@ dt.update(
 # Delete rows
 dt.delete(condition=F.col("score") < 60)
 
-# MERGE (Upsert) — the most powerful operation
+# MERGE (Upsert): the most powerful operation
 updates = spark.createDataFrame([
     (1, "Alice", 99.0, "2025-01-05"),   # update existing
     (6, "Frank", 81.5, "2025-01-05"),   # new record
@@ -361,7 +361,7 @@ BI Tools / ML Models / Data Apps
 | **Variant type** | Native semi-structured data type for JSON |
 | **Universal Format (UniForm)** | Delta tables readable as Iceberg and Hudi automatically |
 | **Delta Kernel** | Embeddable library for building Delta connectors |
-| **DuckDB + Delta** | `SELECT * FROM delta_scan('s3://...')` — no Spark needed |
+| **DuckDB + Delta** | `SELECT * FROM delta_scan('s3://...')`: no Spark needed |
 
 ### Liquid Clustering (Replaces Partitioning)
 

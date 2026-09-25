@@ -7,11 +7,11 @@
 ## LangChain Overview
 
 LangChain provides:
-- **Integrations** — 200+ LLM providers, vector DBs, document loaders, tools
-- **LCEL** (LangChain Expression Language) — compose chains declaratively
-- **Agents** — ReAct, tool-calling, and custom agent loops
-- **Memory** — conversation history management
-- **LangSmith** — observability and evaluation platform
+- **Integrations**: 200+ LLM providers, vector DBs, document loaders, tools
+- **LCEL** (LangChain Expression Language): compose chains declaratively
+- **Agents**: ReAct, tool-calling, and custom agent loops
+- **Memory**: conversation history management
+- **LangSmith**: observability and evaluation platform
 
 ```bash
 pip install langchain langchain-anthropic langchain-community
@@ -427,7 +427,7 @@ Use `create_tool_calling_agent` with a model that supports tool use (Claude, GPT
 - `ConversationBufferMemory`: stores all messages verbatim. Use for short conversations.
 - `ConversationSummaryMemory`: summarizes older turns using an LLM. Use for long sessions where context window is a concern.
 - `ConversationBufferWindowMemory`: keeps the last N messages. Simple and predictable.
-- **LangGraph checkpointing**: best for production — persists full graph state (not just messages) to a database, enabling true session continuity.
+- **LangGraph checkpointing**: best for production: persists full graph state (not just messages) to a database, enabling true session continuity.
 
 **Q6: What is LangSmith and how do you use it?**
 LangSmith is LangChain's observability platform. You enable it by setting `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY`. It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.
@@ -453,10 +453,10 @@ llm_with_retry = llm.with_retry(stop_after_attempt=3, wait_exponential_jitter=Tr
 For structured handling use `.with_fallbacks()` to specify backup models/chains when the primary fails.
 
 **Q10: What are the main challenges with LangChain in production?**
-1. **Version instability** — the library moves fast; pin versions carefully
-2. **Debugging complexity** — deep chains can be hard to trace without LangSmith
-3. **Over-abstraction** — sometimes easier to call APIs directly for simple use cases
-4. **Memory management** — default in-memory state is not suitable for multi-user production; need external checkpointing
+1. **Version instability**: the library moves fast; pin versions carefully
+2. **Debugging complexity**: deep chains can be hard to trace without LangSmith
+3. **Over-abstraction**: sometimes easier to call APIs directly for simple use cases
+4. **Memory management**: default in-memory state is not suitable for multi-user production; need external checkpointing
 
 ---
 

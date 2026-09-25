@@ -18,8 +18,8 @@ A/B testing is the gold standard for measuring real user impact.
 
 ```
 H₀: μ_treatment = μ_control      (no difference)
-H₁: μ_treatment ≠ μ_control      (two-tailed — use when you don't know direction)
-H₁: μ_treatment > μ_control      (one-tailed — when direction is expected)
+H₁: μ_treatment ≠ μ_control      (two-tailed: use when you don't know direction)
+H₁: μ_treatment > μ_control      (one-tailed, when direction is expected)
 ```
 
 Use two-tailed unless you have strong a priori reason for directionality. Two-tailed is more conservative and prevents p-hacking.
@@ -28,7 +28,7 @@ Use two-tailed unless you have strong a priori reason for directionality. Two-ta
 
 **Primary metric:** The one metric that determines launch decision (e.g., revenue per user, CTR)
 
-**Guardrail metrics:** Metrics that must not decrease (e.g., latency, error rate, retention) — these are non-negotiable
+**Guardrail metrics:** Metrics that must not decrease (e.g., latency, error rate, retention), these are non-negotiable
 
 **Secondary metrics:** Informational, not part of decision criteria
 
@@ -263,7 +263,7 @@ def simulate_peeking(n_simulations=10_000, max_n=1_000, check_every=50):
 **Solutions:**
 - **Pre-register** sample size and analysis plan before starting
 - **Sequential testing** (alpha spending functions) if you need early stopping
-- **Bayesian testing** — update beliefs continuously without inflating error rates
+- **Bayesian testing**: update beliefs continuously without inflating error rates
 
 ### 2. Multiple Testing Problem
 
@@ -320,7 +320,7 @@ print(df[['segment', 'variant', 'rate']])
 # Desktop: Control=10%, Treatment=9%
 
 # But aggregate: Treatment better overall (because treatment had more mobile users!)
-# This is Simpson's Paradox — always analyze by segment
+# This is Simpson's Paradox: always analyze by segment
 ```
 
 **Prevention:** Always segment analysis by major user groups. Check if treatment groups are balanced across key dimensions.
@@ -341,7 +341,7 @@ def cuped_metric(
     """
     Adjust post-experiment metric using pre-experiment covariate.
     Y_cuped = Y - θ × (X - E[X])
-    θ = Cov(Y, X) / Var(X)  — OLS estimate
+    θ = Cov(Y, X) / Var(X): OLS estimate
     """
     theta = np.cov(post_metric, pre_metric)[0, 1] / np.var(pre_metric)
     return post_metric - theta * (pre_metric - np.mean(pre_metric))
@@ -480,7 +480,7 @@ ci.plot()
 ## Common Interview Questions
 
 **Q: How do you determine how long to run an A/B test?**
-Calculate required sample size before running based on baseline conversion rate, minimum detectable effect (MDE), desired power (80-95%), and significance level (5%). Run until reaching that sample size — not based on time. Also run for full weekly cycles (multiples of 7 days) to avoid day-of-week bias.
+Calculate required sample size before running based on baseline conversion rate, minimum detectable effect (MDE), desired power (80-95%), and significance level (5%). Run until reaching that sample size, not based on time. Also run for full weekly cycles (multiples of 7 days) to avoid day-of-week bias.
 
 **Q: The test shows p=0.03 but you checked yesterday and p=0.06. What happened?**
 This is the peeking problem. By checking early and stopping when p crossed the threshold, you inflated your Type I error rate. The true false positive rate with repeated peeking is much higher than 5%. You should have pre-committed to a sample size and only looked once at the end.
@@ -489,7 +489,7 @@ This is the peeking problem. By checking early and stopping when p crossed the t
 Define primary metric (e.g., CTR or session time), guardrails (latency p99, error rate). Randomize on user ID for personalization. Calculate sample size for the expected effect. Use interleaving for faster signal if testing ranking only. Run shadow mode first to check model correctness. Monitor for novelty effects in first 24-48 hours. Segment analysis by user type (new vs returning, mobile vs desktop).
 
 **Q: What is a Sample Ratio Mismatch (SRM) and why is it critical?**
-SRM occurs when the actual split between variants differs significantly from the planned split. It indicates a bug in the randomization/logging/data pipeline. If 50/50 split gives you 45K control and 55K treatment, something is wrong — you cannot trust any of the experiment's results. Always check SRM first before looking at any metrics.
+SRM occurs when the actual split between variants differs significantly from the planned split. It indicates a bug in the randomization/logging/data pipeline. If 50/50 split gives you 45K control and 55K treatment, something is wrong: you cannot trust any of the experiment's results. Always check SRM first before looking at any metrics.
 
 **Q: When would you use CUPED?**
-CUPED (pre-experiment covariate adjustment) is useful when users have highly variable baseline behavior. If pre-experiment purchase rate is highly correlated with post-experiment purchase rate, CUPED can reduce variance by 50-80%, allowing you to detect smaller effects or reach significance faster with fewer users. It's essentially regression adjustment — standard in large-scale experimentation.
+CUPED (pre-experiment covariate adjustment) is useful when users have highly variable baseline behavior. If pre-experiment purchase rate is highly correlated with post-experiment purchase rate, CUPED can reduce variance by 50-80%, allowing you to detect smaller effects or reach significance faster with fewer users. It's essentially regression adjustment: standard in large-scale experimentation.

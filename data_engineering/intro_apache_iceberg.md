@@ -1,6 +1,6 @@
 # Apache Iceberg – Complete Guide (2026 Edition)
 
-**Apache Iceberg** is an open table format for huge analytic datasets. It brings SQL table semantics — ACID transactions, schema evolution, hidden partitioning, and time travel — to data lake files on S3/GCS/ADLS. In 2026, Iceberg has become the **default open table format** for the data lakehouse.
+**Apache Iceberg** is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden partitioning, and time travel) to data lake files on S3/GCS/ADLS. In 2026, Iceberg has become the **default open table format** for the data lakehouse.
 
 ---
 
@@ -23,9 +23,9 @@
 ## What is Apache Iceberg?
 
 Before open table formats, data lakes had three options:
-1. **Raw Parquet/ORC files** — fast reads, but no ACID, no schema, no history
-2. **Hive Metastore tables** — basic metadata, but terrible at scale
-3. **Proprietary formats** — vendor lock-in
+1. **Raw Parquet/ORC files**: fast reads, but no ACID, no schema, no history
+2. **Hive Metastore tables**: basic metadata, but terrible at scale
+3. **Proprietary formats**: vendor lock-in
 
 Iceberg solves this by adding a **metadata layer** on top of existing file formats:
 
@@ -40,12 +40,12 @@ A "proper" SQL table with ACID, schema, history, and fast queries
 ### Why Iceberg Won (vs Delta Lake vs Hudi)
 
 Iceberg has become the industry standard because:
-- **Truly open** — Apache Software Foundation, no single vendor owns it
-- **Catalog-agnostic** — works with Hive Metastore, Glue, Nessie, REST, JDBC
-- **Engine-agnostic** — Spark, Flink, Trino, Snowflake, Athena, DuckDB, BigQuery all read it
-- **Multi-writer support** — designed for concurrent writes from multiple engines
-- **Column statistics** — fine-grained stats for query pruning
-- **Partition evolution** — change partition strategy without rewriting data
+- **Truly open**: Apache Software Foundation, no single vendor owns it
+- **Catalog-agnostic**: works with Hive Metastore, Glue, Nessie, REST, JDBC
+- **Engine-agnostic**: Spark, Flink, Trino, Snowflake, Athena, DuckDB, BigQuery all read it
+- **Multi-writer support**: designed for concurrent writes from multiple engines
+- **Column statistics**: fine-grained stats for query pruning
+- **Partition evolution**: change partition strategy without rewriting data
 
 ---
 
@@ -58,7 +58,7 @@ Iceberg has become the industry standard because:
 | **Engine support** | Spark, Flink, Trino, DuckDB, Snowflake, BigQuery... | Spark, Trino (read), Databricks | Spark, Flink |
 | **ACID** | ✓ | ✓ | ✓ |
 | **Time travel** | ✓ | ✓ | ✓ |
-| **Schema evolution** | ✓ (best-in-class) | ✓ | ✓ |
+| **Schema evolution** | ✓ (most flexible) | ✓ | ✓ |
 | **Partition evolution** | ✓ (unique) | Partial | Partial |
 | **Multi-engine writes** | ✓ | Limited | Limited |
 | **Row-level deletes** | ✓ (v2: Delete Files) | ✓ | ✓ (MOR tables) |
@@ -96,7 +96,7 @@ Iceberg has become the industry standard because:
 | **Manifest List** | Points to all manifests for a snapshot |
 | **Manifest File** | Lists data files + their column-level statistics |
 | **Data File** | The actual Parquet/ORC/Avro file with rows |
-| **Delete File** | Records which rows are deleted (v2 format — avoids rewriting) |
+| **Delete File** | Records which rows are deleted (v2 format: avoids rewriting) |
 | **Sequence Number** | Monotonically increasing version counter for ordering snapshots |
 
 ---
@@ -233,7 +233,7 @@ arrow_table = scan.to_arrow()   # → PyArrow Table
 ### Write Modes
 
 ```python
-# Append — add rows
+# Append: add rows
 df.writeTo("local.db.orders").append()
 
 # Overwrite matching partitions
@@ -274,12 +274,12 @@ table.overwrite(new_df, overwrite_filter=EqualTo("status", "pending"))
 
 ## Schema Evolution
 
-Iceberg's schema evolution is **lossless** — you can safely:
+Iceberg's schema evolution is **lossless**: you can safely:
 - **Add columns** (new reads get NULL for old rows)
 - **Drop columns** (old files still have the data, just hidden)
-- **Rename columns** — tracked by column ID, not name
-- **Promote types** — int → long, float → double
-- **Reorder columns** — cosmetic only
+- **Rename columns**: tracked by column ID, not name
+- **Promote types**: int → long, float → double
+- **Reorder columns**: cosmetic only
 
 ```sql
 -- Add column
@@ -321,7 +321,7 @@ with table.update_schema() as update:
 
 Iceberg's **hidden partitioning** is a major advantage over Hive-style partitioning.
 
-### Hive Partitioning (old way — avoid)
+### Hive Partitioning (old way: avoid)
 ```sql
 -- Hive: partition column IS a real column
 -- Users must write: WHERE dt = '2025-01-15'
@@ -360,7 +360,7 @@ SELECT * FROM orders WHERE created_at BETWEEN '2025-01-01' AND '2025-01-31';
 ### Partition Evolution
 
 ```sql
--- Change from day to hour partitioning — zero data rewrite!
+-- Change from day to hour partitioning: zero data rewrite!
 ALTER TABLE local.db.orders
 REPLACE PARTITION FIELD days(created_at)
 WITH hours(created_at);
@@ -495,7 +495,7 @@ spark = SparkSession.builder \
     .config("spark.sql.catalog.nessie.ref", "main") \
     .getOrCreate()
 
-# Work on a branch — isolates your changes
+# Work on a branch: isolates your changes
 spark.sql("USE REFERENCE my_feature_branch IN nessie")
 spark.sql("UPDATE nessie.db.orders SET status = 'v2' WHERE ...")
 
@@ -507,7 +507,7 @@ spark.sql("UPDATE nessie.db.orders SET status = 'v2' WHERE ...")
 
 ## DuckDB + Iceberg
 
-DuckDB can query Iceberg tables **without Spark** — perfect for local development and ad-hoc queries.
+DuckDB can query Iceberg tables **without Spark**: perfect for local development and ad-hoc queries.
 
 ```sql
 -- Install extension
@@ -540,12 +540,12 @@ SELECT * FROM iceberg_catalog.my_db.orders LIMIT 10;
 | Feature | Status in 2026 |
 |---------|---------------|
 | **Iceberg v3** | Row lineage, default values, multi-arg transforms, variant type |
-| **REST Catalog standard** | The default catalog API — all engines support it |
-| **Apache Polaris** | Anthropic/Snowflake open-sourced REST catalog — industry standard |
+| **REST Catalog standard** | The default catalog API: all engines support it |
+| **Apache Polaris** | Anthropic/Snowflake open-sourced REST catalog: industry standard |
 | **Uniform read** | Snowflake, BigQuery, Athena all read Iceberg natively |
-| **Delta UniForm** | Delta tables expose Iceberg metadata — bridging the gap |
+| **Delta UniForm** | Delta tables expose Iceberg metadata, bridging the gap |
 | **Streaming support** | Flink + Iceberg is production-standard for streaming ETL |
-| **PyIceberg 0.8+** | Native Python reads without Spark — DuckDB integration |
+| **PyIceberg 0.8+** | Native Python reads without Spark: DuckDB integration |
 
 ### Adoption in 2026
 

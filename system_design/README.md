@@ -356,9 +356,9 @@ See detailed design: [Fraud Detection System](./fraud_detection.md)
 **Use case:** Detect anomalies in server metrics, financial transactions, IoT sensors
 
 **Approaches:**
-- **Statistical:** Z-score, IQR, ARIMA residuals — works for stationary data
+- **Statistical:** Z-score, IQR, ARIMA residuals, works for stationary data
 - **ML-based:** Isolation Forest, LOF for multivariate tabular data
-- **Deep learning:** LSTM Autoencoder — learns normal patterns, flags high reconstruction error
+- **Deep learning:** LSTM Autoencoder, learns normal patterns, flags high reconstruction error
 - **Forecasting-based:** Predict expected value, flag when actual > threshold×predicted
 
 **Pipeline:**
@@ -440,7 +440,7 @@ Every guide in `system_design/`. Start with the overview above, then work throug
 - [Backend and System Design for AI](./intro_backend_ai_system_design.md)
 - [Designing a Production LLM Assistant](./llm_assistant_system.md)
 - [ETA Prediction System Design](./eta_prediction.md)
-- [ML System Design Patterns — 2026 Production Guide](./ml_system_design_patterns.md)
+- [ML System Design Patterns: 2026 Production Guide](./ml_system_design_patterns.md)
 - [News Feed Ranking System Design](./news_feed_ranking.md)
 - [Recommendation System Design](./recommendation_system.md)
 - [Search and Ranking System Design](./search_ranking_system.md)
@@ -450,8 +450,8 @@ Every guide in `system_design/`. Start with the overview above, then work throug
 
 ## References
 
-- [Designing Machine Learning Systems — Chip Huyen (O'Reilly)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)
-- [Machine Learning System Design Interview — Alex Xu, Sahn Lam](https://www.amazon.com/Machine-Learning-System-Design-Interview/dp/1736049127)
+- [Designing Machine Learning Systems: Chip Huyen (O'Reilly)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)
+- [Machine Learning System Design Interview: Alex Xu, Sahn Lam](https://www.amazon.com/Machine-Learning-System-Design-Interview/dp/1736049127)
 - [ML Systems Design at Recsys, KDD, and MLSys conferences](https://proceedings.mlsys.org/)
 - [Google's Rules of Machine Learning](https://developers.google.com/machine-learning/guides/rules-of-ml)
 - [Meta's AI Infrastructure blog](https://engineering.fb.com/category/ml-applications/)

@@ -1,6 +1,6 @@
 # Kubernetes – Complete Guide (2026 Edition)
 
-Kubernetes (K8s) is the de-facto standard for **container orchestration** — automating deployment, scaling, self-healing, and management of containerized applications at scale.
+Kubernetes (K8s) is the de-facto standard for **container orchestration**, automating deployment, scaling, self-healing, and management of containerized applications at scale.
 
 ---
 
@@ -15,7 +15,7 @@ Kubernetes (K8s) is the de-facto standard for **container orchestration** — au
 8. [Configuration](#configuration)
 9. [Namespaces & RBAC](#namespaces--rbac)
 10. [Ingress](#ingress)
-11. [Helm](./intro_helm.md) — covered in its own guide
+11. [Helm](./intro_helm.md): covered in its own guide
 12. [Scaling & Auto-scaling](#scaling--auto-scaling)
 13. [Observability](#observability)
 14. [Kubernetes in 2026](#kubernetes-in-2026)
@@ -181,7 +181,7 @@ kubectl cp my-pod:/app/logs/app.log ./app.log
 
 ### Pod
 
-The smallest unit. Almost never created directly — use Deployments instead.
+The smallest unit. Almost never created directly: use Deployments instead.
 
 ```yaml
 apiVersion: v1
@@ -395,7 +395,7 @@ A **Service** provides a stable IP and DNS name for a set of Pods (which come an
 ### Service Types
 
 ```yaml
-# ClusterIP (default) — internal only
+# ClusterIP (default): internal only
 apiVersion: v1
 kind: Service
 metadata:
@@ -409,7 +409,7 @@ spec:
   type: ClusterIP
 
 ---
-# NodePort — accessible on each node's IP
+# NodePort: accessible on each node's IP
 spec:
   type: NodePort
   ports:
@@ -418,7 +418,7 @@ spec:
       nodePort: 30080   # 30000-32767
 
 ---
-# LoadBalancer — provisions cloud load balancer
+# LoadBalancer: provisions cloud load balancer
 spec:
   type: LoadBalancer
   ports:
@@ -455,7 +455,7 @@ parameters:
 reclaimPolicy: Retain
 
 ---
-# PersistentVolumeClaim — request storage
+# PersistentVolumeClaim: request storage
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -770,7 +770,7 @@ helm upgrade --install loki grafana/loki-stack \
 | **WebAssembly (Wasm)** | Wasm workloads running alongside containers via `runwasi` |
 | **Karpenter** | Node auto-provisioner (replaces Cluster Autoscaler on AWS) |
 | **Cilium** | eBPF-powered networking, replacing kube-proxy in many clusters |
-| **ArgoCD / Flux** | GitOps — declarative continuous delivery for K8s |
+| **ArgoCD / Flux** | GitOps: declarative continuous delivery for K8s |
 | **Crossplane** | Kubernetes-native infrastructure provisioning (K8s for cloud resources) |
 | **KEDA** | Event-driven autoscaling (scale on Kafka lag, queue depth, etc.) |
 | **OpenTelemetry** | Standard for traces, metrics, logs across the cluster |

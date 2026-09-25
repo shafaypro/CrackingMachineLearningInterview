@@ -54,7 +54,7 @@ MLflow solves these problems by providing a unified platform that works with any
 
 ## Tracking Experiments
 
-Every MLflow run belongs to an **experiment**. An experiment groups related runs together — for example, all runs tuning hyperparameters for a specific model.
+Every MLflow run belongs to an **experiment**. An experiment groups related runs together: for example, all runs tuning hyperparameters for a specific model.
 
 ```python
 import mlflow
@@ -157,7 +157,7 @@ with mlflow.start_run():
 
 ### Artifacts
 
-Artifacts are files associated with a run — model files, plots, datasets, reports:
+Artifacts are files associated with a run: model files, plots, datasets, reports:
 
 ```python
 import matplotlib.pyplot as plt
@@ -505,11 +505,11 @@ with mlflow.start_run():
 
 **Q1: What is the difference between an MLflow experiment and a run?**
 
-An **experiment** is a logical grouping of related runs — for example, all attempts to build a fraud detection model. A **run** is a single execution of your training code with a specific set of parameters. One experiment contains many runs. You can think of an experiment as a folder and runs as files within it.
+An **experiment** is a logical grouping of related runs: for example, all attempts to build a fraud detection model. A **run** is a single execution of your training code with a specific set of parameters. One experiment contains many runs. You can think of an experiment as a folder and runs as files within it.
 
 **Q2: How does the MLflow Model Registry differ from just storing model artifacts in a run?**
 
-Run artifacts are just files stored in a blob store — there is no lifecycle management, versioning, or discoverability. The Model Registry adds: named versioning (v1, v2, v3), lifecycle stages (Staging/Production/Archived), descriptions, tags for governance, and aliases. It acts as a single source of truth for what model is in production, enabling CI/CD pipelines to fetch `models:/ModelName/Production` without hardcoding run IDs.
+Run artifacts are just files stored in a blob store: there is no lifecycle management, versioning, or discoverability. The Model Registry adds: named versioning (v1, v2, v3), lifecycle stages (Staging/Production/Archived), descriptions, tags for governance, and aliases. It acts as a single source of truth for what model is in production, enabling CI/CD pipelines to fetch `models:/ModelName/Production` without hardcoding run IDs.
 
 **Q3: What is an MLflow flavor and why does it matter?**
 
@@ -533,7 +533,7 @@ Tracking metadata (params, metrics, tags) can be stored in: local filesystem (`.
 
 **Q8: How would you set up MLflow in a team environment?**
 
-Deploy an MLflow Tracking Server with: a SQL database backend (PostgreSQL recommended) for metadata, cloud object storage (S3/GCS/Azure Blob) for artifacts, and optional authentication via a reverse proxy (nginx + OAuth). Use `mlflow.set_tracking_uri("http://mlflow-server:5000")` or the `MLFLOW_TRACKING_URI` environment variable. Set up the Model Registry on the same server. For access control, MLflow OSS has limited auth — consider Databricks MLflow or add an auth proxy.
+Deploy an MLflow Tracking Server with: a SQL database backend (PostgreSQL recommended) for metadata, cloud object storage (S3/GCS/Azure Blob) for artifacts, and optional authentication via a reverse proxy (nginx + OAuth). Use `mlflow.set_tracking_uri("http://mlflow-server:5000")` or the `MLFLOW_TRACKING_URI` environment variable. Set up the Model Registry on the same server. For access control, MLflow OSS has limited auth: consider Databricks MLflow or add an auth proxy.
 
 **Q9: What is the difference between `mlflow.log_metric` with a `step` parameter and without?**
 
@@ -561,7 +561,7 @@ Calling `mlflow.log_metric("loss", value)` inside a training loop without `step=
 Models without signatures cannot validate inputs at serving time. This leads to cryptic errors in production. Always use `infer_signature` or define the signature manually.
 
 **4. Using stages instead of aliases for flexible routing**
-The traditional stage system (Staging/Production) is rigid — only one model can be in Production at a time per model name. Aliases (MLflow 2.x) allow multiple simultaneously active versions with custom names, enabling champion/challenger setups.
+The traditional stage system (Staging/Production) is rigid: only one model can be in Production at a time per model name. Aliases (MLflow 2.x) allow multiple simultaneously active versions with custom names, enabling champion/challenger setups.
 
 **5. Storing large datasets as artifacts**
 MLflow artifacts are not designed for versioning large datasets. Use a dedicated tool (DVC, Delta Lake, LakeFS) for dataset versioning and only log a reference (path or hash) in MLflow.
@@ -585,9 +585,9 @@ The default MLflow server has no authentication. Anyone with network access can 
 
 ## Related Topics
 
-- [Kubernetes](../devops/intro_kubernetes.md) — Orchestrating ML workloads and pipelines on Kubernetes
-- [Intro to Model Serving](intro_model_serving.md) — TF Serving, Triton, BentoML, and serving strategies
-- [Intro to Feature Stores](intro_feature_stores.md) — Feast, Tecton, and managing ML features
-- [Intro to Model Explainability](intro_model_explainability.md) — SHAP, LIME, and interpretability
-- [Intro to Data Quality](intro_data_quality.md) — Great Expectations, data contracts, and drift detection
-- [GitHub Actions](../devops/intro_github_actions.md) — Automating ML pipelines and model CI/CD
+- [Kubernetes](../devops/intro_kubernetes.md): Orchestrating ML workloads and pipelines on Kubernetes
+- [Intro to Model Serving](intro_model_serving.md): TF Serving, Triton, BentoML, and serving strategies
+- [Intro to Feature Stores](intro_feature_stores.md): Feast, Tecton, and managing ML features
+- [Intro to Model Explainability](intro_model_explainability.md): SHAP, LIME, and interpretability
+- [Intro to Data Quality](intro_data_quality.md): Great Expectations, data contracts, and drift detection
+- [GitHub Actions](../devops/intro_github_actions.md): Automating ML pipelines and model CI/CD

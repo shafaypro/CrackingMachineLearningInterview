@@ -24,10 +24,10 @@
 ### The Problem RAG Solves
 
 LLMs have limitations:
-- **Knowledge cutoff** — don't know recent events
-- **No private data** — can't access your internal docs
-- **Hallucination** — may make up facts confidently
-- **Context limits** — can't fit millions of docs in one prompt
+- **Knowledge cutoff**: don't know recent events
+- **No private data**: can't access your internal docs
+- **Hallucination**: may make up facts confidently
+- **Context limits**: can't fit millions of docs in one prompt
 
 RAG solves all of these by **retrieving relevant documents at query time** and adding them to the prompt.
 
@@ -743,7 +743,7 @@ print(rag.query("How do I set up dbt incrementally?"))
 
 | Tool | Role |
 |------|------|
-| **Voyage AI** | Anthropic's embedding models (best-in-class for retrieval) |
+| **Voyage AI** | Anthropic's embedding models (strong retrieval quality) |
 | **LangChain** | RAG pipelines, document loaders, retrievers |
 | **LlamaIndex** | Advanced RAG, knowledge graphs, query engines |
 | **RAGAS** | RAG evaluation framework |
@@ -752,7 +752,7 @@ print(rag.query("How do I set up dbt incrementally?"))
 | **pgvector** | PostgreSQL extension for vectors |
 | **Chroma** | Open-source, developer-friendly vector DB |
 | **Qdrant** | Rust-based high-performance vector DB |
-| **Cohere Rerank** | Best-in-class reranking API |
+| **Cohere Rerank** | Widely used hosted reranking API |
 
 ### Trends in 2026
 

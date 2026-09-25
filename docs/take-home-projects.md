@@ -1,6 +1,6 @@
 # ML Take-Home Projects and Case Studies
 
-The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was wrong but because they optimized the wrong thing — chasing an extra point of AUC while shipping a notebook nobody can run, no baseline to compare against, and no statement of what they would do next.
+The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was wrong but because they optimized the wrong thing, chasing an extra point of AUC while shipping a notebook nobody can run, no baseline to compare against, and no statement of what they would do next.
 
 This guide covers what reviewers actually score, how to budget your time, the structure that reads well, and the presentation round that usually follows.
 
@@ -44,7 +44,7 @@ The single most common mis-calibration is spending 80% of the time on the model 
 
 ## Time Budget
 
-If the brief says "about 4 hours," treat that as a real constraint. Reviewers compare submissions against the stated budget, and a 30-hour submission signals poor prioritization as much as it signals effort — it also disadvantages candidates who respected the limit, which reviewers notice.
+If the brief says "about 4 hours," treat that as a real constraint. Reviewers compare submissions against the stated budget, and a 30-hour submission signals poor prioritization as much as it signals effort: it also disadvantages candidates who respected the limit, which reviewers notice.
 
 For a nominal 4–6 hours:
 
@@ -101,7 +101,7 @@ Most reviewers spend 10–15 minutes on a submission, and much of it in the READ
 A structure that works:
 
 ```markdown
-# <Problem> — Approach and Results
+# <Problem> Approach and Results
 
 ## Problem framing
 What I understood the task to be, the metric I optimized, and why that metric
@@ -135,7 +135,7 @@ Ranked by expected value, not by what is interesting.
 Exact commands, verified from a clean checkout.
 ```
 
-Two sections carry disproportionate weight. **Assumptions and limitations** is where reviewers look for intellectual honesty — a candidate who names the weaknesses of their own work is one who can be trusted with an ambiguous problem. **What I'd do next**, ranked by expected value, demonstrates prioritization, which is most of senior ML work.
+Two sections carry disproportionate weight. **Assumptions and limitations** is where reviewers look for intellectual honesty: a candidate who names the weaknesses of their own work is one who can be trusted with an ambiguous problem. **What I'd do next**, ranked by expected value, demonstrates prioritization, which is most of senior ML work.
 
 ---
 
@@ -143,9 +143,9 @@ Two sections carry disproportionate weight. **Assumptions and limitations** is w
 
 **Framing before fitting.** Write down the prediction target, the unit of prediction, when the prediction would be made in production, and what information is available at that moment. That last question is what prevents leakage, and stating it explicitly is worth marks by itself.
 
-**Choose the metric from the cost structure.** Accuracy on an imbalanced problem is an immediate red flag. Ask what a false positive costs versus a false negative, then pick accordingly — PR-AUC and recall at a fixed precision for rare-event problems, calibration if scores drive decisions, MAE versus RMSE depending on outlier treatment. Say why in one sentence.
+**Choose the metric from the cost structure.** Accuracy on an imbalanced problem is an immediate red flag. Ask what a false positive costs versus a false negative, then pick accordingly: PR-AUC and recall at a fixed precision for rare-event problems, calibration if scores drive decisions, MAE versus RMSE depending on outlier treatment. Say why in one sentence.
 
-**Split before you look.** Fit every transformation — scalers, imputers, target encoders — inside a pipeline on the training fold only. If the data is temporal, split by time; if entities repeat (users, sessions, patients), split by group. A random split on temporal or grouped data is the most common disqualifying error in take-homes, and it produces suspiciously good numbers that reviewers recognize on sight.
+**Split before you look.** Fit every transformation (scalers, imputers, target encoders) inside a pipeline on the training fold only. If the data is temporal, split by time; if entities repeat (users, sessions, patients), split by group. A random split on temporal or grouped data is the most common disqualifying error in take-homes, and it produces suspiciously good numbers that reviewers recognize on sight.
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -161,7 +161,7 @@ pipeline = Pipeline([
 ])
 ```
 
-**Error analysis beats one more model.** Twenty minutes examining where the model fails — which segments, which feature ranges, what the false positives have in common — produces better material than another hour of hyperparameter search. It is also the part that transfers directly into the presentation round.
+**Error analysis beats one more model.** Twenty minutes examining where the model fails (which segments, which feature ranges, what the false positives have in common) produces better material than another hour of hyperparameter search. It is also the part that transfers directly into the presentation round.
 
 **Seed everything and state the variance.** Report `mean ± std` across folds rather than a single number. A candidate who reports 0.412 ± 0.03 is more credible than one who reports 0.4118.
 
@@ -180,7 +180,7 @@ pipeline = Pipeline([
 | **RAG / LLM feature** | Evaluation of a non-deterministic system | No eval set; "looks good" as the evidence |
 | **Open-ended analysis** | Prioritization and communication | Exhaustive EDA with no conclusion |
 
-Two type-specific notes worth knowing. For **NLP**, a TF-IDF plus linear model baseline takes ten minutes and makes any subsequent transformer result meaningful; skipping it is a common and avoidable loss. For **RAG or LLM take-homes**, the whole test is usually whether you build an evaluation harness at all — 20 or 30 labeled question-answer pairs with retrieval recall and answer accuracy measured separately outweighs any amount of prompt polish.
+Two type-specific notes worth knowing. For **NLP**, a TF-IDF plus linear model baseline takes ten minutes and makes any subsequent transformer result meaningful; skipping it is a common and avoidable loss. For **RAG or LLM take-homes**, the whole test is usually whether you build an evaluation harness at all: 20 or 30 labeled question-answer pairs with retrieval recall and answer accuracy measured separately outweighs any amount of prompt polish.
 
 ---
 
@@ -191,16 +191,16 @@ Most take-homes are followed by a 30–45 minute discussion. It is a real round 
 **Structure a 10-minute walkthrough**: problem framing and metric choice (2 min), data findings (2 min), approach and baseline comparison (3 min), results and error analysis (2 min), limitations and next steps (1 min). Lead with framing, not with the model.
 
 **Questions to expect:**
-- "Why that metric?" — have the cost reasoning ready.
+- "Why that metric?": have the cost reasoning ready.
 - "Why that model, and what else did you consider?"
 - "What was your baseline, and how much did the model actually add over it?"
-- "Where does it fail?" — never answer "I'm not sure"; you did the error analysis.
-- "How would you deploy this?" — features at serving time, latency, monitoring, retraining.
+- "Where does it fail?": never answer "I'm not sure"; you did the error analysis.
+- "How would you deploy this?": features at serving time, latency, monitoring, retraining.
 - "What would break at 100x the data?"
 - "What did you not have time to do?"
 - "What would you do differently?"
 
-**Defend and concede appropriately.** If a reviewer challenges a choice you thought through, explain the reasoning and the alternative you rejected. If they identify a genuine mistake, acknowledge it directly and say what you would change — reviewers frequently probe a known weakness specifically to see whether you will defend the indefensible. Conceding a real error scores better than defending it.
+**Defend and concede appropriately.** If a reviewer challenges a choice you thought through, explain the reasoning and the alternative you rejected. If they identify a genuine mistake, acknowledge it directly and say what you would change: reviewers frequently probe a known weakness specifically to see whether you will defend the indefensible. Conceding a real error scores better than defending it.
 
 **Know your numbers.** Dataset size, class balance, baseline score, final score, and runtime. Fumbling your own results undermines everything else.
 
@@ -210,11 +210,11 @@ Most take-homes are followed by a 30–45 minute discussion. It is a real round 
 
 A few boundary questions come up often enough to answer here.
 
-**Clarifying questions are usually welcome.** One concise email asking about an ambiguous target definition or an unclear evaluation criterion signals engagement. Three rounds of questions signal an inability to act under ambiguity. If nobody responds, state your assumption in the README and proceed — that is the correct behavior, and reviewers score it well.
+**Clarifying questions are usually welcome.** One concise email asking about an ambiguous target definition or an unclear evaluation criterion signals engagement. Three rounds of questions signal an inability to act under ambiguity. If nobody responds, state your assumption in the README and proceed, that is the correct behavior, and reviewers score it well.
 
 **Going over the stated time** is a real negative, not the neutral it feels like. If you spent longer, do not claim otherwise; say what you did within the budget and mark clearly anything added afterward.
 
-**On using AI assistance**: follow whatever the brief says. If it is silent, use it as you would at work and be prepared to explain every line — the presentation round exposes code you cannot account for very quickly. Where a brief asks you to disclose usage, disclose it; being caught misrepresenting it ends the process regardless of the work's quality.
+**On using AI assistance**: follow whatever the brief says. If it is silent, use it as you would at work and be prepared to explain every line: the presentation round exposes code you cannot account for very quickly. Where a brief asks you to disclose usage, disclose it; being caught misrepresenting it ends the process regardless of the work's quality.
 
 **On external data and pretrained models**: allowed unless the brief forbids it, but justify the choice and account for the added complexity. A pretrained model that adds two points over a simple baseline while tripling inference cost is a tradeoff worth discussing rather than an automatic win.
 
@@ -225,7 +225,7 @@ A few boundary questions come up often enough to answer here.
 Run through this before submitting.
 
 **Reproducibility**
-- [ ] Cloned to a fresh directory, new virtualenv, followed the README literally — it runs
+- [ ] Cloned to a fresh directory, new virtualenv, followed the README literally: it runs
 - [ ] Dependencies pinned; no absolute paths; seeds set
 - [ ] Large data and artifacts gitignored, with instructions for obtaining them
 

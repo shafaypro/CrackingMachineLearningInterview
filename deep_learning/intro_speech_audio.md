@@ -1,6 +1,6 @@
 # Speech and Audio ML
 
-Speech is the interface behind voice assistants, call-center analytics, meeting transcription, dictation, accessibility tools, and now real-time voice agents built on LLMs. It is also a field with its own vocabulary — spectrograms, CTC, WER, EER, vocoders — that interviewers use to check whether you have actually shipped audio models or only read about them. This guide covers the signal-processing basics, the main model families for recognition and synthesis, the metrics, and the production issues that decide whether a speech system works outside the lab.
+Speech is the interface behind voice assistants, call-center analytics, meeting transcription, dictation, accessibility tools, and now real-time voice agents built on LLMs. It is also a field with its own vocabulary (spectrograms, CTC, WER, EER, vocoders), that interviewers use to check whether you have actually shipped audio models or only read about them. This guide covers the signal-processing basics, the main model families for recognition and synthesis, the metrics, and the production issues that decide whether a speech system works outside the lab.
 
 ---
 
@@ -176,7 +176,7 @@ frames:  h h _ e l l _ l o _      ->  "hello"
          (the blank between the two l-runs is what keeps "ll" from merging)
 ```
 
-The blank does two jobs: it lets the model output "nothing" on frames between tokens (most frames), and it separates genuinely repeated characters. The sum over alignments is computed efficiently with a forward-backward dynamic program, so training needs only (audio, transcript) pairs.
+The blank does two jobs: it lets the model output "nothing" on frames between tokens (most frames), and it separates repeated characters. The sum over alignments is computed efficiently with a forward-backward dynamic program, so training needs only (audio, transcript) pairs.
 
 The cost is a **conditional independence assumption**: each frame's output is predicted independently given the audio, so CTC has no internal language model and benefits a lot from an external one. It also requires `T` to be at least `U` plus the number of repeated adjacent labels. CTC models tend to produce **peaky** outputs: sharp spikes on a single frame per token with blank everywhere else.
 
@@ -246,7 +246,7 @@ score(y) = log p_AM(y | x) + λ · log p_LM(y) + β · |y|
 - **Shallow fusion**: add the external LM score during beam search. The length bonus `β` counters the LM's bias toward short outputs. Tune `λ` and `β` on a dev set.
 - **Rescoring**: generate an n-best list or lattice with a cheap LM, then rescore with a large neural LM or an LLM.
 - **Deep/cold fusion**: combine hidden states of AM and LM during training; less common in practice.
-- **Contextual biasing**: boost specific phrases (contact names, product SKUs) at decode time, via a prefix trie over bias phrases or a learned biasing module. This is often the highest-leverage fix for domain vocabulary.
+- **Contextual biasing**: boost specific phrases (contact names, product SKUs) at decode time, via a prefix trie over bias phrases or a learned biasing module. This is often the most effective fix for domain vocabulary.
 
 An end-to-end model already contains an implicit LM learned from its training transcripts, so fusing an external LM can double-count; **internal LM estimation** subtracts an estimate of it and helps on cross-domain audio.
 

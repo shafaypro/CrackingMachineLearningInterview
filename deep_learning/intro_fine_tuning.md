@@ -2,11 +2,11 @@
 
 ## Why Fine-Tune?
 
-Pre-trained LLMs are general-purpose. Fine-tuning adapts them to specific tasks, domains, or styles without training from scratch. The challenge: LLMs have billions of parameters — full fine-tuning is memory-prohibitive for most practitioners.
+Pre-trained LLMs are general-purpose. Fine-tuning adapts them to specific tasks, domains, or styles without training from scratch. The challenge: LLMs have billions of parameters: full fine-tuning is memory-prohibitive for most practitioners.
 
 **When to fine-tune vs. prompt engineer:**
-- **Prompt engineering first** — if you can solve the task with few-shot examples, do that
-- **Fine-tune when** — consistent format/style is needed, task is domain-specific (legal, medical), latency requires shorter prompts, behavior that's hard to describe in a prompt
+- **Prompt engineering first**: if you can solve the task with few-shot examples, do that
+- **Fine-tune when**: consistent format/style is needed, task is domain-specific (legal, medical), latency requires shorter prompts, behavior that's hard to describe in a prompt
 
 ---
 
@@ -34,7 +34,7 @@ W_new = W_pretrained + ΔW = W_pretrained + B · A
 
 During training, W_pretrained is **frozen**. Only A and B are updated.
 
-**Why low rank works:** The updates needed to adapt a pre-trained model to a downstream task tend to have low intrinsic dimensionality — they lie in a small subspace.
+**Why low rank works:** The updates needed to adapt a pre-trained model to a downstream task tend to have low intrinsic dimensionality, they lie in a small subspace.
 
 ### LoRA Math
 
@@ -42,8 +42,8 @@ During training, W_pretrained is **frozen**. Only A and B are updated.
 h = W₀x + ΔWx = W₀x + BAx
 ```
 
-- W₀ ∈ ℝ^(d×k) — frozen pretrained weights
-- B ∈ ℝ^(d×r), A ∈ ℝ^(r×k) — trainable low-rank matrices
+- W₀ ∈ ℝ^(d×k): frozen pretrained weights
+- B ∈ ℝ^(d×r), A ∈ ℝ^(r×k): trainable low-rank matrices
 - r = rank (typical: 4, 8, 16, 64)
 - A is initialized with random Gaussian, B with zeros → ΔW = 0 at init
 
@@ -60,9 +60,9 @@ h = W₀x + ΔWx = W₀x + BAx
 ### Which Modules to Apply LoRA To?
 
 Common choices (from the original paper):
-- `q_proj`, `v_proj` — query and value projections in attention
-- `k_proj`, `o_proj` — key and output projections
-- `gate_proj`, `up_proj`, `down_proj` — MLP layers
+- `q_proj`, `v_proj`: query and value projections in attention
+- `k_proj`, `o_proj`: key and output projections
+- `gate_proj`, `up_proj`, `down_proj`: MLP layers
 
 Applying LoRA to all linear layers usually outperforms selective application.
 
@@ -100,8 +100,8 @@ model.print_trainable_parameters()
 QLoRA (Dettmers et al., 2023) enables fine-tuning 65B models on a single 48GB GPU by combining:
 
 1. **4-bit NormalFloat (NF4)** quantization of the base model
-2. **Double quantization** — quantize the quantization constants themselves
-3. **Paged optimizers** — offload optimizer states to CPU RAM when GPU memory spikes
+2. **Double quantization**: quantize the quantization constants themselves
+3. **Paged optimizers**: offload optimizer states to CPU RAM when GPU memory spikes
 4. **LoRA adapters** trained in bf16
 
 ### NF4 Quantization
@@ -253,10 +253,10 @@ tokenizer.apply_chat_template(
 
 ### Key Instruction Tuning Tips
 
-1. **Quality > Quantity** — 1K high-quality examples often outperforms 100K noisy ones
-2. **Diversity of instructions** — cover many task types (summarization, QA, code, classification)
-3. **Response length calibration** — include both short and long answers
-4. **System prompts** — include them in training data if you'll use them at inference
+1. **Quality > Quantity**: 1K high-quality examples often outperforms 100K noisy ones
+2. **Diversity of instructions**: cover many task types (summarization, QA, code, classification)
+3. **Response length calibration**: include both short and long answers
+4. **System prompts**: include them in training data if you'll use them at inference
 
 ---
 
@@ -265,9 +265,9 @@ tokenizer.apply_chat_template(
 ### RLHF (Reinforcement Learning from Human Feedback)
 
 Three-stage process:
-1. **SFT** — Supervised fine-tuning on demonstrations
-2. **Reward modeling** — Train a reward model on human preference pairs (chosen vs rejected)
-3. **PPO** — Fine-tune the SFT model with RL using reward model signal
+1. **SFT**: Supervised fine-tuning on demonstrations
+2. **Reward modeling**: Train a reward model on human preference pairs (chosen vs rejected)
+3. **PPO**: Fine-tune the SFT model with RL using reward model signal
 
 Expensive: requires running 4 models simultaneously (SFT, reward, policy, value function).
 
@@ -364,7 +364,7 @@ output_b = model.generate(...)
 ## Common Interview Questions
 
 **Q: Why does LoRA work well even with rank=8?**
-The adaptation needed to steer a pretrained model toward a task has low intrinsic rank — the gradient updates during fine-tuning lie in a low-dimensional subspace of the full parameter space. LoRA captures this efficiently.
+The adaptation needed to steer a pretrained model toward a task has low intrinsic rank: the gradient updates during fine-tuning lie in a low-dimensional subspace of the full parameter space. LoRA captures this efficiently.
 
 **Q: When would you use full fine-tuning over LoRA?**
 When compute is available and the task requires fundamental behavioral shifts (e.g., changing the language a model operates in, major domain shift like scientific reasoning). For most task adaptation, LoRA is sufficient and preferred.
@@ -379,4 +379,4 @@ QLoRA uses quantization during *training* to reduce memory so you can fine-tune 
 Automated: task-specific metrics (accuracy, ROUGE, BLEU, code pass@k). LLM-as-judge: use a stronger model (GPT-4) to evaluate response quality on a held-out set. Human eval: for subjective quality. Monitor both capability gain *and* regression on general benchmarks (MT-Bench, MMLU).
 
 **Q: Explain gradient checkpointing trade-off.**
-Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades ~30% training speed for ~60-70% memory reduction — crucial when fine-tuning large models.
+Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades ~30% training speed for ~60-70% memory reduction, which matters most when fine-tuning large models.

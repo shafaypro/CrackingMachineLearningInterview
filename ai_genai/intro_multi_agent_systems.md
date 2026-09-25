@@ -1,4 +1,4 @@
-# Multi-Agent Systems — Architecture, Patterns & Production
+# Multi-Agent Systems: Architecture, Patterns & Production
 
 ## Single-Agent vs Multi-Agent Systems
 
@@ -363,7 +363,7 @@ class CircuitBreaker:
             if time.time() - self.last_failure_time > self.recovery_timeout:
                 self.state = "HALF-OPEN"
             else:
-                raise Exception("Circuit breaker OPEN — service unavailable")
+                raise Exception("Circuit breaker OPEN: service unavailable")
 
         try:
             result = func(*args, **kwargs)
@@ -399,16 +399,16 @@ class CircuitBreaker:
 ## Interview Questions
 
 **Q: When would you use multi-agent over single-agent?**
-> Multi-agent when: (1) tasks are parallelizable and time matters, (2) you need specialized expertise that doesn't fit one context window, (3) adversarial validation improves quality (generator + critic). Single-agent for most production use cases — it's simpler, cheaper, faster.
+> Multi-agent when: (1) tasks are parallelizable and time matters, (2) you need specialized expertise that doesn't fit one context window, (3) adversarial validation improves quality (generator + critic). Single-agent for most production use cases: it's simpler, cheaper, faster.
 
 **Q: Explain the supervisor pattern in multi-agent systems.**
 > A supervisor (orchestrator) agent receives the user request, decomposes it, routes subtasks to specialist agents, collects results, and synthesizes the final output. It's the "manager" that never does domain work itself, only coordinates.
 
 **Q: What's the difference between short-term and long-term memory in agents?**
-> Short-term: the context window — what the agent can "see" right now. Fast, free, but ephemeral and size-limited. Long-term: external storage (vector DB, database) — retrieved via semantic search and injected into context when relevant. Enables cross-session learning.
+> Short-term: the context window, what the agent can "see" right now. Fast, free, but ephemeral and size-limited. Long-term: external storage (vector DB, database): retrieved via semantic search and injected into context when relevant. Enables cross-session learning.
 
 **Q: How do you handle tool failures in agent systems?**
-> Retry with exponential backoff for transient failures. Circuit breakers to stop hammering a failing service. Fallback tools (e.g., if Google Search fails, use Bing). Graceful degradation — agent continues without the tool output and informs user. Always set timeouts.
+> Retry with exponential backoff for transient failures. Circuit breakers to stop hammering a failing service. Fallback tools (e.g., if Google Search fails, use Bing). Graceful degradation: agent continues without the tool output and informs user. Always set timeouts.
 
 **Q: What makes an agent flow deterministic vs non-deterministic, and which is better?**
-> Deterministic: control flow is defined in code (graph edges, if/else routing). Non-deterministic: LLM decides what to do next. Neither is universally better — use deterministic for predictability and reliability in production, non-deterministic for flexibility in exploratory tasks. Hybrid is best: deterministic macro-flow with non-deterministic micro-decisions within nodes.
+> Deterministic: control flow is defined in code (graph edges, if/else routing). Non-deterministic: LLM decides what to do next. Neither is universally better: use deterministic for predictability and reliability in production, non-deterministic for flexibility in exploratory tasks. Hybrid is best: deterministic macro-flow with non-deterministic micro-decisions within nodes.

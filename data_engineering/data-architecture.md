@@ -481,7 +481,7 @@ It is more about interoperability and intelligent control across a fragmented es
 
 ### When to Use
 
-- complex enterprise landscapes with many platforms
+- complex enterprise environments with many platforms
 - strong need for cross-system lineage, metadata, and policy automation
 - modernization programs where full platform consolidation is unrealistic
 

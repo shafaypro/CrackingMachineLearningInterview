@@ -87,10 +87,10 @@ Point-in-time correctness ensures that when creating training data, only feature
 # Event: customer churned on 2024-06-15
 # We should only use features available before 2024-06-15
 
-# WRONG: join on user_id only — gets current feature values (includes future data)
+# WRONG: join on user_id only, gets current feature values (includes future data)
 training_df = events.merge(features, on='user_id')
 
-# CORRECT: point-in-time join — gets feature values as of event timestamp
+# CORRECT: point-in-time join, gets feature values as of event timestamp
 # (each row gets the feature value that was current at the event_timestamp)
 training_df = feature_store.get_historical_features(
     entity_df=events[['user_id', 'event_timestamp']],
@@ -256,13 +256,13 @@ def predict(user_id: int) -> float:
 ## Interview Q&A
 
 **Q1: What problem does a feature store solve?**
-Two main problems: (1) **Training-serving skew** — without a feature store, features computed in Python/pandas for training and in Java/SQL for serving often diverge, causing silent model degradation in production. (2) **Feature duplication** — multiple teams compute the same feature independently with different logic, wasting engineering effort and causing inconsistency.
+Two main problems: (1) **Training-serving skew**: without a feature store, features computed in Python/pandas for training and in Java/SQL for serving often diverge, causing silent model degradation in production. (2) **Feature duplication**: multiple teams compute the same feature independently with different logic, wasting engineering effort and causing inconsistency.
 
 **Q2: What is point-in-time correctness and why does it matter?**
-When creating training data, we must use only feature values that were available *before* the label event. A naive join on entity ID would give the current (latest) feature value, which may include data from after the event — future leakage. Point-in-time joins fetch the feature value that was current at the exact event timestamp, preventing this leakage.
+When creating training data, we must use only feature values that were available *before* the label event. A naive join on entity ID would give the current (latest) feature value, which may include data from after the event: future leakage. Point-in-time joins fetch the feature value that was current at the exact event timestamp, preventing this leakage.
 
 **Q3: What is the difference between online and offline feature stores?**
-The offline store holds historical feature values for model training — it's optimized for batch reads (Parquet, BigQuery) and supports point-in-time queries. The online store holds the latest feature values for real-time inference — it's optimized for low-latency single-key lookups (Redis, DynamoDB, < 10ms). Materialization jobs sync data from offline to online.
+The offline store holds historical feature values for model training: it's optimized for batch reads (Parquet, BigQuery) and supports point-in-time queries. The online store holds the latest feature values for real-time inference: it's optimized for low-latency single-key lookups (Redis, DynamoDB, < 10ms). Materialization jobs sync data from offline to online.
 
 **Q4: How does feature freshness work in a feature store?**
 TTL (Time To Live) controls how long features stay in the online store. Materialization frequency determines how current the online store is. For real-time features (e.g., "user's last click"), you'd use streaming pipelines (Kafka → Redis) that update the online store continuously. For slower-changing features (e.g., "30-day purchase count"), batch materialization every few hours is sufficient.

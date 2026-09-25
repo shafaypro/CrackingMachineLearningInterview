@@ -1,6 +1,6 @@
 # DuckDB – Complete Guide (2026 Edition)
 
-**DuckDB** is an in-process OLAP database that runs directly inside your application — no server, no setup, no cluster. It's fast, embeddable, and can query Parquet, CSV, JSON, Arrow, Iceberg, and Delta Lake files directly. In 2026, DuckDB has become the go-to tool for local data analytics and the "SQLite of OLAP."
+**DuckDB** is an in-process OLAP database that runs directly inside your application: no server, no setup, no cluster. It's fast, embeddable, and can query Parquet, CSV, JSON, Arrow, Iceberg, and Delta Lake files directly. In 2026, DuckDB has become the go-to tool for local data analytics and the "SQLite of OLAP."
 
 ---
 
@@ -23,15 +23,15 @@
 
 DuckDB is a **columnar, vectorized, in-process** analytical database.
 
-- **In-process**: Runs inside your Python/R/Go/Java/Node app — like SQLite, but for analytics
-- **Columnar**: Stores data column-by-column — perfect for aggregations over wide tables
-- **Vectorized**: Processes data in vectors (batches) — massively parallel on a single machine
+- **In-process**: Runs inside your Python/R/Go/Java/Node app: like SQLite, but for analytics
+- **Columnar**: Stores data column-by-column: perfect for aggregations over wide tables
+- **Vectorized**: Processes data in vectors (batches): massively parallel on a single machine
 - **No server**: Nothing to install, configure, or maintain
 
 ```python
 import duckdb
 result = duckdb.sql("SELECT 42 AS answer").fetchone()
-# → (42,)   — it just works, no server needed
+# → (42,): it just works, no server needed
 ```
 
 ### When to Use DuckDB
@@ -115,7 +115,7 @@ CREATE TEMP TABLE tmp_orders AS SELECT * FROM orders WHERE status = 'pending';
 ### Querying
 
 ```sql
--- Standard SQL — DuckDB is highly SQL-compliant
+-- Standard SQL: DuckDB is highly SQL-compliant
 SELECT
     customer_id,
     COUNT(*) AS order_count,
@@ -135,7 +135,7 @@ LIMIT 20;
 
 ## Reading Files Directly
 
-This is DuckDB's superpower — **no import needed**.
+This is DuckDB's superpower: **no import needed**.
 
 ### CSV
 
@@ -189,7 +189,7 @@ SELECT * FROM parquet_metadata('data/orders.parquet');
 -- Read JSON Lines (ndjson)
 SELECT * FROM read_json('data/events.jsonl');
 
--- Nested JSON — DuckDB handles it!
+-- Nested JSON: DuckDB handles it!
 SELECT
     json_extract(payload, '$.user.id') AS user_id,
     json_extract(payload, '$.event') AS event_name
@@ -281,7 +281,7 @@ df = duckdb.sql("SELECT * FROM orders").df()
 import duckdb
 import pandas as pd
 
-# DuckDB can query Pandas/Polars DataFrames directly — zero copy!
+# DuckDB can query Pandas/Polars DataFrames directly: zero copy!
 orders_df = pd.read_csv('orders.csv')
 
 # Query the DataFrame by name
@@ -612,7 +612,7 @@ SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY latency) FROM requests;
 | Feature | Description |
 |---------|-------------|
 | **DuckDB 1.x** | Stable release, production-ready |
-| **MotherDuck** | Managed cloud DuckDB — scale beyond single machine |
+| **MotherDuck** | Managed cloud DuckDB: scale beyond single machine |
 | **DuckDB Extensions** | Iceberg, Delta, Spatial, Substrait, Excel, MySQL, PostgreSQL |
 | **WASM** | DuckDB running in the browser (duckdb-wasm) |
 | **Polars integration** | Zero-copy interchange with Polars via Arrow |

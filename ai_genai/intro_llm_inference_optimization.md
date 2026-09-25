@@ -30,13 +30,13 @@ Autoregressive generation has two phases with completely different hardware char
 | **Prefill** | Process the whole prompt in one forward pass | **Compute-bound** (large matmuls) | All prompt tokens at once |
 | **Decode** | Generate one token at a time | **Memory-bandwidth-bound** | One token per step, per sequence |
 
-During decode, generating a single token requires reading *every model weight* from HBM to compute one small matrix-vector product. For a 13B model in fp16, that's ~26 GB read per token. On an A100 with ~2 TB/s bandwidth, the floor is ~13 ms/token regardless of how fast the GPU's FLOPs are — the arithmetic intensity is terrible.
+During decode, generating a single token requires reading *every model weight* from HBM to compute one small matrix-vector product. For a 13B model in fp16, that's ~26 GB read per token. On an A100 with ~2 TB/s bandwidth, the floor is ~13 ms/token regardless of how fast the GPU's FLOPs are: the arithmetic intensity is terrible.
 
 This single fact explains the field:
-- **Batching helps enormously in decode** — the weights are read once and amortized across all sequences in the batch, so throughput scales nearly linearly until compute finally binds.
-- **Quantization helps decode directly** — half the bytes to read is roughly half the time per token.
-- **Speculative decoding helps** — it verifies several tokens in one weight-read pass.
-- **More FLOPs alone barely helps decode** — which is why raw TFLOPs is a misleading spec for a serving GPU.
+- **Batching helps enormously in decode**: the weights are read once and amortized across all sequences in the batch, so throughput scales nearly linearly until compute finally binds.
+- **Quantization helps decode directly**: half the bytes to read is roughly half the time per token.
+- **Speculative decoding helps**: it verifies several tokens in one weight-read pass.
+- **More FLOPs alone barely helps decode**: which is why raw TFLOPs is a misleading spec for a serving GPU.
 
 ---
 
@@ -54,9 +54,9 @@ This single fact explains the field:
 Total latency = TTFT + (output_tokens - 1) × TPOT
 ```
 
-For a chat UI, TTFT dominates perceived responsiveness — stream tokens and users tolerate a slower TPOT as long as text appears quickly. For a batch summarization job, only throughput matters and you should push batch size until TTFT is awful, because nobody is waiting.
+For a chat UI, TTFT dominates perceived responsiveness: stream tokens and users tolerate a slower TPOT as long as text appears quickly. For a batch summarization job, only throughput matters and you should push batch size until TTFT is awful, because nobody is waiting.
 
-**There is a fundamental throughput/latency tradeoff.** Larger batches raise throughput and raise per-request latency. Serving one model to both an interactive chat product and an offline pipeline from the same endpoint is usually a mistake — run separate deployments with different batch configurations.
+**There is a fundamental throughput/latency tradeoff.** Larger batches raise throughput and raise per-request latency. Serving one model to both an interactive chat product and an offline pipeline from the same endpoint is usually a mistake: run separate deployments with different batch configurations.
 
 ---
 
@@ -73,13 +73,13 @@ KV cache bytes = 2 (K and V)
               × bytes_per_element
 ```
 
-Worked example — Llama-3-8B (32 layers, 8 KV heads via GQA, head_dim 128) in fp16, 8k context:
+Worked example: Llama-3-8B (32 layers, 8 KV heads via GQA, head_dim 128) in fp16, 8k context:
 
 ```
 2 × 32 × 8 × 128 × 8192 × 2 bytes ≈ 1.07 GB per sequence
 ```
 
-At batch size 32 that's **34 GB of KV cache** — larger than the 16 GB of model weights. On long-context workloads the KV cache, not the model, is what limits how many concurrent requests fit on a GPU.
+At batch size 32 that's **34 GB of KV cache**: larger than the 16 GB of model weights. On long-context workloads the KV cache, not the model, is what limits how many concurrent requests fit on a GPU.
 
 ### Reducing KV cache size
 
@@ -92,7 +92,7 @@ At batch size 32 that's **34 GB of KV cache** — larger than the 16 GB of model
 | **PagedAttention** | Non-contiguous paged allocation | Eliminates fragmentation waste (~2x effective) |
 | **Sliding window / eviction** | Keep only recent + sink tokens | Bounded memory, some quality loss |
 
-**PagedAttention** (vLLM's core contribution) is worth explaining precisely: naive serving preallocates a contiguous buffer sized to the maximum possible sequence length for every request, so a request that generates 100 tokens with a 4096 reservation wastes 97% of its allocation. PagedAttention borrows OS virtual memory: the cache is split into fixed-size blocks allocated on demand and tracked through a block table. Fragmentation drops to near zero, and identical prefixes can share blocks via copy-on-write — which is what makes prefix caching for shared system prompts nearly free.
+**PagedAttention** (vLLM's core contribution) is worth explaining precisely: naive serving preallocates a contiguous buffer sized to the maximum possible sequence length for every request, so a request that generates 100 tokens with a 4096 reservation wastes 97% of its allocation. PagedAttention borrows OS virtual memory: the cache is split into fixed-size blocks allocated on demand and tracked through a block table. Fragmentation drops to near zero, and identical prefixes can share blocks via copy-on-write, which is what makes prefix caching for shared system prompts nearly free.
 
 ---
 
@@ -113,7 +113,7 @@ Continuous batching matters because generation lengths in a real workload vary b
 
 ## Attention Kernel Optimizations
 
-**FlashAttention** does not change the math; it changes the memory traffic. Standard attention materializes the `n × n` score matrix in HBM, so memory traffic is `O(n²)`. FlashAttention tiles the computation in SRAM and uses the online-softmax trick to never write the full matrix out, making traffic `O(n²/M)` for SRAM size `M`. The result is 2–4x faster attention and memory that scales linearly in sequence length — which is what made long-context training and inference practical at all.
+**FlashAttention** does not change the math; it changes the memory traffic. Standard attention materializes the `n × n` score matrix in HBM, so memory traffic is `O(n²)`. FlashAttention tiles the computation in SRAM and uses the online-softmax trick to never write the full matrix out, making traffic `O(n²/M)` for SRAM size `M`. The result is 2–4x faster attention and memory that scales linearly in sequence length, which is what made long-context training and inference practical at all.
 
 **PagedAttention** (memory allocation) and **FlashAttention** (kernel efficiency) are complementary and both used in modern servers. A common interview slip is treating them as alternatives.
 
@@ -127,7 +127,7 @@ Quantization reduces the numerical precision of weights and sometimes activation
 
 | Method | Bits | Type | Quality impact | Notes |
 |---|---|---|---|---|
-| **fp16 / bf16** | 16 | Baseline | — | Standard serving precision |
+| **fp16 / bf16** | 16 | Baseline | - | Standard serving precision |
 | **fp8** | 8 | Post-training | Very small | H100+ native support |
 | **INT8 (SmoothQuant, LLM.int8)** | 8 | Post-training | Small | Handles outlier activation channels |
 | **GPTQ** | 4 | Post-training, calibrated | Small–moderate | Layer-wise second-order error correction |
@@ -135,9 +135,9 @@ Quantization reduces the numerical precision of weights and sometimes activation
 | **GGUF (llama.cpp)** | 2–8 | Post-training | Varies by level | The CPU/edge standard |
 | **QLoRA (NF4)** | 4 | Training-time | Small | For fine-tuning, not primarily serving |
 
-Rules of thumb worth stating in an interview: 8-bit is essentially free in quality terms and should be the default. 4-bit costs a small but measurable amount of quality — usually acceptable, and worth it when it lets you fit a larger model on the same GPU. Below 4-bit, degradation becomes obvious on reasoning tasks.
+Rules of thumb worth stating in an interview: 8-bit is essentially free in quality terms and should be the default. 4-bit costs a small but measurable amount of quality, usually acceptable, and worth it when it lets you fit a larger model on the same GPU. Below 4-bit, degradation becomes obvious on reasoning tasks.
 
-**A larger 4-bit model usually beats a smaller fp16 model of the same memory footprint.** A 4-bit 70B model (~35 GB) generally outperforms an fp16 13B (~26 GB) on quality. That framing — quantization as a way to buy a bigger model rather than as a way to shrink a fixed one — is the answer interviewers are looking for.
+**A larger 4-bit model usually beats a smaller fp16 model of the same memory footprint.** A 4-bit 70B model (~35 GB) generally outperforms an fp16 13B (~26 GB) on quality. That framing (quantization as a way to buy a bigger model rather than as a way to shrink a fixed one) is the answer interviewers are looking for.
 
 **Verify quality yourself.** Perplexity barely moves under quantization while task accuracy can drop noticeably, especially on structured output, tool calling, and multi-step reasoning. Run your own eval set on the quantized model before shipping.
 
@@ -147,7 +147,7 @@ Rules of thumb worth stating in an interview: 8-bit is essentially free in quali
 
 A small, fast **draft model** proposes `k` tokens; the large **target model** verifies all `k` in a single forward pass. Accepted tokens are kept, and the first rejection resamples from a corrected distribution.
 
-Why it works: verifying `k` tokens costs almost the same as generating 1, because decode is memory-bandwidth-bound — you read the weights once either way. The speedup is roughly the mean number of accepted tokens per verification step, typically 2–3x on predictable text.
+Why it works: verifying `k` tokens costs almost the same as generating 1, because decode is memory-bandwidth-bound: you read the weights once either way. The speedup is roughly the mean number of accepted tokens per verification step, typically 2–3x on predictable text.
 
 ```
 Expected speedup ≈ (1 - α^(k+1)) / ((1 - α)(1 + c·k))
@@ -155,11 +155,11 @@ Expected speedup ≈ (1 - α^(k+1)) / ((1 - α)(1 + c·k))
 ```
 
 Key properties:
-- **Output distribution is provably unchanged** with the standard rejection-sampling acceptance rule. This is the crucial point: it is not an approximation and does not trade quality for speed.
+- **Output distribution is provably unchanged** with the standard rejection-sampling acceptance rule. This is the key point: it is not an approximation and does not trade quality for speed.
 - Acceptance rate matters most. A draft model too weak gets rejected constantly and you pay its cost for nothing; too strong and it's expensive to run.
-- Variants that avoid a separate draft model: **Medusa** (extra prediction heads on the target model), **EAGLE** (feature-level drafting), **n-gram / prompt lookup decoding** (draft by copying from the prompt — remarkably effective for summarization, RAG, and code editing where output copies input heavily).
+- Variants that avoid a separate draft model: **Medusa** (extra prediction heads on the target model), **EAGLE** (feature-level drafting), **n-gram / prompt lookup decoding** (draft by copying from the prompt, remarkably effective for summarization, RAG, and code editing where output copies input heavily).
 
-Speculative decoding improves **latency at low batch sizes**. At high batch sizes the GPU is already compute-saturated and there is no spare capacity to spend on verification, so gains shrink or vanish — a nuance worth mentioning.
+Speculative decoding improves **latency at low batch sizes**. At high batch sizes the GPU is already compute-saturated and there is no spare capacity to spend on verification, so gains shrink or vanish: a nuance worth mentioning.
 
 ---
 
@@ -221,14 +221,14 @@ Two structural points that matter more than the arithmetic:
 
 Often larger wins than anything at the kernel level, and cheaper to implement:
 
-- **Prompt caching** — order prompts stable-prefix-first so the cache hits. Frequently a 50–90% input cost reduction for agents and RAG.
-- **Semantic caching** — embed the query, and if a near-identical past query exists, return its answer. Excellent for FAQ-style traffic; needs a similarity threshold tuned carefully and an invalidation strategy, or it will confidently serve stale answers.
-- **Model routing** — send easy requests to a small model and hard ones to a large one, with a classifier or heuristic in front. Typically 60–80% cost reduction with minimal quality impact when the routing signal is decent.
-- **Shorter outputs** — instruct the model to be concise, cap `max_tokens`, and return structured data rather than prose. Output tokens are usually 4–5x the price of input.
-- **Streaming** — doesn't change cost or total time, but it slashes *perceived* latency, which is often the actual complaint.
-- **Batch APIs** — providers offer roughly 50% discounts for asynchronous batch jobs with a 24-hour window. Free money for offline workloads.
-- **Stop sequences and early termination** — stop generating the moment the useful content ends.
-- **Context trimming** — retrieve 20, rerank, pass 5. Fewer tokens, and usually *better* answers, since irrelevant context measurably degrades quality.
+- **Prompt caching**: order prompts stable-prefix-first so the cache hits. Frequently a 50–90% input cost reduction for agents and RAG.
+- **Semantic caching**: embed the query, and if a near-identical past query exists, return its answer. Excellent for FAQ-style traffic; needs a similarity threshold tuned carefully and an invalidation strategy, or it will confidently serve stale answers.
+- **Model routing**: send easy requests to a small model and hard ones to a large one, with a classifier or heuristic in front. Typically 60–80% cost reduction with minimal quality impact when the routing signal is decent.
+- **Shorter outputs**: instruct the model to be concise, cap `max_tokens`, and return structured data rather than prose. Output tokens are usually 4–5x the price of input.
+- **Streaming**: doesn't change cost or total time, but it slashes *perceived* latency, which is often the actual complaint.
+- **Batch APIs**: providers offer roughly 50% discounts for asynchronous batch jobs with a 24-hour window. Free money for offline workloads.
+- **Stop sequences and early termination**: stop generating the moment the useful content ends.
+- **Context trimming**: retrieve 20, rerank, pass 5. Fewer tokens, and usually *better* answers, since irrelevant context measurably degrades quality.
 
 ---
 
@@ -236,13 +236,13 @@ Often larger wins than anything at the kernel level, and cheaper to implement:
 
 #### Why is LLM inference memory-bandwidth-bound rather than compute-bound?
 
-During decode, one token is generated per step per sequence, so each weight matrix participates in a matrix-*vector* product — a tiny amount of arithmetic per byte loaded. The GPU must stream every model weight from HBM for each step: ~26 GB for a 13B fp16 model. On an A100 at ~2 TB/s that's ~13 ms of pure memory traffic per token, while the arithmetic takes a fraction of that. The GPU sits idle waiting on memory.
+During decode, one token is generated per step per sequence, so each weight matrix participates in a matrix-*vector* product: a tiny amount of arithmetic per byte loaded. The GPU must stream every model weight from HBM for each step: ~26 GB for a 13B fp16 model. On an A100 at ~2 TB/s that's ~13 ms of pure memory traffic per token, while the arithmetic takes a fraction of that. The GPU sits idle waiting on memory.
 
 Prefill is different: the whole prompt is processed at once, so it's a matrix-matrix product with high arithmetic intensity and it is compute-bound. This is why prefill and decode have different optimizations, why batching multiplies decode throughput almost for free, and why quantization directly speeds up generation.
 
 #### Explain the KV cache and why it can be larger than the model.
 
-Attention needs the keys and values of every previous token. Without a cache, each new token requires recomputing them for the whole prefix — `O(n²)` per sequence. The KV cache stores them, making each step `O(n)`.
+Attention needs the keys and values of every previous token. Without a cache, each new token requires recomputing them for the whole prefix: `O(n²)` per sequence. The KV cache stores them, making each step `O(n)`.
 
 Its size is `2 × layers × kv_heads × head_dim × seq_len × batch × dtype_bytes`, which grows linearly in *both* sequence length and batch size while the model weights are fixed. For Llama-3-8B at 8k context, one sequence costs ~1 GB; 32 concurrent sequences cost ~34 GB against 16 GB of fp16 weights. That's why long-context, high-concurrency serving is a KV cache capacity problem, and why GQA, cache quantization, and PagedAttention exist.
 
@@ -256,11 +256,11 @@ Continuous (in-flight) batching operates at the token level: after every decode 
 
 The draft model proposes `k` tokens and the target model verifies them in one forward pass, which is nearly free because decode is bandwidth-bound. Each drafted token is accepted with probability `min(1, p_target(x)/p_draft(x))`; on rejection, the token is resampled from the normalized residual distribution `max(0, p_target - p_draft)`.
 
-That acceptance rule is exactly modified rejection sampling, and it makes the resulting sequence distribution **provably identical** to sampling from the target model alone. So it is a pure latency optimization with no quality tradeoff — the tradeoff is compute spent on the draft model and the fact that gains shrink at high batch sizes, where the GPU has no idle capacity to spend on verification.
+That acceptance rule is exactly modified rejection sampling, and it makes the resulting sequence distribution **provably identical** to sampling from the target model alone. So it is a pure latency optimization with no quality tradeoff: the tradeoff is compute spent on the draft model and the fact that gains shrink at high batch sizes, where the GPU has no idle capacity to spend on verification.
 
 #### Your chat app has a 4-second time to first token. How do you diagnose and fix it?
 
-TTFT is prefill plus queueing, so I'd first measure which one dominates — instrument queue wait, prefill time, and network separately before changing anything.
+TTFT is prefill plus queueing, so I'd first measure which one dominates: instrument queue wait, prefill time, and network separately before changing anything.
 
 If it's **queueing**, the server is saturated: add replicas, enable continuous batching if it isn't on, or use chunked prefill so long prompts stop head-of-line-blocking short ones.
 
@@ -268,14 +268,14 @@ If it's **prefill compute**, the prompt is too long: enable prefix caching so th
 
 If it's **model size**, route easy requests to a smaller model, or use a smaller model with a larger context budget.
 
-Independently of all this, I'd make sure the response streams — a 4-second wall before any text is a much worse experience than 800 ms to first token and a slower stream, at the same total latency.
+Independently of all this, I'd make sure the response streams: a 4-second wall before any text is a much worse experience than 800 ms to first token and a slower stream, at the same total latency.
 
 #### How would you cut LLM serving costs by 70% without hurting quality much?
 
 Layered, measuring at each step:
-1. **Prompt/prefix caching** — often the single biggest win, since input tokens dominate RAG and agent workloads and cached input is roughly 10% of the price.
-2. **Trim context** — retrieve 20, rerank, send 5. Cheaper *and* usually more accurate, since irrelevant context degrades answers.
-3. **Model routing** — a small model handles the 70–80% of easy requests; escalate only when a classifier or confidence signal says so.
+1. **Prompt/prefix caching**: often the single biggest win, since input tokens dominate RAG and agent workloads and cached input is roughly 10% of the price.
+2. **Trim context**: retrieve 20, rerank, send 5. Cheaper *and* usually more accurate, since irrelevant context degrades answers.
+3. **Model routing**: a small model handles the 70–80% of easy requests; escalate only when a classifier or confidence signal says so.
 4. **Semantic caching** for repeated or near-repeated queries.
 5. **Cap output length** and prefer structured output over prose; output tokens cost several times input.
 6. **Batch API** (~50% discount) for anything that isn't interactive.
@@ -291,9 +291,9 @@ Use an API when load is spiky (you pay for idle GPUs otherwise), when you need f
 
 #### What quality risk does 4-bit quantization carry, and how do you validate it?
 
-The risk is uneven: perplexity often moves very little, which makes quantization look safe, while task-level accuracy on reasoning, structured output, and tool calling can drop noticeably. Outlier activation channels are the usual culprit — a few dimensions with very large magnitudes dominate the quantization range, which is exactly what AWQ and SmoothQuant are designed to protect against.
+The risk is uneven: perplexity often moves very little, which makes quantization look safe, while task-level accuracy on reasoning, structured output, and tool calling can drop noticeably. Outlier activation channels are the usual culprit: a few dimensions with very large magnitudes dominate the quantization range, which is exactly what AWQ and SmoothQuant are designed to protect against.
 
-Validation: run the *application's* eval set, not a generic benchmark. Compare fp16 and quantized on task success rate, JSON schema validity, and tool-call correctness; check the tails, not just the mean. If quality holds, 4-bit is usually the right call — and a 4-bit 70B typically beats an fp16 13B at the same memory, which is the real reason to quantize.
+Validation: run the *application's* eval set, not a generic benchmark. Compare fp16 and quantized on task success rate, JSON schema validity, and tool-call correctness; check the tails, not just the mean. If quality holds, 4-bit is usually the right call, and a 4-bit 70B typically beats an fp16 13B at the same memory, which is the real reason to quantize.
 
 #### What's the difference between FlashAttention and PagedAttention?
 

@@ -1,6 +1,6 @@
 # Anthropic AI – Complete Guide (2026 Edition)
 
-Anthropic is an AI safety company and the creator of **Claude** — a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide covers Claude's capabilities, the Anthropic API, key AI concepts, and how to build with Claude in 2026.
+Anthropic is an AI safety company and the creator of **Claude**: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide covers Claude's capabilities, the Anthropic API, key AI concepts, and how to build with Claude in 2026.
 
 ---
 
@@ -34,7 +34,7 @@ Anthropic is an AI safety company and the creator of **Claude** — a family of 
 ### Why Claude?
 
 Claude is designed to be:
-- **Helpful**: Genuinely useful for complex tasks
+- **Helpful**: Useful for complex tasks
 - **Harmless**: Avoids causing harm through careful training
 - **Honest**: Acknowledges uncertainty, won't deceive
 
@@ -92,12 +92,12 @@ Training Data → Pre-training (predict next token) → Base Model
 | **Hallucination** | Model generating confident but incorrect information |
 | **Grounding** | Anchoring model output to retrieved facts/documents (RAG) |
 | **Fine-tuning** | Further training a model on domain-specific data |
-| **RLHF** | Reinforcement Learning from Human Feedback — trains models on human preferences |
+| **RLHF** | Reinforcement Learning from Human Feedback: trains models on human preferences |
 | **Constitutional AI** | Anthropic's method: model critiques and revises itself against a set of principles |
 | **Embedding** | Dense vector representation of text for similarity search |
 | **Tokenizer** | Converts raw text to tokens (and back) |
 
-### Context Window Deep Dive
+### Context Windows in Detail
 
 ```
 200,000 tokens ≈ 150,000 words ≈ ~500 pages of text
@@ -327,7 +327,7 @@ def run_agent(user_message: str):
             messages.append({"role": "user", "content": tool_results})
 
         else:
-            # Claude is done — extract final text
+            # Claude is done: extract final text
             for block in response.content:
                 if hasattr(block, "text"):
                     return block.text
@@ -534,11 +534,11 @@ Anthropic trains Claude using a set of principles (a "constitution") rather than
 ### Claude's Values
 
 Claude is designed to:
-- Be **genuinely helpful** — not watered-down or overly cautious
-- Avoid **deception** — won't create false impressions
-- Avoid **harm** — won't assist with clearly harmful actions
+- Be **genuinely helpful**, not watered-down or overly cautious
+- Avoid **deception**: won't create false impressions
+- Avoid **harm**: won't assist with clearly harmful actions
 - Be **transparent** about limitations and uncertainty
-- Have **good character** — not just follow rules, but actually care
+- Have **good character**, not just follow rules, but actually care
 
 ### Responsible Scaling Policy (RSP)
 
@@ -589,7 +589,7 @@ def with_retry(fn, max_retries=3):
 ### Context Caching (cost optimization)
 
 ```python
-# Cache a large system prompt/document — up to 90% cost reduction
+# Cache a large system prompt/document: up to 90% cost reduction
 response = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=1024,
@@ -635,7 +635,7 @@ while batch.processing_status != "ended":
 
 | Feature | Description |
 |---------|-------------|
-| **Claude 4.x Series** | Opus 4.6, Sonnet 4.6, Haiku 4.5 — state of the art reasoning |
+| **Claude 4.x Series** | Opus 4.6, Sonnet 4.6, Haiku 4.5: current generation |
 | **Claude Code** | Agentic coding tool using Claude in the terminal / IDE |
 | **Extended thinking** | Claude "thinks" before answering for harder problems |
 | **MCP ecosystem** | Thousands of MCP servers connecting Claude to every tool imaginable |

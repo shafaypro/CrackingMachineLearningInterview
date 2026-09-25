@@ -1,6 +1,6 @@
 # Pandas and NumPy Challenges
 
-Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are rarely algorithmically hard — they test whether you can reshape real data fluently, avoid the silent-correctness traps, and know why the vectorized version is 100× faster.
+Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are rarely algorithmically hard: they test whether you can reshape real data fluently, avoid the silent-correctness traps, and know why the vectorized version is 100× faster.
 
 Each challenge below gives the problem, an idiomatic solution, and the follow-up interviewers ask.
 
@@ -32,7 +32,7 @@ Each challenge below gives the problem, an idiomatic solution, and the follow-up
 2. **State the approach before typing.** "Group by user, take the last event per group, then join back" earns credit even if the syntax needs a lookup.
 3. **Vectorize, but correctness first.** A working `apply` beats a broken one-liner. Then say "this is `O(n)` Python-level calls; here's the vectorized version" and rewrite it.
 4. **Name the traps unprompted.** Chained assignment, silent join fan-out, `groupby` dropping NaN keys, off-by-one in rolling windows. Mentioning these signals real experience.
-5. **Check your output.** `df.shape` before and after a merge is the single highest-value habit — it catches fan-out immediately.
+5. **Check your output.** `df.shape` before and after a merge is the single highest-value habit, it catches fan-out immediately.
 
 ---
 
@@ -45,7 +45,7 @@ a = np.arange(12).reshape(3, 4)     # (3, 4)
 
 a.shape, a.dtype, a.ndim, a.nbytes  # always know these
 
-# Views vs copies — the correctness trap
+# Views vs copies: the correctness trap
 b = a[:, 1:3]      # VIEW: writing to b modifies a
 c = a[:, [1, 2]]   # COPY: fancy indexing always copies
 b[0, 0] = 999      # a is now modified
@@ -59,11 +59,11 @@ x = np.array([1, -2, 3, -4, 5])
 x[x < 0] = 0                        # in-place clamp
 np.where(x > 2, x, 0)               # vectorized conditional
 
-# Aggregation along axes — axis is the one that DISAPPEARS
+# Aggregation along axes: axis is the one that DISAPPEARS
 m = np.arange(12).reshape(3, 4)
-m.sum(axis=0)     # (4,) — collapses rows, one value per column
-m.sum(axis=1)     # (3,) — collapses columns, one value per row
-m.sum(axis=1, keepdims=True)   # (3, 1) — keeps dims for broadcasting
+m.sum(axis=0)     # (4,): collapses rows, one value per column
+m.sum(axis=1)     # (3,): collapses columns, one value per row
+m.sum(axis=1, keepdims=True)   # (3, 1): keeps dims for broadcasting
 ```
 
 **The `axis` mnemonic worth memorizing**: `axis=k` is the axis that gets *removed* by the reduction. That resolves nearly all axis confusion.
@@ -83,7 +83,7 @@ c = np.array([1, 2, 3])             # (3,)   → (1,3) vs (3,4)  ✗ error
 A + c[:, None]                      # (3,1) vs (3,4)           ✓ explicit reshape
 ```
 
-**Challenge — pairwise distances without loops:**
+**Challenge: pairwise distances without loops:**
 
 ```python
 def pairwise_sq_dists(X, Y):
@@ -109,9 +109,9 @@ df = pd.DataFrame({"price": np.random.rand(1_000_000) * 100,
                    "qty": np.random.randint(1, 10, 1_000_000)})
 
 # Slowest → fastest
-# df.apply(lambda r: r.price * r.qty, axis=1)   # ~10 s — row-wise Python
+# df.apply(lambda r: r.price * r.qty, axis=1)   # ~10 s: row-wise Python
 # df["price"].combine(df["qty"], lambda a, b: a*b)  # slow
-df["total"] = df["price"] * df["qty"]           # ~5 ms — vectorized
+df["total"] = df["price"] * df["qty"]           # ~5 ms: vectorized
 ```
 
 Roughly **1000× difference**. `apply(axis=1)` constructs a Series per row; the vectorized version is a single C-level operation over contiguous memory.
@@ -132,7 +132,7 @@ df["band"] = pd.cut(df.price, bins=[0, 20, 50, 80, np.inf],
                     labels=["low", "medium", "high", "premium"])
 ```
 
-When you genuinely need per-row Python (calling an external API, complex branching), `apply` is acceptable — but say so explicitly rather than reaching for it by default.
+When you need per-row Python (calling an external API, complex branching), `apply` is acceptable, but say so explicitly rather than reaching for it by default.
 
 ---
 
@@ -147,7 +147,7 @@ sales = pd.DataFrame({
                             "2026-02-03", "2026-03-01"]),
 })
 
-# Named aggregation — clean, flat column names
+# Named aggregation: clean, flat column names
 sales.groupby("region").agg(
     total=("amount", "sum"),
     avg=("amount", "mean"),
@@ -169,9 +169,9 @@ sales.groupby("region").filter(lambda g: g["amount"].sum() > 400)
 | `agg` | One row per group | Summaries |
 | `transform` | **Same shape as input** | Adding group statistics as a column |
 | `filter` | Subset of original rows | Dropping whole groups |
-| `apply` | Anything | Last resort — slowest, most flexible |
+| `apply` | Anything | Last resort: slowest, most flexible |
 
-**Challenge — top-N per group:**
+**Challenge: top-N per group:**
 
 ```python
 # Idiomatic and fast
@@ -207,10 +207,10 @@ df["lag1"] = df["value"].shift(1)
 **The leakage trap in ML feature engineering:**
 
 ```python
-# WRONG — includes the current row, leaking the label's own value
+# WRONG: includes the current row, leaking the label's own value
 df["feat"] = df.groupby("user")["target"].transform(lambda s: s.rolling(7).mean())
 
-# RIGHT — shift so only strictly prior values are used
+# RIGHT: shift so only strictly prior values are used
 df["feat"] = df.groupby("user")["target"].transform(
     lambda s: s.shift(1).rolling(7).mean()
 )
@@ -235,7 +235,7 @@ m = orders.merge(custs, on="cust_id", how="left", validate="many_to_one")
 |---|---|
 | `one_to_one` | Keys unique on both sides |
 | `one_to_many` | Left keys unique |
-| `many_to_one` | **Right keys unique** — the usual dimension lookup |
+| `many_to_one` | **Right keys unique**: the usual dimension lookup |
 | `many_to_many` | No check (the default behavior) |
 
 Silent fan-out is the classic disaster: duplicate keys on the right side multiply rows, every downstream sum doubles, and nothing errors. Always compare `df.shape` before and after.
@@ -250,7 +250,7 @@ pd.merge_asof(trades.sort_values("time"), quotes.sort_values("time"),
               on="time", by="symbol", direction="backward")
 ```
 
-`merge_asof` is worth knowing cold — it's the correct tool for point-in-time correct feature joins, and reaching for it signals experience with temporal data.
+`merge_asof` is worth knowing cold: it's the correct tool for point-in-time correct feature joins, and reaching for it signals experience with temporal data.
 
 ---
 
@@ -274,7 +274,7 @@ agg = sales.groupby("region").agg({"amount": ["sum", "mean"]})
 agg.columns = ["_".join(c) for c in agg.columns]
 ```
 
-**`pivot` vs `pivot_table`**: `pivot` raises on duplicate index/column pairs; `pivot_table` aggregates them. If `pivot` errors, your data isn't at the grain you thought — investigate rather than swapping to `pivot_table` reflexively.
+**`pivot` vs `pivot_table`**: `pivot` raises on duplicate index/column pairs; `pivot_table` aggregates them. If `pivot` errors, your data isn't at the grain you thought: investigate rather than swapping to `pivot_table` reflexively.
 
 ```python
 # Explode list-valued cells into rows
@@ -293,7 +293,7 @@ df.resample("D").sum()          # downsample to daily
 df.resample("W-MON").mean()     # weekly, weeks starting Monday
 df.resample("M").agg({"value": "sum", "id": "nunique"})
 
-# Fill gaps explicitly — resample creates rows for missing periods
+# Fill gaps explicitly: resample creates rows for missing periods
 daily = df.resample("D").sum().fillna(0)
 
 # Timezones
@@ -311,12 +311,12 @@ pd.date_range("2026-01-01", periods=10, freq="B")
 
 ```python
 df.isna().sum()                       # count per column
-df.isna().mean().sort_values()        # proportion — more useful
+df.isna().mean().sort_values()        # proportion: more useful
 
 df.dropna(subset=["important_col"])   # drop rows missing a specific column
 df.fillna({"a": 0, "b": df.b.median()})   # per-column strategies
 
-df["v"].ffill()                       # forward fill — legitimate for time series
+df["v"].ffill()                       # forward fill: legitimate for time series
 df["v"].interpolate(method="time")    # time-aware interpolation
 ```
 
@@ -340,7 +340,7 @@ df["f32"] = df["f64"].astype("float32")
 df["country"] = df["country"].astype("category")   # often 10-50× smaller
 ```
 
-**Category dtype is the single biggest memory lever** for typical dataframes — a string column with 200 distinct values across 10M rows drops from ~600 MB to ~10 MB, and groupby on it gets faster too.
+**Category dtype is the single biggest memory lever** for typical dataframes: a string column with 200 distinct values across 10M rows drops from ~600 MB to ~10 MB, and groupby on it gets faster too.
 
 ```python
 # Read only what you need
@@ -360,7 +360,7 @@ df.to_parquet("data.parquet")
 df.query("price > 100 and qty < 5")     # no boolean intermediates
 ```
 
-When pandas genuinely isn't enough: **Polars** (multi-threaded, lazy, much faster), **DuckDB** (SQL over dataframes and Parquet, excellent for joins and aggregations), or **Dask**/**Spark** for distributed. Naming DuckDB as the pragmatic middle step is a strong answer.
+When pandas isn't enough: **Polars** (multi-threaded, lazy, much faster), **DuckDB** (SQL over dataframes and Parquet, excellent for joins and aggregations), or **Dask**/**Spark** for distributed. Naming DuckDB as the pragmatic middle step is a strong answer.
 
 ---
 
@@ -385,7 +385,7 @@ for tr, va in KFold(5, shuffle=True, random_state=42).split(df):
     df.iloc[va, df.columns.get_loc("target_enc")] = df.iloc[va]["cat"].map(means)
 ```
 
-The `reindex` on one-hot encoding is a real production bug source: an unseen category at serving time produces a different column set, and the model receives a misaligned feature vector — often without erroring.
+The `reindex` on one-hot encoding is a real production bug source: an unseen category at serving time produces a different column set, and the model receives a misaligned feature vector, often without erroring.
 
 ---
 
@@ -411,11 +411,11 @@ The `reindex` on one-hot encoding is a real production bug source: an unseen cat
 
 It calls a Python function once per row, and each call constructs a Series object for that row. So you pay Python interpreter overhead plus object allocation `n` times, with no opportunity for the underlying C loops or SIMD to help. On a million rows that's typically 100–1000× slower than the vectorized equivalent.
 
-Instead: plain vectorized arithmetic for math, `np.where` for two-branch conditionals, `np.select` for multi-branch, `pd.cut` for binning, `map` for dictionary lookups, and `groupby().transform()` for group-relative computations. If the logic genuinely can't vectorize — calling an external service, say — `apply` is fine, but I'd name that explicitly rather than defaulting to it.
+Instead: plain vectorized arithmetic for math, `np.where` for two-branch conditionals, `np.select` for multi-branch, `pd.cut` for binning, `map` for dictionary lookups, and `groupby().transform()` for group-relative computations. If the logic can't vectorize (calling an external service, say) `apply` is fine, but I'd name that explicitly rather than defaulting to it.
 
 #### Explain views versus copies in NumPy.
 
-Basic slicing (`a[1:3, :]`) returns a **view** — a new array object pointing at the same memory — so writing through it modifies the original. Fancy indexing (integer arrays or boolean masks) returns a **copy**, so writes don't propagate back.
+Basic slicing (`a[1:3, :]`) returns a **view** (a new array object pointing at the same memory), so writing through it modifies the original. Fancy indexing (integer arrays or boolean masks) returns a **copy**, so writes don't propagate back.
 
 That asymmetry causes both classic bugs: "why did my source array change?" when someone modifies a slice, and "why didn't my change stick?" when they write through a boolean mask expecting a view. `np.shares_memory(a, b)` settles it when unsure, and `.copy()` makes the intent explicit.
 
@@ -423,17 +423,17 @@ The pandas analogue is `SettingWithCopyWarning`, which fires when chained indexi
 
 #### Your merge produced more rows than the left dataframe. What happened?
 
-Duplicate keys on the right side, so each left row matched multiple right rows and fanned out. It's the most damaging silent bug in data work — nothing errors, but every downstream sum is inflated.
+Duplicate keys on the right side, so each left row matched multiple right rows and fanned out. It's the most damaging silent bug in data work: nothing errors, but every downstream sum is inflated.
 
-The prevention is `validate="many_to_one"` on the merge, which raises immediately if the right keys aren't unique. The diagnosis is comparing `df.shape` before and after — a habit worth having on every merge — and `custs["cust_id"].duplicated().sum()` to confirm.
+The prevention is `validate="many_to_one"` on the merge, which raises immediately if the right keys aren't unique. The diagnosis is comparing `df.shape` before and after (a habit worth having on every merge), and `custs["cust_id"].duplicated().sum()` to confirm.
 
 Then decide what the duplicates mean: if they're genuine data errors, deduplicate; if the right side is legitimately at a finer grain, aggregate it to the join grain first, or accept the fan-out deliberately and adjust the downstream aggregation.
 
 #### What's the difference between `agg`, `transform`, and `apply` on a groupby?
 
-`agg` reduces each group to a single row — use it for summaries. `transform` returns something the **same shape as the input**, broadcasting the group result back to every row, which is what you want when adding a group statistic as a new column without a join. `filter` keeps or drops whole groups based on a group-level predicate. `apply` can return anything and is the most flexible, but it's also the slowest and its return-shape behaviour is inconsistent enough to be surprising.
+`agg` reduces each group to a single row: use it for summaries. `transform` returns something the **same shape as the input**, broadcasting the group result back to every row, which is what you want when adding a group statistic as a new column without a join. `filter` keeps or drops whole groups based on a group-level predicate. `apply` can return anything and is the most flexible, but it's also the slowest and its return-shape behaviour is inconsistent enough to be surprising.
 
-The practical rule: if you're about to compute a group aggregate and merge it back onto the original frame, use `transform` instead — it's one operation, faster, and can't fan out.
+The practical rule: if you're about to compute a group aggregate and merge it back onto the original frame, use `transform` instead: it's one operation, faster, and can't fan out.
 
 #### How do you compute a rolling feature without leaking the label?
 
@@ -445,33 +445,33 @@ df["feat"] = df.groupby("user")["target"].transform(lambda s: s.shift(1).rolling
 
 Two more temporal cautions: sort by time within each group first, or the window is meaningless; and prefer `rolling("7D")` over `rolling(7)` when rows aren't evenly spaced, because the row-based window silently reaches back further than intended when data is missing.
 
-The general habit is to write down, for each feature, "what would I actually have known at prediction time?" — and if the answer involves the future, the feature is wrong regardless of how well it scores.
+The general habit is to write down, for each feature, "what would I actually have known at prediction time?", and if the answer involves the future, the feature is wrong regardless of how well it scores.
 
 #### Your dataframe uses 8 GB and you have 4. Options?
 
 In order of effort:
 
-**Dtypes first** — usually the biggest win for the least work. `category` for low-cardinality strings often gives 10–50× on those columns; downcast `int64` → `int32`/`int16` and `float64` → `float32` where precision allows. Check with `df.memory_usage(deep=True)`.
+**Dtypes first**: usually the biggest win for the least work. `category` for low-cardinality strings often gives 10–50× on those columns; downcast `int64` → `int32`/`int16` and `float64` → `float32` where precision allows. Check with `df.memory_usage(deep=True)`.
 
-**Load less** — `usecols` to read only needed columns, `dtype=` on read so you never materialize the wide version, and Parquet instead of CSV since it's columnar (read only the columns you need) and compressed.
+**Load less**: `usecols` to read only needed columns, `dtype=` on read so you never materialize the wide version, and Parquet instead of CSV since it's columnar (read only the columns you need) and compressed.
 
-**Chunk** — process in pieces with `chunksize` and aggregate incrementally, if the operation allows it.
+**Chunk**: process in pieces with `chunksize` and aggregate incrementally, if the operation allows it.
 
-**Change tool** — DuckDB runs SQL directly over Parquet files with out-of-core execution and is often the pragmatic answer for joins and aggregations; Polars is much more memory-efficient and multi-threaded for dataframe work; Dask or Spark when it's genuinely distributed-scale.
+**Change tool**: DuckDB runs SQL directly over Parquet files with out-of-core execution and is often the pragmatic answer for joins and aggregations; Polars is much more memory-efficient and multi-threaded for dataframe work; Dask or Spark when it's distributed-scale.
 
 I'd try dtypes and Parquet first, since they're minutes of work and frequently sufficient.
 
 #### Why is `pd.concat` inside a loop a problem?
 
-Each `concat` allocates a new dataframe and copies everything accumulated so far, so appending `n` times copies `1 + 2 + ... + n` rows — quadratic. For a few thousand iterations it's the difference between milliseconds and minutes.
+Each `concat` allocates a new dataframe and copies everything accumulated so far, so appending `n` times copies `1 + 2 + ... + n` rows: quadratic. For a few thousand iterations it's the difference between milliseconds and minutes.
 
-The fix is to accumulate into a Python list and call `pd.concat(parts)` once at the end, which allocates a single result. The same reasoning applies to repeatedly appending to a Series or growing a NumPy array with `np.append` — preallocate or collect and combine once.
+The fix is to accumulate into a Python list and call `pd.concat(parts)` once at the end, which allocates a single result. The same reasoning applies to repeatedly appending to a Series or growing a NumPy array with `np.append`: preallocate or collect and combine once.
 
 #### How do you avoid one-hot encoding mismatches between training and serving?
 
-Never call `get_dummies` independently on the two sets — the column set depends on which categories happen to appear, so an unseen category at serving time, or a missing one, produces a different shape or a misaligned feature vector.
+Never call `get_dummies` independently on the two sets: the column set depends on which categories happen to appear, so an unseen category at serving time, or a missing one, produces a different shape or a misaligned feature vector.
 
-Two robust options. **`reindex` against the training columns** with `fill_value=0`, which forces the serving frame to exactly the training schema. Better, use **`sklearn.OneHotEncoder(handle_unknown="ignore")` inside a `Pipeline`** — it learns the categories at fit time, produces a consistent output width, and handles unseen values gracefully. Putting it in the pipeline also means the same object is serialized with the model, so training and serving can't diverge.
+Two robust options. **`reindex` against the training columns** with `fill_value=0`, which forces the serving frame to exactly the training schema. Better, use **`sklearn.OneHotEncoder(handle_unknown="ignore")` inside a `Pipeline`**: it learns the categories at fit time, produces a consistent output width, and handles unseen values gracefully. Putting it in the pipeline also means the same object is serialized with the model, so training and serving can't diverge.
 
 The failure mode this prevents is nasty because it often doesn't raise: the model receives numbers in the wrong columns and returns confident nonsense.
 

@@ -22,7 +22,7 @@ A plan, not a reading list. This page tells you **what is being tested in 2026**
 
 ## What Changed for 2026
 
-The classical ML fundamentals have not moved — bias/variance, metrics, regularization, and validation are still asked in nearly every loop. What changed is the layer on top.
+The classical ML fundamentals have not moved: bias/variance, metrics, regularization, and validation are still asked in nearly every loop. What changed is the layer on top.
 
 | Shift | What it means for interviews |
 |---|---|
@@ -63,18 +63,18 @@ Priority: **●●● critical** · **●● important** · **● useful**
 |---|---|---|---|---|---|
 | Classical ML | ●●● | ● | ●●● | ● | ●● |
 | Statistics / experiment design | ●● | ● | ●●● | ● | ● |
-| Deep learning | ●●● | ●● | ● | — | ● |
+| Deep learning | ●●● | ●● | ● | - | ● |
 | LLM app engineering | ●● | ●●● | ●● | ● | ●● |
 | RAG and embeddings | ●● | ●●● | ● | ●● | ●● |
-| Agents and tool use | ● | ●●● | ● | — | ●● |
-| Inference optimization | ●● | ●●● | — | — | ●●● |
+| Agents and tool use | ● | ●●● | ● | - | ●● |
+| Inference optimization | ●● | ●●● | - | - | ●●● |
 | Evaluation | ●●● | ●●● | ●●● | ● | ●●● |
 | MLOps / deployment | ●●● | ●● | ● | ●● | ●●● |
 | Data pipelines / modeling | ●● | ●● | ●● | ●●● | ●● |
 | System design | ●●● | ●●● | ● | ●●● | ●●● |
 | SQL | ●● | ● | ●●● | ●●● | ●● |
 | Python / coding round | ●●● | ●●● | ●● | ●●● | ●● |
-| Docker / K8s / IaC | ●● | ●● | — | ●● | ●●● |
+| Docker / K8s / IaC | ●● | ●● | - | ●● | ●●● |
 | Security and governance | ● | ●●● | ● | ●● | ●● |
 
 **How to read this**: your loop will test the ●●● rows properly and spot-check the ●● rows. Preparing the ● rows is what you do with leftover time, not first.
@@ -89,7 +89,7 @@ Priority: **●●● critical** · **●● important** · **● useful**
 | **Technical screen** | 45–60 min | Coding (Python/SQL) or an ML fundamentals rapid-fire round |
 | **Coding round** | 45–60 min | Data manipulation, occasionally [ML from scratch](../coding_challenges/ml_coding_challenges.md) |
 | **ML/AI depth round** | 60 min | Fundamentals with follow-ups going 3–4 layers deep |
-| **System design** | 60 min | An open-ended "design X" — the highest-variance round |
+| **System design** | 60 min | An open-ended "design X": the highest-variance round |
 | **Project deep-dive** | 45–60 min | Your own past work, interrogated in detail |
 | **Behavioral / hiring manager** | 45 min | Ownership, judgment, collaboration |
 
@@ -99,7 +99,7 @@ Two rounds are under-prepared by almost everyone: the **project deep-dive** and 
 
 ## Study Plans by Time Available
 
-### 1 week — triage mode
+### 1 week: triage mode
 
 Assume you cannot learn anything new; you can only surface what you already know.
 
@@ -110,10 +110,10 @@ Assume you cannot learn anything new; you can only surface what you already know
 | 3 | [System design framework](../system_design/README.md) + one full case study end to end |
 | 4 | Coding: [Python](../coding_challenges/python_coding_challenges.md) or [SQL](../coding_challenges/sql_coding_challenges.md), whichever your loop tests |
 | 5 | Role-specific depth: [RAG](../ai_genai/intro_rag.md) + [Agents](../ai_genai/intro_agentic_ai.md), or [MLOps](../mlops/README.md) |
-| 6 | [2026 Additional Questions](./2026-additional-questions.md) — answer out loud, don't read |
+| 6 | [2026 Additional Questions](./2026-additional-questions.md): answer out loud, don't read |
 | 7 | [Behavioral stories](./behavioral-interview-guide.md), rest, logistics |
 
-### 1 month — the realistic plan
+### 1 month: the realistic plan
 
 | Week | Focus | Deliverable |
 |---|---|---|
@@ -122,15 +122,15 @@ Assume you cannot learn anything new; you can only surface what you already know
 | 3 | Production: [MLOps](../mlops/README.md), [monitoring](../mlops/intro_model_monitoring.md), [serving](../mlops/intro_model_serving.md), [inference optimization](../ai_genai/intro_llm_inference_optimization.md), [Docker](../devops/intro_docker.md) | Your project, containerized and monitored |
 | 4 | Interview mechanics: [system design](../system_design/README.md) cases, [coding](../coding_challenges/README.md), [behavioral](./behavioral-interview-guide.md), mock loops | 3 rehearsed system designs, 8 STAR stories |
 
-### 3 months — build depth and a portfolio
+### 3 months: build depth and a portfolio
 
 | Month | Focus |
 |---|---|
 | 1 | Fundamentals with implementation: work through [ML coding challenges](../coding_challenges/ml_coding_challenges.md), rebuild the classics from scratch, and read [classical ML](../classical_ml/README.md) + [deep learning](../deep_learning/README.md) properly |
-| 2 | Build one real project end to end — ingestion, model or LLM pipeline, evals, API, container, monitoring. See [Project Setup](../project_setup/README.md) and [Highlighted Projects](../README.md#highlighted-projects). This project becomes your deep-dive story. |
+| 2 | Build one real project end to end: ingestion, model or LLM pipeline, evals, API, container, monitoring. See [Project Setup](../project_setup/README.md) and [Highlighted Projects](../README.md#highlighted-projects). This project becomes your deep-dive story. |
 | 3 | Interview preparation: [system design](../system_design/README.md) breadth, [2026 questions](./interview_questions_2026.md), weekly mock interviews, [behavioral](./behavioral-interview-guide.md) story bank |
 
-The three-month plan works because month 2 gives you something real to talk about. A candidate with one genuinely deep project outperforms one with five tutorials, every time.
+The three-month plan works because month 2 gives you something real to talk about. A candidate with one deep project outperforms one with five tutorials, every time.
 
 ---
 
@@ -175,7 +175,7 @@ Use this to find gaps. If you cannot answer a line in two minutes without notes,
 
 - **Re-read your own résumé and projects.** Interviewers ask about the line you wrote two years ago and forgot.
 - **Recover your numbers.** Dataset sizes, latency, cost, metric before/after. Approximate is fine; blank is not.
-- **Do one mock loop out loud**, ideally with another person. Reading is not rehearsal — the gap between knowing something and saying it fluently is larger than it feels.
+- **Do one mock loop out loud**, ideally with another person. Reading is not rehearsal: the gap between knowing something and saying it fluently is larger than it feels.
 - **Prepare four questions per interviewer** and know who you're meeting.
 - **Stop learning new topics 48 hours out.** Consolidate what you have; new material at that point mostly adds noise.
 

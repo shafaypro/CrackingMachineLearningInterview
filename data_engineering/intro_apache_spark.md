@@ -1,6 +1,6 @@
 # Apache Spark – Complete Guide (2026 Edition)
 
-**Apache Spark** is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing, streaming, ML, and SQL — all in one unified engine.
+**Apache Spark** is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing, streaming, ML, and SQL: all in one unified engine.
 
 ---
 
@@ -53,14 +53,14 @@ Single Machine         →         Spark Cluster
 
 | Concept | Description |
 |---------|-------------|
-| **RDD** | Resilient Distributed Dataset — fundamental data structure, fault-tolerant, partitioned |
+| **RDD** | Resilient Distributed Dataset: fundamental data structure, fault-tolerant, partitioned |
 | **DataFrame** | Table with named columns and schema. Built on RDDs. Use this 99% of the time. |
 | **Dataset** | Type-safe DataFrame (Scala/Java). In Python = DataFrame. |
 | **Partition** | A chunk of data processed by one task on one executor |
-| **DAG** | Directed Acyclic Graph — Spark's execution plan |
-| **Transformation** | Lazy operation (filter, select, join) — builds the DAG |
+| **DAG** | Directed Acyclic Graph: Spark's execution plan |
+| **Transformation** | Lazy operation (filter, select, join): builds the DAG |
 | **Action** | Triggers execution (count, show, write, collect) |
-| **Catalyst** | Spark's query optimizer — optimizes your execution plan |
+| **Catalyst** | Spark's query optimizer: optimizes your execution plan |
 | **Tungsten** | Memory management and code generation engine |
 
 ---
@@ -135,7 +135,7 @@ df.show(5, truncate=False)  # don't truncate long values
 df.printSchema()         # column names and types
 df.dtypes                # list of (column, type) tuples
 df.columns               # list of column names
-df.count()               # row count (action — triggers execution)
+df.count()               # row count (action: triggers execution)
 df.describe().show()     # stats: count, mean, std, min, max
 df.schema                # full StructType schema
 ```
@@ -251,7 +251,7 @@ result = df1.join(df2,
     "inner"
 )
 
-# Broadcast join (for small tables — avoids shuffle)
+# Broadcast join (for small tables: avoids shuffle)
 from pyspark.sql.functions import broadcast
 result = orders.join(broadcast(customers), "customer_id")
 ```
@@ -292,7 +292,7 @@ spark.sql("SELECT * FROM global_temp.global_orders")
 ## Writing Data
 
 ```python
-# Write to Parquet (columnar, compressed — recommended)
+# Write to Parquet (columnar, compressed: recommended)
 df.write.mode("overwrite").parquet("output/data/")
 df.write.mode("append").partitionBy("year", "month").parquet("output/data/")
 
@@ -371,7 +371,7 @@ query.awaitTermination()
 # Check number of partitions
 df.rdd.getNumPartitions()
 
-# Repartition (full shuffle — for large skewed data)
+# Repartition (full shuffle: for large skewed data)
 df.repartition(200)
 df.repartition(200, "customer_id")  # partition by column for joins
 
@@ -436,7 +436,7 @@ dbutils.notebook.run("./other_notebook", timeout_seconds=300)
 
 | Feature | Status |
 |---------|--------|
-| **Spark Connect** | Remote Spark client — use PySpark from anywhere without running on the cluster |
+| **Spark Connect** | Remote Spark client: use PySpark from anywhere without running on the cluster |
 | **Delta Lake 3.x** | Native Delta support in Spark, liquid clustering |
 | **Python UDFs** | Arrow-optimized UDFs (Pandas UDFs) are now the default |
 | **Spark on K8s** | Standard deployment method alongside YARN |

@@ -63,7 +63,7 @@ for k in K_range:
     km.fit(X)
     inertias.append(km.inertia_)
 
-# Plot: look for the "elbow" — point where adding more k stops reducing inertia significantly
+# Plot: look for the "elbow", point where adding more k stops reducing inertia significantly
 plt.plot(K_range, inertias, 'bo-')
 plt.xlabel('Number of clusters k')
 plt.ylabel('Inertia')
@@ -122,7 +122,7 @@ DBSCAN (Density-Based Spatial Clustering of Applications with Noise) finds clust
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
-# DBSCAN is sensitive to scale — always standardize
+# DBSCAN is sensitive to scale: always standardize
 X_scaled = StandardScaler().fit_transform(X)
 
 dbscan = DBSCAN(
@@ -152,7 +152,7 @@ distances, indices = nbrs.kneighbors(X_scaled)
 # Sort distances to k-th nearest neighbor
 kth_distances = np.sort(distances[:, -1])[::-1]
 
-# Plot: look for "knee" — that's a good eps value
+# Plot: look for "knee", that's a good eps value
 plt.plot(kth_distances)
 plt.xlabel('Points sorted by distance')
 plt.ylabel('5th nearest neighbor distance')
@@ -315,11 +315,11 @@ mbk.fit(X_large)
 2. Assumes spherical, equal-size clusters
 3. Sensitive to outliers (centroid pulled toward them)
 4. Sensitive to feature scale (always standardize)
-5. Non-deterministic (different runs may give different results — use n_init > 1)
+5. Non-deterministic (different runs may give different results: use n_init > 1)
 6. Poor performance on non-convex cluster shapes
 
 **Q2: How does DBSCAN handle outliers differently from K-Means?**
-K-Means assigns every point to a cluster — outliers get forced into the nearest cluster, distorting centroids. DBSCAN explicitly labels low-density points as noise (label = -1), effectively handling outliers without them affecting cluster shapes.
+K-Means assigns every point to a cluster: outliers get forced into the nearest cluster, distorting centroids. DBSCAN explicitly labels low-density points as noise (label = -1), effectively handling outliers without them affecting cluster shapes.
 
 **Q3: What is the difference between K-Means and GMM?**
 K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means ≈ GMM with spherical covariance and hard assignments).
@@ -331,13 +331,13 @@ When: (1) you don't know k upfront and want to explore the tree structure; (2) y
 Use internal metrics: silhouette score (measures cohesion vs separation), Davies-Bouldin index (lower = better-separated clusters), Calinski-Harabasz score. Additionally: visualize with t-SNE/UMAP, inspect cluster statistics (size, centroid distance), run qualitative checks on sampled cluster members.
 
 **Q6: What preprocessing steps are essential for clustering?**
-1. **Standardize features** (Z-score) — K-Means and DBSCAN use distance metrics; unscaled features dominate
-2. **Handle missing values** — impute before clustering
-3. **Dimensionality reduction** (PCA, UMAP) — reduces noise and curse of dimensionality
+1. **Standardize features** (Z-score): K-Means and DBSCAN use distance metrics; unscaled features dominate
+2. **Handle missing values**: impute before clustering
+3. **Dimensionality reduction** (PCA, UMAP): reduces noise and curse of dimensionality
 4. **Remove obvious outliers** before K-Means (but not before DBSCAN which handles them naturally)
 
 **Q7: What is the curse of dimensionality in clustering?**
-In high dimensions, the distance between the nearest and farthest points converges — all points appear equidistant. This makes distance-based clustering (K-Means, DBSCAN) ineffective. Solutions: PCA before clustering, use cosine similarity instead of Euclidean, or use subspace clustering methods.
+In high dimensions, the distance between the nearest and farthest points converges: all points appear equidistant. This makes distance-based clustering (K-Means, DBSCAN) ineffective. Solutions: PCA before clustering, use cosine similarity instead of Euclidean, or use subspace clustering methods.
 
 ---
 

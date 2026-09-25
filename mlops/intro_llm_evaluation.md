@@ -1,8 +1,8 @@
-# LLM Evaluation — Testing, Benchmarks & Production Evals
+# LLM Evaluation: Testing, Benchmarks & Production Evals
 
 ## Why LLM Evaluation is Critical
 
-LLM outputs are probabilistic and hard to test with traditional unit tests. Evaluation is the discipline of systematically measuring whether your LLM application is doing what you want — both before and after deployment.
+LLM outputs are probabilistic and hard to test with traditional unit tests. Evaluation is the discipline of systematically measuring whether your LLM application is doing what you want: both before and after deployment.
 
 ```
 Traditional Software:          LLM Applications:
@@ -31,11 +31,11 @@ input → deterministic fn       input → probabilistic LLM
 ### Correctness Metrics
 
 ```python
-# Exact Match — for factoid QA
+# Exact Match: for factoid QA
 def exact_match(prediction: str, reference: str) -> float:
     return float(prediction.strip().lower() == reference.strip().lower())
 
-# F1 Token Overlap — for extractive QA (SQuAD-style)
+# F1 Token Overlap: for extractive QA (SQuAD-style)
 def token_f1(prediction: str, reference: str) -> float:
     pred_tokens = set(prediction.lower().split())
     ref_tokens = set(reference.lower().split())
@@ -136,7 +136,7 @@ print(f"Score: {result.score:.2f} | {result.verdict}")
 
 ```python
 def pairwise_judge(question: str, answer_a: str, answer_b: str) -> dict:
-    """Returns which answer is better and why — controls for verbosity bias"""
+    """Returns which answer is better and why: controls for verbosity bias"""
     client = Anthropic()
 
     response = client.messages.create(
@@ -166,7 +166,7 @@ result_2 = pairwise_judge(q, model_b_output, model_a_output)
 
 ## Prompt Testing Frameworks
 
-### Promptfoo — CLI-based Prompt Testing
+### Promptfoo: CLI-based Prompt Testing
 
 ```yaml
 # promptfooconfig.yaml
@@ -495,4 +495,4 @@ jobs:
 > Curate golden examples: (question, expected_answer) pairs. Every production bug gets added as a new test case. Run the full suite on each PR with LangSmith or a custom evaluator. Block merge if overall pass rate drops below threshold (e.g., 90%). This creates a growing safety net that catches regressions.
 
 **Q: What's the difference between offline and online evaluation?**
-> Offline: evaluate on a fixed dataset before deployment — reproducible, controlled, catches obvious regressions. Online: monitor real production traffic — catches distribution shift, novel failures, and measures actual user satisfaction. You need both: offline prevents obvious regressions, online catches what offline missed.
+> Offline: evaluate on a fixed dataset before deployment, reproducible, controlled, catches obvious regressions. Online: monitor real production traffic: catches distribution shift, novel failures, and measures actual user satisfaction. You need both: offline prevents obvious regressions, online catches what offline missed.

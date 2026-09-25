@@ -1,4 +1,4 @@
-# OpenClaw — Data Pipeline Lineage and Orchestration
+# OpenClaw: Data Pipeline Lineage and Orchestration
 
 A guide to OpenClaw: defining pipelines, tracking dataset lineage, and running them in production.
 
@@ -22,9 +22,9 @@ A guide to OpenClaw: defining pipelines, tracking dataset lineage, and running t
 
 ## 1. What is OpenClaw?
 
-**OpenClaw** is an open-source data orchestration and lineage tracking framework designed to manage complex data pipelines in modern data platforms. It provides a declarative, graph-based approach to defining how data moves, transforms, and gets validated — from ingestion through to serving.
+**OpenClaw** is an open-source data orchestration and lineage tracking framework designed to manage complex data pipelines in modern data platforms. It provides a declarative, graph-based approach to defining how data moves, transforms, and gets validated: from ingestion through to serving.
 
-> 💡 **Why the name?** A claw grips and holds data at every stage of its journey. "Open" signals it's fully open-source, community-driven, and vendor-neutral.
+> **Why the name?** A claw grips and holds data at every stage of its journey. "Open" signals it's fully open-source, community-driven, and vendor-neutral.
 
 Think of OpenClaw as the **connective tissue** of your data platform: it knows where your data comes from, where it goes, how it was transformed, and whether it can be trusted.
 
@@ -90,7 +90,7 @@ Every unit of work in OpenClaw follows this pattern:
 4. **Sink node** writes output and registers lineage
 5. **Metadata store** updates the graph and emits events
 
-> 🔑 **Key design insight:** Unlike traditional schedulers that care only about task success/failure, OpenClaw tracks the **data itself** — its shape, volume, freshness, and provenance — at every step.
+> 🔑 **Key design insight:** Unlike traditional schedulers that care only about task success/failure, OpenClaw tracks the **data itself** (its shape, volume, freshness, and provenance) at every step.
 
 ---
 
@@ -98,7 +98,7 @@ Every unit of work in OpenClaw follows this pattern:
 
 ### 3.1 Datasets
 
-A **Dataset** in OpenClaw is any named, versioned collection of data — a database table, a file in S3, a Kafka topic, or an in-memory DataFrame. Every dataset has:
+A **Dataset** in OpenClaw is any named, versioned collection of data: a database table, a file in S3, a Kafka topic, or an in-memory DataFrame. Every dataset has:
 
 - A unique **URN** (Universal Resource Name)
 - A versioned **schema**
@@ -112,7 +112,7 @@ urn:openclaw:snowflake:prod.analytics.orders   # example dataset URN
 
 ### 3.2 Transforms
 
-A **Transform** is a computation that takes one or more datasets as input and produces one or more datasets as output. Transforms are first-class citizens — versioned, logged, and attached to the lineage graph automatically.
+A **Transform** is a computation that takes one or more datasets as input and produces one or more datasets as output. Transforms are first-class citizens: versioned, logged, and attached to the lineage graph automatically.
 
 | Transform Type | Use Case |
 |---------------|----------|
@@ -130,7 +130,7 @@ Lineage is OpenClaw's superpower. It tracks **three levels of granularity**:
 - 📊 **Column-level**: `revenue column comes from price * quantity`
 - 🔬 **Row-level** *(experimental)*: trace individual records across transforms
 
-Lineage is captured **automatically** — you do not need to manually document it. OpenClaw instruments your transforms at runtime.
+Lineage is captured **automatically**: you do not need to manually document it. OpenClaw instruments your transforms at runtime.
 
 ### 3.4 Data Contracts
 
@@ -147,11 +147,11 @@ Data Contracts are explicit agreements between producers and consumers of a data
 
 ### 3.5 Partitions and Incremental Processing
 
-OpenClaw is built for incremental processing. When a transform runs, it checks which partitions have changed and processes only those — dramatically reducing compute costs.
+OpenClaw is built for incremental processing. When a transform runs, it checks which partitions have changed and processes only those: dramatically reducing compute costs.
 
 ### 3.6 Run Context
 
-Every execution is wrapped in a **Run Context** — a rich metadata envelope containing:
+Every execution is wrapped in a **Run Context**: a rich metadata envelope containing:
 
 - Run ID (globally unique)
 - Trigger type (scheduled, manual, event-driven)
@@ -335,14 +335,14 @@ run_pipeline = OpenClawOperator(
 
 ## 6. Advanced: Production Patterns
 
-### 6.1 Column-Level Lineage Deep Dive
+### 6.1 Column-Level Lineage
 
 Column-level lineage (CLL) answers: *"Which source column feeds this target column?"*
 
 OpenClaw captures CLL through:
-- **SQL parsing** — static analysis of SELECT, JOIN, and GROUP BY clauses
-- **Spark instrumentation** — tracking DataFrame column operations at runtime
-- **Manual annotation** — decorators for Python code OpenClaw cannot infer
+- **SQL parsing**: static analysis of SELECT, JOIN, and GROUP BY clauses
+- **Spark instrumentation**: tracking DataFrame column operations at runtime
+- **Manual annotation**: decorators for Python code OpenClaw cannot infer
 
 ```python
 from openclaw import column_lineage
@@ -370,7 +370,7 @@ The output is a **ranked list of affected assets with severity scores**, helping
 
 ### 6.3 Data Quality Monitoring
 
-Run quality checks on a schedule — independent of pipeline runs:
+Run quality checks on a schedule: independent of pipeline runs:
 
 ```bash
 openclaw monitor create \
@@ -456,7 +456,7 @@ class MyInternalDBConnector(BaseConnector):
 
 | Layer | OpenClaw Pattern | Key Contracts |
 |-------|-----------------|---------------|
-| **🥉 Bronze (Raw)** | No transforms — ingest only, schema-on-read, full lineage from source | Source freshness, volume bounds |
+| **🥉 Bronze (Raw)** | No transforms: ingest only, schema-on-read, full lineage from source | Source freshness, volume bounds |
 | **🥈 Silver (Cleaned)** | SQL or Spark transforms; strict schema contracts enforced | No nulls on key fields, type contracts |
 | **🥇 Gold (Business)** | dbt models; column-level lineage auto-captured | Business logic assertions, SLA freshness |
 
@@ -533,7 +533,7 @@ OpenClaw will notify all downstream dataset owners automatically and block any n
 
 | Term | Definition |
 |------|-----------|
-| **URN** | Universal Resource Name — OpenClaw's unique identifier for every dataset, e.g. `urn:openclaw:snowflake:prod.schema.table` |
+| **URN** | Universal Resource Name: OpenClaw's unique identifier for every dataset, e.g. `urn:openclaw:snowflake:prod.schema.table` |
 | **Lineage Graph** | Directed acyclic graph where nodes are datasets/transforms and edges are dependencies |
 | **Data Contract** | Formal agreement on schema, freshness, volume, and quality for a dataset |
 | **Claw Engine** | OpenClaw's core execution engine that resolves pipeline plans and runs transforms |

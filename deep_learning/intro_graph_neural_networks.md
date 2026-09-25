@@ -1,6 +1,6 @@
 # Graph Neural Networks
 
-Most real data is relational — social networks, fraud rings, molecules, recommendation bipartite graphs, knowledge bases, code. GNNs are how you learn on it without flattening away the structure. They come up in interviews at companies with graph-shaped problems (payments, social, biotech, recommendations) and as a "do you know anything beyond transformers?" probe.
+Most real data is relational: social networks, fraud rings, molecules, recommendation bipartite graphs, knowledge bases, code. GNNs are how you learn on it without flattening away the structure. They come up in interviews at companies with graph-shaped problems (payments, social, biotech, recommendations) and as a "do you know anything beyond transformers?" probe.
 
 ---
 
@@ -29,14 +29,14 @@ Use a GNN when **the relationships carry signal that node features alone don't**
 
 | Problem | Why a graph helps |
 |---|---|
-| Fraud detection | Fraud rings share devices, addresses, cards — the *structure* is the evidence |
+| Fraud detection | Fraud rings share devices, addresses, cards: the *structure* is the evidence |
 | Recommendations | User-item interactions form a bipartite graph; multi-hop reveals taste similarity |
 | Molecular property prediction | A molecule *is* a graph; bonds determine properties |
 | Social / abuse detection | Coordinated accounts cluster structurally |
 | Knowledge graphs | Reasoning over typed relations |
 | Code analysis | ASTs and call graphs |
 
-**When not to.** If a few aggregate features (`friend_count`, `mean_neighbor_score`) capture most of the signal, engineer those and use gradient boosting — it'll be faster, easier to serve, and often just as accurate. The honest framing for an interview: GNNs win when *multi-hop* structure matters and hand-crafted neighbourhood aggregates plateau. Try the boring baseline first.
+**When not to.** If a few aggregate features (`friend_count`, `mean_neighbor_score`) capture most of the signal, engineer those and use gradient boosting: it'll be faster, easier to serve, and often just as accurate. The honest framing for an interview: GNNs win when *multi-hop* structure matters and hand-crafted neighbourhood aggregates plateau. Try the boring baseline first.
 
 ---
 
@@ -44,13 +44,13 @@ Use a GNN when **the relationships carry signal that node features alone don't**
 
 A graph `G = (V, E)` with `n = |V|` nodes. Representations:
 
-- **Adjacency matrix** `A ∈ R^{n×n}` — dense, `O(n²)` memory, impractical above ~50k nodes.
-- **Edge list / sparse COO** — `[2, num_edges]` tensor, what every real library uses.
+- **Adjacency matrix** `A ∈ R^{n×n}`: dense, `O(n²)` memory, impractical above ~50k nodes.
+- **Edge list / sparse COO**: `[2, num_edges]` tensor, what every real library uses.
 - **Node features** `X ∈ R^{n×d}`; optionally edge features.
 
 Graphs may be directed or undirected, weighted, heterogeneous (multiple node and edge types), or dynamic (evolving over time).
 
-**The defining property is permutation invariance**: relabelling nodes must not change the output. That's why every aggregation function in a GNN is a *set* function — sum, mean, max — rather than something order-dependent. A CNN can assume a fixed grid neighbourhood; a GNN cannot, because neighbourhoods have arbitrary size and no canonical order.
+**The defining property is permutation invariance**: relabelling nodes must not change the output. That's why every aggregation function in a GNN is a *set* function (sum, mean, max) rather than something order-dependent. A CNN can assume a fixed grid neighbourhood; a GNN cannot, because neighbourhoods have arbitrary size and no canonical order.
 
 ---
 
@@ -65,7 +65,7 @@ For each layer k:
   3. UPDATE:    h_v  = Update(h_v, a_v)               combine with own state
 ```
 
-**Each layer extends the receptive field by one hop.** After `k` layers, a node's representation depends on its `k`-hop neighbourhood — which is the intuition behind both the power and the depth problem of GNNs.
+**Each layer extends the receptive field by one hop.** After `k` layers, a node's representation depends on its `k`-hop neighbourhood, which is the intuition behind both the power and the depth problem of GNNs.
 
 ```python
 import torch
@@ -86,7 +86,7 @@ class MessagePassingLayer(nn.Module):
         # 1. Build a message per edge from the source and target states
         msg = self.message(torch.cat([x[src], x[dst]], dim=-1))     # (E, d_out)
 
-        # 2. Sum messages into their destination nodes — permutation invariant
+        # 2. Sum messages into their destination nodes: permutation invariant
         agg = torch.zeros(x.size(0), msg.size(-1), device=x.device)
         agg.index_add_(0, dst, msg)                                  # (n, d_out)
 
@@ -102,7 +102,7 @@ class MessagePassingLayer(nn.Module):
 | **Mean** | Scale invariance | Cannot distinguish degree |
 | **Max** | Salient features | Distribution shape |
 
-Sum is the most expressive — mean and max cannot distinguish a node with two identical neighbours from one with four — which is exactly the argument behind Graph Isomorphism Networks.
+Sum is the most expressive (mean and max cannot distinguish a node with two identical neighbours from one with four), which is exactly the argument behind Graph Isomorphism Networks.
 
 ---
 
@@ -118,7 +118,7 @@ where `Ã = A + I` adds self-loops and `D̃` is its degree matrix.
 
 **Why symmetric normalization `D^(-1/2) A D^(-1/2)`** rather than plain `D^(-1)A`: it keeps the eigenvalues of the propagation matrix bounded, which stabilizes training and prevents high-degree nodes from dominating the representation of their neighbours. Self-loops matter because without them a node's own features are discarded at every layer.
 
-GCN is **transductive** in its original form — it operates on the full fixed adjacency matrix, so a new node arriving after training has no representation without recomputation. That limitation is precisely what GraphSAGE addresses.
+GCN is **transductive** in its original form: it operates on the full fixed adjacency matrix, so a new node arriving after training has no representation without recomputation. That limitation is precisely what GraphSAGE addresses.
 
 ---
 
@@ -136,7 +136,7 @@ h_v^(k) = σ( W · CONCAT( h_v^(k-1), AGGREGATE({h_u^(k-1) : u ∈ SAMPLE(N(v))}
 
 The `CONCAT` (rather than summing the node into the aggregate) preserves a distinction between "what I am" and "what my neighbourhood is", which measurably helps.
 
-For most production graph problems — fraud, recommendations, evolving social graphs — GraphSAGE or a variant of it is the realistic answer, and saying so signals practical experience over paper familiarity.
+For most production graph problems (fraud, recommendations, evolving social graphs) GraphSAGE or a variant of it is the realistic answer, and saying so signals practical experience over paper familiarity.
 
 ---
 
@@ -152,7 +152,7 @@ h_v  = σ( Σ_u α_uv · W h_u )
 
 Multi-head attention, as in transformers, stabilizes it.
 
-**When attention helps**: heterogeneous neighbourhoods where some neighbours are far more informative than others — in fraud, a shared device is much stronger evidence than a shared city. When all neighbours are roughly equivalent, GAT adds parameters and compute for little gain over GCN.
+**When attention helps**: heterogeneous neighbourhoods where some neighbours are far more informative than others: in fraud, a shared device is much stronger evidence than a shared city. When all neighbours are roughly equivalent, GAT adds parameters and compute for little gain over GCN.
 
 The relationship to transformers is worth stating: **a transformer is essentially a GAT on a fully-connected graph**, with positional encodings supplying the structure that a graph provides explicitly. Attention is the aggregation function in both.
 
@@ -168,16 +168,16 @@ The relationship to transformers is worth stating: **a transformer is essentiall
 | **Edge classification** | Is this transaction suspicious? | MLP on edge + endpoint embeddings |
 
 ```python
-# Link prediction — score a candidate pair, train against sampled negatives
+# Link prediction: score a candidate pair, train against sampled negatives
 def link_score(h, u, v):
     return (h[u] * h[v]).sum(-1)          # dot product; or an MLP on concat
 
-# Graph classification — pool node embeddings into one graph vector
+# Graph classification: pool node embeddings into one graph vector
 def graph_readout(h, batch_index):
     return global_mean_pool(h, batch_index)   # permutation-invariant over nodes
 ```
 
-**Splitting is task-specific and easy to get wrong.** For node classification you mask nodes, not rows — the graph structure stays whole and you simply don't compute loss on held-out nodes. For link prediction you must *remove* test edges from the message-passing graph, or the model sees the answer during aggregation. That's the classic leakage bug in GNN work.
+**Splitting is task-specific and easy to get wrong.** For node classification you mask nodes, not rows: the graph structure stays whole and you simply don't compute loss on held-out nodes. For link prediction you must *remove* test edges from the message-passing graph, or the model sees the answer during aggregation. That's the classic leakage bug in GNN work.
 
 ---
 
@@ -185,7 +185,7 @@ def graph_readout(h, batch_index):
 
 GNNs don't get deeper the way CNNs do. Beyond 2–4 layers, performance usually degrades.
 
-**Over-smoothing**: each layer averages a node with its neighbours. Repeat enough times and every node's representation converges toward the same value — the graph equivalent of blurring an image until it's uniform grey. Nodes become indistinguishable, so classification collapses.
+**Over-smoothing**: each layer averages a node with its neighbours. Repeat enough times and every node's representation converges toward the same value: the graph equivalent of blurring an image until it's uniform grey. Nodes become indistinguishable, so classification collapses.
 
 **Over-squashing** is the complementary problem: after `k` layers a node's receptive field contains exponentially many nodes, all compressed into one fixed-size vector. Information from distant nodes is squashed through bottleneck edges and effectively lost.
 
@@ -195,7 +195,7 @@ Mitigations: **residual/skip connections** (as in ResNets), **jumping knowledge*
 
 ## Scaling to Large Graphs
 
-The core difficulty: a graph doesn't decompose into independent examples the way images do. A node's computation depends on its neighbours, whose computation depends on *their* neighbours — the **neighbourhood explosion** problem. With average degree 100 and 3 layers, one node's full computation touches a million nodes.
+The core difficulty: a graph doesn't decompose into independent examples the way images do. A node's computation depends on its neighbours, whose computation depends on *their* neighbours: the **neighbourhood explosion** problem. With average degree 100 and 3 layers, one node's full computation touches a million nodes.
 
 | Strategy | How | Trade-off |
 |---|---|---|
@@ -205,13 +205,13 @@ The core difficulty: a graph doesn't decompose into independent examples the way
 | **Historical embeddings** (GNNAutoScale) | Cache stale neighbour embeddings | Memory for staleness |
 | **Full-batch on GPU** | Just fit it | Only up to a few million nodes |
 
-**Serving is the harder half**, and it's where interviews go if the interviewer has shipped one. Real-time inference needs `k`-hop neighbourhoods fetched at request time — a graph database query with a tight latency budget. The common production pattern is to **precompute embeddings in batch** and refresh periodically, accepting staleness, with real-time computation only for nodes that must be fresh (a brand-new account, for instance). Say that, and you're clearly speaking from deployment experience.
+**Serving is the harder half**, and it's where interviews go if the interviewer has shipped one. Real-time inference needs `k`-hop neighbourhoods fetched at request time: a graph database query with a tight latency budget. The common production pattern is to **precompute embeddings in batch** and refresh periodically, accepting staleness, with real-time computation only for nodes that must be fresh (a brand-new account, for instance). Say that, and you're clearly speaking from deployment experience.
 
 ---
 
 ## Expressiveness Limits
 
-Standard message-passing GNNs are **at most as powerful as the 1-Weisfeiler-Lehman graph isomorphism test**. They cannot distinguish certain non-isomorphic graphs — the standard example being two triangles versus one hexagon, where every node has degree 2 and identical local neighbourhoods, so message passing produces identical embeddings forever.
+Standard message-passing GNNs are **at most as powerful as the 1-Weisfeiler-Lehman graph isomorphism test**. They cannot distinguish certain non-isomorphic graphs: the standard example being two triangles versus one hexagon, where every node has degree 2 and identical local neighbourhoods, so message passing produces identical embeddings forever.
 
 **GIN (Graph Isomorphism Network)** achieves the 1-WL bound by using **sum** aggregation plus an MLP, since sum is injective over multisets in a way mean and max are not:
 
@@ -219,7 +219,7 @@ Standard message-passing GNNs are **at most as powerful as the 1-Weisfeiler-Lehm
 h_v = MLP( (1 + ε)·h_v + Σ_{u ∈ N(v)} h_u )
 ```
 
-Ways past the limit: add **structural features** (node degree, triangle counts, positional encodings), use **higher-order** GNNs operating on node tuples, or add random node identifiers. In practice the theoretical limit rarely binds on real tasks — but knowing it exists, and that sum aggregation is more expressive than mean, is exactly the kind of detail that distinguishes a strong answer.
+Ways past the limit: add **structural features** (node degree, triangle counts, positional encodings), use **higher-order** GNNs operating on node tuples, or add random node identifiers. In practice the theoretical limit rarely binds on real tasks, but knowing it exists, and that sum aggregation is more expressive than mean, is exactly the kind of detail that distinguishes a strong answer.
 
 ---
 
@@ -243,9 +243,9 @@ class SAGENet(nn.Module):
         return self.conv2(x, edge_index)
 ```
 
-**Class imbalance** is severe in the common use cases — fraud is well under 1% of nodes. Use weighted loss and evaluate with PR-AUC, not accuracy or ROC-AUC.
+**Class imbalance** is severe in the common use cases: fraud is well under 1% of nodes. Use weighted loss and evaluate with PR-AUC, not accuracy or ROC-AUC.
 
-**Negative sampling for link prediction**: random negatives are too easy (most random pairs are trivially unconnected). Sample *hard* negatives — nodes 2 hops away, or high-degree nodes — so the model learns something beyond degree.
+**Negative sampling for link prediction**: random negatives are too easy (most random pairs are trivially unconnected). Sample *hard* negatives (nodes 2 hops away, or high-degree nodes), so the model learns something beyond degree.
 
 **Always benchmark against a non-graph baseline**: gradient boosting on node features plus hand-engineered neighbourhood aggregates (neighbour count, mean neighbour label rate, distinct shared devices). If the GNN doesn't clearly beat it, the added complexity in training and serving isn't justified.
 
@@ -270,45 +270,45 @@ class SAGENet(nn.Module):
 
 Almost all of them are message passing, repeated in layers. In each layer, every node builds a message from each of its neighbours, aggregates those messages with a permutation-invariant function like sum or mean, and updates its own representation by combining that aggregate with its previous state.
 
-The key structural fact is that **each layer extends the receptive field by one hop** — after two layers a node's embedding encodes its 2-hop neighbourhood. That's the source of the power (structure gets baked into representations) and of the main limitation (you can't stack many layers).
+The key structural fact is that **each layer extends the receptive field by one hop**: after two layers a node's embedding encodes its 2-hop neighbourhood. That's the source of the power (structure gets baked into representations) and of the main limitation (you can't stack many layers).
 
-Aggregation must be permutation-invariant because nodes have no canonical ordering and neighbourhoods have arbitrary size — which is exactly why a CNN's fixed-grid convolution doesn't transfer directly.
+Aggregation must be permutation-invariant because nodes have no canonical ordering and neighbourhoods have arbitrary size, which is exactly why a CNN's fixed-grid convolution doesn't transfer directly.
 
 #### Why can't you just stack 20 GNN layers?
 
-**Over-smoothing.** Each layer averages a node with its neighbours, so repeated application drives all node representations toward the same value — the graph equivalent of blurring an image until it's uniform. Once nodes are indistinguishable, classification collapses.
+**Over-smoothing.** Each layer averages a node with its neighbours, so repeated application drives all node representations toward the same value: the graph equivalent of blurring an image until it's uniform. Once nodes are indistinguishable, classification collapses.
 
 There's a second, complementary problem: **over-squashing**. A node's `k`-hop receptive field grows exponentially, and all that information must be compressed into a fixed-size vector, often passing through bottleneck edges. Distant information is effectively lost regardless of depth.
 
-Mitigations exist — residual connections, jumping knowledge, normalization, graph rewiring — but the practical answer is that 2–3 layers is standard, and most real graphs have small diameter, so 2–3 hops already covers the useful signal. Depth simply isn't the axis you scale on with GNNs.
+Mitigations exist (residual connections, jumping knowledge, normalization, graph rewiring), but the practical answer is that 2–3 layers is standard, and most real graphs have small diameter, so 2–3 hops already covers the useful signal. Depth simply isn't the axis you scale on with GNNs.
 
 #### What does GraphSAGE add over GCN?
 
 Two things, both aimed at production.
 
-**Inductive capability.** GCN in its original form is transductive — it operates on the full fixed adjacency matrix, learning representations tied to specific nodes, so a new node arriving after training has no embedding without recomputing over the whole graph. GraphSAGE learns aggregation *functions*, so an unseen node can be embedded from its features and sampled neighbourhood at inference. For any graph that grows — users, transactions, items — that's the difference between deployable and not.
+**Inductive capability.** GCN in its original form is transductive: it operates on the full fixed adjacency matrix, learning representations tied to specific nodes, so a new node arriving after training has no embedding without recomputing over the whole graph. GraphSAGE learns aggregation *functions*, so an unseen node can be embedded from its features and sampled neighbourhood at inference. For any graph that grows (users, transactions, items), that's the difference between deployable and not.
 
-**Neighbour sampling.** Instead of aggregating over every neighbour, it samples a fixed fan-out per layer. This bounds per-node computation regardless of degree, which matters enormously because real graphs have heavy-tailed degree distributions — one celebrity node with millions of edges would otherwise dominate the batch.
+**Neighbour sampling.** Instead of aggregating over every neighbour, it samples a fixed fan-out per layer. This bounds per-node computation regardless of degree, which matters enormously because real graphs have heavy-tailed degree distributions: one celebrity node with millions of edges would otherwise dominate the batch.
 
 #### How do you scale GNN training and, harder, GNN serving?
 
-**Training**: the problem is neighbourhood explosion — a node's computation depends on neighbours, whose computation depends on theirs, so with degree 100 and 3 layers one node touches a million others. Neighbour sampling (GraphSAGE) bounds the fan-out per layer and is the standard fix. Cluster-GCN partitions the graph and trains on subgraphs, trading away cross-cluster edges. Historical-embedding methods cache stale neighbour representations to trade memory for freshness.
+**Training**: the problem is neighbourhood explosion: a node's computation depends on neighbours, whose computation depends on theirs, so with degree 100 and 3 layers one node touches a million others. Neighbour sampling (GraphSAGE) bounds the fan-out per layer and is the standard fix. Cluster-GCN partitions the graph and trains on subgraphs, trading away cross-cluster edges. Historical-embedding methods cache stale neighbour representations to trade memory for freshness.
 
-**Serving is harder**, and it's usually where the real constraint bites. Real-time inference requires fetching a `k`-hop neighbourhood per request, which is a graph database query inside a tight latency budget. The common production design is to **precompute embeddings in batch** on a schedule, serve them from a key-value store, and only compute on demand for nodes that genuinely need freshness — a new account, say. That accepts embedding staleness in exchange for predictable latency, and for most applications the graph structure changes slowly enough that it's fine.
+**Serving is harder**, and it's usually where the real constraint bites. Real-time inference requires fetching a `k`-hop neighbourhood per request, which is a graph database query inside a tight latency budget. The common production design is to **precompute embeddings in batch** on a schedule, serve them from a key-value store, and only compute on demand for nodes that need freshness: a new account, say. That accepts embedding staleness in exchange for predictable latency, and for most applications the graph structure changes slowly enough that it's fine.
 
 #### When would you *not* use a GNN?
 
-When simpler neighbourhood features capture most of the signal. Very often, computing `neighbour_count`, `mean_neighbour_label_rate`, `count_of_shared_devices` and feeding them to gradient boosting gets you most of the way — with far better training speed, easier serving, and better interpretability.
+When simpler neighbourhood features capture most of the signal. Very often, computing `neighbour_count`, `mean_neighbour_label_rate`, `count_of_shared_devices` and feeding them to gradient boosting gets you most of the way: with far better training speed, easier serving, and better interpretability.
 
 I'd reach for a GNN when **multi-hop structure matters** and those hand-crafted aggregates plateau. Fraud rings are the canonical case: the signal isn't in any single account's features, it's in the pattern of shared attributes two or three hops out, which is combinatorially awkward to hand-engineer.
 
-I'd also weigh the serving cost seriously. A GNN needs graph infrastructure, neighbourhood fetching, and embedding refresh pipelines. That's a real operational commitment, and it should be justified by a measured lift over the boring baseline — which I'd always build first.
+I'd also weigh the serving cost seriously. A GNN needs graph infrastructure, neighbourhood fetching, and embedding refresh pipelines. That's a real operational commitment, and it should be justified by a measured lift over the boring baseline, which I'd always build first.
 
 #### What's the expressiveness limit of message-passing GNNs?
 
 They're bounded above by the **1-Weisfeiler-Lehman** graph isomorphism test, meaning there are non-isomorphic graphs they provably cannot distinguish. The standard example is two disjoint triangles versus a single hexagon: every node has degree 2 with identical local neighbourhoods, so message passing produces identical embeddings no matter how many layers you add.
 
-**GIN** reaches that 1-WL bound by using sum aggregation followed by an MLP, because sum is injective over multisets in a way mean and max are not — mean can't tell two identical neighbours from four, and max discards multiplicity entirely.
+**GIN** reaches that 1-WL bound by using sum aggregation followed by an MLP, because sum is injective over multisets in a way mean and max are not: mean can't tell two identical neighbours from four, and max discards multiplicity entirely.
 
 To go beyond, you add information message passing can't derive: structural features like degree or triangle counts, positional encodings, random node identifiers, or higher-order GNNs operating on node tuples. In practice the limit rarely binds on real tasks, but it explains why aggregator choice matters and why sum is the more expressive default.
 
@@ -316,9 +316,9 @@ To go beyond, you add information message passing can't derive: structural featu
 
 This is the classic GNN leakage bug. For link prediction, test edges must be **removed from the message-passing graph**, not merely excluded from the loss. If a test edge remains in the adjacency used for aggregation, the model literally observes the connection it's being asked to predict, and validation scores become meaningless.
 
-So the procedure is: hold out a set of edges as positive test examples, build the message-passing graph from the *remaining* edges only, and score the held-out pairs at evaluation. For temporal graphs, split by time rather than randomly — train on edges before a cutoff, test on edges after — because random splits let the model use future connections to predict past ones.
+So the procedure is: hold out a set of edges as positive test examples, build the message-passing graph from the *remaining* edges only, and score the held-out pairs at evaluation. For temporal graphs, split by time rather than randomly (train on edges before a cutoff, test on edges after), because random splits let the model use future connections to predict past ones.
 
-Negative sampling matters too: random node pairs are trivially unconnected, so the model can succeed by learning degree. Hard negatives — nodes two hops away, or degree-matched samples — force it to learn something real.
+Negative sampling matters too: random node pairs are trivially unconnected, so the model can succeed by learning degree. Hard negatives (nodes two hops away, or degree-matched samples) force it to learn something real.
 
 Node classification is different and simpler: you mask *nodes* rather than removing structure, since the graph itself isn't the label.
 

@@ -152,7 +152,7 @@ prompt-experiments/
 
 ## LLM Engineering in Practice (2026)
 
-Knowing the theory isn't enough — interviews and real work test whether you can
+Knowing the theory isn't enough: interviews and real work test whether you can
 *choose a model, budget tokens, control cost, and tune generation*. This section
 is the practical layer.
 
@@ -164,12 +164,12 @@ must. A useful mental model across providers:
 | Tier | Use for | Example: Claude family (2026) |
 |------|---------|-------------------------------|
 | **Frontier / reasoning** | Hardest reasoning, long-horizon agentic work, deep research | `claude-fable-5` (most capable), `claude-opus-4-8` |
-| **Balanced workhorse** | Most production traffic — strong quality at lower cost/latency | `claude-sonnet-4-6` |
+| **Balanced workhorse** | Most production traffic: strong quality at lower cost/latency | `claude-sonnet-4-6` |
 | **Fast / cheap** | High-volume, latency-sensitive, simple tasks (classification, routing, extraction) | `claude-haiku-4-5` |
 
 > Other providers offer the same tiering (a frontier model, a balanced model, a
 > small fast model). Always pull current model IDs, context windows, and pricing
-> from the provider's own docs — they change often. For Claude specifics see the
+> from the provider's own docs: they change often. For Claude specifics see the
 > [Anthropic & Claude guide](./intro_anthropic.md).
 
 **Approximate Claude pricing (per 1M tokens, 2026):**
@@ -198,7 +198,7 @@ If many requests share a large, stable prefix (system prompt, tool definitions,
 few-shot examples, a long document), **cache it**:
 
 - Cache **reads** cost ~10% of normal input price; cache **writes** cost ~1.25×.
-- It's a **prefix match** — any byte change anywhere in the prefix invalidates
+- It's a **prefix match**: any byte change anywhere in the prefix invalidates
   everything after it. So keep stable content first and put volatile content
   (the user's varying question, timestamps) *last*.
 - Silent cache-killers: `datetime.now()` or a UUID in the system prompt,
@@ -209,7 +209,7 @@ few-shot examples, a long document), **cache it**:
 | Parameter | Effect | Typical use |
 |-----------|--------|-------------|
 | `temperature` | Randomness (0 = near-deterministic, higher = more varied) | Low for extraction/code, higher for brainstorming |
-| `top_p` (nucleus) | Sample from the smallest set of tokens covering probability `p` | Alternative to temperature — don't aggressively tune both |
+| `top_p` (nucleus) | Sample from the smallest set of tokens covering probability `p` | Alternative to temperature: don't aggressively tune both |
 | `top_k` | Sample from the top-k tokens | Rarely needed |
 | `max_tokens` | Hard cap on output length | Set generously for generation; small for classification |
 | `stop` sequences | Halt generation on a string | Structured/templated output |
@@ -238,7 +238,7 @@ Without caching the input alone would cost 52K/1e6 × $3 ≈ $0.156.
   provided context, citing sources.
 - **Constrain the output** with structured outputs / strict tool schemas.
 - **Lower temperature** for factual tasks.
-- **Add an eval + guardrail layer** — LLM-as-judge, schema validation, and refusal
+- **Add an eval + guardrail layer**: LLM-as-judge, schema validation, and refusal
   handling. See [Evaluation & Guardrails](../mlops/intro_evaluation_guardrails.md).
 
 ### Interview Questions
@@ -248,7 +248,7 @@ Without caching the input alone would cost 52K/1e6 × $3 ≈ $0.156.
    and route easy traffic to a small model.
 2. **What's the single biggest lever for LLM cost at scale?** → Prompt caching of a
    stable prefix, plus right-sizing the model per task.
-3. **Why not use `tiktoken` to count Claude tokens?** → Wrong tokenizer — it
+3. **Why not use `tiktoken` to count Claude tokens?** → Wrong tokenizer: it
    undercounts; use the provider's token-counting API.
 4. **`temperature` vs `top_p`?** → Both control randomness; temperature scales the
    distribution, top_p truncates it to a probability mass. Tune one, not both hard.

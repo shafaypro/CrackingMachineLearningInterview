@@ -1,6 +1,6 @@
 # MLOps Overview
 
-A comprehensive guide to Machine Learning Operations (MLOps) — the practices, tools, and workflows for deploying and maintaining ML models in production.
+A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.
 
 ---
 
@@ -109,14 +109,14 @@ Example: Customer behavior changes after an economic event; click-through rate p
 PSI = Σ (Actual% - Expected%) × ln(Actual% / Expected%)
 PSI < 0.1: No significant change
 0.1 ≤ PSI < 0.25: Moderate change
-PSI ≥ 0.25: Significant change — retrain required
+PSI ≥ 0.25: Significant change, retrain required
 ```
 
 ---
 
 ## A/B Testing and Deployment Strategies
 
-See [A/B Testing Guide](./intro_ab_testing.md) for comprehensive coverage including:
+See [A/B Testing Guide](./intro_ab_testing.md) for full coverage, including:
 - Sample size calculation, statistical tests (z-test, t-test), and CUPED variance reduction
 - Common pitfalls: peeking problem, multiple testing, Simpson's paradox, SRM
 - Multi-armed bandits vs fixed A/B testing trade-offs
@@ -161,16 +161,16 @@ Two identical production environments. "Blue" is live; "Green" is the new versio
 
 ```
 Current state: All traffic → Blue (v1)
-Deploy to:     Green (v2) — fully tested
+Deploy to:     Green (v2): fully tested
 Switch:        All traffic → Green (v2)
-Rollback:      All traffic → Blue (v1) — instant
+Rollback:      All traffic → Blue (v1): instant
 ```
 
 ---
 
 ## Feature Stores
 
-A feature store is a centralized repository for storing, versioning, and serving ML features. See [Feature Stores](./intro_feature_stores.md) and the [Feature Store Guide](./intro_feature_store.md) for details — the two guides cover the topic from complementary angles.
+A feature store is a centralized repository for storing, versioning, and serving ML features. See [Feature Stores](./intro_feature_stores.md) and the [Feature Store Guide](./intro_feature_store.md) for details: the two guides cover the topic from complementary angles.
 
 **Key concepts:**
 - **Online store:** Low-latency feature retrieval for real-time inference (Redis, DynamoDB)
@@ -229,9 +229,9 @@ DevOps focuses on software deployment and CI/CD for traditional applications. ML
 
 **Q3: Explain the difference between data drift and concept drift.** 🟡 Intermediate
 
-Data drift (covariate shift) occurs when the distribution of input features changes — `P(X)` changes but `P(Y|X)` stays the same. For example, a model trained on users from one region sees users from a different region.
+Data drift (covariate shift) occurs when the distribution of input features changes: `P(X)` changes but `P(Y|X)` stays the same. For example, a model trained on users from one region sees users from a different region.
 
-Concept drift occurs when the relationship between inputs and outputs changes — `P(Y|X)` changes. For example, fraud patterns evolve and what used to be flagged as fraudulent is no longer fraudulent.
+Concept drift occurs when the relationship between inputs and outputs changes: `P(Y|X)` changes. For example, fraud patterns evolve and what used to be flagged as fraudulent is no longer fraudulent.
 
 Both lead to model degradation but require different responses.
 
@@ -310,7 +310,7 @@ Choice depends on feature type (continuous vs categorical) and interpretability 
 **Q11: What is the difference between model retraining and model rebuilding?** 🟡 Intermediate
 
 - **Retraining:** Use the same model architecture, features, and hyperparameters, but train on newer data. Fast and safe; addresses data drift.
-- **Rebuilding:** Start from scratch — re-evaluate the problem, explore new features, test different architectures. Necessary for significant concept drift or when the existing model architecture is fundamentally limited.
+- **Rebuilding:** Start from scratch, re-evaluate the problem, explore new features, test different architectures. Necessary for significant concept drift or when the existing model architecture is fundamentally limited.
 
 ---
 
@@ -394,7 +394,7 @@ Every guide in `mlops/`. Start with the overview above, then work through these.
 - [Evaluation and Guardrails for AI Systems](./intro_evaluation_guardrails.md)
 - [Feature Store Guide](./intro_feature_store.md)
 - [Feature Stores](./intro_feature_stores.md)
-- [LLM Evaluation — Testing, Benchmarks & Production Evals](./intro_llm_evaluation.md)
+- [LLM Evaluation: Testing, Benchmarks & Production Evals](./intro_llm_evaluation.md)
 - [LLMOps and MLOps Engineering](./intro_llmops_mlops_engineering.md)
 - [MLflow: Experiment Tracking, Model Registry, and Deployment](./intro_mlflow.md)
 - [Model Explainability: SHAP, LIME, and Interpretability Techniques](./intro_model_explainability.md)
@@ -410,5 +410,5 @@ Every guide in `mlops/`. Start with the overview above, then work through these.
 - [Sculley et al., "Hidden Technical Debt in Machine Learning Systems" (NIPS 2015)](https://papers.nips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf)
 - [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - [Evidently AI Documentation](https://docs.evidentlyai.com/)
-- [Feature Store Comparison — Feast, Tecton, Hopsworks](https://www.featurestore.org/)
-- [Chip Huyen — Designing Machine Learning Systems (O'Reilly)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)
+- [Feature Store Comparison: Feast, Tecton, Hopsworks](https://www.featurestore.org/)
+- [Chip Huyen: Designing Machine Learning Systems (O'Reilly)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)

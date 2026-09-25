@@ -193,7 +193,7 @@ data = json.loads(response.choices[0].message.content)
 
 ### Structured Outputs (Hard Guarantee)
 
-Enforces a specific JSON Schema — the model is **constrained** to produce only schema-valid output via constrained decoding:
+Enforces a specific JSON Schema: the model is **constrained** to produce only schema-valid output via constrained decoding:
 
 ```python
 from pydantic import BaseModel
@@ -388,7 +388,7 @@ class UserProfile(BaseModel):
     occupation: str
     skills: list[str]
 
-# Extract structured data directly — instructor handles retries automatically
+# Extract structured data directly: instructor handles retries automatically
 profile = client.chat.completions.create(
     model="gpt-4o",
     response_model=UserProfile,  # <- Instructor magic
@@ -466,11 +466,11 @@ Instructor automatically:
 
 ### Tool Description Principles
 
-1. **Describe when to use** — "Use this when the user wants to X, Y, or Z"
-2. **Describe when NOT to use** — prevents the model from calling it in wrong situations
-3. **Be specific about data formats** — ISO 8601 for dates, not "a date string"
-4. **Use enums for constrained choices** — prevents hallucinated values
-5. **Keep tool count under ~20** — too many tools degrades selection accuracy
+1. **Describe when to use**: "Use this when the user wants to X, Y, or Z"
+2. **Describe when NOT to use**: prevents the model from calling it in wrong situations
+3. **Be specific about data formats**: ISO 8601 for dates, not "a date string"
+4. **Use enums for constrained choices**: prevents hallucinated values
+5. **Keep tool count under ~20**: too many tools degrades selection accuracy
 
 ---
 
@@ -548,16 +548,16 @@ for partial_report in client.chat.completions.create_partial(
 ## Common Interview Questions
 
 **Q: What is the difference between JSON mode and Structured Outputs in OpenAI's API?**
-JSON mode (`response_format: {"type": "json_object"}`) guarantees the output is valid JSON but doesn't enforce any schema — the model chooses the keys and structure. Structured Outputs (`response_format: SomePydanticModel`) uses constrained decoding to guarantee the output matches a specific schema exactly, including required fields, types, and allowed values. Structured Outputs is strictly stronger: every valid structured output is also valid JSON, but not vice versa.
+JSON mode (`response_format: {"type": "json_object"}`) guarantees the output is valid JSON but doesn't enforce any schema: the model chooses the keys and structure. Structured Outputs (`response_format: SomePydanticModel`) uses constrained decoding to guarantee the output matches a specific schema exactly, including required fields, types, and allowed values. Structured Outputs is strictly stronger: every valid structured output is also valid JSON, but not vice versa.
 
 **Q: How do you handle cases where the model's tool call has incorrect arguments?**
-Three layers of defense: (1) Schema validation — use strict JSON Schema with enums, min/max, format constraints to limit what the model can produce; (2) Application validation — validate tool args with Pydantic before executing, return a tool error result rather than crashing; (3) Error feedback — if validation fails, return the error as a tool result and let the model retry with the error as context. This is the "retry loop" pattern — the model usually corrects itself when told what was wrong.
+Three layers of defense: (1) Schema validation: use strict JSON Schema with enums, min/max, format constraints to limit what the model can produce; (2) Application validation, validate tool args with Pydantic before executing, return a tool error result rather than crashing; (3) Error feedback, if validation fails, return the error as a tool result and let the model retry with the error as context. This is the "retry loop" pattern: the model usually corrects itself when told what was wrong.
 
 **Q: When should you use function calling vs. prompting for structured data extraction?**
 Function calling is preferred when: (1) you need reliable schema enforcement across many calls, (2) the model needs to decide whether to extract data or do something else (tool choice logic), (3) you want to take action based on extracted data (tool execution). Plain prompting with JSON instructions works when: (1) you always need output (no conditional logic), (2) you need to support models without function calling, (3) the schema is simple and prompt-based extraction is already reliable enough.
 
 **Q: How does constrained decoding work in structured outputs?**
-The model's token probabilities are masked at each generation step to only allow tokens that could lead to a valid continuation of the target schema. Before generation, the JSON Schema is compiled into a finite automaton (or trie) of valid token sequences. At each step, only tokens that advance along a valid path through this automaton are allowed. This guarantees schema-valid output with zero post-processing — no need for retry logic, but the model loses some expressiveness (it can't generate schema-invalid content even if it would be more accurate).
+The model's token probabilities are masked at each generation step to only allow tokens that could lead to a valid continuation of the target schema. Before generation, the JSON Schema is compiled into a finite automaton (or trie) of valid token sequences. At each step, only tokens that advance along a valid path through this automaton are allowed. This guarantees schema-valid output with zero post-processing: no need for retry logic, but the model loses some expressiveness (it can't generate schema-invalid content even if it would be more accurate).
 
 **Q: What is the "tool poisoning" attack and how do you defend against it?**
-Tool poisoning is when a malicious document or user input contains hidden instructions that trick the model into calling a destructive tool (e.g., "delete all files" embedded invisibly in a retrieved document). Defenses: (1) Principle of least privilege — only expose tools needed for the current task; (2) Confirmation gates — require human approval before executing irreversible tools; (3) Input isolation — wrap user/retrieved content in delimiters and instruct the model that instructions inside delimiters are data, not instructions; (4) Tool result validation — validate tool inputs against allowlists before execution.
+Tool poisoning is when a malicious document or user input contains hidden instructions that trick the model into calling a destructive tool (e.g., "delete all files" embedded invisibly in a retrieved document). Defenses: (1) Principle of least privilege: only expose tools needed for the current task; (2) Confirmation gates, require human approval before executing irreversible tools; (3) Input isolation, wrap user/retrieved content in delimiters and instruct the model that instructions inside delimiters are data, not instructions; (4) Tool result validation, validate tool inputs against allowlists before execution.

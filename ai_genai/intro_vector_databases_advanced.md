@@ -1,4 +1,4 @@
-# Vector Databases & Advanced RAG — 2026 Production Guide
+# Vector Databases & Advanced RAG: 2026 Production Guide
 
 ## Vector Database Comparison
 
@@ -531,7 +531,7 @@ Stuffing too many retrieved chunks causes:
 
 ```python
 # 1. Rerank and keep only top-3 instead of top-10
-# 2. Contextual compression — extract only relevant sentences
+# 2. Contextual compression: extract only relevant sentences
 from langchain.retrievers.document_compressors import LLMChainExtractor
 
 compressor = LLMChainExtractor.from_llm(llm)
@@ -544,7 +544,7 @@ compression_retriever = ContextualCompressionRetriever(
 from langchain.chains import MapReduceDocumentsChain
 # Split across multiple LLM calls, then combine
 
-# 4. Hierarchical retrieval — coarse then fine
+# 4. Hierarchical retrieval: coarse then fine
 summary_retriever = ...  # Retrieve document summaries
 chunk_retriever = ...    # Then retrieve specific chunks from those docs
 ```
@@ -588,10 +588,10 @@ User Query → [Query Rewriter] → [Hybrid Search] → [Reranker] │
 > Pinecone: managed, fast, expensive, great for production SaaS. pgvector: free if you have Postgres, SQL joins, but limited scale (~10M vectors). FAISS: free, blazing fast on GPU, billions of vectors, but no built-in metadata filtering and requires custom infrastructure.
 
 **Q: What are chunking strategies and which would you recommend for a legal document RAG system?**
-> Legal documents have hierarchical structure (sections, clauses). Use document-structure-aware chunking (split by headers/numbering) with moderate overlap (100-200 tokens). Avoid fixed-size — it breaks clause boundaries. Consider semantic chunking for the final split within sections.
+> Legal documents have hierarchical structure (sections, clauses). Use document-structure-aware chunking (split by headers/numbering) with moderate overlap (100-200 tokens). Avoid fixed-size: it breaks clause boundaries. Consider semantic chunking for the final split within sections.
 
 **Q: Why is reranking important and how does it work?**
-> Bi-encoders produce approximate rankings — fast but imprecise. A cross-encoder evaluates query + document together, scoring true relevance. Reranking takes top-100 from ANN search and re-scores with a cross-encoder to get top-5 with much higher precision. The cost is worthwhile because you only rerank a small candidate set.
+> Bi-encoders produce approximate rankings: fast but imprecise. A cross-encoder evaluates query + document together, scoring true relevance. Reranking takes top-100 from ANN search and re-scores with a cross-encoder to get top-5 with much higher precision. The cost is worthwhile because you only rerank a small candidate set.
 
 **Q: How do you evaluate a RAG system?**
 > Use RAGAS metrics: context precision (are retrieved docs relevant?), context recall (did we retrieve all needed info?), faithfulness (is the answer grounded in context?), and answer relevancy. Create a golden dataset manually. Automate eval in CI/CD and compare scores before deploying changes to retrieval or prompts.

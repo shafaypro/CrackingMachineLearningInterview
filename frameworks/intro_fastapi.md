@@ -1,4 +1,4 @@
-# FastAPI — Production-Grade AI Backend Engineering
+# FastAPI: Production-Grade AI Backend Engineering
 
 ## Why FastAPI for AI Systems?
 
@@ -11,7 +11,7 @@ FastAPI is the de facto standard for building AI/LLM API backends in 2026 becaus
 
 ---
 
-## Production LLM API — Complete Example
+## Production LLM API: Complete Example
 
 ```python
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
@@ -290,7 +290,7 @@ def estimate_tokens(text: str) -> int:
 
 ---
 
-## Observability — Logging, Tracing, Metrics
+## Observability: Logging, Tracing, Metrics
 
 ```python
 import structlog
@@ -444,7 +444,7 @@ async def stream_agent_progress(job_id: str):
 ## Interview Questions
 
 **Q: Why use FastAPI for LLM backends instead of Flask or Django?**
-> FastAPI's async support is critical — LLM calls are I/O-bound and take 1-30 seconds. With Flask's synchronous model, each request blocks a thread. FastAPI with asyncio handles hundreds of concurrent requests with minimal threads. Also: automatic Pydantic validation, OpenAPI docs, and better performance.
+> FastAPI's async support is critical: LLM calls are I/O-bound and take 1-30 seconds. With Flask's synchronous model, each request blocks a thread. FastAPI with asyncio handles hundreds of concurrent requests with minimal threads. Also: automatic Pydantic validation, OpenAPI docs, and better performance.
 
 **Q: How do you implement streaming LLM responses in FastAPI?**
 > Use `StreamingResponse` with an async generator that yields Server-Sent Events (SSE). The LLM client streams tokens; the generator yields each token formatted as `data: {...}\n\n`. Set `Cache-Control: no-cache` and disable nginx buffering (`X-Accel-Buffering: no`).

@@ -1,6 +1,6 @@
 # Hugging Face Guide
 
-A comprehensive guide to the Hugging Face ecosystem — the go-to platform for open-source AI models, datasets, and tools.
+A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.
 
 ---
 
@@ -10,7 +10,7 @@ A comprehensive guide to the Hugging Face ecosystem — the go-to platform for o
 2. [Loading Models and Tokenizers](#loading-models-and-tokenizers)
 3. [Pipeline API](#pipeline-api)
 4. [Datasets Library](#datasets-library)
-5. [PEFT — Parameter-Efficient Fine-Tuning](#peft--parameter-efficient-fine-tuning)
+5. [PEFT: Parameter-Efficient Fine-Tuning](#peft-parameter-efficient-fine-tuning)
 6. [Model Hub](#model-hub)
 7. [Spaces and Gradio](#spaces-and-gradio)
 8. [Inference Endpoints](#inference-endpoints)
@@ -31,8 +31,8 @@ pip install transformers accelerate datasets peft
 **Core classes:**
 - `AutoModel`, `AutoModelForCausalLM`, `AutoModelForSequenceClassification`
 - `AutoTokenizer`, `AutoProcessor`
-- `pipeline` — high-level API for inference
-- `Trainer`, `TrainingArguments` — for fine-tuning
+- `pipeline`: high-level API for inference
+- `Trainer`, `TrainingArguments`: for fine-tuning
 
 ---
 
@@ -236,7 +236,7 @@ custom_dataset.push_to_hub("username/my-dataset", private=True)
 
 ---
 
-## PEFT — Parameter-Efficient Fine-Tuning
+## PEFT: Parameter-Efficient Fine-Tuning
 
 PEFT allows fine-tuning large models with minimal trainable parameters.
 
@@ -329,7 +329,7 @@ model = AutoModelForCausalLM.from_pretrained(
 # Prepare for k-bit training
 model = prepare_model_for_kbit_training(model)
 
-# Apply LoRA on top of quantized model — this is QLoRA
+# Apply LoRA on top of quantized model: this is QLoRA
 model = get_peft_model(model, lora_config)
 ```
 
@@ -403,7 +403,7 @@ tokenizer.push_to_hub("username/my-finetuned-model")
 Hugging Face Spaces let you deploy ML demos instantly.
 
 ```python
-# app.py — Deploy this as a HF Space
+# app.py: Deploy this as a HF Space
 import gradio as gr
 from transformers import pipeline
 
@@ -539,7 +539,7 @@ The `pipeline` function is a high-level, task-oriented API that handles model lo
 
 **Q6: How do you prevent gradient issues when fine-tuning with PEFT?** 🔴 Advanced
 
-1. Call `prepare_model_for_kbit_training(model)` when using 4-bit/8-bit quantization — it handles gradient checkpointing, casting, and disabling quantized layer grads
+1. Call `prepare_model_for_kbit_training(model)` when using 4-bit/8-bit quantization: it handles gradient checkpointing, casting, and disabling quantized layer grads
 2. Ensure LoRA target modules include all attention projection matrices
 3. Set `lora_dropout` to regularize training
 4. Use gradient clipping (`max_grad_norm=1.0` in `TrainingArguments`)
@@ -554,5 +554,5 @@ The `pipeline` function is a high-level, task-oriented API that handles model lo
 - [Transformers GitHub](https://github.com/huggingface/transformers)
 - [PEFT Documentation](https://huggingface.co/docs/peft)
 - [Datasets Documentation](https://huggingface.co/docs/datasets)
-- [QLoRA Paper — Dettmers et al. (2023)](https://arxiv.org/abs/2305.14314)
-- [LoRA Paper — Hu et al. (2021)](https://arxiv.org/abs/2106.09685)
+- [QLoRA Paper: Dettmers et al. (2023)](https://arxiv.org/abs/2305.14314)
+- [LoRA Paper: Hu et al. (2021)](https://arxiv.org/abs/2106.09685)

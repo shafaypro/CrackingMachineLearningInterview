@@ -1,8 +1,8 @@
-# LangSmith — LLM Observability & Evaluation Platform
+# LangSmith: LLM Observability & Evaluation Platform
 
 ## What is LangSmith?
 
-LangSmith is Anthropic/LangChain's platform for **tracing, debugging, testing, and evaluating** LLM applications. It provides end-to-end visibility into every LLM call, chain execution, and agent decision — critical for production AI systems.
+LangSmith is Anthropic/LangChain's platform for **tracing, debugging, testing, and evaluating** LLM applications. It provides end-to-end visibility into every LLM call, chain execution, and agent decision: critical for production AI systems.
 
 ```
   Your App → LangSmith SDK → LangSmith Platform
@@ -40,7 +40,7 @@ os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_API_KEY"] = "your-api-key"
 os.environ["LANGCHAIN_PROJECT"] = "my-production-app"  # Project for grouping traces
 
-# That's it — all LangChain/LangGraph calls are auto-traced
+# That's it: all LangChain/LangGraph calls are auto-traced
 from langchain_anthropic import ChatAnthropic
 llm = ChatAnthropic(model="claude-sonnet-4-6")
 result = llm.invoke("Explain RAG in 3 sentences")
@@ -174,7 +174,7 @@ results = evaluate(
 
 ---
 
-## Prompt Hub — Version-Controlled Prompts
+## Prompt Hub: Version-Controlled Prompts
 
 ```python
 from langchain import hub
@@ -295,7 +295,7 @@ Request comes in
 > Create a golden dataset with (question, expected_answer) pairs. Run the old and new system on the same dataset with LLM-as-judge evaluators. Compare scores in LangSmith's experiment comparison view. Block deployment if score drops below threshold.
 
 **Q: What's the difference between online and offline evaluation?**
-> Offline: evaluate on a fixed dataset before deployment (regression tests, benchmarks). Online: collect real user feedback and monitor metrics in production (thumbs up/down, implicit signals like follow-up questions). Both are needed — offline catches regressions, online catches real-world failures.
+> Offline: evaluate on a fixed dataset before deployment (regression tests, benchmarks). Online: collect real user feedback and monitor metrics in production (thumbs up/down, implicit signals like follow-up questions). Both are needed: offline catches regressions, online catches real-world failures.
 
 **Q: How would you implement regression testing for an LLM application?**
 > Curate a golden dataset of critical test cases. Integrate `evaluate()` into CI/CD. Set a score threshold (e.g., 85%). Add new test cases whenever a production bug is found (golden negative examples). This creates a growing safety net.

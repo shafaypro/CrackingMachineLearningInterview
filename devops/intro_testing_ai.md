@@ -1,4 +1,4 @@
-# Testing AI Systems — Playwright, Puppeteer & Beyond
+# Testing AI Systems: Playwright, Puppeteer & Beyond
 
 ## Testing AI Applications is Different
 
@@ -16,7 +16,7 @@ assert output == expected      assert quality(output) >= threshold
 
 ---
 
-## Playwright — End-to-End Testing for AI UIs
+## Playwright: End-to-End Testing for AI UIs
 
 Playwright is Microsoft's browser automation library for E2E testing of AI-powered web applications.
 
@@ -114,7 +114,7 @@ class TestMLChatbotUI:
         page.click('[data-testid="send-button"]')
         page.wait_for_selector('[data-testid="assistant-message"]', timeout=20000)
 
-        # Second message — should remember context
+        # Second message: should remember context
         page.fill('[data-testid="chat-input"]', "What is my name?")
         page.click('[data-testid="send-button"]')
         page.wait_for_selector(
@@ -136,7 +136,7 @@ class TestMLChatbotUI:
         page.wait_for_selector('[data-testid="assistant-message"]', timeout=15000)
         latency = time.time() - start
 
-        assert latency < 10.0, f"Response took {latency:.1f}s — exceeds 10s SLA"
+        assert latency < 10.0, f"Response took {latency:.1f}s, exceeds 10s SLA"
 ```
 
 ### Async Playwright for Parallel Tests
@@ -298,7 +298,7 @@ class TestChatAPI:
     def test_streaming_endpoint_returns_sse(self):
         with client.stream("POST", "/chat/stream", json={"question": "Explain AI"}):
             # Check response headers
-            pass  # Streaming test is complex — use async client
+            pass  # Streaming test is complex: use async client
 ```
 
 ### Mock LLM for Fast Tests
@@ -438,7 +438,7 @@ jobs:
 > Mock the LLM client. Use `unittest.mock.AsyncMock` to return fixed responses without calling the real API. This makes tests 100x faster, free, and deterministic. Only call real LLMs in integration/eval tests that run less frequently.
 
 **Q: What's the biggest challenge in E2E testing for AI apps?**
-> Non-determinism — the same test can pass one run and fail the next. Solutions: (1) test behavioral properties ("mentions relevant terms") not exact strings, (2) use fixed seeds/temperature=0 in tests, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.
+> Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties ("mentions relevant terms") not exact strings, (2) use fixed seeds/temperature=0 in tests, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.
 
 **Q: How do you test streaming responses?**
 > Capture response text at intervals (e.g., every 500ms). Assert that the text grows over time. Check that the first token arrives within acceptable time (e.g., < 2s). Verify the final response is complete. Use network interception to validate SSE format.

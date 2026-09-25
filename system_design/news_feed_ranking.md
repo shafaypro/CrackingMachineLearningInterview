@@ -575,7 +575,7 @@ Measure it with creator-side metrics: the distribution of reach across creators,
 - [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md)
 - [Causal Inference and Uplift](../classical_ml/intro_causal_inference.md)
 - [Embeddings](../ai_genai/intro_embeddings.md)
-- [Vector Databases — Advanced](../ai_genai/intro_vector_databases_advanced.md)
+- [Vector Databases: Advanced](../ai_genai/intro_vector_databases_advanced.md)
 - [Apache Kafka](../data_engineering/intro_apache_kafka.md)
 - [A/B Testing](../mlops/intro_ab_testing.md)
 - [Feature Store](../mlops/intro_feature_store.md)

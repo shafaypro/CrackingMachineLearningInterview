@@ -1,4 +1,4 @@
-# Geospatial AI Systems — Google Solar API, ArcGIS & Production ML
+# Geospatial AI Systems: Google Solar API, ArcGIS & Production ML
 
 ## Why Geospatial Matters in AI/ML (2026)
 
@@ -243,7 +243,7 @@ sedf["competitors_5km"] = sedf.spatial.relationship(
 
 ### Why PostGIS?
 
-PostGIS extends PostgreSQL with geospatial types and operations — perfect for production ML pipelines that need spatial joins, buffering, and proximity queries at scale.
+PostGIS extends PostgreSQL with geospatial types and operations: perfect for production ML pipelines that need spatial joins, buffering, and proximity queries at scale.
 
 ```sql
 -- Enable PostGIS
@@ -467,16 +467,16 @@ async def score_leads(addresses: list[str]) -> list[SolarLead]:
 ## Interview Questions
 
 **Q: What coordinate system would you use for computing distances in a geospatial ML pipeline?**
-> Always project to a metric CRS (e.g., UTM or Web Mercator EPSG:3857) before computing distances. Never use lat/lon degrees for distance — 1 degree of longitude has different real-world distances at different latitudes. Use pyproj or GeoPandas `.to_crs()` to reproject.
+> Always project to a metric CRS (e.g., UTM or Web Mercator EPSG:3857) before computing distances. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Use pyproj or GeoPandas `.to_crs()` to reproject.
 
 **Q: How would you design a system to score solar potential for 1 million addresses?**
-> Batch geocode addresses → parallel async calls to Google Solar API (respect rate limits with semaphores) → feature engineering with PostGIS spatial joins → batch ML inference → store results in PostGIS with spatial index for downstream queries. Monitor API costs carefully — Solar API is metered.
+> Batch geocode addresses → parallel async calls to Google Solar API (respect rate limits with semaphores) → feature engineering with PostGIS spatial joins → batch ML inference → store results in PostGIS with spatial index for downstream queries. Monitor API costs carefully: Solar API is metered.
 
 **Q: What is H3 and why is it useful for ML?**
 > H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 hexagons have equal area (unlike lat/lon grids), making them better for spatial statistics.
 
 **Q: How do you prevent data leakage in geospatial ML models?**
-> Don't use future data for historical predictions. Don't use spatial proximity as a feature if your train/test split is random (nearby points will be in both sets — use spatial cross-validation: block holdout by region). Avoid using census data that's derived from the same population you're predicting.
+> Don't use future data for historical predictions. Don't use spatial proximity as a feature if your train/test split is random (nearby points will be in both sets: use spatial cross-validation: block holdout by region). Avoid using census data that's derived from the same population you're predicting.
 
 **Q: How would you combine ArcGIS data with a Python ML pipeline?**
 > Use the ArcGIS Python API (`arcgis` package) to query feature layers as Spatially Enabled DataFrames or use the REST API directly. Convert to GeoPandas for sklearn-compatible processing. Alternatively, export to PostGIS for complex spatial joins at scale. Always manage CRS transformations explicitly.

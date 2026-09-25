@@ -217,7 +217,7 @@ The label is simple in principle: actual arrival time minus the time of predicti
 - Batched deliveries where the courier carried several orders; label each leg separately or include batch features
 - Test orders and internal traffic
 
-**Outliers.** Some trips genuinely take much longer (accident, wrong address). Do not blindly delete them: users experience those too, and removing them makes the model overconfident. Instead cap extreme values for the mean model, keep them for the tail quantile models, and use robust losses.
+**Outliers.** Some trips take much longer (accident, wrong address). Do not blindly delete them: users experience those too, and removing them makes the model overconfident. Instead cap extreme values for the mean model, keep them for the tail quantile models, and use robust losses.
 
 **Censoring.** A trip cancelled after 20 minutes of waiting tells you the true time was *more than* 20 minutes. Dropping these biases the data toward fast trips. Survival-style losses or at least tracking the share of censored trips per segment keeps this visible.
 

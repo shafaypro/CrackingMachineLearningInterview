@@ -173,7 +173,7 @@ Use this track alongside:
 
 ### For AI / LLM Engineer
 1. Classic ML Foundations (Track 1) → 1 week (skim)
-2. Deep Learning — Transformers/Attention (Track 2) → 1 week
+2. Deep Learning: Transformers/Attention (Track 2) → 1 week
 3. GenAI Engineering (Track 3) → 3 weeks
 4. LLMOps (overlap with Track 4) → 1 week
 
@@ -219,12 +219,12 @@ Essential for all roles:
 
 ## Interview Day Tips
 
-1. **Think out loud** — interviewers want to follow your reasoning, not just the answer
-2. **Clarify before you code** — ask about constraints, edge cases, scale requirements
-3. **Start simple** — give a naive/brute-force answer first, then optimize
-4. **Know your tradeoffs** — every algorithm has pros and cons; be ready to discuss them
-5. **Bridge theory to practice** — relate concepts to real systems (e.g., "In production, I would...")
-6. **Admit uncertainty honestly** — "I'd need to verify this, but I believe..." is better than guessing confidently
+1. **Think out loud**: interviewers want to follow your reasoning, not just the answer
+2. **Clarify before you code**: ask about constraints, edge cases, scale requirements
+3. **Start simple**: give a naive/brute-force answer first, then optimize
+4. **Know your tradeoffs**: every algorithm has pros and cons; be ready to discuss them
+5. **Bridge theory to practice**: relate concepts to real systems (e.g., "In production, I would...")
+6. **Admit uncertainty honestly**: "I'd need to verify this, but I believe..." is better than guessing confidently
 
 ---
 

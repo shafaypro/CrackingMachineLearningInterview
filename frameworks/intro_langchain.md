@@ -1,14 +1,14 @@
 # LangChain Guide
 
-> **Note:** A comprehensive LangChain introduction is available at [`ai_genai/intro_langchain.md`](../ai_genai/intro_langchain.md). This file covers additional advanced topics: LangChain Expression Language (LCEL), LangSmith, LangGraph, and chains vs agents vs tools.
+> **Note:** A fuller LangChain introduction is available at [`ai_genai/intro_langchain.md`](../ai_genai/intro_langchain.md). This file covers additional advanced topics: LangChain Expression Language (LCEL), LangSmith, LangGraph, and chains vs agents vs tools.
 
 ---
 
 ## Table of Contents
 
 1. [LangChain Expression Language (LCEL)](#langchain-expression-language-lcel)
-2. [LangSmith — Observability](#langsmith--observability)
-3. [LangGraph — Stateful Agents](#langgraph--stateful-agents)
+2. [LangSmith: Observability](#langsmith-observability)
+3. [LangGraph: Stateful Agents](#langgraph-stateful-agents)
 4. [Chains vs Agents vs Tools](#chains-vs-agents-vs-tools)
 5. [Interview Q&A](#interview-qa)
 6. [References](#references)
@@ -146,9 +146,9 @@ chain = (
 
 ---
 
-## LangSmith — Observability
+## LangSmith: Observability
 
-LangSmith is the observability platform for LangChain applications — trace all LLM calls, inputs, outputs, and costs.
+LangSmith is the observability platform for LangChain applications: trace all LLM calls, inputs, outputs, and costs.
 
 ### Setup
 
@@ -200,7 +200,7 @@ results = evaluate(
 
 ---
 
-## LangGraph — Stateful Agents
+## LangGraph: Stateful Agents
 
 LangGraph is a framework for building stateful, multi-step AI workflows as directed graphs.
 
@@ -312,7 +312,7 @@ chain = prompt | model | parser | postprocess
 result = chain.invoke(input)  # Predictable, fast, no surprises
 ```
 
-Best for: summarization, translation, extraction, classification — tasks with a known input-output pattern.
+Best for: summarization, translation, extraction, classification: tasks with a known input-output pattern.
 
 ### When to Use Agents
 
@@ -356,7 +356,7 @@ LCEL (LangChain Expression Language) is a declarative composition syntax using t
 
 **Q2: What is the difference between a LangChain chain and a LangGraph agent?** 🟡 Intermediate
 
-A LangChain chain is a fixed, linear (or branching but predetermined) sequence of operations — the flow is defined at build time. A LangGraph agent is a directed graph where the LLM decides at runtime which node to execute next based on its state. LangGraph supports cycles (retry loops, multi-step reasoning), persistent state, and conditional branching driven by LLM reasoning. Use chains for predictable workflows, LangGraph for dynamic multi-step tasks.
+A LangChain chain is a fixed, linear (or branching but predetermined) sequence of operations: the flow is defined at build time. A LangGraph agent is a directed graph where the LLM decides at runtime which node to execute next based on its state. LangGraph supports cycles (retry loops, multi-step reasoning), persistent state, and conditional branching driven by LLM reasoning. Use chains for predictable workflows, LangGraph for dynamic multi-step tasks.
 
 ---
 

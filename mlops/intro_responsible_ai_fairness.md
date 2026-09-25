@@ -432,7 +432,7 @@ Because the information is usually still present through proxies. ZIP code, name
 
 #### Demographic parity vs. equalized odds: when would you use each?
 
-Demographic parity requires equal selection rates across groups regardless of true labels. It suits cases where you believe differences in base rates are themselves produced by unfairness, or where the goal is equal exposure (e.g., showing job ads). Its downside is that with genuinely different base rates it forces accepting less-qualified or rejecting more-qualified people in some group. Equalized odds requires equal TPR and FPR, so errors are distributed evenly among people with the same true outcome. It suits cases where the labels are trustworthy and both error types cause harm, such as fraud or risk scoring. If the labels themselves are biased, equalized odds just equalizes errors with respect to a biased target.
+Demographic parity requires equal selection rates across groups regardless of true labels. It suits cases where you believe differences in base rates are themselves produced by unfairness, or where the goal is equal exposure (e.g., showing job ads). Its downside is that with different base rates it forces accepting less-qualified or rejecting more-qualified people in some group. Equalized odds requires equal TPR and FPR, so errors are distributed evenly among people with the same true outcome. It suits cases where the labels are trustworthy and both error types cause harm, such as fraud or risk scoring. If the labels themselves are biased, equalized odds just equalizes errors with respect to a biased target.
 
 #### Explain the impossibility theorem in plain terms.
 
@@ -498,13 +498,13 @@ Intended use and explicitly out-of-scope uses; training and evaluation data sour
 
 ## Related Topics
 
-- [Model Explainability](intro_model_explainability.md) — SHAP, LIME, and explanation requirements under GDPR and the EU AI Act
-- [Model Monitoring](intro_model_monitoring.md) — Tracking drift and per-segment metrics in production
-- [Data Quality](intro_data_quality.md) — Validation and data checks that catch representation problems early
-- [LLM Evaluation](intro_llm_evaluation.md) — Evaluation methods and LLM-as-judge for generative models
-- [Evaluation and Guardrails](intro_evaluation_guardrails.md) — Output filters and safety checks for LLM systems
-- [A/B Testing](intro_ab_testing.md) — Measuring impact, including by segment, after launch
-- [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md) — Confusion matrices, calibration, and slicing metrics
-- [Causal Inference](../classical_ml/intro_causal_inference.md) — Background for counterfactual fairness
-- [LLM Security](../ai_genai/intro_llm_security.md) — Red-teaming, jailbreaks, and data leakage in LLMs
-- [Fraud Detection System Design](../system_design/fraud_detection.md) — A high-stakes system where error-rate balance matters
+- [Model Explainability](intro_model_explainability.md): SHAP, LIME, and explanation requirements under GDPR and the EU AI Act
+- [Model Monitoring](intro_model_monitoring.md): Tracking drift and per-segment metrics in production
+- [Data Quality](intro_data_quality.md): Validation and data checks that catch representation problems early
+- [LLM Evaluation](intro_llm_evaluation.md): Evaluation methods and LLM-as-judge for generative models
+- [Evaluation and Guardrails](intro_evaluation_guardrails.md): Output filters and safety checks for LLM systems
+- [A/B Testing](intro_ab_testing.md): Measuring impact, including by segment, after launch
+- [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md): Confusion matrices, calibration, and slicing metrics
+- [Causal Inference](../classical_ml/intro_causal_inference.md): Background for counterfactual fairness
+- [LLM Security](../ai_genai/intro_llm_security.md): Red-teaming, jailbreaks, and data leakage in LLMs
+- [Fraud Detection System Design](../system_design/fraud_detection.md): A high-stakes system where error-rate balance matters

@@ -1,6 +1,6 @@
 # Classical Machine Learning
 
-A comprehensive reference for classical ML algorithms, evaluation metrics, and fundamental concepts.
+A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.
 
 ---
 
@@ -24,7 +24,7 @@ A comprehensive reference for classical ML algorithms, evaluation metrics, and f
 | Logistic Regression | Supervised / Classification | Fast, interpretable, probabilistic output | Assumes linearity, poor with non-linear data | Binary classification, baselines |
 | Decision Tree | Supervised / Both | Interpretable, handles non-linearity | Overfits, unstable | Explainable ML, rule extraction |
 | Random Forest | Supervised / Both | Robust, handles missing data, feature importance | Slow inference, large memory | Tabular data, general purpose |
-| Gradient Boosting (XGBoost/LightGBM/CatBoost) | Supervised / Both | State-of-the-art tabular performance | Hyperparameter tuning needed | Kaggle, tabular competitions |
+| Gradient Boosting (XGBoost/LightGBM/CatBoost) | Supervised / Both | Usually the most accurate on tabular data | Hyperparameter tuning needed | Kaggle, tabular competitions |
 | SVM | Supervised / Both | Effective in high-dim spaces, kernel trick | Slow on large data, no probability by default | Text classification, small datasets |
 | K-Nearest Neighbors | Supervised / Both | Simple, no training, non-parametric | Slow inference, high memory, curse of dimensionality | Small datasets, recommendation |
 | Naive Bayes | Supervised / Classification | Very fast, works well with small data | Strong independence assumption | Text classification, spam detection |
@@ -139,7 +139,7 @@ print(importance.head(10))
 
 ### XGBoost / LightGBM / CatBoost
 
-Gradient boosting frameworks — typically the best for tabular data.
+Gradient boosting frameworks, typically the best for tabular data.
 
 ```python
 import xgboost as xgb
@@ -251,7 +251,7 @@ print(f"Silhouette Score: {score:.4f}")  # Range: -1 to 1, higher is better
 
 ### DBSCAN
 
-Density-based clustering — finds clusters of arbitrary shape and identifies noise.
+Density-based clustering: finds clusters of arbitrary shape and identifies noise.
 
 ```
 Parameters:
@@ -320,10 +320,10 @@ from sklearn.metrics import (
 # Accuracy
 acc = accuracy_score(y_true, y_pred)
 
-# Precision: TP / (TP + FP) — how many predicted positives are actually positive
+# Precision: TP / (TP + FP), how many predicted positives are actually positive
 precision = precision_score(y_true, y_pred, average="binary")
 
-# Recall (Sensitivity): TP / (TP + FN) — how many actual positives were detected
+# Recall (Sensitivity): TP / (TP + FN), how many actual positives were detected
 recall = recall_score(y_true, y_pred, average="binary")
 
 # F1 Score: harmonic mean of precision and recall
@@ -400,7 +400,7 @@ df["category_encoded"] = le.fit_transform(df["category"])
 ohe = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
 X_encoded = ohe.fit_transform(df[["category"]])
 
-# Target encoding (powerful but risks leakage — use cross-val)
+# Target encoding (powerful but risks leakage: use cross-val)
 from category_encoders import TargetEncoder
 te = TargetEncoder()
 X_te = te.fit_transform(X_train["category"], y_train)
@@ -411,15 +411,15 @@ X_te = te.fit_transform(X_train["category"], y_train)
 ```python
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
-# StandardScaler: zero mean, unit variance — required for SVM, logistic regression, KNN
+# StandardScaler: zero mean, unit variance, required for SVM, logistic regression, KNN
 ss = StandardScaler()
 X_std = ss.fit_transform(X_train)
 
-# MinMaxScaler: scales to [0,1] — required for neural networks sometimes
+# MinMaxScaler: scales to [0,1], required for neural networks sometimes
 mm = MinMaxScaler()
 X_mm = mm.fit_transform(X_train)
 
-# RobustScaler: uses median and IQR — robust to outliers
+# RobustScaler: uses median and IQR, robust to outliers
 rs = RobustScaler()
 X_rs = rs.fit_transform(X_train)
 ```
@@ -470,7 +470,7 @@ The kernel trick allows SVMs to find non-linear decision boundaries without expl
 
 **Q6: How do you handle class imbalance?** 🟡 Intermediate
 
-1. **Resampling:** Oversample minority class (SMOTE — synthetic minority oversampling) or undersample majority class
+1. **Resampling:** Oversample minority class (SMOTE, synthetic minority oversampling) or undersample majority class
 2. **Class weights:** Set `class_weight="balanced"` in sklearn to give higher penalty to minority class errors
 3. **Threshold adjustment:** Lower the classification threshold to increase recall for minority class
 4. **Evaluation:** Use F1-score, AUC-ROC, precision-recall curves instead of accuracy
@@ -481,15 +481,15 @@ The kernel trick allows SVMs to find non-linear decision boundaries without expl
 
 **Q7: What is regularization and when do you need it?** 🟢 Beginner
 
-Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|` — drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²` — shrinks weights uniformly, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.
+Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|`: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²`: shrinks weights uniformly, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.
 
 ---
 
-**Q8: Explain PCA — how does it work and what are its limitations?** 🟡 Intermediate
+**Q8: Explain PCA, how does it work and what are its limitations?** 🟡 Intermediate
 
 PCA finds orthogonal directions (principal components) of maximum variance in the data. It computes the covariance matrix, finds its eigenvectors (principal components) and eigenvalues (variance captured). Projects data onto the top k eigenvectors.
 
-Limitations: (1) Linear only — cannot capture non-linear structure, (2) assumes the directions of maximum variance are the most informative (not always true for classification), (3) loses interpretability — principal components are linear combinations of all features, (4) sensitive to feature scale — requires standardization first.
+Limitations: (1) Linear only: cannot capture non-linear structure, (2) assumes the directions of maximum variance are the most informative (not always true for classification), (3) loses interpretability, principal components are linear combinations of all features, (4) sensitive to feature scale, requires standardization first.
 
 ---
 
@@ -513,19 +513,19 @@ SMOTE (Synthetic Minority Oversampling Technique) creates synthetic minority cla
 
 **Q12: How does KNN work and what are its trade-offs?** 🟢 Beginner
 
-KNN classifies a new point by finding its k nearest training examples (by distance) and voting on the class. No training phase — just stores training data. Advantages: simple, no assumptions about data distribution, naturally handles multi-class. Disadvantages: O(n) inference (must compare to all training points), fails with high-dimensional data (curse of dimensionality), sensitive to feature scale (requires normalization), high memory.
+KNN classifies a new point by finding its k nearest training examples (by distance) and voting on the class. No training phase: just stores training data. Advantages: simple, no assumptions about data distribution, naturally handles multi-class. Disadvantages: O(n) inference (must compare to all training points), fails with high-dimensional data (curse of dimensionality), sensitive to feature scale (requires normalization), high memory.
 
 ---
 
 **Q13: What is the difference between Gini impurity and entropy for decision trees?** 🟡 Intermediate
 
-Both measure node impurity (how mixed the classes are). Gini impurity: `1 - Σpᵢ²`, computationally cheaper (no log). Entropy: `-Σpᵢlog₂(pᵢ)`, information-theoretic measure. In practice, they give very similar results. Gini tends to isolate the most frequent class into its own branch; entropy tends to produce more balanced trees. Default in sklearn is Gini. The difference in model quality is negligible — choose based on computational preference.
+Both measure node impurity (how mixed the classes are). Gini impurity: `1 - Σpᵢ²`, computationally cheaper (no log). Entropy: `-Σpᵢlog₂(pᵢ)`, information-theoretic measure. In practice, they give very similar results. Gini tends to isolate the most frequent class into its own branch; entropy tends to produce more balanced trees. Default in sklearn is Gini. The difference in model quality is negligible: choose based on computational preference.
 
 ---
 
 **Q14: What is L1 vs L2 regularization and which would you use for feature selection?** 🟡 Intermediate
 
-L1 (Lasso) penalty: `λ·Σ|wᵢ|` — drives less important feature weights to exactly zero, performing automatic feature selection. L2 (Ridge) penalty: `λ·Σwᵢ²` — shrinks all weights toward zero but rarely to exactly zero. Use L1 when you believe many features are irrelevant (want sparse models), use L2 when you believe all features are somewhat relevant (want stable coefficients). Elastic Net combines both: `λ₁·Σ|wᵢ| + λ₂·Σwᵢ²`.
+L1 (Lasso) penalty: `λ·Σ|wᵢ|`: drives less important feature weights to exactly zero, performing automatic feature selection. L2 (Ridge) penalty: `λ·Σwᵢ²`: shrinks all weights toward zero but rarely to exactly zero. Use L1 when you believe many features are irrelevant (want sparse models), use L2 when you believe all features are somewhat relevant (want stable coefficients). Elastic Net combines both: `λ₁·Σ|wᵢ| + λ₂·Σwᵢ²`.
 
 ---
 
@@ -543,7 +543,7 @@ Choose DBSCAN when: (1) clusters have arbitrary shapes (not spherical), (2) you 
 
 **Q17: What is the difference between Type I and Type II errors?** 🟢 Beginner
 
-**Type I error (False Positive):** Predicted positive, actually negative. Example: flagging a legitimate email as spam. **Type II error (False Negative):** Predicted negative, actually positive. Example: missing a fraudulent transaction. The tradeoff is controlled via the decision threshold. For fraud detection, minimize FN (Type II) — missing fraud is more costly. For spam filtering, minimize FP (Type I) — blocking legitimate emails is costly.
+**Type I error (False Positive):** Predicted positive, actually negative. Example: flagging a legitimate email as spam. **Type II error (False Negative):** Predicted negative, actually positive. Example: missing a fraudulent transaction. The tradeoff is controlled via the decision threshold. For fraud detection, minimize FN (Type II): missing fraud is more costly. For spam filtering, minimize FP (Type I): blocking legitimate emails is costly.
 
 ---
 
@@ -566,7 +566,7 @@ Key ideas: bootstrap sampling creates diversity, random feature subsets prevent 
 
 **Q20: What is the difference between accuracy and F1 score, and when should you prefer F1?** 🟢 Beginner
 
-Accuracy = (TP + TN) / Total — works well for balanced classes. F1 = 2·(Precision·Recall)/(Precision+Recall) — balances precision and recall. Prefer F1 (or precision-recall separately) when: (1) classes are imbalanced (a model predicting all-majority gets high accuracy but F1≈0), (2) the cost of FP and FN differ, (3) the business cares about detection rate (recall) or precision of alerts. Example: 1% fraud rate — a model predicting no-fraud gets 99% accuracy but 0% F1.
+Accuracy = (TP + TN) / Total: works well for balanced classes. F1 = 2·(Precision·Recall)/(Precision+Recall): balances precision and recall. Prefer F1 (or precision-recall separately) when: (1) classes are imbalanced (a model predicting all-majority gets high accuracy but F1≈0), (2) the cost of FP and FN differ, (3) the business cares about detection rate (recall) or precision of alerts. Example: 1% fraud rate: a model predicting no-fraud gets 99% accuracy but 0% F1.
 
 ---
 
@@ -576,11 +576,11 @@ Accuracy = (TP + TN) / Total — works well for balanced classes. F1 = 2·(Preci
 
 See [Statistics & Probability Guide](./intro_statistics_probability.md) for detailed coverage.
 
-- **Hypothesis testing** — t-test, chi-square, ANOVA, multiple comparisons correction
-- **Probability distributions** — Normal, Binomial, Poisson, Beta and when to use each
-- **Bayesian statistics** — Bayes' theorem, MLE vs MAP, priors and posteriors
-- **Confidence intervals** — frequentist CI vs Bayesian credible intervals, bootstrap CI
-- **Correlation** — Pearson vs Spearman, covariance, correlation ≠ causation
+- **Hypothesis testing**: t-test, chi-square, ANOVA, multiple comparisons correction
+- **Probability distributions**: Normal, Binomial, Poisson, Beta and when to use each
+- **Bayesian statistics**: Bayes' theorem, MLE vs MAP, priors and posteriors
+- **Confidence intervals**: frequentist CI vs Bayesian credible intervals, bootstrap CI
+- **Correlation**: Pearson vs Spearman, covariance, correlation ≠ causation
 
 ---
 
@@ -591,7 +591,7 @@ Every guide in `classical_ml/`. Start with the overview above, then work through
 - [Anomaly Detection](./intro_anomaly_detection.md)
 - [Causal Inference and Uplift Modeling](./intro_causal_inference.md)
 - [Clustering Algorithms](./intro_clustering.md)
-- [Dimensionality Reduction (Deep Dive)](./intro_dimensionality_reduction.md)
+- [Dimensionality Reduction](./intro_dimensionality_reduction.md)
 - [Ensemble Methods and Gradient Boosting](./intro_ensemble_methods.md)
 - [Feature Engineering & Selection](./intro_feature_engineering.md)
 - [Math for ML: Linear Algebra, Calculus, and Optimization](./intro_math_for_ml.md)
@@ -608,6 +608,6 @@ Every guide in `classical_ml/`. Start with the overview above, then work through
 - [Scikit-learn Documentation](https://scikit-learn.org/stable/)
 - [XGBoost Documentation](https://xgboost.readthedocs.io/)
 - [LightGBM Documentation](https://lightgbm.readthedocs.io/)
-- [The Elements of Statistical Learning — Hastie, Tibshirani, Friedman](https://web.stanford.edu/~hastie/ElemStatLearn/)
-- [Pattern Recognition and Machine Learning — Bishop](https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/)
-- [Hands-On Machine Learning — Aurélien Géron (O'Reilly)](https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/)
+- [The Elements of Statistical Learning: Hastie, Tibshirani, Friedman](https://web.stanford.edu/~hastie/ElemStatLearn/)
+- [Pattern Recognition and Machine Learning: Bishop](https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/)
+- [Hands-On Machine Learning: Aurélien Géron (O'Reilly)](https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/)

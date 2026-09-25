@@ -1,4 +1,4 @@
-# Dimensionality Reduction (Deep Dive)
+# Dimensionality Reduction
 
 Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training, enables visualization, and can improve model generalization by removing noise.
 
@@ -163,7 +163,7 @@ t-SNE (t-Distributed Stochastic Neighbor Embedding) is a **non-linear, unsupervi
 3. Minimize KL divergence between P and Q distributions via gradient descent
 ```
 
-The t-distribution in low-d space has heavier tails than Gaussian — this allows moderate distances to be well-separated and avoids the "crowding problem."
+The t-distribution in low-d space has heavier tails than Gaussian: this allows moderate distances to be well-separated and avoids the "crowding problem."
 
 ```python
 from sklearn.manifold import TSNE
@@ -193,7 +193,7 @@ plt.colorbar(label='Class')
 | **n_iter** | Number of optimization steps | 500–5000 |
 | **early_exaggeration** | Spread between clusters | 4–12 |
 
-**Warning**: t-SNE is **non-deterministic** and **non-parametric** — you cannot transform new data points without re-running the full algorithm. Use for exploration only.
+**Warning**: t-SNE is **non-deterministic** and **non-parametric**: you cannot transform new data points without re-running the full algorithm. Use for exploration only.
 
 ---
 
@@ -283,7 +283,7 @@ X_encoded = encoder.predict(X_scaled)  # Compressed representations
 ## Interview Q&A
 
 **Q1: What is the difference between PCA and t-SNE?**
-PCA is linear, deterministic, unsupervised, and maximizes variance. It's interpretable (principal components have loadings) and supports out-of-sample transformation. t-SNE is non-linear, stochastic, and optimized for 2D/3D visualization — it preserves local neighborhood structure but distorts global distances. PCA is used for preprocessing; t-SNE is used only for visualization.
+PCA is linear, deterministic, unsupervised, and maximizes variance. It's interpretable (principal components have loadings) and supports out-of-sample transformation. t-SNE is non-linear, stochastic, and optimized for 2D/3D visualization: it preserves local neighborhood structure but distorts global distances. PCA is used for preprocessing; t-SNE is used only for visualization.
 
 **Q2: What does the perplexity parameter in t-SNE control?**
 Perplexity roughly corresponds to the number of effective nearest neighbors considered for each point. Low perplexity (5-10) focuses on very local structure; high perplexity (30-50) considers broader neighborhoods. The optimal value depends on dataset size and density. Always try multiple values and compare.
@@ -298,10 +298,10 @@ Two common rules:
 For downstream ML tasks, treat k as a hyperparameter and tune via cross-validation.
 
 **Q5: What is the difference between PCA and LDA?**
-PCA is unsupervised — finds directions of maximum variance regardless of class labels. LDA is supervised — finds directions that best separate classes (maximizes between-class / within-class scatter ratio). LDA is better for classification preprocessing; PCA is better for general compression or when labels are unavailable.
+PCA is unsupervised: finds directions of maximum variance regardless of class labels. LDA is supervised: finds directions that best separate classes (maximizes between-class / within-class scatter ratio). LDA is better for classification preprocessing; PCA is better for general compression or when labels are unavailable.
 
 **Q6: Can you use t-SNE for feature extraction (preprocessing for a classifier)?**
-No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric — you can't transform new test points without re-running from scratch; (2) it's stochastic — different runs give different embeddings. Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.
+No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch; (2) it's stochastic) different runs give different embeddings. Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.
 
 **Q7: When would you use UMAP over t-SNE?**
 UMAP when: you need to transform new data points (`.transform()`), you want better global structure preservation, you have large datasets (UMAP is faster), or you're using it as preprocessing for clustering/classification. t-SNE when: you specifically want local neighborhood visualization and global distortion is acceptable.

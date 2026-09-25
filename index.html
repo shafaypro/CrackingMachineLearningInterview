@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Cracking ML Interviews — 2026 Study Hub</title>
-  <meta name="description" content="A premium, hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps & DevOps interview preparation — from fundamentals to frontier." />
+  <title>Cracking ML Interviews: 2026 Study Hub</title>
+  <meta name="description" content="A hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps and DevOps interview preparation, from fundamentals to production systems." />
   <meta name="theme-color" content="#07080f" id="meta-theme-color" />
   <meta name="color-scheme" content="dark light" />
 
@@ -230,7 +230,7 @@
     .icon-btn:disabled { opacity: .4; cursor: not-allowed; }
     .icon-btn.compact { padding: 0; width: 40px; }
 
-    /* Reading progress — lives on the header's bottom edge, GPU-transformed */
+    /* Reading progress: lives on the header's bottom edge, GPU-transformed */
     #read-progress {
       position: absolute; left: 0; right: 0; bottom: -1px; height: 3px;
       background: var(--grad); transform-origin: 0 50%; transform: scaleX(0);
@@ -502,7 +502,7 @@
     .doc-meta a.chip { color: var(--text-3); text-decoration: underline; text-underline-offset: 3px; }
     .doc-meta a.chip:hover { color: var(--accent-text); }
 
-    /* TOC — sticky right rail on wide screens, collapsible block elsewhere */
+    /* TOC: sticky right rail on wide screens, collapsible block elsewhere */
     .toc-rail {
       display: none; width: 236px; flex-shrink: 0;
       position: sticky; top: calc(var(--header-h) + var(--topbar-h) + 28px); align-self: flex-start;
@@ -829,7 +829,7 @@
   <button class="hamburger" id="hamburger" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-  <a class="brand" id="brand" href="./" aria-label="Cracking ML — home">
+  <a class="brand" id="brand" href="./" aria-label="Cracking ML home">
     <span class="brand-mark" aria-hidden="true">ML</span>
     <span class="brand-text">
       <span class="t1">Cracking ML</span>
@@ -887,7 +887,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <span class="eyebrow"><span class="pulse" aria-hidden="true"></span> <span id="eyebrow-text">Updated for 2026</span></span>
         <h1 id="hero-title" tabindex="-1">Crack your next <span class="grad-text">ML / AI interview</span></h1>
-        <p class="lede">A structured, hands-on study hub spanning classical ML, deep learning, generative AI, data &amp; ML engineering, and system design — organized as a guided journey from fundamentals to frontier.</p>
+        <p class="lede">A structured, hands-on study hub spanning classical ML, deep learning, generative AI, data &amp; ML engineering, and system design, organized as a path from fundamentals to production systems.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" id="cta-track" href="#docs/choose-your-track.md">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
@@ -910,7 +910,7 @@
           <li style="display:flex"><a class="entry-card" href="#docs/choose-your-track.md" style="--card-color:#38bdf8;flex:1">
             <span class="ec-icon" aria-hidden="true">🧭</span>
             <span class="ec-title">Choose your track</span>
-            <span class="ec-desc">Pick the path for your target role — MLE, AI engineer, data scientist, data or platform engineer.</span>
+            <span class="ec-desc">Pick the path for your target role: MLE, AI engineer, data scientist, data or platform engineer.</span>
             <span class="ec-go" aria-hidden="true">Find your path →</span>
           </a></li>
           <li style="display:flex"><a class="entry-card" href="#README.md" style="--card-color:#22d3ee;flex:1">
@@ -939,7 +939,7 @@
           <div class="progress-ring-lg" id="overall-ring"></div>
           <div class="progress-meta">
             <h2 id="progress-title">Your progress</h2>
-            <p id="progress-sub">Mark guides as complete while you study — your progress is saved in this browser.</p>
+            <p id="progress-sub">Mark guides as complete while you study. Your progress is saved in this browser.</p>
             <div class="progress-actions">
               <a class="continue-link" id="continue-link" href="#" hidden></a>
               <button class="reset-btn" id="reset-progress" type="button">Reset progress</button>
@@ -1064,7 +1064,7 @@ const TRACKS = [
   {
     id: 'home-readme', phase: 'start', icon: '📋', color: '#22d3ee',
     title: 'Interview Q&A Bank',
-    desc: 'Classic ML fundamentals — supervised/unsupervised, regression, classification, and 100+ core interview questions.',
+    desc: 'Classic ML fundamentals: supervised/unsupervised, regression, classification, and 100+ core interview questions.',
     files: [ { label: 'Main Q&A Bank', path: 'README.md' } ]
   },
   {
@@ -1236,7 +1236,7 @@ const TRACKS = [
   {
     id: 'cloud_ml', phase: 'production', icon: '☁️', color: '#facc15',
     title: 'Cloud ML Platforms',
-    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML — comparison and interview prep.',
+    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML: comparison and interview prep.',
     files: [
       { label: 'Overview', path: 'cloud_ml/README.md' },
       { label: 'Cloud ML Platforms', path: 'cloud_ml/intro_cloud_ml_platforms.md' },
@@ -1529,7 +1529,7 @@ function refreshHomeProgress() {
   if (title) title.textContent = doneCount === 0 ? 'Start your journey' :
     doneCount === ALL_FILES.length ? '🎉 All guides complete!' : `${doneCount} of ${ALL_FILES.length} guides complete`;
   if (sub) sub.textContent = doneCount === 0
-    ? 'Mark guides as complete while you study — your progress is saved in this browser.'
+    ? 'Mark guides as complete while you study. Your progress is saved in this browser.'
     : `You're ${pct}% through the full study hub. Keep going!`;
   const last = getLastGuide();
   const cont = $('continue-link');
@@ -1556,7 +1556,7 @@ function showHome(updateHash = true) {
   setActiveNav(null);
   currentPath = null; currentIndex = -1;
   if (updateHash && location.hash) history.pushState(null, '', location.pathname + location.search);
-  document.title = 'Cracking ML Interviews — 2026 Study Hub';
+  document.title = 'Cracking ML Interviews: 2026 Study Hub';
   refreshHomeProgress();
   window.scrollTo(0, 0);
   updateScrollUI();
@@ -1652,7 +1652,7 @@ function renderError(err, path, file, track, text) {
       <p>then open <code>http://localhost:8080</code>.</p>`;
   } else if (err.kind === 'marked') {
     title = 'The Markdown renderer couldn’t load';
-    body = `<p>This page uses <code>marked</code> from cdn.jsdelivr.net to format guides, and it didn’t load — a network problem, firewall or content blocker may be blocking it. The raw guide text is shown below so you can keep studying.</p>`;
+    body = `<p>This page uses <code>marked</code> from cdn.jsdelivr.net to format guides, and it didn’t load. A network problem, firewall or content blocker may be blocking it. The raw guide text is shown below so you can keep studying.</p>`;
   } else if (err.status === 404) {
     title = 'Guide not found';
     body = `<p>There is no guide at <code>${esc(path)}</code>. It may have been moved or renamed.</p>`;
@@ -1942,13 +1942,13 @@ function updateMarkButton() {
   const done = completed.has(currentPath);
   ['mark-btn', 'mark-btn-end'].forEach(id => $(id).setAttribute('aria-pressed', String(done)));
   $('mark-label').textContent = done ? 'Completed' : 'Mark complete';
-  $('mark-btn').title = done ? 'Completed — click to undo' : 'Mark this guide complete';
+  $('mark-btn').title = done ? 'Completed. Click to undo' : 'Mark this guide complete';
   $('mark-btn').setAttribute('aria-label', done ? 'Completed (press to mark incomplete)' : 'Mark complete');
   $('mark-label-end').textContent = done ? 'Completed ✓' : 'Mark complete';
   $('complete-card').classList.toggle('is-done', done);
   $('cc-title').textContent = done ? 'Guide completed' : 'Finished this guide?';
   $('cc-sub').textContent = done
-    ? 'Nice work — it’s saved to your progress. Carry on with the next guide below.'
+    ? 'Saved to your progress. Carry on with the next guide below.'
     : 'Mark it complete to track your progress across the study hub.';
 }
 function toggleComplete() {

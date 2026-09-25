@@ -54,7 +54,7 @@ AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major 
 
 ## AWS SageMaker
 
-SageMaker is the most comprehensive ML platform with the most managed components.
+SageMaker is the broadest ML platform, with the most managed components.
 
 ### Key Components
 
@@ -377,17 +377,17 @@ A model registry centralizes model versioning and lifecycle management. It store
 1. Code commit triggers GitHub Actions
 2. Build and push Docker training image to ECR
 3. Run SageMaker Training Job
-4. Evaluate model — if metrics pass threshold, register in Model Registry with "PendingApproval"
+4. Evaluate model: if metrics pass threshold, register in Model Registry with "PendingApproval"
 5. Manual approval step (or automated if metrics exceed threshold)
 6. Upon approval, SageMaker Pipelines deploys to staging endpoint
 7. Integration tests on staging
 8. Promote to production endpoint with canary deployment
 
 **Q4: What is the difference between online prediction and batch prediction endpoints?**
-Online (real-time) endpoints are always-running services that respond to individual requests within milliseconds — used for interactive applications. Batch prediction endpoints process large datasets efficiently (millions of records in parallel) on a schedule — used for pre-computing predictions (daily scoring runs). Online: higher cost (always on), low latency. Batch: cost-efficient, high latency acceptable.
+Online (real-time) endpoints are always-running services that respond to individual requests within milliseconds: used for interactive applications. Batch prediction endpoints process large datasets efficiently (millions of records in parallel) on a schedule: used for pre-computing predictions (daily scoring runs). Online: higher cost (always on), low latency. Batch: cost-efficient, high latency acceptable.
 
 **Q5: How do AutoML platforms differ from custom model training?**
-AutoML automatically searches the model architecture and hyperparameter space — no ML expertise required, faster time-to-first-model. Custom training: full control over architecture, features, and optimization — better ceiling performance but requires more expertise. AutoML is best for establishing a baseline, quick prototyping, and non-ML teams. Custom training is best when you need maximum accuracy or have unique domain requirements.
+AutoML automatically searches the model architecture and hyperparameter space: no ML expertise required, faster time-to-first-model. Custom training: full control over architecture, features, and optimization: better ceiling performance but requires more expertise. AutoML is best for establishing a baseline, quick prototyping, and non-ML teams. Custom training is best when you need maximum accuracy or have unique domain requirements.
 
 ---
 

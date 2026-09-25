@@ -1,6 +1,6 @@
-# Ollama — Run LLMs Locally
+# Ollama: Run LLMs Locally
 
-A comprehensive guide to Ollama — the simplest way to run large language models on your local machine.
+A guide to Ollama: the simplest way to run large language models on your local machine.
 
 ---
 
@@ -10,7 +10,7 @@ A comprehensive guide to Ollama — the simplest way to run large language model
 2. [Installation](#installation)
 3. [CLI Commands](#cli-commands)
 4. [Popular Models](#popular-models)
-5. [Modelfile — Custom Models](#modelfile--custom-models)
+5. [Modelfile: Custom Models](#modelfile-custom-models)
 6. [REST API](#rest-api)
 7. [Python Integration](#python-integration)
 8. [LangChain + Ollama](#langchain--ollama)
@@ -26,11 +26,11 @@ A comprehensive guide to Ollama — the simplest way to run large language model
 
 ## What is Ollama
 
-Ollama is an open-source tool that allows you to run large language models (LLMs) locally on your machine. It handles model downloading, quantization, hardware detection (CPU/GPU), and provides a simple CLI and REST API — all with a single command.
+Ollama is an open-source tool that allows you to run large language models (LLMs) locally on your machine. It handles model downloading, quantization, hardware detection (CPU/GPU), and provides a simple CLI and REST API: all with a single command.
 
 **Why Ollama?**
 - Zero-cost inference after download
-- Privacy — data never leaves your machine
+- Privacy: data never leaves your machine
 - Works offline
 - OpenAI-compatible REST API
 - Supports macOS (Apple Silicon), Linux, and Windows
@@ -150,14 +150,14 @@ ollama run mistral:7b-instruct-q4_0  # Specific quantization
 | **deepseek-coder** | 6.7B / 33B | ~3.8GB / ~19GB | Strong code generation | `ollama run deepseek-coder` |
 | **llava** | 7B / 13B | ~4.5GB | Vision+language (multimodal) | `ollama run llava` |
 | **moondream** | 1.8B | ~1.2GB | Lightweight vision model | `ollama run moondream` |
-| **nomic-embed-text** | — | ~270MB | Text embeddings | `ollama run nomic-embed-text` |
-| **mxbai-embed-large** | — | ~670MB | High-quality embeddings | `ollama run mxbai-embed-large` |
+| **nomic-embed-text** | - | ~270MB | Text embeddings | `ollama run nomic-embed-text` |
+| **mxbai-embed-large** | - | ~670MB | High-quality embeddings | `ollama run mxbai-embed-large` |
 
 ---
 
-## Modelfile — Custom Models
+## Modelfile: Custom Models
 
-A Modelfile is a configuration file that defines how to build a custom Ollama model — similar to a Dockerfile.
+A Modelfile is a configuration file that defines how to build a custom Ollama model: similar to a Dockerfile.
 
 ### Basic Modelfile
 
@@ -346,7 +346,7 @@ for chunk in ollama.chat(
 
 ### Using OpenAI Python Client
 
-Point the OpenAI client at Ollama's API — perfect for code that already uses the OpenAI SDK.
+Point the OpenAI client at Ollama's API: perfect for code that already uses the OpenAI SDK.
 
 ```python
 from openai import OpenAI
@@ -809,7 +809,7 @@ Ollama runs models locally on your own hardware (no cloud costs, no data sent ex
 
 **Q3: What is a Modelfile in Ollama?** 🟡 Intermediate
 
-A Modelfile is analogous to a Dockerfile — it defines how to build a custom Ollama model. It specifies the base model (`FROM`), system prompt (`SYSTEM`), inference parameters (`PARAMETER temperature`, `PARAMETER num_ctx`), and stop sequences. You build it with `ollama create model-name -f Modelfile` and run it like any other model.
+A Modelfile is analogous to a Dockerfile: it defines how to build a custom Ollama model. It specifies the base model (`FROM`), system prompt (`SYSTEM`), inference parameters (`PARAMETER temperature`, `PARAMETER num_ctx`), and stop sequences. You build it with `ollama create model-name -f Modelfile` and run it like any other model.
 
 ---
 
@@ -827,7 +827,7 @@ Ollama prioritizes simplicity and local development. It works great for single-u
 
 **Q6: What is quantization in the context of Ollama models?** 🟡 Intermediate
 
-Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (4-bit with K-means quantization, mixed precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the sweet spot — ~75% memory reduction vs F32 with minimal quality loss.
+Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (4-bit with K-means quantization, mixed precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the sweet spot: ~75% memory reduction vs F32 with minimal quality loss.
 
 ---
 
@@ -850,7 +850,7 @@ Quantization reduces the precision of model weights (e.g., from float32 to 4-bit
    - Build a prompt with context + question
    - Send to llama3.2 via Ollama API
 
-6. All computation runs locally — 100% private
+6. All computation runs locally: 100% private
 ```
 
 ---
@@ -865,7 +865,7 @@ Quantization reduces the precision of model weights (e.g., from float32 to 4-bit
 | 30-34B params | ~18-20 GB | ~32 GB RAM |
 | 70B params | ~40+ GB | ~64+ GB RAM |
 
-Apple Silicon (M1/M2/M3/M4) uses unified memory — RAM and VRAM are shared, making Macs excellent for local LLM inference.
+Apple Silicon (M1/M2/M3/M4) uses unified memory: RAM and VRAM are shared, making Macs excellent for local LLM inference.
 
 ---
 
@@ -890,6 +890,6 @@ Set it higher (e.g., `OLLAMA_KEEP_ALIVE=1h`) for interactive development to avoi
 - [Ollama Model Library](https://ollama.com/library)
 - [Ollama REST API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md)
 - [Ollama Python Library](https://github.com/ollama/ollama-python)
-- [Open WebUI — Browser UI for Ollama](https://github.com/open-webui/open-webui)
+- [Open WebUI: Browser UI for Ollama](https://github.com/open-webui/open-webui)
 - [LangChain + Ollama Integration](https://python.langchain.com/docs/integrations/llms/ollama)
 - [LlamaIndex + Ollama Integration](https://docs.llamaindex.ai/en/stable/examples/llm/ollama/)
