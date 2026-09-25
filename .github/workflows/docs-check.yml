@@ -19,3 +19,5 @@ jobs:
           python-version: "3.12"
       - name: Check Markdown links, anchors and index.html nav entries
         run: python3 tools/check_links.py
+      - name: Check data/questions.json is up to date with the guides
+        run: python3 tools/build_question_bank.py --check
