@@ -1,6 +1,6 @@
-# Apache Kafka – Complete Guide (2026 Edition)
+# Apache Kafka
 
-**Apache Kafka** is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix — powering real-time data pipelines, event-driven architectures, and streaming analytics.
+**Apache Kafka** is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix, powering real-time data pipelines, event-driven architectures, and streaming analytics.
 
 ---
 
@@ -23,7 +23,7 @@ Microservice B  →                       → Another Microservice
 | **Consumer model** | Multiple consumers read independently | Typically point-to-point |
 | **Throughput** | Millions of msgs/sec | Thousands |
 | **Ordering** | Guaranteed per partition | Varies |
-| **Replay** | Yes — rewind consumer offset | No |
+| **Replay** | Yes: rewind consumer offset | No |
 | **Use case** | Streaming, event sourcing, large scale | Task queues, RPC |
 
 ---
@@ -67,7 +67,7 @@ Consumer Group "warehouse":
   Consumer X → Partition 0, 1
   Consumer Y → Partition 2
 
-Both groups read independently — no coordination.
+Both groups read independently: no coordination.
 ```
 
 ---
@@ -241,7 +241,7 @@ try:
             consumer.commit(asynchronous=False)
         except Exception as e:
             print(f"Processing failed: {e}")
-            # Don't commit — message will be re-delivered
+            # Don't commit: message will be re-delivered
 
 finally:
     consumer.close()
@@ -358,7 +358,7 @@ producer.produce(
 }
 ```
 
-### Debezium (CDC — Change Data Capture)
+### Debezium (CDC: Change Data Capture)
 
 Debezium captures every database change and publishes it to Kafka:
 
@@ -461,8 +461,8 @@ query = orders.writeStream \
 |-------|-------------|
 | **KRaft mode** | ZooKeeper fully removed in Kafka 4.0 |
 | **Kafka 4.0** | KRaft-only, tiered storage GA, improved quota system |
-| **Tiered Storage** | Offload old segments to S3/GCS — cheaper long retention |
-| **Redpanda** | Kafka-compatible alternative in C++ — 10x lower latency |
+| **Tiered Storage** | Offload old segments to S3/GCS: cheaper long retention |
+| **Redpanda** | Kafka-compatible alternative in C++: 10x lower latency |
 | **WarpStream** | Kafka-compatible, disaggregated architecture, zero inter-zone costs |
 | **Apache Flink** | Primary stream processor alongside Kafka (replaced Kafka Streams at scale) |
 | **Confluent Tableflow** | Auto-sync Kafka topics to Iceberg tables |

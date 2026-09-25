@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glossary Flashcards — Cracking ML Interviews</title>
+  <title>Glossary Flashcards | Cracking ML Interviews</title>
   <meta name="description" content="Interactive flashcards for every term in the ML and AI glossary. Flip, shuffle, track what you know, and jump straight to the guide that covers each term." />
 
   <!-- Apply the saved theme before first paint (same key as the Study Hub) -->
@@ -739,7 +739,7 @@ function parseGlossary(md) {
   const cards = [];
   let letter = null;
   let current = null;
-  const entryRe = /^\*\*(.+?)\*\*\s*[—–]\s*(.*)$/;
+  const entryRe = /^\*\*(.+?)\*\*\s*(?::|[\u2014\u2013])\s*(.*)$/;
   for (const rawLine of md.split(/\r?\n/)) {
     const line = rawLine.trim();
     const h = line.match(/^##\s+(.+?)\s*$/);
@@ -895,7 +895,7 @@ function renderControls() {
   else parts.push('All terms');
   if (letterFilter) parts.push('letter ' + letterFilter);
   if (query) parts.push(`“${query}”`);
-  $('deck-desc').textContent = parts.join(' · ') + ` — ${deck.length} card${deck.length === 1 ? '' : 's'}`;
+  $('deck-desc').textContent = parts.join(' · ') + ` · ${deck.length} card${deck.length === 1 ? '' : 's'}`;
   $('deck-pos').textContent = deck.length ? `${Math.min(pos + 1, deck.length)} / ${deck.length}` : '';
 }
 

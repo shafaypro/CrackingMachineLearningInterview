@@ -1,9 +1,9 @@
 # Feature Store Guide
 
-A comprehensive guide to feature stores — centralized repositories for storing, versioning, and serving ML features.
+A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.
 
 > **Related guide:** this track also has [Feature Stores](./intro_feature_stores.md), which covers the same
-> topic from a different angle — point-in-time correctness, when a feature store is and isn't worth it, and
+> topic from a different angle: point-in-time correctness, when a feature store is and isn't worth it, and
 > common pitfalls. This guide leans toward the motivation, tool comparison, and a Feast walkthrough.
 > Read both if you are preparing the topic for an interview.
 
@@ -41,13 +41,13 @@ Event Logs                Feature Registry
 
 ### Problem 1: Training-Serving Skew
 
-Without a feature store, data scientists compute features in notebooks (Python/SQL) and engineers re-implement them in production code (Java, C++). Differences in implementation lead to **training-serving skew** — the model sees different data at serving time than it was trained on.
+Without a feature store, data scientists compute features in notebooks (Python/SQL) and engineers re-implement them in production code (Java, C++). Differences in implementation lead to **training-serving skew**: the model sees different data at serving time than it was trained on.
 
 **Feature store solution:** Define features once, use them for both training and serving.
 
 ### Problem 2: Feature Duplication
 
-Different teams compute the same features independently — wasted compute, inconsistent results, no shared governance.
+Different teams compute the same features independently: wasted compute, inconsistent results, no shared governance.
 
 **Feature store solution:** Centralized feature registry with reusable, discoverable features.
 
@@ -55,7 +55,7 @@ Different teams compute the same features independently — wasted compute, inco
 
 When creating training datasets, using future data that wouldn't be available at prediction time leads to overly optimistic models that fail in production.
 
-**Feature store solution:** Point-in-time correct joins — retrieve feature values as they existed at the time of each training example.
+**Feature store solution:** Point-in-time correct joins, retrieve feature values as they existed at the time of each training example.
 
 ### Problem 4: Feature Freshness
 
@@ -280,7 +280,7 @@ A feature store prevents this by providing a single feature definition that is u
 
 **Q4: What is point-in-time correctness and why is it important?** 🔴 Advanced
 
-Point-in-time correctness means that when creating a training dataset, each training example only uses feature values that were available at the time of that event — not future data.
+Point-in-time correctness means that when creating a training dataset, each training example only uses feature values that were available at the time of that event, not future data.
 
 Without it, data leakage occurs. Example: if you train a fraud model and join the user's features as of today (which include transactions that happened after the fraud event), the model learns from future information and appears much more accurate than it will be in production.
 
@@ -293,7 +293,7 @@ Feast and other feature stores provide point-in-time correct joins by looking up
 **Use a custom pipeline when:**
 - Small team, few models, simple feature requirements
 - Strong existing data infrastructure (dbt, Airflow) that already handles features
-- Budget constraints — feature stores add operational overhead
+- Budget constraints: feature stores add operational overhead
 
 **Use a feature store when:**
 - Multiple models share features across teams
@@ -309,5 +309,5 @@ Feast and other feature stores provide point-in-time correct joins by looking up
 - [Feast Documentation](https://docs.feast.dev/)
 - [Tecton Feature Store Guide](https://www.tecton.ai/blog/what-is-a-feature-store/)
 - [Hopsworks Documentation](https://docs.hopsworks.ai/)
-- [Feature Store Comparison — featurestore.org](https://www.featurestore.org/)
-- [Chip Huyen — Real-time Machine Learning Inference (Feature Stores)](https://huyenchip.com/2020/12/27/real-time-machine-learning.html)
+- [Feature Store Comparison: featurestore.org](https://www.featurestore.org/)
+- [Chip Huyen: Real-time Machine Learning Inference (Feature Stores)](https://huyenchip.com/2020/12/27/real-time-machine-learning.html)

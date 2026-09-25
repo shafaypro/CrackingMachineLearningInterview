@@ -1,6 +1,6 @@
 # PyTorch Guide
 
-A comprehensive guide to PyTorch — the leading deep learning framework for research and production.
+A guide to PyTorch: the leading deep learning framework for research and production.
 
 ---
 
@@ -12,7 +12,7 @@ A comprehensive guide to PyTorch — the leading deep learning framework for res
 4. [DataLoader and Dataset](#dataloader-and-dataset)
 5. [GPU Usage](#gpu-usage)
 6. [Model Saving and Loading](#model-saving-and-loading)
-7. [torch.compile — PyTorch 2.0](#torchcompile--pytorch-20)
+7. [torch.compile: PyTorch 2.0](#torchcompile-pytorch-20)
 8. [Interview Q&A](#interview-qa)
 9. [References](#references)
 
@@ -373,7 +373,7 @@ model = ConvNet(num_classes=10)
 model.load_state_dict(torch.load("model_weights.pth", map_location=device))
 model.eval()
 
-# Save full model (not recommended — fragile)
+# Save full model (not recommended: fragile)
 torch.save(model, "full_model.pth")
 model = torch.load("full_model.pth")
 
@@ -412,7 +412,7 @@ torch.onnx.export(
 
 ---
 
-## torch.compile — PyTorch 2.0
+## torch.compile: PyTorch 2.0
 
 `torch.compile` compiles the model using TorchInductor (on top of OpenAI Triton) for significant speedups.
 
@@ -421,7 +421,7 @@ import torch
 
 model = ConvNet(num_classes=10).to("cuda")
 
-# Compile the model — one line!
+# Compile the model: one line!
 model = torch.compile(model)
 
 # Different modes
@@ -448,19 +448,19 @@ for data, targets in train_loader:
 
 **Q1: What is the difference between `tensor.view()` and `tensor.reshape()`?** 🟡 Intermediate
 
-`view()` requires the tensor to be contiguous in memory and returns a view (shared memory — no copy). `reshape()` returns a tensor with the desired shape, creating a new memory layout if necessary (copy if non-contiguous). Use `view()` for efficiency when you know the tensor is contiguous; use `reshape()` when you're unsure.
+`view()` requires the tensor to be contiguous in memory and returns a view (shared memory: no copy). `reshape()` returns a tensor with the desired shape, creating a new memory layout if necessary (copy if non-contiguous). Use `view()` for efficiency when you know the tensor is contiguous; use `reshape()` when you're unsure.
 
 ---
 
 **Q2: Why do we call `optimizer.zero_grad()` before each backward pass?** 🟢 Beginner
 
-PyTorch accumulates gradients by default — each `backward()` call adds to existing gradients. If you don't zero them, gradients from previous batches are included in the current update, leading to incorrect weight updates. You zero them at the start of each batch (or iteration) to ensure clean gradient computation.
+PyTorch accumulates gradients by default: each `backward()` call adds to existing gradients. If you don't zero them, gradients from previous batches are included in the current update, leading to incorrect weight updates. You zero them at the start of each batch (or iteration) to ensure clean gradient computation.
 
 ---
 
 **Q3: What is the difference between `model.train()` and `model.eval()`?** 🟢 Beginner
 
-`model.train()` sets the model to training mode: BatchNorm uses batch statistics, Dropout randomly drops neurons. `model.eval()` sets the model to evaluation mode: BatchNorm uses running mean/variance statistics, Dropout is disabled. Always switch modes correctly — using `model.train()` during evaluation gives incorrect results with Dropout and BatchNorm.
+`model.train()` sets the model to training mode: BatchNorm uses batch statistics, Dropout randomly drops neurons. `model.eval()` sets the model to evaluation mode: BatchNorm uses running mean/variance statistics, Dropout is disabled. Always switch modes correctly, using `model.train()` during evaluation gives incorrect results with Dropout and BatchNorm.
 
 ---
 
@@ -472,7 +472,7 @@ PyTorch accumulates gradients by default — each `backward()` call adds to exis
 
 **Q5: Explain the gradient flow during backpropagation in PyTorch.** 🔴 Advanced
 
-PyTorch builds a computational graph during the forward pass — each operation creates a node with references to its inputs. During `loss.backward()`, PyTorch traverses this graph in reverse using the chain rule, computing `dL/dw` for each parameter w. Gradients are accumulated in `param.grad`. The optimizer then uses these gradients to update parameters via `optimizer.step()`. `retain_graph=True` keeps the graph for multiple backward passes.
+PyTorch builds a computational graph during the forward pass: each operation creates a node with references to its inputs. During `loss.backward()`, PyTorch traverses this graph in reverse using the chain rule, computing `dL/dw` for each parameter w. Gradients are accumulated in `param.grad`. The optimizer then uses these gradients to update parameters via `optimizer.step()`. `retain_graph=True` keeps the graph for multiple backward passes.
 
 ---
 
@@ -484,7 +484,7 @@ Mixed Precision Training uses FP16 (half-precision) for most computations and FP
 
 **Q7: What is `torch.compile` and how does it improve performance?** 🟡 Intermediate
 
-`torch.compile` (PyTorch 2.0+) applies ahead-of-time graph compilation using TorchInductor, which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and leverages hardware-specific optimizations. Typical speedup: 10-40% on training, 2x+ on inference. The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
+`torch.compile` (PyTorch 2.0+) applies ahead-of-time graph compilation using TorchInductor, which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Typical speedup: 10-40% on training, 2x+ on inference. The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
 
 ---
 
@@ -514,5 +514,5 @@ This achieves an effective batch size of `accumulation_steps × batch_size` with
 - [PyTorch Documentation](https://pytorch.org/docs/)
 - [PyTorch Tutorials](https://pytorch.org/tutorials/)
 - [PyTorch 2.0 Release Notes (torch.compile)](https://pytorch.org/blog/pytorch-2.0-release/)
-- [Mixed Precision Training — NVIDIA](https://developer.nvidia.com/automatic-mixed-precision)
-- [Deep Learning with PyTorch — Eli Stevens, Luca Antiga (Manning)](https://www.manning.com/books/deep-learning-with-pytorch)
+- [Mixed Precision Training: NVIDIA](https://developer.nvidia.com/automatic-mixed-precision)
+- [Deep Learning with PyTorch: Eli Stevens, Luca Antiga (Manning)](https://www.manning.com/books/deep-learning-with-pytorch)

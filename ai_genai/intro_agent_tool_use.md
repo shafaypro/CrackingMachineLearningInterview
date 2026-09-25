@@ -157,9 +157,9 @@ The core loop: call the model with `tools` → if it returns a tool-use request,
 execute the tool and append the result as a `tool_result` → repeat until the model
 stops requesting tools.
 
-- **Manual loop** — you write the `while` loop. Use it when you need custom
+- **Manual loop**: you write the `while` loop. Use it when you need custom
   logging, conditional execution, or **human-in-the-loop approval** before a tool runs.
-- **SDK tool runner** — the SDK drives the loop for you (define tools as typed
+- **SDK tool runner**: the SDK drives the loop for you (define tools as typed
   functions/schemas, it handles execution and feedback). Use it for the common case.
 
 Always **append the full assistant response** (including tool-use blocks) before
@@ -171,13 +171,13 @@ the tool results, and make sure each `tool_result` carries the matching
 A single model turn can request **multiple** tool calls. Execute independent ones
 concurrently and return **all** results in **one** user message. Splitting results
 across messages silently teaches the model to stop calling tools in parallel. For
-a tool that failed, still return a result with an error flag — don't drop it.
+a tool that failed, still return a result with an error flag: don't drop it.
 
 ### Strict Schemas & Validation
 
 Use strict JSON schemas (`additionalProperties: false`, explicit `required`) so the
 model's arguments validate exactly. Always validate inputs *inside* your handler
-before acting — the arguments are model output, not trusted input. Parse tool
+before acting, the arguments are model output, not trusted input. Parse tool
 inputs with a real JSON parser; never string-match the serialized arguments.
 
 ### Programmatic Tool Calling (PTC)
@@ -192,10 +192,10 @@ large and should be filtered before reaching the context.
 
 With dozens or hundreds of tools, putting every schema in context is wasteful and
 hurts selection accuracy. **Tool search** lets the model discover and load only the
-relevant tool schemas on demand — and because schemas are *appended* rather than
+relevant tool schemas on demand, and because schemas are *appended* rather than
 swapped, the prompt cache is preserved.
 
-### MCP — a Standard Tool Interface
+### MCP: a Standard Tool Interface
 
 The **Model Context Protocol** lets agents connect to standardized tool servers
 (GitHub, databases, SaaS apps) without bespoke integrations per tool. Declare the
@@ -203,8 +203,8 @@ server; the agent gains its tools. See [MCP](./intro_mcp.md).
 
 ### Server-Side / Built-in Tools
 
-Providers offer hosted tools that run on their infrastructure — **web search**,
-**web fetch**, and **code execution** — declared in the `tools` list with no
+Providers offer hosted tools that run on their infrastructure: **web search**,
+**web fetch**, and **code execution**: declared in the `tools` list with no
 client-side execution loop. Great for grounding answers in current information or
 running computation without managing a sandbox yourself.
 
@@ -223,7 +223,7 @@ running computation without managing a sandbox yourself.
 
 1. **Why must parallel tool results go in one message?** → Splitting them trains
    the model to stop issuing parallel calls and breaks `tool_use_id` pairing.
-2. **What does programmatic tool calling save?** → Round-trips and tokens — only
+2. **What does programmatic tool calling save?** → Round-trips and tokens: only
    the final result re-enters the context, not every intermediate value.
 3. **How do you scale an agent to hundreds of tools?** → Tool search / dynamic
    discovery so only relevant schemas load, preserving the prompt cache.

@@ -1,6 +1,6 @@
 # Speech and Audio ML
 
-Speech is the interface behind voice assistants, call-center analytics, meeting transcription, dictation, accessibility tools, and now real-time voice agents built on LLMs. It is also a field with its own vocabulary — spectrograms, CTC, WER, EER, vocoders — that interviewers use to check whether you have actually shipped audio models or only read about them. This guide covers the signal-processing basics, the main model families for recognition and synthesis, the metrics, and the production issues that decide whether a speech system works outside the lab.
+Speech is the interface behind voice assistants, call-center analytics, meeting transcription, dictation, accessibility tools, and now real-time voice agents built on LLMs. It is also a field with its own vocabulary (spectrograms, CTC, WER, EER, vocoders), that interviewers use to check whether you have actually shipped audio models or only read about them. This guide covers the signal-processing basics, the main model families for recognition and synthesis, the metrics, and the production issues that decide whether a speech system works outside the lab.
 
 ---
 
@@ -35,7 +35,7 @@ Audio is a pressure wave sampled at regular intervals and quantized to integers.
 | **Bit depth** | Bits per sample | 16-bit PCM (about 96 dB dynamic range, ~6 dB per bit); 32-bit float in pipelines |
 | **Channels** | Mono / stereo / multi-mic arrays | ASR models almost always take mono |
 
-**Nyquist–Shannon**: a signal can be reconstructed exactly only if it contains no energy above `fs / 2`. Anything above that folds back into the representable band as a false lower frequency. That is **aliasing**, and it cannot be removed after the fact.
+**Nyquist-Shannon**: a signal can be reconstructed exactly only if it contains no energy above `fs / 2`. Anything above that folds back into the representable band as a false lower frequency. That is **aliasing**, and it cannot be removed after the fact.
 
 **Resampling** is where aliasing bites in practice. Downsampling 48 kHz to 16 kHz by keeping every third sample lets content between 8 and 24 kHz fold into the speech band. A proper resampler low-pass filters at the new Nyquist first, then decimates.
 
@@ -124,7 +124,7 @@ Labeled speech is expensive, and real audio varies in speaker, microphone, room,
 | Technique | What it does | Why it helps |
 |---|---|---|
 | **SpecAugment** | Masks random frequency bands and time spans of the log-mel (plus optional time warping) | Cheap, on-the-fly; forces the model to use context instead of any single band or frame |
-| **Additive noise** | Mix in noise (e.g. MUSAN, recorded background) at a random SNR, say 0–20 dB | Robustness to cafes, cars, TVs |
+| **Additive noise** | Mix in noise (e.g. MUSAN, recorded background) at a random SNR, say 0-20 dB | Robustness to cafes, cars, TVs |
 | **Speed perturbation** | Resample to 0.9x / 1.0x / 1.1x speed | Changes tempo and pitch together; triples effective data; strong, well-established gain |
 | **Room impulse responses** | Convolve clean speech with a real or simulated RIR | Simulates reverberation and far-field microphones |
 | **Codec / channel simulation** | Pass through telephone band-pass, MP3/Opus, packet loss | Matches deployment channel |
@@ -165,7 +165,7 @@ ASR maps a variable-length audio sequence (T frames) to a shorter, variable-leng
 
 ### HMM-GMM and hybrid systems (history)
 
-The classic pipeline factored the problem: an **acoustic model** (GMMs, later DNNs) scored frames against context-dependent phone states of an HMM, a **pronunciation lexicon** mapped words to phones, and an **n-gram language model** scored word sequences. These were composed into a weighted finite-state transducer and searched with Viterbi decoding (Kaldi). Hybrid DNN-HMM systems dominated until around 2016–2019. They still show up where a lexicon and tight control over vocabulary matter, but training requires forced alignments and many separate components.
+The classic pipeline factored the problem: an **acoustic model** (GMMs, later DNNs) scored frames against context-dependent phone states of an HMM, a **pronunciation lexicon** mapped words to phones, and an **n-gram language model** scored word sequences. These were composed into a weighted finite-state transducer and searched with Viterbi decoding (Kaldi). Hybrid DNN-HMM systems dominated until around 2016-2019. They still show up where a lexicon and tight control over vocabulary matter, but training requires forced alignments and many separate components.
 
 ### CTC
 
@@ -176,7 +176,7 @@ frames:  h h _ e l l _ l o _      ->  "hello"
          (the blank between the two l-runs is what keeps "ll" from merging)
 ```
 
-The blank does two jobs: it lets the model output "nothing" on frames between tokens (most frames), and it separates genuinely repeated characters. The sum over alignments is computed efficiently with a forward-backward dynamic program, so training needs only (audio, transcript) pairs.
+The blank does two jobs: it lets the model output "nothing" on frames between tokens (most frames), and it separates repeated characters. The sum over alignments is computed efficiently with a forward-backward dynamic program, so training needs only (audio, transcript) pairs.
 
 The cost is a **conditional independence assumption**: each frame's output is predicted independently given the audio, so CTC has no internal language model and benefits a lot from an external one. It also requires `T` to be at least `U` plus the number of repeated adjacent labels. CTC models tend to produce **peaky** outputs: sharp spikes on a single frame per token with blank everywhere else.
 
@@ -246,7 +246,7 @@ score(y) = log p_AM(y | x) + λ · log p_LM(y) + β · |y|
 - **Shallow fusion**: add the external LM score during beam search. The length bonus `β` counters the LM's bias toward short outputs. Tune `λ` and `β` on a dev set.
 - **Rescoring**: generate an n-best list or lattice with a cheap LM, then rescore with a large neural LM or an LLM.
 - **Deep/cold fusion**: combine hidden states of AM and LM during training; less common in practice.
-- **Contextual biasing**: boost specific phrases (contact names, product SKUs) at decode time, via a prefix trie over bias phrases or a learned biasing module. This is often the highest-leverage fix for domain vocabulary.
+- **Contextual biasing**: boost specific phrases (contact names, product SKUs) at decode time, via a prefix trie over bias phrases or a learned biasing module. This is often the most effective fix for domain vocabulary.
 
 An end-to-end model already contains an implicit LM learned from its training transcripts, so fusing an external LM can double-count; **internal LM estimation** subtracts an estimate of it and helps on cross-domain audio.
 
@@ -313,7 +313,7 @@ Streaming is built with **causal convolutions** and **chunked or limited-context
 
 Common hybrid designs: **two-pass** systems where a streaming RNN-T produces partials and a second, full-context pass rescores or rewrites the final result; and **cascaded or dual-mode encoders** that share weights between streaming and full-context modes.
 
-**Endpointing**, deciding the user has finished, often dominates perceived latency more than the recognizer does. A fixed silence timeout of 500–800 ms is simple but cuts off slow speakers and makes fast ones wait. Learned endpointers that combine acoustic cues with whether the partial transcript sounds complete do better.
+**Endpointing**, deciding the user has finished, often dominates perceived latency more than the recognizer does. A fixed silence timeout of 500-800 ms is simple but cuts off slow speakers and makes fast ones wait. Learned endpointers that combine acoustic cues with whether the partial transcript sounds complete do better.
 
 A subtle streaming issue is **emission delay**: an RNN-T trained without constraints can learn to wait for more future context before emitting a token, adding latency. Delay-penalized or FastEmit-style regularization counters it.
 
@@ -416,11 +416,11 @@ A middle ground is a **speech-in LLM** (audio encoder feeding an LLM directly, l
 
 | Stage | Typical budget |
 |---|---|
-| Endpointing (deciding the user finished) | 200–500 ms |
-| ASR finalization | 50–200 ms |
-| LLM time to first token | 150–500 ms |
-| TTS time to first audio | 100–250 ms |
-| Network and audio buffering | 50–150 ms |
+| Endpointing (deciding the user finished) | 200-500 ms |
+| ASR finalization | 50-200 ms |
+| LLM time to first token | 150-500 ms |
+| TTS time to first audio | 100-250 ms |
+| Network and audio buffering | 50-150 ms |
 
 The levers: stream everything (partial ASR, LLM token streaming, TTS starting on the first clause), speculatively start the LLM on a stable partial transcript, use smaller or faster LLMs for the first sentence, colocate components, and use semantic turn detection rather than long silence timeouts.
 

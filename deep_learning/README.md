@@ -1,6 +1,6 @@
 # Deep Learning
 
-A comprehensive reference for deep learning fundamentals, architectures, training techniques, and regularization methods.
+A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.
 
 ---
 
@@ -153,7 +153,7 @@ Randomly sets a fraction of neurons to zero during training, preventing co-adapt
 
 ```python
 # During training: randomly zero with probability p
-# During inference: scale by (1-p) — or use inverted dropout (PyTorch default)
+# During inference: scale by (1-p), or use inverted dropout (PyTorch default)
 
 dropout = nn.Dropout(p=0.5)  # 50% dropout
 # Standard: 0.1-0.5 for hidden layers, 0.0-0.1 for output
@@ -299,7 +299,7 @@ class LSTMClassifier(nn.Module):
 
 ### Transformers
 
-See [Transformers Deep Dive](./intro_transformers.md) for detailed coverage.
+See [Transformers](./intro_transformers.md) for detailed coverage.
 
 - **BERT (encoder-only):** Bidirectional context, great for classification, NER, QA
 - **GPT (decoder-only):** Autoregressive generation, text completion
@@ -309,20 +309,20 @@ See [Transformers Deep Dive](./intro_transformers.md) for detailed coverage.
 
 See [Fine-Tuning Guide](./intro_fine_tuning.md) for detailed coverage.
 
-- **LoRA** — low-rank adaptation, trains only A·B matrices, <1% of parameters
-- **QLoRA** — NF4 quantization + LoRA, fine-tune 7B models on a single GPU
-- **Instruction tuning** — teach models to follow natural language instructions
-- **DPO** — preference optimization without RL infrastructure
+- **LoRA**: low-rank adaptation, trains only A·B matrices, <1% of parameters
+- **QLoRA**: NF4 quantization + LoRA, fine-tune 7B models on a single GPU
+- **Instruction tuning**: teach models to follow natural language instructions
+- **DPO**: preference optimization without RL infrastructure
 
 ### Computer Vision
 
 See [Computer Vision Guide](./intro_computer_vision.md) for detailed coverage.
 
-- **CNNs** — convolutions, residual blocks, receptive fields
-- **Architectures** — ResNet, EfficientNet, MobileNet, ViT
-- **Object detection** — Faster R-CNN, YOLO, mAP, NMS, IoU
-- **Segmentation** — U-Net, semantic vs instance
-- **Augmentation** — CutMix, MixUp, RandAugment
+- **CNNs**: convolutions, residual blocks, receptive fields
+- **Architectures**: ResNet, EfficientNet, MobileNet, ViT
+- **Object detection**: Faster R-CNN, YOLO, mAP, NMS, IoU
+- **Segmentation**: U-Net, semantic vs instance
+- **Augmentation**: CutMix, MixUp, RandAugment
 
 ### Diffusion Models
 
@@ -354,7 +354,7 @@ import torchvision.models as models
 # Load pretrained model
 resnet = models.resnet50(pretrained=True)
 
-# Option 1: Feature extraction — freeze all but classifier
+# Option 1: Feature extraction, freeze all but classifier
 for param in resnet.parameters():
     param.requires_grad = False
 
@@ -464,25 +464,25 @@ Self-attention: Q, K, V all come from the same sequence (captures relationships 
 
 **Q8: What is the difference between CNNs and Transformers for image tasks?** 🔴 Advanced
 
-CNNs use local convolutional filters — effective for capturing local patterns and translation equivariance. They process images hierarchically (local → global). Transformers use self-attention — each patch can attend to every other patch from the start, capturing long-range dependencies. ViT (Vision Transformer) splits images into patches and processes them as a sequence. Transformers need more data than CNNs to learn useful representations but scale better. Modern architectures (ConvNeXt, Swin Transformer) blend both approaches.
+CNNs use local convolutional filters: effective for capturing local patterns and translation equivariance. They process images hierarchically (local → global). Transformers use self-attention: each patch can attend to every other patch from the start, capturing long-range dependencies. ViT (Vision Transformer) splits images into patches and processes them as a sequence. Transformers need more data than CNNs to learn useful representations but scale better. Modern architectures (ConvNeXt, Swin Transformer) blend both approaches.
 
 ---
 
 **Q9: What is the exploding gradient problem and how do you prevent it?** 🟡 Intermediate
 
-Exploding gradients occur when gradient values grow exponentially through deep layers, causing extremely large weight updates that destabilize training (NaN losses). Common in RNNs. Solutions: (1) gradient clipping — cap gradients at a maximum norm, (2) weight initialization — use Xavier/He initialization, (3) batch normalization — normalizes activations, preventing extreme values, (4) LSTM/GRU — gating mechanisms limit gradient flow, (5) residual connections — provide gradient highways.
+Exploding gradients occur when gradient values grow exponentially through deep layers, causing extremely large weight updates that destabilize training (NaN losses). Common in RNNs. Solutions: (1) gradient clipping: cap gradients at a maximum norm, (2) weight initialization, use Xavier/He initialization, (3) batch normalization, normalizes activations, preventing extreme values, (4) LSTM/GRU: gating mechanisms limit gradient flow, (5) residual connections, provide gradient highways.
 
 ---
 
 **Q10: What is the difference between fine-tuning and training from scratch?** 🟢 Beginner
 
-Training from scratch initializes weights randomly and trains on a dataset from nothing — requires large datasets and significant compute. Fine-tuning starts from pretrained weights (learned on a large dataset) and continues training on a task-specific dataset — requires much less data and compute. Fine-tuning leverages transfer learning: knowledge from the pretraining task generalizes to the new task. For most practical NLP and vision tasks, fine-tuning a pretrained model outperforms training from scratch.
+Training from scratch initializes weights randomly and trains on a dataset from nothing: requires large datasets and significant compute. Fine-tuning starts from pretrained weights (learned on a large dataset) and continues training on a task-specific dataset: requires much less data and compute. Fine-tuning uses transfer learning: knowledge from the pretraining task generalizes to the new task. For most practical NLP and vision tasks, fine-tuning a pretrained model outperforms training from scratch.
 
 ---
 
 **Q11: What is the dying ReLU problem?** 🟡 Intermediate
 
-A ReLU neuron "dies" when its input is always negative — gradient is 0, so the neuron never updates and permanently outputs 0. Causes: high learning rates causing large negative weight updates, poor initialization, gradient flow issues. Solutions: Leaky ReLU (small negative slope for x<0), ELU, GELU/SiLU (smooth, always non-zero gradient), careful learning rate tuning, good initialization.
+A ReLU neuron "dies" when its input is always negative: gradient is 0, so the neuron never updates and permanently outputs 0. Causes: high learning rates causing large negative weight updates, poor initialization, gradient flow issues. Solutions: Leaky ReLU (small negative slope for x<0), ELU, GELU/SiLU (smooth, always non-zero gradient), careful learning rate tuning, good initialization.
 
 ---
 
@@ -504,7 +504,7 @@ Limitations: (1) "sufficient neurons" can be exponential in input dimensions, (2
 
 **Q14: What is gradient checkpointing?** 🔴 Advanced
 
-Gradient checkpointing trades compute for memory. Normally, all intermediate activations are stored during the forward pass for use in backpropagation — memory grows linearly with depth. With gradient checkpointing, only a subset of activations are stored (checkpoints); others are recomputed from the nearest checkpoint during backpropagation. This reduces memory from O(n) to O(√n) at the cost of ~30% more compute. Essential for training large models on memory-constrained hardware.
+Gradient checkpointing trades compute for memory. Normally, all intermediate activations are stored during the forward pass for use in backpropagation: memory grows linearly with depth. With gradient checkpointing, only a subset of activations are stored (checkpoints); others are recomputed from the nearest checkpoint during backpropagation. This reduces memory from O(n) to O(√n) at the cost of ~30% more compute. Essential for training large models on memory-constrained hardware.
 
 ---
 
@@ -526,7 +526,7 @@ Knowledge distillation trains a small "student" model to mimic a large "teacher"
 
 **Q17: What is a hyperparameter and how do you tune them?** 🟢 Beginner
 
-Hyperparameters are configuration values set before training that control the learning process (not learned from data). Examples: learning rate, batch size, number of layers, dropout rate, weight decay. Tuning methods: (1) grid search — exhaustive search over specified values, (2) random search — randomly sample combinations, often more efficient, (3) Bayesian optimization — use probabilistic model to select promising hyperparameters, (4) population-based training — evolve hyperparameters during training. Tools: Optuna, W&B Sweeps, Ray Tune.
+Hyperparameters are configuration values set before training that control the learning process (not learned from data). Examples: learning rate, batch size, number of layers, dropout rate, weight decay. Tuning methods: (1) grid search: exhaustive search over specified values, (2) random search, randomly sample combinations, often more efficient, (3) Bayesian optimization, use probabilistic model to select promising hyperparameters, (4) population-based training, evolve hyperparameters during training. Tools: Optuna, W&B Sweeps, Ray Tune.
 
 ---
 
@@ -538,7 +538,7 @@ A VAE is a generative model that learns a latent distribution rather than discre
 
 **Q19: What is the difference between discriminative and generative models?** 🟡 Intermediate
 
-**Discriminative models** learn the conditional probability P(Y|X) — the boundary between classes. Examples: logistic regression, SVM, BERT for classification. Generally better at classification when trained on sufficient labeled data.
+**Discriminative models** learn the conditional probability P(Y|X): the boundary between classes. Examples: logistic regression, SVM, BERT for classification. Generally better at classification when trained on sufficient labeled data.
 
 **Generative models** learn the joint distribution P(X, Y) or just P(X). Can generate new samples from the learned distribution. Examples: Naive Bayes, VAE, GAN, diffusion models. Useful when you need to generate data, with limited labeled data (using P(X) as prior), or for understanding data structure.
 
@@ -565,16 +565,16 @@ Every guide in `deep_learning/`. Start with the overview above, then work throug
 - [Reinforcement Learning: MDPs, Q-Learning, Bandits, PPO, and RLHF](./intro_reinforcement_learning.md)
 - [Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq](./intro_sequence_models.md)
 - [Speech and Audio: ASR, TTS, Speaker Models, and Voice Agents](./intro_speech_audio.md)
-- [Transformers Deep Dive](./intro_transformers.md)
+- [Transformers](./intro_transformers.md)
 
 ---
 
 ## References
 
-- [Deep Learning — Ian Goodfellow, Yoshua Bengio, Aaron Courville (free online)](https://www.deeplearningbook.org/)
-- [Dive into Deep Learning — d2l.ai](https://d2l.ai/)
+- [Deep Learning: Ian Goodfellow, Yoshua Bengio, Aaron Courville (free online)](https://www.deeplearningbook.org/)
+- [Dive into Deep Learning: d2l.ai](https://d2l.ai/)
 - [PyTorch Documentation](https://pytorch.org/docs/)
 - [CS231n: Convolutional Neural Networks for Visual Recognition](http://cs231n.stanford.edu/)
 - [CS224n: Natural Language Processing with Deep Learning](http://web.stanford.edu/class/cs224n/)
-- [Attention Is All You Need — Vaswani et al. (2017)](https://arxiv.org/abs/1706.03762)
-- [Deep Residual Learning for Image Recognition — He et al. (2015)](https://arxiv.org/abs/1512.03385)
+- [Attention Is All You Need: Vaswani et al. (2017)](https://arxiv.org/abs/1706.03762)
+- [Deep Residual Learning for Image Recognition: He et al. (2015)](https://arxiv.org/abs/1512.03385)

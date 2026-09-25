@@ -9,7 +9,7 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 | Level | Label | Description |
 |-------|-------|-------------|
 | 🟢 Beginner | Entry-level | Conceptual understanding; expected from all candidates |
-| 🟡 Intermediate | Mid-level | Applied knowledge; expected for 2–5 YOE roles |
+| 🟡 Intermediate | Mid-level | Applied knowledge; expected for 2-5 YOE roles |
 | 🔴 Advanced | Senior-level | Deep technical; expected for senior/staff roles |
 
 ---
@@ -17,7 +17,7 @@ This guide provides a structured study plan for ML, AI Engineer, and Data Engine
 ## Track 1: Classic ML Foundations
 
 **Recommended for:** All ML/AI/DS roles
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master |
 |-------|-----------|------------------------|
@@ -87,7 +87,7 @@ Use this track alongside:
 ## Track 3: AI / GenAI Engineering
 
 **Recommended for:** AI Engineer, GenAI Engineer, LLM Engineer
-**Estimated prep time:** 3–4 weeks
+**Estimated prep time:** 3-4 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -110,7 +110,7 @@ Use this track alongside:
 ## Track 4: MLOps & Production ML
 
 **Recommended for:** MLOps Engineer, Senior ML Engineer
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -128,7 +128,7 @@ Use this track alongside:
 ## Track 5: Data Engineering
 
 **Recommended for:** Data Engineer, Analytics Engineer, Platform Engineer
-**Estimated prep time:** 3–4 weeks
+**Estimated prep time:** 3-4 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -149,7 +149,7 @@ Use this track alongside:
 ## Track 6: DevOps & Infrastructure
 
 **Recommended for:** MLOps Engineer, Platform Engineer, DevOps Engineer
-**Estimated prep time:** 2–3 weeks
+**Estimated prep time:** 2-3 weeks
 
 | Topic | Difficulty | Key Questions to Master | Guide |
 |-------|-----------|------------------------|-------|
@@ -173,7 +173,7 @@ Use this track alongside:
 
 ### For AI / LLM Engineer
 1. Classic ML Foundations (Track 1) → 1 week (skim)
-2. Deep Learning — Transformers/Attention (Track 2) → 1 week
+2. Deep Learning: Transformers/Attention (Track 2) → 1 week
 3. GenAI Engineering (Track 3) → 3 weeks
 4. LLMOps (overlap with Track 4) → 1 week
 
@@ -219,12 +219,12 @@ Essential for all roles:
 
 ## Interview Day Tips
 
-1. **Think out loud** — interviewers want to follow your reasoning, not just the answer
-2. **Clarify before you code** — ask about constraints, edge cases, scale requirements
-3. **Start simple** — give a naive/brute-force answer first, then optimize
-4. **Know your tradeoffs** — every algorithm has pros and cons; be ready to discuss them
-5. **Bridge theory to practice** — relate concepts to real systems (e.g., "In production, I would...")
-6. **Admit uncertainty honestly** — "I'd need to verify this, but I believe..." is better than guessing confidently
+1. **Think out loud**: interviewers want to follow your reasoning, not just the answer
+2. **Clarify before you code**: ask about constraints, edge cases, scale requirements
+3. **Start simple**: give a naive/brute-force answer first, then optimize
+4. **Know your tradeoffs**: every algorithm has pros and cons; be ready to discuss them
+5. **Bridge theory to practice**: relate concepts to real systems (e.g., "In production, I would...")
+6. **Admit uncertainty honestly**: "I'd need to verify this, but I believe..." is better than guessing confidently
 
 ---
 

@@ -5,13 +5,13 @@
 ### Why Convolutions?
 
 Fully connected layers applied to images have two problems:
-1. **Parameter explosion** — a 224×224×3 image with a 1000-unit FC layer = 150M parameters
-2. **Spatial invariance** — FC layers don't exploit local structure or translation invariance
+1. **Parameter explosion**: a 224×224×3 image with a 1000-unit FC layer = 150M parameters
+2. **Spatial invariance**: FC layers don't exploit local structure or translation invariance
 
 Convolutions solve this via:
-- **Local connectivity** — each neuron sees a small spatial region (kernel)
-- **Weight sharing** — the same kernel slides over all positions (reduces parameters drastically)
-- **Equivariance** — if a feature shifts in the image, its activation shifts proportionally
+- **Local connectivity**: each neuron sees a small spatial region (kernel)
+- **Weight sharing**: the same kernel slides over all positions (reduces parameters drastically)
+- **Equivariance**: if a feature shifts in the image, its activation shifts proportionally
 
 ### Convolution Operation
 
@@ -50,17 +50,17 @@ Deeper layers have larger receptive fields. This is why deep networks learn hier
 
 ## Landmark CNN Architectures
 
-### AlexNet (2012) — The Deep Learning Revolution
+### AlexNet (2012): The Deep Learning Revolution
 - 5 conv layers + 3 FC, ~60M params
 - First to use ReLU activations, dropout, data augmentation at scale
 - Won ImageNet 2012 by 10% margin (top-5 error: 15.3% vs 26.2%)
 
-### VGGNet (2014) — Depth via Small Kernels
+### VGGNet (2014): Depth via Small Kernels
 - Key insight: Stack 3×3 convolutions instead of large kernels
 - Two 3×3 convs have same receptive field as one 5×5 but 28% fewer params and more non-linearity
 - VGG-16: 16 weight layers, 138M params (heavy FC layers)
 
-### ResNet (2015) — Residual Connections
+### ResNet (2015): Residual Connections
 
 The problem with very deep networks: **vanishing/exploding gradients** make training degrade.
 
@@ -90,7 +90,7 @@ Skip connections let gradients flow directly through identity mappings, enabling
 - Each block learns a *residual* F(x) rather than a full transformation H(x)
 - At initialization, blocks behave like identity → training starts with a shallow-like network
 
-### EfficientNet (2019) — Compound Scaling
+### EfficientNet (2019): Compound Scaling
 
 Rather than scaling only depth, width, or resolution independently, EfficientNet scales all three jointly using a compound coefficient φ:
 
@@ -103,11 +103,11 @@ subject to: α × β² × γ² ≈ 2 (FLOP constraint)
 
 Best values found by NAS: α=1.2, β=1.1, γ=1.15. EfficientNet-B7 achieves 84.3% top-1 with 66M params vs ResNet-152's 78.3% with 60M params.
 
-### MobileNet — Efficient Inference
+### MobileNet: Efficient Inference
 
 **Depthwise separable convolution** factorizes a standard convolution into:
-1. **Depthwise conv** — 1 filter per input channel (spatial filtering)
-2. **Pointwise conv** — 1×1 conv to combine channels
+1. **Depthwise conv**: 1 filter per input channel (spatial filtering)
+2. **Pointwise conv**: 1×1 conv to combine channels
 
 ```python
 # Standard 3×3 conv: D_k × D_k × M × N operations  
@@ -142,7 +142,7 @@ y_i = γ x̂_i + β             # scale and shift (learned)
 ```
 
 **Benefits:**
-- Reduces internal covariate shift — each layer sees normalized inputs
+- Reduces internal covariate shift: each layer sees normalized inputs
 - Acts as regularization (slightly noisy estimates of population stats)
 - Allows higher learning rates
 - Makes network less sensitive to weight initialization
@@ -234,7 +234,7 @@ def iou(box_a, box_b):
 - Average Precision (AP) = area under PR curve
 - mAP = mean AP over all classes
 - mAP@0.5: IoU threshold 0.5 (PASCAL VOC)
-- mAP@[0.5:0.95]: average over IoU thresholds 0.5–0.95 (COCO standard)
+- mAP@[0.5:0.95]: average over IoU thresholds 0.5-0.95 (COCO standard)
 
 **Non-Maximum Suppression (NMS):**
 ```python
@@ -258,8 +258,8 @@ def nms(boxes, scores, iou_threshold=0.5):
 
 ### Semantic vs Instance Segmentation
 
-- **Semantic segmentation** — classify every pixel (no distinction between instances): person/car/road
-- **Instance segmentation** — detect each object instance + its pixel mask: person₁, person₂
+- **Semantic segmentation**: classify every pixel (no distinction between instances): person/car/road
+- **Instance segmentation**: detect each object instance + its pixel mask: person₁, person₂
 
 ### U-Net Architecture
 
@@ -355,7 +355,7 @@ class PatchEmbedding(nn.Module):
 
 ## Data Augmentation
 
-Augmentation is critical for CV — prevents overfitting and improves robustness.
+Augmentation is critical for CV: prevents overfitting and improves robustness.
 
 ```python
 import torchvision.transforms as T
@@ -378,10 +378,10 @@ cutmix_or_mixup = v2.RandomChoice([cutmix, mixup])
 ```
 
 **Advanced augmentations:**
-- **Cutout/Random Erasing** — mask out random patches
-- **RandAugment** — randomly apply N augmentations from a fixed policy
-- **MixUp** — linearly interpolate two images and their labels
-- **CutMix** — cut a patch from one image, paste into another, mix labels by area
+- **Cutout/Random Erasing**: mask out random patches
+- **RandAugment**: randomly apply N augmentations from a fixed policy
+- **MixUp**: linearly interpolate two images and their labels
+- **CutMix**: cut a patch from one image, paste into another, mix labels by area
 
 ---
 
@@ -393,14 +393,14 @@ import torchvision.models as models
 # Load pretrained ResNet-50
 model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
 
-# Option 1: Feature extraction — freeze backbone
+# Option 1: Feature extraction, freeze backbone
 for param in model.parameters():
     param.requires_grad = False
 
 # Replace classifier for new task
 model.fc = nn.Linear(model.fc.in_features, n_classes)  # only this trains
 
-# Option 2: Fine-tuning — use differential learning rates
+# Option 2: Fine-tuning, use differential learning rates
 optimizer = torch.optim.AdamW([
     {'params': model.layer4.parameters(), 'lr': 1e-4},  # backbone: low lr
     {'params': model.fc.parameters(),     'lr': 1e-3},  # head: high lr

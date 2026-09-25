@@ -1,4 +1,4 @@
-# LLMOps – Deploying & Operating LLMs in Production (2026 Edition)
+# LLMOps: Deploying and Operating LLMs in Production
 
 **LLMOps** is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific concerns: prompt management, evals, hallucination detection, cost control, and guardrails.
 
@@ -96,7 +96,7 @@ trace.update(output=answer)
 ### Helicone (API Proxy with analytics)
 
 ```python
-# Just change base URL — automatic logging, cost tracking
+# Just change base URL: automatic logging, cost tracking
 from anthropic import Anthropic
 
 client = Anthropic(
@@ -375,7 +375,7 @@ response = client.messages.create(
 # 3. Batch API (50% cheaper, async)
 batch = client.messages.batches.create(requests=[...])
 
-# 4. max_tokens optimization — set realistic limits
+# 4. max_tokens optimization: set realistic limits
 # Don't use max_tokens=4096 for a one-sentence answer task
 
 # 5. Truncate retrieved context to essentials

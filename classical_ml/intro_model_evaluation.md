@@ -58,12 +58,12 @@ Ask in every interview: **what does a false positive cost, and what does a false
 | Log loss | `-Σ[y log p + (1-y) log(1-p)]` | Probability quality | You need calibrated probabilities |
 | Brier score | `mean((p - y)²)` | Squared probability error | Calibration + sharpness together |
 
-**Why the harmonic mean in F1?** It punishes imbalance between P and R. A model with P=1.0 and R=0.01 has arithmetic mean 0.505 but F1 = 0.0198 — the harmonic mean refuses to reward a model that gets one number by destroying the other.
+**Why the harmonic mean in F1?** It punishes imbalance between P and R. A model with P=1.0 and R=0.01 has arithmetic mean 0.505 but F1 = 0.0198: the harmonic mean refuses to reward a model that gets one number by destroying the other.
 
 **Macro vs micro vs weighted averaging** (multiclass):
-- **Macro**: unweighted mean over classes — every class counts equally, so rare classes matter. Use when rare classes are important.
-- **Micro**: pool all TP/FP/FN, then compute — equals accuracy in single-label multiclass. Dominated by frequent classes.
-- **Weighted**: mean weighted by class support — a compromise, but hides rare-class failure.
+- **Macro**: unweighted mean over classes: every class counts equally, so rare classes matter. Use when rare classes are important.
+- **Micro**: pool all TP/FP/FN, then compute: equals accuracy in single-label multiclass. Dominated by frequent classes.
+- **Weighted**: mean weighted by class support: a compromise, but hides rare-class failure.
 
 ---
 
@@ -71,7 +71,7 @@ Ask in every interview: **what does a false positive cost, and what does a false
 
 Both summarize a ranking across all thresholds, but they answer different questions.
 
-**ROC** plots TPR vs FPR. **ROC-AUC** = probability that a random positive is ranked above a random negative. It is **invariant to class balance** — which is exactly its strength and its trap.
+**ROC** plots TPR vs FPR. **ROC-AUC** = probability that a random positive is ranked above a random negative. It is **invariant to class balance**, which is exactly its strength and its trap.
 
 **PR curve** plots Precision vs Recall. **PR-AUC (average precision)** depends on prevalence and reflects what an operator actually experiences on an imbalanced problem.
 
@@ -93,7 +93,7 @@ Always print the prevalence baseline. A PR-AUC of 0.30 is excellent at 1% preval
 - Recall = 90/100 = **90%**
 - Precision = 90/1000 = **9%**
 - FPR = 910/99,900 = **0.9%** → ROC looks superb
-- Accuracy = 99.0% — *worse than predicting "never fraud"* (99.9%)
+- Accuracy = 99.0%: *worse than predicting "never fraud"* (99.9%)
 
 ROC-AUC will read ~0.98 here because FPR is normalized by the huge negative class. PR-AUC honestly reports that 91% of the analyst's review queue is noise. **On heavy imbalance, report PR-AUC; use ROC-AUC only as a secondary ranking check.**
 
@@ -117,7 +117,7 @@ best_f1_threshold = thresholds[np.argmax(f1[:-1])]
 mask = precision[:-1] >= 0.80
 best_recall_threshold = thresholds[mask][np.argmax(recall[:-1][mask])] if mask.any() else None
 
-# Option C: minimize expected cost — the most defensible in an interview
+# Option C: minimize expected cost, the most defensible in an interview
 COST_FN, COST_FP = 500, 10     # e.g. missed fraud vs wasted analyst review
 
 def expected_cost(threshold):
@@ -160,7 +160,7 @@ print(f"Brier after : {brier_score_loss(y_val, calibrated.predict_proba(X_val)[:
 
 Which models need calibration? SVMs and naive Bayes are badly calibrated by construction. Boosted trees are pushed toward 0 and 1 by the loss. Random Forests are compressed toward the middle (averaging pulls away from extremes). Logistic regression trained with log loss is usually close to calibrated already. Anything trained with class reweighting or on a resampled dataset is miscalibrated by design and must be corrected before its scores feed a downstream cost calculation.
 
-Calibration matters when the score is **used as a number** — expected-value decisions, pricing, ranking against a cost threshold, or feeding another model. If you only threshold once, ranking is enough.
+Calibration matters when the score is **used as a number**: expected-value decisions, pricing, ranking against a cost threshold, or feeding another model. If you only threshold once, ranking is enough.
 
 ---
 
@@ -171,7 +171,7 @@ Calibration matters when the score is **used as a number** — expected-value de
 | MAE | `mean|y - ŷ|` | Target units | Low | Outliers are noise; you want the median behavior |
 | MSE | `mean(y - ŷ)²` | Squared units | High | Large errors are disproportionately bad |
 | RMSE | `√MSE` | Target units | High | Same as MSE but readable |
-| MAPE | `mean|y-ŷ|/|y|` | Percent | Medium | Comparing across scales — breaks near `y=0` |
+| MAPE | `mean|y-ŷ|/|y|` | Percent | Medium | Comparing across scales: breaks near `y=0` |
 | SMAPE | symmetric variant | Percent | Medium | MAPE with bounded blow-up |
 | R² | `1 - SSE/SST` | Unitless | High | Explaining variance vs the mean baseline |
 | Quantile / pinch loss | asymmetric | Target units | Tunable | Over- and under-prediction cost differently |
@@ -179,7 +179,7 @@ Calibration matters when the score is **used as a number** — expected-value de
 
 Two things worth saying out loud in an interview:
 
-- **MAE optimizes the median, MSE optimizes the mean.** If you train with MSE on a right-skewed target (revenue, latency), the model systematically over-predicts the typical case. That's a modeling choice, not a bug — but it should be deliberate.
+- **MAE optimizes the median, MSE optimizes the mean.** If you train with MSE on a right-skewed target (revenue, latency), the model systematically over-predicts the typical case. That's a modeling choice, not a bug, but it should be deliberate.
 - **R² can be negative** (worse than predicting the mean) and always increases when you add features, so use adjusted R² when comparing models with different feature counts. R² is also not comparable across datasets with different target variance.
 
 For skewed positive targets, training on `log1p(y)` and reporting RMSE in log space (RMSLE) penalizes under-prediction more than over-prediction and stops a few huge values from dominating the loss.
@@ -190,12 +190,12 @@ For skewed positive targets, training on `log1p(y)` and reporting RMSE in log sp
 
 | Metric | What it captures |
 |---|---|
-| **Precision@k** | Fraction of the top-k that are relevant — matches a fixed-size UI slot |
-| **Recall@k** | Fraction of all relevant items appearing in top-k — the standard retrieval metric |
-| **MRR** | `mean(1 / rank of first relevant)` — right for "one correct answer" tasks |
-| **MAP** | Mean average precision — rewards relevant items ranked higher |
-| **NDCG@k** | Discounted cumulative gain, normalized — handles graded relevance and position discount |
-| **Hit rate@k** | Any relevant item in top-k — coarse but interpretable |
+| **Precision@k** | Fraction of the top-k that are relevant: matches a fixed-size UI slot |
+| **Recall@k** | Fraction of all relevant items appearing in top-k: the standard retrieval metric |
+| **MRR** | `mean(1 / rank of first relevant)`: right for "one correct answer" tasks |
+| **MAP** | Mean average precision: rewards relevant items ranked higher |
+| **NDCG@k** | Discounted cumulative gain, normalized: handles graded relevance and position discount |
+| **Hit rate@k** | Any relevant item in top-k: coarse but interpretable |
 
 NDCG is the default for search and recommendation because it handles both *graded* relevance (a 4-star match beats a 2-star match) and *position discount* (rank 1 is worth more than rank 10):
 
@@ -203,7 +203,7 @@ NDCG is the default for search and recommendation because it handles both *grade
 DCG@k = Σ (2^rel_i - 1) / log₂(i + 1)      NDCG@k = DCG@k / IDCG@k
 ```
 
-These same metrics apply to RAG retrieval evaluation — recall@k on the retriever is usually the first thing to measure when a RAG system gives wrong answers.
+These same metrics apply to RAG retrieval evaluation: recall@k on the retriever is usually the first thing to measure when a RAG system gives wrong answers.
 
 ---
 
@@ -275,7 +275,7 @@ Include a **degradation plan** too: metrics drift as the input distribution move
 
 #### Your model has 99% accuracy. Is it good?
 
-Unanswerable without the class balance and the cost structure. If 99% of examples are negative, predicting "always negative" scores 99% and has zero value — accuracy is measuring the prior, not the model. I'd ask for prevalence, then report PR-AUC against the prevalence baseline, plus recall at whatever precision the business can tolerate. I'd also ask what a false positive and a false negative each cost, because that determines both the metric and the operating threshold.
+Unanswerable without the class balance and the cost structure. If 99% of examples are negative, predicting "always negative" scores 99% and has zero value: accuracy is measuring the prior, not the model. I'd ask for prevalence, then report PR-AUC against the prevalence baseline, plus recall at whatever precision the business can tolerate. I'd also ask what a false positive and a false negative each cost, because that determines both the metric and the operating threshold.
 
 #### When would you use ROC-AUC over PR-AUC, and vice versa?
 
@@ -285,41 +285,41 @@ The mechanism: ROC's x-axis is FPR = FP/(FP+TN). With a huge negative class, tho
 
 #### What is probability calibration, and when do you need it?
 
-Calibration means predicted probabilities match observed frequencies — of the cases scored 0.7, about 70% should be positive. You need it whenever the score is consumed as a number rather than as a rank: expected-value decisions, risk pricing, thresholds derived from costs, or feeding the score into a downstream model or human judgment.
+Calibration means predicted probabilities match observed frequencies: of the cases scored 0.7, about 70% should be positive. You need it whenever the score is consumed as a number rather than as a rank: expected-value decisions, risk pricing, thresholds derived from costs, or feeding the score into a downstream model or human judgment.
 
-You don't strictly need it when you only rank (recommendations shown in order) or threshold once at an empirically tuned cutoff. Check with a reliability diagram and the Brier score; fix with Platt scaling (small data), isotonic regression (larger data), or temperature scaling (neural networks) — always fit on a held-out calibration set.
+You don't strictly need it when you only rank (recommendations shown in order) or threshold once at an empirically tuned cutoff. Check with a reliability diagram and the Brier score; fix with Platt scaling (small data), isotonic regression (larger data), or temperature scaling (neural networks): always fit on a held-out calibration set.
 
 #### Why is a random train/test split wrong for time series?
 
-It leaks the future into the past. A random split lets the model train on Tuesday and Thursday while validating on Wednesday, so it can exploit information no production model would have — trends, same-day correlated events, or explicit lag features computed over the whole series. Validation scores look great and production degrades immediately.
+It leaks the future into the past. A random split lets the model train on Tuesday and Thursday while validating on Wednesday, so it can exploit information no production model would have: trends, same-day correlated events, or explicit lag features computed over the whole series. Validation scores look great and production degrades immediately.
 
-Use a forward-chaining split (`TimeSeriesSplit`), evaluate on strictly later data than training, and add a `gap` when the label takes time to materialize — e.g. a 30-day churn label means the last 30 days of training data would not have been labeled yet in production.
+Use a forward-chaining split (`TimeSeriesSplit`), evaluate on strictly later data than training, and add a `gap` when the label takes time to materialize, e.g. a 30-day churn label means the last 30 days of training data would not have been labeled yet in production.
 
 #### Explain the precision-recall tradeoff and how you pick a threshold.
 
 Both derive from one score and one cutoff. Lower the threshold and you predict positive more often: recall rises, precision falls. The curve is a property of the model's ranking; the threshold is a business decision on top of it.
 
-I pick it by expected cost when costs are known: choose the threshold minimizing `COST_FN × FN + COST_FP × FP` on validation data. When costs aren't quantified, I anchor on an operational constraint — reviewer capacity, or a precision floor stakeholders will accept — and take the best recall subject to it. F1-optimal is a fallback for when no business context exists at all, which is rarer than people assume.
+I pick it by expected cost when costs are known: choose the threshold minimizing `COST_FN × FN + COST_FP × FP` on validation data. When costs aren't quantified, I anchor on an operational constraint (reviewer capacity, or a precision floor stakeholders will accept), and take the best recall subject to it. F1-optimal is a fallback for when no business context exists at all, which is rarer than people assume.
 
 #### What's the difference between MAE and RMSE, and when does the choice matter?
 
 RMSE squares errors before averaging, so a single error of 10 contributes as much as 100 errors of 1. MAE weighs every error linearly. Consequently RMSE ≥ MAE always, and the gap grows with error variance.
 
-The choice matters when outliers exist and their treatment is a real decision. Training on MSE fits the conditional mean and chases outliers; training on MAE fits the conditional median and ignores them. For delivery-time prediction, a rare 3-hour delay may genuinely be catastrophic (RMSE), while for sensor data the same spike is measurement noise (MAE, or Huber for a middle ground).
+The choice matters when outliers exist and their treatment is a real decision. Training on MSE fits the conditional mean and chases outliers; training on MAE fits the conditional median and ignores them. For delivery-time prediction, a rare 3-hour delay may be catastrophic (RMSE), while for sensor data the same spike is measurement noise (MAE, or Huber for a middle ground).
 
 #### How do you evaluate a model when labels arrive weeks later?
 
 Three moves, used together:
-1. **Proxy metrics available immediately** — prediction distribution shift, feature drift (PSI/KL), and model confidence, monitored for anomalies that predict a quality drop.
-2. **A delayed evaluation pipeline** — join predictions to labels as they arrive and backfill true performance on a rolling basis, accepting that today's number describes the model from weeks ago.
-3. **A fast-label subsample** — for some domains you can buy or manually label a small sample quickly for a same-week signal.
+1. **Proxy metrics available immediately**: prediction distribution shift, feature drift (PSI/KL), and model confidence, monitored for anomalies that predict a quality drop.
+2. **A delayed evaluation pipeline**: join predictions to labels as they arrive and backfill true performance on a rolling basis, accepting that today's number describes the model from weeks ago.
+3. **A fast-label subsample**: for some domains you can buy or manually label a small sample quickly for a same-week signal.
 
 I'd also make sure the training setup respects the delay: features must be as-of prediction time and the CV gap must equal the label latency, or offline scores will be unreachable in production.
 
 #### Your offline AUC improved but the A/B test is flat. What happened?
 
 The usual suspects, in the order I'd check them:
-- **Train/serve skew**: features computed differently offline and online — the most common cause by a wide margin.
+- **Train/serve skew**: features computed differently offline and online: the most common cause by a wide margin.
 - **The offline metric is the wrong proxy**: AUC improved on easy examples that don't change any decision, or the threshold means the ranking improvement never crosses into a different action.
 - **The improvement is inside noise**: the A/B test may be underpowered for an effect that size; check the minimum detectable effect before concluding "flat".
 - **Leakage offline**: the offline gain was never real.
@@ -328,7 +328,7 @@ The usual suspects, in the order I'd check them:
 
 #### Why report standard deviation across CV folds?
 
-Because a single mean hides instability. Fold variance tells you whether a difference between two models is real, whether the dataset has heterogeneous subgroups (one fold much worse usually means a distinct segment the model fails on), and whether the model is sensitive to which rows it sees. If model A is 0.84 ± 0.06 and model B is 0.82 ± 0.01, B may be the better production choice — the paired difference across folds, not the raw means, is what to test.
+Because a single mean hides instability. Fold variance tells you whether a difference between two models is real, whether the dataset has heterogeneous subgroups (one fold much worse usually means a distinct segment the model fails on), and whether the model is sensitive to which rows it sees. If model A is 0.84 ± 0.06 and model B is 0.82 ± 0.01, B may be the better production choice: the paired difference across folds, not the raw means, is what to test.
 
 #### What is data leakage, and how do you detect it?
 

@@ -78,7 +78,7 @@ Each bootstrap sample leaves out roughly `1/e ≈ 36.8%` of rows. Those out-of-b
 
 ### Extremely Randomized Trees (Extra Trees)
 
-Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains 2–5x faster.
+Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains 2-5x faster.
 
 ---
 
@@ -94,7 +94,7 @@ Reweights misclassified samples upward each round and weights each learner by it
 w_i ← w_i · exp(α_t · 1[y_i ≠ h_t(x_i)])      where α_t = ½ ln((1 - err_t) / err_t)
 ```
 
-AdaBoost minimizes exponential loss, which makes it sensitive to label noise and outliers — a permanently mislabeled point gets ever-larger weight.
+AdaBoost minimizes exponential loss, which makes it sensitive to label noise and outliers: a permanently mislabeled point gets ever-larger weight.
 
 ### Gradient Boosting
 
@@ -111,7 +111,7 @@ import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 
 class TinyGradientBoosting:
-    """Minimal gradient boosting for squared error — the interview whiteboard version."""
+    """Minimal gradient boosting for squared error: the interview whiteboard version."""
 
     def __init__(self, n_estimators=100, learning_rate=0.1, max_depth=3):
         self.n_estimators = n_estimators
@@ -141,11 +141,11 @@ class TinyGradientBoosting:
 
 Three ideas carry over to every production implementation:
 
-1. **Shrinkage** (`learning_rate`): small steps generalize better. Lower learning rate needs more trees — they trade off roughly inversely.
-2. **Shallow trees**: depth 3–8. Each tree only needs to capture a bit of remaining signal.
+1. **Shrinkage** (`learning_rate`): small steps generalize better. Lower learning rate needs more trees: they trade off roughly inversely.
+2. **Shallow trees**: depth 3-8. Each tree only needs to capture a bit of remaining signal.
 3. **Additive, sequential**: cannot be parallelized across trees (only within a tree's split search), unlike bagging.
 
-For non-squared losses (log loss, Huber, ranking objectives), the residual is replaced by the loss gradient and the leaf values by a Newton step using the second derivative — that second-order step is XGBoost's core contribution.
+For non-squared losses (log loss, Huber, ranking objectives), the residual is replaced by the loss gradient and the leaf values by a Newton step using the second derivative, that second-order step is XGBoost's core contribution.
 
 ---
 
@@ -156,7 +156,7 @@ For non-squared losses (log loss, Huber, ranking objectives), the residual is re
 | Tree growth | Level-wise (depth-first balanced) | **Leaf-wise** (splits the highest-gain leaf) | Symmetric / oblivious trees |
 | Speed on large data | Fast | **Fastest** (histogram + GOSS + EFB) | Moderate |
 | Small data (< ~10k rows) | Good | Overfits easily leaf-wise | **Best**, ordered boosting resists overfitting |
-| Categorical features | Must encode yourself | Native (`categorical_feature`) | **Native and best-in-class** (ordered target statistics) |
+| Categorical features | Must encode yourself | Native (`categorical_feature`) | **Native, strongest of the three** (ordered target statistics) |
 | Missing values | Learns a default direction per split | Learns a default direction | Handled |
 | Key regularizer | `lambda`, `alpha`, `max_depth` | `num_leaves`, `min_data_in_leaf` | `depth`, `l2_leaf_reg` |
 | Typical pick | Safe default, huge ecosystem | Wide/large datasets, tight training budget | Many categorical columns, small/medium data |
@@ -171,10 +171,10 @@ model = xgb.XGBClassifier(
     n_estimators=2000,          # set high; early stopping picks the real number
     learning_rate=0.05,
     max_depth=6,
-    subsample=0.8,              # row sampling per tree — stochastic gradient boosting
+    subsample=0.8,              # row sampling per tree: stochastic gradient boosting
     colsample_bytree=0.8,       # column sampling per tree
     reg_lambda=1.0,             # L2 on leaf weights
-    min_child_weight=5,         # minimum summed hessian in a leaf — the main anti-overfit knob
+    min_child_weight=5,         # minimum summed hessian in a leaf: the main anti-overfit knob
     eval_metric='auc',
     early_stopping_rounds=50,
     n_jobs=-1,
@@ -185,7 +185,7 @@ print(f"Best iteration: {model.best_iteration}, best AUC: {model.best_score:.4f}
 
 ### Why leaf-wise growth is both LightGBM's strength and its trap
 
-Level-wise growth splits every node at a depth before going deeper — balanced but wasteful. Leaf-wise always splits whichever leaf reduces loss most, so it reaches lower training loss with the same number of leaves. On small datasets it will happily grow a deep, narrow branch that memorizes 40 rows. Control it with `num_leaves` (keep `num_leaves < 2^max_depth`) and `min_data_in_leaf`, not with `n_estimators`.
+Level-wise growth splits every node at a depth before going deeper: balanced but wasteful. Leaf-wise always splits whichever leaf reduces loss most, so it reaches lower training loss with the same number of leaves. On small datasets it will happily grow a deep, narrow branch that memorizes 40 rows. Control it with `num_leaves` (keep `num_leaves < 2^max_depth`) and `min_data_in_leaf`, not with `n_estimators`.
 
 ---
 
@@ -214,22 +214,22 @@ stack.fit(X_tr, y_tr)
 
 The `cv=5` is the whole trick. If you train base models and the meta-learner on the same rows, the base models' in-sample predictions are near-perfect, the meta-learner learns to trust them completely, and the stack collapses at inference time. This is the single most common stacking bug.
 
-Stacking wins Kaggle competitions and rarely survives production review: 3–8x the inference cost and 3–8x the models to monitor, for perhaps 0.3% AUC. Bring it up in interviews as a tradeoff you can articulate, not a default.
+Stacking wins Kaggle competitions and rarely survives production review: 3-8x the inference cost and 3-8x the models to monitor, for perhaps 0.3% AUC. Bring it up in interviews as a tradeoff you can articulate, not a default.
 
 ---
 
 ## Hyperparameter Tuning Guide
 
-Tune in this order — later parameters matter less than earlier ones.
+Tune in this order: later parameters matter less than earlier ones.
 
 | Order | Parameter | Range | Effect |
 |---|---|---|---|
-| 1 | `learning_rate` | 0.01–0.1 | Lower = better generalization, more trees needed |
+| 1 | `learning_rate` | 0.01-0.1 | Lower = better generalization, more trees needed |
 | 2 | `n_estimators` | Use early stopping | Let validation decide, don't grid-search it |
-| 3 | `max_depth` / `num_leaves` | 3–10 / 15–255 | Main capacity control |
-| 4 | `min_child_weight` / `min_data_in_leaf` | 1–100 | Prevents leaves fit to a handful of rows |
-| 5 | `subsample`, `colsample_bytree` | 0.6–1.0 | Adds randomness, reduces variance |
-| 6 | `reg_lambda`, `reg_alpha` | 0–10 | L2 / L1 on leaf weights |
+| 3 | `max_depth` / `num_leaves` | 3-10 / 15-255 | Main capacity control |
+| 4 | `min_child_weight` / `min_data_in_leaf` | 1-100 | Prevents leaves fit to a handful of rows |
+| 5 | `subsample`, `colsample_bytree` | 0.6-1.0 | Adds randomness, reduces variance |
+| 6 | `reg_lambda`, `reg_alpha` | 0-10 | L2 / L1 on leaf weights |
 
 ```python
 import optuna
@@ -274,10 +274,10 @@ Tree "importance" has three common definitions, and they disagree:
 from sklearn.inspection import permutation_importance
 import shap
 
-# Permutation importance — measured on held-out data, which is the point
+# Permutation importance: measured on held-out data, which is the point
 perm = permutation_importance(model, X_val, y_val, n_repeats=10, random_state=42, n_jobs=-1)
 
-# SHAP — exact and fast for trees
+# SHAP: exact and fast for trees
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X_val)
 shap.summary_plot(shap_values, X_val)
@@ -323,15 +323,15 @@ Boosting is the opposite: each additional tree reduces training loss and eventua
 #### How does XGBoost differ from vanilla gradient boosting?
 
 Four substantive differences:
-1. **Second-order optimization** — it uses both gradient and Hessian for a Newton step, giving better leaf values and a principled split-gain formula.
-2. **Regularization in the objective** — an explicit penalty on the number of leaves (`gamma`) and the L2 norm of leaf weights (`lambda`), so pruning falls out of the objective rather than being a heuristic.
-3. **Sparsity-aware split finding** — it learns a default direction for missing values instead of requiring imputation.
-4. **Systems engineering** — column blocks for cache-efficient split search, approximate quantile sketch for candidate splits, out-of-core training.
+1. **Second-order optimization**: it uses both gradient and Hessian for a Newton step, giving better leaf values and a principled split-gain formula.
+2. **Regularization in the objective**: an explicit penalty on the number of leaves (`gamma`) and the L2 norm of leaf weights (`lambda`), so pruning falls out of the objective rather than being a heuristic.
+3. **Sparsity-aware split finding**: it learns a default direction for missing values instead of requiring imputation.
+4. **Systems engineering**: column blocks for cache-efficient split search, approximate quantile sketch for candidate splits, out-of-core training.
 
 #### Your gradient boosting model has training AUC 0.99 and validation AUC 0.72. What do you do?
 
 Severe overfitting. In order of impact:
-1. Confirm it isn't **leakage** first — a validation AUC that collapsed only after adding a feature usually means that feature encodes the target or the future. Check the top SHAP features for anything computed after the label event.
+1. Confirm it isn't **leakage** first: a validation AUC that collapsed only after adding a feature usually means that feature encodes the target or the future. Check the top SHAP features for anything computed after the label event.
 2. Lower `learning_rate` and re-fit with early stopping on a proper validation split.
 3. Reduce capacity: shallower `max_depth` / fewer `num_leaves`, raise `min_child_weight`.
 4. Add randomness: `subsample=0.8`, `colsample_bytree=0.8`.
@@ -342,30 +342,30 @@ Also verify the split itself is valid: with temporal data, a random split leaks 
 
 #### When would you *not* use gradient boosting?
 
-When inputs have structure trees cannot represent — images, audio, raw text, long sequences — a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need a genuinely interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.
+When inputs have structure trees cannot represent (images, audio, raw text, long sequences) a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need a interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.
 
 #### How do you handle class imbalance with tree ensembles?
 
 Start with the metric, not the model: accuracy is meaningless at 1% positives; use PR-AUC or recall at a fixed precision. Then in rough order of preference:
-- `scale_pos_weight = n_negative / n_positive` in XGBoost (or `class_weight='balanced'` in sklearn) — reweights the loss, costs nothing.
-- **Threshold tuning** on the validation set — the model's ranking is often fine and only the 0.5 cutoff is wrong. This alone fixes most "the model predicts all zeros" complaints.
-- Resampling (SMOTE, undersampling) — sometimes helps, but SMOTE interpolates in feature space and can create implausible synthetic points with categorical or high-dimensional data. Always resample **inside** the CV fold, never before splitting.
+- `scale_pos_weight = n_negative / n_positive` in XGBoost (or `class_weight='balanced'` in sklearn): reweights the loss, costs nothing.
+- **Threshold tuning** on the validation set: the model's ranking is often fine and only the 0.5 cutoff is wrong. This alone fixes most "the model predicts all zeros" complaints.
+- Resampling (SMOTE, undersampling): sometimes helps, but SMOTE interpolates in feature space and can create implausible synthetic points with categorical or high-dimensional data. Always resample **inside** the CV fold, never before splitting.
 
 Note that reweighting distorts predicted probabilities; if you need calibrated probabilities, recalibrate afterwards.
 
 #### What is stacking, and what is the main way it goes wrong?
 
-Stacking trains a meta-learner on the predictions of several base models, letting it learn which model to trust in which region of feature space. The dominant failure is **training the meta-learner on in-sample base predictions**: base models nearly memorize their training rows, so the meta-features look far more accurate at fit time than at inference time, and the meta-learner over-trusts them. The fix is out-of-fold predictions — train base models on K-1 folds, predict the held-out fold, assemble those out-of-fold predictions as the meta-training set.
+Stacking trains a meta-learner on the predictions of several base models, letting it learn which model to trust in which region of feature space. The dominant failure is **training the meta-learner on in-sample base predictions**: base models nearly memorize their training rows, so the meta-features look far more accurate at fit time than at inference time, and the meta-learner over-trusts them. The fix is out-of-fold predictions: train base models on K-1 folds, predict the held-out fold, assemble those out-of-fold predictions as the meta-training set.
 
 #### Why does a lower learning rate usually generalize better?
 
-Each tree takes a smaller step toward the gradient direction, so the ensemble explores a smoother path and no single tree can dominate the prediction. It's the boosting analogue of small steps in SGD: more, smaller corrections average out the noise in each individual fit. The cost is more rounds — roughly, halving the learning rate doubles the trees needed — so the practical rule is to pick the smallest learning rate your training budget tolerates and let early stopping choose the tree count.
+Each tree takes a smaller step toward the gradient direction, so the ensemble explores a smoother path and no single tree can dominate the prediction. It's the boosting analogue of small steps in SGD: more, smaller corrections average out the noise in each individual fit. The cost is more rounds (roughly, halving the learning rate doubles the trees needed), so the practical rule is to pick the smallest learning rate your training budget tolerates and let early stopping choose the tree count.
 
 #### How do you make an ensemble fast enough for real-time serving?
 
 Measure first: latency is `n_trees × average_depth` memory-bound traversals. Then, in order:
-- Reduce `n_estimators` — the accuracy/latency curve is steeply diminishing, and 200 trees is often within 0.2% of 2000.
-- Compile the model: Treelite, ONNX Runtime, or `xgboost`'s native inplace prediction give 2–10x over Python-loop scoring.
+- Reduce `n_estimators`: the accuracy/latency curve is steeply diminishing, and 200 trees is often within 0.2% of 2000.
+- Compile the model: Treelite, ONNX Runtime, or `xgboost`'s native inplace prediction give 2-10x over Python-loop scoring.
 - Batch requests so the traversal amortizes across rows.
 - Cache predictions for repeated entities.
 - As a last resort, distill the ensemble into a single shallow tree or a small neural network trained on the ensemble's outputs.
@@ -382,7 +382,7 @@ Measure first: latency is `n_trees × average_depth` memory-bound traversals. Th
 | SMOTE before the train/test split | Synthetic points derived from test rows leak across the split | Resample inside the CV fold only |
 | `num_leaves` set to `2^max_depth` in LightGBM | Leaf-wise growth then overfits aggressively | Keep `num_leaves` well below `2^max_depth` |
 | Stacking on in-sample base predictions | Meta-learner over-trusts base models | Out-of-fold predictions (`cv=` in `StackingClassifier`) |
-| Scaling features for trees | Wasted work — trees are invariant to monotonic transforms | Skip scaling; spend the effort on feature construction |
+| Scaling features for trees | Wasted work: trees are invariant to monotonic transforms | Skip scaling; spend the effort on feature construction |
 | Reading `predict_proba` as a real probability | Boosting with reweighting produces distorted scores | Calibrate (Platt/isotonic) and check a reliability curve |
 | Adding trees to fix underfitting from a tiny `max_depth` | Depth-1 stumps cannot express interactions no matter how many | Raise depth to capture interactions, then re-tune |
 

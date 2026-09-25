@@ -37,7 +37,7 @@ P(B) = Σ_i P(B|A_i) × P(A_i)
 | Normal | Continuous measurements | μ, σ² | μ | σ² |
 | Exponential | Time between events | λ | 1/λ | 1/λ² |
 | Uniform | Equal probability range | a, b | (a+b)/2 | (b-a)²/12 |
-| Beta | Probability of probability | α, β | α/(α+β) | — |
+| Beta | Probability of probability | α, β | α/(α+β) | - |
 
 **When to use each in ML:**
 - **Bernoulli/Binomial:** Binary classification outputs, A/B testing outcomes
@@ -57,9 +57,9 @@ import numpy as np
 
 data = [2, 4, 4, 4, 5, 5, 7, 9]
 
-mean   = np.mean(data)    # 5.0  — sensitive to outliers
-median = np.median(data)  # 4.5  — robust to outliers
-mode   = 4                # most frequent — categorical data
+mean   = np.mean(data)    # 5.0: sensitive to outliers
+median = np.median(data)  # 4.5: robust to outliers
+mode   = 4                # most frequent: categorical data
 
 # When to use which:
 # Symmetric distributions: mean ≈ median ≈ mode
@@ -104,7 +104,7 @@ kurt = stats.kurtosis(data)  # excess kurtosis (normal = 0)
 5. **Decision**: if p < α, reject H₀
 
 **Errors:**
-- **Type I (α):** Reject H₀ when it's true (false positive) — controlled by α
+- **Type I (α):** Reject H₀ when it's true (false positive), controlled by α
 - **Type II (β):** Fail to reject H₀ when it's false (false negative)
 - **Power = 1 - β:** Probability of correctly detecting an effect
 
@@ -176,7 +176,7 @@ Running 20 tests at α=0.05 → expect ~1 false positive by chance.
 n_tests = 20
 alpha_bonferroni = 0.05 / n_tests  # 0.0025
 
-# Benjamini-Hochberg (FDR control) — less conservative
+# Benjamini-Hochberg (FDR control): less conservative
 from statsmodels.stats.multitest import multipletests
 reject, p_corrected, _, _ = multipletests(p_values, method='fdr_bh')
 ```
@@ -330,7 +330,7 @@ min NLL + λ||θ||²  ↔  MAP with prior θ ~ N(0, 1/2λ)
 min NLL + λ||θ||₁  ↔  MAP with prior θ ~ Laplace(0, 1/λ)
 ```
 
-This is why L1 produces sparse solutions — the Laplace prior has a sharp peak at 0.
+This is why L1 produces sparse solutions: the Laplace prior has a sharp peak at 0.
 
 ---
 
@@ -366,7 +366,7 @@ Test error = Bias² + Variance + Irreducible Noise. Bias: systematic error from 
 L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ corresponds to the inverse variance of the prior. This Bayesian view explains why L1 induces sparsity: the Laplace prior has infinite density at zero, strongly pulling weights toward zero.
 
 **Q: What is the difference between standard error and standard deviation?**
-Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean* — how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.
+Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean* how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.
 
 **Q: When would you use non-parametric tests?**
 When data doesn't meet parametric assumptions: non-normality with small n, ordinal data, heavy outliers, or when you can't assume a specific distribution. Examples: Mann-Whitney U (vs t-test), Kruskal-Wallis (vs ANOVA), Spearman (vs Pearson). The trade-off is lower statistical power when assumptions actually hold.

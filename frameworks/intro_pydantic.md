@@ -1,4 +1,4 @@
-# Pydantic — Data Validation for AI Systems
+# Pydantic: Data Validation for AI Systems
 
 ## What is Pydantic?
 
@@ -257,7 +257,7 @@ class DataBatch(BaseModel):
         unique_labels = set(labels)
         if len(unique_labels) == 1 and len(self.examples) > 100:
             import warnings
-            warnings.warn("Batch contains only one class label — possible data issue")
+            warnings.warn("Batch contains only one class label: possible data issue")
         return self
 
 # Validate incoming training data
@@ -347,13 +347,13 @@ task = TypeAdapter(AgentTask).validate_python(task_data)
 ## Interview Questions
 
 **Q: Why is Pydantic important in LLM applications?**
-> LLMs return unstructured text. Pydantic enforces that outputs conform to a schema — catching missing fields, wrong types, invalid values before they cause downstream failures. With `with_structured_output()`, the LLM is guided via JSON Schema / tool calling to produce valid structured data.
+> LLMs return unstructured text. Pydantic enforces that outputs conform to a schema, catching missing fields, wrong types, invalid values before they cause downstream failures. With `with_structured_output()`, the LLM is guided via JSON Schema / tool calling to produce valid structured data.
 
 **Q: How does Pydantic v2 differ from v1 in performance?**
 > Pydantic v2's core is written in Rust (via the `pydantic-core` library), making validation 10-50x faster than v1. API changes: `@validator` → `@field_validator`, `.dict()` → `.model_dump()`, `class Config` → `model_config = SettingsConfigDict(...)`.
 
 **Q: How do you handle LLM output validation failures?**
-> Retry with a clearer prompt that includes the schema and error message. Use fallback to a raw string parser if structured parsing fails after N retries. Log all failures for dataset curation — these become training examples for improving prompts.
+> Retry with a clearer prompt that includes the schema and error message. Use fallback to a raw string parser if structured parsing fails after N retries. Log all failures for dataset curation: these become training examples for improving prompts.
 
 **Q: What's the difference between `model_validate` and direct instantiation?**
-> Direct instantiation (`MyModel(field=value)`) validates kwargs. `model_validate(dict_or_object)` validates from a dict/object — useful when data comes from JSON. `model_validate(data, strict=True)` enforces strict type matching (no coercion). Use strict mode when accepting external data to avoid silent type coercions.
+> Direct instantiation (`MyModel(field=value)`) validates kwargs. `model_validate(dict_or_object)` validates from a dict/object: useful when data comes from JSON. `model_validate(data, strict=True)` enforces strict type matching (no coercion). Use strict mode when accepting external data to avoid silent type coercions.

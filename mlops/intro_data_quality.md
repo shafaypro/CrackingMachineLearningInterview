@@ -46,7 +46,7 @@ Great Expectations (GX) is the most popular open-source data quality framework. 
 | **Expectation Suite** | A collection of expectations for a dataset |
 | **Checkpoint** | Runs a suite against a batch of data and produces validation results |
 | **Data Docs** | Auto-generated HTML report of validation results |
-| **Data Context** | The entry point — manages expectations, stores, and checkpoints |
+| **Data Context** | The entry point: manages expectations, stores, and checkpoints |
 
 ### Installation & Setup
 
@@ -396,7 +396,7 @@ models:
 ## Interview Q&A
 
 **Q1: What is the difference between data drift and concept drift?**
-Data drift (covariate shift) is when the input feature distribution P(X) changes — e.g., users skew older, average transaction amounts increase. Concept drift is when the relationship between features and target P(Y|X) changes — the model's learned patterns no longer hold. Data drift can be detected by comparing feature distributions to a reference. Concept drift requires monitoring model accuracy and prediction distributions over time.
+Data drift (covariate shift) is when the input feature distribution P(X) changes: e.g., users skew older, average transaction amounts increase. Concept drift is when the relationship between features and target P(Y|X) changes: the model's learned patterns no longer hold. Data drift can be detected by comparing feature distributions to a reference. Concept drift requires monitoring model accuracy and prediction distributions over time.
 
 **Q2: How would you monitor data quality in a production ML pipeline?**
 1. Schema validation at pipeline ingestion (Pandera, Great Expectations)
@@ -407,15 +407,15 @@ Data drift (covariate shift) is when the input feature distribution P(X) changes
 6. Automated alerts to Slack/PagerDuty with severity levels
 
 **Q3: What is PSI (Population Stability Index) and how do you interpret it?**
-PSI measures how much a distribution has shifted relative to a reference. Compute by bucketing both distributions, then PSI = Σ (actual% - reference%) × ln(actual% / reference%). Interpretation: < 0.1 no significant change; 0.1–0.2 slight change, monitor; > 0.2 significant drift, investigate and likely retrain.
+PSI measures how much a distribution has shifted relative to a reference. Compute by bucketing both distributions, then PSI = Σ (actual% - reference%) × ln(actual% / reference%). Interpretation: < 0.1 no significant change; 0.1-0.2 slight change, monitor; > 0.2 significant drift, investigate and likely retrain.
 
 **Q4: What are data contracts and why are they important?**
-A data contract is a formal SLA between data producers (e.g., an engineering team) and data consumers (e.g., ML team or analytics). It specifies schema, quality expectations (null rates, uniqueness), freshness SLAs, and versioning. Without contracts, producers change schemas silently, breaking downstream ML pipelines — often discovered only when models produce wrong predictions.
+A data contract is a formal SLA between data producers (e.g., an engineering team) and data consumers (e.g., ML team or analytics). It specifies schema, quality expectations (null rates, uniqueness), freshness SLAs, and versioning. Without contracts, producers change schemas silently, breaking downstream ML pipelines, often discovered only when models produce wrong predictions.
 
 **Q5: How do you handle schema drift in an ML pipeline?**
 1. Schema validation at ingestion (fail fast, alert immediately)
-2. Backward-compatible changes (adding nullable columns) — handle in feature engineering with defaults
-3. Breaking changes (column removal, type change) — trigger pipeline pause + alert
+2. Backward-compatible changes (adding nullable columns): handle in feature engineering with defaults
+3. Breaking changes (column removal, type change): trigger pipeline pause + alert
 4. Use Avro/Protobuf schemas with registries (Confluent Schema Registry for Kafka) to enforce compatibility
 5. Version your feature engineering code alongside schema versions
 

@@ -1,8 +1,8 @@
-# CrewAI — Multi-Agent Framework
+# CrewAI: Multi-Agent Framework
 
 ## What is CrewAI?
 
-CrewAI is an open-source framework for orchestrating **role-playing autonomous AI agents** that collaborate to accomplish complex tasks. Unlike single-agent systems, CrewAI models work as a "crew" — each agent has a defined **role**, **goal**, and **backstory** that shapes its behavior.
+CrewAI is an open-source framework for orchestrating **role-playing autonomous AI agents** that collaborate to accomplish complex tasks. Unlike single-agent systems, CrewAI models work as a "crew": each agent has a defined **role**, **goal**, and **backstory** that shapes its behavior.
 
 ```
                     ┌─────────────────────────────┐
@@ -41,7 +41,7 @@ CrewAI is an open-source framework for orchestrating **role-playing autonomous A
 
 ---
 
-## Code Example — Research + Write Crew
+## Code Example: Research + Write Crew
 
 ```python
 from crewai import Agent, Task, Crew, Process
@@ -148,7 +148,7 @@ crew = Crew(
 
 ## Tool Calling in CrewAI
 
-Agents use tools via natural language — CrewAI routes the call automatically:
+Agents use tools via natural language: CrewAI routes the call automatically:
 
 ```python
 from crewai_tools import (
@@ -210,7 +210,7 @@ agent = Agent(
 
 4. **Tool errors cascade**: If a tool fails, the agent retries by default. Add `exception_on_tool_error=True` to fail fast.
 
-5. **Cost estimation**: A 5-agent crew with web search can cost $0.50–$5 per run. Monitor with LangSmith or Literal AI.
+5. **Cost estimation**: A 5-agent crew with web search can cost $0.50-$5 per run. Monitor with LangSmith or Literal AI.
 
 ---
 
@@ -241,7 +241,7 @@ task = Task(
 ## Interview Questions
 
 **Q: What is CrewAI and when would you choose it over LangChain?**
-> CrewAI is a multi-agent orchestration framework where each agent has a role, goal, and backstory. Choose CrewAI when you have distinct agent personas with clear task division (researcher, writer, reviewer). LangChain is lower-level — it's a toolkit for building chains and agents but doesn't natively model "crews."
+> CrewAI is a multi-agent orchestration framework where each agent has a role, goal, and backstory. Choose CrewAI when you have distinct agent personas with clear task division (researcher, writer, reviewer). LangChain is lower-level: it's a toolkit for building chains and agents but doesn't natively model "crews."
 
 **Q: How does CrewAI handle agent communication?**
 > Agents don't communicate directly. Task outputs are passed as context to downstream tasks. In hierarchical mode, a manager agent delegates and validates results.

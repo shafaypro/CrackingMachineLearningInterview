@@ -1,4 +1,4 @@
-# Common ML Interview Questions — 2026 Edition
+# Common ML Interview Questions (2026)
 
 > Focus areas in 2026: LLM applications, agent systems, RAG, production AI, evaluation, and classical ML at depth.
 
@@ -35,7 +35,7 @@ Key tradeoffs:
 - **Non-determinism**: Same input, different output. Mitigate: set temperature=0 for routing decisions, add output validators.
 - **Token cost explosion**: 5 agents × 3 tool calls = 15x tokens. Mitigate: set `max_iter` limits, use cheaper models for simple sub-tasks.
 - **Error cascades**: Agent A fails → Agent B gets bad input → Agent C produces garbage. Mitigate: validate outputs at each handoff, fail fast with circuit breakers.
-- **Coordination overhead**: More time coordinating than doing work. Mitigate: use single agent unless parallelism or specialization is genuinely needed.
+- **Coordination overhead**: More time coordinating than doing work. Mitigate: use single agent unless parallelism or specialization is needed.
 - **Debugging difficulty**: Which agent caused the bad output? Mitigate: full trace with LangSmith, unique run IDs per agent.
 
 ---
@@ -59,7 +59,7 @@ Step 1: Measure faithfulness vs. accuracy separately
   - Is the answer faithful to retrieved context? (hallucination check)
   - Is the retrieved context actually correct? (retrieval check)
 
-Step 2: Sample 50 failures — categorize:
+Step 2: Sample 50 failures: categorize:
   a) Context retrieved but answer wrong → Generation problem
   b) Context not retrieved → Retrieval problem
   c) Context retrieved but irrelevant → Reranking problem
@@ -110,7 +110,7 @@ Step 4: Fix generation problems:
 
 **Strong Answer:**
 > Attention is O(n²) in time and space with sequence length n. Doubling the context = 4x compute. At 128K tokens, this is expensive. Implications for RAG:
-> 1. Don't stuff 50 chunks into context — retrieve 3-5 high-quality ones
+> 1. Don't stuff 50 chunks into context: retrieve 3-5 high-quality ones
 > 2. Place most relevant chunks at the beginning and end (lost-in-middle effect)
 > 3. Compress: summarize retrieved docs before inserting
 > 4. Use context-efficient models (Claude 3.5 Haiku handles long context well for cost)
@@ -212,11 +212,11 @@ Tooling: LangSmith for LLM traces, Prometheus+Grafana for system metrics, custom
 **Strong Answer:**
 > Unlike classical ML models (where data drift causes accuracy decline), LLMs face:
 
-> 1. **Upstream model drift**: The LLM provider updates their model (Claude 3.5 → 3.6) — output distribution changes even without you doing anything. Detect: run your eval suite after any model update.
+> 1. **Upstream model drift**: The LLM provider updates their model (Claude 3.5 → 3.6): output distribution changes even without you doing anything. Detect: run your eval suite after any model update.
 
 > 2. **Prompt drift**: Works initially, breaks after adding features. Track prompt versions, run evals on all prompt changes.
 
-> 3. **Data drift in RAG**: The knowledge base becomes stale — users ask about events after the last index update. Monitor: track "I don't know" rate; high rate = stale knowledge.
+> 3. **Data drift in RAG**: The knowledge base becomes stale: users ask about events after the last index update. Monitor: track "I don't know" rate; high rate = stale knowledge.
 
 > 4. **Distribution shift in user queries**: Users start asking different types of questions. Monitor: query embedding drift using cosine similarity to training distribution.
 
@@ -285,11 +285,11 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 > Gradient boosting trains an ensemble of decision trees sequentially. Each tree corrects the errors of the previous ensemble. The "gradient" refers to fitting each tree to the negative gradient of the loss function (not the raw residuals).
 
 > Why it beats deep learning on tabular data:
-> 1. **Tabular data has irregular structure** — trees naturally handle mixed types, missing values, and non-monotonic relationships without preprocessing
-> 2. **Needs less data** — deep learning requires 100K+ samples to outperform GBM; GBM works well with 1K-100K
-> 3. **Training speed** — XGBoost/LightGBM train in seconds; deep learning takes hours
-> 4. **Feature importance is interpretable** — SHAP values work well with GBM
-> 5. **Less hyperparameter sensitivity** — GBM defaults are competitive; deep learning requires careful tuning
+> 1. **Tabular data has irregular structure**: trees naturally handle mixed types, missing values, and non-monotonic relationships without preprocessing
+> 2. **Needs less data**: deep learning requires 100K+ samples to outperform GBM; GBM works well with 1K-100K
+> 3. **Training speed**: XGBoost/LightGBM train in seconds; deep learning takes hours
+> 4. **Feature importance is interpretable**: SHAP values work well with GBM
+> 5. **Less hyperparameter sensitivity**: GBM defaults are competitive; deep learning requires careful tuning
 
 > Exception: When tabular data has image/text columns, or when sample size is 1M+, deep learning can compete.
 
@@ -326,7 +326,7 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 > 3. **Annotator disagreement**: Different humans have different preferences
 > 4. **Distribution shift**: Reward model trained on distribution A fails on distribution B
 
-> DPO (Direct Preference Optimization) is now preferred — same result, no RL needed, more stable training.
+> DPO (Direct Preference Optimization) is now preferred: same result, no RL needed, more stable training.
 
 ---
 

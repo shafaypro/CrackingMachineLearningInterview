@@ -94,7 +94,7 @@ V*(s)    = max_a Σ_s' P(s'|s,a) [ R(s,a) + γ V*(s') ]
 Q*(s, a) = Σ_s' P(s'|s,a) [ R(s,a) + γ max_a' Q*(s',a') ]
 ```
 
-Once you have `Q*`, the optimal policy is just `argmax_a Q*(s, a)` — no model needed. That is why so much of RL is about estimating `Q`.
+Once you have `Q*`, the optimal policy is just `argmax_a Q*(s, a)`: no model needed. That is why so much of RL is about estimating `Q`.
 
 ---
 
@@ -105,7 +105,7 @@ Three axes that interviewers use to check you have a map of the field:
 **Value-based vs policy-based**
 - *Value-based* (Q-learning, DQN): learn `Q`, act greedily. Works well for discrete actions; awkward for continuous ones because of the `max_a`.
 - *Policy-based* (REINFORCE): parameterize `π_θ` directly and do gradient ascent on return. Handles continuous and stochastic policies naturally; high variance.
-- *Actor-critic* (A2C, PPO, SAC): both — a policy (actor) updated with help from a learned value function (critic).
+- *Actor-critic* (A2C, PPO, SAC): both, a policy (actor) updated with help from a learned value function (critic).
 
 **Model-based vs model-free**
 - *Model-based*: learn or are given `P` and `R`, then plan (dynamic programming, MCTS, model-predictive control). Much more sample-efficient; errors in the model compound over long rollouts.
@@ -113,7 +113,7 @@ Three axes that interviewers use to check you have a map of the field:
 
 **On-policy vs off-policy**
 - *On-policy* (SARSA, REINFORCE, PPO): learn about the policy that is currently collecting the data. Data goes stale after each update.
-- *Off-policy* (Q-learning, DQN, SAC): learn about a *target* policy from data collected by a different *behaviour* policy. Can reuse old data from a replay buffer or logs — which is what makes offline RL and logged-data evaluation possible.
+- *Off-policy* (Q-learning, DQN, SAC): learn about a *target* policy from data collected by a different *behaviour* policy. Can reuse old data from a replay buffer or logs, which is what makes offline RL and logged-data evaluation possible.
 
 ---
 
@@ -139,7 +139,7 @@ def value_iteration(P, R, gamma=0.99, tol=1e-8):
         V = V_new
 ```
 
-DP is rarely the production answer — you almost never know `P` — but it's the conceptual base: every model-free method is an approximation of one of these updates using samples instead of the true expectation.
+DP is rarely the production answer (you almost never know `P`), but it's the conceptual base: every model-free method is an approximation of one of these updates using samples instead of the true expectation.
 
 ---
 
@@ -150,7 +150,7 @@ Both estimate value from experience without a model. They differ in what target 
 | | Monte Carlo | TD(0) |
 |---|---|---|
 | Target | Full observed return `G_t` | `r + γ V(s')` (bootstrapped) |
-| Needs episode to finish? | Yes | No — updates every step |
+| Needs episode to finish? | Yes | No: updates every step |
 | Bias | Unbiased | Biased (depends on current estimate of `V(s')`) |
 | Variance | High (sum of many random rewards) | Low (one reward + an estimate) |
 | Uses Markov structure? | No | Yes |
@@ -234,7 +234,7 @@ UCB and Thompson sampling come with logarithmic regret guarantees in the stochas
 
 ## Multi-Armed and Contextual Bandits
 
-A bandit is RL with **one step**: no state transitions, so no credit assignment over time — only the exploration-exploitation trade-off. This is where most industrial RL actually lives.
+A bandit is RL with **one step**: no state transitions, so no credit assignment over time, only the exploration-exploitation trade-off. This is where most industrial RL actually lives.
 
 | Setting | State | Example |
 |---|---|---|
@@ -309,7 +309,7 @@ Intuition: increase the log-probability of actions in proportion to how good the
 
 **REINFORCE** is the Monte Carlo version: roll out a full episode, compute `G_t`, step along the gradient. It is unbiased but very high variance.
 
-**Baselines** are the standard variance reduction: subtract `b(s_t)` from `G_t`. Any baseline that doesn't depend on the action leaves the gradient unbiased (because `E[∇ log π] = 0`). Using `b = V(s)` turns `G_t − V(s_t)` into an advantage estimate — which is the step to actor-critic.
+**Baselines** are the standard variance reduction: subtract `b(s_t)` from `G_t`. Any baseline that doesn't depend on the action leaves the gradient unbiased (because `E[∇ log π] = 0`). Using `b = V(s)` turns `G_t − V(s_t)` into an advantage estimate, which is the step to actor-critic.
 
 ```python
 import torch
@@ -385,9 +385,9 @@ def ope_estimates(pi_new, p_logged, r, r_hat_logged, r_hat_policy):
     return {"IPS": ips, "SNIPS": snips, "DR": dr}
 ```
 
-Requirements that interviews probe: **logged propensities** (reconstructing them after the fact is error-prone), **overlap/support** (if `π_0` never takes an action that `π` takes, no estimator can evaluate it — this is why production systems keep some randomization), and **weight clipping** to control variance at the cost of bias. This is the same machinery as inverse propensity weighting in causal inference.
+Requirements that interviews probe: **logged propensities** (reconstructing them after the fact is error-prone), **overlap/support** (if `π_0` never takes an action that `π` takes, no estimator can evaluate it: this is why production systems keep some randomization), and **weight clipping** to control variance at the cost of bias. This is the same machinery as inverse propensity weighting in causal inference.
 
-For sequential problems, importance weights multiply across time steps and variance explodes with horizon — a big reason long-horizon OPE is hard.
+For sequential problems, importance weights multiply across time steps and variance explodes with horizon: a big reason long-horizon OPE is hard.
 
 **Offline RL** (learning a policy from a fixed dataset) faces **distributional shift**: the learned `Q` overestimates the value of actions the data never tried, and the policy exploits those errors. Methods constrain the policy toward the data: BCQ, CQL (penalizes Q-values for out-of-distribution actions), IQL (avoids querying unseen actions entirely). Behaviour cloning on the best logged trajectories is a strong baseline that is often hard to beat.
 
@@ -397,7 +397,7 @@ For sequential problems, importance weights multiply across time steps and varia
 
 The agent optimizes exactly the reward you wrote, not the one you meant.
 
-**Reward hacking / specification gaming**: the policy finds a way to score highly that violates the intent. Classic forms: exploiting a simulator bug, looping to collect a repeatable reward, optimizing a proxy (clicks) at the expense of the goal (satisfaction) — clickbait is reward hacking. In RLHF, the policy learns to exploit weaknesses of the learned reward model: longer answers, confident tone, sycophancy.
+**Reward hacking / specification gaming**: the policy finds a way to score highly that violates the intent. Classic forms: exploiting a simulator bug, looping to collect a repeatable reward, optimizing a proxy (clicks) at the expense of the goal (satisfaction): clickbait is reward hacking. In RLHF, the policy learns to exploit weaknesses of the learned reward model: longer answers, confident tone, sycophancy.
 
 **Reward shaping** adds intermediate rewards to speed up learning in sparse-reward problems, and can change the optimal policy if done carelessly. **Potential-based shaping** `F(s, s') = γ Φ(s') − Φ(s)` provably preserves the optimal policy (Ng, Harada & Russell, 1999), because the shaping terms telescope along any trajectory.
 
@@ -419,7 +419,7 @@ In the MDP framing, the state is the prompt plus tokens so far, the action is th
 | Method | What it needs | How it works | Trade-offs |
 |---|---|---|---|
 | **PPO (RLHF)** | Reward model, value model, reference model, policy | Online RL with clipped updates and KL penalty | Most flexible; four models in memory; many hyperparameters; unstable |
-| **DPO** | Preference pairs, reference model | Closed-form reparameterization of the KL-regularized objective turns it into a classification loss on pairs | No reward model, no sampling, simple and stable; offline — limited to the preference data's distribution |
+| **DPO** | Preference pairs, reference model | Closed-form reparameterization of the KL-regularized objective turns it into a classification loss on pairs | No reward model, no sampling, simple and stable; offline: limited to the preference data's distribution |
 | **GRPO** | Reward function or model, reference model | Sample a group of responses per prompt; advantage = reward normalized by the group mean and std; PPO-style clipped update | No value network; works well with verifiable rewards (math, code); popularized by DeepSeek's reasoning models |
 
 **RL with verifiable rewards (RLVR)**: for math and code, the reward comes from checking the answer or running tests rather than a learned reward model, which removes one source of reward hacking (though models can still exploit weak test suites or answer-format checks).
@@ -458,7 +458,7 @@ Deep RL is also notoriously sensitive to seeds, hyperparameters and implementati
 
 #### What is the difference between Q-learning and SARSA?
 
-Both are TD control methods that update `Q(s, a)` toward a one-step target. SARSA uses the action the agent actually takes next, `r + γ Q(s', a')`, so it learns the value of its current (exploring) policy — it is on-policy. Q-learning uses `r + γ max_a' Q(s', a')`, the greedy action, so it learns the value of the optimal policy regardless of how data was collected — it is off-policy.
+Both are TD control methods that update `Q(s, a)` toward a one-step target. SARSA uses the action the agent actually takes next, `r + γ Q(s', a')`, so it learns the value of its current (exploring) policy: it is on-policy. Q-learning uses `r + γ max_a' Q(s', a')`, the greedy action, so it learns the value of the optimal policy regardless of how data was collected: it is off-policy.
 
 The practical consequence shows up in cliff walking: under ε-greedy exploration, Q-learning learns the risky optimal path along the edge and falls off during training; SARSA learns a safer path because its values include the cost of occasional random moves. If you'll keep exploring when deployed, SARSA's policy performs better. Q-learning's off-policy nature is also what allows DQN's experience replay.
 
@@ -468,7 +468,7 @@ It writes value recursively: the value of a state equals the expected immediate 
 
 It matters because it turns a sum over infinite futures into a local consistency condition. Dynamic programming iterates it to the fixed point when the model is known. TD learning and Q-learning replace the expectation with a single sampled transition and nudge the estimate toward it. DQN is Q-learning with a neural network regressing onto Bellman targets. Almost every value-based method is some approximation of this equation.
 
-#### Monte Carlo vs TD — which would you use?
+#### Monte Carlo vs TD, which would you use?
 
 MC waits for the episode's full return: unbiased but high variance, and it needs episodes to terminate. TD bootstraps from the current estimate of the next state: biased, but much lower variance, updates online, and works on continuing tasks. TD usually learns faster in practice because it exploits the Markov structure.
 
@@ -478,13 +478,13 @@ The real answer is often in between: n-step returns or GAE, which use a few real
 
 Q-learning with a neural network is unstable for two reasons. Consecutive transitions are highly correlated, which violates the i.i.d. assumption SGD relies on and makes the network overfit to the recent trajectory. And the regression target `r + γ max Q(s', a')` depends on the same parameters being updated, so the target moves with every step.
 
-The replay buffer samples random past transitions, decorrelating minibatches and reusing data — valid because Q-learning is off-policy. The target network freezes the parameters used for targets for many steps, so the network regresses toward a fixed objective for a while. Double DQN additionally decouples action selection from evaluation to reduce the overestimation bias caused by taking a max over noisy estimates.
+The replay buffer samples random past transitions, decorrelating minibatches and reusing data: valid because Q-learning is off-policy. The target network freezes the parameters used for targets for many steps, so the network regresses toward a fixed objective for a while. Double DQN additionally decouples action selection from evaluation to reduce the overestimation bias caused by taking a max over noisy estimates.
 
 #### Explain the policy gradient theorem and why baselines help.
 
-The gradient of expected return is `E[∇ log π(a|s) · G]`: push up the log-probability of actions in proportion to the return that followed. It doesn't require a differentiable environment — only the ability to differentiate the policy's log-probability.
+The gradient of expected return is `E[∇ log π(a|s) · G]`: push up the log-probability of actions in proportion to the return that followed. It doesn't require a differentiable environment: only the ability to differentiate the policy's log-probability.
 
-The estimator is unbiased but very noisy, because `G` varies a lot for reasons that have nothing to do with the action. Subtracting a baseline `b(s)` keeps it unbiased, since the expected score function is zero, but reduces variance substantially. The natural baseline is `V(s)`, which turns the multiplier into an advantage — "was this action better than usual here?" — and that is exactly the actor-critic setup.
+The estimator is unbiased but very noisy, because `G` varies a lot for reasons that have nothing to do with the action. Subtracting a baseline `b(s)` keeps it unbiased, since the expected score function is zero, but reduces variance substantially. The natural baseline is `V(s)`, which turns the multiplier into an advantage ("was this action better than usual here?"), and that is exactly the actor-critic setup.
 
 #### What problem does PPO solve, and how does the clipped objective work?
 
@@ -496,13 +496,13 @@ PPO uses the probability ratio `r = π_new/π_old` and optimizes `min(r·A, clip
 
 Instead of an A/B test when regret during the experiment matters and I don't need a precise effect estimate: many creatives, short-lived content like headlines or promos, or a best option that drifts. A/B tests are the right tool when I need a clean, defensible measurement for a launch decision.
 
-Instead of full RL when my action doesn't meaningfully change the user's future state — or when I'm willing to ignore that effect. Most recommendation, ad and pricing decisions are modelled as contextual bandits because they're far easier to train, evaluate offline and debug. I'd move to full RL only if there's clear evidence that myopic optimization hurts long-term outcomes, for example that optimizing immediate clicks is reducing retention.
+Instead of full RL when my action doesn't meaningfully change the user's future state, or when I'm willing to ignore that effect. Most recommendation, ad and pricing decisions are modelled as contextual bandits because they're far easier to train, evaluate offline and debug. I'd move to full RL only if there's clear evidence that myopic optimization hurts long-term outcomes, for example that optimizing immediate clicks is reducing retention.
 
 #### How do you evaluate a new recommendation policy without deploying it?
 
 Off-policy evaluation on logged data. For each logged decision I need the context, action, reward and the propensity with which the production policy chose that action. IPS reweights each logged reward by `π_new(a|x) / π_old(a|x)`; it's unbiased if propensities are correct and the old policy gave positive probability to every action the new one takes, but variance blows up when weights are large. SNIPS normalizes by the sum of weights to cut variance. Doubly robust combines a reward model with an IPS correction on its residual, and stays unbiased if either component is correct.
 
-In practice I'd report DR and SNIPS with confidence intervals, check the effective sample size of the weights, clip extreme weights, and treat OPE as a filter for which candidates go to an online A/B test rather than a replacement for it. If the logging policy was deterministic, there's no overlap and OPE is impossible — which is why you keep some randomization in production.
+In practice I'd report DR and SNIPS with confidence intervals, check the effective sample size of the weights, clip extreme weights, and treat OPE as a filter for which candidates go to an online A/B test rather than a replacement for it. If the logging policy was deterministic, there's no overlap and OPE is impossible, which is why you keep some randomization in production.
 
 #### What is the exploration-exploitation trade-off and how do UCB and Thompson sampling handle it?
 
@@ -512,15 +512,15 @@ UCB adds an optimism bonus that shrinks with the number of times an action has b
 
 #### Explain RLHF, and why DPO and GRPO exist.
 
-RLHF trains a reward model on human preference pairs, then uses PPO to maximize that reward minus a KL penalty to the SFT reference model. The KL term prevents the policy from drifting into regions where the reward model is wrong and being exploited. It works, but it holds a policy, reference model, reward model and value model in memory, is sensitive to hyperparameters, and the reward model can be hacked — longer, more confident or more flattering outputs.
+RLHF trains a reward model on human preference pairs, then uses PPO to maximize that reward minus a KL penalty to the SFT reference model. The KL term prevents the policy from drifting into regions where the reward model is wrong and being exploited. It works, but it holds a policy, reference model, reward model and value model in memory, is sensitive to hyperparameters, and the reward model can be hacked: longer, more confident or more flattering outputs.
 
-DPO shows that the optimal policy of the KL-regularized objective has a closed form in terms of the reward, so you can substitute it back and train the policy directly on preference pairs with a logistic loss — no reward model, no sampling, no RL loop. The cost is that it's offline: it only learns from the pairs you have.
+DPO shows that the optimal policy of the KL-regularized objective has a closed form in terms of the reward, so you can substitute it back and train the policy directly on preference pairs with a logistic loss: no reward model, no sampling, no RL loop. The cost is that it's offline: it only learns from the pairs you have.
 
 GRPO keeps online sampling but drops the value network: for each prompt it samples a group of responses, uses their mean and standard deviation as the baseline to normalize rewards into advantages, and applies a PPO-style clipped update with a KL penalty. It's cheaper than PPO and particularly effective with verifiable rewards like passing unit tests or matching a math answer.
 
 #### What is reward hacking, and how do you guard against it?
 
-The policy finds behaviour that scores well on the reward you specified but violates what you intended — the gap between a proxy and the true goal gets optimized. Examples: a recommender maximizing clicks learns clickbait; an RLHF model learns that longer answers score higher with the reward model; a code model special-cases the test inputs.
+The policy finds behaviour that scores well on the reward you specified but violates what you intended: the gap between a proxy and the true goal gets optimized. Examples: a recommender maximizing clicks learns clickbait; an RLHF model learns that longer answers score higher with the reward model; a code model special-cases the test inputs.
 
 Guards: use rewards close to the true outcome, pair the primary metric with guardrail metrics, regularize toward a trusted reference policy with a KL penalty, and inspect the highest-reward samples manually, because that's where hacks show up first. For learned reward models, periodically collect fresh human labels on the current policy's outputs and retrain. If you need to shape rewards, potential-based shaping is the form that provably doesn't change the optimal policy.
 
@@ -542,7 +542,7 @@ RL also needs either a trustworthy simulator or safe online exploration, a rewar
 | Deterministic production policy | No overlap; can't evaluate alternatives from logs | Keep a small amount of randomization |
 | Plain IPS with tiny propensities | Variance explodes; estimates are noise | SNIPS, doubly robust, weight clipping, check effective sample size |
 | Fixed ε forever | Linear regret; wastes reward | Decay ε, or use UCB / Thompson sampling |
-| Optimizing a proxy reward | Reward hacking — clickbait, verbosity | Guardrail metrics, KL to reference, audit top-reward samples |
+| Optimizing a proxy reward | Reward hacking: clickbait, verbosity | Guardrail metrics, KL to reference, audit top-reward samples |
 | Careless reward shaping | Changes the optimal policy | Potential-based shaping |
 | DQN without a target network or replay | Moving targets and correlated samples cause divergence | Replay buffer + lagged target network |
 | Single-seed RL results | High variance across seeds; false conclusions | Report mean and spread over several seeds |

@@ -1,6 +1,6 @@
 # Frameworks & Tools Overview
 
-A comprehensive reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.
+A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.
 
 ---
 
@@ -80,7 +80,7 @@ Run large language models locally on your own hardware without sending data to e
 | Graph type | Dynamic (eager by default) | Static (graph) + eager mode |
 | Research popularity | Dominant in research | Declining in research |
 | Production tooling | TorchServe, ONNX | TFServing, TFLite, TF.js |
-| Debugging | Easy — standard Python debugging | Harder with graph mode |
+| Debugging | Easy: standard Python debugging | Harder with graph mode |
 | Community | Very large | Large |
 
 ---
@@ -105,7 +105,7 @@ For building LLM applications, RAG pipelines, and AI agents.
 |-----------|-------------|-----------|------------|----------|
 | **[LangChain](./intro_langchain.md)** | LLM application framework | Huge community, many integrations | Abstraction overhead, breaking changes | Rapid LLM app prototyping |
 | **[n8n](../ai_genai/intro_n8n.md)** | Visual workflow automation | Fast integrations, approvals, business workflow visibility | Less suited for deep agent state management | AI-enabled operations and internal tooling |
-| **LlamaIndex** | Data indexing + RAG | Best-in-class RAG, document handling | More limited for general agents | Document Q&A, knowledge bases |
+| **LlamaIndex** | Data indexing + RAG | Strong RAG and document handling | More limited for general agents | Document Q&A, knowledge bases |
 | **Haystack** | NLP pipeline framework | Enterprise-ready, production-focused | Smaller community | Enterprise search pipelines |
 | **DSPy** | LLM programming | Automatic prompt optimization | New, smaller community | Research, optimized pipelines |
 | **Instructor** | Structured LLM output | Simple, reliable structured output | Single-purpose | Structured data extraction |
@@ -140,7 +140,7 @@ Rule of thumb: Ollama for development, vLLM for production.
 
 **Q2: What is PagedAttention in vLLM?** 🔴 Advanced
 
-PagedAttention is vLLM's key innovation. The KV (key-value) cache — which stores attention states for each token — is typically pre-allocated as a contiguous block. This leads to memory fragmentation and waste when requests have different lengths.
+PagedAttention is vLLM's key innovation. The KV (key-value) cache (which stores attention states for each token) is typically pre-allocated as a contiguous block. This leads to memory fragmentation and waste when requests have different lengths.
 
 PagedAttention manages the KV cache in fixed-size pages (like OS virtual memory paging). Pages are allocated dynamically and can be shared across requests (e.g., for system prompts). This dramatically reduces memory waste, enables larger batch sizes, and increases throughput by 2-4x compared to standard implementations.
 
@@ -172,13 +172,13 @@ In many production systems, n8n handles the outer operational workflow while Lan
 
 **TensorFlow** has mature production tooling: TF Serving (high-performance model serving), TFLite (mobile/edge), TF.js (browser), and tight integration with Google Cloud (Vertex AI).
 
-For new projects in 2025: choose PyTorch — it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.
+For new projects in 2025: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.
 
 ---
 
 **Q6: What is the difference between Chroma and Pinecone for vector search?** 🟡 Intermediate
 
-**Chroma** is an open-source, embedded vector database ideal for local development and prototyping. Zero infrastructure setup — runs in-process or as a local server.
+**Chroma** is an open-source, embedded vector database ideal for local development and prototyping. Zero infrastructure setup: runs in-process or as a local server.
 
 **Pinecone** is a fully managed vector database SaaS. Handles indexing, scaling, and serving automatically. Better for production use cases with millions of vectors and high query throughput. Has costs and vendor dependency.
 
@@ -214,15 +214,15 @@ Choose pgvector if you already use PostgreSQL and have < 10M vectors. Choose a d
 
 Every guide in `frameworks/`. Start with the overview above, then work through these.
 
-- [FastAPI — Production-Grade AI Backend Engineering](./intro_fastapi.md)
+- [FastAPI: Production-Grade AI Backend Engineering](./intro_fastapi.md)
 - [Hugging Face Guide](./intro_huggingface.md)
 - [LangChain Guide](./intro_langchain.md)
-- [Ollama — Run LLMs Locally](./intro_ollama.md)
-- [Pydantic — Data Validation for AI Systems](./intro_pydantic.md)
+- [Ollama: Run LLMs Locally](./intro_ollama.md)
+- [Pydantic: Data Validation for AI Systems](./intro_pydantic.md)
 - [Python for AI Engineering (2026 Edition)](./intro_python_for_ai.md)
 - [PyTorch Guide](./intro_pytorch.md)
-- [Unsloth — Fast LoRA Fine-Tuning](./intro_unsloth.md)
-- [vLLM — High-Throughput LLM Serving](./intro_vllm.md)
+- [Unsloth: Fast LoRA Fine-Tuning](./intro_unsloth.md)
+- [vLLM: High-Throughput LLM Serving](./intro_vllm.md)
 
 ---
 

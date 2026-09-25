@@ -1,6 +1,6 @@
-# ML Coding Challenges — Implement From Scratch
+# ML Coding Challenges: Implement From Scratch
 
-Many ML interviews include a round where you implement an algorithm with NumPy only — no scikit-learn, no PyTorch. The point is not memorization; it is whether you understand the math well enough to translate it into code, and whether you can reason about shapes, numerical stability, and complexity out loud.
+Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is whether you understand the math well enough to translate it into code, and whether you can reason about shapes, numerical stability, and complexity out loud.
 
 Each challenge below gives the problem, a reference solution, and the follow-up questions interviewers actually ask.
 
@@ -32,11 +32,11 @@ Each challenge below gives the problem, a reference solution, and the follow-up 
 ## How to Approach These Rounds
 
 1. **Clarify the contract first.** Input shapes, dtypes, whether a bias term is expected, what happens on empty input. Thirty seconds here prevents a rewrite.
-2. **State the math before typing.** "Gradient of MSE with respect to w is `2/n · Xᵀ(Xw - y)`" — this earns credit even if the code has a bug.
+2. **State the math before typing.** "Gradient of MSE with respect to w is `2/n · Xᵀ(Xw - y)`": this earns credit even if the code has a bug.
 3. **Write shapes as comments.** `# (n, d) @ (d,) -> (n,)`. Shape errors are the number one failure in these rounds, and annotating prevents most of them.
 4. **Vectorize, but get it correct first.** A working loop beats a broken broadcast. Then say "this loop is `O(n·k)`; here's the vectorized version" and rewrite it.
 5. **Mention numerical stability unprompted.** Subtract the max before `exp`, clip before `log`, add epsilon to denominators. Interviewers weight this heavily because it separates people who have shipped models from people who have read about them.
-6. **Test on a tiny example out loud.** Two points, two clusters — walk through one iteration.
+6. **Test on a tiny example out loud.** Two points, two clusters: walk through one iteration.
 
 ---
 
@@ -75,21 +75,21 @@ class LinearRegressionGD:
         return self._add_bias(np.asarray(X, dtype=float)) @ self.w
 ```
 
-**Closed form** (the normal equation) — know both:
+**Closed form** (the normal equation): know both:
 
 ```python
 def fit_closed_form(X, y, ridge=0.0):
-    """w = (XᵀX + λI)⁻¹ Xᵀy — O(d³), exact, no learning rate."""
+    """w = (XᵀX + λI)⁻¹ Xᵀy: O(d³), exact, no learning rate."""
     X = np.c_[np.ones(len(X)), X]
     d = X.shape[1]
     reg = ridge * np.eye(d)
     reg[0, 0] = 0.0                              # never penalize the intercept
-    return np.linalg.solve(X.T @ X + reg, X.T @ y)   # solve beats inv() — faster and stabler
+    return np.linalg.solve(X.T @ X + reg, X.T @ y)   # solve beats inv(): faster and stabler
 ```
 
 **Follow-ups**
 - *When use gradient descent over the closed form?* The normal equation is `O(d³)` and needs `XᵀX` in memory, so it's impractical above a few thousand features; it also requires `XᵀX` to be invertible, which fails with collinear features (ridge fixes that). Gradient descent scales to large `n` and `d`, works out-of-core, and generalizes to non-convex models.
-- *Why `np.linalg.solve` instead of `np.linalg.inv`?* Solving the system directly is roughly 2x faster and numerically more stable — explicitly inverting amplifies conditioning problems.
+- *Why `np.linalg.solve` instead of `np.linalg.inv`?* Solving the system directly is roughly 2x faster and numerically more stable: explicitly inverting amplifies conditioning problems.
 - *What if the loss diverges?* Learning rate too high, or features on wildly different scales. Standardize, or lower the LR.
 
 ---
@@ -180,7 +180,7 @@ def kmeans(X, k, n_iters=100, tol=1e-4, seed=0):
 **Follow-ups**
 - *Memory problem with this distance computation?* `X[:, None, :] - centroids[None, :, :]` materializes an `(n, k, d)` array. For n=1M, k=100, d=128 that's 51 GB. Use the identity `‖x-c‖² = ‖x‖² - 2x·c + ‖c‖²` to compute distances with one `(n,d)@(d,k)` matmul.
 - *Why k-means++?* Random initialization frequently converges to a poor local minimum; k-means++ samples each new centroid proportional to squared distance from existing ones, giving an `O(log k)` approximation guarantee in expectation and much more stable results.
-- *Convergence?* Both steps monotonically decrease inertia and there are finitely many assignments, so it always converges — to a local optimum, which is why you run it with several seeds (`n_init`).
+- *Convergence?* Both steps monotonically decrease inertia and there are finitely many assignments, so it always converges: to a local optimum, which is why you run it with several seeds (`n_init`).
 - *Empty cluster?* Reinitialize it to the point farthest from its centroid, or keep the old centroid (as above).
 
 ---
@@ -191,7 +191,7 @@ def kmeans(X, k, n_iters=100, tol=1e-4, seed=0):
 def knn_predict(X_train, y_train, X_test, k=5, task='classification'):
     X_train, X_test = np.asarray(X_train, float), np.asarray(X_test, float)
 
-    # ‖a - b‖² = ‖a‖² - 2a·b + ‖b‖²  — avoids the (n_test, n_train, d) tensor
+    # ‖a - b‖² = ‖a‖² - 2a·b + ‖b‖²: avoids the (n_test, n_train, d) tensor
     d2 = (
         (X_test ** 2).sum(axis=1)[:, None]
         - 2 * X_test @ X_train.T
@@ -208,9 +208,9 @@ def knn_predict(X_train, y_train, X_test, k=5, task='classification'):
 ```
 
 **Follow-ups**
-- *Why `argpartition` over `argsort`?* You need the k smallest, not a full ordering — `O(n)` vs `O(n log n)` per row.
+- *Why `argpartition` over `argsort`?* You need the k smallest, not a full ordering: `O(n)` vs `O(n log n)` per row.
 - *Why does KNN fail in high dimensions?* Distance concentration: as `d` grows, the ratio between nearest and farthest neighbor distances approaches 1, so "nearest" stops being meaningful. Reduce dimensions first (PCA) or use a learned metric.
-- *Scaling required?* Yes — KNN is distance-based, so a feature measured in dollars swamps one in fractions. Always standardize.
+- *Scaling required?* Yes: KNN is distance-based, so a feature measured in dollars swamps one in fractions. Always standardize.
 
 ---
 
@@ -257,7 +257,7 @@ def best_split(X, y, criterion=gini):
 
 **Follow-ups**
 - *Gini vs entropy?* They agree on the chosen split the overwhelming majority of the time. Gini is cheaper (no logarithm) and is scikit-learn's default; entropy is grounded in information theory. Not a decision worth agonizing over.
-- *Complexity?* This is `O(d · n²)` because of the inner loop over thresholds recomputing impurity. Sorting each feature once and updating class counts incrementally as the threshold sweeps gives `O(d · n log n)`. Say this — it's the optimization interviewers look for.
+- *Complexity?* This is `O(d · n²)` because of the inner loop over thresholds recomputing impurity. Sorting each feature once and updating class counts incrementally as the threshold sweeps gives `O(d · n log n)`. Say this: it's the optimization interviewers look for.
 - *How would you handle continuous vs categorical?* Continuous uses thresholds as above; categorical either uses subset splits (exponential, so usually restricted) or is ordered by mean target value first.
 
 ---
@@ -294,7 +294,7 @@ def k_fold_indices(n, k=5, seed=0):
         yield train, val
 ```
 
-**Follow-up**: *What changes for time series?* Nothing about this works — shuffling leaks the future. Use forward chaining: fold `i` trains on `[0..i]` and validates on `[i+1]`, with a gap equal to the label latency.
+**Follow-up**: *What changes for time series?* Nothing about this works: shuffling leaks the future. Use forward chaining: fold `i` trains on `[0..i]` and validates on `[i+1]`, with a gap equal to the label latency.
 
 ---
 
@@ -318,7 +318,7 @@ def precision_recall_f1(y_true, y_pred, eps=1e-12):
 
 def roc_auc(y_true, y_score):
     """AUC == P(score of a random positive > score of a random negative).
-    Computed via the rank-sum (Mann-Whitney U) identity — O(n log n), no curve needed."""
+    Computed via the rank-sum (Mann-Whitney U) identity: O(n log n), no curve needed."""
     y_true = np.asarray(y_true)
     order = np.argsort(y_score)
     ranks = np.empty(len(y_score), dtype=float)
@@ -365,7 +365,7 @@ def pca(X, n_components):
 
 **Follow-ups**
 - *Why SVD over eigendecomposition of `XᵀX`?* Forming `XᵀX` squares the condition number, losing precision; SVD works on `X` directly. It's also cheaper when `d >> n`.
-- *Must you standardize as well as center?* Center always. Standardize when features are on different scales — otherwise the component with the largest units dominates the variance and PCA just finds that axis.
+- *Must you standardize as well as center?* Center always. Standardize when features are on different scales, otherwise the component with the largest units dominates the variance and PCA just finds that axis.
 - *Choosing `n_components`?* Cumulative explained variance (e.g. 95%), an elbow in the scree plot, or downstream task performance.
 
 ---
@@ -386,7 +386,7 @@ def cross_entropy(logits, labels, eps=1e-12):
     return -np.log(probs[np.arange(n), labels] + eps).mean()
 
 def cross_entropy_grad(logits, labels):
-    """dL/dlogits = (softmax(logits) - onehot(labels)) / n — strikingly simple."""
+    """dL/dlogits = (softmax(logits) - onehot(labels)) / n: strikingly simple."""
     probs = softmax(logits, axis=1)
     n = len(labels)
     probs[np.arange(n), labels] -= 1
@@ -468,7 +468,7 @@ def causal_mask(n):
 
 **Follow-ups**
 - *Why divide by `√d_k`?* If `q` and `k` have i.i.d. components with unit variance, their dot product has variance `d_k`. Without scaling, logits grow with dimension, softmax saturates into a near-one-hot distribution, and gradients vanish. The `√d_k` keeps the variance at 1.
-- *Complexity?* `O(n² · d)` time and `O(n²)` memory for the score matrix — the reason long context is expensive, and what FlashAttention addresses by never materializing that matrix.
+- *Complexity?* `O(n² · d)` time and `O(n²)` memory for the score matrix: the reason long context is expensive, and what FlashAttention addresses by never materializing that matrix.
 - *Multi-head?* Project to `h` sets of (Q,K,V) of dimension `d/h`, attend in parallel, concatenate, and apply an output projection. The point is letting different heads attend to different relationships.
 
 ---
@@ -489,7 +489,7 @@ def top_k_similar(query_vec, doc_matrix, k=5):
 
 **Follow-ups**
 - *Why is the epsilon there?* A zero vector (empty document, failed embedding) would divide by zero and produce NaNs that silently propagate through the ranking.
-- *Scaling past a few million vectors?* Exact search is `O(n·d)` per query. Move to an ANN index — HNSW for high recall at moderate memory, IVF-PQ for large corpora with tight memory budgets. Both trade a small recall loss for orders-of-magnitude speedup.
+- *Scaling past a few million vectors?* Exact search is `O(n·d)` per query. Move to an ANN index: HNSW for high recall at moderate memory, IVF-PQ for large corpora with tight memory budgets. Both trade a small recall loss for orders-of-magnitude speedup.
 
 ---
 
@@ -524,7 +524,7 @@ def chunk_text(text, chunk_size=500, overlap=50):
 ```
 
 **Follow-ups**
-- *Why overlap at all?* An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10–20% overlap is the usual range.
+- *Why overlap at all?* An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10-20% overlap is the usual range.
 - *Why does the `end >= len(text)` break matter?* Without it, when `overlap` is large relative to the final chunk, `start` can fail to advance and the loop never terminates. Infinite-loop edge cases are exactly what interviewers probe.
 - *Better than character-based?* Token-based chunking matches what the model actually sees; structural splitting (headers, functions) preserves coherence better than either.
 
@@ -566,13 +566,13 @@ class TokenBucket:
         return False
 ```
 
-**Follow-up**: *Why jitter?* Without it, every client that got rate-limited at the same moment retries at the same moment, producing a synchronized thundering herd that re-triggers the limit. Randomizing the delay spreads the retries out — this is why AWS's guidance is "full jitter", and it's a strong signal to mention it.
+**Follow-up**: *Why jitter?* Without it, every client that got rate-limited at the same moment retries at the same moment, producing a synchronized thundering herd that re-triggers the limit. Randomizing the delay spreads the retries out: this is why AWS's guidance is "full jitter", and it's a strong signal to mention it.
 
 ---
 
 ## 15. Reciprocal Rank Fusion
 
-Combining a keyword ranking and a vector ranking — the standard hybrid-search question.
+Combining a keyword ranking and a vector ranking: the standard hybrid-search question.
 
 ```python
 def reciprocal_rank_fusion(rankings, k=60):
@@ -601,7 +601,7 @@ def reciprocal_rank_fusion(rankings, k=60):
 | Decision tree | `O(dn log n)` (sorted) | `O(depth)` | `O(nodes)` |
 | Random Forest | `O(T · dn log n)` | `O(T · depth)` | `O(T · nodes)` |
 | PCA (SVD) | `O(min(n²d, nd²))` | `O(dc)` | `O(nd)` |
-| Self-attention | `O(n²d)` | — | `O(n²)` |
+| Self-attention | `O(n²d)` | - | `O(n²)` |
 
 ---
 

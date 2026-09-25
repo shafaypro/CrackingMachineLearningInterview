@@ -1,6 +1,6 @@
-# vLLM — High-Throughput LLM Serving
+# vLLM: High-Throughput LLM Serving
 
-A comprehensive guide to vLLM — the high-performance inference engine for large language models.
+A guide to vLLM: the high-performance inference engine for large language models.
 
 ---
 
@@ -21,7 +21,7 @@ A comprehensive guide to vLLM — the high-performance inference engine for larg
 
 ## What is vLLM
 
-vLLM (Virtual LLM) is an open-source LLM inference and serving library developed by UC Berkeley. It achieves state-of-the-art serving throughput through its key innovation: **PagedAttention**.
+vLLM (Virtual LLM) is an open-source LLM inference and serving library developed by UC Berkeley. It achieves high serving throughput through its key innovation: **PagedAttention**.
 
 **Key features:**
 - OpenAI-compatible REST API
@@ -37,7 +37,7 @@ vLLM (Virtual LLM) is an open-source LLM inference and serving library developed
 The core innovation of vLLM. Traditional inference engines pre-allocate a contiguous memory block for the KV (key-value) cache based on the maximum sequence length. This wastes memory for shorter sequences.
 
 PagedAttention manages the KV cache in fixed-size **pages** (like OS virtual memory):
-- Pages are allocated on demand — no wasted memory
+- Pages are allocated on demand: no wasted memory
 - Pages can be shared across requests (e.g., shared system prompts)
 - Enables much larger batch sizes → higher throughput
 
@@ -178,7 +178,7 @@ prompts = [
     "How does backpropagation work?"
 ]
 
-# Generate all at once — much faster than one-by-one
+# Generate all at once: much faster than one-by-one
 outputs = llm.generate(prompts, sampling_params)
 
 for output in outputs:
@@ -294,7 +294,7 @@ vllm serve meta-llama/Llama-3.1-8B-Instruct \
 
 | Method | Memory Reduction | Quality | GPU Required |
 |--------|-----------------|---------|-------------|
-| FP16 (baseline) | — | Best | A100, H100 |
+| FP16 (baseline) | - | Best | A100, H100 |
 | GPTQ (4-bit) | ~75% | Very good | Most NVIDIA |
 | AWQ (4-bit) | ~75% | Good | Most NVIDIA |
 | FP8 | ~50% | Excellent | H100, A100 |
@@ -359,10 +359,10 @@ vLLM supports 100+ model architectures from Hugging Face. Key families:
 
 | Family | Examples |
 |--------|---------|
-| Llama | Llama 3.1, 3.2, 3.3 (1B–405B) |
+| Llama | Llama 3.1, 3.2, 3.3 (1B-405B) |
 | Mistral | Mistral 7B, Mixtral 8x7B, Mistral NeMo |
 | Gemma | Gemma 2 (9B, 27B) |
-| Qwen | Qwen2.5 (0.5B–72B) |
+| Qwen | Qwen2.5 (0.5B-72B) |
 | Phi | Phi-3, Phi-4 |
 | DeepSeek | DeepSeek-R1, DeepSeek-V2 |
 | Command R | Cohere Command R+ |
@@ -381,7 +381,7 @@ PagedAttention manages the KV (key-value) cache in fixed-size pages similar to O
 
 **Q2: What is the difference between vLLM and Ollama?** 🟡 Intermediate
 
-vLLM is designed for high-throughput production serving with continuous batching, multi-GPU tensor parallelism, and PagedAttention. It handles many concurrent users efficiently. Ollama prioritizes ease of use for local development — single command to run models, minimal setup. Ollama is for development/single-user; vLLM is for production serving with multiple concurrent users.
+vLLM is designed for high-throughput production serving with continuous batching, multi-GPU tensor parallelism, and PagedAttention. It handles many concurrent users efficiently. Ollama prioritizes ease of use for local development: single command to run models, minimal setup. Ollama is for development/single-user; vLLM is for production serving with multiple concurrent users.
 
 ---
 
@@ -411,5 +411,5 @@ For NVIDIA H100/A100: FP8 gives the best balance of quality and speed with nativ
 
 - [vLLM Documentation](https://docs.vllm.ai/)
 - [vLLM GitHub Repository](https://github.com/vllm-project/vllm)
-- [PagedAttention Paper — Efficient Memory Management for Large Language Model Serving (2023)](https://arxiv.org/abs/2309.06180)
-- [vLLM Blog — UC Berkeley Sky Computing Lab](https://blog.vllm.ai/)
+- [PagedAttention Paper: Efficient Memory Management for Large Language Model Serving (2023)](https://arxiv.org/abs/2309.06180)
+- [vLLM Blog: UC Berkeley Sky Computing Lab](https://blog.vllm.ai/)

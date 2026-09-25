@@ -1,6 +1,6 @@
-# Model Context Protocol (MCP) – Complete Guide (2026 Edition)
+# Model Context Protocol (MCP)
 
-**Model Context Protocol (MCP)** is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services. Launched in November 2024, MCP has become the **USB-C of AI integrations** — one protocol to connect any LLM to any tool.
+**Model Context Protocol (MCP)** is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services. Launched in November 2024, MCP has become the **USB-C of AI integrations**: one protocol to connect any LLM to any tool.
 
 ---
 
@@ -14,7 +14,7 @@
 7. [Building an MCP Server (Python)](#building-an-mcp-server-python)
 8. [Building an MCP Server (TypeScript)](#building-an-mcp-server-typescript)
 9. [MCP Client (Using a Server)](#mcp-client-using-a-server)
-10. [MCP in 2026 — Ecosystem](#mcp-in-2026--ecosystem)
+10. [MCP in 2026: Ecosystem](#mcp-in-2026-ecosystem)
 
 ---
 
@@ -65,11 +65,11 @@ One server definition → Works with any MCP client
 ```
 
 Benefits:
-- **Standardized** — build once, use everywhere
-- **Secure** — servers run locally or in controlled environments
-- **Composable** — mix and match servers
-- **Discoverable** — clients can query server capabilities at runtime
-- **Stateful** — maintain context across a session
+- **Standardized**: build once, use everywhere
+- **Secure**: servers run locally or in controlled environments
+- **Composable**: mix and match servers
+- **Discoverable**: clients can query server capabilities at runtime
+- **Stateful**: maintain context across a session
 
 ---
 
@@ -215,28 +215,28 @@ claude mcp get server-name
 ### Official (by Anthropic)
 
 ```bash
-# Filesystem — read/write local files
+# Filesystem: read/write local files
 npx @modelcontextprotocol/server-filesystem /allowed/path
 
-# GitHub — repos, PRs, issues
+# GitHub: repos, PRs, issues
 npx @modelcontextprotocol/server-github
 
-# PostgreSQL — query databases
+# PostgreSQL: query databases
 npx @modelcontextprotocol/server-postgres postgresql://localhost/db
 
-# Brave Search — web search
+# Brave Search: web search
 npx @modelcontextprotocol/server-brave-search
 
-# Slack — send messages, read channels
+# Slack: send messages, read channels
 npx @modelcontextprotocol/server-slack
 
-# Google Drive — access documents
+# Google Drive: access documents
 npx @modelcontextprotocol/server-gdrive
 
-# Memory — persistent key-value memory
+# Memory: persistent key-value memory
 npx @modelcontextprotocol/server-memory
 
-# Sequential Thinking — structured reasoning tool
+# Sequential Thinking: structured reasoning tool
 npx @modelcontextprotocol/server-sequential-thinking
 ```
 
@@ -569,17 +569,17 @@ asyncio.run(use_mcp_server())
 
 ---
 
-## MCP in 2026 — Ecosystem
+## MCP in 2026: Ecosystem
 
 ### Adoption
 
 MCP has been adopted by:
-- **Anthropic** — Claude Desktop, Claude Code, Claude API
-- **OpenAI** — ChatGPT supports MCP servers
-- **Google** — Gemini MCP support
-- **Microsoft** — GitHub Copilot, VS Code
-- **Cursor, Windsurf, Zed** — AI code editors
-- **LangChain, LlamaIndex** — frameworks integrate MCP
+- **Anthropic**: Claude Desktop, Claude Code, Claude API
+- **OpenAI**: ChatGPT supports MCP servers
+- **Google**: Gemini MCP support
+- **Microsoft**: GitHub Copilot, VS Code
+- **Cursor, Windsurf, Zed**: AI code editors
+- **LangChain, LlamaIndex**: frameworks integrate MCP
 
 ### MCP Registry
 

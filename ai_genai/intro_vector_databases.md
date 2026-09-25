@@ -1,6 +1,6 @@
-# Vector Databases – Complete Guide (2026 Edition)
+# Vector Databases
 
-**Vector databases** store and search high-dimensional vector embeddings — the mathematical representations of text, images, audio, and code produced by AI models. They're foundational to RAG, semantic search, recommendation systems, and AI applications.
+**Vector databases** store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI models. They're foundational to RAG, semantic search, recommendation systems, and AI applications.
 
 ---
 
@@ -42,12 +42,12 @@ Text → Embedding Model → Vector [0.23, -0.15, 0.87, ..., 0.04]  (1536 dimens
 
 ## ANN Algorithms
 
-Exact nearest neighbor search is O(n) — too slow at scale. Vector DBs use **Approximate Nearest Neighbor (ANN)** algorithms:
+Exact nearest neighbor search is O(n): too slow at scale. Vector DBs use **Approximate Nearest Neighbor (ANN)** algorithms:
 
 | Algorithm | Description | DB |
 |-----------|-------------|-----|
-| **HNSW** | Hierarchical Navigable Small World — graph-based, fast queries | Most DBs |
-| **IVF** | Inverted File Index — cluster-based, efficient for large datasets | Faiss, pgvector |
+| **HNSW** | Hierarchical Navigable Small World: graph-based, fast queries | Most DBs |
+| **IVF** | Inverted File Index: cluster-based, efficient for large datasets | Faiss, pgvector |
 | **ScaNN** | Google's ANN library | Vertex AI |
 | **DiskANN** | Disk-based ANN for billion-scale | Azure, Qdrant |
 

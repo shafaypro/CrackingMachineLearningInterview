@@ -1,6 +1,6 @@
 # Model Explainability: SHAP, LIME, and Interpretability Techniques
 
-Model explainability (also called interpretability or XAI — Explainable AI) refers to the degree to which humans can understand the causes of a model's decisions. As ML models are deployed in high-stakes domains — credit scoring, medical diagnosis, hiring, criminal justice — the ability to explain predictions has become both a technical and regulatory necessity.
+Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model's decisions. As ML models are deployed in high-stakes domains (credit scoring, medical diagnosis, hiring, criminal justice) the ability to explain predictions has become both a technical and regulatory necessity.
 
 ---
 
@@ -24,7 +24,7 @@ Model explainability (also called interpretability or XAI — Explainable AI) re
 
 ## Why Explainability Matters
 
-**Trust and adoption:** Stakeholders — doctors, loan officers, judges — will not act on a model's output unless they can understand and verify its reasoning.
+**Trust and adoption:** Stakeholders (doctors, loan officers, judges) will not act on a model's output unless they can understand and verify its reasoning.
 
 **Debugging:** Explainability reveals data leakage, spurious correlations, and feature engineering errors faster than aggregate metrics. A model predicting hospital readmission based on "discharge day = Friday" reveals a systematic bias that accuracy scores would miss.
 
@@ -155,7 +155,7 @@ print(f"Base + SHAP sum: {shap_sum:.4f}")  # Should match (in log-odds space for
 
 ### KernelSHAP
 
-Model-agnostic approximation using weighted linear regression on feature coalitions. Much slower than TreeSHAP — use only when TreeSHAP is not available.
+Model-agnostic approximation using weighted linear regression on feature coalitions. Much slower than TreeSHAP: use only when TreeSHAP is not available.
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -176,7 +176,7 @@ shap_values = explainer.shap_values(X_test[:100], nsamples=500)
 
 ### DeepSHAP
 
-For neural networks — uses a modified backpropagation approach based on DeepLIFT:
+For neural networks: uses a modified backpropagation approach based on DeepLIFT:
 
 ```python
 import torch
@@ -354,7 +354,7 @@ print(f"Convergence delta: {delta.item():.6f}")  # Should be close to 0
 print(f"Attribution magnitudes: {attributions.detach().numpy()}")
 ```
 
-**Saturation Axiom:** IG satisfies completeness — attributions sum exactly to `F(x) - F(x')`, unlike plain gradients.
+**Saturation Axiom:** IG satisfies completeness, attributions sum exactly to `F(x) - F(x')`, unlike plain gradients.
 
 ---
 
@@ -464,7 +464,7 @@ The EU AI Act classifies AI systems by risk level:
 - Human oversight mechanisms
 - Conformity assessment before market deployment
 
-### GDPR Article 22 — Right to Explanation
+### GDPR Article 22: Right to Explanation
 
 When a decision is based solely on automated processing and produces legal or similarly significant effects, the data subject has the right to:
 - Obtain human intervention
@@ -494,23 +494,23 @@ SHAP values satisfy four game-theoretic axioms (efficiency, symmetry, dummy, lin
 
 **Q3: What is the computational complexity of TreeSHAP vs. KernelSHAP?**
 
-TreeSHAP runs in O(TLD²) — polynomial in the number of trees T, leaves L, and depth D. It can explain a prediction in milliseconds. KernelSHAP runs in O(2^M) in the worst case (exponential in M features), but in practice uses sampling, making it O(S × M) where S is the number of samples. For a model with 100 features, KernelSHAP might require minutes per prediction while TreeSHAP takes milliseconds.
+TreeSHAP runs in O(TLD²): polynomial in the number of trees T, leaves L, and depth D. It can explain a prediction in milliseconds. KernelSHAP runs in O(2^M) in the worst case (exponential in M features), but in practice uses sampling, making it O(S × M) where S is the number of samples. For a model with 100 features, KernelSHAP might require minutes per prediction while TreeSHAP takes milliseconds.
 
 **Q4: How does LIME ensure that local explanations are faithful to the black-box model?**
 
-LIME weights perturbed samples by their proximity to the explained instance using an exponential kernel: `w(z) = exp(-D(x, z)² / σ²)`. Points closer to x get higher weight, so the sparse linear model is primarily fitted on the local neighborhood of x. However, faithfulness is not guaranteed — LIME is an approximation. The `num_samples` parameter controls the quality of the approximation.
+LIME weights perturbed samples by their proximity to the explained instance using an exponential kernel: `w(z) = exp(-D(x, z)² / σ²)`. Points closer to x get higher weight, so the sparse linear model is primarily fitted on the local neighborhood of x. However, faithfulness is not guaranteed: LIME is an approximation. The `num_samples` parameter controls the quality of the approximation.
 
 **Q5: What is the baseline in Integrated Gradients and how do you choose it?**
 
-The baseline is the reference input representing "absence of information" or "neutral input." Common choices: all-zeros for tabular/image data, the all-black image for vision, the all-[PAD] token sequence for text, or the mean training example. The choice significantly affects attributions — the baseline should represent a "no information" state for the problem domain. For text, the [MASK] token is often preferred over [PAD].
+The baseline is the reference input representing "absence of information" or "neutral input." Common choices: all-zeros for tabular/image data, the all-black image for vision, the all-[PAD] token sequence for text, or the mean training example. The choice significantly affects attributions: the baseline should represent a "no information" state for the problem domain. For text, the [MASK] token is often preferred over [PAD].
 
 **Q6: How would you use SHAP to debug a data leakage problem?**
 
-Train the model and compute SHAP values. If a feature with extremely high SHAP importance is one that should not be causally related to the target (e.g., a timestamp, an ID, or a feature computed after the prediction time), this signals leakage. Plot the SHAP dependence plot for that feature — if it shows an unnaturally perfect relationship, investigate the feature's data pipeline. TreeSHAP makes this fast enough to run in CI/CD after every training run.
+Train the model and compute SHAP values. If a feature with extremely high SHAP importance is one that should not be causally related to the target (e.g., a timestamp, an ID, or a feature computed after the prediction time), this signals leakage. Plot the SHAP dependence plot for that feature: if it shows an unnaturally perfect relationship, investigate the feature's data pipeline. TreeSHAP makes this fast enough to run in CI/CD after every training run.
 
 **Q7: What is a partial dependence plot and when would you prefer ICE curves?**
 
-A PDP shows the average marginal effect of a feature by averaging predictions over all other feature values. ICE curves show this effect for each individual data point. Prefer ICE when you suspect the relationship is heterogeneous — for example, if income increases prediction for some customers but decreases it for others (a crossing pattern in ICE reveals an interaction that the PDP would average away). PDPs can be misleading when features are highly correlated.
+A PDP shows the average marginal effect of a feature by averaging predictions over all other feature values. ICE curves show this effect for each individual data point. Prefer ICE when you suspect the relationship is heterogeneous: for example, if income increases prediction for some customers but decreases it for others (a crossing pattern in ICE reveals an interaction that the PDP would average away). PDPs can be misleading when features are highly correlated.
 
 **Q8: Under GDPR, what does "right to explanation" require technically?**
 
@@ -560,8 +560,8 @@ SHAP explains what the model learned, not what is correct. A model that perfectl
 
 ## Related Topics
 
-- [Intro to MLflow](intro_mlflow.md) — Tracking experiments and managing model lifecycle
-- [Intro to Model Serving](intro_model_serving.md) — Deploying models and logging predictions for explanation storage
-- [Intro to Data Quality](intro_data_quality.md) — Data drift detection and validation
-- [Intro to Feature Stores](intro_feature_stores.md) — Managing features that feed into explainability analyses
-- [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md) — Metric choice, calibration, and slicing metrics by segment to surface bias
+- [Intro to MLflow](intro_mlflow.md): Tracking experiments and managing model lifecycle
+- [Intro to Model Serving](intro_model_serving.md): Deploying models and logging predictions for explanation storage
+- [Intro to Data Quality](intro_data_quality.md): Data drift detection and validation
+- [Intro to Feature Stores](intro_feature_stores.md): Managing features that feed into explainability analyses
+- [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md): Metric choice, calibration, and slicing metrics by segment to surface bias

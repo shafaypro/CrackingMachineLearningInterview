@@ -556,7 +556,7 @@ Online, watch the distribution of top-1 similarity scores and the zero-result ra
 - [Model Compression](../deep_learning/intro_model_compression.md)
 - [Embeddings](../ai_genai/intro_embeddings.md)
 - [Multimodal AI](../ai_genai/intro_multimodal_ai.md)
-- [Vector Databases — Advanced](../ai_genai/intro_vector_databases_advanced.md)
+- [Vector Databases: Advanced](../ai_genai/intro_vector_databases_advanced.md)
 - [Model Evaluation and Metrics](../classical_ml/intro_model_evaluation.md)
 - [Model Monitoring](../mlops/intro_model_monitoring.md)
 - [Model Serving](../mlops/intro_model_serving.md)

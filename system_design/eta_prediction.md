@@ -217,7 +217,7 @@ The label is simple in principle: actual arrival time minus the time of predicti
 - Batched deliveries where the courier carried several orders; label each leg separately or include batch features
 - Test orders and internal traffic
 
-**Outliers.** Some trips genuinely take much longer (accident, wrong address). Do not blindly delete them: users experience those too, and removing them makes the model overconfident. Instead cap extreme values for the mean model, keep them for the tail quantile models, and use robust losses.
+**Outliers.** Some trips take much longer (accident, wrong address). Do not blindly delete them: users experience those too, and removing them makes the model overconfident. Instead cap extreme values for the mean model, keep them for the tail quantile models, and use robust losses.
 
 **Censoring.** A trip cancelled after 20 minutes of waiting tells you the true time was *more than* 20 minutes. Dropping these biases the data toward fast trips. Survival-style losses or at least tracking the share of censored trips per segment keeps this visible.
 
@@ -337,7 +337,7 @@ Train several quantile heads (e.g. P10, P50, P90) together, or a parametric dist
 
 - **Quantile crossing.** Independent heads can produce P90 < P50. Predict P50 and non-negative offsets (via softplus) instead of raw quantiles.
 - **Conformal calibration.** On a recent holdout, measure how often actuals fall inside the predicted interval and widen or shrink it until coverage matches the target, per segment. This is cheap and robust.
-- **Display policy is separate from the model.** The product decides whether to show P50–P90, round to five minutes, or pad for new restaurants. Keep that logic outside the model so it can change without retraining.
+- **Display policy is separate from the model.** The product decides whether to show P50-P90, round to five minutes, or pad for new restaurants. Keep that logic outside the model so it can change without retraining.
 
 ---
 
@@ -352,7 +352,7 @@ Train several quantile heads (e.g. P10, P50, P90) together, or a parametric dist
 | **P90 / P95 absolute error** | The tail; the bad experiences that drive complaints |
 | **Mean signed error (bias)** | Systematic early or late predictions; a model can have good MAE and be biased late in one city |
 | **Late rate** | Share of trips arriving after the promised time (or after the upper end of the range) |
-| **Interval coverage** | Share of actuals inside the P10–P90 interval; should be close to 80% |
+| **Interval coverage** | Share of actuals inside the P10-P90 interval; should be close to 80% |
 | **Interval width** | Narrow intervals are only useful if coverage holds |
 
 **Slice everything.** Report each metric by city, hour band, trip-length bucket, vehicle type, stage (pickup vs dropoff), and new versus established restaurants. Aggregate MAE hides the segments where the model is badly biased, and those are usually where complaints come from.
@@ -423,7 +423,7 @@ Offline accuracy does not guarantee better outcomes, because the ETA changes beh
                                                                    features)
 
  GPS pings ──► Kafka ──► Map matching ──► Segment speed aggregator ──► Routing weights
-                               │                   (1–5 min windows)   + feature store
+                               │                   (1-5 min windows)   + feature store
                                ▼
                    Trip events (pickup, dropoff) ──► Label join ──► Training data
                                                                         │

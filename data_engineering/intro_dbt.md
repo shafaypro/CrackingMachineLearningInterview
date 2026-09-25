@@ -1,4 +1,4 @@
-# dbt (Data Build Tool) — Complete Reference Guide
+# dbt (Data Build Tool): Complete Reference Guide
 
 > A complete, beginner-to-advanced reference for dbt concepts. Click any section to expand it.
 
@@ -43,12 +43,12 @@
 
 **dbt (data build tool)** is a transformation framework that lets data analysts and engineers write SQL `SELECT` statements to define transformations, and dbt handles the `CREATE TABLE / VIEW` logic, dependency resolution, testing, and documentation automatically.
 
-dbt is the **T in ELT** — it runs entirely inside your data warehouse. No data ever leaves.
+dbt is the **T in ELT**: it runs entirely inside your data warehouse. No data ever leaves.
 
 **Key principles:**
-- Write `SELECT` — never `CREATE`, `DROP`, or `INSERT`
+- Write `SELECT`: never `CREATE`, `DROP`, or `INSERT`
 - Every `.sql` file = one table or view in your warehouse
-- Dependencies are declared with `ref()` — dbt resolves run order automatically
+- Dependencies are declared with `ref()`: dbt resolves run order automatically
 - Everything is version-controlled, tested, and documented
 
 ---
@@ -135,7 +135,7 @@ create or replace view dev.stg_orders as (
 </details>
 
 <details>
-<summary><strong>The ref() function — the most important concept in dbt</strong></summary>
+<summary><strong>The ref() function: the most important concept in dbt</strong></summary>
 
 `ref()` is how you reference another model. It does two things:
 
@@ -267,7 +267,7 @@ select * from final
 <details>
 <summary><strong>What are sources?</strong></summary>
 
-Sources are raw tables that dbt doesn't own — they're loaded by your EL tool (Fivetran, Airbyte, etc.). You declare them in a YAML file so dbt knows about them and can run freshness checks.
+Sources are raw tables that dbt doesn't own: they're loaded by your EL tool (Fivetran, Airbyte, etc.). You declare them in a YAML file so dbt knows about them and can run freshness checks.
 
 ```yaml
 # models/staging/_sources.yml
@@ -275,7 +275,7 @@ version: 2
 
 sources:
   - name: raw                          # logical name used in {{ source() }}
-    database: my_database              # optional — defaults to profile database
+    database: my_database              # optional: defaults to profile database
     schema: raw                        # actual schema in your warehouse
     tables:
       - name: orders
@@ -357,7 +357,7 @@ models:
 <details>
 <summary><strong>Singular tests (custom SQL)</strong></summary>
 
-A singular test is a `.sql` file in the `tests/` folder. It should return **zero rows** to pass — any row returned is a failure.
+A singular test is a `.sql` file in the `tests/` folder. It should return **zero rows** to pass: any row returned is a failure.
 
 ```sql
 -- tests/assert_orders_positive_amount.sql
@@ -396,7 +396,7 @@ dbt build -s +orders            # run + test orders and all upstream models
 ### Documentation
 
 <details>
-<summary><strong>schema.yml — tests + docs in one place</strong></summary>
+<summary><strong>schema.yml: tests + docs in one place</strong></summary>
 
 ```yaml
 # models/marts/_marts.yml
@@ -415,7 +415,7 @@ models:
       - name: amount
         description: "Order total in USD."
       - name: order_tier
-        description: "high_value (≥$100), mid_value ($50–$99), low_value (<$50)."
+        description: "high_value (≥$100), mid_value ($50-$99), low_value (<$50)."
 ```
 
 </details>
@@ -437,7 +437,7 @@ The docs site includes:
 </details>
 
 <details>
-<summary><strong>doc() blocks — reusable descriptions</strong></summary>
+<summary><strong>doc() blocks: reusable descriptions</strong></summary>
 
 For long descriptions, write them in a `.md` file and reference them:
 
@@ -446,7 +446,7 @@ For long descriptions, write them in a `.md` file and reference them:
 {% docs order_tier %}
 Bucketed order value:
 - **high_value**: order total ≥ $100
-- **mid_value**: order total $50–$99
+- **mid_value**: order total $50-$99
 - **low_value**: order total < $50
 {% enddocs %}
 ```
@@ -466,7 +466,7 @@ Bucketed order value:
 <details>
 <summary><strong>What are macros?</strong></summary>
 
-Macros are Jinja-templated functions stored in `macros/`. They let you write reusable SQL logic — think of them as functions in a programming language.
+Macros are Jinja-templated functions stored in `macros/`. They let you write reusable SQL logic: think of them as functions in a programming language.
 
 ```sql
 -- macros/cents_to_dollars.sql
@@ -525,7 +525,7 @@ from {{ ref('stg_order_items') }}
 <details>
 <summary><strong>What are seeds?</strong></summary>
 
-Seeds are CSV files in the `seeds/` directory that dbt loads as tables in your warehouse. Useful for static lookup data — country codes, mapping tables, cost rates, etc.
+Seeds are CSV files in the `seeds/` directory that dbt loads as tables in your warehouse. Useful for static lookup data: country codes, mapping tables, cost rates, etc.
 
 ```csv
 -- seeds/country_codes.csv
@@ -570,7 +570,7 @@ seeds:
 <details>
 <summary><strong>What are snapshots?</strong></summary>
 
-Snapshots track changes to rows over time — useful for slowly changing dimensions (SCDs). dbt adds `dbt_valid_from` and `dbt_valid_to` columns to record when each version of a row was active.
+Snapshots track changes to rows over time: useful for slowly changing dimensions (SCDs). dbt adds `dbt_valid_from` and `dbt_valid_to` columns to record when each version of a row was active.
 
 ```sql
 -- snapshots/orders_snapshot.sql
@@ -610,7 +610,7 @@ Result table includes:
 <details>
 <summary><strong>How the DAG works</strong></summary>
 
-dbt automatically builds a **Directed Acyclic Graph** from all your `ref()` and `source()` calls. It guarantees models run in the correct order — you never have to manage this manually.
+dbt automatically builds a **Directed Acyclic Graph** from all your `ref()` and `source()` calls. It guarantees models run in the correct order: you never have to manage this manually.
 
 ```
 raw.orders ──────► stg_orders ──────┐
@@ -658,9 +658,9 @@ Marts  ──  Business entities: Orders, Customers, Revenue.
 ```
 
 **Naming conventions:**
-- `stg_[source]__[table].sql` — staging (e.g. `stg_shopify__orders.sql`)
-- `int_[entity]_[verb].sql` — intermediate (e.g. `int_orders_joined.sql`)
-- `[entity].sql` or `fct_[entity].sql` / `dim_[entity].sql` — marts
+- `stg_[source]__[table].sql`: staging (e.g. `stg_shopify__orders.sql`)
+- `int_[entity]_[verb].sql`: intermediate (e.g. `int_orders_joined.sql`)
+- `[entity].sql` or `fct_[entity].sql` / `dim_[entity].sql`: marts
 
 ---
 
@@ -671,7 +671,7 @@ Marts  ──  Business entities: Orders, Customers, Revenue.
 <details>
 <summary><strong>How view materialization works</strong></summary>
 
-dbt executes `CREATE OR REPLACE VIEW`. No data is stored — the SQL runs live every time something queries the view.
+dbt executes `CREATE OR REPLACE VIEW`. No data is stored: the SQL runs live every time something queries the view.
 
 ```sql
 {{ config(materialized='view') }}
@@ -820,7 +820,7 @@ select * from final
 
 **Use when:** small helper transformations you don't want cluttering your warehouse schema.
 
-**Avoid when:** multiple models reference it — the SQL gets duplicated into each.
+**Avoid when:** multiple models reference it, the SQL gets duplicated into each.
 
 </details>
 
@@ -854,7 +854,7 @@ The `+` prefix applies the config to the folder and all subfolders. An inline `c
 ## Jinja & Macros in Depth
 
 <details>
-<summary><strong>Jinja basics — if, for, variables</strong></summary>
+<summary><strong>Jinja basics: if, for, variables</strong></summary>
 
 dbt uses Jinja2 templating. Anything inside `{{ }}` is rendered; `{% %}` is control flow.
 
@@ -907,7 +907,7 @@ from {{ ref('orders') }}
 </details>
 
 <details>
-<summary><strong>run_query — execute SQL inside a macro</strong></summary>
+<summary><strong>run_query: execute SQL inside a macro</strong></summary>
 
 ```sql
 {% macro get_column_values(table, column) %}
@@ -950,7 +950,7 @@ Install:
 dbt deps
 ```
 
-**dbt_utils — most-used macros:**
+**dbt_utils: most-used macros:**
 
 ```sql
 -- surrogate key from multiple columns
@@ -970,7 +970,7 @@ dbt deps
 ) }}
 ```
 
-**dbt_expectations — Great Expectations-style tests:**
+**dbt_expectations: Great Expectations-style tests:**
 
 ```yaml
 - name: amount
@@ -1028,7 +1028,7 @@ dbt run --vars '{"start_date": "2023-01-01", "is_test_run": true}'
 ## Environments & Profiles
 
 <details>
-<summary><strong>profiles.yml — warehouse connections</strong></summary>
+<summary><strong>profiles.yml: warehouse connections</strong></summary>
 
 Located at `~/.dbt/profiles.yml` (outside the project, so credentials aren't checked into git):
 
@@ -1069,7 +1069,7 @@ dbt run --target dev    # default
 </details>
 
 <details>
-<summary><strong>target object — environment-aware SQL</strong></summary>
+<summary><strong>target object: environment-aware SQL</strong></summary>
 
 The `target` object exposes the current environment in Jinja:
 
@@ -1118,7 +1118,7 @@ select * from {{ source('raw', 'customers') }}
 <details>
 <summary><strong>Check strategy</strong></summary>
 
-Use when there's no `updated_at` — dbt hashes specified columns to detect changes:
+Use when there's no `updated_at`: dbt hashes specified columns to detect changes:
 
 ```sql
 {% snapshot orders_snapshot %}
@@ -1143,7 +1143,7 @@ select * from {{ source('raw', 'orders') }}
 <details>
 <summary><strong>Documenting downstream consumers</strong></summary>
 
-Exposures document what uses your dbt models — dashboards, ML models, reverse ETL, etc. They appear in the lineage graph so you can see the blast radius of a model change.
+Exposures document what uses your dbt models: dashboards, ML models, reverse ETL, etc. They appear in the lineage graph so you can see the blast radius of a model change.
 
 ```yaml
 # models/marts/exposures.yml
@@ -1154,7 +1154,7 @@ exposures:
     type: dashboard
     maturity: high
     url: https://looker.mycompany.com/dashboards/42
-    description: "Executive orders dashboard — refreshed daily"
+    description: "Executive orders dashboard: refreshed daily"
     depends_on:
       - ref('orders')
       - ref('customers')
@@ -1296,7 +1296,7 @@ jobs:
       - name: dbt deps
         run: dbt deps
 
-      - name: dbt build (slim CI — only changed models + downstream)
+      - name: dbt build (slim CI: only changed models + downstream)
         run: |
           dbt build \
             --select state:modified+ \
@@ -1307,7 +1307,7 @@ jobs:
           DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
 ```
 
-**Slim CI** with `state:modified+` only builds models that changed in the PR and their downstream dependencies — much faster than rebuilding everything.
+**Slim CI** with `state:modified+` only builds models that changed in the PR and their downstream dependencies: much faster than rebuilding everything.
 
 </details>
 

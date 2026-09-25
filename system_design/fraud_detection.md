@@ -144,7 +144,7 @@ features = {
 
 | Factor | Justification |
 |--------|---------------|
-| Performance | State-of-the-art on tabular data |
+| Performance | Usually the most accurate on tabular data |
 | Latency | Inference < 5ms on CPU |
 | Interpretability | SHAP values for feature importance |
 | Class imbalance | Built-in `scale_pos_weight` parameter |
@@ -179,7 +179,7 @@ Hybrid: Rules Engine + ML Model
 import lightgbm as lgb
 from sklearn.metrics import roc_auc_score
 
-# Heavily imbalanced — 0.1% fraud rate
+# Heavily imbalanced: 0.1% fraud rate
 # scale_pos_weight compensates: ~ 999 for 1:999 ratio
 fraud_weight = len(y_train[y_train == 0]) / len(y_train[y_train == 1])
 
@@ -242,12 +242,12 @@ S3 Transaction Files → Spark Job → Feature Join → Model Scoring → Risk D
 |-----------|---------------|-------|
 | Class weights | `scale_pos_weight=999` | Most important, built-in |
 | Threshold tuning | Set P > 0.5 based on cost-benefit | Tune on validation set |
-| SMOTE | Oversample minority class | Use carefully — may generate unrealistic fraud |
+| SMOTE | Oversample minority class | Use carefully: may generate unrealistic fraud |
 | Undersampling | Downsample legitimate transactions | Risk losing signal |
 | Cost-sensitive learning | Weight misclassification by fraud amount | Custom loss function |
 | Stratified splitting | Ensure fraud rate consistent across folds | Critical for cross-validation |
 
-**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE — synthetic fraud patterns may not reflect real fraud behavior.
+**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior.
 
 ---
 
@@ -390,7 +390,7 @@ Training window: Rolling 90 days
 ├── Include recent fraud confirmed via chargebacks (30-60 day lag)
 ├── Balance: ~2% fraud rate in training set via class weights
 ├── Temporal split: train on oldest 80%, validate on most recent 20%
-└── Never shuffle — time ordering is critical (prevents leakage)
+└── Never shuffle: time ordering is critical (prevents leakage)
 ```
 
 **Deployment process:**

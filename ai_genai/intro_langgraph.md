@@ -1,4 +1,4 @@
-# LangGraph — Stateful Agent Orchestration
+# LangGraph: Stateful Agent Orchestration
 
 ## What is LangGraph?
 
@@ -8,7 +8,7 @@ LangGraph is a library built on top of LangChain for creating **stateful, multi-
 - **Edges** = control flow (conditional or fixed)
 - **State** = a shared typed object that flows through the graph
 
-This gives you **explicit control** over agent execution flow — the key differentiator from CrewAI or vanilla LangChain agents.
+This gives you **explicit control** over agent execution flow: the key differentiator from CrewAI or vanilla LangChain agents.
 
 ```
                     ┌─────────────────────────────────────┐
@@ -148,7 +148,7 @@ print(result["messages"][-1].content)
 
 ## Persistence & Memory
 
-LangGraph has built-in **checkpointing** — the graph state can be saved after each node execution:
+LangGraph has built-in **checkpointing**: the graph state can be saved after each node execution:
 
 ```python
 from langgraph.checkpoint.sqlite import SqliteSaver
@@ -167,7 +167,7 @@ with PostgresSaver.from_conn_string("postgresql://...") as checkpointer:
 config = {"configurable": {"thread_id": "user-123-session-456"}}
 result = app.invoke({"messages": [("human", "Hello")]}, config=config)
 
-# Resume from same thread — graph "remembers" prior messages
+# Resume from same thread: graph "remembers" prior messages
 result2 = app.invoke({"messages": [("human", "What did I just say?")]}, config=config)
 ```
 
@@ -294,10 +294,10 @@ for chunk in app.astream_events(input_data, config=config, version="v2"):
 ## Interview Questions
 
 **Q: What makes LangGraph different from LangChain agents?**
-> LangGraph makes control flow explicit via a graph structure. You define exactly which node runs next and under what conditions. LangChain agents let the LLM decide next steps implicitly — less predictable, harder to debug.
+> LangGraph makes control flow explicit via a graph structure. You define exactly which node runs next and under what conditions. LangChain agents let the LLM decide next steps implicitly: less predictable, harder to debug.
 
 **Q: How does LangGraph support human-in-the-loop?**
-> Via `interrupt()` — the graph pauses mid-execution, saves state to a checkpointer, and waits for external input. You resume by calling `invoke` with a `Command(resume=...)`. The graph continues from exactly where it stopped.
+> Via `interrupt()`: the graph pauses mid-execution, saves state to a checkpointer, and waits for external input. You resume by calling `invoke` with a `Command(resume=...)`. The graph continues from exactly where it stopped.
 
 **Q: How do you prevent infinite loops in LangGraph?**
 > Track `iteration_count` in state. Add a conditional edge that routes to END if `iteration_count > MAX_ITERATIONS`. Also use `recursion_limit` in the graph config.

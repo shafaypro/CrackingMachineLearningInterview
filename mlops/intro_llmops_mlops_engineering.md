@@ -128,9 +128,9 @@ ai-cicd/
 
 #### How does LLMOps differ from traditional MLOps?
 
-The pipeline shape is similar; the hard parts move. In MLOps the artifact is a trained model and the risks are drift, retraining, and reproducibility. In LLMOps the model is often someone else's and unchangeable, so the artifacts you version are **prompts, retrieval indexes, tool definitions, and model versions** — and the deployment risk is that a provider silently updates the model under you.
+The pipeline shape is similar; the hard parts move. In MLOps the artifact is a trained model and the risks are drift, retraining, and reproducibility. In LLMOps the model is often someone else's and unchangeable, so the artifacts you version are **prompts, retrieval indexes, tool definitions, and model versions**, and the deployment risk is that a provider silently updates the model under you.
 
-Other genuine differences: outputs are non-deterministic, so testing is statistical rather than exact; evaluation has no ground-truth label for most requests; cost is per-request and unbounded rather than a fixed serving cost; and latency is dominated by generation length, which the model itself decides. Security also enters the runtime path — prompt injection is a live attack surface that has no MLOps analogue.
+Other genuine differences: outputs are non-deterministic, so testing is statistical rather than exact; evaluation has no ground-truth label for most requests; cost is per-request and unbounded rather than a fixed serving cost; and latency is dominated by generation length, which the model itself decides. Security also enters the runtime path: prompt injection is a live attack surface that has no MLOps analogue.
 
 What stays identical: you still need versioning, staged rollout, monitoring, rollback, and a regression suite. Candidates who claim LLMOps is entirely new usually haven't operated either.
 
@@ -138,11 +138,11 @@ What stays identical: you still need versioning, staged rollout, monitoring, rol
 
 Everything that can change the output: the prompt template, the model ID *and* provider version, sampling parameters, the tool schemas, the retrieval index version and embedding model, the chunking configuration, and the eval suite version. Bundle them into one immutable release artifact rather than versioning each independently.
 
-The reason is debuggability. Without it, "quality dropped last Tuesday" is unanswerable — you cannot tell whether someone edited a prompt, the index was reindexed, or the provider shipped a new model snapshot. Pinning provider model *snapshots* rather than floating aliases is the specific practice that saves you here.
+The reason is debuggability. Without it, "quality dropped last Tuesday" is unanswerable: you cannot tell whether someone edited a prompt, the index was reindexed, or the provider shipped a new model snapshot. Pinning provider model *snapshots* rather than floating aliases is the specific practice that saves you here.
 
 #### How do you deploy a prompt change safely?
 
-Like a code change, because it is one. It goes through review, runs against the regression suite in CI, and ships behind a flag with a staged rollout — a small traffic percentage first, watching quality signals, error rate, latency, and cost before widening. Keep the previous version live for instant rollback.
+Like a code change, because it is one. It goes through review, runs against the regression suite in CI, and ships behind a flag with a staged rollout: a small traffic percentage first, watching quality signals, error rate, latency, and cost before widening. Keep the previous version live for instant rollback.
 
 The additional LLM-specific step is a **shadow run**: send a sample of production traffic to the new prompt without serving its output, and compare against the current one offline. It catches regressions on real inputs that a curated eval set misses, at no user risk.
 
@@ -154,13 +154,13 @@ Four layers:
 - **Quality**: sampled automated evals, user feedback signals, abstention rate, guardrail trip rate, schema validation failure rate, and for agents the tool error rate and step count distribution.
 - **Behavioral drift**: input distribution shift (are users asking different things?) and output length distribution, both of which move before quality metrics do.
 
-The cheapest high-value alert is on **schema validation failures** — it catches provider model changes, prompt regressions, and malformed tool calls in one signal.
+The cheapest high-value alert is on **schema validation failures**: it catches provider model changes, prompt regressions, and malformed tool calls in one signal.
 
 #### How do you trace a multi-step agent request for debugging?
 
 Structured tracing with a span per step, all correlated by one request ID: the initial prompt, each model call with its full input and output, each tool invocation with arguments and result, retrieval queries and returned document IDs, retries, and the final response. Record token counts and latency per span so you can attribute cost and time to a specific step.
 
-That's what LangSmith, Langfuse, and OpenTelemetry-based setups provide. The point is that agent failures are almost never in the last step — a bad answer usually traces back to a tool returning something unexpected five steps earlier, and without span-level traces you're guessing.
+That's what LangSmith, Langfuse, and OpenTelemetry-based setups provide. The point is that agent failures are almost never in the last step: a bad answer usually traces back to a tool returning something unexpected five steps earlier, and without span-level traces you're guessing.
 
 #### How do you control LLM spend?
 

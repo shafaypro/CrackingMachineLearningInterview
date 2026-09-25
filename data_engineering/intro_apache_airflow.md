@@ -1,4 +1,4 @@
-# Apache Airflow – Complete Guide (2026 Edition)
+# Apache Airflow
 
 **Apache Airflow** is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.
 
@@ -39,7 +39,7 @@ Airflow defines this as a **DAG** (Directed Acyclic Graph) in Python.
 
 | Concept | Description |
 |---------|-------------|
-| **DAG** | Directed Acyclic Graph — a workflow defined in Python |
+| **DAG** | Directed Acyclic Graph: a workflow defined in Python |
 | **Task** | A unit of work within a DAG |
 | **Operator** | Template for a task type (PythonOperator, BashOperator, etc.) |
 | **TaskFlow API** | Modern way to write DAGs using `@task` decorators |

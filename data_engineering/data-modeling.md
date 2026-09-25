@@ -618,7 +618,7 @@ Choose denormalized structures when the same joins are executed repeatedly by an
 
 If the organization is analytics-first and wants a tightly managed platform, warehouse-centric modeling is often the better operating model.
 
-If the organization needs shared access across analytics, data science, ML, and streaming use cases, lakehouse modeling often provides more leverage, but only if metadata and table-management discipline are strong.
+If the organization needs shared access across analytics, data science, ML, and streaming use cases, lakehouse modeling often pays off more, but only if metadata and table-management discipline are strong.
 
 ---
 

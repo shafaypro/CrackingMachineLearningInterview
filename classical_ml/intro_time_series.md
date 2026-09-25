@@ -105,9 +105,9 @@ residual = result.resid
 ## ARIMA & SARIMA
 
 **ARIMA(p, d, q)**:
-- **p** — AutoRegressive order: how many lagged values of y
-- **d** — Integration order: how many times to difference to achieve stationarity
-- **q** — Moving Average order: how many lagged forecast errors
+- **p**: AutoRegressive order: how many lagged values of y
+- **d**: Integration order: how many times to difference to achieve stationarity
+- **q**: Moving Average order: how many lagged forecast errors
 
 **SARIMA(p, d, q)(P, D, Q, m)**: Seasonal extension where m = seasonal period.
 
@@ -116,8 +116,8 @@ residual = result.resid
 ```python
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
-# ACF: helps identify q (MA order)  — cuts off after lag q
-# PACF: helps identify p (AR order) — cuts off after lag p
+# ACF: helps identify q (MA order), cuts off after lag q
+# PACF: helps identify p (AR order), cuts off after lag p
 plot_acf(ts_diff, lags=40)
 plot_pacf(ts_diff, lags=40)
 ```
@@ -313,7 +313,7 @@ def evaluate_forecast(y_true, y_pred):
 
 ## Cross-Validation for Time Series
 
-**Never use random cross-validation for time series** — it causes data leakage. Always use forward-chaining (walk-forward validation).
+**Never use random cross-validation for time series**: it causes data leakage. Always use forward-chaining (walk-forward validation).
 
 ```python
 from sklearn.model_selection import TimeSeriesSplit
@@ -341,8 +341,8 @@ A stationary series has constant mean, variance, and autocorrelation over time. 
 
 **Q3: How do you choose p and d and q in ARIMA?**
 - d: difference until ADF test shows stationarity (typically d=0 or d=1)
-- p: look at PACF plot — significant lags before cutoff
-- q: look at ACF plot — significant lags before cutoff
+- p: look at PACF plot: significant lags before cutoff
+- q: look at ACF plot: significant lags before cutoff
 - Alternatively: use `auto_arima` with AIC/BIC minimization
 
 **Q4: When would you use Prophet over ARIMA?**
@@ -359,10 +359,10 @@ Always split in time order, and shift lag features by at least 1 step.
 Extract calendar features (month, day of week, etc.) with cyclical encoding (sin/cos). Add lag features at seasonal periods (e.g., lag_7 for weekly data, lag_365 for yearly). Add Fourier terms to model smooth seasonal patterns. GBM can learn these patterns if given the right features.
 
 **Q7: What's the difference between forecasting and anomaly detection in time series?**
-Forecasting predicts future values (point forecast or interval). Anomaly detection identifies values that deviate significantly from expected behavior — often using forecast residuals (if residual > threshold, it's an anomaly). LSTM autoencoders, Isolation Forest on lag features, and statistical process control (Z-score on rolling stats) are common approaches.
+Forecasting predicts future values (point forecast or interval). Anomaly detection identifies values that deviate significantly from expected behavior, often using forecast residuals (if residual > threshold, it's an anomaly). LSTM autoencoders, Isolation Forest on lag features, and statistical process control (Z-score on rolling stats) are common approaches.
 
 **Q8: How would you evaluate a forecasting model on multiple SKUs/stores?**
-Use MASE (Mean Absolute Scaled Error) — it's scale-free so it's comparable across series with different magnitudes. Also use Weighted MAPE (weighted by volume) so high-volume SKUs drive the score. Report both mean and distribution of errors to catch underperforming segments.
+Use MASE (Mean Absolute Scaled Error): it's scale-free so it's comparable across series with different magnitudes. Also use Weighted MAPE (weighted by volume) so high-volume SKUs drive the score. Report both mean and distribution of errors to catch underperforming segments.
 
 ---
 

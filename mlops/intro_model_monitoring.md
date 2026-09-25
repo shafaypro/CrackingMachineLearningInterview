@@ -1,6 +1,6 @@
 # Model Monitoring Guide
 
-A comprehensive guide to monitoring ML models in production — detecting drift, measuring performance, and knowing when to retrain.
+A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.
 
 ---
 
@@ -40,7 +40,7 @@ The relationship between inputs and outputs changes.
 P_train(Y|X) ≠ P_prod(Y|X)
 ```
 
-**Example:** Fraud patterns evolve — transactions that were previously legitimate are now fraudulent.
+**Example:** Fraud patterns evolve, transactions that were previously legitimate are now fraudulent.
 
 **Detection:** Requires ground truth labels (delayed feedback). Monitor proxy metrics or use windowed holdout sets.
 
@@ -52,7 +52,7 @@ P_train(Y|X) ≠ P_prod(Y|X)
 
 ### Model Drift / Performance Drift
 
-The downstream effect of data or concept drift — the model's predictions become less accurate or useful over time.
+The downstream effect of data or concept drift: the model's predictions become less accurate or useful over time.
 
 **Detection:** Monitor business KPIs, accuracy metrics (when labels available), and prediction score distributions.
 
@@ -136,11 +136,11 @@ psi = calculate_psi(reference_data, production_data)
 if psi < 0.1:
     status = "No significant change"
 elif psi < 0.25:
-    status = "Moderate change — investigate"
+    status = "Moderate change: investigate"
 else:
-    status = "Significant change — retrain required"
+    status = "Significant change: retrain required"
 
-print(f"PSI: {psi:.4f} — {status}")
+print(f"PSI: {psi:.4f}, {status}")
 ```
 
 ### Chi-Squared Test (Categorical Features)
@@ -355,7 +355,7 @@ def run_monitoring_check(reference_data, current_data, threshold=0.3):
 
 passed, results = run_monitoring_check(reference_data, production_data)
 if not passed:
-    print("ALERT: Model monitoring check failed — investigate drift")
+    print("ALERT: Model monitoring check failed, investigate drift")
     # Send alert to Slack, PagerDuty, etc.
 ```
 
@@ -370,7 +370,7 @@ if not passed:
 | PSI ≥ 0.25 on key features | Significant data drift | High |
 | Model accuracy drops > 5% | Performance degradation | High |
 | Business KPI anomaly | Conversion/revenue drop | High |
-| PSI 0.1–0.25 on multiple features | Moderate drift | Medium |
+| PSI 0.1-0.25 on multiple features | Moderate drift | Medium |
 | Scheduled interval | Weekly/monthly safeguard | Low |
 | New data available (large batch) | Proactive retraining | Low |
 
@@ -424,7 +424,7 @@ For continuous features: KS test (returns p-value and D-statistic) or PSI (inter
 When labels are delayed (e.g., fraud confirmed days later, loan default confirmed months later):
 
 1. Monitor input feature distributions using statistical tests (proxy for data drift)
-2. Monitor prediction score distributions — shifts indicate potential concept drift
+2. Monitor prediction score distributions: shifts indicate potential concept drift
 3. Monitor business proxy metrics (transaction decline rates, user complaints)
 4. Use a held-out labeled set for periodic evaluation
 5. Use model confidence scores as a proxy metric
@@ -442,7 +442,7 @@ PSI (Population Stability Index) measures distribution shift: `PSI = Σ (Actual%
 
 - **Feature drift:** Monitor all input features (transaction amount, merchant category, time of day) using PSI and KS tests
 - **Score distribution:** Watch for shifts in the fraud probability score distribution
-- **Alert rate:** Monitor % of transactions flagged as fraud — anomalies indicate drift
+- **Alert rate:** Monitor % of transactions flagged as fraud, anomalies indicate drift
 - **Business metrics:** Track false positive rate (customer friction) and false negative rate (missed fraud)
 - **Latency:** Ensure real-time scoring meets SLA (< 50ms)
 - **Feedback loop:** When fraud confirmed, update training data and check if model would have caught it
@@ -454,5 +454,5 @@ PSI (Population Stability Index) measures distribution shift: `PSI = Σ (Actual%
 - [Evidently AI Documentation](https://docs.evidentlyai.com/)
 - [WhyLogs Documentation](https://whylogs.readthedocs.io/)
 - [Arize AI Blog on Model Monitoring](https://arize.com/blog/)
-- [Chip Huyen — ML Monitoring (book chapter)](https://huyenchip.com/2022/02/07/data-distribution-shifts-and-monitoring.html)
+- [Chip Huyen: ML Monitoring (book chapter)](https://huyenchip.com/2022/02/07/data-distribution-shifts-and-monitoring.html)
 - [PSI and CSI: Understanding Population Stability Index](https://mwburke.github.io/data%20science/2018/04/29/population-stability-index.html)

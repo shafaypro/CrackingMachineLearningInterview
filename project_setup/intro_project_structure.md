@@ -1,8 +1,8 @@
-# ML / AI Project Folder Structures (2026 Edition)
+# ML / AI Project Folder Structures
 
 A reference for how to lay out real machine-learning, deep-learning, LLM/agent,
 and data-engineering projects. A clean structure makes a project reproducible,
-testable, and reviewable — and it's something interviewers probe with "how would
+testable, and reviewable, and it's something interviewers probe with "how would
 you organize this?"
 
 > **Principle:** separate **code** (versioned in git), **data** (versioned with
@@ -45,7 +45,7 @@ my-project/
 ├── src/                    # source code (importable package)
 ├── tests/                  # unit + integration tests
 ├── configs/                # YAML/Hydra configs (no hardcoded params)
-├── notebooks/              # exploration only — not the source of truth
+├── notebooks/              # exploration only, not the source of truth
 ├── scripts/                # one-off / CLI entry points
 └── docs/                   # documentation
 ```
@@ -86,7 +86,7 @@ ml-project/
 └── dvc.yaml            # data/pipeline versioning (optional but recommended)
 ```
 
-**Key ideas:** `data/raw` is *immutable* — you never edit it; transformations
+**Key ideas:** `data/raw` is *immutable* you never edit it; transformations
 flow `raw → interim → processed`. Notebooks are for exploration; production logic
 lives in `src/` and is imported into notebooks, not copy-pasted.
 
@@ -174,16 +174,16 @@ llm-app/
 ```
 
 **Key ideas:**
-- **Prompts are versioned artifacts** — keep them in files (`prompts/`), not inline
+- **Prompts are versioned artifacts**: keep them in files (`prompts/`), not inline
   string literals scattered through code, so you can diff and regression-test them.
 - **Centralize model IDs and parameters** in `models.py`/`config` so a model
   upgrade is a one-line change. Use current model IDs (e.g. `claude-opus-4-8`,
   `claude-sonnet-4-6`, `claude-haiku-4-5`) and read keys from env.
-- **An `eval/` harness is not optional** — LLM apps degrade silently; offline evals
+- **An `eval/` harness is not optional**: LLM apps degrade silently; offline evals
   + LLM-as-judge catch regressions. See
   [LLM Evaluation](../mlops/intro_llm_evaluation.md) and
   [Evaluation & Guardrails](../mlops/intro_evaluation_guardrails.md).
-- **Guardrails** separate from business logic — input validation, output schema
+- **Guardrails** separate from business logic: input validation, output schema
   enforcement, PII filtering.
 
 ---
@@ -225,11 +225,11 @@ agent-project/
 **Key ideas:**
 - **Tools are first-class, isolated, and testable.** Each tool = a typed schema +
   a handler. You should be able to unit-test a tool without invoking the model.
-- **Separate the agent loop from tools and memory** — the loop orchestrates;
+- **Separate the agent loop from tools and memory**: the loop orchestrates;
   tools execute; memory persists.
 - **Evaluate agents on task success rate and trajectory**, not just final-token
   quality. Keep a task suite in `evals/`.
-- **Tracing/observability is built in**, not bolted on — you need to see every
+- **Tracing/observability is built in**, not bolted on: you need to see every
   tool call to debug. See [Agentic AI](../ai_genai/intro_agentic_ai.md),
   [Agent Tool Use](../ai_genai/intro_agent_tool_use.md), and
   [Multi-Agent Systems](../ai_genai/intro_multi_agent_systems.md).
@@ -323,12 +323,12 @@ pip install -e .          # reads pyproject.toml, installs your package editable
 1. **How do you structure an ML repo for reproducibility?** → Separate code/
    data/config/artifacts; immutable raw data; config-driven runs; pinned deps;
    seeds set; experiments tracked.
-2. **Where do trained models and datasets belong — and why not git?** → A registry
+2. **Where do trained models and datasets belong, and why not git?** → A registry
    / object storage / DVC; git is optimized for diffable text, not large binaries.
-3. **`src/` layout vs flat — which and why?** → `src/` for shippable packages: it
+3. **`src/` layout vs flat, which and why?** → `src/` for shippable packages: it
    forces proper installation and prevents accidental cwd imports.
 4. **How do you version prompts in an LLM app?** → As files under `prompts/`,
-   in git, with regression tests — treat them like code.
+   in git, with regression tests: treat them like code.
 5. **What makes a tool "well-structured" in an agent project?** → A typed schema +
    an isolated handler that's unit-testable without the model in the loop.
 6. **How do notebooks fit into a production project?** → Exploration and reporting

@@ -1,6 +1,6 @@
 # Feature Engineering & Selection
 
-Feature engineering is the process of transforming raw data into meaningful inputs for ML models. It is consistently cited as the highest-impact activity in applied ML — better features beat better algorithms.
+Feature engineering is the process of transforming raw data into meaningful inputs for ML models. It is consistently cited as the highest-impact activity in applied ML: better features beat better algorithms.
 
 ---
 
@@ -113,7 +113,7 @@ def target_encode(train_df, valid_df, col, target, smoothing=10):
     return train_df, valid_df
 ```
 
-**Use when**: high-cardinality categories (city, zip code, user_id). **Warning**: prone to target leakage — always compute on training fold only.
+**Use when**: high-cardinality categories (city, zip code, user_id). **Warning**: prone to target leakage: always compute on training fold only.
 
 ### Embedding Encoding (for very high cardinality)
 
@@ -343,7 +343,7 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)              # Only transform, never fit
 
 # Target encoding leakage: compute encoding on training fold only
-# (see target encoding section above — use k-fold within training)
+# (see target encoding section above: use k-fold within training)
 ```
 
 ---
@@ -351,13 +351,13 @@ X_test = scaler.transform(X_test)              # Only transform, never fit
 ## Interview Q&A
 
 **Q1: What is the difference between StandardScaler and MinMaxScaler?**
-StandardScaler transforms to mean=0, std=1 (Z-score). It doesn't bound the output — outliers remain extreme but less dominant. MinMaxScaler transforms to [0,1] — it preserves relative distances but is sensitive to outliers (one extreme value squashes everything else). Use StandardScaler for linear models, neural nets, PCA, SVMs. Use MinMaxScaler when you need bounded values (image pixels, when the algorithm requires [0,1]).
+StandardScaler transforms to mean=0, std=1 (Z-score). It doesn't bound the output: outliers remain extreme but less dominant. MinMaxScaler transforms to [0,1]: it preserves relative distances but is sensitive to outliers (one extreme value squashes everything else). Use StandardScaler for linear models, neural nets, PCA, SVMs. Use MinMaxScaler when you need bounded values (image pixels, when the algorithm requires [0,1]).
 
 **Q2: When would you use target encoding over one-hot encoding?**
-Target encoding (mean encoding) is better for high-cardinality categoricals (city with 10,000 unique values, user_id) where one-hot would create too many sparse columns. However, target encoding requires careful application — always compute on the training fold only (within cross-validation) to prevent target leakage. Add smoothing to handle rare categories.
+Target encoding (mean encoding) is better for high-cardinality categoricals (city with 10,000 unique values, user_id) where one-hot would create too many sparse columns. However, target encoding requires careful application: always compute on the training fold only (within cross-validation) to prevent target leakage. Add smoothing to handle rare categories.
 
 **Q3: What is target leakage and how do you detect it?**
-Target leakage is using information in features that wouldn't be available at prediction time. Signs: suspiciously high model performance, features with very high importance that don't make business sense, test performance much lower than validation performance. Prevention: think causally — "would this feature be available before the prediction is needed?"
+Target leakage is using information in features that wouldn't be available at prediction time. Signs: suspiciously high model performance, features with very high importance that don't make business sense, test performance much lower than validation performance. Prevention: think causally: "would this feature be available before the prediction is needed?"
 
 **Q4: What's the difference between filter, wrapper, and embedded feature selection methods?**
 - **Filter**: rank features using a statistical score (correlation, mutual information, ANOVA F-test) independent of the model. Fast but ignores feature interactions.
@@ -365,7 +365,7 @@ Target leakage is using information in features that wouldn't be available at pr
 - **Embedded**: feature selection built into the model training (L1/Lasso shrinks to zero, tree importance, SHAP). Best of both worlds in practice.
 
 **Q5: Why is it important to fit scalers on training data only?**
-If you fit a scaler on the entire dataset (including test data), the test data's statistics (mean, std, min, max) contaminate the training scaler — a form of data leakage. The model sees information about the test distribution during training, leading to optimistically biased evaluation. Always fit on training set only, then transform both train and test.
+If you fit a scaler on the entire dataset (including test data), the test data's statistics (mean, std, min, max) contaminate the training scaler: a form of data leakage. The model sees information about the test distribution during training, leading to optimistically biased evaluation. Always fit on training set only, then transform both train and test.
 
 **Q6: What are cyclical features and when do you use them?**
 Cyclical features encode circular variables (hour of day, month, day of week) using sine and cosine transforms: `sin(2π*x/period)` and `cos(2π*x/period)`. Without this, a model would see December (month=12) and January (month=1) as far apart (distance=11), but they're adjacent. The sin/cos pair correctly captures circularity.

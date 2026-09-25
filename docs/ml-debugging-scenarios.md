@@ -1,6 +1,6 @@
-# ML Debugging Scenarios: "Your Model Is Broken — What Do You Do?"
+# ML Debugging Scenarios: "Your Model Is Broken, What Do You Do?"
 
-Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom — a suspicious metric, a production regression, a latency spike — and watches how you work through it. There is rarely one correct answer. What gets graded is whether your process finds the cause quickly and cheaply, and whether you protect users while you look.
+Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a latency spike), and watches how you work through it. There is rarely one correct answer. What gets graded is whether your process finds the cause quickly and cheaply, and whether you protect users while you look.
 
 This guide covers a repeatable answer structure and 25 scenarios drawn from real loops, grouped by where the failure shows up.
 
@@ -27,7 +27,7 @@ Use the same five steps every time. Say them out loud so the interviewer can fol
 | Step | What you do | What it sounds like |
 |---|---|---|
 | **1. Clarify** | Pin down the symptom: which metric, how much, since when, all traffic or a segment, anything deployed or changed | "Did this start suddenly or gradually? Was there a deploy, a data change, or a traffic change around then?" |
-| **2. Hypothesise** | List 3–5 causes, ranked by *likelihood × cost-to-check* | "Most likely is leakage, and it's cheap to check, so that's first." |
+| **2. Hypothesise** | List 3-5 causes, ranked by *likelihood × cost-to-check* | "Most likely is leakage, and it's cheap to check, so that's first." |
 | **3. Check cheapest first** | Run the fast, high-information checks before the slow ones | "Before retraining anything, I'd look at feature importances and single-feature AUCs." |
 | **4. Fix** | Mitigate first if users are affected (rollback, fallback, kill switch), then fix the root cause | "I'd roll back to the previous model now, then debug without time pressure." |
 | **5. Prevent recurrence** | Add the test, monitor, or process change that catches this class of failure next time | "I'd add a schema check on that upstream table and alert on null rate." |
@@ -38,7 +38,7 @@ Three habits make the difference between a mid-level and a senior answer:
 - **Mitigate before you diagnose.** In production, the first action is usually to stop the damage. Debugging a live regression while it keeps costing money is a red flag.
 - **End with a system change.** "I fixed the bug" is a mid-level ending. "I added a check so nobody on the team can ship this bug again" is a senior one.
 
-Aim to talk for 5–8 minutes per scenario, then let the interviewer steer. They usually have a specific root cause in mind and will give you hints if you ask good clarifying questions.
+Aim to talk for 5-8 minutes per scenario, then let the interviewer steer. They usually have a specific root cause in mind and will give you hints if you ask good clarifying questions.
 
 ---
 
@@ -51,7 +51,7 @@ Aim to talk for 5–8 minutes per scenario, then let the interviewer steer. They
 2. Split leakage: random split on temporal data, or the same user/patient/session in both train and validation.
 3. Duplicate rows across splits.
 4. Preprocessing (scaler, target encoder, imputer) fit on the full dataset before splitting.
-5. The problem is genuinely easy — possible, but last on the list until proven.
+5. The problem is easy: possible, but last on the list until proven.
 
 **How to investigate**
 - Look at feature importances. One feature carrying most of the importance is the classic leakage signature.
@@ -117,7 +117,7 @@ if not torch.isfinite(loss) or not torch.isfinite(grad_norm):
 4. Inputs not normalised, or the model is in eval mode.
 
 **How to investigate**
-- Overfit a single small batch. A working model and pipeline should drive training loss close to zero on 8–32 examples within a few hundred steps. If it can't, the bug is in code, not data or capacity.
+- Overfit a single small batch. A working model and pipeline should drive training loss close to zero on 8-32 examples within a few hundred steps. If it can't, the bug is in code, not data or capacity.
 - Check the initial loss. For k-class cross-entropy with a reasonable init it should be close to `ln(k)`; far off means the output layer or loss is wired wrong.
 - Print a few `(input, label)` pairs after the full data pipeline and check them by eye.
 - Confirm `sum(p.numel() for p in model.parameters() if p.requires_grad)` is what you expect.
@@ -223,7 +223,7 @@ for f in feature_names:
 
 **Fix:** If the model is the cause, roll back or re-tune its objective to include the long-term metric (e.g. margin or 30-day retention) as a target or guardrail.
 
-**Prevent it next time:** Keep a persistent 1–5% holdout for major models, run tests long enough to see novelty decay, and include revenue and retention as guardrail metrics, not just the primary proxy.
+**Prevent it next time:** Keep a persistent 1-5% holdout for major models, run tests long enough to see novelty decay, and include revenue and retention as guardrail metrics, not just the primary proxy.
 
 **What the interviewer is listening for:** Knowing that A/B tests measure short-term effects on a proxy, and that long-term holdouts exist for exactly this problem.
 
@@ -240,7 +240,7 @@ for f in feature_names:
 - Check the model hash loaded by the service against the registry.
 - Score the same request twice in the service. Different outputs mean nondeterminism (`model.eval()` missing).
 
-**Fix:** Correct the divergent stage. Feature ordering by position rather than name is a common culprit — pass features by name.
+**Fix:** Correct the divergent stage. Feature ordering by position rather than name is a common culprit: pass features by name.
 
 **Prevent it next time:** Add a golden-request test to CI: a set of fixed inputs with expected outputs that both paths must reproduce within tolerance before deploy.
 
@@ -259,7 +259,7 @@ for f in feature_names:
 4. Label drift or a change in label definition.
 
 **How to investigate**
-- Compute drift per feature (PSI or KS) between the training window and each recent month. Rule of thumb: PSI under 0.1 is stable, 0.1–0.25 is moderate, above 0.25 is significant.
+- Compute drift per feature (PSI or KS) between the training window and each recent month. Rule of thumb: PSI under 0.1 is stable, 0.1-0.25 is moderate, above 0.25 is significant.
 
 ```python
 import numpy as np
@@ -353,7 +353,7 @@ def psi(expected, actual, bins=10):
 - Train on old data only, new data only, and both. Evaluate each on the fixed set.
 - Compare label rates and feature distributions between old and new data, and sample 50 new labels to check by hand.
 
-**Fix:** Filter or reweight the bad slice, fix the label mapping, or train separate handling for the new population if it genuinely differs.
+**Fix:** Filter or reweight the bad slice, fix the label mapping, or train separate handling for the new population if it differs.
 
 **Prevent it next time:** Keep a frozen, versioned evaluation set that is only changed deliberately. Version training data (DVC, Delta, Iceberg snapshots) so you can reproduce and diff any past training run.
 
@@ -394,7 +394,7 @@ print(cohen_kappa_score(annotator_a, annotator_b))  # < 0.6 means the labels the
 **How to investigate**
 - Break down metrics by segment with sample sizes and confidence intervals. Small segments have noisy metrics.
 - Compare feature null rates and distributions for the segment versus everyone else.
-- Look at 20–30 errors from the segment by hand.
+- Look at 20-30 errors from the segment by hand.
 
 **Fix:** Collect or upweight data for the segment, add features that work for it (content features for cold users), or use a dedicated model or fallback for it. If fairness is involved, involve the relevant stakeholders before choosing a trade-off.
 
@@ -516,7 +516,7 @@ def recall_at_k(golden, retrieve, k=5):
 
 **What the interviewer is listening for:** Understanding that logged data is biased by the policy that generated it, and naming position bias and counterfactual evaluation.
 
-### 21. "Recommendations became homogeneous — everyone sees the same popular items"
+### 21. "Recommendations became homogeneous: everyone sees the same popular items"
 
 **Likely causes**
 1. Feedback loop: the model recommends popular items, they get more clicks, the next model learns they're even more popular.

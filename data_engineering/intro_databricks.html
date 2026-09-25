@@ -864,7 +864,7 @@
       <div class="eyebrow-line"></div>
     </div>
     <h2>Master <span>Databricks</span><br>End to End</h2>
-    <p>From zero to production-ready — covering Spark, Delta Lake, MLflow, streaming, performance tuning, and enterprise-grade Lakehouse architecture.</p>
+    <p>From zero to production-ready, covering Spark, Delta Lake, MLflow, streaming, performance tuning, and enterprise-grade Lakehouse architecture.</p>
     <div class="stats-row">
       <div class="stat">
         <div class="stat-value">12</div>
@@ -902,7 +902,7 @@
 
       <div class="sh">What is Databricks?</div>
       <p class="body">Databricks is a unified <span class="highlight">data analytics platform</span> built on top of Apache Spark. It was founded by the original creators of Apache Spark and provides a cloud-based environment for big data processing, machine learning, and analytics at scale.</p>
-      <p class="body">Databricks implements the <span class="highlight">Lakehouse architecture</span> — combining the best of data warehouses (structured queries, ACID transactions) with data lakes (low-cost storage, flexibility, ML support).</p>
+      <p class="body">Databricks implements the <span class="highlight">Lakehouse architecture</span>: combining the best of data warehouses (structured queries, ACID transactions) with data lakes (low-cost storage, flexibility, ML support).</p>
 
       <div class="cards-grid">
         <div class="card">
@@ -913,12 +913,12 @@
         <div class="card">
           <span class="card-icon">☁️</span>
           <h4>Cloud-Native</h4>
-          <p>Runs on AWS, Azure, and GCP. Managed clusters spin up automatically — no infrastructure headaches.</p>
+          <p>Runs on AWS, Azure, and GCP. Managed clusters spin up automatically: no infrastructure headaches.</p>
         </div>
         <div class="card">
           <span class="card-icon">🔥</span>
           <h4>Apache Spark Core</h4>
-          <p>Built on Spark — the industry-standard distributed computing engine for processing petabytes of data.</p>
+          <p>Built on Spark: the industry-standard distributed computing engine for processing petabytes of data.</p>
         </div>
         <div class="card">
           <span class="card-icon">🏔️</span>
@@ -944,7 +944,7 @@
         </tbody>
       </table>
 
-      <div class="sh">Getting Started — Community Edition</div>
+      <div class="sh">Getting Started: Community Edition</div>
       <p class="body">The <span class="highlight">Databricks Community Edition</span> is free and perfect for learning. Sign up at <code style="color:var(--accent2); font-family:var(--mono); font-size:12px;">community.cloud.databricks.com</code>.</p>
 
       <div class="steps">
@@ -979,12 +979,12 @@
       </div>
 
       <div class="concept green">
-        <div class="concept-title">💡 Key Terminology</div>
+        <div class="concept-title">Key Terminology</div>
         <ul>
           <li><strong>Workspace:</strong> Your personal environment for notebooks, experiments, models, and data.</li>
           <li><strong>Cluster:</strong> A group of VMs that run your Spark computations.</li>
-          <li><strong>Runtime:</strong> The Databricks Runtime (DBR) — Spark + libraries + optimizations.</li>
-          <li><strong>DBFS:</strong> Databricks File System — an abstraction layer over cloud object storage.</li>
+          <li><strong>Runtime:</strong> The Databricks Runtime (DBR): Spark + libraries + optimizations.</li>
+          <li><strong>DBFS:</strong> Databricks File System: an abstraction layer over cloud object storage.</li>
           <li><strong>Catalog:</strong> The metadata store for databases, tables, and views.</li>
         </ul>
       </div>
@@ -1007,7 +1007,7 @@
       <div class="section-header">
         <div class="section-number">02</div>
         <div class="section-title-block">
-          <h3>Architecture Deep Dive</h3>
+          <h3>Architecture in Detail</h3>
           <p>Understand the Control Plane, Data Plane, and how Databricks components work together.</p>
         </div>
       </div>
@@ -1039,7 +1039,7 @@
         <div class="card">
           <span class="card-icon">☁️</span>
           <h4>Data Plane</h4>
-          <p>Runs in YOUR cloud account. All actual data processing happens here. Your data never leaves your cloud account — Databricks only orchestrates, not stores.</p>
+          <p>Runs in YOUR cloud account. All actual data processing happens here. Your data never leaves your cloud account: Databricks only orchestrates, not stores.</p>
         </div>
       </div>
 
@@ -1068,7 +1068,7 @@
           <li><strong>Task:</strong> The smallest unit of work. A single executor runs one task at a time per CPU core.</li>
           <li><strong>Stage:</strong> Group of tasks that can run in parallel. Stages are separated by shuffle operations.</li>
           <li><strong>Job:</strong> Complete computation triggered by an action (like .count() or .collect()).</li>
-          <li><strong>DAG:</strong> Directed Acyclic Graph — Spark's execution plan. Built lazily and optimized by Catalyst.</li>
+          <li><strong>DAG:</strong> Directed Acyclic Graph: Spark's execution plan. Built lazily and optimized by Catalyst.</li>
         </ul>
       </div>
 
@@ -1087,9 +1087,9 @@
       <div class="concept">
         <div class="concept-title">📦 Runtime Flavors</div>
         <ul>
-          <li><strong>DBR X.Y:</strong> Standard runtime — Spark + Python/R/Scala/Java</li>
+          <li><strong>DBR X.Y:</strong> Standard runtime: Spark + Python/R/Scala/Java</li>
           <li><strong>DBR X.Y ML:</strong> Includes TensorFlow, PyTorch, scikit-learn, MLflow</li>
-          <li><strong>DBR X.Y Photon:</strong> Vectorized query engine written in C++ — up to 12x faster SQL</li>
+          <li><strong>DBR X.Y Photon:</strong> Vectorized query engine written in C++: up to 12x faster SQL</li>
           <li><strong>DBR X.Y GPU:</strong> CUDA-enabled for deep learning workloads</li>
         </ul>
       </div>
@@ -1160,7 +1160,7 @@ ls /mnt/datalake/</pre>
       </div>
 
       <div class="concept green">
-        <div class="concept-title">💡 Cluster Sizing Tips</div>
+        <div class="concept-title">Cluster Sizing Tips</div>
         <ul>
           <li>Start with 4-8 workers, then scale based on job duration</li>
           <li>Enable autoscaling for unpredictable workloads</li>
@@ -1173,23 +1173,23 @@ ls /mnt/datalake/</pre>
 
       <div class="sh">Databricks Utilities (dbutils)</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">Python — dbutils</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">Python: dbutils</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="cm"># File system operations</span>
 dbutils.fs.ls(<span class="str">"/mnt/datalake/"</span>)
 dbutils.fs.cp(<span class="str">"/source/file.csv"</span>, <span class="str">"/dest/file.csv"</span>)
 dbutils.fs.rm(<span class="str">"/path/to/delete"</span>, recurse=<span class="kw">True</span>)
 dbutils.fs.mkdirs(<span class="str">"/new/directory"</span>)
 
-<span class="cm"># Secrets — retrieve stored credentials</span>
+<span class="cm"># Secrets: retrieve stored credentials</span>
 <span class="var">token</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"my-scope"</span>, key=<span class="str">"api-token"</span>)
 <span class="var">password</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"db-secrets"</span>, key=<span class="str">"db-password"</span>)
 
-<span class="cm"># Widget parameters — parameterize notebooks</span>
+<span class="cm"># Widget parameters: parameterize notebooks</span>
 dbutils.widgets.text(<span class="str">"date"</span>, <span class="str">"2024-01-01"</span>, <span class="str">"Processing Date"</span>)
 dbutils.widgets.dropdown(<span class="str">"env"</span>, <span class="str">"dev"</span>, [<span class="str">"dev"</span>, <span class="str">"staging"</span>, <span class="str">"prod"</span>])
 <span class="var">date_param</span> <span class="op">=</span> dbutils.widgets.get(<span class="str">"date"</span>)
 
-<span class="cm"># Notebook workflow — run other notebooks</span>
+<span class="cm"># Notebook workflow: run other notebooks</span>
 <span class="var">result</span> <span class="op">=</span> dbutils.notebook.run(
   <span class="str">"/path/to/notebook"</span>,
   timeout_seconds=<span class="num">3600</span>,
@@ -1220,13 +1220,13 @@ dbutils.fs.mount(
 
       <div class="sh">Spark Execution Model</div>
       <div class="concept blue">
-        <div class="concept-title">🔵 Lazy Evaluation — The Core Concept</div>
+        <div class="concept-title">🔵 Lazy Evaluation: The Core Concept</div>
         <p>Spark does NOT execute code immediately. <strong>Transformations</strong> build a logical plan (DAG). <strong>Actions</strong> trigger actual execution. This allows Spark to optimize the full computation before running anything.</p>
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark — Transformations vs Actions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
-        <pre><span class="cm"># ── TRANSFORMATIONS (lazy — nothing runs yet) ──</span>
+        <div class="code-header"><span class="code-lang">PySpark: Transformations vs Actions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># ── TRANSFORMATIONS (lazy, nothing runs yet) ──</span>
 <span class="var">df</span> <span class="op">=</span> spark.read.parquet(<span class="str">"/data/sales"</span>)           <span class="cm"># lazy</span>
 <span class="var">df_filtered</span> <span class="op">=</span> df.filter(df.amount <span class="op">></span> <span class="num">100</span>)           <span class="cm"># lazy</span>
 <span class="var">df_grouped</span> <span class="op">=</span> df_filtered.groupBy(<span class="str">"region"</span>)        <span class="cm"># lazy</span>
@@ -1254,12 +1254,12 @@ df.cache()                          <span class="cm"># Cache in memory</span></p
         <thead><tr><th>API</th><th>Language</th><th>Type Safety</th><th>Optimization</th><th>When to Use</th></tr></thead>
         <tbody>
           <tr><td><strong>RDD</strong></td><td>All</td><td>None</td><td>None</td><td>Low-level control, legacy code</td></tr>
-          <tr><td><strong>DataFrame</strong></td><td>Python/R/SQL</td><td>Runtime</td><td>Catalyst + Tungsten</td><td>Most use cases — default choice</td></tr>
+          <tr><td><strong>DataFrame</strong></td><td>Python/R/SQL</td><td>Runtime</td><td>Catalyst + Tungsten</td><td>Most use cases: default choice</td></tr>
           <tr><td><strong>Dataset</strong></td><td>Scala/Java only</td><td>Compile-time</td><td>Catalyst + Tungsten</td><td>Typed transformations in Scala</td></tr>
         </tbody>
       </table>
 
-      <div class="sh">SparkSession — Entry Point</div>
+      <div class="sh">SparkSession: Entry Point</div>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">PySpark</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> SparkSession
@@ -1314,7 +1314,7 @@ df_jdbc   <span class="op">=</span> spark.read.jdbc(url=<span class="str">"jdbc:
 
       <div class="tab-panel active" id="tab-df-api">
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PySpark — DataFrame Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <div class="code-header"><span class="code-lang">PySpark: DataFrame Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
           <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
 
 df <span class="op">=</span> spark.read.delta(<span class="str">"/mnt/data/orders"</span>)
@@ -1407,7 +1407,7 @@ result_df <span class="op">=</span> spark.sql(<span class="str">"""
 
       <div class="tab-panel" id="tab-df-joins">
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PySpark — Join Types</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <div class="code-header"><span class="code-lang">PySpark: Join Types</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
           <pre><span class="cm"># Standard joins</span>
 orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"inner"</span>)
 orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left"</span>)
@@ -1415,7 +1415,7 @@ orders.join(customers, <span class="str">"customer_id"</span>, <span class="str"
 orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"full"</span>)
 orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left_anti"</span>)   <span class="cm"># in orders, NOT in customers</span>
 orders.join(customers, <span class="str">"customer_id"</span>, <span class="str">"left_semi"</span>)   <span class="cm"># in orders, matched in customers</span>
-orders.crossJoin(products)                            <span class="cm"># Cartesian product — use carefully!</span>
+orders.crossJoin(products)                            <span class="cm"># Cartesian product: use carefully!</span>
 
 <span class="cm"># Multi-column join</span>
 orders.join(products,
@@ -1424,7 +1424,7 @@ orders.join(products,
     <span class="str">"inner"</span>
 )
 
-<span class="cm"># Broadcast join (for small tables — avoids shuffle!)</span>
+<span class="cm"># Broadcast join (for small tables: avoids shuffle!)</span>
 <span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> broadcast
 
 large_df.join(broadcast(small_lookup), <span class="str">"id"</span>)
@@ -1442,7 +1442,7 @@ large_df.join(broadcast(small_lookup), <span class="str">"id"</span>)
 
       <div class="tab-panel" id="tab-df-windows">
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PySpark — Window Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <div class="code-header"><span class="code-lang">PySpark: Window Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
           <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> Window
 <span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
 
@@ -1475,12 +1475,12 @@ latest <span class="op">=</span> df.withColumn(
 
       <div class="tab-panel" id="tab-df-udf">
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PySpark — User Defined Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+          <div class="code-header"><span class="code-lang">PySpark: User Defined Functions</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
           <pre><span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> udf, pandas_udf
 <span class="kw">from</span> pyspark.sql.types <span class="kw">import</span> StringType, DoubleType
 <span class="kw">import</span> pandas <span class="kw">as</span> pd
 
-<span class="cm"># Standard UDF (slower — Python serialization per row)</span>
+<span class="cm"># Standard UDF (slower: Python serialization per row)</span>
 <span class="kw">def</span> <span class="fn">classify_amount</span>(amount):
     <span class="kw">if</span> amount <span class="kw">is</span> <span class="kw">None</span>: <span class="kw">return</span> <span class="str">"Unknown"</span>
     <span class="kw">if</span> amount <span class="op">></span> <span class="num">1000</span>: <span class="kw">return</span> <span class="str">"High"</span>
@@ -1490,7 +1490,7 @@ latest <span class="op">=</span> df.withColumn(
 <span class="var">classify_udf</span> <span class="op">=</span> udf(classify_amount, StringType())
 df.withColumn(<span class="str">"tier"</span>, classify_udf(F.col(<span class="str">"amount"</span>)))
 
-<span class="cm"># Pandas UDF (MUCH faster — vectorized via Apache Arrow)</span>
+<span class="cm"># Pandas UDF (MUCH faster: vectorized via Apache Arrow)</span>
 <span class="op">@</span>pandas_udf(DoubleType())
 <span class="kw">def</span> <span class="fn">apply_discount</span>(amounts: pd.Series) -> pd.Series:
     <span class="kw">return</span> amounts <span class="op">*</span> <span class="num">0.9</span>  <span class="cm"># Vectorized operation</span>
@@ -1502,7 +1502,7 @@ spark.udf.register(<span class="str">"classify_amount_sql"</span>, classify_amou
 spark.sql(<span class="str">"SELECT classify_amount_sql(amount) FROM orders"</span>)
 
 <span class="cm"># ⚠️ Best Practices:</span>
-<span class="cm"># 1. Prefer built-in functions (F.*) over UDFs — they run in JVM</span>
+<span class="cm"># 1. Prefer built-in functions (F.*) over UDFs: they run in JVM</span>
 <span class="cm"># 2. Use Pandas UDFs over Python UDFs for better performance</span>
 <span class="cm"># 3. Never use UDFs for simple transformations (null handling, math, strings)</span></pre>
         </div>
@@ -1542,17 +1542,17 @@ spark.sql(<span class="str">"SELECT classify_amount_sql(amount) FROM orders"</sp
         <div class="card">
           <span class="card-icon">🗂️</span>
           <h4>DML Operations</h4>
-          <p>Full UPDATE, DELETE, and MERGE (upsert) support — impossible with plain Parquet files.</p>
+          <p>Full UPDATE, DELETE, and MERGE (upsert) support: impossible with plain Parquet files.</p>
         </div>
       </div>
 
       <div class="concept blue">
-        <div class="concept-title">🔵 Delta Log — How It Works</div>
+        <div class="concept-title">🔵 Delta Log: How It Works</div>
         <p>Delta Lake stores data as Parquet files + a <strong>transaction log</strong> (_delta_log directory). Every operation is recorded as a JSON commit. Spark reads the log to reconstruct the current and historical state of the table. This is how time travel and ACID transactions work.</p>
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark / SQL — Delta Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">PySpark / SQL: Delta Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="cm"># ── CREATE DELTA TABLE ──</span>
 df.write.format(<span class="str">"delta"</span>) \
     .mode(<span class="str">"overwrite"</span>) \
@@ -1611,8 +1611,8 @@ delta_table.vacuum(<span class="num">168</span>)                       <span cla
 
       <div class="sh">Schema Evolution</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark — Schema Evolution</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
-        <pre><span class="cm"># Enable schema evolution — allows adding new columns</span>
+        <div class="code-header"><span class="code-lang">PySpark: Schema Evolution</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Enable schema evolution: allows adding new columns</span>
 df_new.write.format(<span class="str">"delta"</span>) \
     .mode(<span class="str">"append"</span>) \
     .option(<span class="str">"mergeSchema"</span>, <span class="str">"true"</span>) \
@@ -1652,7 +1652,7 @@ spark.sql(<span class="str">"ALTER TABLE orders DROP COLUMN deprecated_col"</spa
         </div>
         <div class="arch-arrow">↓ Ingest (auto-loader)</div>
         <div class="arch-layer">
-          <div class="arch-box red">🥉 Bronze Layer<sub>Raw, unfiltered data — full history</sub></div>
+          <div class="arch-box red">🥉 Bronze Layer<sub>Raw, unfiltered data: full history</sub></div>
         </div>
         <div class="arch-arrow">↓ Validate & Clean</div>
         <div class="arch-layer">
@@ -1664,10 +1664,10 @@ spark.sql(<span class="str">"ALTER TABLE orders DROP COLUMN deprecated_col"</spa
         </div>
       </div>
 
-      <div class="sh">Auto Loader — Incremental Ingestion</div>
+      <div class="sh">Auto Loader: Incremental Ingestion</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark — Auto Loader</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
-        <pre><span class="cm"># Auto Loader — efficiently ingests new files from cloud storage</span>
+        <div class="code-header"><span class="code-lang">PySpark: Auto Loader</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># Auto Loader: efficiently ingests new files from cloud storage</span>
 <span class="cm"># Scales to billions of files, tracks processed files automatically</span>
 
 <span class="var">raw_df</span> <span class="op">=</span> spark.readStream \
@@ -1688,7 +1688,7 @@ raw_df.writeStream \
 
       <div class="sh">Delta Live Tables (DLT)</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">Python — Delta Live Tables</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">Python: Delta Live Tables</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="kw">import</span> dlt
 <span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
 
@@ -1721,7 +1721,7 @@ raw_df.writeStream \
       </div>
 
       <div class="concept green">
-        <div class="concept-title">💡 DLT Quality Expectations</div>
+        <div class="concept-title">DLT Quality Expectations</div>
         <ul>
           <li><strong>@dlt.expect("msg", "condition"):</strong> Track violations as metrics but keep data</li>
           <li><strong>@dlt.expect_or_drop("msg", "condition"):</strong> Drop rows that fail</li>
@@ -1745,11 +1745,11 @@ raw_df.writeStream \
 
       <div class="concept blue">
         <div class="concept-title">🔵 Streaming Mental Model</div>
-        <p>Think of a stream as an <strong>unbounded table</strong> that keeps growing. Spark Structured Streaming treats streaming data the same as batch DataFrames — same API, but with checkpointing for fault tolerance and exactly-once processing guarantees.</p>
+        <p>Think of a stream as an <strong>unbounded table</strong> that keeps growing. Spark Structured Streaming treats streaming data the same as batch DataFrames: same API, but with checkpointing for fault tolerance and exactly-once processing guarantees.</p>
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark — Kafka Streaming</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">PySpark: Kafka Streaming</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="cm"># Read from Kafka</span>
 <span class="var">stream_df</span> <span class="op">=</span> spark.readStream \
     .format(<span class="str">"kafka"</span>) \
@@ -1791,10 +1791,10 @@ raw_df.writeStream \
 query.awaitTermination()
 
 <span class="cm"># Trigger options</span>
-<span class="cm"># .trigger(processingTime="30 seconds") — micro-batch every 30s</span>
-<span class="cm"># .trigger(once=True)           — run once then stop</span>
-<span class="cm"># .trigger(availableNow=True)   — process all available, then stop</span>
-<span class="cm"># .trigger(continuous="1 second") — true continuous (low latency)</span></pre>
+<span class="cm"># .trigger(processingTime="30 seconds"): micro-batch every 30s</span>
+<span class="cm"># .trigger(once=True): run once then stop</span>
+<span class="cm"># .trigger(availableNow=True): process all available, then stop</span>
+<span class="cm"># .trigger(continuous="1 second"): true continuous (low latency)</span></pre>
       </div>
     </div>
 
@@ -1835,7 +1835,7 @@ query.awaitTermination()
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">Python — MLflow End-to-End</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">Python: MLflow End-to-End</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="kw">import</span> mlflow
 <span class="kw">import</span> mlflow.sklearn
 <span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
@@ -1885,7 +1885,7 @@ predictions <span class="op">=</span> prod_model.predict(new_data)</pre>
 
       <div class="sh">Distributed ML with Spark</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">Python — Hyperopt + SparkTrials</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">Python: Hyperopt + SparkTrials</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="kw">from</span> hyperopt <span class="kw">import</span> fmin, tpe, hp, SparkTrials, STATUS_OK
 <span class="kw">import</span> mlflow
 
@@ -1945,7 +1945,7 @@ predictions <span class="op">=</span> prod_model.predict(new_data)</pre>
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">SQL — Unity Catalog Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">SQL: Unity Catalog Operations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="cm">-- Create catalog</span>
 <span class="kw">CREATE</span> CATALOG IF NOT EXISTS prod;
 
@@ -2007,7 +2007,7 @@ DESCRIBE EXTENDED prod.sales.orders;</pre>
         <div class="section-number">11</div>
         <div class="section-title-block">
           <h3>Performance Tuning</h3>
-          <p>Diagnose and eliminate bottlenecks — partitioning, caching, AQE, and Photon.</p>
+          <p>Diagnose and eliminate bottlenecks: partitioning, caching, AQE, and Photon.</p>
         </div>
       </div>
 
@@ -2025,14 +2025,14 @@ DESCRIBE EXTENDED prod.sales.orders;</pre>
       </table>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">PySpark — Performance Configurations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
-        <pre><span class="cm"># ── ADAPTIVE QUERY EXECUTION (AQE) — enable always ──</span>
+        <div class="code-header"><span class="code-lang">PySpark: Performance Configurations</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># ── ADAPTIVE QUERY EXECUTION (AQE): enable always ──</span>
 spark.conf.set(<span class="str">"spark.sql.adaptive.enabled"</span>,                   <span class="str">"true"</span>)
 spark.conf.set(<span class="str">"spark.sql.adaptive.coalescePartitions.enabled"</span>, <span class="str">"true"</span>)  <span class="cm"># Merge small partitions</span>
 spark.conf.set(<span class="str">"spark.sql.adaptive.skewJoin.enabled"</span>,           <span class="str">"true"</span>)  <span class="cm"># Auto-fix skew</span>
 
 <span class="cm"># ── PARTITIONING ──</span>
-<span class="cm"># Rule: target 128MB–200MB per partition</span>
+<span class="cm"># Rule: target 128MB-200MB per partition</span>
 spark.conf.set(<span class="str">"spark.sql.shuffle.partitions"</span>, <span class="str">"400"</span>)           <span class="cm"># Default 200, tune to data size</span>
 spark.conf.set(<span class="str">"spark.default.parallelism"</span>, <span class="str">"400"</span>)
 
@@ -2074,7 +2074,7 @@ skewed_df.withColumn(<span class="str">"salt"</span>, (F.rand() <span class="op"
           <li><strong>Jobs tab:</strong> Top-level jobs triggered by actions. Click in for stages.</li>
           <li><strong>Stages tab:</strong> See individual stage timing, task distribution, shuffle read/write.</li>
           <li><strong>SQL/DataFrame tab:</strong> Physical query plan, scan statistics, join types chosen.</li>
-          <li><strong>Storage tab:</strong> Cached DataFrames — size, fraction cached, memory used.</li>
+          <li><strong>Storage tab:</strong> Cached DataFrames: size, fraction cached, memory used.</li>
           <li><strong>Executors tab:</strong> GC time, task failures, memory usage per executor.</li>
           <li><strong>Red flags:</strong> Spill to disk, high GC time (&gt;10%), skewed task durations, shuffle spill.</li>
         </ul>
@@ -2095,7 +2095,7 @@ skewed_df.withColumn(<span class="str">"salt"</span>, (F.rand() <span class="op"
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">JSON — Workflow Job Definition (API)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">JSON: Workflow Job Definition (API)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre>{
   <span class="str">"name"</span>: <span class="str">"Daily ETL Pipeline"</span>,
   <span class="str">"schedule"</span>: {
@@ -2164,7 +2164,7 @@ skewed_df.withColumn(<span class="str">"salt"</span>, (F.rand() <span class="op"
 
       <div class="sh">Secrets Management</div>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">Databricks CLI — Secrets</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-header"><span class="code-lang">Databricks CLI: Secrets</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
         <pre><span class="cm"># Create a secret scope (backed by Azure Key Vault or Databricks)</span>
 databricks secrets create-scope --scope prod-secrets
 
@@ -2176,7 +2176,7 @@ databricks secrets put --scope prod-secrets --key api-key
 databricks secrets list-scopes
 databricks secrets list --scope prod-secrets
 
-<span class="cm"># In notebooks — NEVER print secrets!</span>
+<span class="cm"># In notebooks: NEVER print secrets!</span>
 <span class="var">password</span> <span class="op">=</span> dbutils.secrets.get(scope=<span class="str">"prod-secrets"</span>, key=<span class="str">"db-password"</span>)
 <span class="cm"># [REDACTED] in logs automatically</span>
 
@@ -2202,7 +2202,7 @@ spark.conf.set(
         <div class="card">
           <span class="card-icon">📋</span>
           <h4>Audit Logs</h4>
-          <p>Every action logged — who ran what query, accessed which table, created/deleted resources. Export to SIEM.</p>
+          <p>Every action logged, who ran what query, accessed which table, created/deleted resources. Export to SIEM.</p>
         </div>
         <div class="card">
           <span class="card-icon">👥</span>
@@ -2261,7 +2261,7 @@ spark.conf.set(
           <li><strong>Z-Ordering:</strong> Apply to high-cardinality columns queried frequently (user_id, order_id).</li>
           <li><strong>Vacuum Schedule:</strong> Run VACUUM weekly. Default 7-day retention for time travel.</li>
           <li><strong>OPTIMIZE Schedule:</strong> Run after large writes. Target 128MB+ file sizes.</li>
-          <li><strong>Job Clusters:</strong> Use job clusters for production — cheaper, fresh environment, auto-terminate.</li>
+          <li><strong>Job Clusters:</strong> Use job clusters for production: cheaper, fresh environment, auto-terminate.</li>
           <li><strong>Separate Environments:</strong> dev → staging → prod catalogs in Unity Catalog.</li>
           <li><strong>CI/CD:</strong> Use Databricks Asset Bundles (DABs) with GitHub Actions or Azure DevOps.</li>
           <li><strong>Monitoring:</strong> Track DLT expectations, MLflow metrics, workflow SLAs.</li>
@@ -2270,8 +2270,8 @@ spark.conf.set(
       </div>
 
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">YAML — Databricks Asset Bundle (CI/CD)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
-        <pre><span class="cm"># databricks.yml — deploy jobs as code</span>
+        <div class="code-header"><span class="code-lang">YAML: Databricks Asset Bundle (CI/CD)</span><button class="code-copy" onclick="copyCode(this)">COPY</button></div>
+        <pre><span class="cm"># databricks.yml: deploy jobs as code</span>
 bundle:
   name: my-data-platform
 

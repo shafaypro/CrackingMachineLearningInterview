@@ -190,7 +190,7 @@ def batch_softmax_loss(user_embeddings, item_embeddings, temperature=0.1):
     user_embeddings: (batch_size, embed_dim)
     item_embeddings: (batch_size, embed_dim)
     """
-    # Similarity matrix: (batch, batch) — diagonal is positive pairs
+    # Similarity matrix: (batch, batch), diagonal is positive pairs
     logits = torch.matmul(user_embeddings, item_embeddings.T) / temperature
     labels = torch.arange(logits.size(0)).to(logits.device)
     return F.cross_entropy(logits, labels)
@@ -404,7 +404,7 @@ def get_user_features(user_id: str) -> dict:
     }
 
 def get_item_features_batch(item_ids: list[str]) -> dict:
-    """Batch fetch item features — much faster than one at a time."""
+    """Batch fetch item features: much faster than one at a time."""
     pipeline = redis.pipeline()
     for item_id in item_ids:
         pipeline.hgetall(f"item:features:{item_id}")
@@ -497,7 +497,7 @@ Ranking Model:
 
 1. **Why use a two-stage pipeline (retrieval + ranking)?** Running a complex ranking model on 10M+ items is infeasible (too slow). The two-stage pipeline uses a fast approximate method (ANN on embeddings) to narrow to 1000 candidates, then uses a rich model for precise ranking. This balances quality and latency.
 
-2. **How do you address the explore-exploit trade-off?** Use contextual bandits (LinUCB or Thompson Sampling) for exploration — occasionally show items with high uncertainty to gather data. Balance with exploiting known good recommendations. Also use time-varying models to keep recommendations fresh.
+2. **How do you address the explore-exploit trade-off?** Use contextual bandits (LinUCB or Thompson Sampling) for exploration: occasionally show items with high uncertainty to gather data. Balance with exploiting known good recommendations. Also use time-varying models to keep recommendations fresh.
 
 3. **How do you prevent filter bubbles?** Enforce diversity constraints in re-ranking (max N items per genre), include content-based exploration items, monitor catalog coverage in A/B tests as a guardrail metric.
 

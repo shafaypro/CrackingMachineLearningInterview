@@ -1,6 +1,6 @@
-# Unsloth — Fast LoRA Fine-Tuning
+# Unsloth: Fast LoRA Fine-Tuning
 
-A comprehensive guide to Unsloth — the fastest library for fine-tuning LLMs with LoRA and QLoRA.
+A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.
 
 ---
 
@@ -32,7 +32,7 @@ Unsloth is an open-source Python library that significantly accelerates LoRA and
 - Rewritten CUDA kernels using OpenAI Triton (avoiding PyTorch overhead)
 - Optimized gradient checkpointing
 - Memory-efficient QLoRA with NF4 quantization
-- Kernel fusion — fewer memory reads/writes
+- Kernel fusion: fewer memory reads/writes
 
 ---
 
@@ -379,25 +379,25 @@ Benchmarks comparing Unsloth vs standard HuggingFace (HF) training on Llama 3.2 
 
 **Q1: What is Unsloth and what makes it faster than standard HuggingFace training?** 🟡 Intermediate
 
-Unsloth is a library for fast LoRA/QLoRA fine-tuning. It achieves 2-5x speedup through: (1) manually written CUDA kernels using OpenAI Triton that replace PyTorch's generic implementations, (2) kernel fusion — combining multiple operations into one kernel pass to reduce memory bandwidth, (3) optimized gradient checkpointing that is smarter about which activations to recompute, and (4) memory-efficient attention implementations.
+Unsloth is a library for fast LoRA/QLoRA fine-tuning. It achieves 2-5x speedup through: (1) manually written CUDA kernels using OpenAI Triton that replace PyTorch's generic implementations, (2) kernel fusion, combining multiple operations into one kernel pass to reduce memory bandwidth, (3) optimized gradient checkpointing that is smarter about which activations to recompute, and (4) memory-efficient attention implementations.
 
 ---
 
 **Q2: What is the difference between saving a LoRA adapter vs a merged model?** 🟡 Intermediate
 
-A **LoRA adapter** contains only the small additional matrices (r << d). It's compact (~50-200MB) but requires loading the base model + adapter at inference time. A **merged model** combines the LoRA weights back into the base model weights — it's a complete standalone model but at full size. Use adapter format for flexibility (swap adapters), use merged format for production deployment where simplicity matters.
+A **LoRA adapter** contains only the small additional matrices (r << d). It's compact (~50-200MB) but requires loading the base model + adapter at inference time. A **merged model** combines the LoRA weights back into the base model weights: it's a complete standalone model but at full size. Use adapter format for flexibility (swap adapters), use merged format for production deployment where simplicity matters.
 
 ---
 
 **Q3: What is `use_gradient_checkpointing="unsloth"` and when should you use it?** 🔴 Advanced
 
-Gradient checkpointing reduces memory by not storing all intermediate activations during the forward pass — instead it recomputes them during backpropagation. Standard gradient checkpointing has a fixed recomputation strategy. Unsloth's implementation is smarter: it selectively checkpoints the most memory-intensive activations while minimizing recomputation overhead, achieving a better memory-speed tradeoff than the standard approach. Use it whenever training on limited VRAM (< 24GB).
+Gradient checkpointing reduces memory by not storing all intermediate activations during the forward pass: instead it recomputes them during backpropagation. Standard gradient checkpointing has a fixed recomputation strategy. Unsloth's implementation is smarter: it selectively checkpoints the most memory-intensive activations while minimizing recomputation overhead, achieving a better memory-speed tradeoff than the standard approach. Use it whenever training on limited VRAM (< 24GB).
 
 ---
 
 **Q4: How would you use a model fine-tuned with Unsloth in Ollama?** 🟡 Intermediate
 
-Unsloth supports exporting to GGUF format via `model.save_pretrained_gguf()`. After export, create an Ollama Modelfile that references the GGUF file, then run `ollama create model-name -f Modelfile`. The model can then be used with `ollama run` or via Ollama's API — making it accessible locally without any Python dependencies.
+Unsloth supports exporting to GGUF format via `model.save_pretrained_gguf()`. After export, create an Ollama Modelfile that references the GGUF file, then run `ollama create model-name -f Modelfile`. The model can then be used with `ollama run` or via Ollama's API, making it accessible locally without any Python dependencies.
 
 ---
 
@@ -413,5 +413,5 @@ LoRA rank `r` controls the number of trainable parameters. Common values: r=4-8 
 - [Unsloth Documentation](https://docs.unsloth.ai/)
 - [Unsloth Notebooks (Google Colab)](https://github.com/unslothai/unsloth#-finetune-for-free)
 - [TRL Documentation (SFTTrainer)](https://huggingface.co/docs/trl/sft_trainer)
-- [LoRA Paper — Hu et al. (2021)](https://arxiv.org/abs/2106.09685)
-- [QLoRA Paper — Dettmers et al. (2023)](https://arxiv.org/abs/2305.14314)
+- [LoRA Paper: Hu et al. (2021)](https://arxiv.org/abs/2106.09685)
+- [QLoRA Paper: Dettmers et al. (2023)](https://arxiv.org/abs/2305.14314)

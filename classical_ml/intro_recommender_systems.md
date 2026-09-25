@@ -126,7 +126,7 @@ Matrix factorization decomposes the user-item matrix R (m×n) into two lower-ran
 
 ### Alternating Least Squares (ALS)
 
-ALS is commonly used for implicit feedback (clicks, purchases, views) — popular in Spark ML.
+ALS is commonly used for implicit feedback (clicks, purchases, views): popular in Spark ML.
 
 ```python
 from sklearn.decomposition import NMF
@@ -303,7 +303,7 @@ def get_recommendations(user_id, interaction_count, cf_model, cb_model, threshol
 |--------|---------|-----------------|
 | **Precision@k** | Relevant in top-k / k | Fraction of recommended items that are relevant |
 | **Recall@k** | Relevant in top-k / Total relevant | Fraction of relevant items that were recommended |
-| **NDCG@k** | Normalized Discounted Cumulative Gain | Ranking quality — rewards placing relevant items higher |
+| **NDCG@k** | Normalized Discounted Cumulative Gain | Ranking quality: rewards placing relevant items higher |
 | **MAP@k** | Mean Average Precision | Average precision across users |
 | **Hit Rate@k** | % of users with ≥1 relevant item in top-k | Broad coverage metric |
 | **MRR** | Mean Reciprocal Rank | Rank of first relevant result |
@@ -360,7 +360,7 @@ Final Top-N Recommendations
 ## Interview Q&A
 
 **Q1: What is the difference between collaborative filtering and content-based filtering?**
-CF uses the user-item interaction matrix only — it leverages collective user behavior. It can recommend items that are hard to describe but popular with similar users. CB uses item/user features — it can explain recommendations ("because you liked sci-fi") and handles new items well. CF suffers from cold start; CB doesn't generalize beyond item similarity.
+CF uses the user-item interaction matrix only: it uses collective user behavior. It can recommend items that are hard to describe but popular with similar users. CB uses item/user features: it can explain recommendations ("because you liked sci-fi") and handles new items well. CF suffers from cold start; CB doesn't generalize beyond item similarity.
 
 **Q2: How do you handle the cold start problem in collaborative filtering?**
 New users: collect onboarding preferences (ask them to rate a few items), use demographic-based CF, or fall back to content-based until enough interactions. New items: use content features in a hybrid model, or give new items exploration slots (epsilon-greedy).
@@ -369,7 +369,7 @@ New users: collect onboarding preferences (ask them to rate a few items), use de
 Two-tower models: (1) can incorporate rich features beyond IDs (text, images, context); (2) scale to billions of users/items via ANN retrieval; (3) support real-time user context; (4) naturally handle cold start via feature encoding. MF is simpler but limited to ID-based embeddings and doesn't generalize to unseen users/items.
 
 **Q4: How do you evaluate a recommender system offline vs online?**
-Offline: precision@k, recall@k, NDCG@k on held-out interactions (use time-based split, not random). Online: A/B test CTR, conversion rate, watch time, user retention. Offline metrics don't always correlate with online performance — the bandit feedback problem means you can only evaluate on items that were actually shown.
+Offline: precision@k, recall@k, NDCG@k on held-out interactions (use time-based split, not random). Online: A/B test CTR, conversion rate, watch time, user retention. Offline metrics don't always correlate with online performance: the bandit feedback problem means you can only evaluate on items that were actually shown.
 
 **Q5: What is matrix factorization and how does it work?**
 MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k << min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize reconstruction error: ||R - UV^T||². Gradient descent or ALS updates one matrix while holding the other fixed.

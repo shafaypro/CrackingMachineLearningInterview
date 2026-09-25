@@ -490,7 +490,7 @@ Embedding memory (hashed, illustrative):
 
 Training data:
   500k req/s × ~1 ad each × 86,400 s ≈ 43B impressions/day
-  → Downsample negatives to w = 0.05–0.1 → a few billion examples/day
+  → Downsample negatives to w = 0.05-0.1 → a few billion examples/day
 ```
 
 ---

@@ -216,7 +216,7 @@ class ShadowModeServer:
     def predict(self, X):
         primary_pred = self.primary.predict(X)
 
-        # Run shadow asynchronously — don't block
+        # Run shadow asynchronously: don't block
         def run_shadow():
             try:
                 shadow_pred = self.shadow.predict(X)
@@ -356,7 +356,7 @@ spec:
 Batch inference processes a large dataset offline (e.g., nightly job scoring all customers). Real-time inference responds to individual requests with low latency (< 100ms). Batch: high throughput, no latency constraint, GPU-efficient. Real-time: low latency, auto-scaling required, may need prediction caching.
 
 **Q2: What is dynamic batching and why is it important for GPU serving?**
-Dynamic batching accumulates multiple incoming requests over a short time window (e.g., 5-10ms), then processes them as a single batch. GPUs are massively parallel — a single request uses < 1% of a GPU's capacity, while a batch of 64 may use 80%. Dynamic batching dramatically improves GPU utilization and cost efficiency without significantly increasing P99 latency.
+Dynamic batching accumulates multiple incoming requests over a short time window (e.g., 5-10ms), then processes them as a single batch. GPUs are massively parallel: a single request uses < 1% of a GPU's capacity, while a batch of 64 may use 80%. Dynamic batching dramatically improves GPU utilization and cost efficiency without significantly increasing P99 latency.
 
 **Q3: How do you do a canary deployment for an ML model?**
 Route a small percentage (5-10%) of traffic to the new model version. Monitor key metrics: prediction latency, error rates, and most importantly business metrics (CTR, conversion, revenue). Use a load balancer or service mesh (Istio) to split traffic. Gradually increase canary traffic if metrics are good; roll back if they degrade.
@@ -368,7 +368,7 @@ Shadow mode routes all production traffic to both the current model (which serve
 REST uses JSON over HTTP/1.1: human-readable, easy to debug, broad tooling support, but slower due to JSON serialization. gRPC uses Protocol Buffers over HTTP/2: 5-10x smaller payloads, faster parsing, native streaming, but requires generated client code and browser support via proxy. Use REST for external APIs; gRPC for internal high-throughput services.
 
 **Q6: How would you reduce serving latency for a large deep learning model?**
-1. **Quantization**: INT8/FP16 instead of FP32 — 2-4x speedup with minimal accuracy loss
+1. **Quantization**: INT8/FP16 instead of FP32: 2-4x speedup with minimal accuracy loss
 2. **Distillation**: smaller student model trained on teacher outputs
 3. **Pruning**: remove low-importance weights
 4. **TensorRT optimization**: compile for specific GPU hardware

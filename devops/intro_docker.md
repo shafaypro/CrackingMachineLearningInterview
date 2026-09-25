@@ -1,6 +1,6 @@
-# Docker – Complete Guide (2026 Edition)
+# Docker
 
-Docker is the standard for packaging applications into portable, reproducible **containers**. Whether you're deploying microservices, running local dev environments, or building CI/CD pipelines, Docker is foundational to modern software delivery.
+Docker is the standard for packaging applications into portable, reproducible **containers**. It is used for deploying microservices, running local dev environments, and building CI/CD pipelines, and ML model serving is almost always shipped as a container image.
 
 ---
 
@@ -22,7 +22,7 @@ Docker is the standard for packaging applications into portable, reproducible **
 
 ## What is Docker?
 
-Docker packages an application and **all its dependencies** (libraries, runtime, config) into a **container** — a lightweight, isolated process that runs identically on any machine.
+Docker packages an application and **all its dependencies** (libraries, runtime, config) into a **container**: a lightweight, isolated process that runs identically on any machine.
 
 ```
 Without Docker:                    With Docker:
@@ -39,7 +39,7 @@ Without Docker:                    With Docker:
 | Overhead | High (hypervisor) | Minimal |
 | Portability | Medium | High |
 
-Containers share the **host OS kernel** — they're not VMs. They use Linux namespaces and cgroups for isolation.
+Containers share the **host OS kernel**: they're not VMs. They use Linux namespaces and cgroups for isolation.
 
 ---
 
@@ -148,7 +148,7 @@ CMD ["app.py"]
 
 ### .dockerignore
 
-Like `.gitignore` — prevents unnecessary files from being sent to the Docker build context:
+Like `.gitignore`: prevents unnecessary files from being sent to the Docker build context:
 
 ```dockerignore
 .git

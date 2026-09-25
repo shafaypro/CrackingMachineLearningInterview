@@ -33,7 +33,7 @@ FROM / JOIN  →  WHERE  →  GROUP BY  →  HAVING  →  SELECT  →  DISTINCT 
 Two consequences that come up constantly:
 
 - **You cannot reference a `SELECT` alias in `WHERE`**, because `WHERE` runs first. (Some engines allow it in `GROUP BY`/`ORDER BY` as a convenience.)
-- **`WHERE` filters rows, `HAVING` filters groups.** Putting a non-aggregate condition in `HAVING` works but filters *after* grouping — much more expensive than filtering before.
+- **`WHERE` filters rows, `HAVING` filters groups.** Putting a non-aggregate condition in `HAVING` works but filters *after* grouping: much more expensive than filtering before.
 
 The optimizer then rewrites this logical plan into a physical one: which index to use, which join algorithm, what order to join tables, whether to parallelize.
 
@@ -76,7 +76,7 @@ HashAggregate  (cost=... rows=1000 width=..) (actual time=850 rows=48200 loops=1
 
 The single most valuable habit: **compare estimated to actual rows at every node**. A plan is only as good as its estimates, and almost every catastrophically slow query traces back to an estimate that was off by orders of magnitude.
 
-`BUFFERS` shows actual I/O — `shared hit` is cache, `shared read` is disk. A query that looks fast on a warm cache can be terrible cold.
+`BUFFERS` shows actual I/O: `shared hit` is cache, `shared read` is disk. A query that looks fast on a warm cache can be terrible cold.
 
 ---
 
@@ -90,7 +90,7 @@ CREATE INDEX idx_orders_customer_created ON orders (customer_id, created_at);
 
 ### Composite index column order
 
-The rule: **equality columns first, then range, then columns used only for ordering.** An index on `(a, b)` supports lookups on `a` and on `(a, b)`, but **not** on `b` alone — the same reason a phone book sorted by (surname, first name) can't find everyone named "James".
+The rule: **equality columns first, then range, then columns used only for ordering.** An index on `(a, b)` supports lookups on `a` and on `(a, b)`, but **not** on `b` alone: the same reason a phone book sorted by (surname, first name) can't find everyone named "James".
 
 ```sql
 -- Supports: WHERE customer_id = 5
@@ -100,7 +100,7 @@ The rule: **equality columns first, then range, then columns used only for order
 
 ### Covering indexes
 
-If the index contains every column the query needs, the engine never touches the table — an **index-only scan**:
+If the index contains every column the query needs, the engine never touches the table: an **index-only scan**:
 
 ```sql
 CREATE INDEX idx_cover ON orders (customer_id, created_at) INCLUDE (amount, status);
@@ -116,7 +116,7 @@ Index only the rows you query, which is smaller and faster to maintain:
 CREATE INDEX idx_pending ON orders (created_at) WHERE status = 'pending';
 ```
 
-Excellent when a status column is heavily skewed — indexing 0.1% of rows instead of all of them.
+Excellent when a status column is heavily skewed, indexing 0.1% of rows instead of all of them.
 
 ### Other index types
 
@@ -125,12 +125,12 @@ Excellent when a status column is heavily skewed — indexing 0.1% of rows inste
 | **Hash** | Equality only; rarely worth it over B-tree |
 | **GIN** | Arrays, JSONB, full-text search |
 | **GiST / SP-GiST** | Geometric, range, nearest-neighbour |
-| **BRIN** | Very large tables with natural physical ordering (append-only time series) — tiny index, coarse filtering |
+| **BRIN** | Very large tables with natural physical ordering (append-only time series): tiny index, coarse filtering |
 | **Bitmap** (warehouses) | Low-cardinality columns |
 
 ### The cost of indexes
 
-Every index slows `INSERT`, `UPDATE`, and `DELETE`, consumes storage, and must be maintained. Unused indexes are pure overhead — check `pg_stat_user_indexes` for `idx_scan = 0` and drop them. "Add an index" is not a free answer, and saying so unprompted is a good signal.
+Every index slows `INSERT`, `UPDATE`, and `DELETE`, consumes storage, and must be maintained. Unused indexes are pure overhead: check `pg_stat_user_indexes` for `idx_scan = 0` and drop them. "Add an index" is not a free answer, and saying so unprompted is a good signal.
 
 ---
 
@@ -142,9 +142,9 @@ Every index slows `INSERT`, `UPDATE`, and `DELETE`, consumes storage, and must b
 | **Hash Join** | `O(n + m)` | Large unsorted inputs, equality join, hash table fits memory |
 | **Merge Join** | `O(n log n + m log m)`, or `O(n + m)` if pre-sorted | Both inputs already sorted on the key; range joins |
 
-**Nested loop is the dangerous one.** It's optimal when the outer side has 10 rows and the inner has an index. It's catastrophic when the optimizer *estimated* 10 rows and there are actually 10 million — the same plan becomes 10 million index lookups. That mis-estimate is the most common cause of a query that ran in 50 ms yesterday and 50 minutes today.
+**Nested loop is the dangerous one.** It's optimal when the outer side has 10 rows and the inner has an index. It's catastrophic when the optimizer *estimated* 10 rows and there are actually 10 million: the same plan becomes 10 million index lookups. That mis-estimate is the most common cause of a query that ran in 50 ms yesterday and 50 minutes today.
 
-**Hash join** builds a hash table on the smaller side and probes with the larger. If the build side doesn't fit in memory it spills to disk in batches, which is much slower — watch for that in the plan.
+**Hash join** builds a hash table on the smaller side and probes with the larger. If the build side doesn't fit in memory it spills to disk in batches, which is much slower: watch for that in the plan.
 
 **Join order matters enormously.** With `n` tables there are factorially many orders; optimizers search heuristically and give up on very large joins. The practical rule: filter early, join the most selective tables first, so intermediate results stay small.
 
@@ -169,14 +169,14 @@ WHERE amount > 50
 
 This is the most common single cause of "I added an index and nothing got faster", and it comes up in interviews constantly.
 
-**Expression indexes** rescue cases where the function is genuinely needed:
+**Expression indexes** rescue cases where the function is needed:
 
 ```sql
 CREATE INDEX idx_lower_email ON users (LOWER(email));
 -- now WHERE LOWER(email) = '...' can use it
 ```
 
-**Leading wildcards** also defeat B-trees — `LIKE '%term'` cannot use an index because the prefix is unknown. Use a trigram index (`pg_trgm`) or full-text search instead.
+**Leading wildcards** also defeat B-trees: `LIKE '%term'` cannot use an index because the prefix is unknown. Use a trigram index (`pg_trgm`) or full-text search instead.
 
 **`OR` across different columns** often prevents index usage; rewriting as `UNION ALL` of two indexed queries can be dramatically faster.
 
@@ -191,14 +191,14 @@ ANALYZE orders;                                  -- refresh statistics
 ALTER TABLE orders ALTER COLUMN status SET STATISTICS 1000;   -- finer histogram
 ```
 
-**Correlated columns** are the classic estimation failure. The optimizer assumes independence, so for `WHERE city = 'Paris' AND country = 'France'` it multiplies the two selectivities and estimates far too few rows — when in reality the predicates are nearly redundant. Postgres addresses this with extended statistics:
+**Correlated columns** are the classic estimation failure. The optimizer assumes independence, so for `WHERE city = 'Paris' AND country = 'France'` it multiplies the two selectivities and estimates far too few rows, when in reality the predicates are nearly redundant. Postgres addresses this with extended statistics:
 
 ```sql
 CREATE STATISTICS stat_city_country (dependencies, ndistinct)
   ON city, country FROM addresses;
 ```
 
-**Skew** is the other estimation trap. If 95% of orders have `status = 'complete'`, an index on `status` helps for the rare values and is useless for the common one — and the optimizer, seeing average selectivity, may choose wrongly for both.
+**Skew** is the other estimation trap. If 95% of orders have `status = 'complete'`, an index on `status` helps for the rare values and is useless for the common one, and the optimizer, seeing average selectivity, may choose wrongly for both.
 
 ---
 
@@ -228,9 +228,9 @@ FROM orders
 WINDOW w AS (PARTITION BY customer_id ORDER BY created_at);
 ```
 
-**Frame clauses** change both semantics and cost. `ROWS BETWEEN` is cheaper than `RANGE BETWEEN`, and the default frame for an ordered window is `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` — which surprises people expecting `ROWS`, particularly with ties.
+**Frame clauses** change both semantics and cost. `ROWS BETWEEN` is cheaper than `RANGE BETWEEN`, and the default frame for an ordered window is `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, which surprises people expecting `ROWS`, particularly with ties.
 
-**Top-N per group** — the perennial interview question, with a performance angle:
+**Top-N per group**: the perennial interview question, with a performance angle:
 
 ```sql
 -- Portable
@@ -252,7 +252,7 @@ CROSS JOIN LATERAL (
 ) o;
 ```
 
-The `LATERAL` form wins when groups are few and there's an index on `(customer_id, amount DESC)` — it does a small index seek per group instead of sorting the whole table.
+The `LATERAL` form wins when groups are few and there's an index on `(customer_id, amount DESC)`: it does a small index seek per group instead of sorting the whole table.
 
 ---
 
@@ -268,7 +268,7 @@ CREATE TABLE events_2026_01 PARTITION OF events
   FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
 ```
 
-Pruning only works if the query filters on the **partition key**. A query filtering on `user_id` when partitioned by date scans everything — so the partition key must match the dominant access pattern.
+Pruning only works if the query filters on the **partition key**. A query filtering on `user_id` when partitioned by date scans everything, so the partition key must match the dominant access pattern.
 
 The other big benefit: dropping an old partition is instant metadata work, versus a `DELETE` that has to touch every row and bloat the table.
 
@@ -294,14 +294,14 @@ The optimization mindset differs, and interviewers check that you know which wor
 | Storage | Row-oriented | Column-oriented |
 | Optimize for | Point lookups, small transactions | Large scans and aggregations |
 | Main lever | **Indexes** | **Partition pruning + clustering** |
-| `SELECT *` | Mildly wasteful | **Very expensive** — reads every column |
+| `SELECT *` | Mildly wasteful | **Very expensive**: reads every column |
 | Row count filters | Index seek | File/block skipping via min-max stats |
 | Joins | Index nested loop common | Hash joins, broadcast vs shuffle |
 | Cost model | I/O and CPU | **Bytes scanned** (often literally billed) |
 
-In a warehouse, **column selection is the primary optimization** — `SELECT *` on a 200-column table reads 200 columns' worth of data when you needed three. Partition pruning and clustering replace indexes as the mechanism for reading less.
+In a warehouse, **column selection is the primary optimization**: `SELECT *` on a 200-column table reads 200 columns' worth of data when you needed three. Partition pruning and clustering replace indexes as the mechanism for reading less.
 
-**Broadcast vs shuffle join** in distributed engines: if one side is small it's broadcast to every node (cheap); otherwise both sides are shuffled across the network by join key (expensive). Data **skew** — one key with a disproportionate share of rows — makes one task run far longer than the rest, which is the classic Spark/warehouse performance problem. Salting the key is the standard fix.
+**Broadcast vs shuffle join** in distributed engines: if one side is small it's broadcast to every node (cheap); otherwise both sides are shuffled across the network by join key (expensive). Data **skew** (one key with a disproportionate share of rows) makes one task run far longer than the rest, which is the classic Spark/warehouse performance problem. Salting the key is the standard fix.
 
 ---
 
@@ -326,7 +326,7 @@ FROM customers c
 JOIN (SELECT customer_id, sum(amount) total FROM orders GROUP BY customer_id) o
   ON o.customer_id = c.id;
 
--- 4. Deep OFFSET is O(offset) — use keyset pagination
+-- 4. Deep OFFSET is O(offset): use keyset pagination
 -- Slow at page 10,000
 SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 200000;
 -- Fast: seek directly
@@ -349,7 +349,7 @@ SELECT a FROM t1 UNION ALL SELECT a FROM t2;   -- when duplicates are fine or im
 5. **Check sargability.** Is a function wrapping an indexed column?
 6. **Consider the index.** Does one exist, is the column order right, would a covering or partial index help?
 7. **Consider a rewrite.** `EXISTS` instead of `COUNT`, aggregate before join, window instead of correlated subquery.
-8. **Re-measure.** Then confirm the plan actually changed — sometimes it doesn't.
+8. **Re-measure.** Then confirm the plan actually changed: sometimes it doesn't.
 
 Optimize the **plan node that dominates actual time**, not the part of the SQL that looks ugliest.
 
@@ -359,11 +359,11 @@ Optimize the **plan node that dominates actual time**, not the part of the SQL t
 
 #### What does it mean for a predicate to be sargable?
 
-Sargable means the predicate can use an index to seek rather than forcing a scan. The rule is that the indexed column must appear bare on one side of the comparison — the moment you wrap it in a function or arithmetic, the engine can no longer map the predicate onto the index's sort order.
+Sargable means the predicate can use an index to seek rather than forcing a scan. The rule is that the indexed column must appear bare on one side of the comparison: the moment you wrap it in a function or arithmetic, the engine can no longer map the predicate onto the index's sort order.
 
 So `WHERE DATE(created_at) = '2026-01-01'` cannot use an index on `created_at`, while the equivalent `WHERE created_at >= '2026-01-01' AND created_at < '2026-01-02'` can. Same for `UPPER(email) = ...` versus comparing against a lowered constant, and `amount * 2 > 100` versus `amount > 50`.
 
-This is the most common reason someone adds an index and sees no improvement. When the function is genuinely required, an expression index on `LOWER(email)` restores index usage. Leading wildcards (`LIKE '%foo'`) are the related case — no known prefix means no B-tree seek, so you need trigram or full-text indexing.
+This is the most common reason someone adds an index and sees no improvement. When the function is required, an expression index on `LOWER(email)` restores index usage. Leading wildcards (`LIKE '%foo'`) are the related case: no known prefix means no B-tree seek, so you need trigram or full-text indexing.
 
 #### Explain the three join algorithms and when each is chosen.
 
@@ -371,7 +371,7 @@ This is the most common reason someone adds an index and sees no improvement. Wh
 
 **Hash join**: build a hash table on the smaller input, probe with the larger. `O(n+m)`, the workhorse for large equality joins. Degrades sharply if the build side doesn't fit in memory and has to spill to disk in batches.
 
-**Merge join**: sort both inputs on the key and walk them together. `O(n log n + m log m)`, but `O(n+m)` if the inputs are already sorted — so it's the natural choice when an index provides the ordering for free, and it also handles range joins that hash join can't.
+**Merge join**: sort both inputs on the key and walk them together. `O(n log n + m log m)`, but `O(n+m)` if the inputs are already sorted, so it's the natural choice when an index provides the ordering for free, and it also handles range joins that hash join can't.
 
 The dangerous one is nested loop, because its cost depends entirely on the outer row count being small. If the optimizer estimates 10 rows and there are actually 10 million, the same plan turns into 10 million lookups. That estimate error is the most common cause of a query that was fast yesterday and is unusable today.
 
@@ -379,7 +379,7 @@ The dangerous one is nested loop, because its cost depends entirely on the outer
 
 Almost always the plan changed, and almost always because estimates changed.
 
-I'd start with `EXPLAIN ANALYZE` and compare estimated to actual rows at each node. The usual causes: **stale statistics** after a large data load, so the optimizer is planning against an old distribution — fixed by `ANALYZE`. **Data growth crossing a threshold**, where a nested loop that was correct at 1,000 rows is catastrophic at 10 million. **Skew**, where a previously uniform column became heavily concentrated. **Parameter sniffing**, where a cached plan built for a selective parameter value is reused for a non-selective one.
+I'd start with `EXPLAIN ANALYZE` and compare estimated to actual rows at each node. The usual causes: **stale statistics** after a large data load, so the optimizer is planning against an old distribution: fixed by `ANALYZE`. **Data growth crossing a threshold**, where a nested loop that was correct at 1,000 rows is catastrophic at 10 million. **Skew**, where a previously uniform column became heavily concentrated. **Parameter sniffing**, where a cached plan built for a selective parameter value is reused for a non-selective one.
 
 I'd also check the boring possibilities: an index was dropped, a cold cache (compare `shared hit` versus `shared read` in `BUFFERS`), or resource contention from something else on the box. But statistics and estimate drift account for most of these, and `ANALYZE` plus a plan comparison usually identifies it in minutes.
 
@@ -389,7 +389,7 @@ Because a composite index is sorted lexicographically by `a` first, then `b` wit
 
 The phone book analogy makes it concrete: a directory sorted by surname then first name lets you find "Smith", or "Smith, James", but finding everyone named James means reading the entire book.
 
-Practically: put equality columns first, then range columns, then ordering columns. If you frequently filter on `b` alone, you need a separate index — though some engines can do an "index skip scan" when `a` has very few distinct values, which partly rescues the case.
+Practically: put equality columns first, then range columns, then ordering columns. If you frequently filter on `b` alone, you need a separate index, though some engines can do an "index skip scan" when `a` has very few distinct values, which partly rescues the case.
 
 #### How is optimizing a columnar warehouse different from optimizing Postgres?
 
@@ -397,9 +397,9 @@ Different levers, because the storage model is different.
 
 In row-store OLTP, the win is finding the few rows you want without touching the rest, so **indexes** are the primary tool and point lookups are the target workload.
 
-In a columnar warehouse, data is stored and compressed per column, and queries scan large ranges. There typically are no indexes in the OLTP sense. The levers are **reading fewer columns** — `SELECT *` on a 200-column table is genuinely expensive because it reads all 200 — and **reading fewer blocks**, achieved through partition pruning on the partition key and clustering/sort keys so min-max statistics let the engine skip files entirely.
+In a columnar warehouse, data is stored and compressed per column, and queries scan large ranges. There typically are no indexes in the OLTP sense. The levers are **reading fewer columns** (`SELECT *` on a 200-column table is expensive because it reads all 200), and **reading fewer blocks**, achieved through partition pruning on the partition key and clustering/sort keys so min-max statistics let the engine skip files entirely.
 
-The cost model also differs: warehouses often bill by **bytes scanned**, so optimization is directly a cost exercise rather than only a latency one. And in distributed engines you additionally care about join strategy (broadcast the small side versus shuffling both) and **data skew**, where one hot key makes a single task run far longer than the rest — usually addressed by salting the key.
+The cost model also differs: warehouses often bill by **bytes scanned**, so optimization is directly a cost exercise rather than only a latency one. And in distributed engines you additionally care about join strategy (broadcast the small side versus shuffling both) and **data skew**, where one hot key makes a single task run far longer than the rest, usually addressed by salting the key.
 
 #### What's wrong with `NOT IN` on a subquery?
 
@@ -409,13 +409,13 @@ Two things, one of them a silent correctness bug.
 
 **Performance**: `NOT IN` with a subquery often can't be transformed into an anti-join, so the engine may materialize and re-check the whole subquery.
 
-`NOT EXISTS` fixes both — it's NULL-safe by construction and typically plans as a proper anti-join. `LEFT JOIN ... WHERE right.key IS NULL` is the third equivalent form and sometimes plans better still.
+`NOT EXISTS` fixes both: it's NULL-safe by construction and typically plans as a proper anti-join. `LEFT JOIN ... WHERE right.key IS NULL` is the third equivalent form and sometimes plans better still.
 
 #### How would you paginate through 10 million rows efficiently?
 
-Not with `OFFSET`. `LIMIT 20 OFFSET 200000` requires the engine to generate and discard 200,000 rows before returning anything, so cost grows linearly with page depth — the last pages become unusable.
+Not with `OFFSET`. `LIMIT 20 OFFSET 200000` requires the engine to generate and discard 200,000 rows before returning anything, so cost grows linearly with page depth: the last pages become unusable.
 
-**Keyset (seek) pagination** instead: remember the sort key of the last row returned and use it as a filter — `WHERE id > :last_seen ORDER BY id LIMIT 20`. With an index on the sort key this is an index seek, so every page costs the same regardless of depth.
+**Keyset (seek) pagination** instead: remember the sort key of the last row returned and use it as a filter, `WHERE id > :last_seen ORDER BY id LIMIT 20`. With an index on the sort key this is an index seek, so every page costs the same regardless of depth.
 
 The trade-offs worth stating: you can't jump to an arbitrary page number, only forward and backward; the sort key must be unique or you need a tiebreaker (`(created_at, id)`) or rows can be skipped or duplicated; and it's a different API contract, so it's a design decision rather than a drop-in change.
 

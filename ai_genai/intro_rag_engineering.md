@@ -159,13 +159,13 @@ Several distinct causes, and they need different fixes:
 
 Separately at each stage, or you cannot localize a regression.
 
-**Retrieval**: recall@k and MRR against a labeled set of questions with known-relevant chunk IDs. Recall@k is the ceiling on everything downstream — if the evidence isn't retrieved, no prompt fixes it.
+**Retrieval**: recall@k and MRR against a labeled set of questions with known-relevant chunk IDs. Recall@k is the ceiling on everything downstream: if the evidence isn't retrieved, no prompt fixes it.
 
 **Generation given context**: faithfulness (is every claim supported by the retrieved text?), answer relevance, and citation correctness. LLM-as-judge works here if the judge is validated against human labels on a sample.
 
 **End to end**: task success rate on a fixed regression suite, run on every prompt, model, or index change.
 
-**Production**: user feedback signals, escalation rate, and the frequency of "I don't know" responses — a sudden rise usually means retrieval broke, not that the model got more cautious.
+**Production**: user feedback signals, escalation rate, and the frequency of "I don't know" responses: a sudden rise usually means retrieval broke, not that the model got more cautious.
 
 #### How do you handle queries the corpus cannot answer?
 
@@ -173,28 +173,28 @@ Explicitly, because the default behavior is confident fabrication. Set a relevan
 
 #### Why use hybrid retrieval instead of pure vector search?
 
-Because they fail in complementary ways. Dense retrieval handles paraphrase and synonymy but blurs exact identifiers — error codes, SKUs, function names, rare proper nouns — since those carry little distributional meaning. BM25 nails exact terms but returns nothing when the query shares no vocabulary with the document.
+Because they fail in complementary ways. Dense retrieval handles paraphrase and synonymy but blurs exact identifiers (error codes, SKUs, function names, rare proper nouns), since those carry little distributional meaning. BM25 nails exact terms but returns nothing when the query shares no vocabulary with the document.
 
 Fusing with Reciprocal Rank Fusion (`score = Σ 1/(k + rank)`, k≈60) avoids having to calibrate BM25 scores against cosine similarities, which live on incomparable scales.
 
 #### Your RAG system is too expensive. Where do you cut?
 
 Input tokens dominate RAG cost, so start there:
-1. **Retrieve more, send less** — retrieve 20 candidates, rerank, pass the top 3–5. Usually cheaper *and* more accurate, since irrelevant context degrades answers.
-2. **Prompt caching** — put the stable system prompt and instructions first so the cached prefix is reused; cached input is typically ~10% of the price.
+1. **Retrieve more, send less**: retrieve 20 candidates, rerank, pass the top 3-5. Usually cheaper *and* more accurate, since irrelevant context degrades answers.
+2. **Prompt caching**: put the stable system prompt and instructions first so the cached prefix is reused; cached input is typically ~10% of the price.
 3. **Semantic caching** for repeated questions, with a tuned threshold and a real invalidation strategy.
-4. **Model routing** — a small model handles simple lookups, escalating only for synthesis-heavy questions.
+4. **Model routing**: a small model handles simple lookups, escalating only for synthesis-heavy questions.
 5. **Smaller embedding dimensions or quantized vectors** to cut index cost, verified against recall@k.
 
 #### How do you keep the index fresh?
 
 Drive index mutations from the source of truth's change stream rather than periodic full reindexes: on create/update, re-chunk and upsert; on delete, remove by document ID. Store a content hash per chunk so unchanged chunks are skipped. Keep the ingest timestamp in metadata so retrieval can prefer recent content and so you can audit staleness.
 
-For an embedding model upgrade, the whole corpus must be re-embedded — vectors from two models are not comparable. Standard practice is a blue/green reindex into a new collection with an atomic cutover.
+For an embedding model upgrade, the whole corpus must be re-embedded: vectors from two models are not comparable. Standard practice is a blue/green reindex into a new collection with an atomic cutover.
 
 #### When is RAG the wrong tool?
 
-When the knowledge is small and static enough to fit in the prompt — just put it in the context and skip the infrastructure. When the task needs reasoning over the *entire* corpus (aggregate questions like "how many contracts expire this quarter"), which is a database query, not retrieval. When the model needs to internalize a style or format rather than facts — that's fine-tuning. And when the data is highly structured, where SQL or a graph query gives exact answers that top-k similarity cannot.
+When the knowledge is small and static enough to fit in the prompt, just put it in the context and skip the infrastructure. When the task needs reasoning over the *entire* corpus (aggregate questions like "how many contracts expire this quarter"), which is a database query, not retrieval. When the model needs to internalize a style or format rather than facts, that's fine-tuning. And when the data is highly structured, where SQL or a graph query gives exact answers that top-k similarity cannot.
 
 ---
 
@@ -202,8 +202,8 @@ When the knowledge is small and static enough to fit in the prompt — just put 
 
 | Pitfall | Why it hurts | Fix |
 |---|---|---|
-| Chunks too large | The vector averages several topics and matches none well | 300–800 tokens, or small-to-big retrieval |
-| No reranking stage | Right document retrieved but ranked below the cutoff | Cross-encoder rerank of the top 20–50 |
+| Chunks too large | The vector averages several topics and matches none well | 300-800 tokens, or small-to-big retrieval |
+| No reranking stage | Right document retrieved but ranked below the cutoff | Cross-encoder rerank of the top 20-50 |
 | Skipping metadata | No filtering, no access control, no recency preference | Attach source, section, timestamp, permissions at ingest |
 | Post-filtering by permissions | Empty result pages and leaked document existence | Filter inside the vector search |
 | Different embedding models for index and query | Vectors are incomparable; results are noise | Pin the model version; reindex on change |

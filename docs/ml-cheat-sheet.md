@@ -48,7 +48,7 @@ Actual  Neg  |  TN   |   FP   |   FP = false alarm (Type I)
 - Costs are known: pick the threshold minimising `C_FP·FP + C_FN·FN`, not `0.5`.
 - Stakeholder report: precision and recall at the operating threshold, never accuracy alone.
 
-**Deep dive:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Anomaly Detection](../classical_ml/intro_anomaly_detection.md)
+**Read more:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Anomaly Detection](../classical_ml/intro_anomaly_detection.md)
 
 ---
 
@@ -70,7 +70,7 @@ Actual  Neg  |  TN   |   FP   |   FP = false alarm (Type I)
 - `SS_res = Σ(y - ŷ)²`, `SS_tot = Σ(y - ȳ)²`. R² of a model that predicts `ȳ` is `0`.
 - Huber loss as a metric: MSE near zero, MAE in the tails.
 
-**Deep dive:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Time Series](../classical_ml/intro_time_series.md)
+**Read more:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Time Series](../classical_ml/intro_time_series.md)
 
 ---
 
@@ -90,7 +90,7 @@ Actual  Neg  |  TN   |   FP   |   FP = false alarm (Type I)
 - Position 1 discount is `1/log2(2) = 1`; position 2 is `1/log2(3) ≈ 0.63`; position 3 is `0.5`.
 - Offline ranking gains often fail to move online metrics (CTR, dwell, revenue). Always pair with an A/B test.
 
-**Deep dive:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Recommender Systems](../classical_ml/intro_recommender_systems.md) · [Search Ranking System](../system_design/search_ranking_system.md)
+**Read more:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Recommender Systems](../classical_ml/intro_recommender_systems.md) · [Search Ranking System](../system_design/search_ranking_system.md)
 
 ---
 
@@ -115,7 +115,7 @@ Actual  Neg  |  TN   |   FP   |   FP = false alarm (Type I)
 - Maximum likelihood view: MSE = Gaussian NLL, MAE = Laplace NLL, BCE = Bernoulli NLL.
 - Forward KL `KL(P‖Q)` is mean-seeking (covers all modes); reverse KL `KL(Q‖P)` is mode-seeking.
 
-**Deep dive:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Embeddings](../ai_genai/intro_embeddings.md) · [Model Compression](../deep_learning/intro_model_compression.md)
+**Read more:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Embeddings](../ai_genai/intro_embeddings.md) · [Model Compression](../deep_learning/intro_model_compression.md)
 
 ---
 
@@ -173,7 +173,7 @@ binary metric: σ² = p(1-p)
 | Holm (step-down) | FWER | Sort p ascending; reject while `p_(i) ≤ α/(m - i + 1)`; always at least as powerful as Bonferroni |
 | Benjamini-Hochberg | FDR | Sort ascending; largest `i` with `p_(i) ≤ (i/m)·α`; reject hypotheses `1..i` |
 
-**Deep dive:** [Statistics and Probability](../classical_ml/intro_statistics_probability.md) · [A/B Testing](../mlops/intro_ab_testing.md) · [Causal Inference](../classical_ml/intro_causal_inference.md)
+**Read more:** [Statistics and Probability](../classical_ml/intro_statistics_probability.md) · [A/B Testing](../mlops/intro_ab_testing.md) · [Causal Inference](../classical_ml/intro_causal_inference.md)
 
 ---
 
@@ -208,7 +208,7 @@ binary metric: σ² = p(1-p)
 - Rank = number of non-zero singular values. Condition number = `σ_max / σ_min` (large → numerically unstable).
 - Numerical stability: compute softmax/log-sum-exp as `m + log Σ e^{z_i - m}` with `m = max(z)`.
 
-**Deep dive:** [Math for ML](../classical_ml/intro_math_for_ml.md) · [Dimensionality Reduction](../classical_ml/intro_dimensionality_reduction.md)
+**Read more:** [Math for ML](../classical_ml/intro_math_for_ml.md) · [Dimensionality Reduction](../classical_ml/intro_dimensionality_reduction.md)
 
 ---
 
@@ -243,7 +243,7 @@ binary metric: σ² = p(1-p)
 - Gradient clipping by global norm (e.g. `1.0`) guards against spikes, essential for RNNs and LLMs.
 - Batch size scaling (heuristic): linear LR scaling for SGD (`k×` batch → `k×` LR, with warmup); roughly `√k` for Adam.
 
-**Deep dive:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Math for ML](../classical_ml/intro_math_for_ml.md)
+**Read more:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Math for ML](../classical_ml/intro_math_for_ml.md)
 
 ---
 
@@ -269,7 +269,7 @@ binary metric: σ² = p(1-p)
 - Tree models are invariant to monotonic feature transforms; distance, margin and gradient-based models are not.
 - Default tabular pipeline: logistic regression baseline → gradient boosting → tune → only then consider deep learning.
 
-**Deep dive:** [Classical ML Overview](../classical_ml/README.md) · [Ensemble Methods](../classical_ml/intro_ensemble_methods.md) · [Clustering](../classical_ml/intro_clustering.md) · [Dimensionality Reduction](../classical_ml/intro_dimensionality_reduction.md)
+**Read more:** [Classical ML Overview](../classical_ml/README.md) · [Ensemble Methods](../classical_ml/intro_ensemble_methods.md) · [Clustering](../classical_ml/intro_clustering.md) · [Dimensionality Reduction](../classical_ml/intro_dimensionality_reduction.md)
 
 ---
 
@@ -301,7 +301,7 @@ binary metric: σ² = p(1-p)
 
 - Double descent: very over-parameterised nets can see test error fall again past the interpolation threshold.
 
-**Deep dive:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Ensemble Methods](../classical_ml/intro_ensemble_methods.md)
+**Read more:** [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Ensemble Methods](../classical_ml/intro_ensemble_methods.md)
 
 ---
 
@@ -362,7 +362,7 @@ Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V
 - Inference FLOPs `≈ 2·N` per generated token (ignoring attention over the context).
 - Chinchilla compute-optimal: `D ≈ 20·N` tokens (approximate).
 
-**Deep dive:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Transformers](../deep_learning/intro_transformers.md) · [Computer Vision](../deep_learning/intro_computer_vision.md) · [Sequence Models](../deep_learning/intro_sequence_models.md)
+**Read more:** [Neural Network Training](../deep_learning/intro_neural_network_training.md) · [Transformers](../deep_learning/intro_transformers.md) · [Computer Vision](../deep_learning/intro_computer_vision.md) · [Sequence Models](../deep_learning/intro_sequence_models.md)
 
 ---
 
@@ -393,7 +393,7 @@ KV bytes = 2 (K and V) × n_layers × n_kv_heads × d_head × seq_len × batch �
 - Batch-1 decode ceiling: `tokens/s ≈ memory bandwidth / model bytes` (e.g. 14 GB model on ~2 TB/s HBM → ~140 tok/s upper bound).
 - Cost/latency levers: quantisation, KV-cache reuse (prefix caching), continuous batching, speculative decoding, shorter prompts.
 
-**Deep dive:** [LLM Fundamentals](../ai_genai/intro_llm_fundamentals.md) · [LLM Inference Optimization](../ai_genai/intro_llm_inference_optimization.md) · [Model Compression](../deep_learning/intro_model_compression.md) · [Fine-Tuning](../deep_learning/intro_fine_tuning.md)
+**Read more:** [LLM Fundamentals](../ai_genai/intro_llm_fundamentals.md) · [LLM Inference Optimization](../ai_genai/intro_llm_inference_optimization.md) · [Model Compression](../deep_learning/intro_model_compression.md) · [Fine-Tuning](../deep_learning/intro_fine_tuning.md)
 
 ---
 
@@ -429,40 +429,40 @@ All values are **approximate orders of magnitude**; hardware varies. Use them fo
 | Dense bf16 throughput (A100 / H100 SXM) | ~312 / ~990 TFLOPS |
 | PCIe 4.0 x16 | ~32 GB/s per direction |
 
-**Deep dive:** [ML System Design Patterns](../system_design/ml_system_design_patterns.md) · [Model Serving](../mlops/intro_model_serving.md) · [Backend System Design Guide](../system_design/backend_system_design_interview_guide.md)
+**Read more:** [ML System Design Patterns](../system_design/ml_system_design_patterns.md) · [Model Serving](../mlops/intro_model_serving.md) · [Backend System Design Guide](../system_design/backend_system_design_interview_guide.md)
 
 ---
 
 ## Top 20 Traps
 
-1. **Target leakage** — a feature that is only known after the label (e.g. "refund issued" to predict fraud). Ask "would I have this at prediction time?"
-2. **Fitting preprocessing on all data** — scalers, imputers, target encoders or feature selection fit before the split. Put them inside a `Pipeline` fit per fold.
-3. **Random split on time series** — trains on the future. Use time-based splits / forward-chaining CV with a gap.
-4. **Entity leakage** — same user, patient or session in train and test. Use `GroupKFold`.
-5. **Accuracy on imbalanced data** — 99% accuracy at 1% prevalence is a constant predictor. Use PR-AUC, recall@precision, F1.
-6. **ROC-AUC on rare events** — looks great while precision is terrible. Report PR-AUC too.
-7. **Oversampling (SMOTE) before splitting** — synthetic copies of test points leak into training. Resample only the training fold.
-8. **Tuning on the test set** — every peek makes it a validation set. Hold out a final test set touched once.
-9. **Default 0.5 threshold** — choose the threshold from costs or a precision/recall target on validation data.
-10. **Uncalibrated probabilities** — after class weights, undersampling or boosting, scores are not probabilities. Recalibrate (Platt, isotonic) or correct for the sampling rate.
-11. **Training-serving skew** — features computed differently offline vs online. Share feature code, log served features.
-12. **Duplicates across splits** — near-duplicate images/texts, or benchmark contamination in LLM pretraining data. Dedupe before splitting.
-13. **Peeking at A/B tests** — stopping when `p < 0.05` inflates false positives. Fix sample size up front or use sequential tests.
-14. **Multiple comparisons** — 20 metrics at `α = 0.05` gives ~1 false win by chance. Pre-register a primary metric; correct (Holm, BH).
-15. **Sample ratio mismatch** — a 50/50 test landing 52/48 means broken assignment/logging. Check with a chi-square test before reading results.
-16. **Correlation ≠ causation** — confounding and Simpson's paradox. Feature importance is not a causal effect.
-17. **Missing feature scaling** — k-NN, SVM, k-means, PCA and regularised linear models all depend on scale; trees don't.
-18. **Forgetting `model.eval()`** — dropout stays on and BatchNorm uses batch stats at inference.
-19. **Bad metric for the target** — MAPE when `y` can be ~0, RMSE on heavy-tailed targets, R² compared across datasets.
-20. **Feedback loops and selection bias** — training only on data your model chose to show or approve (clicks on shown items, approved loans). Log propensities, keep exploration traffic.
+1. **Target leakage**: a feature that is only known after the label (e.g. "refund issued" to predict fraud). Ask "would I have this at prediction time?"
+2. **Fitting preprocessing on all data**: scalers, imputers, target encoders or feature selection fit before the split. Put them inside a `Pipeline` fit per fold.
+3. **Random split on time series**: trains on the future. Use time-based splits / forward-chaining CV with a gap.
+4. **Entity leakage**: same user, patient or session in train and test. Use `GroupKFold`.
+5. **Accuracy on imbalanced data**: 99% accuracy at 1% prevalence is a constant predictor. Use PR-AUC, recall@precision, F1.
+6. **ROC-AUC on rare events**: looks great while precision is terrible. Report PR-AUC too.
+7. **Oversampling (SMOTE) before splitting**: synthetic copies of test points leak into training. Resample only the training fold.
+8. **Tuning on the test set**: every peek makes it a validation set. Hold out a final test set touched once.
+9. **Default 0.5 threshold**: choose the threshold from costs or a precision/recall target on validation data.
+10. **Uncalibrated probabilities**: after class weights, undersampling or boosting, scores are not probabilities. Recalibrate (Platt, isotonic) or correct for the sampling rate.
+11. **Training-serving skew**: features computed differently offline vs online. Share feature code, log served features.
+12. **Duplicates across splits**: near-duplicate images/texts, or benchmark contamination in LLM pretraining data. Dedupe before splitting.
+13. **Peeking at A/B tests**: stopping when `p < 0.05` inflates false positives. Fix sample size up front or use sequential tests.
+14. **Multiple comparisons**: 20 metrics at `α = 0.05` gives ~1 false win by chance. Pre-register a primary metric; correct (Holm, BH).
+15. **Sample ratio mismatch**: a 50/50 test landing 52/48 means broken assignment/logging. Check with a chi-square test before reading results.
+16. **Correlation ≠ causation**: confounding and Simpson's paradox. Feature importance is not a causal effect.
+17. **Missing feature scaling**: k-NN, SVM, k-means, PCA and regularised linear models all depend on scale; trees don't.
+18. **Forgetting `model.eval()`**: dropout stays on and BatchNorm uses batch stats at inference.
+19. **Bad metric for the target**: MAPE when `y` can be ~0, RMSE on heavy-tailed targets, R² compared across datasets.
+20. **Feedback loops and selection bias**: training only on data your model chose to show or approve (clicks on shown items, approved loans). Log propensities, keep exploration traffic.
 
-**Deep dive:** [Feature Engineering](../classical_ml/intro_feature_engineering.md) · [Time Series](../classical_ml/intro_time_series.md) · [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [A/B Testing](../mlops/intro_ab_testing.md) · [Model Monitoring](../mlops/intro_model_monitoring.md) · [Glossary](./glossary.md)
+**Read more:** [Feature Engineering](../classical_ml/intro_feature_engineering.md) · [Time Series](../classical_ml/intro_time_series.md) · [Model Evaluation](../classical_ml/intro_model_evaluation.md) · [A/B Testing](../mlops/intro_ab_testing.md) · [Model Monitoring](../mlops/intro_model_monitoring.md) · [Glossary](./glossary.md)
 
 ---
 
 ## Related Topics
 
-- [Glossary](./glossary.md) — every term in one or two sentences
+- [Glossary](./glossary.md): every term in one or two sentences
 - [2026 Interview Questions](./interview_questions_2026.md)
 - [2026 Interview Roadmap](./2026-interview-roadmap.md)
 - [Study Pattern](./study-pattern.md)
