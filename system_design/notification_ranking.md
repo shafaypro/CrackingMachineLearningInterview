@@ -133,12 +133,12 @@ The naive objective is P(open). It fails for three reasons.
 A better per-candidate value:
 
 ```
-value(u, n) =   w_1 * delta P(visit | send)            # incremental visit, not raw open
-              + w_2 * delta E[downstream actions]       # posts, purchases, replies after open
-              + w_3 * delta long-term retention proxy   # e.g. change in P(active in 28 days)
+value(u, n) =   w_1 * delta P(visit | send)                       # incremental visit, not raw open
+              + w_2 * delta E[downstream actions]                 # posts, purchases, replies after open
+              + w_3 * delta long-term retention proxy             # e.g. change in P(active in 28 days)
               - w_4 * P(disable or unsubscribe | send)
               - w_5 * P(spam report / negative feedback | send)
-              - c_interrupt(u)                       # per-user cost of an interruption
+              - c_interrupt(u)                                    # per-user cost of an interruption
 ```
 
 The delta terms are uplifts: the difference between sending and not sending. The disable term is multiplied by a large weight because a disable removes all future value on that channel. A rough way to size it: `w_4 ~ expected future value of the channel for this user`, which is larger for users who currently get a lot from notifications.
