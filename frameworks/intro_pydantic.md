@@ -14,7 +14,7 @@ Pydantic is a Python data validation library that uses **type annotations** to d
 ## Core Concepts (Pydantic v2)
 
 ```python
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
 from typing import Optional, Literal
 from datetime import datetime
 import json
@@ -65,6 +65,7 @@ The most critical use case in 2026: forcing LLMs to return validated, typed outp
 ### With LangChain
 
 ```python
+from typing import Optional, Literal
 from pydantic import BaseModel, Field
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
@@ -100,9 +101,9 @@ print(result.difficulty)
 ### Direct with Anthropic SDK
 
 ```python
+from typing import Literal
 from anthropic import Anthropic
-from pydantic import BaseModel
-import json
+from pydantic import BaseModel, Field
 
 class RAGEvaluation(BaseModel):
     relevance_score: float = Field(ge=0.0, le=1.0)
@@ -115,6 +116,9 @@ client = Anthropic()
 def evaluate_rag_response(question: str, context: str, answer: str) -> RAGEvaluation:
     schema = RAGEvaluation.model_json_schema()
 
+    # Forced tool use as a JSON-extraction trick. Newer alternative: the API's
+    # structured outputs feature (output_config.format). Note that some newer
+    # Claude models reject forced tool_choice ("any"/"tool"); use "auto" there.
     response = client.messages.create(
         model="claude-opus-4-6",
         max_tokens=1024,
@@ -229,9 +233,13 @@ async def config_check(settings: AppSettings = Depends(get_settings)):
 ## Data Pipeline Validation
 
 ```python
-from pydantic import BaseModel, field_validator
-from typing import Any
+from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+from datetime import datetime
+import logging
+import uuid
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 class TrainingExample(BaseModel):
     features: list[float] = Field(..., min_length=1)
@@ -283,8 +291,9 @@ def process_batch(raw_data: list[dict]) -> DataBatch:
 | **Validators** | `@validator` | `@field_validator`, `@model_validator` |
 | **Export** | `.dict()`, `.json()` | `.model_dump()`, `.model_dump_json()` |
 | **JSON schema** | `.schema()` | `.model_json_schema()` |
-| **Performance** | Python | Rust core (10-50x faster) |
-| **Config** | `class Config:` | `model_config = SettingsConfigDict(...)` |
+| **Performance** | Python | Rust core (`pydantic-core`), typically several times to tens of times faster |
+| **Config** | `class Config:` | `model_config = ConfigDict(...)` (`SettingsConfigDict` for `BaseSettings`) |
+| **Parsing** | `parse_obj()`, `parse_raw()` | `model_validate()`, `model_validate_json()` |
 | **Strict mode** | Manual | Built-in `model_validate(data, strict=True)` |
 
 ---
@@ -295,7 +304,7 @@ def process_batch(raw_data: list[dict]) -> DataBatch:
 
 ```python
 from pydantic import ValidationError
-from langchain.output_parsers import PydanticOutputParser
+from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.output_parsers import StrOutputParser
 
 parser = PydanticOutputParser(pydantic_object=InterviewAnswer)
@@ -312,9 +321,8 @@ def safe_parse(llm_output: str) -> InterviewAnswer | str:
 ### Discriminated Unions (for Multi-Agent Routing)
 
 ```python
-from pydantic import BaseModel
-from typing import Union, Annotated
-from pydantic import Discriminator, Tag
+from pydantic import BaseModel, Discriminator, TypeAdapter
+from typing import Union, Annotated, Literal
 
 class ResearchTask(BaseModel):
     task_type: Literal["research"] = "research"
@@ -350,7 +358,7 @@ task = TypeAdapter(AgentTask).validate_python(task_data)
 > LLMs return unstructured text. Pydantic enforces that outputs conform to a schema, catching missing fields, wrong types, invalid values before they cause downstream failures. With `with_structured_output()`, the LLM is guided via JSON Schema / tool calling to produce valid structured data.
 
 **Q: How does Pydantic v2 differ from v1 in performance?**
-> Pydantic v2's core is written in Rust (via the `pydantic-core` library), making validation 10-50x faster than v1. API changes: `@validator` → `@field_validator`, `.dict()` → `.model_dump()`, `class Config` → `model_config = SettingsConfigDict(...)`.
+> Pydantic v2's core is written in Rust (via the `pydantic-core` library), making validation substantially faster than v1 (often by several times or more, depending on the workload). API changes: `@validator` → `@field_validator`, `.dict()` → `.model_dump()`, `parse_obj()` → `model_validate()`, `class Config` → `model_config = ConfigDict(...)` (or `SettingsConfigDict` in `pydantic-settings`).
 
 **Q: How do you handle LLM output validation failures?**
 > Retry with a clearer prompt that includes the schema and error message. Use fallback to a raw string parser if structured parsing fails after N retries. Log all failures for dataset curation: these become training examples for improving prompts.

@@ -14,8 +14,10 @@ LangChain provides:
 - **LangSmith**: observability and evaluation platform
 
 ```bash
-pip install langchain langchain-anthropic langchain-community
+pip install langchain langchain-anthropic langchain-community langchain-text-splitters
 ```
+
+> **Version note:** LangChain 1.0 (late 2025) slimmed the `langchain` package down to the core building blocks and the new `create_agent` API. Legacy pieces such as `LLMChain`, `ConversationChain`, `AgentExecutor`, and the `langchain.memory` classes moved to the separate `langchain-classic` package. New code should use LCEL, `create_agent`, and LangGraph.
 
 ---
 
@@ -58,8 +60,8 @@ results = chain.batch([
 
 ```python
 from langchain_anthropic import ChatAnthropic
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_chroma import Chroma                    # pip install langchain-chroma
+from langchain_huggingface import HuggingFaceEmbeddings  # pip install langchain-huggingface
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
@@ -104,7 +106,7 @@ from langchain_community.document_loaders import (
     PyPDFLoader, WebBaseLoader, DirectoryLoader,
     GitLoader, NotionDirectoryLoader
 )
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Load PDF
 loader = PyPDFLoader("report.pdf")
@@ -133,8 +135,7 @@ vectorstore = Chroma.from_documents(chunks, embeddings, persist_directory="./db"
 ```python
 from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
-from langchain.agents import create_tool_calling_agent, AgentExecutor
-from langchain_core.prompts import ChatPromptTemplate
+from langchain.agents import create_agent  # LangChain 1.0+
 
 llm = ChatAnthropic(model="claude-sonnet-4-6")
 
@@ -157,18 +158,19 @@ def search_web(query: str) -> str:
 
 tools = [get_weather, run_sql, search_web]
 
-# Create agent
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful data analyst assistant."),
-    ("human", "{input}"),
-    ("placeholder", "{agent_scratchpad}"),
-])
+# Create agent (runs the tool-calling loop on LangGraph under the hood)
+agent = create_agent(
+    model=llm,
+    tools=tools,
+    system_prompt="You are a helpful data analyst assistant.",
+)
 
-agent = create_tool_calling_agent(llm, tools, prompt)
-executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+result = agent.invoke(
+    {"messages": [{"role": "user", "content": "How many users do we have and what's the weather in NYC?"}]}
+)
+print(result["messages"][-1].content)
 
-result = executor.invoke({"input": "How many users do we have and what's the weather in NYC?"})
-print(result["output"])
+# Pre-1.0 code used create_tool_calling_agent + AgentExecutor; those now live in langchain-classic.
 ```
 
 ---
@@ -226,7 +228,7 @@ def execute_tools(state: AgentState) -> AgentState:
 def should_continue(state: AgentState) -> str:
     last_message = state["messages"][-1]
     if last_message.tool_calls:
-        return "execute_tools"
+        return "tools"   # must match the node name registered below
     return END
 
 # Build the graph
@@ -298,9 +300,10 @@ print(result["final"])
 
 ```python
 import os
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "ls__..."
-os.environ["LANGCHAIN_PROJECT"] = "my-rag-app"
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_API_KEY"] = "lsv2_..."
+os.environ["LANGSMITH_PROJECT"] = "my-rag-app"
+# Older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY / LANGCHAIN_PROJECT names are still read for backward compatibility
 
 # All LangChain calls are now traced automatically in LangSmith
 # → View traces, latency, token usage, errors at smith.langchain.com
@@ -310,12 +313,13 @@ os.environ["LANGCHAIN_PROJECT"] = "my-rag-app"
 
 ## Memory Management
 
-LangChain provides several memory types for conversational applications:
+The classic memory classes below are **legacy**: in LangChain 1.0 they live in `langchain-classic` (`pip install langchain-classic`, import from `langchain_classic`). You will still see them in older codebases and interviews, but new code should keep history in LangGraph state with a checkpointer (next section).
 
 ```python
-from langchain.memory import ConversationBufferMemory, ConversationSummaryMemory
+# Legacy API (pre-1.0 imports were langchain.memory / langchain.chains)
+from langchain_classic.memory import ConversationBufferMemory, ConversationSummaryMemory
 from langchain_anthropic import ChatAnthropic
-from langchain.chains import ConversationChain
+from langchain_classic.chains import ConversationChain
 
 llm = ChatAnthropic(model="claude-sonnet-4-6")
 
@@ -326,23 +330,25 @@ memory = ConversationBufferMemory()
 memory_summary = ConversationSummaryMemory(llm=llm)
 
 chain = ConversationChain(llm=llm, memory=memory)
-response1 = chain.predict(input="My name is Alex.")
-response2 = chain.predict(input="What's my name?")   # Correctly recalls "Alex"
-print(response2)
+response1 = chain.invoke({"input": "My name is Alex."})
+response2 = chain.invoke({"input": "What's my name?"})   # Correctly recalls "Alex"
+print(response2["response"])
 ```
 
 ### LangGraph Persistence (Production Memory)
 
 ```python
+# pip install langgraph-checkpoint-sqlite
 from langgraph.checkpoint.sqlite import SqliteSaver
 
 # Persist state between runs with a checkpointer
-memory_saver = SqliteSaver.from_conn_string("./memory.db")
-app = graph.compile(checkpointer=memory_saver)
+# (from_conn_string is a context manager in current releases)
+with SqliteSaver.from_conn_string("./memory.db") as memory_saver:
+    app = graph.compile(checkpointer=memory_saver)
 
-# Thread-based sessions (each thread_id = one conversation)
-config = {"configurable": {"thread_id": "user-123"}}
-result = app.invoke({"messages": [("user", "Hello!")]}, config=config)
+    # Thread-based sessions (each thread_id = one conversation)
+    config = {"configurable": {"thread_id": "user-123"}}
+    result = app.invoke({"messages": [("user", "Hello!")]}, config=config)
 ```
 
 ---
@@ -351,7 +357,7 @@ result = app.invoke({"messages": [("user", "Hello!")]}, config=config)
 
 ```python
 from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field  # langchain_core.pydantic_v1 is deprecated; use Pydantic v2 directly
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -421,16 +427,17 @@ LangChain provides components and LCEL for building linear chains (prompt → LL
 LangGraph uses **checkpointers** (e.g., `SqliteSaver`, `PostgresSaver`, `RedisSaver`) to persist graph state between invocations. Each conversation is identified by a `thread_id` in the config. This enables resuming interrupted workflows and multi-turn conversations without loading full history each time.
 
 **Q4: How would you implement a ReAct agent in LangChain?**
-Use `create_tool_calling_agent` with a model that supports tool use (Claude, GPT-4, etc.) and `AgentExecutor`. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.
+In LangChain 1.0+, use `create_agent(model, tools, system_prompt=...)` with a model that supports tool calling (Claude, GPT, Gemini, etc.); it runs the ReAct loop on LangGraph. Older code used `create_tool_calling_agent` + `AgentExecutor`, now in `langchain-classic`. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.
 
 **Q5: What are the main memory types in LangChain and when would you use each?**
+The first three are the classic memory classes (legacy since LangChain 1.0, now in `langchain-classic`); they still come up in interviews.
 - `ConversationBufferMemory`: stores all messages verbatim. Use for short conversations.
 - `ConversationSummaryMemory`: summarizes older turns using an LLM. Use for long sessions where context window is a concern.
 - `ConversationBufferWindowMemory`: keeps the last N messages. Simple and predictable.
 - **LangGraph checkpointing**: best for production: persists full graph state (not just messages) to a database, enabling true session continuity.
 
 **Q6: What is LangSmith and how do you use it?**
-LangSmith is LangChain's observability platform. You enable it by setting `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY`. It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.
+LangSmith is LangChain's observability platform. You enable it by setting `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` (the older `LANGCHAIN_TRACING_V2` / `LANGCHAIN_API_KEY` names still work). It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.
 
 **Q7: When would you choose LangChain over calling the Anthropic API directly?**
 Use LangChain when: you need many integrations quickly (vector DBs, document loaders), want LCEL's streaming/batch/async built-in, need agent orchestration (LangGraph), or want LangSmith tracing. Use the raw API when: you need maximum control, minimum dependencies, or you're building a production system where simplicity is more important than framework features.

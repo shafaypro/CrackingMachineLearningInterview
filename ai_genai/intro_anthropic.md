@@ -42,17 +42,21 @@ Claude is designed to be:
 
 ## Claude Model Family
 
-As of early 2026:
+As of late 2026 (model lineups change several times a year, so check Anthropic's models page or the Models API, `client.models.list()`, before quoting IDs):
 
 | Model | ID | Best For | Context Window |
 |-------|----|----------|----------------|
-| **Claude Opus 4.6** | `claude-opus-4-6` | Complex reasoning, deep analysis | 200K tokens |
-| **Claude Sonnet 4.6** | `claude-sonnet-4-6` | Balanced: performance + speed | 200K tokens |
-| **Claude Haiku 4.5** | `claude-haiku-4-5-20251001` | Fast, lightweight tasks | 200K tokens |
+| **Claude Fable 5.1** | `claude-fable-5-1` | Most capable tier: hardest reasoning, long-horizon agentic work | 1M tokens |
+| **Claude Opus 5.5** | `claude-opus-5-5` | Complex reasoning, agentic coding, deep analysis | 1M tokens |
+| **Claude Sonnet 5** | `claude-sonnet-5` | Balanced: performance + speed | 1M tokens |
+| **Claude Haiku 4.5** | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | Fast, lightweight tasks | 200K tokens |
+
+Older models (for example the Claude 4.6 and 4.8 releases) stay available for a while after a new generation ships, but new code should start from the current tier.
 
 ### Choosing a Model
 
 ```
+Hardest, longest-running problems?            → Fable
 Need maximum intelligence for complex tasks?  → Opus
 Balanced production workloads?                → Sonnet (most popular)
 High-volume, latency-sensitive tasks?         → Haiku
@@ -82,9 +86,9 @@ Training Data → Pre-training (predict next token) → Base Model
 
 | Term | Definition |
 |------|-----------|
-| **Token** | Smallest unit of text (~4 chars/word on average). Models process tokens, not words. |
+| **Token** | Smallest unit of text (roughly 4 characters, or about 0.75 English words, per token on average). Models process tokens, not words. |
 | **Context Window** | Max tokens a model can process at once (input + output combined) |
-| **Temperature** | Controls randomness (0 = deterministic, 1 = creative, >1 = chaotic) |
+| **Temperature** | Controls sampling randomness (0 = near-deterministic, higher = more varied). The Claude API accepts 0 to 1. |
 | **Top-p (nucleus sampling)** | Probability mass for token selection (0.9 = consider top 90% likely tokens) |
 | **System prompt** | Instructions that shape the model's behavior for the conversation |
 | **Few-shot prompting** | Providing examples in the prompt to guide output format/style |
@@ -100,7 +104,8 @@ Training Data → Pre-training (predict next token) → Base Model
 ### Context Windows in Detail
 
 ```
-200,000 tokens ≈ 150,000 words ≈ ~500 pages of text
+200,000 tokens ≈ 150,000 words ≈ ~500 pages of text   (Haiku 4.5)
+1,000,000 tokens ≈ 750,000 words                      (current Sonnet, Opus, Fable)
 
 What fits in Claude's context window:
 - A full codebase (small/medium projects)
@@ -141,7 +146,7 @@ import anthropic
 client = anthropic.Anthropic()
 
 message = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[
         {"role": "user", "content": "Explain quantum entanglement in simple terms."}
@@ -161,7 +166,7 @@ The Messages API is the primary way to interact with Claude.
 
 ```python
 response = client.messages.create(
-    model="claude-sonnet-4-6",   # required
+    model="claude-sonnet-5",     # required
     max_tokens=4096,              # required: max output tokens
     system="You are a helpful data engineer...",  # optional system prompt
     messages=[                    # required: conversation history
@@ -169,9 +174,10 @@ response = client.messages.create(
         {"role": "assistant", "content": "Hi! How can I help?"},
         {"role": "user", "content": "Write me a SQL query..."},
     ],
-    temperature=0.7,              # optional: 0-1 (default 1)
-    top_p=0.9,                    # optional
     stop_sequences=["###"],       # optional: stop generation on these
+    # temperature / top_p / top_k: accepted by older models (Sonnet 4.6, Haiku 4.5),
+    # but rejected with a 400 by the newest ones (Sonnet 5, Opus 4.7+, Fable).
+    # On those, steer with the prompt and output_config={"effort": ...} instead.
 )
 ```
 
@@ -181,7 +187,7 @@ response = client.messages.create(
 response.id               # message ID
 response.model            # model used
 response.role             # "assistant"
-response.stop_reason      # "end_turn" | "max_tokens" | "stop_sequence" | "tool_use"
+response.stop_reason      # "end_turn" | "max_tokens" | "stop_sequence" | "tool_use" | "pause_turn" | "refusal"
 response.content          # list of content blocks
 response.usage.input_tokens
 response.usage.output_tokens
@@ -199,7 +205,7 @@ client = anthropic.Anthropic()
 
 def chat(messages: list, system: str = "") -> str:
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=2048,
         system=system,
         messages=messages,
@@ -300,7 +306,7 @@ def run_agent(user_message: str):
 
     while True:
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=4096,
             tools=tools,
             messages=messages,
@@ -351,7 +357,7 @@ client = anthropic.Anthropic()
 
 # Method 1: URL (for publicly accessible images)
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{
         "role": "user",
@@ -377,7 +383,7 @@ image_data = base64.standard_b64encode(
 ).decode("utf-8")
 
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{
         "role": "user",
@@ -413,17 +419,16 @@ client = anthropic.Anthropic()
 
 # Streaming with context manager
 with client.messages.stream(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Write a 500-word essay on AI safety."}]
 ) as stream:
     for text in stream.text_stream:
         print(text, end="", flush=True)
+    # Get final message with usage stats (call it inside the `with` block)
+    final_message = stream.get_final_message()
 
 print()  # newline
-
-# Get final message with usage stats
-final_message = stream.get_final_message()
 print(f"\nInput tokens: {final_message.usage.input_tokens}")
 print(f"Output tokens: {final_message.usage.output_tokens}")
 ```
@@ -512,6 +517,8 @@ Analyze the following data pipeline and identify bottlenecks.
 
 ### Temperature Guide
 
+This applies to models that still accept sampling parameters (for example Sonnet 4.6 and Haiku 4.5). The newest Claude models (Sonnet 5, Opus 4.7 and later, Fable) reject non-default `temperature`/`top_p`/`top_k`; control them with clear instructions, examples, and the `effort` setting instead.
+
 | Temperature | Use Case | Example |
 |-------------|----------|---------|
 | `0.0` | Deterministic, factual | SQL generation, code, math |
@@ -591,7 +598,7 @@ def with_retry(fn, max_retries=3):
 ```python
 # Cache a large system prompt/document: up to 90% cost reduction
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     system=[
         {
@@ -635,30 +642,30 @@ while batch.processing_status != "ended":
 
 | Feature | Description |
 |---------|-------------|
-| **Claude 4.x Series** | Opus 4.6, Sonnet 4.6, Haiku 4.5: current generation |
+| **Current model lineup** | Fable 5.1, Opus 5.5, Sonnet 5, Haiku 4.5 (Opus/Sonnet/Fable have 1M-token context) |
 | **Claude Code** | Agentic coding tool using Claude in the terminal / IDE |
-| **Extended thinking** | Claude "thinks" before answering for harder problems |
+| **Adaptive thinking + effort** | Claude decides how much to think; you set `effort` (`low` to `max`) instead of a fixed token budget |
 | **MCP ecosystem** | Thousands of MCP servers connecting Claude to every tool imaginable |
 | **Computer use** | Claude can operate a computer (click, type, navigate) |
 | **Multi-agent** | Orchestrate multiple Claude instances for complex workflows |
 | **Artifacts** | Claude can create and iterate on files, code, documents directly |
 | **Projects** | Persistent memory and context across conversations |
 
-### Extended Thinking
+### Extended Thinking (Adaptive Thinking)
+
+The older form, `thinking={"type": "enabled", "budget_tokens": N}`, only works on pre-4.6 models (and Haiku 4.5); it is deprecated on the 4.6 models and returns a 400 on Sonnet 5, Opus 4.7 and later, and Fable. Current models use **adaptive thinking**: the model decides how much to reason, and you tune depth and cost with `effort`.
 
 ```python
-# Claude "thinks" step by step before answering
+# Claude "thinks" before answering
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=16000,
-    thinking={
-        "type": "enabled",
-        "budget_tokens": 10000  # how much to "think"
-    },
+    thinking={"type": "adaptive", "display": "summarized"},  # summarized: return a readable summary
+    output_config={"effort": "high"},  # low | medium | high | xhigh | max
     messages=[{"role": "user", "content": "Prove that sqrt(2) is irrational."}]
 )
 
-# Response includes thinking blocks + final answer
+# Response includes thinking blocks (a summary, never the raw chain of thought) + final answer
 for block in response.content:
     if block.type == "thinking":
         print("Thinking:", block.thinking[:200], "...")
@@ -675,14 +682,15 @@ for block in response.content:
 import anthropic
 client = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var
 
-# Models
-"claude-opus-4-6"           # most capable
-"claude-sonnet-4-6"         # recommended default
+# Models (verify with client.models.list(); these change often)
+"claude-fable-5-1"          # most capable tier
+"claude-opus-5-5"           # top Opus model
+"claude-sonnet-5"           # recommended default
 "claude-haiku-4-5-20251001" # fastest/cheapest
 
 # Simple message
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello!"}]
 )
@@ -690,7 +698,7 @@ text = response.content[0].text
 
 # With system prompt
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     system="You are a helpful assistant.",
     messages=[{"role": "user", "content": "Hello!"}]
@@ -698,7 +706,7 @@ response = client.messages.create(
 
 # Streaming
 with client.messages.stream(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Tell me a story."}]
 ) as stream:

@@ -77,12 +77,12 @@ Benefits:
 
 ### Transport Layers
 
-MCP supports two transport mechanisms:
+MCP defines two standard transports:
 
 | Transport | Use Case |
 |-----------|----------|
 | **stdio** | Local servers. Client spawns server as subprocess. Most common. |
-| **HTTP + SSE** | Remote servers. Client connects over network. |
+| **Streamable HTTP** | Remote servers. Client connects over network (single HTTP endpoint, optional SSE streaming for responses). Replaced the older HTTP + SSE transport, which is deprecated but still seen in older servers. |
 
 ### Protocol Flow
 
@@ -161,13 +161,15 @@ Reusable prompt templates with arguments.
 Claude Code has first-class MCP support.
 
 ```bash
-# Add an MCP server
-claude mcp add server-name command [args]
+# Add a local (stdio) MCP server: everything after -- is the command to run
+claude mcp add server-name -- command [args]
+
+# Add a remote MCP server over HTTP
+claude mcp add --transport http server-name https://example.com/mcp
 
 # Examples:
-claude mcp add github npx @modelcontextprotocol/server-github
-claude mcp add postgres npx @modelcontextprotocol/server-postgres postgresql://localhost/mydb
-claude mcp add filesystem npx @modelcontextprotocol/server-filesystem /path/to/dir
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /path/to/dir
+claude mcp add memory -- npx -y @modelcontextprotocol/server-memory
 
 # List configured servers
 claude mcp list
@@ -212,33 +214,22 @@ claude mcp get server-name
 
 ## Popular MCP Servers
 
-### Official (by Anthropic)
+### Reference Servers (MCP project)
+
+The `modelcontextprotocol/servers` repo keeps a small set of reference servers meant as examples:
 
 ```bash
 # Filesystem: read/write local files
-npx @modelcontextprotocol/server-filesystem /allowed/path
+npx -y @modelcontextprotocol/server-filesystem /allowed/path
 
-# GitHub: repos, PRs, issues
-npx @modelcontextprotocol/server-github
-
-# PostgreSQL: query databases
-npx @modelcontextprotocol/server-postgres postgresql://localhost/db
-
-# Brave Search: web search
-npx @modelcontextprotocol/server-brave-search
-
-# Slack: send messages, read channels
-npx @modelcontextprotocol/server-slack
-
-# Google Drive: access documents
-npx @modelcontextprotocol/server-gdrive
-
-# Memory: persistent key-value memory
-npx @modelcontextprotocol/server-memory
+# Memory: knowledge-graph style persistent memory
+npx -y @modelcontextprotocol/server-memory
 
 # Sequential Thinking: structured reasoning tool
-npx @modelcontextprotocol/server-sequential-thinking
+npx -y @modelcontextprotocol/server-sequential-thinking
 ```
+
+Several early reference servers (GitHub, PostgreSQL, Slack, Brave Search, Google Drive, Puppeteer) were moved to an archive and are no longer maintained there. For those services, prefer the server published by the vendor itself (for example GitHub's own GitHub MCP server) or a maintained community server, and check it before trusting it with credentials.
 
 ### Community Servers (2026 Ecosystem)
 
@@ -366,8 +357,8 @@ async def list_resources() -> list[types.Resource]:
     ]
 
 @app.read_resource()
-async def read_resource(uri: str) -> str:
-    if uri == "data://schemas/all":
+async def read_resource(uri) -> str:  # uri arrives as a pydantic AnyUrl, not a str
+    if str(uri) == "data://schemas/all":
         schemas = await get_all_schemas()
         return json.dumps(schemas, indent=2)
     raise ValueError(f"Unknown resource: {uri}")
@@ -583,7 +574,7 @@ MCP has been adopted by:
 
 ### MCP Registry
 
-The community maintains an official registry at [mcp.so](https://mcp.so) with 2,000+ servers.
+The MCP project runs an official registry (registry.modelcontextprotocol.io) where server publishers list their servers. Community directories such as [mcp.so](https://mcp.so) also index thousands of servers, but they are unvetted, so review a server before installing it.
 
 ### Key Patterns in 2026
 
@@ -601,7 +592,7 @@ The community maintains an official registry at [mcp.so](https://mcp.so) with 2,
 # Remote MCP server with authentication
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("Remote Data Server")
+mcp = FastMCP("Remote Data Server", port=8080)  # host/port are server settings
 
 @mcp.tool()
 async def query_warehouse(sql: str) -> str:
@@ -611,12 +602,12 @@ async def query_warehouse(sql: str) -> str:
 
 # Run as HTTP server
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", port=8080)
+    mcp.run(transport="streamable-http")  # serves at http://localhost:8080/mcp
 ```
 
 ```bash
 # Client connects to remote server
-claude mcp add remote-warehouse --url https://data-server.mycompany.com/mcp
+claude mcp add --transport http remote-warehouse https://data-server.mycompany.com/mcp
 ```
 
 ---
@@ -625,17 +616,16 @@ claude mcp add remote-warehouse --url https://data-server.mycompany.com/mcp
 
 ```bash
 # Claude Code MCP commands
-claude mcp add <name> <command> [args]
+claude mcp add <name> -- <command> [args]
+claude mcp add --transport http <name> <url>
 claude mcp list
 claude mcp remove <name>
 claude mcp get <name>
 
 # Common servers
-claude mcp add github npx @modelcontextprotocol/server-github
-claude mcp add postgres npx @modelcontextprotocol/server-postgres <DB_URL>
-claude mcp add filesystem npx @modelcontextprotocol/server-filesystem /path
-claude mcp add memory npx @modelcontextprotocol/server-memory
-claude mcp add brave-search npx @modelcontextprotocol/server-brave-search
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /path
+claude mcp add memory -- npx -y @modelcontextprotocol/server-memory
+claude mcp add seq-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 
 # Python MCP server template
 pip install mcp

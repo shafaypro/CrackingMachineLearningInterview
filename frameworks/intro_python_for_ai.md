@@ -145,16 +145,16 @@ class Settings(BaseModel):
 
 ```python
 # config.py: never hardcode keys
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Config(BaseSettings):
+class AppConfig(BaseSettings):
+    # v2 style; the inner `class Config:` form is deprecated
+    model_config = SettingsConfigDict(env_file=".env")
+
     anthropic_api_key: str
     vector_db_url: str = "http://localhost:6333"
 
-    class Config:
-        env_file = ".env"
-
-config = Config()  # reads from environment / .env
+config = AppConfig()  # reads from environment / .env
 ```
 
 - **Pin dependencies** with a lockfile for reproducibility.
