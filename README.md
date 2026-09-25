@@ -28,6 +28,7 @@ and how to tell when you're interview-ready.
 * Use the **Classic Question Bank** for core ML, statistics, deep learning, and algorithms.
 * Use **Preparation Resources and References** to build a targeted study plan.
 * Use **Suggested Learning Order** if you want a clean path from fundamentals to production AI systems.
+* The night before: skim the **[ML Cheat Sheet](./docs/ml-cheat-sheet.md)**, drill the **[Glossary Flashcards](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)**, and rehearse a few **[Debugging Scenarios](./docs/ml-debugging-scenarios.md)** out loud.
 
 ## Quick Navigation
 * [**Choose Your Track** — start here (New)](./docs/choose-your-track.md)
@@ -37,6 +38,9 @@ and how to tell when you're interview-ready.
 * [Behavioral & Project Deep-Dive Guide (New)](./docs/behavioral-interview-guide.md)
 * [ML Take-Home Projects & Case Studies (New)](./docs/take-home-projects.md)
 * [ML & AI Glossary (New)](./docs/glossary.md)
+* [ML Cheat Sheet — formulas & numbers for the night before (New)](./docs/ml-cheat-sheet.md)
+* [ML Debugging Scenarios — "your model is broken, what do you do?" (New)](./docs/ml-debugging-scenarios.md)
+* [Glossary Flashcards — interactive practice (New)](https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html)
 * [AI / GenAI Track](#ai--genai-track)
 * [Classic ML Track](#classic-ml-track)
 * [Deep Learning Track](#deep-learning-track)
@@ -75,6 +79,10 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/behavioral-interview-guide.md`](./docs/behavioral-interview-guide.md): STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations. **(New)**
 * [`docs/take-home-projects.md`](./docs/take-home-projects.md): what reviewers score, time budgeting, repository structure, and the follow-up presentation round. **(New)**
 * [`docs/glossary.md`](./docs/glossary.md): every term in the repo defined in a sentence or two, with the practical point attached. **(New)**
+* [`docs/ml-cheat-sheet.md`](./docs/ml-cheat-sheet.md): metrics, losses, distributions, update rules, and the numbers worth memorising, on one page. **(New)**
+* [`docs/ml-debugging-scenarios.md`](./docs/ml-debugging-scenarios.md): troubleshooting scenarios (leakage, NaN loss, offline/online gaps, drift, RAG regressions) with ranked causes and fixes. **(New)**
+* [`flashcards.html`](./flashcards.html): interactive flashcards built from the glossary, with progress saved in your browser. **(New)**
+* [`tools/check_links.py`](./tools/check_links.py): offline link and anchor checker, run in CI on every pull request. **(New)**
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG. **(Expanded)**
 * [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them — linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering. **(Expanded)**
 * [`mlops/`](./mlops): MLOps topics — MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation. **(Expanded)**
@@ -180,6 +188,7 @@ Core topics:
 * [Model Compression (distillation, pruning, quantization)](./deep_learning/intro_model_compression.md) **(New)**
 * [Distributed Training (DDP, FSDP/ZeRO, tensor & pipeline parallelism, mixed precision)](./deep_learning/intro_distributed_training.md) **(New)**
 * [Reinforcement Learning (MDPs, Q-learning, bandits, PPO, offline RL, RLHF)](./deep_learning/intro_reinforcement_learning.md) **(New)**
+* [Speech & Audio ML (log-mel, CTC, RNN-T, Whisper, TTS, voice agents)](./deep_learning/intro_speech_audio.md) **(New)**
 * [Computer Vision (CNNs, Detection, Segmentation, ViT)](./deep_learning/intro_computer_vision.md) **(New)**
 * [Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)](./deep_learning/intro_fine_tuning.md) **(New)**
 
@@ -249,6 +258,8 @@ Core topics:
 * [Search & Ranking System Design](./system_design/search_ranking_system.md) **(New)**
 * [Designing a Production LLM Assistant](./system_design/llm_assistant_system.md) **(New)**
 * [Fraud Detection System Design](./system_design/fraud_detection.md)
+* [Ads Click-Through-Rate Prediction System Design (auctions, calibration, delayed feedback)](./system_design/ads_ctr_prediction.md) **(New)**
+* [Content Moderation System Design (multimodal, human review, prevalence)](./system_design/content_moderation_system.md) **(New)**
 * [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
 
 ## Coding Challenges Track
@@ -472,10 +483,13 @@ Core topics:
         alongside answers in form of types of objects/classes.
 
 #### How would you differentiate between Multilabel and MultiClass classification?
-        A multiclass defines as a classification outcome which can be of multiple classes either A or B or C but not   two or more than one.
-        While in MultiLabel classification, An outcome can be of either one or more than two classes i.e A or A and B or A and B and C. 
+        Multi-class: each example belongs to exactly one of K > 2 classes (for example cat OR dog OR bird).
+            Output layer: softmax over K classes. Loss: categorical cross-entropy. Predict the argmax.
+        Multi-label: each example can have any subset of the labels (a photo tagged "beach" AND "sunset" AND "people").
+            Output layer: K independent sigmoids. Loss: binary cross-entropy per label. Threshold each label separately.
+        Metrics also differ. Multi-class uses accuracy and macro/micro F1. Multi-label uses per-label F1, Hamming loss,
+        subset accuracy, and mAP.
 ![](https://4.bp.blogspot.com/-sCcOrQsTH9Q/XG1yv7mhERI/AAAAAAAAAJI/aEj6Jf1lookERHqPQS_Y6Q9bxBcTV7TIwCLcBGAs/s1600/multiclass-multilabel.png)
-
 
 #### What is a Confusion Matrix?
         A confusion matrix, also known as an error matrix, is a specific table layout that allows visualization of
@@ -487,9 +501,11 @@ Core topics:
 ![](https://www.unite.ai/wp-content/uploads/2019/12/Preventive_Medicine-e1576294312614.png)
 
 #### Which Algorithms are High Biased Algorithms?
-        Bias is the simplifying assumptions made by the model to make the target function easier to approximate.
-        1) High bias algorithms are most probably Linear Algorithm, which are concerned with linear relationships or linear distancing. Examples are 
-        2) Linear, Logistic or Linear Discriminant Analysis.
+        Bias comes from the simplifying assumptions a model makes about the shape of the target function.
+            High-bias examples: linear regression, logistic regression, LDA, naive Bayes, shallow trees and decision stumps,
+            and kNN with a very large k. They assume linear or otherwise simple boundaries, or independent features.
+        They underfit when the true relationship is non-linear or has interactions. Fix that with feature engineering
+        (polynomial terms, interactions), kernels, or more flexible models.
 
 #### Which Algorithms are High and low Variance Algorithms?	
         Variance is how much the learned function changes when the training data changes.
@@ -539,7 +555,12 @@ Core topics:
 ![](https://miro.medium.com/max/1200/1*5dq_1hnqkboZTcKFfwbO9A.png)
 
 #### What is Process of Splitting?
-        Splitting up your data in to subsets based on provided data facts. (can come in handy for decision Trees)
+        Splitting is how a decision tree grows. At each node it tries candidate (feature, threshold) pairs and picks the one
+        that most reduces impurity in the child nodes: Gini or entropy for classification, variance (MSE) for regression.
+        It then recurses on each child until a stopping rule is reached: max depth, min samples per leaf, or no gain.
+        Numeric features are split at thresholds between sorted values. Histogram-based methods (LightGBM) bin the values
+        first for speed.
+        (In the data sense, "splitting" also means dividing data into train, validation and test sets.)
 
 #### What is the process of pruning?
         The shortening of branches of Decision Trees is termed as pruning. The process is done in order to reach the decision earlier than
@@ -903,29 +924,29 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
         on their associated weights.
 
 #### What are Output Layers?
-        Output layer in ANN determines the final layer which is responsible for the final outcome, the outcome totally depends
-        on the usecase provided and the function which is being used to scale the values. By default, Linear, Sigmoid and Relu are 
-        most common choices.
-        Linear for Regression.
-        Sigmoid/Softmax for Classification.
+        The output layer turns the last hidden representation into the prediction. Its activation and loss must match the task:
+            Regression                 -> linear (no activation), MSE / MAE / Huber loss
+            Binary classification      -> 1 unit with sigmoid, binary cross-entropy
+            Multi-class classification -> K units with softmax, categorical cross-entropy
+            Multi-label classification -> K units with sigmoid each, binary cross-entropy per label
+            Positive-only targets      -> softplus or exp (e.g. counts, variances)
+        ReLU is a hidden-layer activation. It is rarely the right output activation.
+        In PyTorch, output raw logits and use CrossEntropyLoss or BCEWithLogitsLoss, which apply softmax or sigmoid
+        internally in a numerically stable way.
 
 #### What are activation functions ?
-        Activation functions perform a transformation on the input received, in order to keep values within a manageable range depending
-        on the limitation of the activation function. Its more of a mathematical scale filter applied to a complete layer (Vector)
-        to scale out values.
-        Some common examples for AF are:
-            1) Sigmoid or SoftMax Function (has Vanish Gradient problem)
-                Softmax outputs produce a vector that is non-negative and sums to 1. It's useful when you have mutually exclusive categories 
-                ("these images only contain cats or dogs, not both"). You can use softmax if you have 2,3,4,5,... mutually exclusive labels.
-
-            2) Tanh function (has Vanish Garident problem)
-                if the outputs are somehow constrained to lie in [−1,1], tanh could make sense.
-            3) Relu Function
-                ReLU units or similar variants can be helpful when the output is bounded above or below. 
-                If the output is only restricted to be non-negative, it would make sense to use a ReLU 
-                activation as the output function. (0 to Max(x))
-
-            4) Leaky Relu Function (to fix the dying relu problem in the Relu function within hidden layers)
+        An activation function adds non-linearity after each linear layer. Without it, any stack of linear layers collapses
+        into a single linear map, however deep the network is.
+        Common choices:
+            1) Sigmoid: squashes to (0, 1). Used for binary and multi-label outputs and LSTM gates. It saturates at both
+               ends, which causes vanishing gradients in deep hidden layers.
+            2) Softmax: turns a vector of logits into a probability distribution that sums to 1. Used for the multi-class
+               output layer (mutually exclusive classes).
+            3) Tanh: squashes to (-1, 1) and is zero-centred. It also saturates. Used for RNN hidden states.
+            4) ReLU: max(0, x). Cheap, and does not saturate for x > 0. The default for hidden layers.
+               Units can "die" if they only ever receive negative inputs.
+            5) Leaky ReLU / PReLU / ELU: a small slope or smooth curve for x < 0, which avoids dead units.
+            6) GELU / SiLU (Swish): smooth ReLU-like functions, standard in transformers and LLMs.
 
 #### What is a Convolutional Neural Network?
         convolutional-neural-network is a subclass of neural-networks which have at least one convolution layer. 
@@ -943,11 +964,14 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
 ![ImageAddress](https://www.i2tutorials.com/wp-content/uploads/2019/09/Neural-network-62-i2tutorials.png)
 
 #### What is LSTM network?
-        Long short-term memory (LSTM) is an artificial recurrent neural network (RNN) architecture.
-        Unlike standard feedforward neural networks, LSTM has feedback connections. It can not only process single
-        data points (such as images), but also entire sequences of data (such as speech or video). 
-        For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, Anomly detection in network
-        traffic or IDS.
+        Long Short-Term Memory (LSTM) is a recurrent neural network cell built to learn long-range dependencies that vanilla
+        RNNs forget because of vanishing gradients. It keeps a separate cell state that is updated additively, and three
+        sigmoid gates control it: forget (what to erase), input (what to write), and output (what to expose as the hidden
+        state). Because the additive path lets gradients flow across many time steps, it can remember information for
+        hundreds of steps.
+        Use cases: speech recognition, handwriting recognition, time-series forecasting, anomaly detection on sequences,
+        and machine translation before transformers. Transformers have largely replaced LSTMs for language, but LSTMs remain
+        useful for small, streaming, or on-device sequence models.
 ![](https://miro.medium.com/max/1400/1*qn_quuUSYzozyH3CheoQsA.png)
 
 #### What is a Convolutional Layer?
@@ -981,10 +1005,12 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
 ![](https://2.bp.blogspot.com/-iNPVcxMHMNg/WdDnyLPY9QI/AAAAAAAAAZU/hgwQOQ1liyE4nhKVYzOyuUprjHNEx7aygCLcBGAs/s1600/kernel.png)
 
 #### What is Segmentation?
-        The process of partitioning a digital source into multiple segments.
-        If you refer Image, Imagine Image source being converted into multiple segments such as Airplane object.
-        The goal of segmentation is to simplify and/or change the representation of an image into something that
-         is more meaningful and easier to analyze.
+        Segmentation partitions an input into meaningful regions, at the pixel level for images:
+            * Semantic segmentation: a class for every pixel.
+            * Instance segmentation: a separate mask for each object instance.
+            * Panoptic segmentation: both at once.
+        The same word also appears elsewhere: customer segmentation (clustering users), and text or audio segmentation
+        (splitting a stream into sentences, speakers, or events).
 
 #### What is Pose Estimation?	
         Pose estimation predicts the positions of an object's keypoints. For humans these are joints such as shoulders,
@@ -1166,8 +1192,11 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
         The cumulative distribution function F(x) = P(X <= x) exists for both.
 
 #### What is Z score?
-        Z score (also called the standard score) represents the number of standard deviations with which the 
-        value of an observation point or data differ than the mean value of what is observed
+        The z-score says how many standard deviations a value lies from the mean: z = (x - μ) / σ.
+        Uses: standardising features, outlier flagging (|z| > 3), comparing values on different scales, and
+        z-tests in hypothesis testing.
+        Under a normal distribution about 68% / 95% / 99.7% of values fall within 1 / 2 / 3 standard deviations.
+        The z-score is sensitive to outliers, because they inflate σ. The robust version uses the median and MAD.
 
 #### What is KNN how does it works? what is neigbouring criteria? How you can change it ?
         k-Nearest Neighbours is a lazy, instance-based method. Training just stores the data. To predict a new point:
@@ -1201,9 +1230,17 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
 ![](https://qph.fs.quoracdn.net/main-qimg-e50401a4bdaf033ef6b451ea72334f8b)
 
 #### What is Attention ? Give Example ?
-        A neural attention mechanism equips a neural network with the ability to focus on a subset of its inputs (or features).
-        1) Hard Attention (Image Cropping)
-        2) Soft Attention (Highlight attentional area keeping the image size same)
+        Attention lets a model compute each output as a weighted average over its inputs, with the weights computed from
+        how relevant each input is to the current query:
+            Attention(Q, K, V) = softmax(Q·Kᵀ / sqrt(d_k)) · V
+        Examples:
+            * Machine translation (Bahdanau attention): while generating each target word, the decoder attends to the most
+              relevant source words instead of squeezing the whole sentence into one vector.
+            * Self-attention in transformers: every token attends to every other token in the same sequence.
+              "it" in "The animal didn't cross the street because it was tired" attends strongly to "animal".
+            * Image captioning ("Show, Attend and Tell"): the model attends to image regions as it generates each word.
+        Soft attention (differentiable weights over all inputs) is the standard. Hard attention picks one location and needs
+        sampling or RL to train.
 ![](https://distill.pub/2016/augmented-rnns/assets/show-attend-tell.png)
 
 #### What are AutoEncoders? and what are transformers?
@@ -1252,10 +1289,18 @@ print(information_gain(["a", "a", "b", "b"], [["a", "a"], ["b", "b"]]))  # 1.0 (
 
 
 #### Define Semantic Segmentation?
-        Semantic Segmentation is the Segmentation of an image based on Type of Objects
+        Semantic segmentation assigns a class label to every pixel (road, car, person, sky). It does not separate objects:
+        two touching people are one "person" region.
+        Typical models are encoder-decoders with skip connections (U-Net, DeepLab with atrous convolutions, SegFormer).
+        Loss: per-pixel cross-entropy, often combined with Dice loss for imbalanced classes. Metric: mean IoU (mIoU).
 ![](https://miro.medium.com/max/2436/0*QeOs5RvXlkbDkLOy.png)
+
 #### What is Instance Segmentation?
-        Same as Semantic, although with Objects (with respectable ID's)
+        Instance segmentation detects each individual object and gives it its own pixel mask: person #1, person #2, and so on.
+        It combines object detection with segmentation. Mask R-CNN, for example, adds a mask head to Faster R-CNN.
+        Background classes such as sky or road are ignored.
+        Panoptic segmentation combines both: every pixel gets a class, and every countable object also gets an instance ID.
+        Metric: mask AP (average precision over IoU thresholds).
 
 #### What is Imperative and Symbolic Programming?
         Imperative (define-by-run / eager): each operation executes immediately, as in ordinary Python. PyTorch eager mode and
@@ -1453,11 +1498,17 @@ Random sample consensus (RANSAC) is an iterative method to estimate parameters o
 
 
 #### 13) How does [CBIR](https://www.robots.ox.ac.uk/~vgg/publications/2013/arandjelovic13/arandjelovic13.pdf) work? [[src](https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/)]
+Content-based image retrieval (CBIR) finds images that look like a query image, using the pixels themselves rather than
+keywords or tags:
+1. **Represent**: turn every image into a vector. Older systems used hand-crafted descriptors (colour histograms, SIFT
+   aggregated with bag-of-visual-words, VLAD or Fisher vectors). Modern systems use embeddings from a CNN or ViT, or joint
+   image-text embeddings (CLIP), which also allow text queries.
+2. **Index**: store the vectors in an approximate nearest-neighbour index (FAISS, HNSW, IVF-PQ).
+3. **Query**: embed the query image, retrieve the top-k nearest vectors by cosine or L2 distance, and optionally
+   re-rank them (geometric verification with keypoint matching and RANSAC, or a heavier model).
 
-[[Answer]](https://en.wikipedia.org/wiki/Content-based_image_retrieval)
-Content-based image retrieval is the concept of using images to gather metadata on their content. Compared to the current image retrieval approach based on the keywords associated to the images, this technique generates its metadata from computer vision techniques to extract the relevant informations that will be used during the querying step. Many approach are possible from feature detection to retrieve keywords to the usage of CNN to extract dense features that will be associated to a known distribution of keywords. 
-
-With this last approach, we care less about what is shown on the image but more about the similarity between the metadata generated by a known image and a list of known label and or tags projected into this metadata space.
+Train or fine-tune the embedding with a metric-learning loss (contrastive, triplet) on your own notion of "similar":
+the same product, a near-duplicate, or the same landmark. Evaluate with recall@k and mAP.
 
 #### 14) How does image registration work? Sparse vs. dense [optical flow](http://www.ncorr.com/download/publications/bakerunify.pdf) and so on. [[src](https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/)]
 Image registration aligns two images of the same scene into one coordinate frame:
@@ -1534,25 +1585,80 @@ O(n) time and O(1) extra space. Keep three pointers (`prev`, `current`, `next`) 
 [[Answer]](https://www.geeksforgeeks.org/reverse-a-linked-list/)
 
 #### 21) What is data normalization and why do we need it? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
-Data normalization is very important preprocessing step, used to rescale values to fit in a specific range to assure better convergence during backpropagation. In general, it boils down to subtracting the mean of each data point and dividing by its standard deviation. If we don't do this then some of the features (those with high magnitude) will be weighted more in the cost function (if a higher-magnitude feature changes by 1%, then that change is pretty big, but for smaller features it's quite insignificant). The data normalization makes all features weighted equally.
+Normalization rescales features onto comparable ranges. The two usual forms are **standardization**
+`(x - mean) / std` and **min-max scaling** to `[0, 1]`. It matters because:
+- **Gradient-based training converges faster.** With features on very different scales the loss surface is a long,
+  narrow valley, and gradient descent zig-zags or needs a tiny learning rate.
+- **Distance- and margin-based models (kNN, k-means, SVM, PCA) depend on it.** Without scaling, the feature with
+  the largest range dominates every distance.
+- **Regularisation treats weights fairly.** An L1/L2 penalty only means something if the features share a scale.
+
+Tree-based models (random forests, gradient boosting) don't need it, because their splits are invariant to monotonic
+rescaling. Always fit the scaler on the training data only and reuse those statistics at validation, test and
+serving time. Otherwise you leak information, or your features drift between training and serving.
 
 #### 22) Why do we use convolutions for images rather than just FC layers? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
 Firstly, convolutions preserve, encode, and actually use the spatial information from the image. If we used only FC layers we would have no relative spatial information. Secondly, Convolutional Neural Networks (CNNs) have a partially built-in translation in-variance, since each convolution kernel acts as it's own filter/feature detector.
 
 #### 23) What makes CNNs translation invariant? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
-As explained above, each convolution kernel acts as it's own filter/feature detector. So let's say you're doing object detection, it doesn't matter where in the image the object is since we're going to apply the convolution in a sliding window fashion across the entire image anyways.
+Two properties need to be kept apart:
+- **Convolution is translation-*equivariant*.** The same kernel (shared weights) is applied at every position, so if
+  the input shifts, the feature map shifts by the same amount. A feature detector learned in one corner works everywhere.
+- **Translation *invariance*** (the output doesn't change when the input shifts) comes from what is stacked on top:
+  pooling, which gives small local invariance, and especially global average pooling or a classifier head that
+  aggregates over all positions.
+
+In practice CNNs are only approximately invariant. Striding and downsampling break exact shift-equivariance, so a
+shift of a few pixels can change the prediction. Data augmentation with random crops and shifts and anti-aliased
+downsampling (blur pooling) improve robustness.
 
 #### 24) Why do we have max-pooling in classification CNNs? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
-for a role in Computer Vision. Max-pooling in a CNN allows you to reduce computation since your feature maps are smaller after the pooling. You don't lose too much semantic information since you're taking the maximum activation. There's also a theory that max-pooling contributes a bit to giving CNNs more translation in-variance. Check out this great video from Andrew Ng on the [benefits of max-pooling](https://www.coursera.org/learn/convolutional-neural-networks/lecture/hELHk/pooling-layers).
+Max-pooling downsamples feature maps by keeping the strongest activation in each window (typically 2x2, stride 2):
+- **Less computation and memory** in later layers, because the feature maps are 4x smaller.
+- **Larger receptive field.** Later layers see more of the image, which they need to recognise whole objects.
+- **Some local translation invariance.** A feature that moves a pixel or two within the window gives the same maximum.
+- **It keeps "is the feature present?"** rather than exactly where it is, which is what classification needs.
+
+Many modern architectures replace most pooling with strided convolutions and end with global average pooling.
+Vision Transformers use patch embeddings instead. For dense tasks such as segmentation, too much pooling hurts
+localisation, which is why those models use skip connections or dilated convolutions.
 
 #### 25) Why do segmentation CNNs typically have an encoder-decoder style / structure? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
 The encoder CNN can basically be thought of as a feature extraction network, while the decoder uses that information to predict the image segments by "decoding" the features and upscaling to the original image size.
 
 #### 26) What is the significance of Residual Networks? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
-The main thing that residual connections did was allow for direct feature access from previous layers. This makes information propagation throughout the network much easier. One very interesting paper about this shows how using local skip connections gives the network a type of ensemble multi-path structure, giving features multiple paths to propagate throughout the network.
+Residual networks (ResNets) made very deep networks trainable. Each block learns a *residual* `F(x)` and outputs
+`y = x + F(x)` through an identity skip connection.
+- **Before ResNets, deeper plain networks got *worse training* error.** That rules out overfitting: it was an
+  optimisation problem (degradation). With a skip connection, a block can easily learn the identity by driving `F`
+  to zero, so adding depth shouldn't hurt.
+- **Gradients flow directly.** The gradient of `x + F(x)` includes an identity term, so the signal reaches early
+  layers through the skip path without vanishing through dozens of multiplications.
+- **Multiple paths.** A ResNet behaves somewhat like an ensemble of many shallower paths of different lengths.
+
+Residual connections are now everywhere. Every transformer layer uses them around attention and the MLP, which is why
+100+ layer LLMs train at all.
 
 #### 27) What is batch normalization and why does it work? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
-Training Deep Neural Networks is complicated by the fact that the distribution of each layer's inputs changes during training, as the parameters of the previous layers change. The idea is then to normalize the inputs of each layer in such a way that they have a mean output activation of zero and standard deviation of one. This is done for each individual mini-batch at each layer i.e compute the mean and variance of that mini-batch alone, then normalize. This is analogous to how the inputs to networks are standardized. How does this help? We know that normalizing the inputs to a network helps it learn. But a network is just a series of layers, where the output of one layer becomes the input to the next. That means we can think of any layer in a neural network as the first layer of a smaller subsequent network. Thought of as a series of neural networks feeding into each other, we normalize the output of one layer before applying the activation function, and then feed it into the following layer (sub-network).
+Batch normalization normalises each channel's activations using the **mini-batch** mean and variance, then applies a
+learned scale and shift:
+
+```
+x_hat = (x - mean_batch) / sqrt(var_batch + eps)
+y     = gamma * x_hat + beta
+```
+
+During training it uses batch statistics and updates running averages. At inference it uses those running averages,
+so remember to call `model.eval()`.
+
+**Why it helps:** the original explanation was reducing "internal covariate shift" (layer inputs changing
+distribution during training). Later work suggests the main effect is a **smoother loss landscape**, which allows
+larger learning rates and makes training less sensitive to initialisation. It also regularises a little, because
+batch statistics are noisy.
+
+**Limitations:** it behaves badly with small batches, and it adds a train/inference discrepancy. It is awkward for
+variable-length sequences. That is why transformers use **LayerNorm** or **RMSNorm** (per-example statistics), and
+small-batch vision work uses GroupNorm.
 
 #### 28) Why would you use many small convolutional kernels such as 3x3 rather than a few large ones? [[src](http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions)]
 This is very well explained in the [VGGNet paper](https://arxiv.org/pdf/1409.1556.pdf). There are 2 reasons: First, you can use several smaller kernels rather than few large ones to get the same receptive field and capture more spatial context, but with the smaller kernels you are using less parameters and computations. Secondly, because with smaller kernels you will be using more filters, you'll be able to use more activation functions and thus have a more discriminative mapping function being learned by your CNN.
@@ -1613,7 +1719,13 @@ Computer vision is one of fields where data augmentation is very useful. There a
 Each problem needs a customized data augmentation pipeline. For example, on OCR, doing flips will change the text and won’t be beneficial; however, resizes and small rotations may help.
 
 #### 35) What is Turing test? [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
-The Turing test is a method to test the machine’s ability to match the human level intelligence. A machine is used to challenge the human intelligence that when it passes the test, it is considered as intelligent. Yet a machine could be viewed as intelligent without sufficiently knowing about people to mimic a human.
+Proposed by Alan Turing in 1950 as the "imitation game": a human judge holds text conversations with a hidden human
+and a hidden machine. If the judge can't reliably tell which is which, the machine passes. It replaces the vague
+question "can machines think?" with an operational test of whether behaviour is indistinguishable from a human's.
+
+Criticisms: it rewards imitation and deception rather than intelligence (Searle's Chinese Room argument). It depends
+heavily on the judge. It tests only conversation. Modern LLMs can often pass informal versions, which has shifted
+evaluation towards task benchmarks, capability evals and safety evals rather than human-likeness.
 
 #### 36) What is Precision?  
 Precision (also called positive predictive value) is the fraction of relevant instances among the retrieved instances  
@@ -1630,26 +1742,63 @@ It is the weighted average of precision and recall. It considers both false posi
 F1-Score = 2 * (precision * recall) / (precision + recall)
 
 #### 39) What is cost function? [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
-Cost function is a scalar functions which Quantifies the error factor of the Neural Network. Lower the cost function better the Neural network. Eg: MNIST Data set to classify the image, input image is digit 2 and the Neural network wrongly predicts it to be 3
+A cost (or loss) function maps the model's predictions and the true targets to a single number that says how wrong
+the model is. Training minimises it. Strictly, the *loss* is per example and the *cost* is the average over the
+dataset, often plus a regularisation term: `J(w) = (1/n) Σ L(y_i, f(x_i; w)) + λ·R(w)`.
+
+The choice encodes what "wrong" means:
+- regression: MSE (penalises large errors), MAE (robust to outliers), Huber (a compromise between the two)
+- classification: cross-entropy / log loss (penalises confident mistakes), hinge loss (SVMs), focal loss (imbalance)
+- ranking and embeddings: pairwise, contrastive and triplet losses
+
+A good training loss should be differentiable and aligned with the business metric. Often you optimise a surrogate
+(log loss) and then choose the threshold for the real metric (precision at a fixed recall).
 
 #### 40) List different activation neurons or functions. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
- - Linear Neuron
- - Binary Threshold Neuron
- - Stochastic Binary Neuron
- - Sigmoid Neuron
- - Tanh function
- - Rectified Linear Unit (ReLU)
+| Activation | Formula | Range | Notes |
+|---|---|---|---|
+| Linear / identity | `x` | (-∞, ∞) | Regression output layer |
+| Step (binary threshold) | `1 if x > 0 else 0` | {0, 1} | Original perceptron; not differentiable |
+| Sigmoid | `1 / (1 + e^-x)` | (0, 1) | Binary / multi-label outputs, gates; saturates |
+| Tanh | `(e^x - e^-x)/(e^x + e^-x)` | (-1, 1) | Zero-centred; still saturates; RNN hidden states |
+| ReLU | `max(0, x)` | [0, ∞) | Default for CNNs/MLPs; can "die" |
+| Leaky ReLU / PReLU | `max(αx, x)` | (-∞, ∞) | Fixes dying ReLU |
+| ELU / SELU | smooth negative part | (-α, ∞) | Self-normalising (SELU) |
+| GELU | `x·Φ(x)` | ≈(-0.17, ∞) | Default in BERT/GPT-style transformers |
+| SiLU / Swish | `x·sigmoid(x)` | ≈(-0.28, ∞) | Used in SwiGLU feed-forward layers of modern LLMs |
+| Softmax | `e^{x_i} / Σ e^{x_j}` | (0, 1), sums to 1 | Multi-class output layer |
 
 #### 41) Define Learning Rate.
 Learning rate is a hyper-parameter that controls how much we are adjusting the weights of our network with respect the loss gradient. [[src](https://en.wikipedia.org/wiki/Learning_rate)]
 
 #### 42) What is Momentum (w.r.t NN optimization)?
-Momentum lets the optimization algorithm remembers its last step, and adds some proportion of it to the current step. This way, even if the algorithm is stuck in a flat region, or a small local minimum, it can get out and continue towards the true minimum. [[src]](https://www.quora.com/What-is-the-difference-between-momentum-and-learning-rate)
+Momentum keeps a running (exponentially decaying) average of past gradients and steps along that average instead of
+the raw gradient:
+
+```
+v = β·v + g          # β ≈ 0.9
+w = w - lr·v
+```
+
+It damps oscillation across steep, narrow valleys (the gradients there alternate sign and cancel out) and accelerates
+movement along consistent directions (the gradients add up). This gives faster convergence and helps roll through
+flat regions and saddle points. Nesterov momentum evaluates the gradient at the look-ahead point `w - lr·β·v`.
+Adam combines momentum (first moment) with per-parameter scaling (second moment).
+[[src]](https://www.quora.com/What-is-the-difference-between-momentum-and-learning-rate)
 
 #### 43) What is the difference between Batch Gradient Descent and Stochastic Gradient Descent?
-Batch gradient descent computes the gradient using the whole dataset. This is great for convex, or relatively smooth error manifolds. In this case, we move somewhat directly towards an optimum solution, either local or global. Additionally, batch gradient descent, given an annealed learning rate, will eventually find the minimum located in it's basin of attraction.
+| | Batch GD | Stochastic GD (1 sample) | Mini-batch GD (e.g. 32-4096) |
+|---|---|---|---|
+| Gradient from | Whole dataset | One example | A small random batch |
+| Cost per update | Very high | Very low | Moderate; uses GPU parallelism well |
+| Gradient noise | None | Very high | Controlled by batch size |
+| Convergence | Smooth; exact for convex problems | Noisy; needs a decaying learning rate | Good balance |
+| Memory | Must process all data per step | Tiny | Fits in GPU memory |
 
-Stochastic gradient descent (SGD) computes the gradient using a single sample. SGD works well (Not well, I suppose, but better than batch gradient descent) for error manifolds that have lots of local maxima/minima. In this case, the somewhat noisier gradient calculated using the reduced number of samples tends to jerk the model out of local minima into a region that hopefully is more optimal. [[src]](https://stats.stackexchange.com/questions/49528/batch-gradient-descent-versus-stochastic-gradient-descent)
+In practice "SGD" almost always means mini-batch SGD. The gradient noise isn't only a cost: it helps escape saddle
+points and sharp minima and is thought to improve generalisation, although very large batches tend to need learning
+rate retuning and warmup. Batch GD is only practical for small datasets or convex problems (where L-BFGS is often
+better anyway). [[src]](https://stats.stackexchange.com/questions/49528/batch-gradient-descent-versus-stochastic-gradient-descent)
 
 #### 44) Epoch vs. Batch vs. Iteration.
  - **Epoch**: one full pass over **all** the training examples.
@@ -1659,24 +1808,55 @@ Stochastic gradient descent (SGD) computes the gradient using a single sample. S
 Example: 10,000 samples with batch size 100 gives 100 iterations per epoch.
 
 #### 45) What is vanishing gradient? [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
-As we add more and more hidden layers, back propagation becomes less and less useful in passing information to the lower layers. In effect, as information is passed back, the gradients begin to vanish and become small relative to the weights of the networks.
+Backpropagation multiplies one local derivative per layer. If those factors are mostly smaller than 1, the gradient
+shrinks exponentially with depth, so early layers barely learn. If they are mostly larger than 1, gradients *explode*.
+
+Causes: saturating activations (sigmoid's derivative is at most 0.25, and tanh's is near 0 at the tails), poor
+weight initialisation, and long unrolled RNNs, where the same weight matrix is multiplied at every time step.
+
+Fixes:
+- ReLU-family activations
+- careful initialisation (Xavier/Glorot for tanh, He/Kaiming for ReLU)
+- normalisation layers (BatchNorm, LayerNorm)
+- residual connections
+- gated recurrent units (LSTM/GRU), or attention instead of recurrence
+- for exploding gradients: gradient clipping
 
 #### 46) What are dropouts? [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
-Dropout is a simple way to prevent a neural network from overfitting. It is the dropping out of some of the units in a neural network. It is similar to the natural reproduction process, where the nature produces offsprings by combining distinct genes (dropping out others) rather than strengthening the co-adapting of them.
+Dropout is a regulariser: during training each unit's output is set to zero with probability `p` (commonly 0.1-0.5).
+With *inverted* dropout, which PyTorch uses, the surviving activations are scaled by `1/(1-p)` so the expected value
+is unchanged. At inference dropout is switched off (`model.eval()`) and no rescaling is needed.
+
+Why it works: units can't rely on specific other units being present, which reduces co-adaptation and pushes the
+network to learn redundant, robust features. It is also roughly equivalent to training an exponential number of
+thinned sub-networks that share weights and averaging them at test time.
+
+Practical notes: it is less common in modern CNNs (BatchNorm and data augmentation do much of the regularising) and
+in large LLM pre-training (often `p = 0` when there is enough data). It is still common in fine-tuning and small MLPs.
+Monte Carlo dropout (keeping it on at inference) gives cheap uncertainty estimates.
 
 #### 47) Define LSTM. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
 Long Short Term Memory – are explicitly designed to address the long term dependency problem, by maintaining a state what to remember and what to forget.
 
 #### 48) List the key components of LSTM. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
- - Gates (forget, Memory, update & Read)
- - tanh(x) (values between -1 to 1)
- - Sigmoid(x) (values between 0 to 1)
+- **Cell state `c_t`**: the long-term memory, updated additively, which lets gradients flow across many steps.
+- **Forget gate** `f_t = σ(W_f·[h_{t-1}, x_t] + b_f)`: what to erase from the cell state.
+- **Input gate** `i_t = σ(...)` and **candidate** `c̃_t = tanh(...)`: what new information to write.
+- **Cell update**: `c_t = f_t ⊙ c_{t-1} + i_t ⊙ c̃_t`.
+- **Output gate** `o_t = σ(...)`, and **hidden state** `h_t = o_t ⊙ tanh(c_t)`: what to expose to the next layer and time step.
+
+The sigmoid gates output values in (0, 1) and act as soft switches. tanh keeps candidate values in (-1, 1).
+A GRU merges the forget and input gates into a single update gate and has no separate cell state.
 
 #### 49) List the variants of RNN. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
- - LSTM: Long Short Term Memory
- - GRU: Gated Recurrent Unit
- - End to End Network
- - Memory Network
+- **Vanilla (Elman) RNN**: `h_t = tanh(W·h_{t-1} + U·x_t)`. It suffers from vanishing gradients.
+- **LSTM**: a gated cell state for long-range dependencies.
+- **GRU**: a simpler gated variant (update and reset gates). Often matches LSTM with fewer parameters.
+- **Bidirectional RNN**: runs forward and backward passes and concatenates them. It uses future context, so it can't stream.
+- **Stacked / deep RNN**: several recurrent layers.
+- **Encoder-decoder (seq2seq)**: one RNN encodes, another decodes, usually with attention.
+- Modern relatives: linear-recurrence and state-space models (S4, Mamba, RWKV) that train in parallel like
+  transformers but run with constant memory per step at inference.
 
 #### 50) What is Autoencoder, name few applications. [[src](https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/)]
 Auto encoder is basically used to learn a compressed form of given data. Few applications include
@@ -1702,11 +1882,25 @@ Both combine many models, but in opposite ways:
 | Examples | Random Forest, ExtraTrees | AdaBoost, Gradient Boosting, XGBoost, LightGBM, CatBoost |
 
 #### 53) Explain how a ROC curve works. [[src]](https://www.springboard.com/blog/machine-learning-interview-questions/)
-The ROC curve is a graphical representation of the contrast between true positive rates and the false positive rate at various thresholds. It’s often used as a proxy for the trade-off between the sensitivity of the model (true positives) vs the fall-out or the probability it will trigger a false alarm (false positives).
+Sweep the decision threshold from high to low. At each threshold compute the **true positive rate**
+`TPR = TP / (TP + FN)` (recall) and the **false positive rate** `FPR = FP / (FP + TN)`, and plot TPR against FPR.
+- A random classifier lies on the diagonal (AUC = 0.5). A perfect one hugs the top-left corner (AUC = 1).
+- **AUC** equals the probability that a randomly chosen positive gets a higher score than a randomly chosen negative.
+  It measures ranking quality and doesn't depend on any threshold.
+- ROC-AUC doesn't depend on class balance, and that becomes a weakness when positives are rare: a tiny FPR can still
+  mean many more false positives than true positives. Use the **precision-recall curve / PR-AUC** for imbalanced
+  problems.
+- ROC doesn't measure calibration. You still have to pick an operating threshold from the costs of FPs and FNs.
 
 #### 54) What’s the difference between Type I and Type II error? [[src]](https://www.springboard.com/blog/machine-learning-interview-questions/)
-Type I error is a false positive, while Type II error is a false negative. Briefly stated, Type I error means claiming something has happened when it hasn’t, while Type II error means that you claim nothing is happening when in fact something is.
-A clever way to think about this is to think of Type I error as telling a man he is pregnant, while Type II error means you tell a pregnant woman she isn’t carrying a baby.
+- **Type I error (false positive)**: rejecting a true null hypothesis, i.e. claiming an effect or positive when there
+  isn't one. Its probability is `α`, the significance level (commonly 0.05).
+- **Type II error (false negative)**: failing to reject a false null hypothesis, i.e. missing a real effect or
+  positive. Its probability is `β`. **Power = 1 - β** (commonly targeted at 0.8).
+
+For a fixed sample size, lowering α raises β. The only way to reduce both is more data, or a larger effect.
+In ML terms: a spam filter blocking a real email is a Type I error, and a fraud model approving a fraudulent
+transaction is a Type II error. Which is worse depends on the business costs, and that is what sets the threshold.
 
 #### 55) What’s the difference between a generative and discriminative model? [[src]](https://www.springboard.com/blog/machine-learning-interview-questions/)
 A **discriminative** model learns the decision boundary directly, `P(y | x)`. Examples: logistic regression, SVM,
@@ -1776,7 +1970,16 @@ The biggest difference between the output of UMAP when compared with t-SNE is th
 [[src]](https://pair-code.github.io/understanding-umap/)
 
 #### 63) How Random Number Generator Works, e.g. rand() function in python works?
-It generates a pseudo random number based on the seed and there are some famous algorithm, please see below link for further information on this.
+Computers usually generate **pseudo**-random numbers: a deterministic algorithm expands a **seed** into a sequence
+that looks statistically random. The same seed always gives the same sequence, which is why setting seeds makes
+experiments reproducible.
+- **Linear congruential generator**: `x_{n+1} = (a·x_n + c) mod m`. Simple and fast, but has visible correlations.
+- **Mersenne Twister** (period `2^19937 - 1`): the engine behind Python's `random` module and NumPy's legacy `np.random.*`.
+- **PCG64**: the default for NumPy's modern `np.random.default_rng()`. Better statistics and small state.
+- **Cryptographically secure** generators (`secrets`, `os.urandom`) draw on OS entropy and are unpredictable.
+  Use them for tokens and passwords, never Mersenne Twister, whose state can be recovered from its outputs.
+
+To get other distributions, transform uniform samples (inverse CDF, Box-Muller for normals).
 [[src]](https://en.wikipedia.org/wiki/Linear_congruential_generator)
 
 #### 64) Given that we want to evaluate the performance of 'n' different machine learning models on the same data, why would the following splitting mechanism be incorrect :
@@ -1802,7 +2005,11 @@ from sklearn.linear_model import LogisticRegression
 train, valid, test = get_splits()
 ...
 ```
-The rand() function orders the data differently each time it is run, so if we run the splitting mechanism again, the 80% of the rows we get will be different from the ones we got the first time it was run. This presents an issue as we need to compare the performance of our models on the same test set. In order to ensure reproducible and consistent sampling we would have to set the random seed in advance or store the data once it is split. Alternatively, we could simply set the 'random_state' parameter in sklearn's train_test_split() function in order to get the same train, validation and test sets across different executions. 
+There are two bugs here.
+
+**1. Operator precedence.** In Python `&` binds tighter than `>=` and `<`, so `rnd >= 0.8 & rnd < 0.9` is parsed as `rnd >= (0.8 & rnd) < 0.9`. That raises an error for float arrays. Each comparison needs parentheses: `df[(rnd >= 0.8) & (rnd < 0.9)]`.
+
+**2. Different splits for every model.** The rand() function orders the data differently each time it is run, so if we run the splitting mechanism again, the 80% of the rows we get will be different from the ones we got the first time it was run. This presents an issue as we need to compare the performance of our models on the same test set. In order to ensure reproducible and consistent sampling we would have to set the random seed in advance or store the data once it is split. Alternatively, we could simply set the 'random_state' parameter in sklearn's train_test_split() function in order to get the same train, validation and test sets across different executions. 
 
 [[src]](https://towardsdatascience.com/why-do-we-set-a-random-state-in-machine-learning-models-bb2dc68d8431#:~:text=In%20Scikit%2Dlearn%2C%20the%20random,random%20state%20instance%20from%20np.)
 

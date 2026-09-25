@@ -58,7 +58,15 @@ Branch naming conventions:
 
 ### 3. Make Your Changes
 
-Follow the content and formatting guidelines below. Test that all links work.
+Follow the content and formatting guidelines below. Then check that all links work:
+
+```bash
+python3 tools/check_links.py                 # whole repo, plus the index.html nav entries
+python3 tools/check_links.py path/to/new.md  # just your file
+```
+
+The same check runs in CI on every pull request. If you add a new guide, also add it to the track list in
+`README.md`, the track's own `README.md`, and the `files` list of the right track in `index.html`.
 
 ### 4. Commit Your Changes
 

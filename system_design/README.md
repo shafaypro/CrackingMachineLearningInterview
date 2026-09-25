@@ -433,7 +433,9 @@ Latency directly impacts user experience (100ms slowdown = 1% drop in conversion
 
 Every guide in `system_design/`. Start with the overview above, then work through these.
 
+- [Ads Click-Through-Rate Prediction System Design](./ads_ctr_prediction.md)
 - [Backend System Design Interview Guide](./backend_system_design_interview_guide.md)
+- [Content Moderation System Design](./content_moderation_system.md)
 - [Fraud Detection System Design](./fraud_detection.md)
 - [Backend and System Design for AI](./intro_backend_ai_system_design.md)
 - [Designing a Production LLM Assistant](./llm_assistant_system.md)
