@@ -439,9 +439,12 @@ Every guide in `system_design/`. Start with the overview above, then work throug
 - [Fraud Detection System Design](./fraud_detection.md)
 - [Backend and System Design for AI](./intro_backend_ai_system_design.md)
 - [Designing a Production LLM Assistant](./llm_assistant_system.md)
+- [ETA Prediction System Design](./eta_prediction.md)
 - [ML System Design Patterns — 2026 Production Guide](./ml_system_design_patterns.md)
+- [News Feed Ranking System Design](./news_feed_ranking.md)
 - [Recommendation System Design](./recommendation_system.md)
 - [Search and Ranking System Design](./search_ranking_system.md)
+- [Visual Search System Design](./visual_search_system.md)
 
 ---
 

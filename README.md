@@ -260,6 +260,9 @@ Core topics:
 * [Fraud Detection System Design](./system_design/fraud_detection.md)
 * [Ads Click-Through-Rate Prediction System Design (auctions, calibration, delayed feedback)](./system_design/ads_ctr_prediction.md) **(New)**
 * [Content Moderation System Design (multimodal, human review, prevalence)](./system_design/content_moderation_system.md) **(New)**
+* [ETA Prediction System Design (routing baseline, residual models, quantile losses)](./system_design/eta_prediction.md) **(New)**
+* [News Feed Ranking System Design (value model, multi-task ranking, fan-out)](./system_design/news_feed_ranking.md) **(New)**
+* [Visual Search System Design (metric learning, ANN indexes, re-ranking)](./system_design/visual_search_system.md) **(New)**
 * [ML System Design Patterns — RAG, Agents, Batch vs Real-Time (2026)](./system_design/ml_system_design_patterns.md) **(New)**
 
 ## Coding Challenges Track
