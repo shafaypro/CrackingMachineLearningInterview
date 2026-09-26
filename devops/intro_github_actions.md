@@ -40,10 +40,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -54,7 +54,7 @@ jobs:
         run: pytest tests/ -v --cov=src
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
 ```
 
 ---
@@ -128,7 +128,7 @@ jobs:
 
     steps:
       # Use an Action from marketplace
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Shell command
       - name: Run lint
@@ -171,8 +171,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - run: pytest tests/
@@ -224,7 +224,7 @@ jobs:
 - run: echo "Region is ${{ vars.AWS_REGION }}"
 
 # GitHub token (auto-provided)
-- uses: actions/github-script@v7
+- uses: actions/github-script@v8
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -287,9 +287,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: "pip"
@@ -297,7 +297,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest tests/ --cov=src --cov-report=xml
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -309,7 +309,7 @@ jobs:
       image-digest: ${{ steps.build.outputs.digest }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: docker/login-action@v3
         with:
@@ -320,7 +320,7 @@ jobs:
       - uses: docker/setup-buildx-action@v3
 
       - id: build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
@@ -337,9 +337,9 @@ jobs:
     environment: staging
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: azure/k8s-set-context@v3
+      - uses: azure/k8s-set-context@v4
         with:
           kubeconfig: ${{ secrets.KUBECONFIG_STAGING }}
 
@@ -356,9 +356,9 @@ jobs:
     environment: production   # has required reviewers
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: azure/k8s-set-context@v3
+      - uses: azure/k8s-set-context@v4
         with:
           kubeconfig: ${{ secrets.KUBECONFIG_PROD }}
 
@@ -373,17 +373,19 @@ jobs:
 
 ## Useful Actions (2026)
 
+GitHub is moving JavaScript actions from the Node 20 runtime to Node 24, so prefer action majors built for Node 24 (for example `actions/checkout@v5`, `actions/setup-python@v6`, or newer). Check each action's releases page for its current major before copying a pin, and pin third-party actions to a release tag or commit SHA rather than a branch.
+
 ```yaml
 # Checkout
-- uses: actions/checkout@v4
+- uses: actions/checkout@v5
   with:
     fetch-depth: 0     # full history for git-based versioning
 
 # Language setup
-- uses: actions/setup-python@v5
-- uses: actions/setup-node@v4
-- uses: actions/setup-go@v5
-- uses: actions/setup-java@v4
+- uses: actions/setup-python@v6
+- uses: actions/setup-node@v5
+- uses: actions/setup-go@v6
+- uses: actions/setup-java@v5
 
 # Caching
 - uses: actions/cache@v4
@@ -394,7 +396,7 @@ jobs:
 # Docker
 - uses: docker/login-action@v3
 - uses: docker/setup-buildx-action@v3
-- uses: docker/build-push-action@v5
+- uses: docker/build-push-action@v6
 
 # Cloud
 - uses: aws-actions/configure-aws-credentials@v4
@@ -402,15 +404,15 @@ jobs:
 - uses: azure/login@v2
 
 # Kubernetes / Helm
-- uses: azure/setup-kubectl@v3
-- uses: azure/setup-helm@v3
+- uses: azure/setup-kubectl@v4
+- uses: azure/setup-helm@v4
 
 # Security
-- uses: aquasecurity/trivy-action@master    # container scanning
-- uses: anchore/scan-action@v3              # SBOM + vuln scan
+- uses: aquasecurity/trivy-action@<release-tag-or-sha>  # container scanning; never pin to a branch like @master
+- uses: anchore/scan-action@v6              # SBOM + vuln scan
 
-# Notifications
-- uses: slackapi/slack-github-action@v1
+# Notifications (v2 changed the inputs: see its README)
+- uses: slackapi/slack-github-action@v2
 ```
 
 ---
@@ -441,8 +443,9 @@ ${{ cancelled() }}
 ${{ contains(github.ref, 'main') }}
 ${{ startsWith(github.ref, 'refs/tags/') }}
 
-# Set output
+# Set output (replaces the removed ::set-output and ::save-state commands)
 echo "key=value" >> $GITHUB_OUTPUT
+echo "key=value" >> $GITHUB_STATE     # state for an action's post step
 
 # Set env var for subsequent steps
 echo "MY_VAR=hello" >> $GITHUB_ENV

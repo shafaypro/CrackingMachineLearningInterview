@@ -34,13 +34,16 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 helm version
 ```
 
+All commands in this guide are Helm 3 or later. Helm 2 (with the in-cluster Tiller server and `helm init`) is long unsupported. Helm 4 was released in late 2025; the everyday commands below carry over, but read its migration notes before upgrading CI or plugins.
+
 ---
 
 ## Core Workflow
 
 ```bash
 # Add a chart repository
-helm repo add stable https://charts.helm.sh/stable
+# (The old "stable" repo at charts.helm.sh/stable is archived: find charts on Artifact Hub instead.)
+# Bitnami moved its charts to OCI and restricted its free catalog in 2025: check current terms first.
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update   # refresh repo index
 
@@ -347,8 +350,8 @@ autoscaling:
 # Render templates without installing (dry run)
 helm template my-app ./chart -f values.yaml
 
-# Dry run with server validation
-helm install my-app ./chart --dry-run
+# Dry run with server validation (plain --dry-run is client-only since Helm 3.13)
+helm install my-app ./chart --dry-run=server
 
 # Debug rendered templates
 helm template my-app ./chart --debug
@@ -381,7 +384,7 @@ helm push my-chart-1.0.0.tgz oci://ghcr.io/myorg/charts
 helm install my-app oci://ghcr.io/myorg/charts/my-chart --version 1.0.0
 
 # Login to OCI registry
-helm registry login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
+echo "$GITHUB_TOKEN" | helm registry login ghcr.io -u "$GITHUB_USER" --password-stdin
 ```
 
 ---
@@ -389,7 +392,8 @@ helm registry login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
 ## Popular Charts in 2026
 
 ```bash
-# Ingress NGINX
+# Ingress NGINX (the community controller was retired in 2026; prefer a
+# Gateway API implementation or another maintained controller for new clusters)
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
@@ -397,7 +401,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 # cert-manager (TLS automation)
 helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace cert-manager --create-namespace \
-  --set installCRDs=true
+  --set crds.enabled=true   # replaces the deprecated installCRDs flag
 
 # Prometheus + Grafana
 helm upgrade --install kube-prometheus-stack \

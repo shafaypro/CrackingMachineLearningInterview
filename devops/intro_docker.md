@@ -535,7 +535,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3

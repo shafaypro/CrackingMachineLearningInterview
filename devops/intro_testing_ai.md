@@ -390,7 +390,7 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run unit tests (mocked LLM)
         env:
           ANTHROPIC_API_KEY: "test-key"
@@ -400,11 +400,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Start app
-        run: docker-compose up -d
+        run: docker compose up -d --wait
       - name: Install Playwright
-        run: pip install playwright && playwright install chromium
+        run: pip install playwright pytest-playwright && playwright install --with-deps chromium
       - name: Run E2E tests
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -420,12 +420,12 @@ jobs:
 | Dimension | Playwright (Python/JS) | Puppeteer (JS) |
 |-----------|----------------------|----------------|
 | **Language** | Python, JS, Java, C# | JavaScript only |
-| **Browsers** | Chrome, Firefox, Safari | Chrome/Edge only |
-| **Auto-wait** | Built-in smart waits | Manual waits |
-| **Network intercept** | Full request/response mock | Request intercept only |
-| **Parallel tests** | Built-in via `pytest-xdist` | External tooling |
+| **Browsers** | Chromium, Firefox, WebKit (Safari's engine) | Chrome/Chromium and Firefox |
+| **Auto-wait** | Built-in smart waits (locators) | Locator API auto-waits; older `waitForSelector` style is manual |
+| **Network intercept** | Full request/response mock | Request interception, can respond with mocks |
+| **Parallel tests** | Built-in in Playwright Test (JS); `pytest-xdist` for Python | External tooling (test runner) |
 | **Screenshots/video** | Built-in | Built-in |
-| **Best for** | Cross-browser AI UI testing | Chrome-specific JS apps |
+| **Best for** | Cross-browser AI UI testing | Chrome-focused JS automation |
 
 ---
 
@@ -438,7 +438,7 @@ jobs:
 > Mock the LLM client. Use `unittest.mock.AsyncMock` to return fixed responses without calling the real API. This makes tests 100x faster, free, and deterministic. Only call real LLMs in integration/eval tests that run less frequently.
 
 **Q: What's the biggest challenge in E2E testing for AI apps?**
-> Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties ("mentions relevant terms") not exact strings, (2) use fixed seeds/temperature=0 in tests, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.
+> Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties ("mentions relevant terms") not exact strings, (2) reduce variance where the API allows it (low temperature on models that accept sampling parameters; many current models, including recent Claude models, reject `temperature` and no provider guarantees bit-identical outputs), pin model snapshots, and cache recorded responses, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.
 
 **Q: How do you test streaming responses?**
 > Capture response text at intervals (e.g., every 500ms). Assert that the text grows over time. Check that the first token arrives within acceptable time (e.g., < 2s). Verify the final response is complete. Use network interception to validate SSE format.
