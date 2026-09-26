@@ -145,12 +145,17 @@ shap_values = explainer.shap_values(X_test)
 print(f"SHAP values shape: {shap_values.shape}")  # (n_samples, n_features)
 print(f"Base value: {explainer.expected_value:.4f}")
 
-# Verify additivity for one sample
+# Verify additivity for one sample (TreeExplainer explains XGBoost in log-odds space)
 sample_idx = 0
-prediction = model.predict_proba(X_test[sample_idx:sample_idx+1])[0, 1]
+log_odds = model.predict(X_test.iloc[[sample_idx]], output_margin=True)[0]
 shap_sum = explainer.expected_value + shap_values[sample_idx].sum()
-print(f"Model prediction: {prediction:.4f}")
-print(f"Base + SHAP sum: {shap_sum:.4f}")  # Should match (in log-odds space for XGB)
+print(f"Model output (log-odds): {log_odds:.4f}")
+print(f"Base + SHAP sum: {shap_sum:.4f}")  # Should match
+
+# Newer unified API: calling the explainer returns a shap.Explanation object
+# that the shap.plots.* functions (beeswarm, bar, waterfall) consume directly
+explanation = explainer(X_test)
+shap.plots.waterfall(explanation[0])
 ```
 
 ### KernelSHAP
@@ -183,8 +188,8 @@ import torch
 import shap
 
 # background = sample of training data as tensor
-background = torch.tensor(X_train[:100], dtype=torch.float32)
-test_input = torch.tensor(X_test[:10], dtype=torch.float32)
+background = torch.tensor(X_train.values[:100], dtype=torch.float32)
+test_input = torch.tensor(X_test.values[:10], dtype=torch.float32)
 
 explainer = shap.DeepExplainer(pytorch_model, background)
 shap_values = explainer.shap_values(test_input)
@@ -221,7 +226,7 @@ Explains a single prediction by showing each feature's contribution from the bas
 shap.waterfall_plot(shap.Explanation(
     values=shap_values[0],
     base_values=explainer.expected_value,
-    data=X_test[0],
+    data=X_test.iloc[0],
     feature_names=X_test.columns.tolist()
 ))
 ```
@@ -339,7 +344,7 @@ import torch
 model.eval()
 ig = IntegratedGradients(model)
 
-input_tensor = torch.tensor(X_test[:1], dtype=torch.float32, requires_grad=True)
+input_tensor = torch.tensor(X_test.values[:1], dtype=torch.float32, requires_grad=True)
 baseline = torch.zeros_like(input_tensor)  # Baseline: all-zero input
 
 attributions, delta = ig.attribute(
@@ -354,7 +359,7 @@ print(f"Convergence delta: {delta.item():.6f}")  # Should be close to 0
 print(f"Attribution magnitudes: {attributions.detach().numpy()}")
 ```
 
-**Saturation Axiom:** IG satisfies completeness, attributions sum exactly to `F(x) - F(x')`, unlike plain gradients.
+**Completeness axiom:** IG attributions sum to `F(x) - F(x')` (exactly in the limit; the convergence delta measures the numerical error), unlike plain gradients.
 
 ---
 
@@ -431,12 +436,11 @@ model_card.model_details.overview = (
     "Trained on 12 months of transaction data."
 )
 
-# Add quantitative analysis
-from model_card_toolkit.proto.model_card_pb2 import PerformanceMetric
-metric = model_card.quantitative_analysis.performance_metrics.add()
-metric.type = "AUC-ROC"
-metric.value = "0.934"
-metric.slice = "Overall"
+# Add quantitative analysis (fields are Python dataclasses/lists in toolkit 2.x)
+import model_card_toolkit as mctlib
+model_card.quantitative_analysis.performance_metrics.append(
+    mctlib.PerformanceMetric(type="AUC-ROC", value="0.934", slice="Overall")
+)
 
 mct.update_model_card(model_card)
 mct.export_format(model_card=model_card, template_path="template.html")
@@ -469,8 +473,9 @@ The EU AI Act classifies AI systems by risk level:
 When a decision is based solely on automated processing and produces legal or similarly significant effects, the data subject has the right to:
 - Obtain human intervention
 - Express their point of view
-- Obtain an explanation of the decision
 - Contest the decision
+
+The "explanation" part comes from Recital 71 and from Articles 13-15, which require "meaningful information about the logic involved". Its exact legal scope is debated, so treat per-decision explanations as good practice rather than a precisely defined obligation.
 
 **Technical implementation:** Local explanations (SHAP waterfall, LIME) per prediction satisfy the spirit of the right to explanation. Store explanations alongside predictions in your serving logs.
 
@@ -490,7 +495,7 @@ Global explainability describes the overall behavior of a model across all predi
 
 **Q2: Why are SHAP values theoretically superior to permutation importance?**
 
-SHAP values satisfy four game-theoretic axioms (efficiency, symmetry, dummy, linearity) that provide mathematical guarantees about fairness of attribution. Permutation importance suffers from: correlated features splitting importance arbitrarily, dependence on the choice of evaluation metric, and sensitivity to the number of permutation repeats. SHAP is also additive (individual SHAP values sum to the prediction), making it directly interpretable as contributions.
+SHAP values satisfy four game-theoretic axioms (efficiency, symmetry, dummy, linearity) that provide mathematical guarantees about fairness of attribution. Permutation importance suffers from: correlated features splitting importance arbitrarily, dependence on the choice of evaluation metric, and sensitivity to the number of permutation repeats. SHAP is also additive (individual SHAP values sum to the prediction minus the base value), making it directly interpretable as contributions.
 
 **Q3: What is the computational complexity of TreeSHAP vs. KernelSHAP?**
 
@@ -526,7 +531,7 @@ A model card is a brief transparency document for a model. For high-risk AI syst
 
 **Q11: When would SHAP give misleading explanations?**
 
-SHAP assumes feature independence when computing Shapley values (marginalizing over the feature distribution). When features are highly correlated, SHAP values can be misleading because the "absent features" in the coalition computation are filled with values from the joint distribution that never occur naturally. For example, if height and weight are correlated, SHAP may assign high importance to one and low to the other based on which was included in the coalition first, not reflecting the true marginal contribution.
+Common estimators (KernelSHAP, interventional TreeSHAP) treat features as independent: the "absent features" in a coalition are filled with values drawn from their marginal (background) distribution. When features are highly correlated, this creates feature combinations that never occur naturally, and the model's behavior on those off-manifold points drives the attribution. For example, if height and weight are correlated, a model may rely on either one, and SHAP can assign high importance to one and near-zero to the other depending on what the model happened to learn, not on their real-world relevance.
 
 ---
 
@@ -542,7 +547,7 @@ Impurity-based importance inflates the importance of high-cardinality features a
 KernelSHAP makes `nsamples` calls to the model per explained instance. For 10,000 test samples and `nsamples=500`, that is 5 million model calls. Always use TreeSHAP for tree models and only use KernelSHAP on a representative subsample.
 
 **4. Ignoring SHAP interaction effects**
-The main SHAP value for a feature includes its interaction effects with other features, which can be misleading. Use `shap.TreeExplainer(model, feature_perturbation="interventional")` and SHAP interaction values to decompose interaction effects explicitly.
+The main SHAP value for a feature includes its interaction effects with other features, which can be misleading. Use SHAP interaction values (`shap.TreeExplainer(model).shap_interaction_values(X)`) to separate main effects from pairwise interaction effects explicitly.
 
 **5. Presenting PDPs for correlated features**
 A PDP for income marginalized over all other features may show effects for income levels that never co-occur with realistic values of correlated features (e.g., very high income with very high debt). Use Accumulated Local Effects (ALE) plots as a PDP alternative when features are correlated.

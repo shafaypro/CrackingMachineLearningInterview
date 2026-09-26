@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "generator": "tools/build_question_bank.py",
-  "count": 927,
+  "count": 944,
   "tracks": {
-    "ai_genai": 106,
+    "ai_genai": 123,
     "classic": 167,
     "classical_ml": 116,
     "cloud_ml": 20,
@@ -17,7 +17,7 @@
     "project_setup": 13,
     "system_design": 131
   },
-  "sources": 97,
+  "sources": 100,
   "questions": [
     {
       "id": "c20b1cb1ad45",
@@ -1857,6 +1857,127 @@
       "order": 166
     },
     {
+      "id": "1b2a56f15970",
+      "question": "Why must parallel tool results go in one message?",
+      "answer_md": "Splitting them trains the model to stop issuing parallel calls and breaks `tool_use_id` pairing.",
+      "source_path": "ai_genai/intro_agent_tool_use.md",
+      "source_title": "Agent Systems and Tool Use",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "67804deeb1f4",
+      "question": "What does programmatic tool calling save?",
+      "answer_md": "Round-trips and tokens: only the final result re-enters the context, not every intermediate value.",
+      "source_path": "ai_genai/intro_agent_tool_use.md",
+      "source_title": "Agent Systems and Tool Use",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "444731d7337d",
+      "question": "How do you scale an agent to hundreds of tools?",
+      "answer_md": "Tool search / dynamic discovery so only relevant schemas load, preserving the prompt cache.",
+      "source_path": "ai_genai/intro_agent_tool_use.md",
+      "source_title": "Agent Systems and Tool Use",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "cd6f19f6f534",
+      "question": "How do you make a `bash`/file tool safe?",
+      "answer_md": "Sandboxing, command allowlists, canonical-path confinement, timeouts, and logging every call.",
+      "source_path": "ai_genai/intro_agent_tool_use.md",
+      "source_title": "Agent Systems and Tool Use",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "0c6354379562",
+      "question": "What is MCP and why does it matter?",
+      "answer_md": "A standard protocol for exposing tools to agents, so tool servers are reusable across agents instead of bespoke.",
+      "source_path": "ai_genai/intro_agent_tool_use.md",
+      "source_title": "Agent Systems and Tool Use",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "2d9fdc186147",
+      "question": "When should you NOT build an agent?",
+      "answer_md": "When the task is single-step or fully specifiable: a single call or a code-orchestrated workflow is cheaper, faster, and more reliable.",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "65d4a7f43dee",
+      "question": "Bash tool vs dedicated tools: trade-offs?",
+      "answer_md": "Bash = max capability, opaque to the harness; dedicated tools = gateable, validatable, parallelizable, but you must build each one. Promote to dedicated when you need to gate/render/parallelize.",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "25d8f1dd091b",
+      "question": "How do you keep a long-running agent within the context window?",
+      "answer_md": "Context editing (prune), compaction (summarize), and memory (persist across sessions).",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "5761fb6bbddb",
+      "question": "How do you evaluate an agent?",
+      "answer_md": "Task success rate + trajectory quality + efficiency, on a fixed task suite, often with LLM-as-judge.",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "ca4ca262c788",
+      "question": "How do you defend against prompt injection in an agentic RAG system?",
+      "answer_md": "Treat retrieved/tool content as untrusted data, never as instructions; separate the system/operator channel; validate and sandbox tool execution.",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "943a28cacbe9",
+      "question": "How do you cut agent cost without hurting quality?",
+      "answer_md": "Right-size models per sub-task, prompt-cache the stable prefix, lower effort on routine steps, parallelize tool calls, and batch offline work.",
+      "source_path": "ai_genai/intro_agentic_ai.md",
+      "source_title": "Agentic AI & Multi-Agent Systems",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 5
+    },
+    {
       "id": "57dffff684f8",
       "question": "What is context engineering and how does it differ from prompt engineering?",
       "answer_md": "Prompt engineering optimizes the *wording* of instructions: phrasing, examples, output format. Context engineering optimizes *what information enters the window at all*: which documents, how much history, in what order, within what token and cost budget, and what gets evicted when it overflows.\n\nThe distinction became important once windows got large enough that \"include everything\" was possible. It turns out that including everything degrades quality: irrelevant context distracts the model, and content in the middle of a long window is attended to less reliably. So the job shifted from writing better instructions to curating a smaller, better-ordered context. In a RAG or agent system it is also where nearly all the cost lives, since input tokens dominate.",
@@ -2317,6 +2438,72 @@
       "difficulty": "beginner",
       "difficulty_source": "heuristic",
       "order": 4
+    },
+    {
+      "id": "c8bd6cae386d",
+      "question": "How do you pick a model for a new feature?",
+      "answer_md": "Start with the cheapest tier that meets the quality bar (measured on an eval set), scale up only where needed, and route easy traffic to a small model.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 0
+    },
+    {
+      "id": "9f094b3a60ea",
+      "question": "What's the single biggest lever for LLM cost at scale?",
+      "answer_md": "Prompt caching of a stable prefix, plus right-sizing the model per task.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "intermediate",
+      "difficulty_source": "heuristic",
+      "order": 1
+    },
+    {
+      "id": "a53050985a44",
+      "question": "Why not use `tiktoken` to count Claude tokens?",
+      "answer_md": "Wrong tokenizer: its counts differ from Claude's; use the provider's token-counting API.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 2
+    },
+    {
+      "id": "dde0b117af23",
+      "question": "`temperature` vs `top_p`?",
+      "answer_md": "Both control randomness; temperature scales the distribution, top_p truncates it to a probability mass. Tune one, not both hard.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 3
+    },
+    {
+      "id": "5c1277bfbe6d",
+      "question": "What is a context window and how do you stay within it?",
+      "answer_md": "Max tokens per request; budget prompt + context + output, trim/retrieve selectively, and use compaction/summarization for long sessions.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 4
+    },
+    {
+      "id": "28f5b739af6c",
+      "question": "How do you reduce hallucinations?",
+      "answer_md": "Ground with RAG + citations, constrain output structure, lower temperature, and add evals/guardrails.",
+      "source_path": "ai_genai/intro_llm_fundamentals.md",
+      "source_title": "LLM and Generative AI Fundamentals",
+      "track": "ai_genai",
+      "difficulty": "beginner",
+      "difficulty_source": "heuristic",
+      "order": 5
     },
     {
       "id": "a0a6c4b5a95b",
