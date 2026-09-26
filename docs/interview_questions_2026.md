@@ -4,10 +4,11 @@
 
 ---
 
-## Section 1: Agent Systems Design
+## Interview Q&A
 
-**Q1: Design a research agent that can answer questions about a company's internal documents.**
+### Section 1: Agent Systems Design
 
+#### Q1: Design a research agent that can answer questions about a company's internal documents.
 **Strong Answer:**
 ```
 Architecture:
@@ -29,8 +30,7 @@ Key tradeoffs:
 
 ---
 
-**Q2: What are the risks of using multi-agent systems in production, and how do you mitigate them?**
-
+#### Q2: What are the risks of using multi-agent systems in production, and how do you mitigate them?
 **Strong Answer:**
 - **Non-determinism**: Same input, different output. Mitigate: set temperature=0 for routing decisions, add output validators.
 - **Token cost explosion**: 5 agents × 3 tool calls = 15x tokens. Mitigate: set `max_iter` limits, use cheaper models for simple sub-tasks.
@@ -40,8 +40,7 @@ Key tradeoffs:
 
 ---
 
-**Q3: Explain the difference between ReAct and function calling in agent systems.**
-
+#### Q3: Explain the difference between ReAct and function calling in agent systems.
 **Strong Answer:**
 > **ReAct** (Reasoning + Acting): The LLM explicitly outputs a "Thought:" step, then an "Action:" step, then observes the result. Human-readable reasoning chain, but verbose and slower. Works with any LLM that can follow instructions.
 
@@ -49,10 +48,9 @@ Key tradeoffs:
 
 ---
 
-## Section 2: RAG Optimization
+### Section 2: RAG Optimization
 
-**Q4: Your RAG chatbot gives wrong answers 30% of the time. Walk me through your debugging process.**
-
+#### Q4: Your RAG chatbot gives wrong answers 30% of the time. Walk me through your debugging process.
 **Strong Answer:**
 ```
 Step 1: Measure faithfulness vs. accuracy separately
@@ -80,8 +78,7 @@ Step 4: Fix generation problems:
 
 ---
 
-**Q5: What is HyDE and when would you use it?**
-
+#### Q5: What is HyDE and when would you use it?
 **Strong Answer:**
 > HyDE (Hypothetical Document Embeddings): Instead of embedding the user's query directly, use an LLM to generate a *hypothetical* answer, then embed that. The hypothetical answer's embedding is closer to real answer embeddings in the vector space than the raw question.
 
@@ -91,8 +88,7 @@ Step 4: Fix generation problems:
 
 ---
 
-**Q6: Explain chunking strategy selection for different document types.**
-
+#### Q6: Explain chunking strategy selection for different document types.
 | Document Type | Best Strategy | Reasoning |
 |--------------|---------------|-----------|
 | Markdown/Wiki | Header-based chunking | Respect document structure |
@@ -104,10 +100,9 @@ Step 4: Fix generation problems:
 
 ---
 
-## Section 3: LLM Scaling Challenges
+### Section 3: LLM Scaling Challenges
 
-**Q7: How does the attention mechanism scale, and what are the implications for RAG design?**
-
+#### Q7: How does the attention mechanism scale, and what are the implications for RAG design?
 **Strong Answer:**
 > Attention is O(n²) in time and space with sequence length n. Doubling the context = 4x compute. At 128K tokens, this is expensive. Implications for RAG:
 > 1. Don't stuff 50 chunks into context: retrieve 3-5 high-quality ones
@@ -117,8 +112,7 @@ Step 4: Fix generation problems:
 
 ---
 
-**Q8: What is prompt caching and how does it reduce costs?**
-
+#### Q8: What is prompt caching and how does it reduce costs?
 **Strong Answer:**
 > Anthropic's prompt caching lets you mark parts of a prompt as cacheable. If the same prefix is reused across requests, the cached tokens are processed at 10% of normal cost.
 
@@ -146,8 +140,7 @@ client.messages.create(
 
 ---
 
-**Q9: How do you handle LLM rate limits in production?**
-
+#### Q9: How do you handle LLM rate limits in production?
 **Strong Answer:**
 ```
 1. Retry with exponential backoff + jitter:
@@ -173,10 +166,9 @@ client.messages.create(
 
 ---
 
-## Section 4: Production AI Systems
+### Section 4: Production AI Systems
 
-**Q10: How do you monitor an LLM application in production?**
-
+#### Q10: How do you monitor an LLM application in production?
 **Strong Answer:**
 ```
 Four categories of metrics:
@@ -207,8 +199,7 @@ Tooling: LangSmith for LLM traces, Prometheus+Grafana for system metrics, custom
 
 ---
 
-**Q11: What is model drift in production LLM systems, and how do you detect it?**
-
+#### Q11: What is model drift in production LLM systems, and how do you detect it?
 **Strong Answer:**
 > Unlike classical ML models (where data drift causes accuracy decline), LLMs face:
 
@@ -222,8 +213,7 @@ Tooling: LangSmith for LLM traces, Prometheus+Grafana for system metrics, custom
 
 ---
 
-**Q12: Explain the CAP theorem's relevance to ML feature stores.**
-
+#### Q12: Explain the CAP theorem's relevance to ML feature stores.
 **Strong Answer:**
 > Feature stores must choose between Consistency and Availability during partition:
 
@@ -238,10 +228,9 @@ Tooling: LangSmith for LLM traces, Prometheus+Grafana for system metrics, custom
 
 ---
 
-## Section 5: Classical ML Depth
+### Section 5: Classical ML Depth
 
-**Q13: You have a dataset with 1M samples but only 50 positives for fraud detection. How do you handle this?**
-
+#### Q13: You have a dataset with 1M samples but only 50 positives for fraud detection. How do you handle this?
 **Strong Answer:**
 ```
 1. Don't use accuracy as metric → use Precision-Recall AUC, F1 at threshold, ROI
@@ -268,8 +257,7 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 
 ---
 
-**Q14: What's the difference between online learning and continual learning?**
-
+#### Q14: What's the difference between online learning and continual learning?
 **Strong Answer:**
 > **Online learning**: Model updates on each example one-at-a-time (or small batches) as they arrive. Used in recommendation systems, ad bidding. Example: SGD with `partial_fit()` in sklearn.
 
@@ -279,8 +267,7 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 
 ---
 
-**Q15: Explain gradient boosting and why it often beats deep learning on tabular data.**
-
+#### Q15: Explain gradient boosting and why it often beats deep learning on tabular data.
 **Strong Answer:**
 > Gradient boosting trains an ensemble of decision trees sequentially. Each tree corrects the errors of the previous ensemble. The "gradient" refers to fitting each tree to the negative gradient of the loss function (not the raw residuals).
 
@@ -295,10 +282,9 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 
 ---
 
-## Section 6: LLM Fine-tuning vs RAG
+### Section 6: LLM Fine-tuning vs RAG
 
-**Q16: When would you fine-tune an LLM vs use RAG?**
-
+#### Q16: When would you fine-tune an LLM vs use RAG?
 | Scenario | Fine-tuning | RAG |
 |----------|-------------|-----|
 | **Teaching facts** | No (facts change, fine-tuning is expensive) | Yes |
@@ -311,8 +297,7 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 
 ---
 
-**Q17: Explain RLHF and its limitations.**
-
+#### Q17: Explain RLHF and its limitations.
 **Strong Answer:**
 > RLHF (Reinforcement Learning from Human Feedback):
 > 1. Collect human preference data (which of 2 responses is better?)
@@ -330,10 +315,9 @@ scale_pos_weight = (1M - 50) / 50 = 19,998  # XGBoost
 
 ---
 
-## Section 7: System Design Scenarios
+### Section 7: System Design Scenarios
 
-**Q18: Design a real-time product recommendation system for an e-commerce site with 10M users.**
-
+#### Q18: Design a real-time product recommendation system for an e-commerce site with 10M users.
 ```
 Requirements:
 - Latency: <100ms P99
@@ -373,8 +357,7 @@ Monitoring:
 
 ---
 
-**Q19: How would you A/B test a new LLM model vs the existing one?**
-
+#### Q19: How would you A/B test a new LLM model vs the existing one?
 **Strong Answer:**
 ```
 1. Define success metrics upfront:
@@ -408,10 +391,9 @@ Monitoring:
 
 ---
 
-## Section 8: AI Workflow Automation
+### Section 8: AI Workflow Automation
 
-**Q20: When would you use n8n in an AI system, and when would you avoid it?**
-
+#### Q20: When would you use n8n in an AI system, and when would you avoid it?
 **Strong Answer:**
 > Use **n8n** when the system is driven by operational workflows: webhooks, SaaS integrations, approvals, notifications, CRM updates, or internal back-office automation. It is especially strong when product and operations teams need visibility into the workflow.
 
