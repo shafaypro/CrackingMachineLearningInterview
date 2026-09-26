@@ -160,13 +160,13 @@ pip install feast
 ```python
 # feature_repo/features.py
 from datetime import timedelta
-from feast import Entity, Feature, FeatureView, FileSource, ValueType
-from feast.types import Float32, Int64, String
+from feast import Entity, FeatureView, Field, FileSource
+from feast.types import Float32, Int64
 
 # Define entities (primary keys)
 user = Entity(
-    name="user_id",
-    value_type=ValueType.INT64,
+    name="user",
+    join_keys=["user_id"],
     description="User identifier"
 )
 
@@ -180,13 +180,13 @@ user_stats_source = FileSource(
 # Define feature view
 user_stats_view = FeatureView(
     name="user_stats",
-    entities=["user_id"],
+    entities=[user],
     ttl=timedelta(days=30),
-    features=[
-        Feature(name="transaction_count_30d", dtype=ValueType.INT64),
-        Feature(name="total_spend_30d", dtype=ValueType.FLOAT),
-        Feature(name="avg_transaction_amount_30d", dtype=ValueType.FLOAT),
-        Feature(name="unique_merchants_30d", dtype=ValueType.INT64),
+    schema=[  # `Feature`/`features=` were removed; use `Field`/`schema=`
+        Field(name="transaction_count_30d", dtype=Int64),
+        Field(name="total_spend_30d", dtype=Float32),
+        Field(name="avg_transaction_amount_30d", dtype=Float32),
+        Field(name="unique_merchants_30d", dtype=Int64),
     ],
     source=user_stats_source,
 )

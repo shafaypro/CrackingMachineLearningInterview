@@ -271,16 +271,17 @@ model = GradientBoostingClassifier(n_estimators=100)
 model.fit(X_train, y_train)
 
 with mlflow.start_run() as run:
-    mlflow.sklearn.log_model(
+    # MLflow 3 uses `name=`; `artifact_path=` is deprecated
+    model_info = mlflow.sklearn.log_model(
         sk_model=model,
-        artifact_path="model",
+        name="model",
         registered_model_name="FraudDetector",  # Automatically registers
         signature=mlflow.models.infer_signature(X_train, model.predict(X_train)),
         input_example=X_train[:5]  # Saves example for documentation
     )
 
-# Loading for inference
-model_uri = f"runs:/{run.info.run_id}/model"
+# Loading for inference (model_info.model_uri points at the logged model)
+model_uri = model_info.model_uri
 loaded_model = mlflow.sklearn.load_model(model_uri)
 
 # Load as generic pyfunc (framework-agnostic)
@@ -308,7 +309,7 @@ class PreprocessAndPredict(mlflow.pyfunc.PythonModel):
 # Log the custom model
 with mlflow.start_run():
     mlflow.pyfunc.log_model(
-        artifact_path="custom_model",
+        name="custom_model",
         python_model=PreprocessAndPredict(),
         artifacts={
             "model_path": "model.joblib",
@@ -322,9 +323,11 @@ with mlflow.start_run():
 
 ## Model Registry Lifecycle
 
-The Model Registry provides a central hub for managing model versions and their lifecycle stages.
+The Model Registry provides a central hub for managing model versions and their lifecycle.
 
-### Lifecycle Stages
+### Lifecycle Stages (Legacy)
+
+Fixed stages are deprecated since MLflow 2.9 in favour of **aliases** and **tags** (shown below). You will still meet them in older codebases and interviews:
 
 ```
 None → Staging → Production → Archived
@@ -351,13 +354,9 @@ result = mlflow.register_model(
 )
 print(f"Version: {result.version}")
 
-# Transition to staging
-client.transition_model_version_stage(
-    name="FraudDetector",
-    version=result.version,
-    stage="Staging",
-    archive_existing_versions=False
-)
+# Mark as a candidate (aliases replace the deprecated Staging stage)
+client.set_registered_model_alias("FraudDetector", "challenger", result.version)
+client.set_model_version_tag("FraudDetector", result.version, "validation_status", "pending")
 
 # Add a description
 client.update_model_version(
@@ -366,17 +365,12 @@ client.update_model_version(
     description="XGBoost model trained on Q4 2024 data. F1=0.918"
 )
 
-# Promote to production (archives existing production versions)
-client.transition_model_version_stage(
-    name="FraudDetector",
-    version=result.version,
-    stage="Production",
-    archive_existing_versions=True
-)
+# Promote to production: move the alias (an alias points at exactly one version)
+client.set_registered_model_alias("FraudDetector", "champion", result.version)
 
 # Load the current production model
 production_model = mlflow.pyfunc.load_model(
-    model_uri="models:/FraudDetector/Production"
+    model_uri="models:/FraudDetector@champion"
 )
 
 # Load a specific version
@@ -385,9 +379,9 @@ v3_model = mlflow.pyfunc.load_model(
 )
 ```
 
-### Model Aliases (MLflow 2.x)
+### Model Aliases (MLflow 2.3+)
 
-MLflow 2.x introduced aliases as a more flexible alternative to stages:
+Aliases are mutable, named pointers to a model version and are the recommended replacement for stages:
 
 ```python
 # Set an alias
@@ -406,10 +400,10 @@ champion = mlflow.pyfunc.load_model("models:/FraudDetector@champion")
 
 ```bash
 # Serve a registered model
-mlflow models serve -m "models:/FraudDetector/Production" --port 5001
+mlflow models serve -m "models:/FraudDetector@champion" --port 5001
 
-# Serve from a run
-mlflow models serve -m "runs:/abc123/model" --port 5001 --no-conda
+# Serve from a run, using the current Python environment
+mlflow models serve -m "runs:/abc123/model" --port 5001 --env-manager local
 ```
 
 **Making predictions via REST:**
@@ -425,7 +419,7 @@ curl -X POST http://localhost:5001/invocations \
 ```bash
 # Build a Docker image for the model
 mlflow models build-docker \
-  -m "models:/FraudDetector/Production" \
+  -m "models:/FraudDetector@champion" \
   -n "fraud-detector:v1"
 
 # Run the container
@@ -435,16 +429,18 @@ docker run -p 5001:8080 fraud-detector:v1
 ### Deployment to Cloud Platforms
 
 ```python
-# Deploy to SageMaker
-import mlflow.sagemaker as mfs
+# Deploy to SageMaker via the deployments client
+# (the old mlflow.sagemaker.deploy() function was removed in MLflow 2.0)
+from mlflow.deployments import get_deploy_client
 
-mfs.deploy(
-    app_name="fraud-detector-prod",
-    model_uri="models:/FraudDetector/Production",
-    region_name="us-east-1",
-    mode="create",  # or "replace", "add"
-    execution_role_arn="arn:aws:iam::123456789:role/SageMakerRole",
-    image_url="123456789.dkr.ecr.us-east-1.amazonaws.com/mlflow-pyfunc:latest"
+client = get_deploy_client("sagemaker:/us-east-1")
+client.create_deployment(
+    name="fraud-detector-prod",
+    model_uri="models:/FraudDetector@champion",
+    config={
+        "execution_role_arn": "arn:aws:iam::123456789:role/SageMakerRole",
+        "image_url": "123456789.dkr.ecr.us-east-1.amazonaws.com/mlflow-pyfunc:latest",
+    },
 )
 ```
 
@@ -509,7 +505,7 @@ An **experiment** is a logical grouping of related runs: for example, all attemp
 
 **Q2: How does the MLflow Model Registry differ from just storing model artifacts in a run?**
 
-Run artifacts are just files stored in a blob store: there is no lifecycle management, versioning, or discoverability. The Model Registry adds: named versioning (v1, v2, v3), lifecycle stages (Staging/Production/Archived), descriptions, tags for governance, and aliases. It acts as a single source of truth for what model is in production, enabling CI/CD pipelines to fetch `models:/ModelName/Production` without hardcoding run IDs.
+Run artifacts are just files stored in a blob store: there is no lifecycle management, versioning, or discoverability. The Model Registry adds: named versioning (v1, v2, v3), aliases such as `champion`/`challenger` (which replace the deprecated Staging/Production/Archived stages), descriptions, and tags for governance. It acts as a single source of truth for what model is in production, enabling CI/CD pipelines to fetch `models:/ModelName@champion` without hardcoding run IDs.
 
 **Q3: What is an MLflow flavor and why does it matter?**
 
@@ -537,7 +533,7 @@ Deploy an MLflow Tracking Server with: a SQL database backend (PostgreSQL recomm
 
 **Q9: What is the difference between `mlflow.log_metric` with a `step` parameter and without?**
 
-Without `step`, MLflow records the metric at `step=0` and overwrites it if called again with the same key. With `step`, MLflow stores a time-series of (step, value) pairs, enabling you to plot learning curves in the UI. Use `step=epoch` for training loops so you can see how loss or accuracy evolved over training.
+Without `step`, every value is recorded at `step=0` (distinguished only by timestamp), so the UI cannot draw a meaningful per-step curve and summaries show only the latest value. With `step`, MLflow stores a time-series of (step, value) pairs, enabling you to plot learning curves in the UI. Use `step=epoch` for training loops so you can see how loss or accuracy evolved over training.
 
 **Q10: How do you reproduce an MLflow run exactly?**
 
@@ -555,25 +551,25 @@ Autologging can: produce excessive runs if not scoped properly (e.g., each cross
 Defaulting to `./mlruns` means each developer's runs are stored locally and invisible to teammates. Always set `MLFLOW_TRACKING_URI` in your shell profile or CI/CD environment.
 
 **2. Logging inside a loop without steps**
-Calling `mlflow.log_metric("loss", value)` inside a training loop without `step=epoch` overwrites the metric each time. You see only the final value and lose the training curve.
+Calling `mlflow.log_metric("loss", value)` inside a training loop without `step=epoch` records every value at step 0. The run summary shows only the last value and the per-epoch training curve is lost.
 
 **3. Registering models without signatures or input examples**
 Models without signatures cannot validate inputs at serving time. This leads to cryptic errors in production. Always use `infer_signature` or define the signature manually.
 
 **4. Using stages instead of aliases for flexible routing**
-The traditional stage system (Staging/Production) is rigid: only one model can be in Production at a time per model name. Aliases (MLflow 2.x) allow multiple simultaneously active versions with custom names, enabling champion/challenger setups.
+The traditional stage system (Staging/Production) is rigid and has been deprecated since MLflow 2.9. Aliases (MLflow 2.3+) allow multiple simultaneously active versions with custom names, enabling champion/challenger setups.
 
 **5. Storing large datasets as artifacts**
 MLflow artifacts are not designed for versioning large datasets. Use a dedicated tool (DVC, Delta Lake, LakeFS) for dataset versioning and only log a reference (path or hash) in MLflow.
 
-**6. Not archiving old production models**
-Leaving multiple models in Production stage creates confusion about which is actually serving. Use `archive_existing_versions=True` when promoting a new version.
+**6. Not tracking which version is actually serving**
+Leaving several versions tagged or staged as "production" creates confusion about which is actually serving. Point a single `champion` alias at the serving version (an alias always resolves to exactly one version) and move it on promotion.
 
 **7. Hardcoding run IDs in deployment scripts**
-Scripts like `load_model("runs:/abc123/model")` break when a new model version is trained. Always load from the registry: `load_model("models:/ModelName/Production")`.
+Scripts like `load_model("runs:/abc123/model")` break when a new model version is trained. Always load from the registry: `load_model("models:/ModelName@champion")`.
 
 **8. Ignoring the conda environment in MLflow Projects**
-Skipping the conda environment definition with `--no-conda` eliminates reproducibility. Always specify a `conda.yaml` or `python_env.yaml` for Projects used in production pipelines.
+Skipping the environment definition with `--env-manager local` (the replacement for the removed `--no-conda` flag) eliminates reproducibility. Always specify a `conda.yaml` or `python_env.yaml` for Projects used in production pipelines.
 
 **9. Not tagging runs with metadata**
 Without tags like `git_commit`, `data_version`, `triggered_by`, and `environment`, it becomes impossible to audit runs months later. Establish a tagging convention and enforce it in code templates.

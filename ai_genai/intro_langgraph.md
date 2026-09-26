@@ -111,7 +111,7 @@ tools = [search_web, calculate]
 tool_node = ToolNode(tools)
 
 # LLM with tools bound
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 llm_with_tools = llm.bind_tools(tools)
 
 # State
@@ -141,7 +141,8 @@ app = graph.compile()
 result = app.invoke({
     "messages": [("human", "What's 15% of 2840, and who won the 2024 US election?")]
 })
-print(result["messages"][-1].content)
+# .text joins the text blocks; .content can be a list when the model returns thinking blocks
+print(result["messages"][-1].text)
 ```
 
 ---
@@ -234,7 +235,7 @@ for chunk in app.stream({"messages": [("human", "Analyze this data")]}, config=c
 # Stream tokens from LLM
 for chunk in app.astream_events(input_data, config=config, version="v2"):
     if chunk["event"] == "on_chat_model_stream":
-        print(chunk["data"]["chunk"].content, end="", flush=True)
+        print(chunk["data"]["chunk"].text, end="", flush=True)  # text only, skips thinking chunks
 ```
 
 ---
