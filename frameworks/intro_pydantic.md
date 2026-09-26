@@ -185,9 +185,9 @@ class AppSettings(BaseSettings):
 
     # LLM Settings
     anthropic_api_key: SecretStr
-    default_model: str = "claude-sonnet-4-6"
+    default_model: str = "claude-sonnet-5"
     max_tokens: int = 2048
-    temperature: float = 0.7
+    temperature: float | None = None  # leave unset: Claude Sonnet 5 rejects non-default sampling params
 
     # Vector DB
     pinecone_api_key: SecretStr

@@ -701,24 +701,31 @@ LLM-as-judge for graded rubrics. See [LLM Evaluation](../mlops/intro_llm_evaluat
 | Silent quality drift | Continuous evals + tracing on every tool call |
 | Cost blowout | Token/step budgets; alerting on per-task spend |
 
-### Interview Questions
+## Interview Q&A
 
-1. **When should you NOT build an agent?** → When the task is single-step or fully
-   specifiable: a single call or a code-orchestrated workflow is cheaper, faster,
-   and more reliable.
-2. **Bash tool vs dedicated tools: trade-offs?** → Bash = max capability, opaque
-   to the harness; dedicated tools = gateable, validatable, parallelizable, but
-   you must build each one. Promote to dedicated when you need to gate/render/parallelize.
-3. **How do you keep a long-running agent within the context window?** → Context
-   editing (prune), compaction (summarize), and memory (persist across sessions).
-4. **How do you evaluate an agent?** → Task success rate + trajectory quality +
-   efficiency, on a fixed task suite, often with LLM-as-judge.
-5. **How do you defend against prompt injection in an agentic RAG system?** →
-   Treat retrieved/tool content as untrusted data, never as instructions; separate
-   the system/operator channel; validate and sandbox tool execution.
-6. **How do you cut agent cost without hurting quality?** → Right-size models per
-   sub-task, prompt-cache the stable prefix, lower effort on routine steps,
-   parallelize tool calls, and batch offline work.
+#### When should you NOT build an agent?
+
+When the task is single-step or fully specifiable: a single call or a code-orchestrated workflow is cheaper, faster, and more reliable.
+
+#### Bash tool vs dedicated tools: trade-offs?
+
+Bash = max capability, opaque to the harness; dedicated tools = gateable, validatable, parallelizable, but you must build each one. Promote to dedicated when you need to gate/render/parallelize.
+
+#### How do you keep a long-running agent within the context window?
+
+Context editing (prune), compaction (summarize), and memory (persist across sessions).
+
+#### How do you evaluate an agent?
+
+Task success rate + trajectory quality + efficiency, on a fixed task suite, often with LLM-as-judge.
+
+#### How do you defend against prompt injection in an agentic RAG system?
+
+Treat retrieved/tool content as untrusted data, never as instructions; separate the system/operator channel; validate and sandbox tool execution.
+
+#### How do you cut agent cost without hurting quality?
+
+Right-size models per sub-task, prompt-cache the stable prefix, lower effort on routine steps, parallelize tool calls, and batch offline work.
 
 ---
 

@@ -69,7 +69,7 @@ def run_rag(question: str) -> str:
     docs = retrieve_documents(question)
     context = "\n".join([d["text"] for d in docs])
     response = llm.invoke(f"Context: {context}\n\nQuestion: {question}")
-    return response.content
+    return response.text  # text blocks only (.content can be a list when the model thinks)
 
 # Nested traces are automatically linked as parent → child
 answer = run_rag("What is RLHF?")

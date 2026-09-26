@@ -219,18 +219,27 @@ running computation without managing a sandbox yourself.
 | Secret leakage | Keep credentials host-side; never put API keys in prompts or tool args |
 | Runaway cost/loops | Max-iteration and token budgets |
 
-### Interview Questions
+## Interview Q&A
 
-1. **Why must parallel tool results go in one message?** → Splitting them trains
-   the model to stop issuing parallel calls and breaks `tool_use_id` pairing.
-2. **What does programmatic tool calling save?** → Round-trips and tokens: only
-   the final result re-enters the context, not every intermediate value.
-3. **How do you scale an agent to hundreds of tools?** → Tool search / dynamic
-   discovery so only relevant schemas load, preserving the prompt cache.
-4. **How do you make a `bash`/file tool safe?** → Sandboxing, command allowlists,
-   canonical-path confinement, timeouts, and logging every call.
-5. **What is MCP and why does it matter?** → A standard protocol for exposing tools
-   to agents, so tool servers are reusable across agents instead of bespoke.
+#### Why must parallel tool results go in one message?
+
+Splitting them trains the model to stop issuing parallel calls and breaks `tool_use_id` pairing.
+
+#### What does programmatic tool calling save?
+
+Round-trips and tokens: only the final result re-enters the context, not every intermediate value.
+
+#### How do you scale an agent to hundreds of tools?
+
+Tool search / dynamic discovery so only relevant schemas load, preserving the prompt cache.
+
+#### How do you make a `bash`/file tool safe?
+
+Sandboxing, command allowlists, canonical-path confinement, timeouts, and logging every call.
+
+#### What is MCP and why does it matter?
+
+A standard protocol for exposing tools to agents, so tool servers are reusable across agents instead of bespoke.
 
 ---
 
