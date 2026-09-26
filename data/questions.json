@@ -5258,11 +5258,11 @@
     {
       "id": "f114b47acc8c",
       "question": "What coordinate system would you use for computing distances in a geospatial ML pipeline?",
-      "answer_md": "Always project to a metric CRS (e.g., UTM or Web Mercator EPSG:3857) before computing distances. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Use pyproj or GeoPandas `.to_crs()` to reproject.",
+      "answer_md": "Project to a local metric CRS (e.g., the appropriate UTM zone) before computing distances, or use geodesic distance (pyproj `Geod`, PostGIS `geography`) when points span a large area. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Avoid Web Mercator (EPSG:3857) for distances: its units are meters, but scale grows with latitude. Use pyproj or GeoPandas `.to_crs()` to reproject.",
       "source_path": "data_engineering/intro_geospatial.md",
       "source_title": "Geospatial AI Systems: Google Solar API, ArcGIS & Production ML",
       "track": "data_engineering",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 0
     },
@@ -5280,7 +5280,7 @@
     {
       "id": "f23504b359fa",
       "question": "What is H3 and why is it useful for ML?",
-      "answer_md": "H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 hexagons have equal area (unlike lat/lon grids), making them better for spatial statistics.",
+      "answer_md": "H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 cells at a given resolution have roughly similar areas (far more uniform than lat/lon grids, though not exactly equal-area), and every neighbor is equidistant, making them better for spatial statistics.",
       "source_path": "data_engineering/intro_geospatial.md",
       "source_title": "Geospatial AI Systems: Google Solar API, ArcGIS & Production ML",
       "track": "data_engineering",
