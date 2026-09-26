@@ -61,15 +61,17 @@ A manager agent routes tasks to specialist workers:
 from langgraph_supervisor import create_supervisor
 from langchain_anthropic import ChatAnthropic
 
+# data_analyst, ml_engineer, writer: compiled agents created with a unique name,
+# e.g. create_react_agent(llm, tools=[...], name="data_analyst")
 supervisor = create_supervisor(
-    agents=["data_analyst", "ml_engineer", "writer"],
+    agents=[data_analyst, ml_engineer, writer],   # agent objects, not name strings
     model=ChatAnthropic(model="claude-opus-4-6"),
     prompt="""You are a project manager. Route each task to the right specialist:
     - data_analyst: data queries, statistics, EDA
     - ml_engineer: model design, training, evaluation
     - writer: documentation, summaries, reports
     When all tasks are done, synthesize the final answer."""
-)
+).compile()
 ```
 
 ### 2. Critic-Generator Pattern
@@ -103,7 +105,8 @@ def refiner_node(state):
 Execute subtasks concurrently, then aggregate:
 
 ```python
-from langgraph.graph import StateGraph, Send
+from langgraph.graph import StateGraph
+from langgraph.types import Send
 
 def route_to_workers(state):
     """Fan-out: send each document to a worker"""
@@ -282,7 +285,7 @@ relevant = memory.recall("What programming language should I use?")
 Compress old messages to stay within context:
 
 ```python
-from langchain.memory import ConversationSummaryBufferMemory
+from langchain_classic.memory import ConversationSummaryBufferMemory  # legacy API (pre-1.0: langchain.memory)
 
 memory = ConversationSummaryBufferMemory(
     llm=ChatAnthropic(model="claude-haiku-4-5"),

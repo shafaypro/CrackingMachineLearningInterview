@@ -36,9 +36,10 @@ LangSmith is Anthropic/LangChain's platform for **tracing, debugging, testing, a
 # pip install langsmith langchain-anthropic
 
 import os
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "your-api-key"
-os.environ["LANGCHAIN_PROJECT"] = "my-production-app"  # Project for grouping traces
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_API_KEY"] = "your-api-key"
+os.environ["LANGSMITH_PROJECT"] = "my-production-app"  # Project for grouping traces
+# (older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY / LANGCHAIN_PROJECT names still work)
 
 # That's it: all LangChain/LangGraph calls are auto-traced
 from langchain_anthropic import ChatAnthropic
@@ -177,17 +178,21 @@ results = evaluate(
 ## Prompt Hub: Version-Controlled Prompts
 
 ```python
-from langchain import hub
+from langsmith import Client
 
-# Pull a prompt from LangSmith Prompt Hub
-prompt = hub.pull("my-org/rag-qa-prompt:v3")  # Pin to version
+client = Client()
+
+# Pull a prompt from the LangSmith prompt hub
+prompt = client.pull_prompt("rag-qa-prompt:v3")  # Pin to a tag or commit
 
 # Use it
 chain = prompt | llm
 result = chain.invoke({"context": "...", "question": "..."})
 
-# Push updated prompt
-hub.push("my-org/rag-qa-prompt", updated_prompt, new_repo_is_public=False)
+# Push updated prompt (creates a new commit)
+client.push_prompt("rag-qa-prompt", object=updated_prompt)
+
+# Older code used `from langchain import hub`; in LangChain 1.0 that moved to langchain-classic.
 ```
 
 ---

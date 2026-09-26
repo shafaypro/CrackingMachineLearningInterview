@@ -220,7 +220,8 @@ async def rate_limited_llm_call(prompt: str) -> str:
 ## Rate Limiting & Token Management
 
 ```python
-from fastapi import Request, HTTPException
+from fastapi import Request
+from fastapi.responses import JSONResponse
 from collections import defaultdict
 import time
 
@@ -256,9 +257,11 @@ async def rate_limit_middleware(request: Request, call_next):
     if request.url.path.startswith("/chat"):
         client_id = get_client_id(request)
         if not limiter.is_allowed(client_id):
-            raise HTTPException(
+            # Return a response here: an HTTPException raised inside middleware
+            # bypasses FastAPI's exception handlers and surfaces as a 500
+            return JSONResponse(
                 status_code=429,
-                detail="Rate limit exceeded",
+                content={"detail": "Rate limit exceeded"},
                 headers={"Retry-After": "1"}
             )
     return await call_next(request)
@@ -267,8 +270,6 @@ async def rate_limit_middleware(request: Request, call_next):
 ### LLM Token Budget Management
 
 ```python
-import tiktoken
-
 class TokenBudgetManager:
     def __init__(self, model: str = "claude-sonnet-4-6", max_budget: int = 100000):
         self.budget = max_budget
@@ -284,7 +285,9 @@ class TokenBudgetManager:
         return self.budget - self.used
 
 def estimate_tokens(text: str) -> int:
-    """Rough estimate: 1 token ≈ 4 characters"""
+    """Rough estimate: 1 token ≈ 4 characters of English text.
+    For exact counts use the provider's token counting endpoint
+    (tiktoken only matches OpenAI tokenizers, not Claude's)."""
     return len(text) // 4
 ```
 
@@ -295,6 +298,7 @@ def estimate_tokens(text: str) -> int:
 ```python
 import structlog
 import time
+from fastapi import Request, Response
 from opentelemetry import trace
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from prometheus_client import Counter, Histogram, generate_latest
@@ -377,7 +381,7 @@ def route_to_model(task_complexity: Literal["fast", "balanced", "powerful"],
                    prompt_length: int) -> str:
     # Override: very long prompts need larger context window
     if prompt_length > 50000:
-        return "claude-opus-4-6"  # Larger context
+        return "claude-opus-4-6"  # Stronger long-context reasoning (Haiku 4.5 has a 200K window)
     return MODEL_ROUTING[task_complexity]
 
 @app.post("/smart-chat")

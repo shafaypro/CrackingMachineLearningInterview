@@ -50,9 +50,9 @@
 
 ```python
 import os
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "ls__..."
-os.environ["LANGCHAIN_PROJECT"] = "production-rag"
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_API_KEY"] = "lsv2_..."
+os.environ["LANGSMITH_PROJECT"] = "production-rag"
 
 # Automatic tracing of all LangChain calls
 # View at smith.langchain.com: latency, tokens, errors, full traces
@@ -61,6 +61,9 @@ os.environ["LANGCHAIN_PROJECT"] = "production-rag"
 ### Langfuse (Open-source)
 
 ```python
+# Langfuse Python SDK v2 API shown. SDK v3+ is built on OpenTelemetry: import
+# `observe` from `langfuse` directly and use context managers such as
+# `langfuse.start_as_current_span(...)` instead of `langfuse.trace(...)`.
 from langfuse import Langfuse
 from langfuse.decorators import observe
 
@@ -85,7 +88,7 @@ span.end(output={"doc_count": len(docs)})
 
 generation = trace.generation(
     name="llm-call",
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     input=[{"role": "user", "content": question}],
     output=answer,
     usage={"input": 500, "output": 200}
@@ -147,7 +150,7 @@ def llm_judge(
     """Use an LLM to judge the quality of another LLM's answer."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=500,
         system="""You are an expert evaluator for LLM outputs.
 Rate the answer on a scale of 0.0 to 1.0 and explain your reasoning.
@@ -165,7 +168,7 @@ Return JSON with score (0.0-1.0) and reason."""
     )
 
     import json
-    result = json.loads(response.content[0].text)
+    result = json.loads(next(b.text for b in response.content if b.type == "text"))
     return EvalResult(score=result["score"], reason=result["reason"])
 
 # Run eval
@@ -243,7 +246,7 @@ def test_llm_response(case):
         max_tokens=case.get("max_tokens", 500),
         messages=[{"role": "user", "content": case["input"]}]
     )
-    text = response.content[0].text
+    text = next(b.text for b in response.content if b.type == "text")
 
     if "expected_contains" in case:
         for phrase in case["expected_contains"]:
@@ -269,9 +272,9 @@ RAG_SYSTEM_V2 = """You are an expert assistant. Answer questions based ONLY on t
 If the answer isn't in the context, say "I don't have that information."
 Always cite the source document when possible."""
 
-# Or use LangSmith Hub
-from langchain import hub
-prompt = hub.pull("rlm/rag-prompt")   # community prompt
+# Or use the LangSmith prompt hub
+from langsmith import Client
+prompt = Client().pull_prompt("rlm/rag-prompt")   # community prompt
 ```
 
 ### A/B Testing Prompts
@@ -309,11 +312,12 @@ from collections import defaultdict
 
 client = Anthropic()
 
-# Pricing (per million tokens, as of early 2026)
+# Pricing (USD per million tokens, standard rates as of late 2026).
+# Prices change: load them from config and check the provider's pricing page.
 PRICING = {
-    "claude-opus-4-6":          {"input": 15.0,  "output": 75.0},
-    "claude-sonnet-4-6":        {"input": 3.0,   "output": 15.0},
-    "claude-haiku-4-5-20251001":{"input": 0.25,  "output": 1.25},
+    "claude-opus-5-5":           {"input": 4.0, "output": 20.0},
+    "claude-sonnet-5":           {"input": 2.0, "output": 10.0},
+    "claude-haiku-4-5-20251001": {"input": 1.0, "output": 5.0},
 }
 
 class CostTracker:
@@ -322,7 +326,7 @@ class CostTracker:
 
     def track(self, model: str, response):
         usage = response.usage
-        price = PRICING.get(model, {"input": 3.0, "output": 15.0})
+        price = PRICING.get(model, {"input": 2.0, "output": 10.0})
 
         cost = (
             usage.input_tokens * price["input"] / 1_000_000 +
@@ -341,11 +345,11 @@ class CostTracker:
 tracker = CostTracker()
 
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello"}]
 )
-tracker.track("claude-sonnet-4-6", response)
+tracker.track("claude-sonnet-5", response)
 tracker.report()
 ```
 
@@ -356,13 +360,13 @@ tracker.report()
 def route_to_model(task_complexity: str) -> str:
     return {
         "simple": "claude-haiku-4-5-20251001",   # FAQs, classification
-        "medium": "claude-sonnet-4-6",            # most tasks
-        "complex": "claude-opus-4-6",             # deep reasoning
+        "medium": "claude-sonnet-5",            # most tasks
+        "complex": "claude-opus-5-5",             # deep reasoning
     }[task_complexity]
 
 # 2. Context caching (up to 90% savings on repeated context)
 response = client.messages.create(
-    model="claude-sonnet-4-6",
+    model="claude-sonnet-5",
     max_tokens=1024,
     system=[{
         "type": "text",
@@ -448,7 +452,7 @@ class Guardrails:
                 "content": f"Is this answer relevant to the question? Answer yes/no.\nQuestion: {question}\nAnswer: {answer}"
             }]
         )
-        return "yes" in response.content[0].text.lower()
+        return "yes" in next(b.text for b in response.content if b.type == "text").lower()
 
 # Use in application
 guardrails = Guardrails()
@@ -457,11 +461,11 @@ def safe_query(user_input: str) -> str:
     try:
         clean_input = guardrails.check_input(user_input)
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
             messages=[{"role": "user", "content": clean_input}]
         )
-        output = response.content[0].text
+        output = next(b.text for b in response.content if b.type == "text")
         return guardrails.check_output(output)
     except GuardrailError as e:
         return f"I can't process that request: {e}"

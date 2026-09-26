@@ -39,12 +39,11 @@ Unsloth is an open-source Python library that significantly accelerates LoRA and
 ## Installation
 
 ```bash
-# Install for CUDA 12.1 (most common)
-pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
-pip install --no-deps trl peft accelerate bitsandbytes
-
-# Or via pip (stable release)
+# Recommended: stable release from PyPI (pulls in compatible torch/trl/peft)
 pip install unsloth
+
+# Or the latest from GitHub
+pip install --upgrade --no-deps "unsloth @ git+https://github.com/unslothai/unsloth.git"
 
 # Verify installation
 python -c "import unsloth; print(unsloth.__version__)"
@@ -60,7 +59,7 @@ pip install unsloth trl peft accelerate bitsandbytes datasets transformers
 | NVIDIA GPU (CUDA 12.1+) | Full support |
 | Google Colab (free tier T4) | Full support |
 | Kaggle (P100, T4) | Full support |
-| Apple Silicon (MPS) | CPU fallback |
+| Apple Silicon (MPS) | Limited or none; check current docs |
 | AMD GPU (ROCm) | Partial support |
 
 ---
@@ -74,7 +73,7 @@ from unsloth import FastLanguageModel
 
 # Llama 3 family
 model, tokenizer = FastLanguageModel.from_pretrained("unsloth/Meta-Llama-3.1-8B-Instruct")
-model, tokenizer = FastLanguageModel.from_pretrained("unsloth/Meta-Llama-3.2-3B-Instruct")
+model, tokenizer = FastLanguageModel.from_pretrained("unsloth/Llama-3.2-3B-Instruct")
 model, tokenizer = FastLanguageModel.from_pretrained("unsloth/Llama-3.3-70B-Instruct")
 
 # Mistral family
@@ -109,7 +108,7 @@ from unsloth import FastLanguageModel
 import torch
 
 # Configuration
-MODEL_NAME = "unsloth/Meta-Llama-3.2-3B-Instruct"
+MODEL_NAME = "unsloth/Llama-3.2-3B-Instruct"
 MAX_SEQ_LENGTH = 2048      # Context window
 DTYPE = None               # Auto-detect (float16 or bfloat16)
 LOAD_IN_4BIT = True        # Use QLoRA (4-bit quantization)
@@ -155,7 +154,7 @@ model.print_trainable_parameters()
 
 ```python
 from datasets import load_dataset
-from unsloth.chat_templates import get_chat_template
+from unsloth.chat_templates import get_chat_template, standardize_sharegpt
 
 # Apply the correct chat template for the model
 tokenizer = get_chat_template(
@@ -179,6 +178,9 @@ def format_conversations(examples):
 # Load a dataset
 dataset = load_dataset("mlabonne/FineTome-100k", split="train")
 
+# FineTome uses ShareGPT keys ("from"/"value"); convert to "role"/"content"
+dataset = standardize_sharegpt(dataset)
+
 # Format the dataset
 dataset = dataset.map(format_conversations, batched=True)
 
@@ -194,11 +196,12 @@ print(f"Sample:\n{train_dataset[0]['text'][:500]}")
 ### Step 4: Train with TRL SFTTrainer
 
 ```python
-from trl import SFTTrainer
-from transformers import TrainingArguments
+from trl import SFTConfig, SFTTrainer
 from unsloth import is_bfloat16_supported
 
-training_args = TrainingArguments(
+# SFTConfig extends TrainingArguments; dataset options now live here
+# instead of being passed to SFTTrainer directly
+training_args = SFTConfig(
     output_dir="./llama3-finetuned",
     num_train_epochs=3,
 
@@ -219,7 +222,7 @@ training_args = TrainingArguments(
 
     # Logging and saving
     logging_steps=10,
-    evaluation_strategy="epoch",
+    eval_strategy="epoch",          # formerly evaluation_strategy (removed)
     save_strategy="epoch",
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
@@ -230,17 +233,19 @@ training_args = TrainingArguments(
     # Push to Hub
     push_to_hub=False,  # Set True to auto-push
     report_to="none",   # or "wandb", "mlflow"
+
+    # Dataset options (SFT-specific)
+    dataset_text_field="text",
+    max_length=MAX_SEQ_LENGTH,     # formerly max_seq_length
+    dataset_num_proc=2,
+    packing=True,                  # Pack short sequences together for efficiency
 )
 
 trainer = SFTTrainer(
     model=model,
-    tokenizer=tokenizer,
+    processing_class=tokenizer,    # formerly tokenizer=
     train_dataset=train_dataset,
     eval_dataset=eval_dataset,
-    dataset_text_field="text",
-    max_seq_length=MAX_SEQ_LENGTH,
-    dataset_num_proc=2,
-    packing=True,                  # Pack short sequences together for efficiency
     args=training_args,
 )
 
@@ -369,9 +374,9 @@ Benchmarks comparing Unsloth vs standard HuggingFace (HF) training on Llama 3.2 
 | Batch size (16GB GPU) | 2 | 4 | 2x |
 | Time for 1000 steps | 120 min | 55 min | 2.2x |
 
-*For Llama 3.2 3B, batch size 2, max_seq_length 2048, on NVIDIA A100 80GB*
+*Illustrative figures only: real speedups depend on model, sequence length, batch size, and GPU. Check Unsloth's published benchmarks for current numbers.*
 
-**Unsloth Pro** (paid) achieves up to 5x speedup and 80% memory reduction.
+Unsloth's paid tiers advertise larger speedups and memory savings than the free version.
 
 ---
 

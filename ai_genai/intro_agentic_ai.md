@@ -41,7 +41,7 @@ Agent:
 ### Why Agentic AI Now?
 
 Three things converged in 2024-2026:
-1. **Large context windows** (200K tokens): agents can hold entire codebases in mind
+1. **Large context windows** (200K to 1M tokens): agents can hold entire codebases in mind
 2. **Reliable tool use**: models accurately call functions with correct parameters
 3. **Better instruction following**: models stay on task across many steps
 
@@ -204,7 +204,7 @@ def run_agent(task: str, max_iterations: int = 20) -> str:
 
     for iteration in range(max_iterations):
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=4096,
             system=system,
             tools=tools,
@@ -271,14 +271,14 @@ def run_subagent(task: str, agent_role: str) -> str:
         system=f"You are a specialized {agent_role}. Complete the given task concisely.",
         messages=[{"role": "user", "content": task}]
     )
-    return response.content[0].text
+    return next(b.text for b in response.content if b.type == "text")
 
 def orchestrator(user_goal: str) -> str:
     """Orchestrator breaks down goals and coordinates subagents."""
 
     # Step 1: Plan
     plan_response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=1024,
         system="You are a planning agent. Break down the goal into 3-5 parallel subtasks.",
         messages=[{
@@ -288,7 +288,7 @@ def orchestrator(user_goal: str) -> str:
     )
 
     import json
-    plan = json.loads(plan_response.content[0].text)
+    plan = json.loads(next(b.text for b in plan_response.content if b.type == "text"))
 
     # Step 2: Execute subtasks in parallel
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -302,7 +302,7 @@ def orchestrator(user_goal: str) -> str:
 
     # Step 3: Synthesize results
     synthesis = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=2048,
         system="You are a synthesis agent. Combine the work of multiple subagents into a coherent final answer.",
         messages=[{
@@ -311,7 +311,7 @@ def orchestrator(user_goal: str) -> str:
         }]
     )
 
-    return synthesis.content[0].text
+    return next(b.text for b in synthesis.content if b.type == "text")
 
 result = orchestrator("Create a competitive analysis of the top 3 cloud data warehouses")
 print(result)
@@ -332,23 +332,24 @@ print(result)
 
 ## Anthropic Agent SDK
 
-The **Claude Agent SDK** provides higher-level primitives for building agents.
+The **Claude Agent SDK** packages the Claude Code harness as a library: the agent loop, context management, built-in tools (file read/write/edit, bash, search), MCP, subagents, hooks, and permissions. It is a separate package from the `anthropic` API SDK, and you host it yourself.
 
 ```python
-# Install
-# pip install anthropic-agent-sdk  (conceptual - check current docs)
+# pip install claude-agent-sdk
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions
 
-from anthropic import Anthropic
+async def main():
+    async for message in query(
+        prompt="Find the failing test in tests/ and fix it.",
+        options=ClaudeAgentOptions(allowed_tools=["Read", "Edit", "Bash"]),
+    ):
+        print(message)
 
-client = Anthropic()
-
-# Claude Code itself is an agent built on these primitives
-# Key patterns:
-# 1. Tool definitions
-# 2. Agentic loop
-# 3. Context management
-# 4. Interruption handling
+asyncio.run(main())
 ```
+
+Compare with the options around it: the raw Messages API with your own loop (above) gives full control; the API SDK's tool runner automates the loop for tools you define; Claude Managed Agents (beta) has Anthropic run the loop and host a per-session sandbox.
 
 ### Human-in-the-Loop
 
@@ -362,7 +363,7 @@ def agent_with_confirmation(task: str):
 
     while True:
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=4096,
             tools=tools,
             messages=messages,
@@ -371,7 +372,7 @@ def agent_with_confirmation(task: str):
         messages.append({"role": "assistant", "content": response.content})
 
         if response.stop_reason == "end_turn":
-            return response.content[0].text
+            return next(b.text for b in response.content if b.type == "text")
 
         if response.stop_reason == "tool_use":
             tool_results = []
@@ -447,7 +448,7 @@ def agent_with_memory(user_message: str) -> str:
     memory_context = "\n".join(memories) if memories else "No relevant memories."
 
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=1024,
         system=f"""You are a helpful assistant with memory.
 
@@ -458,7 +459,7 @@ Use these memories to provide personalized, contextual responses.""",
         messages=[{"role": "user", "content": user_message}]
     )
 
-    reply = response.content[0].text
+    reply = next(b.text for b in response.content if b.type == "text")
 
     # Store this interaction as a memory
     remember(f"User asked: {user_message}\nAssistant replied: {reply[:200]}")
@@ -559,7 +560,7 @@ Research the current state of vector databases in 2026:
 | **LangGraph** | Python | Stateful multi-agent graphs |
 | **CrewAI** | Python | Role-based agent crews |
 | **n8n** | TypeScript | Visual workflow automation with AI integrations |
-| **AutoGen** | Python | Multi-agent conversations (Microsoft) |
+| **AutoGen** | Python | Multi-agent conversations (Microsoft; its successor is Microsoft Agent Framework) |
 | **Claude Code** | TypeScript | Agentic coding assistant |
 | **Composio** | Python | 250+ tool integrations for agents |
 | **Dify** | Python | Visual agent builder |
@@ -572,6 +573,7 @@ Research the current state of vector databases in 2026:
 | **Google Vertex AI Agents** | Managed agents on GCP |
 | **Azure AI Agents** | Managed agents on Azure |
 | **Anthropic API** | Build your own with Claude + tools |
+| **Claude Managed Agents** (beta) | Anthropic runs the agent loop and a per-session sandbox |
 
 ### 2026 Trends
 

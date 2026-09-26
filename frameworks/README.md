@@ -79,7 +79,7 @@ Run large language models locally on your own hardware without sending data to e
 |--------|---------|------------|
 | Graph type | Dynamic (eager by default) | Static (graph) + eager mode |
 | Research popularity | Dominant in research | Declining in research |
-| Production tooling | TorchServe, ONNX | TFServing, TFLite, TF.js |
+| Production tooling | ONNX, torch.export, ExecuTorch (TorchServe now in limited maintenance) | TFServing, TFLite, TF.js |
 | Debugging | Easy: standard Python debugging | Harder with graph mode |
 | Community | Very large | Large |
 
@@ -168,11 +168,11 @@ In many production systems, n8n handles the outer operational workflow while Lan
 
 **Q5: Compare PyTorch and TensorFlow for production ML.** 🟡 Intermediate
 
-**PyTorch** is dominant in research and has strong production tools (TorchServe, ONNX export, TorchScript). `torch.compile` in PyTorch 2.0 makes it competitive on performance.
+**PyTorch** is dominant in research and has strong production paths (ONNX export, `torch.export` with AOTInductor, ExecuTorch for edge, or serving through vLLM/Triton). TorchScript is deprecated in favor of `torch.export`, and TorchServe is in limited maintenance. `torch.compile` (PyTorch 2.0+) makes it competitive on performance.
 
 **TensorFlow** has mature production tooling: TF Serving (high-performance model serving), TFLite (mobile/edge), TF.js (browser), and tight integration with Google Cloud (Vertex AI).
 
-For new projects in 2025: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.
+For new projects: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.
 
 ---
 

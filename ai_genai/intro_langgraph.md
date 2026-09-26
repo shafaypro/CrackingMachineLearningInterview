@@ -203,26 +203,21 @@ app.invoke(Command(resume={"approved": True}), config=config)
 ## Multi-Agent with LangGraph
 
 ```python
-from langgraph.graph import StateGraph
+# pip install langgraph-supervisor
 from langgraph_supervisor import create_supervisor
 
-# Sub-graphs (specialized agents)
-research_graph = build_research_subgraph()
-writing_graph = build_writing_subgraph()
+# Specialized agents: compiled graphs, each with a unique name
+research_agent = build_research_subgraph().compile(name="researcher")
+writing_agent = build_writing_subgraph().compile(name="writer")
 
-# Supervisor routes between sub-agents
-supervisor = create_supervisor(
-    agents=["researcher", "writer"],
+# Supervisor gets a handoff tool per agent and routes between them
+multi_agent = create_supervisor(
+    agents=[research_agent, writing_agent],   # agent objects, not name strings
     model=ChatAnthropic(model="claude-opus-4-6"),
-    prompt="Route tasks to the appropriate specialist agent."
-)
+    prompt="Route tasks to the appropriate specialist agent.",
+).compile()
 
-# Combine into multi-agent graph
-multi_agent = StateGraph(OverallState)
-multi_agent.add_node("supervisor", supervisor)
-multi_agent.add_node("researcher", research_graph.compile())
-multi_agent.add_node("writer", writing_graph.compile())
-# Add routing edges...
+result = multi_agent.invoke({"messages": [("human", "Research and summarize vector DB trends")]})
 ```
 
 ---

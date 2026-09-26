@@ -63,6 +63,7 @@ Follow the content and formatting guidelines below. Then check that all links wo
 ```bash
 python3 tools/check_links.py                 # whole repo, plus the index.html nav entries
 python3 tools/check_links.py path/to/new.md  # just your file
+python3 tools/check_style.py                 # no em or en dashes; use colons, commas, parentheses or hyphens
 ```
 
 The same check runs in CI on every pull request. If you add a new guide, also add it to the track list in

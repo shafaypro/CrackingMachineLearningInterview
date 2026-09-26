@@ -413,7 +413,7 @@ Embedding model context limit?
 
 ```python
 from langchain_community.retrievers import BM25Retriever
-from langchain.retrievers import EnsembleRetriever
+from langchain_classic.retrievers import EnsembleRetriever  # LangChain 1.0+: legacy retrievers live in langchain-classic
 from langchain_community.vectorstores import Chroma
 
 # Dense retriever
@@ -456,7 +456,7 @@ Query Embedding ──→ [ANN Search] ──→ Top-100 docs
 ```python
 from sentence_transformers import CrossEncoder
 from langchain_cohere import CohereRerank
-from langchain.retrievers.contextual_compression import ContextualCompressionRetriever
+from langchain_classic.retrievers.contextual_compression import ContextualCompressionRetriever  # pre-1.0: langchain.retrievers
 
 # Option 1: Local cross-encoder
 cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
@@ -532,7 +532,7 @@ Stuffing too many retrieved chunks causes:
 ```python
 # 1. Rerank and keep only top-3 instead of top-10
 # 2. Contextual compression: extract only relevant sentences
-from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain_classic.retrievers.document_compressors import LLMChainExtractor
 
 compressor = LLMChainExtractor.from_llm(llm)
 compression_retriever = ContextualCompressionRetriever(
@@ -541,8 +541,9 @@ compression_retriever = ContextualCompressionRetriever(
 )
 
 # 3. Map-reduce for very long documents
-from langchain.chains import MapReduceDocumentsChain
-# Split across multiple LLM calls, then combine
+# Split across multiple LLM calls, then combine. The old MapReduceDocumentsChain
+# is deprecated (now in langchain-classic); a small LangGraph graph or a plain
+# LCEL .batch() over chunks followed by a combine step is the current approach.
 
 # 4. Hierarchical retrieval: coarse then fine
 summary_retriever = ...  # Retrieve document summaries

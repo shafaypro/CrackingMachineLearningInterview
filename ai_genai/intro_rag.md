@@ -115,7 +115,7 @@ from langchain_community.document_loaders import (
 The key insight: **chunk size is a trade-off**. Small chunks are more precise, large chunks have more context.
 
 ```python
-from langchain.text_splitter import (
+from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
     MarkdownHeaderTextSplitter,
     SentenceTransformersTokenTextSplitter,
@@ -306,7 +306,7 @@ def rag_query(user_question: str, collection, n_docs: int = 5) -> str:
 
     # 3. Generate
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=2048,
         system="""You are a helpful assistant that answers questions based on provided documents.
 
@@ -327,7 +327,7 @@ Question: {user_question}"""
         }]
     )
 
-    return response.content[0].text
+    return next(b.text for b in response.content if b.type == "text")
 
 answer = rag_query("What was our revenue in Q4 2025?", collection)
 print(answer)
@@ -349,7 +349,7 @@ def rewrite_query(original_query: str) -> list[str]:
         messages=[{"role": "user", "content": original_query}]
     )
     import json
-    return json.loads(response.content[0].text)
+    return json.loads(next(b.text for b in response.content if b.type == "text"))
 
 # Search with all rewritten queries, deduplicate results
 queries = rewrite_query("What's our churn rate?")
@@ -371,7 +371,7 @@ def hyde_search(question: str, collection) -> list[dict]:
             "content": f"Write a paragraph that answers: {question}\n(Be concise, doesn't need to be factual)"
         }]
     )
-    hypothetical_answer = hyp_response.content[0].text
+    hypothetical_answer = next(b.text for b in hyp_response.content if b.type == "text")
 
     # Use the hypothetical answer for retrieval (better semantic match)
     return retrieve(hypothetical_answer, collection)
@@ -391,7 +391,7 @@ def compress_context(question: str, raw_context: str) -> str:
             "content": f"Question: {question}\n\nDocument:\n{raw_context}"
         }]
     )
-    return response.content[0].text
+    return next(b.text for b in response.content if b.type == "text")
 ```
 
 ---
@@ -561,28 +561,29 @@ def evaluate_retrieval(questions, relevant_doc_ids, retrieved_doc_ids_list, k=5)
 
 ```python
 # Option 1: LLM-generated synthetic QA pairs (RAGAS TestsetGenerator)
-from ragas.testset.generator import TestsetGenerator
-from ragas.testset.evolutions import simple, reasoning, multi_context
+# RAGAS 0.2+ API (the 0.1 `ragas.testset.generator` / `evolutions` modules were removed).
+# The library changes quickly: check the docs for the version you pin.
+from ragas.testset import TestsetGenerator
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
 from langchain_anthropic import ChatAnthropic
 from langchain_community.document_loaders import DirectoryLoader
 
 loader = DirectoryLoader("./docs", glob="**/*.md")
 documents = loader.load()
 
-generator = TestsetGenerator.with_anthropic(
-    generator_llm=ChatAnthropic(model="claude-sonnet-4-6"),
-    critic_llm=ChatAnthropic(model="claude-sonnet-4-6"),
+generator = TestsetGenerator(
+    llm=LangchainLLMWrapper(ChatAnthropic(model="claude-sonnet-4-6")),
+    embedding_model=LangchainEmbeddingsWrapper(embeddings),  # any LangChain embeddings
 )
 
-testset = generator.generate_with_langchain_docs(
-    documents,
-    test_size=50,
-    distributions={simple: 0.5, reasoning: 0.3, multi_context: 0.2}
-)
+testset = generator.generate_with_langchain_docs(documents, testset_size=50)
 testset.to_pandas().to_csv("rag_eval_dataset.csv", index=False)
 ```
 
 ### TruLens Evaluation (Alternative to RAGAS)
+
+> The snippet below uses the legacy `trulens_eval` package. TruLens 1.x renamed it to `trulens` (split into `trulens-core`, `trulens-apps-langchain`, and provider packages, with `TruSession` replacing `Tru`), so check current import paths before copying it. The feedback-function idea is unchanged.
 
 ```python
 from trulens_eval import Tru, TruChain, Feedback
@@ -689,7 +690,7 @@ class RAGSystem:
 
     def _index_documents(self):
         """Load and index all documents."""
-        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
         splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150)
 
         all_chunks = []
@@ -720,7 +721,7 @@ class RAGSystem:
         # Generate
         context = "\n---\n".join(docs)
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
             system="Answer questions based on the provided context. Be concise and cite sources.",
             messages=[{
@@ -728,7 +729,7 @@ class RAGSystem:
                 "content": f"Context:\n{context}\n\nQuestion: {question}"
             }]
         )
-        return response.content[0].text
+        return next(b.text for b in response.content if b.type == "text")
 
 # Usage
 rag = RAGSystem("./docs")
@@ -763,7 +764,7 @@ print(rag.query("How do I set up dbt incrementally?"))
 | **Streaming RAG** | Stream context from DB as generation happens |
 | **Corrective RAG** | Agent validates retrieved context relevance, retries if needed |
 | **Self-RAG** | Model decides when to retrieve, what to retrieve, and validates answers |
-| **Long-context alternatives** | For smaller corpora, just stuff everything in 200K context |
+| **Long-context alternatives** | For smaller corpora, just put everything in a long context window (up to 1M tokens on current frontier models), ideally with prompt caching |
 
 ---
 

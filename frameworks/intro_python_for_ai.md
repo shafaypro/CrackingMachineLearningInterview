@@ -145,16 +145,16 @@ class Settings(BaseModel):
 
 ```python
 # config.py: never hardcode keys
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Config(BaseSettings):
+class AppConfig(BaseSettings):
+    # v2 style; the inner `class Config:` form is deprecated
+    model_config = SettingsConfigDict(env_file=".env")
+
     anthropic_api_key: str
     vector_db_url: str = "http://localhost:6333"
 
-    class Config:
-        env_file = ".env"
-
-config = Config()  # reads from environment / .env
+config = AppConfig()  # reads from environment / .env
 ```
 
 - **Pin dependencies** with a lockfile for reproducibility.
@@ -272,7 +272,7 @@ log_event("tool_call", run_id=run_id, tool="search", args={"query": "..."})
    end-to-end tracing.
 5. **How do you keep secrets out of code?** → `.env` (git-ignored) + a settings
    loader locally, secrets manager / CI secrets in production; never hardcode.
-6. **Sync vs async SDK client (does it matter?** → Yes) calling a blocking sync
+6. **Sync vs async SDK client: does it matter?** → Yes: calling a blocking sync
    client inside an async handler stalls the event loop; use the async client or
    offload to an executor.
 

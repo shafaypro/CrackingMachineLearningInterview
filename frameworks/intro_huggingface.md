@@ -61,7 +61,6 @@ model = AutoModelForCausalLM.from_pretrained(
     model_name,
     quantization_config=bnb_config,
     device_map="auto",  # Automatically distribute across available GPUs
-    trust_remote_code=True
 )
 
 # Simple generation
@@ -190,7 +189,7 @@ print(result["text"])
 ## Datasets Library
 
 ```python
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, load_from_disk, Dataset
 import pandas as pd
 
 # Load a dataset from HF Hub
@@ -228,7 +227,7 @@ custom_dataset = Dataset.from_pandas(df)
 
 # Save and load locally
 tokenized.save_to_disk("./tokenized_imdb")
-loaded = load_dataset("arrow", data_dir="./tokenized_imdb")
+loaded = load_from_disk("./tokenized_imdb")
 
 # Push to Hub
 custom_dataset.push_to_hub("username/my-dataset", private=True)
@@ -247,7 +246,7 @@ pip install peft
 ### LoRA Fine-Tuning
 
 ```python
-from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer
 from peft import LoraConfig, get_peft_model, TaskType
 from datasets import load_dataset
 import torch
@@ -256,8 +255,9 @@ import torch
 model_name = "mistralai/Mistral-7B-v0.1"
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    load_in_4bit=True,
-    torch_dtype=torch.float16,
+    # Passing load_in_4bit=True directly to from_pretrained is deprecated;
+    # use a BitsAndBytesConfig via quantization_config instead
+    quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16),
     device_map="auto"
 )
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -358,7 +358,7 @@ merged_model.save_pretrained("./merged-model")
 
 ## Model Hub
 
-The Hugging Face Hub hosts 700,000+ models, 150,000+ datasets, and 300,000+ Spaces.
+The Hugging Face Hub hosts well over a million models, plus hundreds of thousands of datasets and Spaces.
 
 ```python
 from huggingface_hub import HfApi, login, hf_hub_download
@@ -444,7 +444,8 @@ Hugging Face Inference Endpoints lets you deploy models on managed infrastructur
 ```python
 from huggingface_hub import InferenceClient
 
-# Use public Inference API (free tier)
+# Serverless inference via HF Inference Providers (small free monthly credit).
+# Which models are served changes over time; check the model page first.
 client = InferenceClient(
     model="mistralai/Mistral-7B-Instruct-v0.3",
     token="hf_your_token"
@@ -521,7 +522,7 @@ LoRA (Low-Rank Adaptation) adds small trainable matrices to specific weight matr
 
 **Q3: What is the difference between LoRA and QLoRA?** 🟡 Intermediate
 
-LoRA applies low-rank adapters to the full-precision model. QLoRA (Quantized LoRA) first quantizes the base model to 4-bit precision using NF4 quantization (reducing memory by ~75%), then applies LoRA adapters on top. QLoRA makes it possible to fine-tune 65B+ parameter models on a single consumer GPU (48GB VRAM). The quality is slightly lower than full LoRA but the memory savings are massive.
+LoRA applies low-rank adapters to the full-precision model. QLoRA (Quantized LoRA) first quantizes the base model to 4-bit precision using NF4 quantization (reducing memory by ~75%), then applies LoRA adapters on top. QLoRA makes it possible to fine-tune a 65B parameter model on a single 48GB GPU. The QLoRA paper reports quality close to 16-bit fine-tuning; in practice any gap is small relative to the memory savings.
 
 ---
 
@@ -544,7 +545,7 @@ The `pipeline` function is a high-level, task-oriented API that handles model lo
 3. Set `lora_dropout` to regularize training
 4. Use gradient clipping (`max_grad_norm=1.0` in `TrainingArguments`)
 5. Enable `gradient_checkpointing=True` to trade compute for memory
-6. Use `torch.cuda.amp` (mixed precision) via `fp16=True` or `bf16=True`
+6. Use mixed precision (`torch.amp` under the hood) via `fp16=True` or `bf16=True`
 
 ---
 

@@ -21,7 +21,7 @@ A guide to vLLM: the high-performance inference engine for large language models
 
 ## What is vLLM
 
-vLLM (Virtual LLM) is an open-source LLM inference and serving library developed by UC Berkeley. It achieves high serving throughput through its key innovation: **PagedAttention**.
+vLLM is an open-source LLM inference and serving library, originally developed at UC Berkeley's Sky Computing Lab. It achieves high serving throughput through its key innovation: **PagedAttention**.
 
 **Key features:**
 - OpenAI-compatible REST API
@@ -37,25 +37,23 @@ vLLM (Virtual LLM) is an open-source LLM inference and serving library developed
 The core innovation of vLLM. Traditional inference engines pre-allocate a contiguous memory block for the KV (key-value) cache based on the maximum sequence length. This wastes memory for shorter sequences.
 
 PagedAttention manages the KV cache in fixed-size **pages** (like OS virtual memory):
-- Pages are allocated on demand: no wasted memory
+- Pages are allocated on demand: waste is limited to the partially filled last page of each sequence
 - Pages can be shared across requests (e.g., shared system prompts)
 - Enables much larger batch sizes → higher throughput
 
-**Result:** 2-24x higher throughput compared to HuggingFace Transformers.
+**Result:** the vLLM launch blog reported up to 24x higher throughput than HuggingFace Transformers; the paper reports 2-4x over earlier serving systems such as FasterTransformer and Orca.
 
 ---
 
 ## Installation
 
 ```bash
-# Basic installation (CUDA 12.1+)
+# Basic installation (prebuilt wheels target recent CUDA versions)
 pip install vllm
 
-# Specific CUDA version
-pip install vllm --extra-index-url https://download.pytorch.org/whl/cu121
-
-# CPU-only (limited performance)
-pip install vllm-cpu
+# Other CUDA versions, CPU, AMD ROCm, TPU, etc.: follow the platform-specific
+# instructions in the vLLM installation docs (often a source build or a
+# dedicated Docker image). There is no separate "vllm-cpu" pip package.
 ```
 
 ### Docker
@@ -233,10 +231,10 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
   --tensor-parallel-size 4
 
-# 8-GPU for very large models
+# 16 GPUs (2 nodes x 8) for very large models: TP within a node, PP across nodes
 vllm serve meta-llama/Llama-3.1-405B-Instruct \
   --tensor-parallel-size 8 \
-  --pipeline-parallel-size 2  # Combine with pipeline parallelism
+  --pipeline-parallel-size 2
 ```
 
 ```python
@@ -282,7 +280,7 @@ vllm serve TheBloke/Llama-2-13B-GPTQ \
   --quantization gptq
 ```
 
-### FP8 (NVIDIA H100/A100)
+### FP8 (native on NVIDIA Hopper/Ada, e.g. H100, L40S)
 
 ```bash
 vllm serve meta-llama/Llama-3.1-8B-Instruct \
@@ -294,10 +292,10 @@ vllm serve meta-llama/Llama-3.1-8B-Instruct \
 
 | Method | Memory Reduction | Quality | GPU Required |
 |--------|-----------------|---------|-------------|
-| FP16 (baseline) | - | Best | A100, H100 |
-| GPTQ (4-bit) | ~75% | Very good | Most NVIDIA |
+| FP16/BF16 (baseline) | - | Best | Any supported GPU |
+| GPTQ (4-bit) | ~75% | Good | Most NVIDIA |
 | AWQ (4-bit) | ~75% | Good | Most NVIDIA |
-| FP8 | ~50% | Excellent | H100, A100 |
+| FP8 | ~50% | Excellent | Native on H100/Ada; weight-only fallback on older GPUs |
 
 ---
 
@@ -375,7 +373,7 @@ vLLM supports 100+ model architectures from Hugging Face. Key families:
 
 **Q1: What is PagedAttention and why does it improve throughput?** 🔴 Advanced
 
-PagedAttention manages the KV (key-value) cache in fixed-size pages similar to OS virtual memory. Traditional inference pre-allocates contiguous memory blocks based on max sequence length, wasting memory for shorter sequences and limiting batch size. PagedAttention allocates pages on demand, eliminates internal fragmentation, and allows KV cache sharing across requests (e.g., shared system prompts). This enables larger batch sizes, reducing latency and increasing throughput by 2-24x.
+PagedAttention manages the KV (key-value) cache in fixed-size pages similar to OS virtual memory. Traditional inference pre-allocates contiguous memory blocks based on max sequence length, wasting memory for shorter sequences and limiting batch size. PagedAttention allocates pages on demand, eliminates external fragmentation (internal fragmentation is limited to the last page of each sequence), and allows KV cache sharing across requests (e.g., shared system prompts). This enables larger batch sizes and much higher throughput (the paper reports 2-4x over prior serving systems at similar latency).
 
 ---
 
@@ -403,7 +401,7 @@ Use tensor parallelism within a single node (same server), and combine with pipe
 
 **Q5: What quantization method would you recommend for production?** 🟡 Intermediate
 
-For NVIDIA H100/A100: FP8 gives the best balance of quality and speed with native hardware support. For older NVIDIA (A10, V100): AWQ is preferred over GPTQ as it has lower quality degradation and similar speed. AWQ uses activation-aware quantization that finds better weight quantization points. GPTQ is older and slightly lower quality at the same bit width.
+For NVIDIA Hopper/Ada GPUs (H100, L40S): FP8 gives the best balance of quality and speed with native hardware support (A100 has no FP8 tensor cores). For older NVIDIA GPUs (A100, A10): 4-bit AWQ or GPTQ. AWQ uses activation statistics to protect the most important weights; GPTQ uses approximate second-order information to minimize layer-wise error. Quality at 4 bits is similar in practice, so benchmark both on your own task.
 
 ---
 

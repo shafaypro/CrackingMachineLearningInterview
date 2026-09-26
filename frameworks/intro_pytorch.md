@@ -329,15 +329,16 @@ if torch.backends.mps.is_available():
     device = torch.device("mps")
 
 # Mixed Precision Training (FP16/BF16)
-from torch.cuda.amp import autocast, GradScaler
+# torch.cuda.amp.* is deprecated; use the device-agnostic torch.amp API
+from torch.amp import autocast, GradScaler
 
-scaler = GradScaler()
+scaler = GradScaler("cuda")  # Needed for FP16; BF16 usually does not need a scaler
 
 for data, targets in train_loader:
     data, targets = data.to(device), targets.to(device)
     optimizer.zero_grad()
 
-    with autocast():  # Automatically casts to FP16 where safe
+    with autocast(device_type="cuda", dtype=torch.float16):  # Casts to FP16 where safe
         outputs = model(data)
         loss = criterion(outputs, targets)
 
@@ -370,12 +371,14 @@ torch.save(model.state_dict(), "model_weights.pth")
 
 # Load weights
 model = ConvNet(num_classes=10)
-model.load_state_dict(torch.load("model_weights.pth", map_location=device))
+# weights_only=True is the default since PyTorch 2.6 (safe: no arbitrary unpickling)
+model.load_state_dict(torch.load("model_weights.pth", map_location=device, weights_only=True))
 model.eval()
 
 # Save full model (not recommended: fragile)
 torch.save(model, "full_model.pth")
-model = torch.load("full_model.pth")
+# Full pickled models need weights_only=False; only do this for files you trust
+model = torch.load("full_model.pth", weights_only=False)
 
 # Save training checkpoint (full state for resuming)
 checkpoint = {
@@ -478,13 +481,13 @@ PyTorch builds a computational graph during the forward pass: each operation cre
 
 **Q6: What is Mixed Precision Training and what are its benefits?** 🔴 Advanced
 
-Mixed Precision Training uses FP16 (half-precision) for most computations and FP32 for numerically sensitive operations (loss, normalization). Benefits: ~2x memory reduction (enabling larger batches), ~2-3x faster on Tensor Core GPUs (A100, V100, RTX 3090+). PyTorch's `torch.cuda.amp.autocast()` handles this automatically, and `GradScaler` prevents gradient underflow (values too small to represent in FP16).
+Mixed Precision Training uses FP16 (half-precision) for most computations and FP32 for numerically sensitive operations (loss, normalization). Benefits: ~2x memory reduction (enabling larger batches), ~2-3x faster on Tensor Core GPUs (A100, V100, RTX 3090+). PyTorch's `torch.amp.autocast("cuda")` (formerly `torch.cuda.amp.autocast()`, now deprecated) handles this automatically, and `GradScaler` prevents gradient underflow (values too small to represent in FP16).
 
 ---
 
 **Q7: What is `torch.compile` and how does it improve performance?** 🟡 Intermediate
 
-`torch.compile` (PyTorch 2.0+) applies ahead-of-time graph compilation using TorchInductor, which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Typical speedup: 10-40% on training, 2x+ on inference. The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
+`torch.compile` (PyTorch 2.0+) applies just-in-time graph compilation (TorchDynamo captures the graph, TorchInductor compiles it), which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Speedups vary widely by model, batch size, and hardware (the code comment above gives rough ranges). The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.
 
 ---
 
