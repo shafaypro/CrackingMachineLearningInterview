@@ -238,7 +238,7 @@ class ShadowModeServer:
 |-----------|---------|-----------|
 | **FastAPI** | Custom REST APIs, small models | Simple, async, Pydantic validation |
 | **TensorFlow Serving** | TensorFlow/Keras models | High performance, gRPC, batching |
-| **TorchServe** | PyTorch models | Managed lifecycle, REST/gRPC |
+| **TorchServe** | PyTorch models (legacy deployments) | Managed lifecycle, REST/gRPC; in limited maintenance, so prefer another server for new projects |
 | **Triton Inference Server** | Multi-framework GPU serving | NVIDIA, dynamic batching, ensemble |
 | **BentoML** | Any framework, packaging | Easy deployment, cloud-native |
 | **Ray Serve** | Distributed, complex pipelines | Actor-based, Python-first |

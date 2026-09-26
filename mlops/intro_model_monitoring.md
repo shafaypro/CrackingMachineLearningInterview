@@ -181,10 +181,12 @@ def js_divergence(p, q, bins=50):
     hist_p = hist_p / hist_p.sum() + 1e-10
     hist_q = hist_q / hist_q.sum() + 1e-10
 
-    return jensenshannon(hist_p, hist_q)
+    # scipy returns the JS *distance* (square root of the divergence);
+    # base=2 bounds it to [0, 1], so squaring gives the divergence in [0, 1]
+    return jensenshannon(hist_p, hist_q, base=2) ** 2
 
 js = js_divergence(reference, current)
-print(f"JS Divergence: {js:.4f}")  # 0 = identical, 1 = completely different
+print(f"JS Divergence: {js:.4f}")  # 0 = identical, 1 = completely different (base 2)
 ```
 
 ---

@@ -80,7 +80,7 @@ duration_days = n / daily_traffic
 print(f"Experiment duration: {duration_days:.1f} days")
 ```
 
-**Rule of thumb:** Smaller effect size → exponentially larger sample needed. A 1% lift takes ~100× more users than a 10% lift.
+**Rule of thumb:** Required sample size scales with 1/(effect size)², so it grows quadratically as the effect shrinks. A 1% lift takes ~100× more users than a 10% lift.
 
 ---
 
@@ -131,7 +131,7 @@ from scipy import stats
 # Both variants should show no significant difference
 # If they do, your randomization is broken
 
-# 2. Check balance: verify variant sizes are as expected
+# 2. Sample Ratio Mismatch (SRM) check: verify variant sizes match the planned split
 def check_balance(df, variant_col='variant', expected_split=0.5):
     counts = df[variant_col].value_counts()
     total = len(df)
@@ -139,14 +139,14 @@ def check_balance(df, variant_col='variant', expected_split=0.5):
         actual_split = count / total
         print(f"Variant {variant}: {count:,} ({actual_split:.1%}, expected {expected_split:.1%})")
 
-    # Chi-square test for balance
+    # Chi-square goodness-of-fit test (equal expected counts, i.e. a 50/50 split)
     chi2, p = stats.chisquare(counts.values)
     print(f"Balance test: χ²={chi2:.3f}, p={p:.3f}")
     if p < 0.05:
         print("WARNING: Variants are imbalanced!")
 
-# 3. Check pre-experiment equivalence (SRM - Sample Ratio Mismatch)
-# If users are significantly different before experiment, results are invalid
+# 3. Check pre-experiment equivalence of key covariates
+# If users are significantly different before the experiment, randomization may be broken
 ```
 
 ---
@@ -308,8 +308,8 @@ import pandas as pd
 data = {
     'segment': ['Mobile', 'Mobile', 'Desktop', 'Desktop'],
     'variant':  ['Control', 'Treatment', 'Control', 'Treatment'],
-    'users':    [1000, 9000, 9000, 1000],
-    'conversions': [50, 360, 900, 90]
+    'users':    [9000, 1000, 1000, 9000],
+    'conversions': [450, 40, 100, 810]
 }
 df = pd.DataFrame(data)
 df['rate'] = df['conversions'] / df['users']
@@ -319,7 +319,8 @@ print(df[['segment', 'variant', 'rate']])
 # Mobile: Control=5%, Treatment=4%
 # Desktop: Control=10%, Treatment=9%
 
-# But aggregate: Treatment better overall (because treatment had more mobile users!)
+# But aggregate: Control = 550/10000 = 5.5%, Treatment = 850/10000 = 8.5%
+# Treatment looks better overall because it got mostly high-converting desktop users
 # This is Simpson's Paradox: always analyze by segment
 ```
 
@@ -343,12 +344,12 @@ def cuped_metric(
     Y_cuped = Y - θ × (X - E[X])
     θ = Cov(Y, X) / Var(X): OLS estimate
     """
-    theta = np.cov(post_metric, pre_metric)[0, 1] / np.var(pre_metric)
+    theta = np.cov(post_metric, pre_metric)[0, 1] / np.var(pre_metric, ddof=1)
     return post_metric - theta * (pre_metric - np.mean(pre_metric))
 
 # Usage: if pre_metric is correlated with post_metric,
 # CUPED significantly reduces variance → smaller required sample size
-# Variance reduction of 50-80% is common in practice
+# Variance falls by a factor of (1 - ρ²), where ρ = corr(pre_metric, post_metric)
 ```
 
 **Why it works:** Pre-experiment user behavior is correlated with post-experiment behavior. By removing this systematic variation, you see the treatment effect more clearly.
@@ -492,4 +493,4 @@ Define primary metric (e.g., CTR or session time), guardrails (latency p99, erro
 SRM occurs when the actual split between variants differs significantly from the planned split. It indicates a bug in the randomization/logging/data pipeline. If 50/50 split gives you 45K control and 55K treatment, something is wrong: you cannot trust any of the experiment's results. Always check SRM first before looking at any metrics.
 
 **Q: When would you use CUPED?**
-CUPED (pre-experiment covariate adjustment) is useful when users have highly variable baseline behavior. If pre-experiment purchase rate is highly correlated with post-experiment purchase rate, CUPED can reduce variance by 50-80%, allowing you to detect smaller effects or reach significance faster with fewer users. It's essentially regression adjustment: standard in large-scale experimentation.
+CUPED (pre-experiment covariate adjustment) is useful when users have highly variable baseline behavior. If pre-experiment purchase rate is highly correlated with post-experiment purchase rate, CUPED reduces variance by a fraction ρ² (the squared correlation between the pre- and post-period metric), allowing you to detect smaller effects or reach significance faster with fewer users. It's essentially regression adjustment: standard in large-scale experimentation.
