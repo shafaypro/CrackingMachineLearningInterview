@@ -251,23 +251,24 @@ import bentoml
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
-# Save model to BentoML
+# Save model to the BentoML model store
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
-bento_model = bentoml.sklearn.save_model("fraud_classifier", model)
+bentoml.sklearn.save_model("fraud_classifier", model)
 
-# Create a service
-import bentoml
-from bentoml.io import NumpyNdarray
+# service.py: BentoML 1.2+ class-based API
+# (bentoml.Service, runners and bentoml.io descriptors are the legacy 1.0/1.1 API)
+@bentoml.service(resources={"cpu": "2"}, traffic={"timeout": 10})
+class FraudDetection:
+    def __init__(self):
+        self.model = bentoml.sklearn.load_model("fraud_classifier:latest")
 
-svc = bentoml.Service("fraud_detection", runners=[bento_model.to_runner()])
+    @bentoml.api
+    def predict(self, input_data: np.ndarray) -> np.ndarray:
+        return self.model.predict(input_data)
 
-@svc.api(input=NumpyNdarray(), output=NumpyNdarray())
-def predict(input_data: np.ndarray) -> np.ndarray:
-    return bento_model.to_runner().predict.run(input_data)
-
-# Deploy: bentoml serve service:svc --production
-# Containerize: bentoml containerize fraud_detection:latest
+# Serve locally: bentoml serve service:FraudDetection
+# Package and containerize: bentoml build, then bentoml containerize <bento_tag>
 ```
 
 ---
@@ -286,9 +287,12 @@ def predict(input_data: np.ndarray) -> np.ndarray:
 
 ```python
 # PyTorch model quantization (reduces model size, speeds up CPU inference)
+import io
 import torch
 
-model = torch.load("model.pt")
+# Loading a fully pickled model needs weights_only=False (default is True since PyTorch 2.6);
+# only do this for files you trust
+model = torch.load("model.pt", weights_only=False)
 model.eval()
 
 # Dynamic quantization (quantize weights; activations quantized at runtime)
@@ -296,9 +300,14 @@ quantized_model = torch.quantization.quantize_dynamic(
     model, {torch.nn.Linear}, dtype=torch.qint8
 )
 
-# Size and speed comparison
-original_size = sum(p.numel() for p in model.parameters()) * 4 / 1e6  # MB (float32)
-quantized_size = sum(p.numel() for p in quantized_model.parameters()) * 1 / 1e6  # MB (int8)
+# Size comparison: serialize the state_dict, because quantized Linear weights
+# are packed and no longer show up in .parameters()
+def size_mb(m):
+    buf = io.BytesIO()
+    torch.save(m.state_dict(), buf)
+    return buf.getbuffer().nbytes / 1e6
+
+original_size, quantized_size = size_mb(model), size_mb(quantized_model)
 print(f"Original: {original_size:.1f}MB, Quantized: {quantized_size:.1f}MB")
 ```
 

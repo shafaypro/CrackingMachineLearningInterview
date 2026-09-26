@@ -78,7 +78,7 @@ class InterviewAnswer(BaseModel):
     follow_up_questions: list[str] = Field(description="2 likely follow-up questions")
     difficulty: Literal["easy", "medium", "hard"] = Field(description="Question difficulty")
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 structured_llm = llm.with_structured_output(InterviewAnswer)
 
 prompt = ChatPromptTemplate.from_messages([
@@ -114,28 +114,21 @@ class RAGEvaluation(BaseModel):
 client = Anthropic()
 
 def evaluate_rag_response(question: str, context: str, answer: str) -> RAGEvaluation:
-    schema = RAGEvaluation.model_json_schema()
-
-    # Forced tool use as a JSON-extraction trick. Newer alternative: the API's
-    # structured outputs feature (output_config.format). Note that some newer
-    # Claude models reject forced tool_choice ("any"/"tool"); use "auto" there.
-    response = client.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=1024,
-        tools=[{
-            "name": "submit_evaluation",
-            "description": "Submit the RAG evaluation result",
-            "input_schema": schema
-        }],
-        tool_choice={"type": "tool", "name": "submit_evaluation"},
+    # Structured outputs: the API constrains the reply to the model's JSON schema
+    # and the SDK validates it into a RAGEvaluation. The older trick (a forced
+    # tool_choice plus response.content[0].input) returns a 400 on Claude Opus 5.5,
+    # and content[0] may be a thinking block on current models anyway.
+    response = client.messages.parse(
+        model="claude-opus-5-5",
+        max_tokens=16000,
+        output_format=RAGEvaluation,
         messages=[{
             "role": "user",
             "content": f"Evaluate this RAG response:\nQuestion: {question}\nContext: {context}\nAnswer: {answer}"
         }]
     )
 
-    tool_input = response.content[0].input
-    return RAGEvaluation.model_validate(tool_input)
+    return response.parsed_output  # a validated RAGEvaluation instance
 
 result = evaluate_rag_response(
     question="What is RLHF?",

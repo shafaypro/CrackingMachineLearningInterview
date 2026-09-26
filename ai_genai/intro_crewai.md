@@ -162,7 +162,7 @@ agent = Agent(
     role="Data Scientist",
     goal="Analyze sales data and find anomalies",
     tools=[FileReadTool(), CodeInterpreterTool()],
-    llm="anthropic/claude-sonnet-4-6"
+    llm="anthropic/claude-sonnet-5"
 )
 ```
 

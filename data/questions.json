@@ -6435,11 +6435,11 @@
     {
       "id": "3d5a01d2de69",
       "question": "What's the biggest challenge in E2E testing for AI apps?",
-      "answer_md": "Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties (\"mentions relevant terms\") not exact strings, (2) use fixed seeds/temperature=0 in tests, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.",
+      "answer_md": "Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties (\"mentions relevant terms\") not exact strings, (2) reduce variance where the API allows it (low temperature on models that accept sampling parameters; many current models, including recent Claude models, reject `temperature` and no provider guarantees bit-identical outputs), pin model snapshots, and cache recorded responses, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.",
       "source_path": "devops/intro_testing_ai.md",
       "source_title": "Testing AI Systems: Playwright, Puppeteer & Beyond",
       "track": "devops",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 2
     },

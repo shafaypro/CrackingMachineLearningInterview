@@ -244,13 +244,14 @@ print(f"JS Divergence: {js:.4f}")  # 0 = identical, 1 = completely different
 pip install evidently
 ```
 
+The examples below use the current API (Evidently 0.7+). The pre-0.7 API (`evidently.report`, `evidently.metric_preset`, `TestSuite`, `column_mapping`) is only available under `evidently.legacy` and appears in many older tutorials.
+
 ### Data Drift Report
 
 ```python
 import pandas as pd
-from evidently.report import Report
-from evidently.metric_preset import DataDriftPreset, DataQualityPreset
-from evidently.metrics import ColumnDriftMetric, DatasetDriftMetric
+from evidently import Report
+from evidently.presets import DataDriftPreset, DataSummaryPreset
 
 # Reference data (training distribution)
 reference_data = pd.read_csv("train_data.csv")
@@ -259,93 +260,83 @@ reference_data = pd.read_csv("train_data.csv")
 current_data = pd.read_csv("production_data.csv")
 
 # Create a drift report
-report = Report(metrics=[
+report = Report([
     DataDriftPreset(),
-    DataQualityPreset(),
+    DataSummaryPreset(),
 ])
 
-report.run(
-    reference_data=reference_data,
-    current_data=current_data
-)
+# run() returns a Snapshot with the results; current data comes first
+snapshot = report.run(current_data=current_data, reference_data=reference_data)
 
 # Save HTML report
-report.save_html("drift_report.html")
+snapshot.save_html("drift_report.html")
 
-# Get results as dict
-results = report.as_dict()
-drift_detected = results["metrics"][0]["result"]["dataset_drift"]
-print(f"Dataset drift detected: {drift_detected}")
+# Get results as dict: each metric has "metric_name" and "value"
+results = snapshot.dict()
+drifted = results["metrics"][0]["value"]  # DriftedColumnsCount: {"count": ..., "share": ...}
+print(f"Drifted columns: {drifted}")
 ```
 
 ### Column-Level Drift
 
 ```python
-from evidently.report import Report
-from evidently.metrics import ColumnDriftMetric
+from evidently import Report
+from evidently.metrics import ValueDrift
 
 # Check specific columns
-report = Report(metrics=[
-    ColumnDriftMetric(column_name="age"),
-    ColumnDriftMetric(column_name="income"),
-    ColumnDriftMetric(column_name="credit_score"),
+report = Report([
+    ValueDrift(column="age"),
+    ValueDrift(column="income"),
+    ValueDrift(column="credit_score"),
 ])
 
-report.run(
-    reference_data=reference_data,
-    current_data=current_data
-)
+snapshot = report.run(current_data=current_data, reference_data=reference_data)
 
-result = report.as_dict()
-for metric in result["metrics"]:
-    col = metric["result"]["column_name"]
-    drift = metric["result"]["drift_detected"]
-    score = metric["result"]["drift_score"]
-    print(f"{col}: drift={drift}, score={score:.4f}")
+for metric in snapshot.dict()["metrics"]:
+    # value is the drift score of the auto-selected test (e.g. a p-value or a distance)
+    print(f"{metric['metric_name']}: score={metric['value']:.4f}")
 ```
 
 ### Model Performance Monitoring
 
 ```python
-from evidently.report import Report
-from evidently.metric_preset import ClassificationPreset
+from evidently import BinaryClassification, DataDefinition, Dataset, Report
+from evidently.presets import ClassificationPreset
 
-# When you have ground truth labels (delayed feedback)
-report = Report(metrics=[
-    ClassificationPreset(),
-])
-
-report.run(
-    reference_data=reference_with_labels,
-    current_data=current_with_labels,
-    column_mapping={"target": "label", "prediction": "prediction"}
+# When you have ground truth labels (delayed feedback).
+# DataDefinition replaces the old column_mapping argument.
+definition = DataDefinition(
+    classification=[BinaryClassification(target="label", prediction_labels="prediction")]
 )
-report.save_html("classification_report.html")
+current_ds = Dataset.from_pandas(current_with_labels, data_definition=definition)
+reference_ds = Dataset.from_pandas(reference_with_labels, data_definition=definition)
+
+report = Report([ClassificationPreset()])
+snapshot = report.run(current_data=current_ds, reference_data=reference_ds)
+snapshot.save_html("classification_report.html")
 ```
 
 ### Continuous Monitoring Pipeline
 
 ```python
-import pandas as pd
-from evidently.report import Report
-from evidently.metric_preset import DataDriftPreset
-from evidently.test_suite import TestSuite
-from evidently.tests import TestNumberOfDriftedColumns, TestShareOfDriftedColumns
+from evidently import Report
+from evidently.metrics import DriftedColumnsCount
+from evidently.tests import lt
 
 def run_monitoring_check(reference_data, current_data, threshold=0.3):
     """Run drift checks and return alert status."""
 
-    test_suite = TestSuite(tests=[
-        TestNumberOfDriftedColumns(lt=3),  # Alert if more than 3 columns drift
-        TestShareOfDriftedColumns(lt=threshold),  # Alert if > 30% of columns drift
+    # Tests are attached to metrics (TestSuite was folded into Report)
+    report = Report([
+        DriftedColumnsCount(
+            tests=[lt(3)],                # Fail if 3 or more columns drift
+            share_tests=[lt(threshold)],  # Fail if the drifted share reaches 30%
+        ),
     ])
 
-    test_suite.run(
-        reference_data=reference_data,
-        current_data=current_data
-    )
+    snapshot = report.run(current_data=current_data, reference_data=reference_data)
 
-    results = test_suite.as_dict()
+    results = snapshot.dict()
     all_passed = all(
         test["status"] == "SUCCESS"
         for test in results["tests"]
