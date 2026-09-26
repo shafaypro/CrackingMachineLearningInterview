@@ -55,7 +55,7 @@ Iceberg has become the industry standard because:
 |---------|---------------|------------|-------------|
 | **License** | Apache 2.0 (ASF) | Apache 2.0 (Linux Foundation) | Apache 2.0 (ASF) |
 | **Primary backer** | Netflix, Apple, Databricks, etc. | Databricks | Uber |
-| **Engine support** | Spark, Flink, Trino, DuckDB, Snowflake, BigQuery... | Spark, Trino (read), Databricks | Spark, Flink |
+| **Engine support** | Spark, Flink, Trino, DuckDB, Snowflake, BigQuery... | Spark, Databricks, Trino, Flink, delta-rs (Rust/Python) | Spark, Flink |
 | **ACID** | ✓ | ✓ | ✓ |
 | **Time travel** | ✓ | ✓ | ✓ |
 | **Schema evolution** | ✓ (most flexible) | ✓ | ✓ |
@@ -128,7 +128,7 @@ spark = SparkSession.builder \
 ### With PyIceberg (no Spark needed for reads)
 
 ```bash
-pip install pyiceberg[s3,glue,duckdb]
+pip install "pyiceberg[s3fs,glue,duckdb]"
 ```
 
 ```python
@@ -236,12 +236,14 @@ arrow_table = scan.to_arrow()   # → PyArrow Table
 # Append: add rows
 df.writeTo("local.db.orders").append()
 
-# Overwrite matching partitions
+# Dynamic overwrite: replace only the partitions present in df
 df.writeTo("local.db.orders").overwritePartitions()
 
-# Dynamic overwrite (replace only affected partitions)
-spark.conf.set("spark.sql.sources.partitionOverwriteMode", "dynamic")
-df.writeTo("local.db.orders").overwrite(F.col("created_at_day") == "2025-01-15")
+# Overwrite rows matching a filter (keep it aligned with partition boundaries)
+from pyspark.sql import functions as F
+df.writeTo("local.db.orders").overwrite(
+    (F.col("created_at") >= "2025-01-15") & (F.col("created_at") < "2025-01-16")
+)
 
 # Create or replace table
 df.writeTo("local.db.orders").createOrReplace()
@@ -261,12 +263,13 @@ WHEN NOT MATCHED THEN INSERT *;
 ```
 
 ```python
-# Python MERGE
+# Python upsert (PyIceberg 0.9+); new_df is a PyArrow table
 from pyiceberg.expressions import EqualTo
 
 table = catalog.load_table("my_db.orders")
+table.upsert(new_df, join_cols=["order_id"])
 
-# Upsert using overwrite_partitions
+# Or replace every row matching a filter with new_df
 table.overwrite(new_df, overwrite_filter=EqualTo("status", "pending"))
 ```
 
@@ -305,8 +308,7 @@ ADD COLUMN metadata.source STRING;
 
 ```python
 # Python schema evolution
-from pyiceberg.schema import Schema
-from pyiceberg.types import NestedField, StringType
+from pyiceberg.types import DecimalType
 
 table = catalog.load_table("my_db.orders")
 
@@ -441,20 +443,9 @@ CALL local.system.remove_orphan_files(
 CALL local.system.rewrite_manifests('db.orders');
 ```
 
-```python
-# Python maintenance
-from pyiceberg.catalog import load_catalog
-
-table = catalog.load_table("my_db.orders")
-
-# Expire old snapshots
-table.expire_snapshots().expire_older_than(
-    datetime(2025, 1, 1, tzinfo=timezone.utc)
-).commit()
-
-# Compact files
-table.rewrite_data_files().rewrite_all().execute()
-```
+PyIceberg's maintenance support is newer and version-dependent (recent releases add a
+`table.maintenance` API for snapshot expiry), so check the docs for your version. Compaction
+and orphan-file cleanup are usually run through the Spark (or Flink) procedures above.
 
 ---
 
@@ -491,11 +482,12 @@ spark.sql("CREATE TABLE glue.mydb.orders (...) USING iceberg")
 spark = SparkSession.builder \
     .config("spark.sql.catalog.nessie", "org.apache.iceberg.spark.SparkCatalog") \
     .config("spark.sql.catalog.nessie.catalog-impl", "org.apache.iceberg.nessie.NessieCatalog") \
-    .config("spark.sql.catalog.nessie.uri", "http://localhost:19120/api/v1") \
+    .config("spark.sql.catalog.nessie.uri", "http://localhost:19120/api/v2") \
     .config("spark.sql.catalog.nessie.ref", "main") \
     .getOrCreate()
 
 # Work on a branch: isolates your changes
+# (USE REFERENCE needs the Nessie Spark SQL extensions in spark.sql.extensions)
 spark.sql("USE REFERENCE my_feature_branch IN nessie")
 spark.sql("UPDATE nessie.db.orders SET status = 'v2' WHERE ...")
 
@@ -523,11 +515,14 @@ LIMIT 100;
 -- Time travel
 SELECT * FROM iceberg_scan(
     's3://my-bucket/iceberg/orders/',
-    snapshot_id = 4654808683286204734
+    snapshot_from_id = 4654808683286204734
 );
 
--- Via catalog (REST)
-ATTACH 'https://my-rest-catalog.com' AS iceberg_catalog (TYPE ICEBERG);
+-- Via catalog (REST): the first argument is the warehouse name
+ATTACH 'my_warehouse' AS iceberg_catalog (
+    TYPE ICEBERG,
+    ENDPOINT 'https://my-rest-catalog.com'
+);
 SELECT * FROM iceberg_catalog.my_db.orders LIMIT 10;
 ```
 
@@ -540,8 +535,8 @@ SELECT * FROM iceberg_catalog.my_db.orders LIMIT 10;
 | Feature | Status in 2026 |
 |---------|---------------|
 | **Iceberg v3** | Row lineage, default values, multi-arg transforms, variant type |
-| **REST Catalog standard** | The default catalog API: all engines support it |
-| **Apache Polaris** | Anthropic/Snowflake open-sourced REST catalog: industry standard |
+| **REST Catalog standard** | The default catalog API: most major engines support it |
+| **Apache Polaris** | Open-source REST catalog, originally from Snowflake and donated to the Apache Software Foundation |
 | **Uniform read** | Snowflake, BigQuery, Athena all read Iceberg natively |
 | **Delta UniForm** | Delta tables expose Iceberg metadata, bridging the gap |
 | **Streaming support** | Flink + Iceberg is production-standard for streaming ETL |
@@ -600,6 +595,7 @@ ALTER TABLE tbl REPLACE PARTITION FIELD days(ts) WITH hours(ts);
 ```python
 # PyIceberg quick reference
 from pyiceberg.catalog import load_catalog
+from pyiceberg.types import StringType
 
 catalog = load_catalog("my_catalog", type="rest", uri="https://...")
 table = catalog.load_table("db.tbl")

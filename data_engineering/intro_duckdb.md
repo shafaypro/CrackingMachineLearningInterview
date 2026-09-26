@@ -58,8 +58,8 @@ pip install duckdb
 brew install duckdb                    # macOS
 # or download from duckdb.org/docs/installation
 
-# Node.js
-npm install duckdb
+# Node.js (the older `duckdb` npm package is deprecated)
+npm install @duckdb/node-api
 
 # R
 install.packages("duckdb")
@@ -203,17 +203,20 @@ FROM read_json('data/events.json', auto_detect = true);
 ### S3 / Cloud Storage
 
 ```sql
--- Install and load httpfs extension
+-- Install and load httpfs extension (recent versions autoload it on first s3:// use)
 INSTALL httpfs;
 LOAD httpfs;
 
--- Configure S3 credentials
-SET s3_region = 'us-east-1';
-SET s3_access_key_id = 'AKIA...';
-SET s3_secret_access_key = 'secret...';
+-- Configure S3 credentials with the secrets manager
+CREATE SECRET s3_keys (
+    TYPE s3,
+    KEY_ID 'AKIA...',
+    SECRET 'secret...',
+    REGION 'us-east-1'
+);
 
--- Or use IAM role (on EC2/Lambda/ECS)
-SET s3_use_ssl = true;
+-- Or pick up env vars / ~/.aws / IAM role (EC2, Lambda, ECS) via the aws extension
+CREATE SECRET s3_chain (TYPE s3, PROVIDER credential_chain);
 
 -- Now query S3 directly
 SELECT COUNT(*) FROM read_parquet('s3://my-bucket/data/orders/*.parquet');
@@ -230,8 +233,7 @@ LOAD delta;
 
 SELECT * FROM delta_scan('s3://my-bucket/delta/orders/');
 
--- Time travel
-SELECT * FROM delta_scan('s3://my-bucket/delta/orders/', version = 5);
+-- Time travel support depends on the delta extension version: check its docs
 ```
 
 ### Apache Iceberg
@@ -245,7 +247,7 @@ SELECT * FROM iceberg_scan('s3://my-bucket/iceberg/orders/');
 -- With snapshot
 SELECT * FROM iceberg_scan(
     's3://my-bucket/iceberg/orders/',
-    snapshot_id = 4654808683286204734
+    snapshot_from_id = 4654808683286204734
 );
 ```
 
@@ -569,9 +571,9 @@ def run_etl_pipeline():
 
 -- Use persistent database for repeated queries
 -- (avoid re-reading files every time)
-ATTACH 'warehouse.duckdb';
-CREATE TABLE orders AS SELECT * FROM read_parquet('orders.parquet');
--- Now orders queries use in-memory columnar storage
+ATTACH 'warehouse.duckdb' AS wh;
+CREATE TABLE wh.orders AS SELECT * FROM read_parquet('orders.parquet');
+-- Now orders queries read DuckDB's native compressed columnar storage
 
 -- Set memory limit
 SET memory_limit = '8GB';
@@ -581,7 +583,7 @@ SET threads = 8;
 
 -- Use approximate aggregations for huge datasets
 SELECT approx_count_distinct(user_id) FROM events;  -- much faster than COUNT(DISTINCT)
-SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY latency) FROM requests;
+SELECT approx_quantile(latency, 0.95) FROM requests;  -- approximate p95
 ```
 
 ---
@@ -612,7 +614,7 @@ SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY latency) FROM requests;
 | Feature | Description |
 |---------|-------------|
 | **DuckDB 1.x** | Stable release, production-ready |
-| **MotherDuck** | Managed cloud DuckDB: scale beyond single machine |
+| **MotherDuck** | Managed cloud DuckDB with hybrid local + cloud query execution |
 | **DuckDB Extensions** | Iceberg, Delta, Spatial, Substrait, Excel, MySQL, PostgreSQL |
 | **WASM** | DuckDB running in the browser (duckdb-wasm) |
 | **Polars integration** | Zero-copy interchange with Polars via Arrow |
@@ -662,7 +664,7 @@ CREATE TABLE t AS SELECT * FROM read_parquet('data.parquet');
 DATE_TRUNC('month', ts)          -- truncate timestamp
 DATE_DIFF('day', start, end)     -- difference in days
 STRFTIME('%Y-%m', ts)            -- format timestamp
-LIST_AGG(col, ',')               -- string aggregation
+STRING_AGG(col, ',')             -- string aggregation
 APPROX_COUNT_DISTINCT(col)       -- fast distinct count
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY col) -- median
 GENERATE_SERIES(1, 10)           -- number sequence

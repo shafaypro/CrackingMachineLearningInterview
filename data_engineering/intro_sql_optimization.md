@@ -163,7 +163,7 @@ WHERE created_at::text LIKE '2026%'
 
 -- Sargable: column stays bare, transformation moves to the constant
 WHERE created_at >= '2026-01-01' AND created_at < '2026-01-02'
-WHERE email = LOWER('A@B.COM')       -- with a lower(email) expression index
+WHERE email = 'a@b.com'              -- if emails are stored lowercased on write
 WHERE amount > 50
 ```
 

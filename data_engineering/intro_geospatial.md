@@ -29,24 +29,25 @@ Understanding coordinate systems is essential before building any geospatial ML 
 import pyproj
 from pyproj import Transformer
 
-# Transform GPS coordinates (WGS84) → meters (UTM)
-transformer = Transformer.from_crs("EPSG:4326", "EPSG:32632", always_xy=True)
+# Transform GPS coordinates (WGS84) → meters (UTM zone 10N, which covers San Francisco)
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:32610", always_xy=True)
 
 # San Francisco: (lon, lat) in WGS84
 lon, lat = -122.4194, 37.7749
 x_meters, y_meters = transformer.transform(lon, lat)
 print(f"UTM: ({x_meters:.0f}, {y_meters:.0f}) meters")
 
-# Always use projected CRS for distance/area calculations
+# Use a local projected CRS (e.g. the right UTM zone) or geodesic math for distance/area
 # Always use WGS84 for API inputs and GeoJSON
 ```
 
 ### Critical Rule for ML
 
-> **Never compute distances with lat/lon directly.** 1 degree of longitude ≠ same distance at different latitudes. Always project to meters first.
+> **Never compute distances with lat/lon directly.** 1 degree of longitude ≠ same distance at different latitudes. Project to a local metric CRS first, or use geodesic distance on the ellipsoid. Web Mercator (EPSG:3857) is in "meters" but badly distorts distances away from the equator, so it is not a distance CRS.
 
 ```python
 import geopandas as gpd
+from pyproj import Geod
 from shapely.geometry import Point
 
 # Create GeoDataFrame in WGS84
@@ -56,11 +57,14 @@ gdf = gpd.GeoDataFrame(
     crs="EPSG:4326"
 )
 
-# Reproject to meters for distance calculation
-gdf_projected = gdf.to_crs("EPSG:3857")
-distance_meters = gdf_projected.geometry.iloc[0].distance(gdf_projected.geometry.iloc[1])
-distance_km = distance_meters / 1000
-print(f"Distance NYC→LA: {distance_km:.0f} km")
+# NYC and LA span several UTM zones, so use geodesic distance on the WGS84 ellipsoid
+geod = Geod(ellps="WGS84")
+nyc, la = gdf.geometry.iloc[0], gdf.geometry.iloc[1]
+_, _, distance_meters = geod.inv(nyc.x, nyc.y, la.x, la.y)
+print(f"Distance NYC→LA: {distance_meters / 1000:.0f} km")
+
+# For points within one region, reproject to that region's UTM zone instead:
+# gdf.to_crs(gdf.estimate_utm_crs()).distance(...)
 ```
 
 ---
@@ -261,17 +265,18 @@ CREATE TABLE buildings (
 
 -- Index for spatial queries (CRITICAL for performance)
 CREATE INDEX buildings_geom_idx ON buildings USING GIST(geom);
+-- Distance queries below use geography, so index that expression too
+-- (charging_stations needs the same index)
+CREATE INDEX buildings_geog_idx ON buildings USING GIST((geom::geography));
 
 -- Find buildings within 1km of a charging station
+-- geography casts give true meters on the ellipsoid (EPSG:3857 "meters" are distorted)
 SELECT b.id, b.address, b.solar_score,
-       ST_Distance(
-           ST_Transform(b.geom, 3857),  -- Convert to meters
-           ST_Transform(c.geom, 3857)
-       ) / 1000.0 AS distance_km
+       ST_Distance(b.geom::geography, c.geom::geography) / 1000.0 AS distance_km
 FROM buildings b
 JOIN charging_stations c ON ST_DWithin(
-    ST_Transform(b.geom, 3857),
-    ST_Transform(c.geom, 3857),
+    b.geom::geography,
+    c.geom::geography,
     1000  -- 1000 meters
 )
 WHERE b.solar_score > 0.7
@@ -372,7 +377,7 @@ import pandas as pd
 def aggregate_by_h3(df: pd.DataFrame, resolution: int = 8) -> pd.DataFrame:
     """
     H3 Resolution Guide:
-    Res 4: ~170km² (country-level)
+    Res 4: ~1,770km² (large metro region)
     Res 7: ~5km² (neighborhood)
     Res 8: ~0.7km² (block)
     Res 10: ~0.015km² (building)
@@ -467,13 +472,13 @@ async def score_leads(addresses: list[str]) -> list[SolarLead]:
 ## Interview Questions
 
 **Q: What coordinate system would you use for computing distances in a geospatial ML pipeline?**
-> Always project to a metric CRS (e.g., UTM or Web Mercator EPSG:3857) before computing distances. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Use pyproj or GeoPandas `.to_crs()` to reproject.
+> Project to a local metric CRS (e.g., the appropriate UTM zone) before computing distances, or use geodesic distance (pyproj `Geod`, PostGIS `geography`) when points span a large area. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Avoid Web Mercator (EPSG:3857) for distances: its units are meters, but scale grows with latitude. Use pyproj or GeoPandas `.to_crs()` to reproject.
 
 **Q: How would you design a system to score solar potential for 1 million addresses?**
 > Batch geocode addresses → parallel async calls to Google Solar API (respect rate limits with semaphores) → feature engineering with PostGIS spatial joins → batch ML inference → store results in PostGIS with spatial index for downstream queries. Monitor API costs carefully: Solar API is metered.
 
 **Q: What is H3 and why is it useful for ML?**
-> H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 hexagons have equal area (unlike lat/lon grids), making them better for spatial statistics.
+> H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 cells at a given resolution have roughly similar areas (far more uniform than lat/lon grids, though not exactly equal-area), and every neighbor is equidistant, making them better for spatial statistics.
 
 **Q: How do you prevent data leakage in geospatial ML models?**
 > Don't use future data for historical predictions. Don't use spatial proximity as a feature if your train/test split is random (nearby points will be in both sets: use spatial cross-validation: block holdout by region). Avoid using census data that's derived from the same population you're predicting.

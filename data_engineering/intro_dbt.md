@@ -314,7 +314,7 @@ dbt source freshness
 <details>
 <summary><strong>Generic tests (built-in)</strong></summary>
 
-Declared in YAML alongside your model. dbt ships with four built-in generic tests:
+Declared in YAML alongside your model under `data_tests:` (dbt 1.8+; older projects use `tests:`, which is still accepted). dbt ships with four built-in generic tests:
 
 | Test | What it checks |
 |------|----------------|
@@ -331,24 +331,24 @@ models:
   - name: orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: customer_id
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('stg_customers')
               field: customer_id
 
       - name: status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['pending', 'shipped', 'delivered', 'cancelled']
 
       - name: amount
-        tests:
+        data_tests:
           - not_null
 ```
 
@@ -974,7 +974,7 @@ dbt deps
 
 ```yaml
 - name: amount
-  tests:
+  data_tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
         max_value: 100000
@@ -1283,10 +1283,10 @@ jobs:
   dbt-ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 

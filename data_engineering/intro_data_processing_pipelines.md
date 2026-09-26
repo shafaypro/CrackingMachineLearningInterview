@@ -229,7 +229,7 @@ Q3: Is a once-or-twice-a-day refresh acceptable?
 | Technology | Best fit | Processing model | Notes |
 |------------|----------|------------------|-------|
 | **Apache Spark** | Batch, Microbatch | Distributed batch | Industry standard for large-scale ETL & ML data prep |
-| **Spark Structured Streaming** | Microbatch, Near real-time | Micro-batch (trigger intervals); has a low-latency continuous mode | Same Spark API/tech stack: easy graduation path from batch |
+| **Spark Structured Streaming** | Microbatch, Near real-time | Micro-batch (trigger intervals); also has an experimental low-latency continuous mode | Same Spark API/tech stack: easy graduation path from batch |
 | **Apache Flink** | Real-time, Streaming | True event-at-a-time | Strong state management, event-time, watermarks, exactly-once |
 | **Apache Kafka** | Real-time, Streaming transport | Distributed log / Kafka Streams | The backbone for moving events; replayable via offsets |
 
