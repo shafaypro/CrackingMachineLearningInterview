@@ -132,6 +132,8 @@ FROM ranked
 WHERE rn = 1;
 ```
 
+If two rows share the same `updated_at`, `ROW_NUMBER()` picks one arbitrarily and the result can change between runs. Add a tie-breaker to the `ORDER BY` (for example a unique `event_id` or load sequence) so the dedup is deterministic.
+
 ### Why it matters
 
 This is one of the most common warehouse and dbt patterns.
@@ -179,6 +181,8 @@ FROM ranked_products
 WHERE rn <= 3;
 ```
 
+`ROW_NUMBER()` returns exactly 3 rows per category and breaks revenue ties arbitrarily. If tied products should all be kept, use `RANK()` or `DENSE_RANK()` and say which one the business question wants.
+
 ---
 
 ## 5. Window Functions
@@ -214,6 +218,8 @@ SELECT
 FROM daily_signup_metrics;
 ```
 
+`ROWS BETWEEN 6 PRECEDING AND CURRENT ROW` means the last 7 *rows*, which equals the last 7 days only if the table has exactly one row per day with no missing dates. If days can be missing, join to a date spine first, or use a time-based frame such as `RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW` where supported (PostgreSQL 11+, DuckDB; support varies elsewhere; SQLite only accepts numeric `RANGE` offsets, for example over `julianday(event_date)`).
+
 ### Related repo reading
 
 - [DuckDB Complete Guide](../data_engineering/intro_duckdb.md)
@@ -238,6 +244,8 @@ FROM daily_signup_metrics;
 
 ### Example: monthly active users
 
+`DATE_TRUNC('month', ts)` is PostgreSQL, DuckDB, Snowflake, and Redshift syntax. BigQuery uses `DATE_TRUNC(ts_date, MONTH)` / `TIMESTAMP_TRUNC(ts, MONTH)`, MySQL has no `DATE_TRUNC` (use `DATE_FORMAT(ts, '%Y-%m-01')`), and SQLite uses `strftime('%Y-%m-01', ts)`.
+
 ```sql
 SELECT
     DATE_TRUNC('month', event_time) AS month_start,
@@ -248,7 +256,7 @@ GROUP BY DATE_TRUNC('month', event_time)
 ORDER BY month_start;
 ```
 
-### Example: next-event gap
+### Example: previous event per user (the input to a gap calculation)
 
 ```sql
 SELECT
@@ -260,6 +268,8 @@ SELECT
     ) AS previous_event_time
 FROM user_events;
 ```
+
+The gap itself is `event_time - previous_event_time`, and timestamp subtraction is dialect-specific: an `INTERVAL` in PostgreSQL and DuckDB, `DATEDIFF(second, prev, cur)` in Snowflake, `TIMESTAMP_DIFF(cur, prev, SECOND)` in BigQuery, and `(julianday(cur) - julianday(prev)) * 86400` in SQLite. The first event per user has a `NULL` previous time. Use `LEAD()` instead of `LAG()` for the time until the next event.
 
 ---
 
@@ -295,6 +305,8 @@ SELECT
     SUM(purchased) AS users_purchased
 FROM user_steps;
 ```
+
+This counts users who ever did each step, in any order: a user who purchased without viewing still counts toward `users_purchased`. For a strict funnel, require the earlier steps (for example `SUM(viewed * added_to_cart * purchased)`), and if order matters, compare the first timestamp of each step per user.
 
 ---
 

@@ -84,12 +84,12 @@ def fit_closed_form(X, y, ridge=0.0):
     d = X.shape[1]
     reg = ridge * np.eye(d)
     reg[0, 0] = 0.0                              # never penalize the intercept
-    return np.linalg.solve(X.T @ X + reg, X.T @ y)   # solve beats inv(): faster and stabler
+    return np.linalg.solve(X.T @ X + reg, X.T @ y)   # solve beats inv(): cheaper and stabler
 ```
 
 **Follow-ups**
 - *When use gradient descent over the closed form?* The normal equation is `O(d³)` and needs `XᵀX` in memory, so it's impractical above a few thousand features; it also requires `XᵀX` to be invertible, which fails with collinear features (ridge fixes that). Gradient descent scales to large `n` and `d`, works out-of-core, and generalizes to non-convex models.
-- *Why `np.linalg.solve` instead of `np.linalg.inv`?* Solving the system directly is roughly 2x faster and numerically more stable: explicitly inverting amplifies conditioning problems.
+- *Why `np.linalg.solve` instead of `np.linalg.inv`?* Solving the system directly (one LU factorization plus triangular solves) does fewer operations than forming the full inverse and is numerically more stable: explicitly inverting amplifies conditioning problems.
 - *What if the loss diverges?* Learning rate too high, or features on wildly different scales. Standardize, or lower the LR.
 
 ---
@@ -154,7 +154,8 @@ def kmeans(X, k, n_iters=100, tol=1e-4, seed=0):
     centroids = [X[rng.integers(n)]]
     for _ in range(k - 1):
         d2 = np.min(((X[:, None, :] - np.array(centroids)[None, :, :]) ** 2).sum(-1), axis=1)
-        probs = d2 / d2.sum()
+        # Fewer distinct points than k makes d2 all zero; fall back to uniform
+        probs = d2 / d2.sum() if d2.sum() > 0 else np.full(n, 1.0 / n)
         centroids.append(X[rng.choice(n, p=probs)])
     centroids = np.array(centroids)                      # (k, d)
 
@@ -178,7 +179,7 @@ def kmeans(X, k, n_iters=100, tol=1e-4, seed=0):
 ```
 
 **Follow-ups**
-- *Memory problem with this distance computation?* `X[:, None, :] - centroids[None, :, :]` materializes an `(n, k, d)` array. For n=1M, k=100, d=128 that's 51 GB. Use the identity `‖x-c‖² = ‖x‖² - 2x·c + ‖c‖²` to compute distances with one `(n,d)@(d,k)` matmul.
+- *Memory problem with this distance computation?* `X[:, None, :] - centroids[None, :, :]` materializes an `(n, k, d)` array. For n=1M, k=100, d=128 in float64 that's 10⁶ × 100 × 128 × 8 bytes ≈ 100 GB. Use the identity `‖x-c‖² = ‖x‖² - 2x·c + ‖c‖²` to compute distances with one `(n,d)@(d,k)` matmul.
 - *Why k-means++?* Random initialization frequently converges to a poor local minimum; k-means++ samples each new centroid proportional to squared distance from existing ones, giving an `O(log k)` approximation guarantee in expectation and much more stable results.
 - *Convergence?* Both steps monotonically decrease inertia and there are finitely many assignments, so it always converges: to a local optimum, which is why you run it with several seeds (`n_init`).
 - *Empty cluster?* Reinitialize it to the point farthest from its centroid, or keep the old centroid (as above).
@@ -280,7 +281,8 @@ def train_test_split_manual(X, y, test_size=0.2, stratify=False, seed=0):
             cut = int(len(cls_idx) * (1 - test_size))
             train_idx.extend(cls_idx[:cut])
             test_idx.extend(cls_idx[cut:])
-        train_idx, test_idx = np.array(train_idx), np.array(test_idx)
+        # dtype=int so an empty split still works as an index array
+        train_idx, test_idx = np.array(train_idx, dtype=int), np.array(test_idx, dtype=int)
 
     return X[train_idx], X[test_idx], y[train_idx], y[test_idx]
 
@@ -519,13 +521,15 @@ def chunk_text(text, chunk_size=500, overlap=50):
 
         if end >= len(text):
             break
-        start = end - overlap          # step forward, keeping `overlap` characters
+        # Step forward keeping `overlap` characters, but always advance: backing off
+        # to a space can make the chunk shorter than `overlap`
+        start = max(end - overlap, start + 1)
     return chunks
 ```
 
 **Follow-ups**
 - *Why overlap at all?* An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10-20% overlap is the usual range.
-- *Why does the `end >= len(text)` break matter?* Without it, when `overlap` is large relative to the final chunk, `start` can fail to advance and the loop never terminates. Infinite-loop edge cases are exactly what interviewers probe.
+- *Why does the `end >= len(text)` break matter?* Without it, when `overlap` is large relative to the final chunk, `start` can fail to advance and the loop never terminates. The `max(..., start + 1)` guards the same failure mid-text: if the word-boundary back-off leaves a chunk shorter than `overlap` (for example `chunk_size=10, overlap=8`), `end - overlap` moves `start` backwards (even below zero) and the loop never terminates. Infinite-loop edge cases are exactly what interviewers probe.
 - *Better than character-based?* Token-based chunking matches what the model actually sees; structural splitting (headers, functions) preserves coherence better than either.
 
 ---

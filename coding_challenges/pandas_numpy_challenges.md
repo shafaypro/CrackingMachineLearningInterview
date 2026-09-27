@@ -290,11 +290,12 @@ df.explode("tags")
 df = df.set_index(pd.to_datetime(df["date"]))
 
 df.resample("D").sum()          # downsample to daily
-df.resample("W-MON").mean()     # weekly, weeks starting Monday
-df.resample("M").agg({"value": "sum", "id": "nunique"})
+df.resample("W-SUN").mean()     # weekly, Monday-to-Sunday bins labeled by the Sunday ("W" is the same)
+df.resample("ME").agg({"value": "sum", "id": "nunique"})   # month end; "M" is deprecated since pandas 2.2
 
-# Fill gaps explicitly: resample creates rows for missing periods
-daily = df.resample("D").sum().fillna(0)
+# Gaps: resample creates rows for missing periods. sum() puts 0 there,
+# mean() puts NaN, so choose the fill explicitly (fillna(0), ffill, interpolate)
+daily_mean = df.resample("D").mean().ffill()
 
 # Timezones
 s = df.index.tz_localize("UTC").tz_convert("Europe/Berlin")
@@ -346,9 +347,11 @@ df["country"] = df["country"].astype("category")   # often 10-50× smaller
 # Read only what you need
 pd.read_csv("big.csv", usecols=["a", "b"], dtype={"a": "int32"})
 
-# Chunked processing for files larger than memory
-totals = sum(chunk.groupby("k")["v"].sum() for chunk in
-             pd.read_csv("huge.csv", chunksize=100_000))
+# Chunked processing for files larger than memory. Combine partial results with
+# concat + groupby: adding Series with `+` or sum() gives NaN for keys missing from a chunk
+partials = [chunk.groupby("k")["v"].sum() for chunk in
+            pd.read_csv("huge.csv", chunksize=100_000)]
+totals = pd.concat(partials).groupby(level=0).sum()
 
 # Parquet over CSV: columnar, typed, compressed, ~5-10× faster to read
 df.to_parquet("data.parquet")
@@ -419,7 +422,7 @@ Basic slicing (`a[1:3, :]`) returns a **view** (a new array object pointing at t
 
 That asymmetry causes both classic bugs: "why did my source array change?" when someone modifies a slice, and "why didn't my change stick?" when they write through a boolean mask expecting a view. `np.shares_memory(a, b)` settles it when unsure, and `.copy()` makes the intent explicit.
 
-The pandas analogue is `SettingWithCopyWarning`, which fires when chained indexing makes it ambiguous whether you're writing to a view or a temporary. The fix is a single `.loc` call: `df.loc[mask, "col"] = value` rather than `df[mask]["col"] = value`.
+The pandas analogue is `SettingWithCopyWarning`, which fires when chained indexing makes it ambiguous whether you're writing to a view or a temporary. The fix is a single `.loc` call: `df.loc[mask, "col"] = value` rather than `df[mask]["col"] = value`. Under Copy-on-Write (opt-in in pandas 2.x via `pd.options.mode.copy_on_write = True`, and the default in pandas 3.0) the chained form never updates `df` at all, so the single `.loc` call is the only correct version.
 
 #### Your merge produced more rows than the left dataframe. What happened?
 
