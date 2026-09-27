@@ -3267,7 +3267,7 @@
     {
       "id": "af307ec34789",
       "question": "How do you handle class imbalance?",
-      "answer_md": "1. **Resampling:** Oversample minority class (SMOTE, synthetic minority oversampling) or undersample majority class\n2. **Class weights:** Set `class_weight=\"balanced\"` in sklearn to give higher penalty to minority class errors\n3. **Threshold adjustment:** Lower the classification threshold to increase recall for minority class\n4. **Evaluation:** Use F1-score, AUC-ROC, precision-recall curves instead of accuracy\n5. **Collect more data:** Get more minority class examples\n6. **Algorithm choice:** Tree-based methods handle imbalance better than logistic regression",
+      "answer_md": "1. **Resampling:** Oversample minority class (SMOTE, synthetic minority oversampling) or undersample majority class\n2. **Class weights:** Set `class_weight=\"balanced\"` in sklearn to give higher penalty to minority class errors\n3. **Threshold adjustment:** Lower the classification threshold to increase recall for minority class\n4. **Evaluation:** Use F1-score, AUC-ROC, precision-recall curves instead of accuracy\n5. **Collect more data:** Get more minority class examples\n6. **Algorithm choice:** Gradient-boosted trees with class weights are a strong default, but no algorithm removes the need for the right metric and threshold",
       "source_path": "classical_ml/README.md",
       "source_title": "Classical Machine Learning",
       "track": "classical_ml",
@@ -3278,7 +3278,7 @@
     {
       "id": "ec5569f0d2b3",
       "question": "What is regularization and when do you need it?",
-      "answer_md": "Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|`: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²`: shrinks weights uniformly, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.",
+      "answer_md": "Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|`: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²`: shrinks weights proportionally toward zero, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.",
       "source_path": "classical_ml/README.md",
       "source_title": "Classical Machine Learning",
       "track": "classical_ml",
@@ -3399,7 +3399,7 @@
     {
       "id": "dab635d4dde6",
       "question": "What is feature importance in tree-based models?",
-      "answer_md": "Feature importance measures how much each feature contributes to reducing impurity across all splits in all trees. Computed as the weighted average reduction in Gini/entropy across all splits on that feature, weighted by the number of samples passing through. Limitations: (1) biased toward high-cardinality features, (2) correlated features split importance between them, (3) not causal. More reliable alternatives: permutation importance, SHAP values.",
+      "answer_md": "Feature importance measures how much each feature contributes to reducing impurity across all splits in all trees. Computed as the total reduction in Gini/entropy across all splits on that feature, each weighted by the fraction of samples reaching that node, then averaged over trees and normalized. Limitations: (1) biased toward high-cardinality features, (2) correlated features split importance between them, (3) not causal. More reliable alternatives: permutation importance, SHAP values.",
       "source_path": "classical_ml/README.md",
       "source_title": "Classical Machine Learning",
       "track": "classical_ml",
@@ -3410,7 +3410,7 @@
     {
       "id": "45391ecf9b54",
       "question": "Explain the Random Forest algorithm step by step.",
-      "answer_md": "1. Draw n bootstrap samples (with replacement) from training data\n2. For each bootstrap sample, train a decision tree with a twist: at each split, consider only a random subset of features (typically sqrt(features) for classification, features/3 for regression)\n3. Grow each tree to maximum depth (no pruning)\n4. For prediction: classify by majority vote (classification) or average (regression) across all trees\n\nKey ideas: bootstrap sampling creates diversity, random feature subsets prevent correlated trees, combining uncorrelated trees reduces variance without increasing bias.",
+      "answer_md": "1. Draw n bootstrap samples (with replacement) from training data\n2. For each bootstrap sample, train a decision tree with a twist: at each split, consider only a random subset of features (typically sqrt(features) for classification, features/3 for regression)\n3. Grow each tree to maximum depth (no pruning)\n4. For prediction: classify by majority vote (classification) or average (regression) across all trees\n\nKey ideas: bootstrap sampling creates diversity, random feature subsets prevent correlated trees, combining decorrelated trees reduces variance with only a small increase in bias.",
       "source_path": "classical_ml/README.md",
       "source_title": "Classical Machine Learning",
       "track": "classical_ml",
@@ -4433,11 +4433,11 @@
     {
       "id": "b28b45af0016",
       "question": "When would you use Prophet over ARIMA?",
-      "answer_md": "Use Prophet when: data has strong multiple seasonalities (weekly + yearly), there are holidays/events to model, stakeholders need interpretable components, or you have missing data. Prophet handles these automatically. Use ARIMA when: data is low-frequency (monthly), you need strict statistical rigor, or you're doing multivariate forecasting.",
+      "answer_md": "Use Prophet when: data has strong multiple seasonalities (weekly + yearly), there are holidays/events to model, stakeholders need interpretable components, or you have missing data. Prophet handles these automatically. Use ARIMA when: data is low-frequency (monthly), the series is well described by its own autocorrelation, or you need a classical statistical model with well-understood intervals. ARIMA is univariate (ARIMAX adds exogenous regressors); for jointly forecasting several interacting series, VAR is the classical choice.",
       "source_path": "classical_ml/intro_time_series.md",
       "source_title": "Time Series Analysis & Forecasting",
       "track": "classical_ml",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 3
     },

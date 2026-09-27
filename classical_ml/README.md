@@ -30,7 +30,7 @@ A reference for classical ML algorithms, evaluation metrics, and fundamental con
 | Naive Bayes | Supervised / Classification | Very fast, works well with small data | Strong independence assumption | Text classification, spam detection |
 | K-Means | Unsupervised / Clustering | Simple, scalable | Requires k, assumes spherical clusters | Customer segmentation, quantization |
 | DBSCAN | Unsupervised / Clustering | No k needed, finds arbitrary shapes, handles noise | Sensitive to epsilon parameter | Anomaly detection, spatial data |
-| Hierarchical Clustering | Unsupervised / Clustering | No k needed, dendrogram | O(n²) complexity | Small datasets, biology |
+| Hierarchical Clustering | Unsupervised / Clustering | No k needed, dendrogram | O(n²) memory, O(n² log n) time or worse | Small datasets, biology |
 | PCA | Unsupervised / Dim reduction | Linear, fast, interpretable | Linear only, loses non-linear structure | Feature reduction, preprocessing |
 | t-SNE | Unsupervised / Dim reduction | Preserves local structure, great visualization | Slow, non-parametric, not for new data | Visualization of embeddings |
 | UMAP | Unsupervised / Dim reduction | Faster than t-SNE, preserves global + local | Non-deterministic | Visualization, preprocessing |
@@ -153,11 +153,11 @@ xgb_model = xgb.XGBClassifier(
     max_depth=6,
     subsample=0.8,
     colsample_bytree=0.8,
-    use_label_encoder=False,
     eval_metric="logloss",
+    early_stopping_rounds=50,   # constructor argument; fit() no longer accepts it in XGBoost 2.x+
     random_state=42
 )
-xgb_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], early_stopping_rounds=50, verbose=100)
+xgb_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=100)
 
 # LightGBM (faster, better for large datasets)
 lgb_model = lgb.LGBMClassifier(
@@ -200,10 +200,11 @@ pipeline = Pipeline([
         kernel="rbf",
         C=1.0,               # Regularization
         gamma="scale",       # Kernel coefficient
-        probability=True     # Enable predict_proba (slower)
     ))
 ])
 pipeline.fit(X_train, y_train)
+# For probabilities, wrap the pipeline in CalibratedClassifierCV(..., ensemble=False);
+# SVC(probability=True) is deprecated as of scikit-learn 1.9
 ```
 
 ---
@@ -357,7 +358,7 @@ mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 | Scenario | Recommended Metric |
 |----------|-------------------|
 | Balanced classification | Accuracy, F1 |
-| Imbalanced classification (e.g., fraud) | F1, AUC-ROC, Recall |
+| Imbalanced classification (e.g., fraud) | PR-AUC, F1, recall at a fixed precision (ROC-AUC can look optimistic) |
 | When FP costly (e.g., spam filter) | Precision |
 | When FN costly (e.g., cancer detection) | Recall |
 | Regression (general) | RMSE, MAE, R² |
@@ -392,7 +393,7 @@ df["income_missing"] = df["income"].isna().astype(int)
 ```python
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder
 
-# Label encoding (ordinal or tree-based models)
+# LabelEncoder is meant for the target y; for feature columns use OrdinalEncoder
 le = LabelEncoder()
 df["category_encoded"] = le.fit_transform(df["category"])
 
@@ -475,13 +476,13 @@ The kernel trick allows SVMs to find non-linear decision boundaries without expl
 3. **Threshold adjustment:** Lower the classification threshold to increase recall for minority class
 4. **Evaluation:** Use F1-score, AUC-ROC, precision-recall curves instead of accuracy
 5. **Collect more data:** Get more minority class examples
-6. **Algorithm choice:** Tree-based methods handle imbalance better than logistic regression
+6. **Algorithm choice:** Gradient-boosted trees with class weights are a strong default, but no algorithm removes the need for the right metric and threshold
 
 ---
 
 **Q7: What is regularization and when do you need it?** 🟢 Beginner
 
-Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|`: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²`: shrinks weights uniformly, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.
+Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds `λ·|w|`: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds `λ·||w||²`: shrinks weights proportionally toward zero, keeps all features. Elastic Net combines both. You need regularization when: training accuracy >> validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.
 
 ---
 
@@ -549,7 +550,7 @@ Choose DBSCAN when: (1) clusters have arbitrary shapes (not spherical), (2) you 
 
 **Q18: What is feature importance in tree-based models?** 🟡 Intermediate
 
-Feature importance measures how much each feature contributes to reducing impurity across all splits in all trees. Computed as the weighted average reduction in Gini/entropy across all splits on that feature, weighted by the number of samples passing through. Limitations: (1) biased toward high-cardinality features, (2) correlated features split importance between them, (3) not causal. More reliable alternatives: permutation importance, SHAP values.
+Feature importance measures how much each feature contributes to reducing impurity across all splits in all trees. Computed as the total reduction in Gini/entropy across all splits on that feature, each weighted by the fraction of samples reaching that node, then averaged over trees and normalized. Limitations: (1) biased toward high-cardinality features, (2) correlated features split importance between them, (3) not causal. More reliable alternatives: permutation importance, SHAP values.
 
 ---
 
@@ -560,7 +561,7 @@ Feature importance measures how much each feature contributes to reducing impuri
 3. Grow each tree to maximum depth (no pruning)
 4. For prediction: classify by majority vote (classification) or average (regression) across all trees
 
-Key ideas: bootstrap sampling creates diversity, random feature subsets prevent correlated trees, combining uncorrelated trees reduces variance without increasing bias.
+Key ideas: bootstrap sampling creates diversity, random feature subsets prevent correlated trees, combining decorrelated trees reduces variance with only a small increase in bias.
 
 ---
 
