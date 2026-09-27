@@ -432,7 +432,7 @@ Cost:
 
 ```
 1. Model selection: Claude Haiku 4.5 vs Opus 5 = ~5x per-token price difference
-   (2026 list prices; larger gaps if the small model also needs fewer retries)
+   (list prices at the time of writing)
    → Route simple tasks to Haiku, complex to Opus
 
 2. Prompt optimization: Shorter prompts = fewer input tokens

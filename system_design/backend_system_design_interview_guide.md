@@ -637,7 +637,7 @@ How this helps:
 
 #### Q19: What are message queues and event streaming, and how do they differ?
 
-- Definition: Message queues decouple producers and consumers for task processing. Event streams provide durable ordered logs that multiple consumers can replay.
+- Definition: Message queues decouple producers and consumers for task processing. Event streams provide durable logs (ordered within a partition, in Kafka) that multiple consumers can replay.
 - Why it matters: Async communication is core to modern large systems.
 - Example: Kafka powers activity feeds, audit streams, and analytics pipelines in many companies.
 - Common prompts: Notification service, analytics pipeline, "How do you decouple services with different speeds?"
