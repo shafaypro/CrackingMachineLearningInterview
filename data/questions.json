@@ -4543,7 +4543,7 @@
     {
       "id": "0f2815b5ed4e",
       "question": "What are the key differences between SageMaker and Vertex AI?",
-      "answer_md": "SageMaker has greater breadth and more managed services (17+ built-in algorithms, dedicated endpoints, SageMaker Clarify for bias). Vertex AI has tighter BigQuery integration (no data movement for tabular data), generally better AutoML accuracy, and is built on open standards (Kubeflow Pipelines, TFX). SageMaker is better if you're already on AWS; Vertex AI if you're on GCP with BigQuery as your warehouse.",
+      "answer_md": "SageMaker has greater breadth and more managed services (many built-in algorithms, several endpoint types, SageMaker Clarify for bias). Vertex AI has tighter BigQuery integration (less data movement for tabular data), strong AutoML, and is built on open standards (Kubeflow Pipelines, TFX). SageMaker is better if you're already on AWS; Vertex AI if you're on GCP with BigQuery as your warehouse.",
       "source_path": "cloud_ml/intro_cloud_ml_platforms.md",
       "source_title": "Cloud ML Platforms Comparison",
       "track": "cloud_ml",
@@ -4565,7 +4565,7 @@
     {
       "id": "6aefe9c1bebe",
       "question": "How would you design a CI/CD pipeline for ML on AWS SageMaker?",
-      "answer_md": "1. Code commit triggers GitHub Actions\n2. Build and push Docker training image to ECR\n3. Run SageMaker Training Job\n4. Evaluate model: if metrics pass threshold, register in Model Registry with \"PendingApproval\"\n5. Manual approval step (or automated if metrics exceed threshold)\n6. Upon approval, SageMaker Pipelines deploys to staging endpoint\n7. Integration tests on staging\n8. Promote to production endpoint with canary deployment",
+      "answer_md": "1. Code commit triggers GitHub Actions\n2. Build and push Docker training image to ECR\n3. Run SageMaker Training Job\n4. Evaluate model: if metrics pass threshold, register in Model Registry with \"PendingManualApproval\"\n5. Manual approval step (or automated if metrics exceed threshold)\n6. Upon approval, an EventBridge rule on the approval status change triggers deployment (e.g. via CodePipeline) to a staging endpoint\n7. Integration tests on staging\n8. Promote to production endpoint with canary deployment",
       "source_path": "cloud_ml/intro_cloud_ml_platforms.md",
       "source_title": "Cloud ML Platforms Comparison",
       "track": "cloud_ml",
@@ -6105,7 +6105,7 @@
     {
       "id": "e7740b2adbe2",
       "question": "You pruned 80% of the weights and latency didn't change. Why?",
-      "answer_md": "Because it was **unstructured** pruning. The weights are zero, but the tensor is the same shape, and a dense GEMM kernel multiplies zeros at exactly the same speed as anything else. You've saved storage (if you actually store it in a sparse format), and no compute.\n\nTo get real speedup you need one of: **structured pruning**, which removes whole channels or heads so the matrices are physically smaller and every kernel benefits; **2:4 semi-structured sparsity**, which Ampere+ tensor cores accelerate natively for around 2× on those matmuls; or a genuine sparse kernel, which typically needs very high sparsity (>95%) before it beats dense.\n\nThe general lesson is that parameter count and latency are different currencies, and compression targets one or the other.",
+      "answer_md": "Because it was **unstructured** pruning. The weights are zero, but the tensor is the same shape, and a dense GEMM kernel multiplies zeros at exactly the same speed as anything else. You've saved storage (if you actually store it in a sparse format), and no compute.\n\nTo get real speedup you need one of: **structured pruning**, which removes whole channels or heads so the matrices are physically smaller and every kernel benefits; **2:4 semi-structured sparsity**, which Ampere+ tensor cores accelerate natively for up to about 2× on those matmuls; or a genuine sparse kernel, which typically needs very high sparsity (>95%) before it beats dense.\n\nThe general lesson is that parameter count and latency are different currencies, and compression targets one or the other.",
       "source_path": "deep_learning/intro_model_compression.md",
       "source_title": "Model Compression: Distillation, Pruning, and Quantization",
       "track": "deep_learning",

@@ -27,7 +27,7 @@ AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major 
 | **Strength** | Breadth, scale, enterprise | AutoML, built-in data tools | Azure integration, responsible AI |
 | **LLM/GenAI** | Bedrock + JumpStart | Vertex AI Studio + Gemini | Azure OpenAI Service |
 | **Pricing model** | Pay-per-use | Pay-per-use | Pay-per-use |
-| **Free tier** | SageMaker Studio (limited) | $300 credit for new users | $200 credit for new users |
+| **Free tier** | Limited free tier for new accounts | Trial credits for new accounts | Trial credits for new accounts |
 
 ---
 
@@ -35,31 +35,31 @@ AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major 
 
 | Feature | SageMaker | Vertex AI | Azure ML |
 |---------|----------|----------|---------|
-| **Managed notebooks** | Studio Notebooks | Workbench | Compute Instances / Studio |
+| **Managed notebooks** | Studio (JupyterLab / Code Editor spaces) | Workbench instances | Compute Instances / Studio |
 | **Training jobs** | Training Jobs (built-in containers) | Custom Training | Compute Clusters |
-| **AutoML** | Autopilot | AutoML (Tables, Vision, NLP) | Automated ML |
+| **AutoML** | Autopilot (now surfaced in SageMaker Canvas) | AutoML (tabular, image, video) | Automated ML |
 | **Model registry** | Model Registry | Model Registry | Model Registry |
 | **Feature store** | SageMaker Feature Store | Vertex AI Feature Store | Azure ML Feature Store |
 | **Pipelines / MLflow** | SageMaker Pipelines | Vertex AI Pipelines (Kubeflow) | Azure ML Pipelines |
-| **Real-time endpoints** | Real-time Endpoints | Online Prediction | Real-time Endpoints |
+| **Real-time endpoints** | Real-time Endpoints | Online Prediction | Managed Online Endpoints |
 | **Batch inference** | Batch Transform | Batch Prediction | Batch Endpoints |
-| **Model monitoring** | Model Monitor | Skew/Drift Detection | Data drift monitoring |
+| **Model monitoring** | Model Monitor | Model Monitoring (skew/drift) | Model monitoring (drift, data quality) |
 | **Experiment tracking** | Experiments (basic) / MLflow | Vertex AI Experiments | MLflow integrated |
-| **A/B testing** | Multi-variant endpoints | Traffic split endpoints | Mirroring / A/B |
-| **Edge deployment** | SageMaker Edge Manager | Google Edge TPU | Azure IoT Edge |
-| **Distributed training** | Built-in (Horovod, FSDP) | Reduction Server | Distributed training |
-| **Spot/preemptible** | Managed Spot Training | Preemptible VMs | Low-priority compute |
+| **A/B testing** | Production variants | Traffic split endpoints | Traffic split / mirroring |
+| **Edge deployment** | Edge Manager was discontinued in 2024 (use AWS IoT Greengrass) | AutoML edge model export / Coral Edge TPU | Azure IoT Edge |
+| **Distributed training** | Distributed training libraries, PyTorch FSDP | Reduction Server | Distributed training |
+| **Spot/preemptible** | Managed Spot Training | Spot VMs (successor to preemptible) | Low-priority / spot VMs |
 
 ---
 
 ## AWS SageMaker
 
-SageMaker is the broadest ML platform, with the most managed components.
+SageMaker is the broadest ML platform, with the most managed components. Since late 2024 AWS brands the ML service as **Amazon SageMaker AI**; "Amazon SageMaker" now also covers SageMaker Unified Studio for data, analytics, and AI.
 
 ### Key Components
 
 ```
-SageMaker Studio          → Web-based IDE (notebooks, experiments, pipelines)
+SageMaker Studio          → Web-based IDE (notebooks, experiments, pipelines; replaced Studio Classic)
 SageMaker Training Jobs   → Managed training with built-in algorithms or custom containers
 SageMaker Endpoints       → Real-time inference with auto-scaling
 SageMaker Pipelines       → ML workflow orchestration (CI/CD for ML)
@@ -67,7 +67,7 @@ SageMaker Model Registry  → Version and approve models before deployment
 SageMaker Feature Store   → Offline (S3) + Online (low-latency) feature serving
 SageMaker Model Monitor   → Data quality, model quality, bias, explainability monitoring
 SageMaker Clarify         → Bias detection and explainability
-SageMaker Autopilot       → AutoML: automatic model selection and tuning
+SageMaker Autopilot       → AutoML: automatic model selection and tuning (now part of SageMaker Canvas)
 SageMaker JumpStart       → Pre-trained models (foundation models, fine-tuning)
 ```
 
@@ -93,8 +93,9 @@ estimator = SKLearn(
         'n_estimators': 100,
         'max_depth': 5,
     },
-    use_spot_instances=True,       # Up to 90% cost savings
-    max_wait=3600,
+    use_spot_instances=True,       # Large savings vs on-demand (check current pricing)
+    max_run=3600,
+    max_wait=7200,                 # Must be >= max_run
 )
 
 # Train
@@ -116,6 +117,7 @@ print(result)
 ```python
 from sagemaker.workflow.pipeline import Pipeline
 from sagemaker.workflow.steps import TrainingStep, ProcessingStep
+from sagemaker.workflow.step_collections import RegisterModel
 from sagemaker.workflow.parameters import ParameterInteger, ParameterString
 
 # Pipeline parameters
@@ -123,8 +125,15 @@ model_approval_status = ParameterString(name="ModelApprovalStatus", default_valu
 
 # Define steps
 step_train = TrainingStep(name="TrainModel", estimator=estimator, inputs={...})
-step_register = RegisterModel(name="RegisterModel", estimator=estimator,
-                               model_approval_status=model_approval_status)
+step_register = RegisterModel(
+    name="RegisterModel",
+    estimator=estimator,
+    model_data=step_train.properties.ModelArtifacts.S3ModelArtifacts,
+    content_types=["text/csv"],
+    response_types=["text/csv"],
+    model_package_group_name="FraudDetectionModels",
+    approval_status=model_approval_status,
+)
 
 # Create pipeline
 pipeline = Pipeline(
@@ -135,6 +144,8 @@ pipeline = Pipeline(
 pipeline.upsert(role_arn=role)
 pipeline.start()
 ```
+
+Newer SageMaker Python SDK releases favor `ModelStep` with `step_args` over `RegisterModel`, and add `ModelTrainer` / `ModelBuilder` interfaces; check the SDK version you pin.
 
 ---
 
@@ -152,7 +163,7 @@ Vertex AI Pipelines       → Kubeflow Pipelines-based ML orchestration
 Vertex AI Feature Store   → Managed feature store with BigQuery backend
 Vertex AI Model Registry  → Register, version, and manage models
 Vertex AI Experiments     → Track runs, metrics, parameters
-Vertex AI AutoML          → No-code training for tabular, vision, NLP, video
+Vertex AI AutoML          → No-code training for tabular, image, video (text use cases moved to Gemini tuning)
 Vertex AI Studio          → Prompt design and LLM experimentation (Gemini)
 Vertex AI Search          → Enterprise search and recommendations
 Model Garden              → Pre-trained models (Gemini, Llama, etc.)
@@ -198,8 +209,7 @@ prediction = endpoint.predict(instances=[[25, 50000, 1, 0]])
 ### Vertex AI Pipelines
 
 ```python
-from kfp import dsl
-from kfp.v2 import compiler
+from kfp import compiler, dsl
 from google.cloud.aiplatform import pipeline_jobs
 
 @dsl.component(packages_to_install=['scikit-learn', 'pandas'])
@@ -212,7 +222,7 @@ def train_model(data_path: str, model_output: dsl.Output[dsl.Model]):
     X, y = df.drop('label', axis=1), df['label']
     model = RandomForestClassifier(n_estimators=100)
     model.fit(X, y)
-    joblib.dump(model, model_output.path + '/model.pkl')
+    joblib.dump(model, model_output.path)  # artifact path is a file path
 
 @dsl.pipeline(name="fraud-detection-pipeline")
 def fraud_pipeline(data_path: str = "gs://my-bucket/data.csv"):
@@ -242,30 +252,34 @@ Compute Instances         → Managed notebook VMs
 Compute Clusters          → Scalable training clusters (auto-scale to 0)
 Azure ML Pipelines        → ML workflow orchestration
 Model Registry            → Version and deploy models
-Real-time Endpoints       → Managed Kubernetes-based serving
+Online Endpoints          → Managed online endpoints (or Kubernetes online endpoints on your own AKS / Arc cluster)
 Batch Endpoints           → Large-scale batch inference
 Automated ML              → AutoML for tabular, vision, NLP
-Azure ML Designer         → Drag-and-drop ML pipeline builder
+Azure ML Designer         → Drag-and-drop pipeline builder (current designer uses custom components; classic prebuilt components are legacy v1)
 MLflow Integration        → Built-in MLflow for experiment tracking
 Responsible AI Dashboard  → Fairness, explainability, error analysis
-Azure OpenAI Service      → OpenAI models (GPT-4, DALL-E) in Azure
+Azure OpenAI              → OpenAI models hosted in Azure, managed through Azure AI Foundry (now Microsoft Foundry)
 ```
 
-### Training with MLflow Tracking
+### Training with MLflow Tracking (SDK v2)
+
+The v1 SDK (`azureml-core`, `Workspace`, `Experiment`, `AciWebservice`) is deprecated and past its announced end of support, and ACI deployment from Azure ML is legacy. Use SDK v2 (`azure-ai-ml`, `MLClient`) and managed online endpoints.
 
 ```python
 import mlflow
 import mlflow.sklearn
-from azureml.core import Workspace, Experiment
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import ManagedOnlineDeployment, ManagedOnlineEndpoint
+from azure.identity import DefaultAzureCredential
 from sklearn.ensemble import RandomForestClassifier
 
 # Connect to Azure ML workspace
-ws = Workspace.from_config()
-experiment = Experiment(workspace=ws, name="fraud-detection")
+ml_client = MLClient.from_config(credential=DefaultAzureCredential())
+ws = ml_client.workspaces.get(ml_client.workspace_name)
+mlflow.set_tracking_uri(ws.mlflow_tracking_uri)
+mlflow.set_experiment("fraud-detection")
 
-with mlflow.start_run() as run:
-    mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
-
+with mlflow.start_run():
     # Train
     model = RandomForestClassifier(n_estimators=100, max_depth=5)
     model.fit(X_train, y_train)
@@ -278,41 +292,47 @@ with mlflow.start_run() as run:
     # Register model
     mlflow.sklearn.log_model(model, "fraud_model", registered_model_name="fraud-detector")
 
-# Deploy to real-time endpoint
-from azureml.core.model import Model
-from azureml.core.webservice import AciWebservice, Webservice
+# Deploy to a managed online endpoint (MLflow models need no scoring script)
+endpoint = ManagedOnlineEndpoint(name="fraud-endpoint", auth_mode="key")
+ml_client.online_endpoints.begin_create_or_update(endpoint).result()
 
-model = Model(ws, 'fraud-detector', version=1)
-service = Model.deploy(ws, "fraud-endpoint", [model],
-                       deployment_config=AciWebservice.deploy_configuration(cpu_cores=1, memory_gb=1))
-service.wait_for_deployment(show_output=True)
+deployment = ManagedOnlineDeployment(
+    name="blue",
+    endpoint_name="fraud-endpoint",
+    model="azureml:fraud-detector:1",
+    instance_type="Standard_DS3_v2",
+    instance_count=1,
+)
+ml_client.online_deployments.begin_create_or_update(deployment).result()
+
+endpoint.traffic = {"blue": 100}
+ml_client.online_endpoints.begin_create_or_update(endpoint).result()
 ```
 
-### Automated ML
+### Automated ML (SDK v2)
 
 ```python
-from azureml.train.automl import AutoMLConfig
-from azureml.core import Experiment
+from azure.ai.ml import Input, automl
 
-automl_config = AutoMLConfig(
-    task='classification',
-    primary_metric='AUC_weighted',
-    training_data=train_dataset,
-    label_column_name='is_fraud',
+classification_job = automl.classification(
+    compute="cpu-cluster",
+    experiment_name="automl-fraud",
+    training_data=Input(type="mltable", path="azureml:fraud-train:1"),
+    target_column_name="is_fraud",
+    primary_metric="AUC_weighted",
     n_cross_validations=5,
-    iterations=50,
-    iteration_timeout_minutes=5,
-    enable_early_stopping=True,
-    featurization='auto',
-    enable_onnx_compatible_models=True,
 )
+classification_job.set_limits(
+    max_trials=50,
+    trial_timeout_minutes=5,
+    enable_early_termination=True,
+)
+classification_job.set_featurization(mode="auto")
+classification_job.set_training(enable_onnx_compatible_models=True)
 
-experiment = Experiment(ws, "automl-fraud")
-run = experiment.submit(automl_config)
-run.wait_for_completion(show_output=True)
-
-best_run, fitted_model = run.get_output()
-print(f"Best model: {best_run.get_properties()['algorithm']}")
+returned_job = ml_client.jobs.create_or_update(classification_job)
+ml_client.jobs.stream(returned_job.name)
+# Inspect the best trial in Studio or via MLflow on the parent run
 ```
 
 ---
@@ -323,12 +343,12 @@ print(f"Best model: {best_run.get_properties()['algorithm']}")
 |----------|---------------|--------|
 | Existing AWS infrastructure | **SageMaker** | Native S3, IAM, VPC integration |
 | BigQuery as data warehouse | **Vertex AI** | Direct BigQuery connector, no data movement |
-| Azure Active Directory / compliance | **Azure ML** | Enterprise integration, compliance certifications |
-| Best AutoML for tabular data | **Vertex AI AutoML** | Generally best accuracy and features |
+| Microsoft Entra ID (formerly Azure AD) / compliance | **Azure ML** | Enterprise integration, compliance certifications |
+| Strong managed AutoML for tabular data | **Vertex AI AutoML** or **Azure Automated ML** | Mature tabular AutoML; benchmark on your own data |
 | LLM fine-tuning / GenAI | **Vertex AI** or **SageMaker** | Model Garden vs JumpStart |
-| Responsible AI & fairness | **Azure ML** | Best responsible AI dashboard |
-| Cheapest for small experiments | **Vertex AI** | Generous free tier for notebooks |
-| Most built-in algorithms | **SageMaker** | 17+ built-in algorithms |
+| Responsible AI & fairness | **Azure ML** | Built-in Responsible AI dashboard |
+| Cheapest for small experiments | **Depends** | Free tiers and trial credits change; idle notebooks usually dominate cost |
+| Most built-in algorithms | **SageMaker** | Large catalog of built-in algorithms |
 | Kubeflow-based pipelines | **Vertex AI Pipelines** | Native Kubeflow support |
 
 ---
@@ -337,10 +357,10 @@ print(f"Best model: {best_run.get_properties()['algorithm']}")
 
 | Strategy | SageMaker | Vertex AI | Azure ML |
 |----------|----------|----------|---------|
-| Spot/preemptible instances | Managed Spot Training (up to 90% off) | Preemptible VMs (up to 80% off) | Low-priority compute (up to 80% off) |
-| Auto-scaling to zero | Serverless Inference | Min replicas = 0 | Scale-down enabled clusters |
-| Right-sizing instances | Instance Recommender | Recommender | Compute SKU comparison |
-| Multi-model endpoints | Multi-Model Endpoints | Model Registry | Multiple models per endpoint |
+| Spot/preemptible instances | Managed Spot Training | Spot VMs | Low-priority VMs |
+| Auto-scaling to zero | Serverless Inference, or scale to zero where supported | Batch prediction, or scale to zero where supported | Clusters with min nodes = 0 |
+| Right-sizing instances | Inference Recommender | Recommender | Compute SKU comparison |
+| Multi-model endpoints | Multi-Model Endpoints | Shared deployment resource pools | Multiple deployments per endpoint |
 | Caching predictions | ElastiCache integration | Cloud Memorystore | Azure Cache for Redis |
 
 ```python
@@ -352,15 +372,18 @@ estimator = SKLearn(
     max_wait=7200,                 # Max wait including spot interruptions
 )
 
-# Azure ML: Low-priority compute cluster
-from azureml.core.compute import AmlCompute, ComputeTarget
+# Azure ML (SDK v2): Low-priority compute cluster
+from azure.ai.ml.entities import AmlCompute
 
-compute_config = AmlCompute.provisioning_configuration(
-    vm_size='STANDARD_D3_V2',
-    vm_priority='lowpriority',     # Low-priority = significant cost savings
-    min_nodes=0,                   # Scale to zero when idle
-    max_nodes=4,
+cluster = AmlCompute(
+    name='cpu-cluster',
+    size='Standard_D3_v2',
+    tier='low_priority',           # Low-priority = significant cost savings
+    min_instances=0,               # Scale to zero when idle
+    max_instances=4,
+    idle_time_before_scale_down=300,
 )
+ml_client.compute.begin_create_or_update(cluster).result()
 ```
 
 ---
@@ -368,7 +391,7 @@ compute_config = AmlCompute.provisioning_configuration(
 ## Interview Q&A
 
 **Q1: What are the key differences between SageMaker and Vertex AI?**
-SageMaker has greater breadth and more managed services (17+ built-in algorithms, dedicated endpoints, SageMaker Clarify for bias). Vertex AI has tighter BigQuery integration (no data movement for tabular data), generally better AutoML accuracy, and is built on open standards (Kubeflow Pipelines, TFX). SageMaker is better if you're already on AWS; Vertex AI if you're on GCP with BigQuery as your warehouse.
+SageMaker has greater breadth and more managed services (many built-in algorithms, several endpoint types, SageMaker Clarify for bias). Vertex AI has tighter BigQuery integration (less data movement for tabular data), strong AutoML, and is built on open standards (Kubeflow Pipelines, TFX). SageMaker is better if you're already on AWS; Vertex AI if you're on GCP with BigQuery as your warehouse.
 
 **Q2: What is the purpose of a model registry in a cloud ML platform?**
 A model registry centralizes model versioning and lifecycle management. It stores trained model artifacts, metadata (metrics, hyperparameters, training data version), approval status (pending/approved/rejected), and deployment history. It enables governance: only approved models go to production, and you can trace which model version is currently serving.
@@ -377,9 +400,9 @@ A model registry centralizes model versioning and lifecycle management. It store
 1. Code commit triggers GitHub Actions
 2. Build and push Docker training image to ECR
 3. Run SageMaker Training Job
-4. Evaluate model: if metrics pass threshold, register in Model Registry with "PendingApproval"
+4. Evaluate model: if metrics pass threshold, register in Model Registry with "PendingManualApproval"
 5. Manual approval step (or automated if metrics exceed threshold)
-6. Upon approval, SageMaker Pipelines deploys to staging endpoint
+6. Upon approval, an EventBridge rule on the approval status change triggers deployment (e.g. via CodePipeline) to a staging endpoint
 7. Integration tests on staging
 8. Promote to production endpoint with canary deployment
 
@@ -395,8 +418,8 @@ AutoML automatically searches the model architecture and hyperparameter space: n
 
 | Pitfall | Problem | Fix |
 |---------|---------|-----|
-| Not using spot/preemptible instances | 3-5x higher training costs | Default to spot for training; save on-demand for serving |
-| Endpoints running 24/7 at full capacity | Expensive waste during low traffic | Enable auto-scaling with min=0 for dev/staging |
+| Not using spot/preemptible instances | Much higher training costs | Default to spot for training; save on-demand for serving |
+| Endpoints running 24/7 at full capacity | Expensive waste during low traffic | Enable auto-scaling; scale to zero or use serverless/batch for dev/staging where supported |
 | Storing data on instance storage | Data lost on shutdown | Use S3, GCS, or Azure Blob for all datasets |
 | No pipeline versioning | Can't reproduce training runs | Use SageMaker/Vertex pipelines with parameter versioning |
 | Choosing platform before cloud commitment | Vendor lock-in without benefit | Align with existing cloud infrastructure investment |
@@ -411,6 +434,6 @@ AutoML automatically searches the model architecture and hyperparameter space: n
 | [MLflow](../mlops/intro_mlflow.md) | All three platforms support MLflow for experiment tracking |
 | [Model Serving](../mlops/intro_model_serving.md) | Endpoints are the cloud platform's serving layer |
 | [Feature Stores](../mlops/intro_feature_stores.md) | All three have managed feature stores |
-| [Kubernetes](../devops/intro_kubernetes.md) | Azure ML and Vertex AI use K8s for endpoints |
+| [Kubernetes](../devops/intro_kubernetes.md) | Managed endpoints hide the cluster, but Azure ML can also deploy to your own Kubernetes (AKS / Arc) |
 | [Docker](../devops/intro_docker.md) | Custom containers are the basis for cloud ML training |
 | [Study Pattern](../docs/study-pattern.md) | Cloud ML Platforms are an Advanced (🔴) topic |
