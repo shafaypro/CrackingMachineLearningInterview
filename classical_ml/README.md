@@ -154,7 +154,7 @@ xgb_model = xgb.XGBClassifier(
     subsample=0.8,
     colsample_bytree=0.8,
     eval_metric="logloss",
-    early_stopping_rounds=50,   # constructor argument; fit() no longer accepts it in XGBoost 2.x+
+    early_stopping_rounds=50,   # constructor argument since XGBoost 1.6; the fit() argument was removed later
     random_state=42
 )
 xgb_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=100)
