@@ -51,7 +51,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
-# Always standardize before PCA
+# Standardize before PCA when features are on different scales
 X_scaled = StandardScaler().fit_transform(X)
 
 # Fit PCA
@@ -102,6 +102,8 @@ plt.legend()
 ### PCA Biplot: What Do Components Mean?
 
 ```python
+import pandas as pd
+
 # Loadings: how much each original feature contributes to each PC
 loadings = pca_k.components_  # shape: (k, n_features)
 feature_names = [f"feature_{i}" for i in range(X.shape[1])]
@@ -172,8 +174,8 @@ from sklearn.manifold import TSNE
 tsne = TSNE(
     n_components=2,
     perplexity=30,        # Effective number of neighbors (typical: 5-50)
-    learning_rate=200,    # 'auto' in newer sklearn
-    n_iter=1000,
+    learning_rate='auto', # default since sklearn 1.2 (older examples used 200)
+    max_iter=1000,        # formerly n_iter, which recent sklearn no longer accepts
     random_state=42
 )
 X_tsne = tsne.fit_transform(X_scaled)
@@ -190,7 +192,7 @@ plt.colorbar(label='Class')
 |-----------|--------|--------------|
 | **perplexity** | Controls local vs global structure tradeoff | 5-50 |
 | **learning_rate** | Step size for optimization | 10-1000 (or 'auto') |
-| **n_iter** | Number of optimization steps | 500-5000 |
+| **max_iter** (formerly `n_iter`) | Number of optimization steps | 500-5000 |
 | **early_exaggeration** | Spread between clusters | 4-12 |
 
 **Warning**: t-SNE is **non-deterministic** and **non-parametric**: you cannot transform new data points without re-running the full algorithm. Use for exploration only.
@@ -205,11 +207,11 @@ UMAP (Uniform Manifold Approximation and Projection) is a **non-linear** techniq
 
 | | t-SNE | UMAP |
 |-|-------|------|
-| **Speed** | Slow (O(n²)) | Faster (approximate O(n log n)) |
+| **Speed** | Slow (O(n²) exact, O(n log n) Barnes-Hut) | Faster in practice (approximate nearest neighbors) |
 | **Global structure** | Poor | Better |
 | **New data transform** | No | Yes (`.transform()`) |
 | **Use case** | Visualization only | Visualization + preprocessing |
-| **Deterministic** | No | Yes (with `random_state`) |
+| **Reproducible run to run** | Yes with `random_state` (still stochastic across seeds) | Yes with `random_state` (which disables parallelism) |
 
 ```python
 import umap
@@ -253,7 +255,7 @@ def build_autoencoder(input_dim, encoding_dim=32):
     # Decoder
     x = layers.Dense(64, activation='relu')(encoded)
     x = layers.Dense(128, activation='relu')(x)
-    decoded = layers.Dense(input_dim, activation='sigmoid')(x)
+    decoded = layers.Dense(input_dim, activation='linear')(x)   # linear: standardized inputs can be negative
 
     autoencoder = Model(inputs, decoded)
     encoder = Model(inputs, encoded)
@@ -288,8 +290,8 @@ PCA is linear, deterministic, unsupervised, and maximizes variance. It's interpr
 **Q2: What does the perplexity parameter in t-SNE control?**
 Perplexity roughly corresponds to the number of effective nearest neighbors considered for each point. Low perplexity (5-10) focuses on very local structure; high perplexity (30-50) considers broader neighborhoods. The optimal value depends on dataset size and density. Always try multiple values and compare.
 
-**Q3: Why must you standardize before PCA?**
-PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler ensures all features contribute equally.
+**Q3: Why do you usually standardize before PCA?**
+PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler puts all features on an equal footing (PCA on the correlation matrix). If features already share meaningful units, unscaled PCA can be the right choice.
 
 **Q4: How many principal components should you keep?**
 Two common rules:
@@ -301,7 +303,7 @@ For downstream ML tasks, treat k as a hyperparameter and tune via cross-validati
 PCA is unsupervised: finds directions of maximum variance regardless of class labels. LDA is supervised: finds directions that best separate classes (maximizes between-class / within-class scatter ratio). LDA is better for classification preprocessing; PCA is better for general compression or when labels are unavailable.
 
 **Q6: Can you use t-SNE for feature extraction (preprocessing for a classifier)?**
-No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch; (2) it's stochastic) different runs give different embeddings. Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.
+No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch); (2) it's stochastic (different seeds give different embeddings, and the axes and cluster distances carry no stable meaning). Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.
 
 **Q7: When would you use UMAP over t-SNE?**
 UMAP when: you need to transform new data points (`.transform()`), you want better global structure preservation, you have large datasets (UMAP is faster), or you're using it as preprocessing for clustering/classification. t-SNE when: you specifically want local neighborhood visualization and global distortion is acceptable.

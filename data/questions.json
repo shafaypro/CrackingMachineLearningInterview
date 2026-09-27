@@ -3465,7 +3465,7 @@
     {
       "id": "7e3aea4ef250",
       "question": "A point-wise metric says your time series detector has 2% recall, but operators say it catches everything. What's going on?",
-      "answer_md": "Point-wise metrics mismatch how anomalies actually occur. An incident spans a range (say 60 minutes), and if you flag the first 2 minutes, point-wise recall is 2/60 ≈ 3%, while operationally you detected the event promptly and completely.\n\nThe fix is **event-level or range-based evaluation**: an event counts as detected if any point within it is flagged (optionally weighted by how early), and false positives are counted per distinct alert rather than per timestamp. I'd also report detection latency, since catching an incident 2 minutes in versus 50 minutes in matters enormously and no point-wise metric captures it.",
+      "answer_md": "Point-wise metrics mismatch how anomalies actually occur. An incident spans a range (say 60 minutes), and if you flag only the first minute, point-wise recall is 1/60 ≈ 2%, while operationally you detected the event promptly and completely.\n\nThe fix is **event-level or range-based evaluation**: an event counts as detected if any point within it is flagged (optionally weighted by how early), and false positives are counted per distinct alert rather than per timestamp. I'd also report detection latency, since catching an incident 2 minutes in versus 50 minutes in matters enormously and no point-wise metric captures it.",
       "source_path": "classical_ml/intro_anomaly_detection.md",
       "source_title": "Anomaly Detection",
       "track": "classical_ml",
@@ -3531,7 +3531,7 @@
     {
       "id": "35802fc3fa15",
       "question": "What's the difference between a predictive model and a causal model, and when does it matter?",
-      "answer_md": "A predictive model estimates `P(Y|X)` from observed data; a causal model estimates `P(Y|do(T))`: the distribution under an intervention. They coincide only when treatment is randomized.\n\nIt matters whenever the model's output drives an action. The standard example: a churn model plus a retention discount. The model ranks by churn probability, but the right target is people whose behaviour the discount *changes*. Those overlap poorly: high-risk users may be leaving for reasons a discount can't fix, and some users churn *because* the offer reminded them they're paying. Optimizing prediction here can produce zero or negative incremental revenue while every predictive metric looks excellent.\n\nThe tell that you need causal machinery: the question contains \"should we do X\" rather than \"what will happen\".",
+      "answer_md": "A predictive model estimates `P(Y|X)` from observed data; a causal model estimates `P(Y|do(T))`: the distribution under an intervention. They coincide when treatment is randomized, or more generally when there is no confounding given what you condition on.\n\nIt matters whenever the model's output drives an action. The standard example: a churn model plus a retention discount. The model ranks by churn probability, but the right target is people whose behaviour the discount *changes*. Those overlap poorly: high-risk users may be leaving for reasons a discount can't fix, and some users churn *because* the offer reminded them they're paying. Optimizing prediction here can produce zero or negative incremental revenue while every predictive metric looks excellent.\n\nThe tell that you need causal machinery: the question contains \"should we do X\" rather than \"what will happen\".",
       "source_path": "classical_ml/intro_causal_inference.md",
       "source_title": "Causal Inference and Uplift Modeling",
       "track": "classical_ml",
@@ -3553,7 +3553,7 @@
     {
       "id": "b936c40e061f",
       "question": "What is uplift modeling and how does it differ from a response model?",
-      "answer_md": "A response model predicts `P(convert | treated)` and targets the highest scores. An uplift model estimates `P(convert | treated) - P(convert | not treated)` (the *incremental* effect), and targets the largest differences.\n\nThe distinction is the four quadrants: persuadables (convert only if treated), sure things (convert regardless), lost causes (never convert), and sleeping dogs (treatment makes them *worse*). A response model spends the budget on sure things because they have the highest conversion probability, and cannot detect sleeping dogs at all. That's how a campaign posts strong conversion among the targeted group with zero incremental revenue.\n\nThe requirement worth stating: uplift models must be trained on **experimental** data. Fit on observational data, the treated/untreated comparison is confounded and you learn selection, not causation.",
+      "answer_md": "A response model predicts `P(convert | treated)` and targets the highest scores. An uplift model estimates `P(convert | treated) - P(convert | not treated)` (the *incremental* effect), and targets the largest differences.\n\nThe distinction is the four quadrants: persuadables (convert only if treated), sure things (convert regardless), lost causes (never convert), and sleeping dogs (treatment makes them *worse*). A response model spends the budget on sure things because they have the highest conversion probability, and cannot detect sleeping dogs at all. That's how a campaign posts strong conversion among the targeted group with zero incremental revenue.\n\nThe requirement worth stating: uplift models should be trained on **experimental** data whenever possible. Fit on observational data, the treated/untreated comparison is confounded unless every confounder is measured and adjusted for, and otherwise you learn selection, not causation.",
       "source_path": "classical_ml/intro_causal_inference.md",
       "source_title": "Causal Inference and Uplift Modeling",
       "track": "classical_ml",
@@ -3641,7 +3641,7 @@
     {
       "id": "63428f33d57f",
       "question": "What is the difference between K-Means and GMM?",
-      "answer_md": "K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means ≈ GMM with spherical covariance and hard assignments).",
+      "answer_md": "K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means is the limit of a GMM with equal, shared spherical covariances σ²I as σ → 0, which makes assignments hard).",
       "source_path": "classical_ml/intro_clustering.md",
       "source_title": "Clustering Algorithms",
       "track": "classical_ml",
@@ -3716,13 +3716,13 @@
       "order": 1
     },
     {
-      "id": "7e745563c50c",
-      "question": "Why must you standardize before PCA?",
-      "answer_md": "PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler ensures all features contribute equally.",
+      "id": "ae1ee41fe078",
+      "question": "Why do you usually standardize before PCA?",
+      "answer_md": "PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler puts all features on an equal footing (PCA on the correlation matrix). If features already share meaningful units, unscaled PCA can be the right choice.",
       "source_path": "classical_ml/intro_dimensionality_reduction.md",
       "source_title": "Dimensionality Reduction",
       "track": "classical_ml",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 2
     },
@@ -3751,11 +3751,11 @@
     {
       "id": "c9004ba29030",
       "question": "Can you use t-SNE for feature extraction (preprocessing for a classifier)?",
-      "answer_md": "No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch; (2) it's stochastic) different runs give different embeddings. Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.",
+      "answer_md": "No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch); (2) it's stochastic (different seeds give different embeddings, and the axes and cluster distances carry no stable meaning). Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.",
       "source_path": "classical_ml/intro_dimensionality_reduction.md",
       "source_title": "Dimensionality Reduction",
       "track": "classical_ml",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 5
     },
@@ -3828,7 +3828,7 @@
     {
       "id": "41cf0b54d241",
       "question": "When would you not use gradient boosting?",
-      "answer_md": "When inputs have structure trees cannot represent (images, audio, raw text, long sequences) a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need a interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.",
+      "answer_md": "When inputs have structure trees cannot represent (images, audio, raw text, long sequences) a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need an interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.",
       "source_path": "classical_ml/intro_ensemble_methods.md",
       "source_title": "Ensemble Methods and Gradient Boosting",
       "track": "classical_ml",
@@ -4213,7 +4213,7 @@
     {
       "id": "c8a12dab2143",
       "question": "Why are Word2Vec embeddings insufficient, and what replaced them?",
-      "answer_md": "One vector per word, fixed regardless of context. \"River bank\" and \"investment bank\" get the identical vector, so it's an average over all senses of the word: the representation is systematically wrong for every polysemous word.\n\nContextual models fixed this: ELMo with bidirectional LSTMs, then BERT with transformers, produce a *different* vector for each occurrence based on surrounding text. Same word, different sentence, different embedding.\n\nOne caveat worth adding: raw BERT embeddings are poor for *similarity* comparisons despite being contextual, because BERT is trained on masked-token prediction rather than on making vectors comparable: mean-pooled BERT vectors sit in a narrow cone where nearly everything scores above 0.8 cosine. Sentence-BERT fine-tunes with a contrastive objective so distance actually means something.",
+      "answer_md": "One vector per word, fixed regardless of context. \"River bank\" and \"investment bank\" get the identical vector, so it's an average over all senses of the word: the representation is systematically wrong for every polysemous word.\n\nContextual models fixed this: ELMo with bidirectional LSTMs, then BERT with transformers, produce a *different* vector for each occurrence based on surrounding text. Same word, different sentence, different embedding.\n\nOne caveat worth adding: raw BERT embeddings are poor for *similarity* comparisons despite being contextual, because BERT is trained on masked-token prediction rather than on making vectors comparable: mean-pooled BERT vectors sit in a narrow cone where even unrelated pairs score high cosine similarity. Sentence-BERT fine-tunes with a contrastive objective so distance actually means something.",
       "source_path": "classical_ml/intro_nlp_fundamentals.md",
       "source_title": "NLP Fundamentals",
       "track": "classical_ml",
@@ -4367,7 +4367,7 @@
     {
       "id": "8848daad10ac",
       "question": "How does regularization connect to Bayesian priors?",
-      "answer_md": "L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ corresponds to the inverse variance of the prior. This Bayesian view explains why L1 induces sparsity: the Laplace prior has infinite density at zero, strongly pulling weights toward zero.",
+      "answer_md": "L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ is inversely proportional to the prior's variance (for L2, prior variance 1/(2λ)). This Bayesian view explains why L1 induces sparsity: the Laplace density has a sharp cusp at zero (finite height, but non-differentiable), so the MAP estimate sits exactly at zero whenever the likelihood's pull is weaker than λ.",
       "source_path": "classical_ml/intro_statistics_probability.md",
       "source_title": "Statistics & Probability for ML Interviews",
       "track": "classical_ml",
@@ -4378,7 +4378,7 @@
     {
       "id": "11cd74cfeb4b",
       "question": "What is the difference between standard error and standard deviation?",
-      "answer_md": "Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean* how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.",
+      "answer_md": "Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean*: how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.",
       "source_path": "classical_ml/intro_statistics_probability.md",
       "source_title": "Statistics & Probability for ML Interviews",
       "track": "classical_ml",

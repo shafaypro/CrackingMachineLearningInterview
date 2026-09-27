@@ -260,7 +260,8 @@ nmi = normalized_mutual_info_score(y_true, labels)
 from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
 
 # Silhouette Score (-1 to 1, higher is better)
-# Measures: (inter-cluster distance - intra-cluster distance) / max(both)
+# Per point: (b - a) / max(a, b), where a = mean intra-cluster distance
+# and b = mean distance to the nearest other cluster; averaged over points
 sil = silhouette_score(X, labels)
 
 # Davies-Bouldin Index (lower is better)
@@ -296,7 +297,7 @@ print(f"Silhouette: {sil:.3f}, Davies-Bouldin: {db:.3f}, Calinski-Harabasz: {ch:
 | Want soft probabilistic assignments | **GMM** | Probabilistic framework |
 | Want hierarchical structure, no k needed | **Hierarchical (Ward)** | Dendrogram visualization |
 | Very large datasets (millions of points) | **Mini-Batch K-Means** | Faster K-Means approximation |
-| High-dimensional sparse data (text) | **K-Means with TF-IDF** | Works well with cosine similarity |
+| High-dimensional sparse data (text) | **K-Means on L2-normalized TF-IDF** | Euclidean distance on unit vectors ranks pairs like cosine similarity |
 
 ```python
 from sklearn.cluster import MiniBatchKMeans
@@ -322,7 +323,7 @@ mbk.fit(X_large)
 K-Means assigns every point to a cluster: outliers get forced into the nearest cluster, distorting centroids. DBSCAN explicitly labels low-density points as noise (label = -1), effectively handling outliers without them affecting cluster shapes.
 
 **Q3: What is the difference between K-Means and GMM?**
-K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means ≈ GMM with spherical covariance and hard assignments).
+K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means is the limit of a GMM with equal, shared spherical covariances σ²I as σ → 0, which makes assignments hard).
 
 **Q4: When would you use hierarchical clustering over K-Means?**
 When: (1) you don't know k upfront and want to explore the tree structure; (2) you need a hierarchy for downstream tasks (taxonomies, phylogenetics); (3) the dataset is small enough for the O(n² log n) cost; (4) you want the dendrogram for visualization and interpretability.
