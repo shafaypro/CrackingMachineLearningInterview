@@ -4719,11 +4719,11 @@
     {
       "id": "f5b0f44685f3",
       "question": "Explain views versus copies in NumPy.",
-      "answer_md": "Basic slicing (`a[1:3, :]`) returns a **view** (a new array object pointing at the same memory), so writing through it modifies the original. Fancy indexing (integer arrays or boolean masks) returns a **copy**, so writes don't propagate back.\n\nThat asymmetry causes both classic bugs: \"why did my source array change?\" when someone modifies a slice, and \"why didn't my change stick?\" when they write through a boolean mask expecting a view. `np.shares_memory(a, b)` settles it when unsure, and `.copy()` makes the intent explicit.\n\nThe pandas analogue is `SettingWithCopyWarning`, which fires when chained indexing makes it ambiguous whether you're writing to a view or a temporary. The fix is a single `.loc` call: `df.loc[mask, \"col\"] = value` rather than `df[mask][\"col\"] = value`.",
+      "answer_md": "Basic slicing (`a[1:3, :]`) returns a **view** (a new array object pointing at the same memory), so writing through it modifies the original. Fancy indexing (integer arrays or boolean masks) returns a **copy**, so writes don't propagate back.\n\nThat asymmetry causes both classic bugs: \"why did my source array change?\" when someone modifies a slice, and \"why didn't my change stick?\" when they write through a boolean mask expecting a view. `np.shares_memory(a, b)` settles it when unsure, and `.copy()` makes the intent explicit.\n\nThe pandas analogue is `SettingWithCopyWarning`, which fires when chained indexing makes it ambiguous whether you're writing to a view or a temporary. The fix is a single `.loc` call: `df.loc[mask, \"col\"] = value` rather than `df[mask][\"col\"] = value`. Under Copy-on-Write (opt-in in pandas 2.x via `pd.options.mode.copy_on_write = True`, and the default in pandas 3.0) the chained form never updates `df` at all, so the single `.loc` call is the only correct version.",
       "source_path": "coding_challenges/pandas_numpy_challenges.md",
       "source_title": "Pandas and NumPy Challenges",
       "track": "coding_challenges",
-      "difficulty": "intermediate",
+      "difficulty": "advanced",
       "difficulty_source": "heuristic",
       "order": 1
     },
