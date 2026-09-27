@@ -397,7 +397,7 @@ See detailed design: [Fraud Detection System](./fraud_detection.md)
 
 **Q9: What is the trade-off between model complexity and latency in production?** 🟡 Intermediate
 
-Latency directly impacts user experience (100ms slowdown = 1% drop in conversion). Model complexity trade-offs:
+Latency directly impacts user experience: even small slowdowns can measurably reduce engagement and conversion, so measure the effect on your own product. Model complexity trade-offs:
 
 | Factor | Simple Model | Complex Model |
 |--------|-------------|---------------|

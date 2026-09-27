@@ -172,7 +172,7 @@ Hybrid: Rules Engine + ML Model
 
 4. Fallback:
    - If ML model unavailable: rules engine only
-   - If < 500ms: allow but flag for review
+   - If ML scoring exceeds its timeout (latency budget): decide on rules, flag for review
 ```
 
 ```python
@@ -388,7 +388,8 @@ Alerts:
 ```
 Training window: Rolling 90 days
 ├── Include recent fraud confirmed via chargebacks (30-60 day lag)
-├── Balance: ~2% fraud rate in training set via class weights
+├── Balance: keep the natural fraud rate and use class weights, or downsample
+│   legitimate transactions (e.g. to ~2% fraud) and correct scores before thresholding
 ├── Temporal split: train on oldest 80%, validate on most recent 20%
 └── Never shuffle: time ordering is critical (prevents leakage)
 ```
