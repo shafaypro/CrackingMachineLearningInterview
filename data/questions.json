@@ -4312,7 +4312,7 @@
     {
       "id": "84627549d884",
       "question": "What is matrix factorization and how does it work?",
-      "answer_md": "MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k << min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize reconstruction error: ||R - UV^T||². Gradient descent or ALS updates one matrix while holding the other fixed.",
+      "answer_md": "MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k << min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize squared error over the observed entries only, plus L2 regularization: Σ_(i,j observed) (r_ij - u_i·v_j)² + λ(||U||² + ||V||²). Solve it with SGD over observed entries, or with ALS, which alternates: hold one matrix fixed and solve for the other in closed form.",
       "source_path": "classical_ml/intro_recommender_systems.md",
       "source_title": "Recommender Systems",
       "track": "classical_ml",
