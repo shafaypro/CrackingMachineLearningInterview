@@ -78,11 +78,10 @@ Good interview answers call out:
 ## Pipeline example
 
 ```python
-from kfp import dsl
-from kfp.v2 import compiler
+from kfp import compiler, dsl
 
-@dsl.component(packages_to_install=["pandas", "scikit-learn", "joblib"])
-def train_model(data_uri: str, model_dir: str):
+@dsl.component(packages_to_install=["pandas", "gcsfs", "scikit-learn", "joblib"])
+def train_model(data_uri: str, model: dsl.Output[dsl.Model]):
     import joblib
     import pandas as pd
     from sklearn.ensemble import RandomForestClassifier
@@ -91,20 +90,20 @@ def train_model(data_uri: str, model_dir: str):
     X = df.drop("label", axis=1)
     y = df["label"]
 
-    model = RandomForestClassifier(
+    clf = RandomForestClassifier(
         n_estimators=200,
         max_depth=10,
         random_state=42,
     )
-    model.fit(X, y)
-    joblib.dump(model, f"{model_dir}/model.joblib")
+    clf.fit(X, y)
+    # KFP gives the artifact a local path that Vertex AI syncs to pipeline_root in GCS
+    joblib.dump(clf, model.path)
 
 @dsl.pipeline(name="fraud-vertex-pipeline")
 def fraud_pipeline(
     data_uri: str = "gs://ml-platform/fraud/train.csv",
-    model_dir: str = "gs://ml-platform/models/fraud/latest",
 ):
-    train_model(data_uri=data_uri, model_dir=model_dir)
+    train_model(data_uri=data_uri)
 
 compiler.Compiler().compile(
     pipeline_func=fraud_pipeline,
@@ -181,7 +180,7 @@ Ways to control spend on Vertex AI:
 
 - use autoscaling for endpoints
 - prefer batch prediction where latency is not strict
-- use preemptible resources when jobs tolerate interruption
+- use Spot VMs (the successor to preemptible VMs) when jobs tolerate interruption
 - remove idle workbench instances
 - keep feature computation close to data to avoid expensive movement
 

@@ -73,7 +73,7 @@ In interviews, make sure your answer includes:
 ## Training and deployment workflow
 
 ```python
-from azure.ai.ml import MLClient, command
+from azure.ai.ml import Input, MLClient, command
 from azure.identity import DefaultAzureCredential
 
 ml_client = MLClient(
@@ -86,8 +86,13 @@ ml_client = MLClient(
 job = command(
     code="./src",
     command="python train.py --data_path ${{inputs.data_path}}",
-    inputs={"data_path": "azureml://datastores/workspaceblobstore/paths/train.csv"},
-    environment="AzureML-sklearn-1.5:1",
+    inputs={
+        "data_path": Input(
+            type="uri_file",
+            path="azureml://datastores/workspaceblobstore/paths/train.csv",
+        )
+    },
+    environment="AzureML-sklearn-1.5@latest",  # curated env; check current names
     compute="cpu-training-cluster",
     experiment_name="churn-training",
     display_name="train-churn-model",
@@ -99,6 +104,7 @@ print(returned_job.name)
 
 Key ideas to explain:
 
+- this is SDK v2 (`azure-ai-ml` with `MLClient`); the v1 `azureml-core` SDK is deprecated and past its announced end of support, so new code should use v2
 - the job should run from versioned code, not ad hoc notebook state
 - compute should be separate from interactive exploration
 - artifacts and metrics should feed model registration and approval
@@ -121,7 +127,7 @@ Azure ML is often chosen because governance is not an afterthought.
 Common enterprise patterns:
 
 - separate workspaces or environments for dev, test, and prod
-- Azure AD-backed identity and RBAC for access control
+- Microsoft Entra ID (formerly Azure AD) identity and RBAC for access control
 - approval gates before production deployment
 - private networking for regulated workloads
 - MLflow-backed experiment and model lineage

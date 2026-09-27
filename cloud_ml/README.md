@@ -73,7 +73,7 @@ When asked "Which platform would you choose?", structure the answer around const
 
 - Choose SageMaker if the company is already heavily invested in AWS data and infra services.
 - Choose Vertex AI if BigQuery, GCS, and GCP analytics are already the core stack.
-- Choose Azure ML if the org is Microsoft-centric with Azure security, AD, and Azure OpenAI adoption.
+- Choose Azure ML if the org is Microsoft-centric with Azure security, Microsoft Entra ID (formerly Azure AD), and Azure OpenAI adoption.
 
 ### 2. Team maturity
 

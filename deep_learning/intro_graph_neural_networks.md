@@ -116,7 +116,7 @@ H^(k+1) = σ( D̃^(-1/2) Ã D̃^(-1/2) H^(k) W^(k) )
 
 where `Ã = A + I` adds self-loops and `D̃` is its degree matrix.
 
-**Why symmetric normalization `D^(-1/2) A D^(-1/2)`** rather than plain `D^(-1)A`: it keeps the eigenvalues of the propagation matrix bounded, which stabilizes training and prevents high-degree nodes from dominating the representation of their neighbours. Self-loops matter because without them a node's own features are discarded at every layer.
+**Why symmetric normalization `D^(-1/2) A D^(-1/2)`** rather than plain `D^(-1)A`: both keep the propagation matrix's eigenvalues in `[-1, 1]` (so repeated layers don't blow up the scale), but the symmetric form also keeps the matrix symmetric and scales each edge by `1/√(d_u·d_v)`, so messages from high-degree neighbours are down-weighted instead of dominating. Self-loops matter because without them a node's own features are discarded at every layer.
 
 GCN is **transductive** in its original form: it operates on the full fixed adjacency matrix, so a new node arriving after training has no representation without recomputation. That limitation is precisely what GraphSAGE addresses.
 
