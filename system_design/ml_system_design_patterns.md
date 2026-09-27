@@ -77,10 +77,10 @@ For every system design interview, structure your answer using this 6-step frame
 | Decision | Options | Recommendation |
 |----------|---------|----------------|
 | **Chunking** | Fixed, recursive, semantic | Recursive for general, semantic for technical docs |
-| **Embedding model** | OpenAI, Voyage, Cohere | Voyage-3 for highest quality, OpenAI for cost |
+| **Embedding model** | OpenAI, Voyage, Cohere, open-source | Benchmark candidates on your own queries; weigh quality against cost |
 | **Vector DB** | Pinecone, Weaviate, pgvector | Weaviate for hybrid, pgvector if you have Postgres |
 | **Search** | Dense only, hybrid | Always hybrid in production |
-| **Reranking** | None, cross-encoder, Cohere | Cohere Rerank v3 for best quality |
+| **Reranking** | None, cross-encoder, hosted rerank API | Add a cross-encoder or hosted reranker; pick by measured gain on your data |
 | **Generation model** | Any LLM | Claude Sonnet for quality/cost balance |
 
 ### Scaling Considerations
@@ -115,8 +115,8 @@ Bottleneck 3: LLM generation latency
 # Reduce cost:
 # 1. Cache top-1000 common queries → saves LLM cost
 # 2. Use embedding cache → avoid re-embedding identical queries
-# 3. Route simple queries to Haiku → 10x cheaper
-# 4. Limit context size → fewer output tokens
+# 3. Route simple queries to Haiku → ~2-3x cheaper per token than Sonnet at 2026 list prices
+# 4. Limit context size → fewer input tokens
 ```
 
 ---
@@ -197,7 +197,7 @@ Does it require multiple specialized domains?
 ├── Yes (e.g., legal + technical + financial) → Multi-agent
 └── No → Single agent
 
-Is total token count within 200K?
+Does the task fit comfortably in one model's context window?
 ├── Yes → Single agent (simpler, cheaper)
 └── No → Multi-agent (divide and conquer)
 
@@ -310,13 +310,13 @@ Total:              45ms  (45ms budget left for safety margin)
 ### Feature Store Integration
 
 ```python
-from feast import FeatureStore, FeatureService
+from feast import FeatureStore
 
 store = FeatureStore(repo_path=".")
 
-# Online feature retrieval (sub-millisecond)
+# Online feature retrieval (low single-digit milliseconds with a Redis online store)
 feature_vector = store.get_online_features(
-    features=FeatureService("fraud_detection_features"),
+    features=store.get_feature_service("fraud_detection_features"),
     entity_rows=[{"user_id": "user_123", "transaction_id": "txn_456"}]
 ).to_dict()
 
@@ -431,7 +431,8 @@ Cost:
 **Q: How do you reduce LLM inference cost by 10x?**
 
 ```
-1. Model selection: Claude Haiku vs Opus = 30x cost difference
+1. Model selection: Claude Haiku 4.5 vs Opus 5 = ~5x per-token price difference
+   (2026 list prices; larger gaps if the small model also needs fewer retries)
    → Route simple tasks to Haiku, complex to Opus
 
 2. Prompt optimization: Shorter prompts = fewer input tokens
@@ -450,8 +451,8 @@ Cost:
    → Streaming allows early termination
 
 5. Batching:
-   → Batch multiple requests into one API call
-   → Reduces per-call overhead
+   → Send non-urgent work through a provider batch API
+     (Anthropic's Message Batches API is priced at 50% of standard)
 ```
 
 ---
@@ -469,10 +470,10 @@ Build a routing layer based on:
    - Presence of code / math
    - Confidence required
 
-2. Cost budget:
-   - Haiku: ~$0.00025/1K input, $0.00125/1K output
-   - Sonnet: ~$0.003/1K input, $0.015/1K output
-   - Opus: ~$0.015/1K input, $0.075/1K output
+2. Cost budget (list prices at the time of writing; check current pricing):
+   - Haiku 4.5: ~$0.001/1K input, $0.005/1K output
+   - Sonnet 4.6: ~$0.003/1K input, $0.015/1K output
+   - Opus 5: ~$0.005/1K input, $0.025/1K output
 
 3. Latency requirements:
    - Real-time chat: Haiku or Sonnet (2-5s)

@@ -247,7 +247,7 @@ S3 Transaction Files → Spark Job → Feature Join → Model Scoring → Risk D
 | Cost-sensitive learning | Weight misclassification by fraud amount | Custom loss function |
 | Stratified splitting | Ensure fraud rate consistent across folds | Critical for cross-validation |
 
-**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior.
+**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior. Note that heavy class weights inflate predicted probabilities, so calibrate the scores (Platt or isotonic on unweighted validation data) before treating thresholds like P > 0.9 as probabilities.
 
 ---
 

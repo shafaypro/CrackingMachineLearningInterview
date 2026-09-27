@@ -5929,7 +5929,7 @@
     {
       "id": "d605abc0dc00",
       "question": "Explain gradient checkpointing trade-off.",
-      "answer_md": "Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades ~30% training speed for ~60-70% memory reduction, which matters most when fine-tuning large models.",
+      "answer_md": "Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades roughly 20-40% extra training time (an extra forward pass) for a large cut in activation memory, which matters most when fine-tuning large models.",
       "source_path": "deep_learning/intro_fine_tuning.md",
       "source_title": "Fine-Tuning Large Language Models: LoRA, QLoRA & PEFT",
       "track": "deep_learning",
@@ -10274,7 +10274,7 @@
     {
       "id": "95ba6a052cc6",
       "question": "How do you reduce LLM inference cost by 10x?",
-      "answer_md": "```\n1. Model selection: Claude Haiku vs Opus = 30x cost difference\n   → Route simple tasks to Haiku, complex to Opus\n\n2. Prompt optimization: Shorter prompts = fewer input tokens\n   → Remove redundant instructions\n   → Use system prompts efficiently\n   → Avoid verbose few-shot examples\n\n3. Caching:\n   → Semantic cache (cache by embedding similarity)\n   → Exact cache for repeated identical queries\n   → Prompt prefix caching (Anthropic supports this)\n\n4. Output length control:\n   → Specify max_tokens precisely\n   → Structured output (JSON) is often shorter than prose\n   → Streaming allows early termination\n\n5. Batching:\n   → Batch multiple requests into one API call\n   → Reduces per-call overhead\n```",
+      "answer_md": "```\n1. Model selection: Claude Haiku 4.5 vs Opus 5 = ~5x per-token price difference\n   (2026 list prices; larger gaps if the small model also needs fewer retries)\n   → Route simple tasks to Haiku, complex to Opus\n\n2. Prompt optimization: Shorter prompts = fewer input tokens\n   → Remove redundant instructions\n   → Use system prompts efficiently\n   → Avoid verbose few-shot examples\n\n3. Caching:\n   → Semantic cache (cache by embedding similarity)\n   → Exact cache for repeated identical queries\n   → Prompt prefix caching (Anthropic supports this)\n\n4. Output length control:\n   → Specify max_tokens precisely\n   → Structured output (JSON) is often shorter than prose\n   → Streaming allows early termination\n\n5. Batching:\n   → Batch multiple requests into one API call\n   → Reduces per-call overhead\n```",
       "source_path": "system_design/ml_system_design_patterns.md",
       "source_title": "ML System Design Patterns: 2026 Production Guide",
       "track": "system_design",
@@ -10285,11 +10285,11 @@
     {
       "id": "44a843b79aa9",
       "question": "Walk me through how you'd decide between Claude Opus and Claude Haiku for an application.",
-      "answer_md": "```\nBuild a routing layer based on:\n\n1. Task complexity signals:\n   - Token count of input\n   - Number of reasoning steps needed\n   - Presence of code / math\n   - Confidence required\n\n2. Cost budget:\n   - Haiku: ~$0.00025/1K input, $0.00125/1K output\n   - Sonnet: ~$0.003/1K input, $0.015/1K output\n   - Opus: ~$0.015/1K input, $0.075/1K output\n\n3. Latency requirements:\n   - Real-time chat: Haiku or Sonnet (2-5s)\n   - Background processing: Opus acceptable (5-30s)\n\n4. Quality requirements:\n   - Factual lookup → Haiku sufficient\n   - Complex reasoning → Opus required\n   - Code generation → Sonnet usually enough\n\nImplementation:\nclassifier = small_model.predict_task_complexity(prompt)\nif classifier.score < 0.3:\n    return haiku_response(prompt)\nelif classifier.score < 0.7:\n    return sonnet_response(prompt)\nelse:\n    return opus_response(prompt)\n```",
+      "answer_md": "```\nBuild a routing layer based on:\n\n1. Task complexity signals:\n   - Token count of input\n   - Number of reasoning steps needed\n   - Presence of code / math\n   - Confidence required\n\n2. Cost budget (list prices at the time of writing; check current pricing):\n   - Haiku 4.5: ~$0.001/1K input, $0.005/1K output\n   - Sonnet 4.6: ~$0.003/1K input, $0.015/1K output\n   - Opus 5: ~$0.005/1K input, $0.025/1K output\n\n3. Latency requirements:\n   - Real-time chat: Haiku or Sonnet (2-5s)\n   - Background processing: Opus acceptable (5-30s)\n\n4. Quality requirements:\n   - Factual lookup → Haiku sufficient\n   - Complex reasoning → Opus required\n   - Code generation → Sonnet usually enough\n\nImplementation:\nclassifier = small_model.predict_task_complexity(prompt)\nif classifier.score < 0.3:\n    return haiku_response(prompt)\nelif classifier.score < 0.7:\n    return sonnet_response(prompt)\nelse:\n    return opus_response(prompt)\n```",
       "source_path": "system_design/ml_system_design_patterns.md",
       "source_title": "ML System Design Patterns: 2026 Production Guide",
       "track": "system_design",
-      "difficulty": "intermediate",
+      "difficulty": "advanced",
       "difficulty_source": "heuristic",
       "order": 5
     },
@@ -10582,7 +10582,7 @@
     {
       "id": "aa046e29c21f",
       "question": "Why is interleaving better than A/B testing for ranking?",
-      "answer_md": "An A/B test splits users, so the comparison is between-user and the metric carries all the variance of user heterogeneity: some users click a lot, some never do, and that noise swamps a small ranking difference.\n\nInterleaving merges results from both rankers into a single list shown to every user, then attributes each click to whichever ranker contributed that result. Every user experiences both systems, so the comparison is within-user and the between-user variance cancels. In practice that's roughly an order of magnitude more sensitive, so you can detect real differences with far less traffic and iterate much faster.\n\nThe limits: it measures relative ranking preference, not absolute business metrics like revenue or session length, and it can't evaluate changes to the *set* of results (like a new UI layout). So the usual pattern is interleaving to select among ranker candidates, then a conventional A/B test on the winner to confirm business impact.",
+      "answer_md": "An A/B test splits users, so the comparison is between-user and the metric carries all the variance of user heterogeneity: some users click a lot, some never do, and that noise swamps a small ranking difference.\n\nInterleaving merges results from both rankers into a single list shown to every user, then attributes each click to whichever ranker contributed that result. Every user experiences both systems, so the comparison is within-user and the between-user variance cancels. In practice that's roughly an order of magnitude more sensitive, so you can detect real differences with far less traffic and iterate much faster.\n\nThe limits: it measures relative ranking preference, not absolute business metrics like revenue or session length, and it can't evaluate changes outside the ranked list itself (like a new UI layout or snippet format). So the usual pattern is interleaving to select among ranker candidates, then a conventional A/B test on the winner to confirm business impact.",
       "source_path": "system_design/search_ranking_system.md",
       "source_title": "Search and Ranking System Design",
       "track": "system_design",

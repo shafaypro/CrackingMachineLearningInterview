@@ -15,7 +15,7 @@ Pre-trained LLMs are general-purpose. Fine-tuning adapts them to specific tasks,
 | Aspect | Full Fine-Tuning | PEFT (LoRA/QLoRA) |
 |--------|-----------------|-------------------|
 | Parameters updated | All (~7B for 7B model) | <1% of model (~4-40M) |
-| GPU memory (7B) | ~112 GB (bf16) | ~6-10 GB |
+| GPU memory (7B) | ~112 GB+ (mixed-precision AdamW, before activations) | ~6-10 GB (QLoRA) |
 | Risk of catastrophic forgetting | High | Low |
 | Training speed | Slow | Fast |
 | Multiple task adapters | Impractical | Swap adapters cheaply |
@@ -26,7 +26,7 @@ Pre-trained LLMs are general-purpose. Fine-tuning adapts them to specific tasks,
 
 ### Core Idea
 
-Instead of updating weight matrix **W** (d×k), LoRA learns two small matrices **A** (d×r) and **B** (r×k) where r << d.
+Instead of updating weight matrix **W** (d×k), LoRA learns two small matrices **B** (d×r) and **A** (r×k) where r << min(d, k).
 
 ```
 W_new = W_pretrained + ΔW = W_pretrained + B · A
@@ -59,7 +59,7 @@ h = W₀x + ΔWx = W₀x + BAx
 
 ### Which Modules to Apply LoRA To?
 
-Common choices (from the original paper):
+Common choices (the original LoRA paper adapted attention projections, mainly `q_proj` and `v_proj`; QLoRA showed that adapting every linear layer, including the MLP, works better):
 - `q_proj`, `v_proj`: query and value projections in attention
 - `k_proj`, `o_proj`: key and output projections
 - `gate_proj`, `up_proj`, `down_proj`: MLP layers
@@ -69,6 +69,7 @@ Applying LoRA to all linear layers usually outperforms selective application.
 ### LoRA with HuggingFace PEFT
 
 ```python
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model, TaskType
 
@@ -90,7 +91,8 @@ lora_config = LoraConfig(
 
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# trainable params: 41,943,040 || all params: 6,738,415,616 || trainable%: 0.62%
+# trainable params: 39,976,960 || all params: 6,778,392,576 || trainable%: 0.5898
+# (32 layers x r=16 x [4 x (4096+4096) + 3 x (4096+11008)] = 39,976,960)
 ```
 
 ---
@@ -109,7 +111,8 @@ QLoRA (Dettmers et al., 2023) enables fine-tuning 65B models on a single 48GB GP
 NF4 is an information-theoretically optimal quantization for normally distributed weights. Standard int4 assumes uniform distribution; NF4 uses quantile bins.
 
 ```python
-from transformers import BitsAndBytesConfig
+import torch
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -128,12 +131,10 @@ model = AutoModelForCausalLM.from_pretrained(
 ### Full QLoRA Training Script
 
 ```python
-from transformers import (
-    AutoModelForCausalLM, AutoTokenizer,
-    TrainingArguments, BitsAndBytesConfig
-)
+import torch
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-from trl import SFTTrainer
+from trl import SFTConfig, SFTTrainer
 from datasets import load_dataset
 
 # 1. Load in 4-bit
@@ -165,9 +166,11 @@ lora_config = LoraConfig(
 )
 model = get_peft_model(model, lora_config)
 
-# 4. Training arguments
-training_args = TrainingArguments(
+# 4. Training arguments (SFTConfig extends TrainingArguments with SFT-specific options)
+training_args = SFTConfig(
     output_dir="./qlora-mistral-7b",
+    max_length=2048,                  # called max_seq_length in older TRL releases
+    packing=True,                     # pack short samples into one sequence for efficiency
     num_train_epochs=3,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,    # effective batch = 16
@@ -197,8 +200,6 @@ trainer = SFTTrainer(
     train_dataset=dataset,
     args=training_args,
     formatting_func=format_instruction,
-    max_seq_length=2048,
-    packing=True,  # pack short samples into one sequence for efficiency
 )
 
 trainer.train()
@@ -248,7 +249,7 @@ tokenizer.apply_chat_template(
     tokenize=False,
     add_generation_prompt=True
 )
-# <|begin_of_text|><|start_header_id|>user<|end_header_id|>\nWhat is backprop?<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n
+# <|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWhat is backprop?<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n
 ```
 
 ### Key Instruction Tuning Tips
@@ -298,7 +299,7 @@ trainer = DPOTrainer(
     ref_model=ref_model,   # frozen reference model (SFT checkpoint)
     args=dpo_config,
     train_dataset=preference_dataset,
-    tokenizer=tokenizer,
+    processing_class=tokenizer,   # `tokenizer=` in TRL releases before 0.12
 )
 trainer.train()
 ```
@@ -379,4 +380,4 @@ QLoRA uses quantization during *training* to reduce memory so you can fine-tune 
 Automated: task-specific metrics (accuracy, ROUGE, BLEU, code pass@k). LLM-as-judge: use a stronger model (GPT-4) to evaluate response quality on a held-out set. Human eval: for subjective quality. Monitor both capability gain *and* regression on general benchmarks (MT-Bench, MMLU).
 
 **Q: Explain gradient checkpointing trade-off.**
-Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades ~30% training speed for ~60-70% memory reduction, which matters most when fine-tuning large models.
+Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades roughly 20-40% extra training time (an extra forward pass) for a large cut in activation memory, which matters most when fine-tuning large models.

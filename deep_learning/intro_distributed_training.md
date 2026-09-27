@@ -357,7 +357,7 @@ Training in 16-bit roughly halves activation and weight memory and uses tensor c
 
 **Loss scaling (fp16 only).** Small gradients underflow to zero in fp16. Multiply the loss by a scale factor `S` before backward, so gradients are `S×` larger. Unscale before the optimizer step, and skip the step and halve `S` if any gradient is inf/NaN. Dynamic scaling increases `S` again after a run of clean steps. bf16 has fp32's exponent range, so it does not need this. That is the main reason it became the default on A100/H100/TPU.
 
-**What stays in fp32** even in "bf16 training": master weights, optimizer states, and usually softmax, LayerNorm statistics, loss computation, and gradient reductions. Updating bf16 weights directly loses small updates because bf16 has only about 3 significant decimal digits.
+**What stays in fp32** even in "bf16 training": master weights, optimizer states, and usually softmax, LayerNorm statistics, loss computation, and gradient reductions. Updating bf16 weights directly loses small updates because bf16 has only 8 bits of significand precision (about 2-3 significant decimal digits).
 
 **fp8** (H100 and later) needs per-tensor (or finer-grained) scaling factors, usually computed from a history of recent absolute maxima ("delayed scaling"), because its range is tiny. Libraries such as NVIDIA Transformer Engine handle this for matmuls; sensitive operations stay in higher precision. It can give a substantial speedup over bf16 for large matmuls, but it needs careful validation against a bf16 baseline.
 
