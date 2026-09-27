@@ -5687,7 +5687,7 @@
     {
       "id": "41c6d0afb764",
       "question": "Explain the vanishing gradient problem and how ResNet solves it.",
-      "answer_md": "In deep networks, gradients are multiplied through many layers via chain rule. If those values are < 1, gradients shrink exponentially. ResNet's skip connections create gradient highways: ∂L/∂x includes an identity term (∂L/∂F + I), ensuring gradients don't vanish even in 100+ layer networks.",
+      "answer_md": "In deep networks, gradients are multiplied through many layers via chain rule. If those values are < 1, gradients shrink exponentially. ResNet's skip connections create gradient highways: for y = F(x) + x, ∂L/∂x = ∂L/∂y · (∂F/∂x + I) includes an identity term, ensuring gradients don't vanish even in 100+ layer networks.",
       "source_path": "deep_learning/intro_computer_vision.md",
       "source_title": "Computer Vision for ML Interviews",
       "track": "deep_learning",
@@ -5720,11 +5720,11 @@
     {
       "id": "71b481da511d",
       "question": "When would you choose a CNN over a ViT?",
-      "answer_md": "CNNs are better for small datasets (strong inductive biases) and when you need computational efficiency on edge devices. ViTs excel with large datasets, benefit more from scaling, and are better at capturing global context. For most production tasks with sufficient data, a ViT (or hybrid like ConvNeXt) tends to outperform pure CNNs.",
+      "answer_md": "CNNs are better for small datasets (strong inductive biases) and when you need computational efficiency on edge devices. ViTs excel with large datasets, benefit more from scaling, and are better at capturing global context. For most production tasks with sufficient data, a ViT, or a modernized CNN such as ConvNeXt (which borrows transformer design choices), tends to outperform classic CNNs like ResNet.",
       "source_path": "deep_learning/intro_computer_vision.md",
       "source_title": "Computer Vision for ML Interviews",
       "track": "deep_learning",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "difficulty_source": "heuristic",
       "order": 4
     },
