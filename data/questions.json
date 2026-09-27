@@ -5555,7 +5555,7 @@
     {
       "id": "7e8e1dfbfc35",
       "question": "What is knowledge distillation?",
-      "answer_md": "Knowledge distillation trains a small \"student\" model to mimic a large \"teacher\" model. The student learns from soft probability distributions (temperature-scaled logits) output by the teacher rather than just hard labels. Soft targets carry richer information about class relationships (e.g., \"30% likely class A, 20% likely class B\"). This allows small models to achieve performance close to large models, enabling deployment on constrained hardware. Example: DistilBERT (66% of BERT parameters, 97% of BERT performance).",
+      "answer_md": "Knowledge distillation trains a small \"student\" model to mimic a large \"teacher\" model. The student learns from soft probability distributions (temperature-scaled logits) output by the teacher rather than just hard labels. Soft targets carry richer information about class relationships (e.g., \"30% likely class A, 20% likely class B\"). This allows small models to achieve performance close to large models, enabling deployment on constrained hardware. Example: DistilBERT (about 40% fewer parameters than BERT-base, 66M vs 110M, while retaining about 97% of its GLUE performance).",
       "source_path": "deep_learning/README.md",
       "source_title": "Deep Learning",
       "track": "deep_learning",
@@ -6754,7 +6754,7 @@
     {
       "id": "af47842117fa",
       "question": "What is Flash Attention?",
-      "answer_md": "Flash Attention is an IO-aware exact attention implementation that avoids materializing the full N×N attention matrix. Standard attention writes the N×N matrix to HBM (slow) then reads it back. Flash Attention uses tiling: processes blocks of Q, K, V in SRAM (fast), computes attention incrementally using the softmax trick to maintain running statistics, and writes only the final output to HBM. Result: 2-4x memory reduction, 3-7x speed improvement. Critical for training on long context windows (>4K tokens).",
+      "answer_md": "Flash Attention is an IO-aware exact attention implementation that avoids materializing the full N×N attention matrix. Standard attention writes the N×N matrix to HBM (slow) then reads it back. Flash Attention uses tiling: processes blocks of Q, K, V in SRAM (fast), computes attention incrementally using the softmax trick to maintain running statistics, and writes only the final output to HBM. Result: attention memory becomes linear instead of quadratic in sequence length (savings grow with length), and the paper reports wall-clock speedups of roughly 2-7x depending on setting. Critical for training on long context windows (>4K tokens).",
       "source_path": "deep_learning/intro_transformers.md",
       "source_title": "Transformers",
       "track": "deep_learning",
@@ -6765,7 +6765,7 @@
     {
       "id": "eeac58957634",
       "question": "What is the context window of a Transformer and what limits it?",
-      "answer_md": "The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). GPT-4 supports 128K tokens; Claude 3.5 Sonnet supports 200K.",
+      "answer_md": "The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). For example, GPT-4 Turbo offered 128K tokens and Claude 3.5 Sonnet 200K; several newer models offer 1M-token windows.",
       "source_path": "deep_learning/intro_transformers.md",
       "source_title": "Transformers",
       "track": "deep_learning",
@@ -6787,7 +6787,7 @@
     {
       "id": "efbe41921c0b",
       "question": "What is attention head pruning and why might you do it?",
-      "answer_md": "Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. Can reduce model size by 20-30% with minimal performance loss. Used in model compression for deployment on resource-constrained hardware.",
+      "answer_md": "Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. A sizeable fraction of heads can often be removed with little accuracy loss, though attention heads are only part of the parameters, so the overall size reduction is modest; the main gain is inference speed. Used in model compression for deployment on resource-constrained hardware.",
       "source_path": "deep_learning/intro_transformers.md",
       "source_title": "Transformers",
       "track": "deep_learning",
@@ -6809,7 +6809,7 @@
     {
       "id": "c17e1b292e93",
       "question": "What is the scaling law for Transformers?",
-      "answer_md": "Kaplan et al. (OpenAI, 2020) showed model performance (cross-entropy loss) scales as power laws with:\n- Model parameters N: `L ~ N^(-0.076)`\n- Training tokens D: `L ~ D^(-0.095)`\n- Compute budget C: `L ~ C^(-0.050)`\n\nThese laws allow prediction of model performance before training. Chinchilla (DeepMind, 2022) refined this: for a given compute budget, you should train a ~4x smaller model on 4x more data than previously thought optimal. This led to data-efficient models like Llama, which prioritize large training datasets over large model sizes.",
+      "answer_md": "Kaplan et al. (OpenAI, 2020) showed model performance (cross-entropy loss) scales as power laws with:\n- Model parameters N: `L ~ N^(-0.076)`\n- Training tokens D: `L ~ D^(-0.095)`\n- Compute budget C: `L ~ C^(-0.050)`\n\nThese laws allow prediction of model performance before training. Chinchilla (DeepMind, 2022) refined this: parameters and training tokens should grow in roughly equal proportion with compute (about 20 tokens per parameter), so earlier large models were undertrained. Chinchilla (70B params, 1.4T tokens) outperformed Gopher (280B params, 300B tokens) at a similar compute budget. This led to data-efficient models like Llama, which prioritize large training datasets over large model sizes.",
       "source_path": "deep_learning/intro_transformers.md",
       "source_title": "Transformers",
       "track": "deep_learning",
