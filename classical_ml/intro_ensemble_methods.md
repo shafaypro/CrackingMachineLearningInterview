@@ -78,7 +78,7 @@ Each bootstrap sample leaves out roughly `1/e ≈ 36.8%` of rows. Those out-of-b
 
 ### Extremely Randomized Trees (Extra Trees)
 
-Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains 2-5x faster.
+Extra Trees goes further: split thresholds are drawn at random rather than optimized. This increases bias slightly but cuts variance and training time. It often matches Random Forest on noisy data and trains faster, since no threshold search is needed.
 
 ---
 
@@ -88,11 +88,13 @@ Boosting trains models **sequentially**, where each model focuses on what the en
 
 ### AdaBoost
 
-Reweights misclassified samples upward each round and weights each learner by its accuracy.
+Reweights misclassified samples upward each round and weights each learner by its accuracy. With labels `y_i ∈ {-1, +1}`:
 
 ```
-w_i ← w_i · exp(α_t · 1[y_i ≠ h_t(x_i)])      where α_t = ½ ln((1 - err_t) / err_t)
+w_i ← w_i · exp(-α_t y_i h_t(x_i)), then renormalize      where α_t = ½ ln((1 - err_t) / err_t)
 ```
+
+Misclassified points are multiplied by `e^{α_t}` and correct ones by `e^{-α_t}`.
 
 AdaBoost minimizes exponential loss, which makes it sensitive to label noise and outliers: a permanently mislabeled point gets ever-larger weight.
 
@@ -145,7 +147,7 @@ Three ideas carry over to every production implementation:
 2. **Shallow trees**: depth 3-8. Each tree only needs to capture a bit of remaining signal.
 3. **Additive, sequential**: cannot be parallelized across trees (only within a tree's split search), unlike bagging.
 
-For non-squared losses (log loss, Huber, ranking objectives), the residual is replaced by the loss gradient and the leaf values by a Newton step using the second derivative, that second-order step is XGBoost's core contribution.
+For non-squared losses (log loss, Huber, ranking objectives), the residual is replaced by the loss gradient and the leaf values by a Newton step using the second derivative. XGBoost builds both its split-gain formula and its leaf values around this second-order approximation.
 
 ---
 
@@ -153,10 +155,10 @@ For non-squared losses (log loss, Huber, ranking objectives), the residual is re
 
 | Dimension | XGBoost | LightGBM | CatBoost |
 |---|---|---|---|
-| Tree growth | Level-wise (depth-first balanced) | **Leaf-wise** (splits the highest-gain leaf) | Symmetric / oblivious trees |
+| Tree growth | Level-wise / depth-wise by default (breadth-first, balanced) | **Leaf-wise** (splits the highest-gain leaf) | Symmetric / oblivious trees |
 | Speed on large data | Fast | **Fastest** (histogram + GOSS + EFB) | Moderate |
 | Small data (< ~10k rows) | Good | Overfits easily leaf-wise | **Best**, ordered boosting resists overfitting |
-| Categorical features | Must encode yourself | Native (`categorical_feature`) | **Native, strongest of the three** (ordered target statistics) |
+| Categorical features | Native support in recent versions (`enable_categorical=True`), otherwise encode yourself | Native (`categorical_feature`) | **Native, strongest of the three** (ordered target statistics) |
 | Missing values | Learns a default direction per split | Learns a default direction | Handled |
 | Key regularizer | `lambda`, `alpha`, `max_depth` | `num_leaves`, `min_data_in_leaf` | `depth`, `l2_leaf_reg` |
 | Typical pick | Safe default, huge ecosystem | Wide/large datasets, tight training budget | Many categorical columns, small/medium data |
@@ -202,7 +204,7 @@ stack = StackingClassifier(
     estimators=[
         ('rf', RandomForestClassifier(n_estimators=300, n_jobs=-1, random_state=42)),
         ('xgb', xgb.XGBClassifier(n_estimators=300, max_depth=5, learning_rate=0.05)),
-        ('svm', SVC(probability=True)),
+        ('svm', SVC()),              # stacking uses decision_function when predict_proba is unavailable
     ],
     final_estimator=LogisticRegression(),
     cv=5,             # CRITICAL: base predictions must be out-of-fold
@@ -265,7 +267,7 @@ Tree "importance" has three common definitions, and they disagree:
 
 | Method | What it measures | Bias |
 |---|---|---|
-| **Gain** (default in XGBoost) | Total loss reduction from splits on the feature | Inflates features used in few high-impact splits |
+| **Gain** (default in XGBoost's sklearn API) | Loss reduction from splits on the feature (XGBoost's `gain` is the average per split; `total_gain` is the sum) | Inflates features used in few high-impact splits |
 | **Split count / weight** | How often the feature is used | Inflates high-cardinality continuous features |
 | **Permutation importance** | Score drop when the feature is shuffled | Honest but misleading with correlated features |
 | **SHAP** | Per-prediction attribution with additive guarantees | Slower; the defensible choice for stakeholders |
@@ -342,7 +344,7 @@ Also verify the split itself is valid: with temporal data, a random split leaks 
 
 #### When would you *not* use gradient boosting?
 
-When inputs have structure trees cannot represent (images, audio, raw text, long sequences) a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need a interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.
+When inputs have structure trees cannot represent (images, audio, raw text, long sequences) a neural network exploiting that structure wins decisively. When the latency budget is sub-millisecond and you cannot afford hundreds of tree traversals. When you need an interpretable model for regulatory reasons and SHAP is not accepted. When you must extrapolate beyond the training range (trees output constants outside the observed feature range, so a linear model handles trends better). And when the dataset has a few hundred rows, where a regularized linear model is more honest.
 
 #### How do you handle class imbalance with tree ensembles?
 

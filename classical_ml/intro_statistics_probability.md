@@ -243,7 +243,7 @@ corr = np.corrcoef(x, y)[0, 1]  # Pearson correlation [-1, 1]
 ```
 
 **Spearman vs Pearson:**
-- **Pearson:** linear relationships, sensitive to outliers, assumes normality
+- **Pearson:** linear relationships, sensitive to outliers; its standard significance test assumes approximate bivariate normality
 - **Spearman:** monotonic relationships, rank-based, robust to outliers
 - Use Spearman when data has outliers or you only care about ordinal relationship
 
@@ -322,7 +322,7 @@ MAP: θ* = argmax P(θ|data) = argmax P(data|θ) × P(θ)
 
 **L2 regularization = MAP with Gaussian prior:**
 ```
-min NLL + λ||θ||²  ↔  MAP with prior θ ~ N(0, 1/2λ)
+min NLL + λ||θ||²  ↔  MAP with prior θ ~ N(0, 1/(2λ))
 ```
 
 **L1 regularization = MAP with Laplace prior:**
@@ -330,7 +330,7 @@ min NLL + λ||θ||²  ↔  MAP with prior θ ~ N(0, 1/2λ)
 min NLL + λ||θ||₁  ↔  MAP with prior θ ~ Laplace(0, 1/λ)
 ```
 
-This is why L1 produces sparse solutions: the Laplace prior has a sharp peak at 0.
+This is why L1 produces sparse solutions: the Laplace prior has a sharp, non-differentiable peak (a cusp) at 0.
 
 ---
 
@@ -363,10 +363,10 @@ Not necessarily. Check: (1) Was the test pre-registered with a fixed sample size
 Test error = Bias² + Variance + Irreducible Noise. Bias: systematic error from wrong assumptions (high in underfitting). Variance: sensitivity to training data fluctuations (high in overfitting). The tradeoff: reducing bias (more complex model) increases variance and vice versa. Optimal model minimizes their sum.
 
 **Q: How does regularization connect to Bayesian priors?**
-L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ corresponds to the inverse variance of the prior. This Bayesian view explains why L1 induces sparsity: the Laplace prior has infinite density at zero, strongly pulling weights toward zero.
+L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ is inversely proportional to the prior's variance (for L2, prior variance 1/(2λ)). This Bayesian view explains why L1 induces sparsity: the Laplace density has a sharp cusp at zero (finite height, but non-differentiable), so the MAP estimate sits exactly at zero whenever the likelihood's pull is weaker than λ.
 
 **Q: What is the difference between standard error and standard deviation?**
-Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean* how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.
+Standard deviation (σ) measures variability in the *population*. Standard error (SE = σ/√n) measures variability of the *sample mean*: how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.
 
 **Q: When would you use non-parametric tests?**
 When data doesn't meet parametric assumptions: non-normality with small n, ordinal data, heavy outliers, or when you can't assume a specific distribution. Examples: Mann-Whitney U (vs t-test), Kruskal-Wallis (vs ANOVA), Spearman (vs Pearson). The trade-off is lower statistical power when assumptions actually hold.

@@ -171,7 +171,7 @@ Core topics:
 * [Apache Iceberg](./data_engineering/intro_apache_iceberg.md)
 * [Delta Lake](./data_engineering/intro_delta_lake.md)
 * [DuckDB](./data_engineering/intro_duckdb.md)
-* [OpenClaw](./data_engineering/intro_openclaw.md)
+* [OpenClaw (illustrative lineage example; see the note in the guide)](./data_engineering/intro_openclaw.md)
 * [Geospatial AI Systems (Google Solar API, ArcGIS, PostGIS, H3)](./data_engineering/intro_geospatial.md)
 
 ## Deep Learning Track

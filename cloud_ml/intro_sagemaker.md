@@ -30,13 +30,15 @@ SageMaker is strong when you need:
 
 It is especially common in enterprise environments where the rest of the platform already runs on AWS.
 
+Naming note: since late 2024 AWS calls the classic ML service **Amazon SageMaker AI**, while "Amazon SageMaker" is now an umbrella that also includes SageMaker Unified Studio (data, analytics, and AI in one workspace). Interviewers may use either name; the training, hosting, and pipeline concepts below are the SageMaker AI features.
+
 ---
 
 ## Core services you should know
 
 | Service | Purpose | Interview shorthand |
 |---|---|---|
-| SageMaker Studio | Browser-based ML workspace | Notebook and experiment environment |
+| SageMaker Studio | Browser-based ML workspace (the current Studio replaced Studio Classic) | Notebook and experiment environment |
 | Training Jobs | Managed model training | Scheduled or pipeline-driven training |
 | Processing Jobs | Data prep and feature processing | Pre-training ETL |
 | Pipelines | Multi-step ML workflow orchestration | CI/CD for ML |
@@ -108,6 +110,8 @@ pipeline = Pipeline(
 )
 pipeline.upsert(role_arn=role)
 ```
+
+This uses the SageMaker Python SDK v2 Estimator style. Newer SDK releases also offer `ModelTrainer` and `ModelBuilder` interfaces and pass pipeline steps via `step_args`, so check the SDK version you pin before copying code.
 
 What matters in interviews is not the exact SDK call. It is understanding:
 

@@ -57,8 +57,8 @@ from typing import Literal, Optional, Any
 
 def call_model(
     prompt: str,
-    model: str = "claude-sonnet-4-6",
-    temperature: float = 0.2,
+    model: str = "claude-sonnet-5",
+    temperature: Optional[float] = None,  # None = omit; current Claude models reject non-default values
     tools: Optional[list[dict[str, Any]]] = None,
     role: Literal["system", "user", "assistant"] = "user",
 ) -> str:
@@ -118,8 +118,8 @@ class SearchArgs(BaseModel):
     top_k: int = Field(default=5, ge=1, le=50)
 
 class Settings(BaseModel):
-    model: str = "claude-opus-4-8"
-    temperature: float = 0.2
+    model: str = "claude-opus-5-5"
+    temperature: float | None = None  # leave unset: Claude Opus 4.7+ and Sonnet 5 reject non-default sampling params
     max_tokens: int = 4096
 ```
 

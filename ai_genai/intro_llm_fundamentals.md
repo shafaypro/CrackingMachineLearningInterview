@@ -215,10 +215,12 @@ few-shot examples, a long document), **cache it**:
 | `max_tokens` | Hard cap on output length | Set generously for generation; small for classification |
 | `stop` sequences | Halt generation on a string | Structured/templated output |
 
-> **Note (2026):** the newest reasoning models increasingly drop manual sampling
-> params in favor of **adaptive thinking** + an **effort** control (`low`→`max`).
-> Instead of a fixed "thinking budget," the model decides how much to reason and
-> you set how hard it should try. Steer behavior with prompting, not `temperature=0`.
+> **Note (2026):** the newest reasoning models drop manual sampling params in favor
+> of **adaptive thinking** + an **effort** control (`low`→`max`). On current Claude
+> models such as Sonnet 5 and Opus 4.7 and later, a request that sets `temperature`,
+> `top_p` or `top_k` is rejected with a 400; older models and most open-weight models
+> still accept them. The model decides how much to reason and you set how hard it
+> should try. Steer behavior with prompting and effort, not `temperature=0`.
 
 ### Estimating Cost
 
@@ -238,26 +240,36 @@ Without caching the input alone would cost 52K/1e6 × $3 ≈ $0.156.
 - **Ground the model** with retrieval (RAG) and instruct it to answer only from
   provided context, citing sources.
 - **Constrain the output** with structured outputs / strict tool schemas.
-- **Lower temperature** for factual tasks.
+- **Lower temperature** for factual tasks, on models that still accept sampling
+  params. Current reasoning models reject them, so rely on grounding and prompting.
 - **Add an eval + guardrail layer**: LLM-as-judge, schema validation, and refusal
   handling. See [Evaluation & Guardrails](../mlops/intro_evaluation_guardrails.md).
 
-### Interview Questions
+## Interview Q&A
 
-1. **How do you pick a model for a new feature?** → Start with the cheapest tier
-   that meets the quality bar (measured on an eval set), scale up only where needed,
-   and route easy traffic to a small model.
-2. **What's the single biggest lever for LLM cost at scale?** → Prompt caching of a
-   stable prefix, plus right-sizing the model per task.
-3. **Why not use `tiktoken` to count Claude tokens?** → Wrong tokenizer: its
-   counts differ from Claude's; use the provider's token-counting API.
-4. **`temperature` vs `top_p`?** → Both control randomness; temperature scales the
-   distribution, top_p truncates it to a probability mass. Tune one, not both hard.
-5. **What is a context window and how do you stay within it?** → Max tokens per
-   request; budget prompt + context + output, trim/retrieve selectively, and use
-   compaction/summarization for long sessions.
-6. **How do you reduce hallucinations?** → Ground with RAG + citations, constrain
-   output structure, lower temperature, and add evals/guardrails.
+#### How do you pick a model for a new feature?
+
+Start with the cheapest tier that meets the quality bar (measured on an eval set), scale up only where needed, and route easy traffic to a small model.
+
+#### What's the single biggest lever for LLM cost at scale?
+
+Prompt caching of a stable prefix, plus right-sizing the model per task.
+
+#### Why not use `tiktoken` to count Claude tokens?
+
+Wrong tokenizer: its counts differ from Claude's; use the provider's token-counting API.
+
+#### `temperature` vs `top_p`?
+
+Both control randomness; temperature scales the distribution, top_p truncates it to a probability mass. Tune one, not both hard.
+
+#### What is a context window and how do you stay within it?
+
+Max tokens per request; budget prompt + context + output, trim/retrieve selectively, and use compaction/summarization for long sessions.
+
+#### How do you reduce hallucinations?
+
+Ground with RAG + citations, constrain output structure, add evals/guardrails, and (on models that still accept it) lower the temperature.
 
 ---
 

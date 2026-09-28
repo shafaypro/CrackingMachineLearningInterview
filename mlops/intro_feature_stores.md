@@ -151,8 +151,7 @@ user_stats_fv = FeatureView(
 # Register feature definitions
 feast apply
 
-# Populate offline store from source data
-# Populate online store (last N days)
+# Load feature values from the offline source into the online store
 feast materialize 2024-01-01T00:00:00 2024-12-31T00:00:00
 ```
 

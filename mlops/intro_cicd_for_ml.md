@@ -163,7 +163,7 @@ The registry is the system of record: a versioned model binary plus everything n
 | Evaluation metrics, overall and per slice | Compare against candidates and production |
 | Input/output signature and schema | Validate at serving; detect contract breaks |
 | Feature pipeline version | **Roll back together with the model** |
-| Stage (`staging` / `production` / `archived`) | Drive promotion |
+| Alias (e.g. `challenger` / `champion`) or status tag | Drive promotion |
 
 ```python
 import mlflow
@@ -172,11 +172,14 @@ with mlflow.start_run() as run:
     mlflow.log_params({"max_depth": 6, "learning_rate": 0.05, "seed": 42})
     mlflow.log_metrics({"auc": auc, "pr_auc": pr_auc, **slice_metrics})
     mlflow.log_dict({"data_version": data_version, "feature_pipeline": fp_version}, "lineage.json")
-    mlflow.sklearn.log_model(model, "model", signature=signature, registered_model_name="churn")
+    model_info = mlflow.sklearn.log_model(
+        model, name="model", signature=signature, registered_model_name="churn"
+    )
 
 client = mlflow.MlflowClient()
 if passes_all_gates(metrics, baseline):
-    client.transition_model_version_stage("churn", version, stage="Staging")
+    # Aliases replace the deprecated Staging/Production stages
+    client.set_registered_model_alias("churn", "challenger", model_info.registered_model_version)
 ```
 
 **Promotion gates**: every one automated, and every one able to block:
@@ -298,13 +301,15 @@ jobs:
 
   deploy_staging:
     needs: train
+    runs-on: ubuntu-latest
     steps:
-      - run: python -m src.promote --stage Staging
+      - run: python -m src.promote --alias challenger
       - run: python -m src.deploy --env staging --mode shadow --duration 24h
       - run: python -m src.compare_shadow --fail-on-divergence
 
   deploy_production:
     needs: deploy_staging
+    runs-on: ubuntu-latest
     environment: production        # requires human approval in GitHub
     steps:
       - run: python -m src.deploy --env prod --strategy canary --auto-rollback

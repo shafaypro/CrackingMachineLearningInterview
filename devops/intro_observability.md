@@ -254,8 +254,11 @@ The **error budget** is the useful concept because it converts reliability from 
 # Fast burn: 14.4× budget rate, pages immediately (exhausts 30-day budget in ~2 days)
 (error_ratio_5m > 14.4 * 0.005) and (error_ratio_1h > 14.4 * 0.005)
 
-# Slow burn: 6× budget rate over longer windows, a ticket, not a page
-(error_ratio_6h > 6 * 0.005) and (error_ratio_3d > 6 * 0.005)
+# Slower burn: 6× budget rate over 6h (short window 30m), still a page
+(error_ratio_6h > 6 * 0.005) and (error_ratio_30m > 6 * 0.005)
+
+# Slow burn: 1× budget rate over 3 days (short window 6h), a ticket, not a page
+(error_ratio_3d > 1 * 0.005) and (error_ratio_6h > 1 * 0.005)
 ```
 
 Requiring **both** a short and a long window to breach suppresses one-minute blips while still catching genuine sustained degradation quickly.

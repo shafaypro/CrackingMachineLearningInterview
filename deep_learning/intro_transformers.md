@@ -233,7 +233,7 @@ x = x + self.pos_embedding(positions)
 
 ### RoPE (Rotary Positional Embedding)
 
-Used in Llama, Mistral, Gemma. Encodes relative position by rotating Q and K vectors in the attention calculation. Generalizes better to longer sequences than seen in training.
+Used in Llama, Mistral, Gemma. Encodes relative position by rotating Q and K vectors in the attention calculation. Plain RoPE does not extrapolate well far beyond the training length; context extension relies on scaling methods such as position interpolation, NTK-aware scaling or YaRN, usually with some further training.
 
 ---
 
@@ -321,10 +321,10 @@ class EncoderLayer(nn.Module):
 ```python
 # GPT: causal mask prevents attending to future tokens
 # At each step, predict the next token given all previous tokens
-# Used in: GPT-4, Claude, Llama, Mistral, Gemma
+# Used in: GPT-series, Llama, Mistral, Gemma (and most chat LLMs)
 
 def create_causal_mask(seq_len):
-    """Upper triangular mask: prevents attending to future positions."""
+    """Lower triangular mask (1 = may attend): prevents attending to future positions."""
     mask = torch.tril(torch.ones(seq_len, seq_len))
     return mask.unsqueeze(0).unsqueeze(0)  # (1, 1, seq, seq)
 ```
@@ -344,7 +344,7 @@ def create_causal_mask(seq_len):
 Applied before (Pre-LN, modern) or after (Post-LN, original) each sublayer.
 
 ```python
-# Pre-LN: more stable training (used in GPT-3, Llama)
+# Pre-LN: more stable training (used in GPT-2/GPT-3; Llama uses pre-norm with RMSNorm)
 x = x + attention(LayerNorm(x))
 x = x + ffn(LayerNorm(x))
 
@@ -373,7 +373,7 @@ FFN_SwiGLU(x) = (SiLU(xW₁) ⊙ xW₂) W₃
 
 ### Flash Attention
 
-A memory-efficient attention implementation that uses tiling to avoid materializing the full N×N attention matrix in memory. Up to 7x faster and 2x more memory efficient. Widely used in production (FlashAttention-2 in Llama, Mistral, etc.).
+An exact, memory-efficient attention implementation that uses tiling to avoid materializing the full N×N attention matrix in memory, so extra memory grows linearly rather than quadratically with sequence length. The original paper reports attention speedups of up to about 7x on some settings. Widely used in production (FlashAttention-2 in Llama, Mistral, etc.).
 
 ---
 
@@ -384,7 +384,7 @@ A memory-efficient attention implementation that uses tiling to avoid materializ
 | **Parallelization** | Sequential (can't parallelize) | Fully parallel |
 | **Long-range dependencies** | Poor (vanishing gradient) | Excellent (direct attention) |
 | **Training speed** | Slow | Fast (parallelizable) |
-| **Inference speed** | Fast (fixed state) | Slower (recompute attention) |
+| **Inference cost per token** | Constant (fixed-size state) | Grows with context length (attends over the KV cache) |
 | **Memory (training)** | O(sequence length) | O(sequence length²) |
 | **Positional information** | Built-in (sequential) | Requires explicit encoding |
 | **Context window** | Theoretically unlimited | Limited by context window |
@@ -548,13 +548,13 @@ Sinusoidal PE uses fixed mathematical functions (sin/cos at different frequencie
 
 **Q10: What is Flash Attention?** 🔴 Advanced
 
-Flash Attention is an IO-aware exact attention implementation that avoids materializing the full N×N attention matrix. Standard attention writes the N×N matrix to HBM (slow) then reads it back. Flash Attention uses tiling: processes blocks of Q, K, V in SRAM (fast), computes attention incrementally using the softmax trick to maintain running statistics, and writes only the final output to HBM. Result: 2-4x memory reduction, 3-7x speed improvement. Critical for training on long context windows (>4K tokens).
+Flash Attention is an IO-aware exact attention implementation that avoids materializing the full N×N attention matrix. Standard attention writes the N×N matrix to HBM (slow) then reads it back. Flash Attention uses tiling: processes blocks of Q, K, V in SRAM (fast), computes attention incrementally using the softmax trick to maintain running statistics, and writes only the final output to HBM. Result: attention memory becomes linear instead of quadratic in sequence length (savings grow with length), and the paper reports wall-clock speedups of roughly 2-7x depending on setting. Critical for training on long context windows (>4K tokens).
 
 ---
 
 **Q11: What is the context window of a Transformer and what limits it?** 🟡 Intermediate
 
-The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). GPT-4 supports 128K tokens; Claude 3.5 Sonnet supports 200K.
+The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (`O(n²)`), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). For example, GPT-4 Turbo offered 128K tokens and Claude 3.5 Sonnet 200K; several newer models offer 1M-token windows.
 
 ---
 
@@ -570,7 +570,7 @@ The key difference: BERT sees the full context bidirectionally (knows the "futur
 
 **Q13: What is attention head pruning and why might you do it?** 🔴 Advanced
 
-Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. Can reduce model size by 20-30% with minimal performance loss. Used in model compression for deployment on resource-constrained hardware.
+Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. A sizeable fraction of heads can often be removed with little accuracy loss, though attention heads are only part of the parameters, so the overall size reduction is modest; the main gain is inference speed. Used in model compression for deployment on resource-constrained hardware.
 
 ---
 
@@ -589,7 +589,7 @@ Kaplan et al. (OpenAI, 2020) showed model performance (cross-entropy loss) scale
 - Training tokens D: `L ~ D^(-0.095)`
 - Compute budget C: `L ~ C^(-0.050)`
 
-These laws allow prediction of model performance before training. Chinchilla (DeepMind, 2022) refined this: for a given compute budget, you should train a ~4x smaller model on 4x more data than previously thought optimal. This led to data-efficient models like Llama, which prioritize large training datasets over large model sizes.
+These laws allow prediction of model performance before training. Chinchilla (DeepMind, 2022) refined this: parameters and training tokens should grow in roughly equal proportion with compute (about 20 tokens per parameter), so earlier large models were undertrained. Chinchilla (70B params, 1.4T tokens) outperformed Gopher (280B params, 300B tokens) at a similar compute budget. This led to data-efficient models like Llama, which prioritize large training datasets over large model sizes.
 
 ---
 

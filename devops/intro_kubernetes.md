@@ -648,8 +648,10 @@ spec:
                   number: 80
 ```
 
+> **Note:** the community `ingress-nginx` controller was retired in 2026 (no further releases or security fixes). Existing clusters should plan a migration to a Gateway API implementation or another maintained Ingress controller; the Ingress API itself is not deprecated.
+
 ```bash
-# Install NGINX Ingress Controller
+# Install NGINX Ingress Controller (legacy clusters only, see note above)
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
@@ -753,9 +755,12 @@ helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
 
 ```bash
 # Loki + Grafana (lightweight)
+# The old all-in-one grafana/loki-stack chart is deprecated: install the
+# grafana/loki chart (configure its deployment mode in values), a collector
+# such as Grafana Alloy, and Grafana separately.
 helm repo add grafana https://grafana.github.io/helm-charts
-helm upgrade --install loki grafana/loki-stack \
-  --namespace monitoring --set grafana.enabled=true
+helm upgrade --install loki grafana/loki \
+  --namespace monitoring --create-namespace -f loki-values.yaml
 ```
 
 ---
@@ -766,9 +771,9 @@ helm upgrade --install loki grafana/loki-stack \
 
 | Trend | Description |
 |-------|-------------|
-| **Gateway API** | Successor to Ingress. More expressive routing. Becoming standard. |
+| **Gateway API** | Successor to Ingress (GA since v1.0). More expressive routing; the migration target after the ingress-nginx retirement. |
 | **WebAssembly (Wasm)** | Wasm workloads running alongside containers via `runwasi` |
-| **Karpenter** | Node auto-provisioner (replaces Cluster Autoscaler on AWS) |
+| **Karpenter** | Node auto-provisioner, a common alternative to Cluster Autoscaler on AWS (also used by AKS node auto-provisioning) |
 | **Cilium** | eBPF-powered networking, replacing kube-proxy in many clusters |
 | **ArgoCD / Flux** | GitOps: declarative continuous delivery for K8s |
 | **Crossplane** | Kubernetes-native infrastructure provisioning (K8s for cloud resources) |
@@ -837,6 +842,5 @@ kubectl create ns <name>
 kubectl config set-context --current --namespace=<name>
 
 # === CLEANUP ===
-kubectl delete pods --field-selector=status.phase=Failed -A
-kubectl delete evicted pods -A
+kubectl delete pods --field-selector=status.phase=Failed -A   # includes evicted pods
 ```

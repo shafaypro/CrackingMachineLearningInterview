@@ -11,7 +11,7 @@ Fully connected layers applied to images have two problems:
 Convolutions solve this via:
 - **Local connectivity**: each neuron sees a small spatial region (kernel)
 - **Weight sharing**: the same kernel slides over all positions (reduces parameters drastically)
-- **Equivariance**: if a feature shifts in the image, its activation shifts proportionally
+- **Equivariance**: if a feature shifts in the image, its activation map shifts by the same amount
 
 ### Convolution Operation
 
@@ -30,7 +30,7 @@ params = (kernel_h × kernel_w × C_in + 1) × C_out
 # +1 for bias; 1 bias per output channel
 ```
 
-Example: 3×3 conv, 64→128 channels = (3×3×64 + 1) × 128 = 74,368 params
+Example: 3×3 conv, 64→128 channels = (3×3×64 + 1) × 128 = 73,856 params
 
 ### Receptive Field
 
@@ -83,12 +83,12 @@ class ResidualBlock(nn.Module):
         return self.relu(out)
 ```
 
-Skip connections let gradients flow directly through identity mappings, enabling training of 50, 101, 152+ layer networks. ResNet-50 achieves 24.2% top-1 error on ImageNet.
+Skip connections let gradients flow directly through identity mappings, enabling training of 50, 101, 152+ layer networks. ResNet-50 reaches roughly 76% top-1 accuracy (about 24% error) on ImageNet with standard single-crop evaluation.
 
 **Why skip connections help:**
-- Gradient highway: ∂L/∂x = ∂L/∂F + 1 (identity term prevents vanishing)
+- Gradient highway: for y = F(x) + x, ∂L/∂x = ∂L/∂y · (∂F/∂x + I) (the identity term prevents vanishing)
 - Each block learns a *residual* F(x) rather than a full transformation H(x)
-- At initialization, blocks behave like identity → training starts with a shallow-like network
+- If F starts near zero (e.g. the last BN scale in each block initialized to 0), blocks begin close to identity → training starts like a shallower network
 
 ### EfficientNet (2019): Compound Scaling
 
@@ -101,7 +101,7 @@ resolution: r = γ^φ
 subject to: α × β² × γ² ≈ 2 (FLOP constraint)
 ```
 
-Best values found by NAS: α=1.2, β=1.1, γ=1.15. EfficientNet-B7 achieves 84.3% top-1 with 66M params vs ResNet-152's 78.3% with 60M params.
+Best values found by NAS: α=1.2, β=1.1, γ=1.15. EfficientNet-B7 achieves 84.3% top-1 with 66M params, versus roughly 78% for ResNet-152 at a similar 60M params.
 
 ### MobileNet: Efficient Inference
 
@@ -211,7 +211,7 @@ for r in results:
 **SSD (Single Shot Detector):**
 - Predicts at multiple feature map scales in one forward pass
 - Default boxes (anchors) at different aspect ratios and scales
-- Better than YOLO for small objects due to multi-scale predictions
+- Better than the original YOLO (v1) for small objects due to multi-scale predictions
 
 ### Key Metrics
 
@@ -266,7 +266,7 @@ def nms(boxes, scores, iou_threshold=0.5):
 Originally for medical image segmentation, now widely used:
 
 ```
-Encoder (downsampling):  224→112→56→28→14 (feature maps grow)
+Encoder (downsampling):  224→112→56→28→14 (spatial size shrinks, channels grow)
          ↓          with max pooling at each step
 Bottleneck:              14×14 feature map
          ↓
@@ -358,7 +358,7 @@ class PatchEmbedding(nn.Module):
 Augmentation is critical for CV: prevents overfitting and improves robustness.
 
 ```python
-import torchvision.transforms as T
+import torch
 from torchvision.transforms import v2  # torchvision v2 API
 
 train_transform = v2.Compose([
@@ -366,7 +366,8 @@ train_transform = v2.Compose([
     v2.RandomHorizontalFlip(p=0.5),
     v2.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
     v2.RandomGrayscale(p=0.2),
-    v2.ToTensor(),
+    v2.ToImage(),                              # v2.ToTensor is deprecated
+    v2.ToDtype(torch.float32, scale=True),
     v2.Normalize(mean=[0.485, 0.456, 0.406],   # ImageNet stats
                  std=[0.229, 0.224, 0.225]),
 ])
@@ -420,7 +421,7 @@ optimizer = torch.optim.AdamW([
 Two 3×3 convolutions have the same receptive field as one 5×5 but use fewer parameters (2×3×3 = 18 vs 25 weights) and more non-linearity. Three 3×3s match a 7×7. This was the key insight from VGGNet and became universal.
 
 **Q: Explain the vanishing gradient problem and how ResNet solves it.**
-In deep networks, gradients are multiplied through many layers via chain rule. If those values are < 1, gradients shrink exponentially. ResNet's skip connections create gradient highways: ∂L/∂x includes an identity term (∂L/∂F + I), ensuring gradients don't vanish even in 100+ layer networks.
+In deep networks, gradients are multiplied through many layers via chain rule. If those values are < 1, gradients shrink exponentially. ResNet's skip connections create gradient highways: for y = F(x) + x, ∂L/∂x = ∂L/∂y · (∂F/∂x + I) includes an identity term, ensuring gradients don't vanish even in 100+ layer networks.
 
 **Q: What is the difference between detection, segmentation, and classification?**
 Classification: whole image → one label. Detection: image → multiple bounding boxes + labels. Semantic segmentation: each pixel → label (no instance distinction). Instance segmentation: each pixel → label + instance ID. Panoptic = semantic + instance combined.
@@ -433,7 +434,7 @@ Classification: whole image → one label. Detection: image → multiple boundin
 - Consider two-stage approach: detect all objects first, then classify
 
 **Q: When would you choose a CNN over a ViT?**
-CNNs are better for small datasets (strong inductive biases) and when you need computational efficiency on edge devices. ViTs excel with large datasets, benefit more from scaling, and are better at capturing global context. For most production tasks with sufficient data, a ViT (or hybrid like ConvNeXt) tends to outperform pure CNNs.
+CNNs are better for small datasets (strong inductive biases) and when you need computational efficiency on edge devices. ViTs excel with large datasets, benefit more from scaling, and are better at capturing global context. For most production tasks with sufficient data, a ViT, or a modernized CNN such as ConvNeXt (which borrows transformer design choices), tends to outperform classic CNNs like ResNet.
 
 **Q: What is Focal Loss and when would you use it?**
 Focal Loss = -(1-p_t)^γ × log(p_t). The modulating factor (1-p_t)^γ down-weights easy examples (high p_t) and focuses training on hard, misclassified examples. Used in object detection (RetinaNet) where the background class massively outnumbers foreground, making cross-entropy training dominated by easy negatives.

@@ -331,8 +331,8 @@ def ndcg_at_k(y_true_list, y_score_list, k=10):
         # DCG
         dcg = sum(rel / np.log2(i + 2) for i, rel in enumerate(relevance))
 
-        # Ideal DCG (all relevant items at top)
-        ideal_rel = sorted(relevance, reverse=True)
+        # Ideal DCG: every relevant item (not just the retrieved ones) ranked at the top
+        ideal_rel = [1] * min(len(y_true), k)
         idcg = sum(rel / np.log2(i + 2) for i, rel in enumerate(ideal_rel))
 
         scores.append(dcg / idcg if idcg > 0 else 0)
@@ -481,13 +481,13 @@ Recommendation Service:
 └── Redis cluster: 20 nodes × 50GB = 1TB for user/item features
 
 ANN Search (FAISS):
-├── 10M items × 64 dimensions × 4 bytes = 2.5 GB per index
+├── 10M items × 64 dimensions × 4 bytes ≈ 2.6 GB per index (raw vectors, before index overhead)
 ├── 10 ANN servers (replicas for load distribution)
 └── Index rebuilt weekly; in-memory for fast lookup
 
 Ranking Model:
 ├── 50 Triton servers with T4 GPUs
-├── Batch 100 candidates per request → very efficient GPU usage
+├── Batch all ~1000 candidates per request → very efficient GPU usage
 └── Latency: < 30ms for 1000 candidate ranking on GPU
 ```
 

@@ -140,7 +140,7 @@ optimizer = torch.optim.AdamW(
 )
 ```
 
-**Memory cost**: Adam stores two extra float32 tensors per parameter. A 7B model needs ~14 GB for fp16 weights plus ~56 GB for fp32 master weights, gradients, and optimizer state, which is why full fine-tuning of a 7B model does not fit on a 24 GB GPU and LoRA does.
+**Memory cost**: Adam stores two extra float32 tensors per parameter (8 bytes/param). For a 7B model with mixed-precision AdamW that is ~14 GB of bf16 weights + ~28 GB of fp32 master weights + ~28 GB of fp32 gradients + ~56 GB of Adam state, roughly 126 GB (18 bytes/param) before activations, which is why full fine-tuning of a 7B model does not fit on a 24 GB GPU and LoRA (with the base model frozen) does.
 
 ---
 
@@ -271,7 +271,7 @@ scaler.step(optimizer)
 scaler.update()
 ```
 
-**Where training memory goes** (per parameter, mixed-precision AdamW): 2 bytes fp16 weights + 4 bytes fp32 master weights + 4 bytes gradients + 8 bytes optimizer state ≈ **18 bytes/param**, before activations. Activations often dominate and scale with `batch × sequence_length × hidden × layers`.
+**Where training memory goes** (per parameter, mixed-precision AdamW): 2 bytes fp16 weights + 4 bytes fp32 master weights + 4 bytes fp32 gradients + 8 bytes optimizer state ≈ **18 bytes/param**, before activations (keeping gradients in 16-bit gives the often-quoted 16 bytes/param). Activations often dominate and scale with `batch × sequence_length × hidden × layers`.
 
 Levers when you hit OOM, in order of cost to quality: reduce batch size with gradient accumulation (free), gradient checkpointing (recompute activations, ~30% slower, big memory win), bf16 (free on modern GPUs), 8-bit optimizer states, LoRA/QLoRA instead of full fine-tuning, then model/tensor parallelism.
 
@@ -303,7 +303,7 @@ Data loading is the bottleneck: raise `num_workers`, enable `pin_memory=True` an
 
 #### Explain vanishing gradients and three ways to fix them.
 
-In a deep network, the gradient at an early layer is a product of many Jacobians. When those factors have norm below 1 (as with saturated sigmoid or tanh units, whose derivative maxes at 0.25) the product shrinks exponentially with depth, and early layers receive effectively no learning signal.
+In a deep network, the gradient at an early layer is a product of many Jacobians. When those factors have norm below 1 (sigmoid's derivative never exceeds 0.25, and tanh's is 1 only at zero and near 0 once saturated) the product shrinks exponentially with depth, and early layers receive effectively no learning signal.
 
 Fixes: (1) **ReLU-family activations**, whose derivative is exactly 1 on the positive side, so no shrinkage per layer; (2) **residual connections**, which add an identity path so the gradient reaches early layers regardless of what the block does; (3) **normalization layers**, which keep activation scales stable across depth so Jacobians stay near unit norm. Careful initialization (He/Xavier) and, for RNNs specifically, gated architectures (LSTM/GRU) with additive cell-state updates are the other standard answers.
 

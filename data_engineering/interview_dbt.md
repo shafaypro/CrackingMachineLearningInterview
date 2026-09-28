@@ -7,18 +7,22 @@
 
 ## Table of Contents
 
-- [Mid-level / Engineer: Design & Modelling](#mid-level--engineer-design--modelling)
-- [Mid-Senior: Jinja, Macros & Packages](#mid-senior-jinja-macros--packages)
-- [Senior / Lead: Performance, Testing & CI/CD](#senior--lead-performance-testing--cicd)
-- [Scenario / Situational Questions](#scenario--situational-questions)
+- [Interview Q&A](#interview-qa)
+  - [Mid-level / Engineer: Design & Modelling](#mid-level--engineer-design--modelling)
+  - [Mid-Senior: Jinja, Macros & Packages](#mid-senior-jinja-macros--packages)
+  - [Senior / Lead: Performance, Testing & CI/CD](#senior--lead-performance-testing--cicd)
+  - [Scenario / Situational Questions](#scenario--situational-questions)
+- [Related Guides](#related-guides)
 
 ---
 
-## Mid-level / Engineer: Design & Modelling
+## Interview Q&A
+
+### Mid-level / Engineer: Design & Modelling
 
 ---
 
-### Q1. How do incremental models work? What strategies exist and how do you choose?
+#### Q1. How do incremental models work? What strategies exist and how do you choose?
 
 **Answer:**
 
@@ -50,13 +54,13 @@ from {{ source('raw', 'events') }}
 |---|---|---|
 | `append` | Insert new rows only: no deduplication | Immutable event logs where duplicates are impossible |
 | `merge` | Upsert: update existing rows, insert new ones using `unique_key` | Most use cases: orders, users, any mutable entity |
-| `delete+insert` | Delete all rows matching `unique_key`, re-insert them | Warehouses that don't support `MERGE` natively |
+| `delete+insert` | Delete all rows matching `unique_key`, re-insert them | Adapters without `MERGE` support, or when bulk delete+insert is cheaper |
 | `insert_overwrite` | Replace entire partitions | BigQuery/Spark partitioned tables |
 
 **How to choose:**
 - Data never changes after insert → `append`
 - Rows can be updated → `merge`
-- Warehouse is Redshift (no native MERGE) → `delete+insert`
+- Adapter lacks MERGE support (e.g. older Redshift setups) → `delete+insert`
 - BigQuery with date partitions → `insert_overwrite`
 
 **Force a full rebuild:**
@@ -66,7 +70,7 @@ dbt run -s my_model --full-refresh
 
 ---
 
-### Q2. Append vs merge vs delete+insert: what are the trade-offs?
+#### Q2. Append vs merge vs delete+insert: what are the trade-offs?
 
 **Answer:**
 
@@ -79,7 +83,7 @@ dbt run -s my_model --full-refresh
 - The most common strategy. Uses a `unique_key` to match existing rows
 - Updates changed rows, inserts new ones in a single atomic operation
 - Slightly slower than append due to the match step
-- Requires the warehouse to support `MERGE` (Snowflake, BigQuery, Databricks do; Redshift does not)
+- Requires adapter support for `MERGE` (Snowflake, BigQuery, Databricks; Redshift added `MERGE` in 2023, so check your dbt-redshift version)
 
 ```sql
 {{ config(
@@ -93,13 +97,13 @@ dbt run -s my_model --full-refresh
 - Deletes all rows where `unique_key` matches, then re-inserts
 - Semantically equivalent to merge but works on warehouses without `MERGE`
 - Slightly less efficient than merge because delete + insert = 2 operations
-- Good fallback for Redshift
+- Good fallback where `merge` is unavailable or slow (historically the Redshift default)
 
 **Key trade-off:** append is fastest but dangerous if source data is mutable. Merge is the right default unless you have a specific reason not to use it.
 
 ---
 
-### Q3. How do you handle late-arriving data in an incremental model?
+#### Q3. How do you handle late-arriving data in an incremental model?
 
 **Answer:**
 
@@ -134,7 +138,7 @@ This reprocesses the last 3 days on every run, catching anything that arrived la
 
 ---
 
-### Q4. What are snapshots? How do they implement SCD Type 2?
+#### Q4. What are snapshots? How do they implement SCD Type 2?
 
 **Answer:**
 
@@ -193,7 +197,7 @@ dbt snapshot
 
 ---
 
-### Q5. How would you structure a dbt project for a team of 10+ engineers?
+#### Q5. How would you structure a dbt project for a team of 10+ engineers?
 
 **Answer:**
 
@@ -250,7 +254,7 @@ models:
 
 ---
 
-### Q6. How do custom schemas work? What does `generate_schema_name` do?
+#### Q6. How do custom schemas work? What does `generate_schema_name` do?
 
 **Answer:**
 
@@ -291,7 +295,7 @@ Result:
 
 ---
 
-### Q7. What is the difference between `dbt run`, `dbt build`, and `dbt compile`?
+#### Q7. What is the difference between `dbt run`, `dbt build`, and `dbt compile`?
 
 **Answer:**
 
@@ -310,7 +314,7 @@ Result:
 
 ---
 
-### Q8. Explain node selectors: `+`, `@`, `tag:`, `state:`.
+#### Q8. Explain node selectors: `+`, `@`, `tag:`, `state:`.
 
 **Answer:**
 
@@ -342,11 +346,11 @@ The `state:modified+` selector is the foundation of **slim CI**: you only build 
 
 ---
 
-## Mid-Senior: Jinja, Macros & Packages
+### Mid-Senior: Jinja, Macros & Packages
 
 ---
 
-### Q9. What is Jinja and why does dbt use it?
+#### Q9. What is Jinja and why does dbt use it?
 
 **Answer:**
 
@@ -372,7 +376,7 @@ Jinja solves all of these.
 
 ---
 
-### Q10. Write a macro from scratch. What can a macro return?
+#### Q10. Write a macro from scratch. What can a macro return?
 
 **Answer:**
 
@@ -430,7 +434,7 @@ from prod.orders
 
 ---
 
-### Q11. What is `run_query` and why do you need to guard it with `{% if execute %}`?
+#### Q11. What is `run_query` and why do you need to guard it with `{% if execute %}`?
 
 **Answer:**
 
@@ -469,7 +473,7 @@ AttributeError: 'NoneType' object has no attribute 'columns'
 
 ---
 
-### Q12. What is `dbt_utils`? Name five macros you've used from it.
+#### Q12. What is `dbt_utils`? Name five macros you've used from it.
 
 **Answer:**
 
@@ -527,7 +531,7 @@ group by 1
 
 ---
 
-### Q13. What are `pre-hook` and `post-hook`? Give a real use case.
+#### Q13. What are `pre-hook` and `post-hook`? Give a real use case.
 
 **Answer:**
 
@@ -573,7 +577,7 @@ models:
 
 ---
 
-### Q14. When is `execute` false in dbt? Why does it matter?
+#### Q14. When is `execute` false in dbt? Why does it matter?
 
 **Answer:**
 
@@ -607,11 +611,11 @@ Without the guard, `dbt parse` and `dbt ls` will crash with a `NoneType` error, 
 
 ---
 
-## Senior / Lead: Performance, Testing & CI/CD
+### Senior / Lead: Performance, Testing & CI/CD
 
 ---
 
-### Q15. A dbt model is running slowly. Walk me through how you'd optimise it.
+#### Q15. A dbt model is running slowly. Walk me through how you'd optimise it.
 
 **Answer:**
 
@@ -661,7 +665,7 @@ Run before/after, record bytes scanned and execution time. A good optimisation r
 
 ---
 
-### Q16. How do you set up CI/CD for dbt? What is slim CI?
+#### Q16. How do you set up CI/CD for dbt? What is slim CI?
 
 **Answer:**
 
@@ -678,10 +682,10 @@ jobs:
   dbt-ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dbt
-        run: pip install dbt-snowflake==1.7.0
+        run: pip install dbt-snowflake   # pin the version your project uses
 
       - name: dbt deps
         run: dbt deps
@@ -723,7 +727,7 @@ Slim CI uses the `state:modified+` selector with a saved production manifest to 
 
 ---
 
-### Q17. What is test severity? How do you use `warn` vs `error`?
+#### Q17. What is test severity? How do you use `warn` vs `error`?
 
 **Answer:**
 
@@ -735,14 +739,14 @@ models:
   - name: orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique:
               severity: error       # blocks CI: primary key must be unique
           - not_null:
               severity: error
 
       - name: amount
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               min_value: 0
               max_value: 100000
@@ -764,7 +768,7 @@ This is valuable for:
 
 ---
 
-### Q18. What are exposures and how do you use them for impact analysis?
+#### Q18. What are exposures and how do you use them for impact analysis?
 
 **Answer:**
 
@@ -815,7 +819,7 @@ The output includes `exposure:executive_orders_dashboard`: you immediately know 
 
 ---
 
-### Q19. What is the dbt semantic layer? What problem does MetricFlow solve?
+#### Q19. What is the dbt semantic layer? What problem does MetricFlow solve?
 
 **Answer:**
 
@@ -880,7 +884,7 @@ dbt sl query --metrics total_revenue --group-by ordered_at__month
 
 ---
 
-### Q20. How do you manage dev / staging / prod environments in dbt?
+#### Q20. How do you manage dev / staging / prod environments in dbt?
 
 **Answer:**
 
@@ -935,7 +939,7 @@ limit 10000   -- fast dev iterations
 
 ---
 
-### Q21. What are dbt contracts and how do they enforce data quality at the model level?
+#### Q21. What are dbt contracts and how do they enforce data quality at the model level?
 
 **Answer:**
 
@@ -978,7 +982,7 @@ Contracts are the foundation of **data contracts** between producer and consumer
 
 ---
 
-### Q22. How do you version dbt models and handle breaking changes safely?
+#### Q22. How do you version dbt models and handle breaking changes safely?
 
 **Answer:**
 
@@ -1019,11 +1023,11 @@ select * from {{ ref('orders') }}    -- always resolves to latest_version
 
 ---
 
-## Scenario / Situational Questions
+### Scenario / Situational Questions
 
 ---
 
-### Q23. A `not_null` test fails in prod on your orders model. What do you do?
+#### Q23. A `not_null` test fails in prod on your orders model. What do you do?
 
 **Answer:**
 
@@ -1060,7 +1064,7 @@ Fix the SQL, run `dbt build -s +orders` locally, confirm the test passes.
 
 ---
 
-### Q24. You need to add a column to a mart used by 5 dashboards. What's your process?
+#### Q24. You need to add a column to a mart used by 5 dashboards. What's your process?
 
 **Answer:**
 
@@ -1095,7 +1099,7 @@ The dashboards are unaffected: they select specific columns and a new one doesn'
 
 ---
 
-### Q25. How would you migrate a 500-line stored procedure into dbt?
+#### Q25. How would you migrate a 500-line stored procedure into dbt?
 
 **Answer:**
 
@@ -1129,7 +1133,7 @@ Once the new models are in prod and consumers are validated, remove the procedur
 
 ---
 
-### Q26. Your incremental model is producing duplicate rows. What are the causes?
+#### Q26. Your incremental model is producing duplicate rows. What are the causes?
 
 **Answer:**
 
@@ -1174,11 +1178,11 @@ If the actual grain is `order_id + event_date + event_type`, the composite key i
 
 ---
 
-### Q27. How would you test a macro you've written?
+#### Q27. How would you test a macro you've written?
 
 **Answer:**
 
-Macros don't have a native unit test framework in dbt core (though `dbt-unit-testing` package adds one), so the standard approaches are:
+dbt Core has no unit test framework for macros directly (native unit tests, added in dbt 1.8, test models), so the standard approaches are:
 
 **1. `dbt compile`: inspect the rendered SQL:**
 ```bash
@@ -1193,7 +1197,7 @@ Open `target/compiled/.../model_that_uses_my_macro.sql` and verify the output is
 select
     {{ safe_divide('10', '2') }}    as normal_case,       -- expect 5.0
     {{ safe_divide('10', '0') }}    as zero_denominator,  -- expect null
-    {{ safe_divide('10', null) }}   as null_denominator   -- expect null
+    {{ safe_divide('10', 'null') }} as null_denominator   -- expect null
 ```
 
 Then run a singular test that asserts the values:
@@ -1205,9 +1209,9 @@ where zero_denominator is not null    -- fails if null wasn't returned
    or null_denominator is not null
 ```
 
-**3. Use `dbt-unit-testing` package:**
+**3. Use native unit tests (dbt 1.8+) on a model that calls the macro:**
 ```yaml
-# tests/unit/test_safe_divide.yml
+# models/_unit_tests.yml (unit tests are defined in YAML under your model paths)
 unit_tests:
   - name: test_safe_divide_zero
     model: model_that_uses_my_macro
@@ -1228,5 +1232,7 @@ unit_tests:
 
 ---
 
+## Related Guides
+
 *This document covers Mid-level through Lead-level dbt interview questions and answers.*
-*For fundamentals (Junior/Analyst level), see the main dbt reference guide.*
+*For fundamentals (Junior/Analyst level), see the main [dbt reference guide](./intro_dbt.md).*

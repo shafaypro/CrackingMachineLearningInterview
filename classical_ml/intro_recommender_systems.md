@@ -126,13 +126,15 @@ Matrix factorization decomposes the user-item matrix R (m×n) into two lower-ran
 
 ### Alternating Least Squares (ALS)
 
-ALS is commonly used for implicit feedback (clicks, purchases, views): popular in Spark ML.
+ALS is commonly used for implicit feedback (clicks, purchases, views): popular in Spark ML. It alternates: fix the item factors and solve each user's factors by least squares, then swap.
+
+scikit-learn has no ALS recommender. The sketch below uses `NMF` only to show the shape of a factorization; note that it treats the zeros (unobserved entries) as real ratings of 0, which a production recommender must not do.
 
 ```python
 from sklearn.decomposition import NMF
 
-# Non-negative Matrix Factorization
-nmf = NMF(n_components=10, init='random', random_state=42, max_iter=500)
+# Non-negative Matrix Factorization (illustration only; zeros are treated as observed)
+nmf = NMF(n_components=2, init='random', random_state=42, max_iter=500)
 W = nmf.fit_transform(ratings)  # User latent factors (m x k)
 H = nmf.components_             # Item latent factors (k x n)
 
@@ -272,7 +274,7 @@ Combine collaborative filtering and content-based filtering:
 | **Weighted** | Average CF and CB scores | Score = 0.7*CF + 0.3*CB |
 | **Switching** | Use CB for cold start, CF once enough data | New users get CB; returning users get CF |
 | **Feature augmentation** | Use CB features as input to CF | Add item genre embedding to MF model |
-| **Cascade** | CF generates candidates, CB re-ranks | YouTube: CF retrieval → CB ranking |
+| **Cascade** | One model generates candidates, a second re-ranks them | CF retrieval → feature-rich ranking model (YouTube's two-stage design) |
 
 ---
 
@@ -372,7 +374,7 @@ Two-tower models: (1) can incorporate rich features beyond IDs (text, images, co
 Offline: precision@k, recall@k, NDCG@k on held-out interactions (use time-based split, not random). Online: A/B test CTR, conversion rate, watch time, user retention. Offline metrics don't always correlate with online performance: the bandit feedback problem means you can only evaluate on items that were actually shown.
 
 **Q5: What is matrix factorization and how does it work?**
-MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k << min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize reconstruction error: ||R - UV^T||². Gradient descent or ALS updates one matrix while holding the other fixed.
+MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k << min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize squared error over the observed entries only, plus L2 regularization: Σ_(i,j observed) (r_ij - u_i·v_j)² + λ(||U||² + ||V||²). Solve it with SGD over observed entries, or with ALS, which alternates: hold one matrix fixed and solve for the other in closed form.
 
 **Q6: How would you add diversity to recommendations?**
 Maximum Marginal Relevance (MMR): re-rank to balance relevance and diversity. At each step, select the item that maximizes: λ * relevance_score - (1-λ) * max_similarity_to_already_selected. Or use DPP (Determinantal Point Processes) for principled diversity. Alternatively, apply business rules (no more than 2 items from same category).

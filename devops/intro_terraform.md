@@ -368,13 +368,13 @@ terraform {
     key            = "production/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "terraform-state-lock"   # prevent concurrent applies
+    use_lockfile   = true   # S3-native state locking (Terraform 1.10+); replaces the deprecated dynamodb_table
   }
 }
 ```
 
 ```hcl
-# Terraform Cloud backend
+# HCP Terraform (formerly Terraform Cloud) backend
 terraform {
   cloud {
     organization = "my-org"
@@ -402,6 +402,7 @@ terraform state rm aws_s3_bucket.logs
 
 # Import existing resource into state
 terraform import aws_s3_bucket.my_bucket existing-bucket-name
+# (Terraform 1.5+ also supports declarative `import {}` blocks, reviewed in plan)
 
 # Pull current state
 terraform state pull
@@ -547,8 +548,9 @@ terraform validate
 terraform fmt
 terraform fmt -recursive
 
-# 4. Plan (preview changes, exit code 2 = changes exist)
+# 4. Plan (preview changes)
 terraform plan
+terraform plan -detailed-exitcode # exit code 2 = changes exist (useful in CI)
 terraform plan -out=tfplan        # save plan
 terraform plan -var="env=prod"
 
@@ -562,8 +564,8 @@ terraform apply -target=aws_instance.web  # specific resource
 terraform destroy
 terraform destroy -target=aws_instance.web
 
-# Refresh (sync state with real world)
-terraform refresh
+# Refresh (sync state with real world; `terraform refresh` is deprecated)
+terraform apply -refresh-only
 
 # Graph (visualize dependencies)
 terraform graph | dot -Tpng > graph.png
@@ -620,7 +622,7 @@ module "eks" {
   version = "~> 20.0"
 
   cluster_name    = "${var.project}-eks"
-  cluster_version = "1.32"
+  cluster_version = "1.32"   # pick a version still in EKS standard support
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
@@ -648,7 +650,7 @@ run "creates_bucket_with_versioning" {
   command = apply
 
   variables {
-    bucket_name = "test-bucket-${run.id}"
+    bucket_name = "tftest-example-bucket"   # must be globally unique in real runs
     environment = "test"
   }
 
@@ -683,7 +685,7 @@ func TestTerraformS3Bucket(t *testing.T) {
 
 ### OpenTofu
 
-In August 2023, HashiCorp changed Terraform's license from MPL to BSL (non-open-source). The community forked it as **OpenTofu**, now under the Linux Foundation.
+In August 2023, HashiCorp changed Terraform's license from MPL to the Business Source License (BSL, source-available rather than open source). The community forked it as **OpenTofu**, now under the Linux Foundation.
 
 ```bash
 # OpenTofu is a drop-in replacement
@@ -699,8 +701,8 @@ tofu apply
 | Feature | Description |
 |---------|-------------|
 | **Provider Functions** (Terraform 1.8+/OpenTofu 1.7+) | Call provider-defined functions in HCL |
-| **Stacks** (Terraform Cloud) | Orchestrate multiple configurations as a unit |
-| **Ephemeral Values** | Sensitive values that aren't stored in state |
+| **Stacks** (HCP Terraform) | Orchestrate multiple configurations as a unit |
+| **Ephemeral Values** (Terraform 1.10+) | Sensitive values that aren't stored in state |
 | **State encryption** (OpenTofu 1.7) | Native state file encryption |
 | **`terraform test`** | Built-in unit testing framework (no Terratest needed) |
 | **Drift detection** | Automatic detection of out-of-band changes |
@@ -714,7 +716,7 @@ tofu apply
 | **Infracost** | Cost estimation before `terraform apply` |
 | **tflint** | Linter for Terraform configurations |
 | **Checkov** | Security scanning for IaC |
-| **tfsec** | Terraform security scanner |
+| **Trivy** | Security scanner that absorbed tfsec (tfsec is now in maintenance; migrate to `trivy config`) |
 | **terraform-docs** | Auto-generate module documentation |
 | **env0 / Spacelift** | Terraform collaboration platforms |
 
@@ -752,7 +754,7 @@ terraform state show res.name     # show resource details
 terraform state mv old new        # rename resource
 terraform state rm res.name       # remove from state
 terraform import res.name ID      # import existing
-terraform refresh                 # sync state with reality
+terraform apply -refresh-only     # sync state with reality (replaces deprecated refresh)
 
 # === WORKSPACES ===
 terraform workspace new name

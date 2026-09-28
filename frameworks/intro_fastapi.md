@@ -46,9 +46,10 @@ app = FastAPI(
 
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=4000)
-    model: str = Field(default="claude-sonnet-4-6")
-    max_tokens: int = Field(default=1024, ge=1, le=8192)
-    temperature: float = Field(default=0.7, ge=0, le=1.0)
+    model: str = Field(default="claude-sonnet-5")
+    # Headroom for adaptive thinking, which counts toward max_tokens. No temperature
+    # field: Claude Sonnet 5 and Opus 4.7+ reject non-default sampling parameters.
+    max_tokens: int = Field(default=4096, ge=1, le=16000)
     stream: bool = False
 
 class ChatResponse(BaseModel):
@@ -69,7 +70,6 @@ async def chat(request: ChatRequest):
         message = await client.messages.create(
             model=request.model,
             max_tokens=request.max_tokens,
-            temperature=request.temperature,
             messages=[{"role": "user", "content": request.question}]
         )
     except Exception as e:
@@ -79,7 +79,8 @@ async def chat(request: ChatRequest):
     latency_ms = (time.time() - start) * 1000
 
     return ChatResponse(
-        answer=message.content[0].text,
+        # Join text blocks: with thinking on, content[0] can be a thinking block
+        answer="".join(b.text for b in message.content if b.type == "text"),
         model=message.model,
         input_tokens=message.usage.input_tokens,
         output_tokens=message.usage.output_tokens,
@@ -143,8 +144,8 @@ async def websocket_chat(websocket: WebSocket):
             question = data.get("question", "")
 
             async with client.messages.stream(
-                model="claude-sonnet-4-6",
-                max_tokens=1024,
+                model="claude-sonnet-5",
+                max_tokens=4096,
                 messages=[{"role": "user", "content": question}]
             ) as stream:
                 async for text in stream.text_stream:
@@ -208,11 +209,11 @@ async def rate_limited_llm_call(prompt: str) -> str:
     async with semaphore:  # Only 5 calls active at once
         client = AsyncAnthropic()
         msg = await client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=1024,
+            model="claude-sonnet-5",
+            max_tokens=4096,
             messages=[{"role": "user", "content": prompt}]
         )
-        return msg.content[0].text
+        return "".join(b.text for b in msg.content if b.type == "text")
 ```
 
 ---
@@ -271,7 +272,7 @@ async def rate_limit_middleware(request: Request, call_next):
 
 ```python
 class TokenBudgetManager:
-    def __init__(self, model: str = "claude-sonnet-4-6", max_budget: int = 100000):
+    def __init__(self, model: str = "claude-sonnet-5", max_budget: int = 100000):
         self.budget = max_budget
         self.used = 0
 
@@ -373,15 +374,15 @@ from typing import Literal
 
 MODEL_ROUTING = {
     "fast": "claude-haiku-4-5",       # < 500ms, simple tasks
-    "balanced": "claude-sonnet-4-6",   # 1-3s, most tasks
-    "powerful": "claude-opus-4-6",     # 3-10s, complex reasoning
+    "balanced": "claude-sonnet-5",     # 1-3s, most tasks
+    "powerful": "claude-opus-5-5",     # 3-10s, complex reasoning
 }
 
 def route_to_model(task_complexity: Literal["fast", "balanced", "powerful"],
                    prompt_length: int) -> str:
     # Override: very long prompts need larger context window
     if prompt_length > 50000:
-        return "claude-opus-4-6"  # Stronger long-context reasoning (Haiku 4.5 has a 200K window)
+        return "claude-opus-5-5"  # Stronger long-context reasoning (Haiku 4.5 has a 200K window)
     return MODEL_ROUTING[task_complexity]
 
 @app.post("/smart-chat")

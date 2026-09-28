@@ -68,9 +68,9 @@ How text becomes model inputs, and the source of many practical surprises.
 
 | Algorithm | How | Used by |
 |---|---|---|
-| **BPE** | Iteratively merge the most frequent adjacent pair | GPT family |
+| **BPE** | Iteratively merge the most frequent adjacent pair | GPT family, Llama |
 | **WordPiece** | Merge the pair that most increases likelihood | BERT |
-| **Unigram / SentencePiece** | Start large, prune tokens by loss impact | T5, Llama |
+| **Unigram** (usually via SentencePiece) | Start large, prune tokens by loss impact | T5, ALBERT, XLNet |
 
 ```python
 from transformers import AutoTokenizer
@@ -126,7 +126,7 @@ Its limits: no word order beyond n-grams, no synonymy (`car` and `automobile` ar
 
 ## Word Embeddings
 
-**Word2Vec** learns dense vectors by predicting context. Two variants: **skip-gram** (predict context from the word (better for rare words) and **CBOW** (predict the word from context) faster). Negative sampling makes it tractable by replacing the full softmax with a handful of binary decisions.
+**Word2Vec** learns dense vectors by predicting context. Two variants: **skip-gram** (predict context from the word; better for rare words) and **CBOW** (predict the word from context; faster). Negative sampling makes it tractable by replacing the full softmax with a handful of binary decisions.
 
 The famous property: `king - man + woman ≈ queen`. Vector arithmetic captures relational structure because the training objective places words in similar contexts near each other.
 
@@ -147,7 +147,7 @@ BERT    (2018)   →  transformer, deeply bidirectional, masked LM pretraining
 Sentence-BERT    →  fine-tuned so vector distance means semantic similarity
 ```
 
-**Why raw BERT embeddings are bad for similarity**: a favourite interview question: BERT is trained on masked-token prediction, not on making sentence vectors comparable. Mean-pooled BERT vectors occupy a narrow cone where almost every pair scores above 0.8 cosine, so the numbers barely discriminate. Sentence-BERT fixes it by fine-tuning with a contrastive or triplet objective so distance actually corresponds to semantic difference. See [Embeddings](../ai_genai/intro_embeddings.md).
+**Why raw BERT embeddings are bad for similarity**: a favourite interview question: BERT is trained on masked-token prediction, not on making sentence vectors comparable. Mean-pooled BERT vectors occupy a narrow cone (anisotropy) where even unrelated sentences get high cosine similarity, so the numbers barely discriminate. Sentence-BERT fixes it by fine-tuning with a contrastive or triplet objective so distance actually corresponds to semantic difference. See [Embeddings](../ai_genai/intro_embeddings.md).
 
 ---
 
@@ -178,7 +178,7 @@ B-PER  I-PER  O        B-ORG  I-ORG  O   B-LOC
 
 `B-` begins an entity, `I-` continues it, `O` is outside. The scheme exists so adjacent entities of the same type stay separable.
 
-**Evaluation must be entity-level, not token-level.** Getting 3 of 4 tokens right in "Tim Cook Jr" is not 75% correct: the entity is wrong, full stop. Token-level F1 systematically overstates performance, and using it is a tell that someone hasn't shipped an NER system.
+**Evaluation must be entity-level, not token-level.** Getting 2 of 3 tokens right in "Tim Cook Jr" is not 67% correct: the entity is wrong, full stop. Token-level F1 systematically overstates performance, and using it is a tell that someone hasn't shipped an NER system.
 
 Approaches, in historical order: CRF over hand-crafted features (still competitive on small data, and it enforces valid tag sequences), BiLSTM-CRF, and fine-tuned transformers with a token-classification head (the current default). For zero-shot or rare entity types, LLMs with structured output work well.
 
@@ -263,7 +263,7 @@ One vector per word, fixed regardless of context. "River bank" and "investment b
 
 Contextual models fixed this: ELMo with bidirectional LSTMs, then BERT with transformers, produce a *different* vector for each occurrence based on surrounding text. Same word, different sentence, different embedding.
 
-One caveat worth adding: raw BERT embeddings are poor for *similarity* comparisons despite being contextual, because BERT is trained on masked-token prediction rather than on making vectors comparable: mean-pooled BERT vectors sit in a narrow cone where nearly everything scores above 0.8 cosine. Sentence-BERT fine-tunes with a contrastive objective so distance actually means something.
+One caveat worth adding: raw BERT embeddings are poor for *similarity* comparisons despite being contextual, because BERT is trained on masked-token prediction rather than on making vectors comparable: mean-pooled BERT vectors sit in a narrow cone where even unrelated pairs score high cosine similarity. Sentence-BERT fine-tunes with a contrastive objective so distance actually means something.
 
 #### How do you evaluate a NER model?
 
@@ -316,7 +316,7 @@ The general rule I'd give: preprocess to match how the representation was built.
 | ROUGE/BLEU as the sole quality metric | Measures overlap, not correctness or fluency | Add human eval or a validated judge |
 | Single train/test split on small data | Estimate is dominated by split noise | Cross-validate; report mean ± std |
 | Treating LDA topics as ground truth | Topics shift with hyperparameters | Treat as exploratory; check coherence |
-| `O(n²)` deduplication | Infeasible past ~100k documents | MinHash + LSH |
+| `O(n²)` deduplication | Infeasible at corpus scale (millions of documents) | MinHash + LSH |
 
 ---
 

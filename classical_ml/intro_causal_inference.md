@@ -292,7 +292,7 @@ uplift_s = (ms.predict(np.column_stack([X_new, np.ones(len(X_new))]))
 
 **Causal forests** deserve a sentence in any answer: unlike a standard tree that splits to reduce outcome error, they split to maximize the *difference in treatment effect* between children, with honest sample splitting (one subsample chooses the structure, another estimates the effects) so the confidence intervals are valid.
 
-Critically, **uplift models need experimental data to train on**. Training on observational data means the treatment/control comparison is confounded, and the model learns selection rather than effect.
+Critically, **uplift models are best trained on experimental data**. On observational data the treatment/control comparison is confounded unless unconfoundedness and overlap hold given the features, and otherwise the model learns selection rather than effect.
 
 ---
 
@@ -345,7 +345,7 @@ The decisive validation is a **follow-up experiment**: randomize between targeti
 
 #### What's the difference between a predictive model and a causal model, and when does it matter?
 
-A predictive model estimates `P(Y|X)` from observed data; a causal model estimates `P(Y|do(T))`: the distribution under an intervention. They coincide only when treatment is randomized.
+A predictive model estimates `P(Y|X)` from observed data; a causal model estimates `P(Y|do(T))`: the distribution under an intervention. They coincide when treatment is randomized, or more generally when there is no confounding given what you condition on.
 
 It matters whenever the model's output drives an action. The standard example: a churn model plus a retention discount. The model ranks by churn probability, but the right target is people whose behaviour the discount *changes*. Those overlap poorly: high-risk users may be leaving for reasons a discount can't fix, and some users churn *because* the offer reminded them they're paying. Optimizing prediction here can produce zero or negative incremental revenue while every predictive metric looks excellent.
 
@@ -365,7 +365,7 @@ A response model predicts `P(convert | treated)` and targets the highest scores.
 
 The distinction is the four quadrants: persuadables (convert only if treated), sure things (convert regardless), lost causes (never convert), and sleeping dogs (treatment makes them *worse*). A response model spends the budget on sure things because they have the highest conversion probability, and cannot detect sleeping dogs at all. That's how a campaign posts strong conversion among the targeted group with zero incremental revenue.
 
-The requirement worth stating: uplift models must be trained on **experimental** data. Fit on observational data, the treated/untreated comparison is confounded and you learn selection, not causation.
+The requirement worth stating: uplift models should be trained on **experimental** data whenever possible. Fit on observational data, the treated/untreated comparison is confounded unless every confounder is measured and adjusted for, and otherwise you learn selection, not causation.
 
 #### How do you evaluate an uplift model when you never observe individual treatment effects?
 

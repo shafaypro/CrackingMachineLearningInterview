@@ -70,9 +70,11 @@ def modified_zscore(x, threshold=3.5):
     x = np.asarray(x, dtype=float)
     median = np.median(x)
     mad = np.median(np.abs(x - median))
-    if mad == 0:                                  # degenerate: >50% identical values
-        mad = np.mean(np.abs(x - median)) * 1.253 or 1e-9
-    scores = 0.6745 * (x - median) / mad          # 0.6745 makes MAD comparable to σ
+    if mad > 0:
+        scores = 0.6745 * (x - median) / mad      # 0.6745 makes MAD comparable to σ
+    else:                                         # degenerate: >=50% identical values
+        mean_ad = np.mean(np.abs(x - median))     # fall back to mean absolute deviation
+        scores = (x - median) / (1.253314 * mean_ad) if mean_ad > 0 else np.zeros_like(x)
     return np.abs(scores) > threshold, scores
 ```
 
@@ -295,7 +297,7 @@ PR-AUC uses FP/(TP+FP), which has no large denominator to hide behind, so it ref
 
 #### A point-wise metric says your time series detector has 2% recall, but operators say it catches everything. What's going on?
 
-Point-wise metrics mismatch how anomalies actually occur. An incident spans a range (say 60 minutes), and if you flag the first 2 minutes, point-wise recall is 2/60 ≈ 3%, while operationally you detected the event promptly and completely.
+Point-wise metrics mismatch how anomalies actually occur. An incident spans a range (say 60 minutes), and if you flag only the first minute, point-wise recall is 1/60 ≈ 2%, while operationally you detected the event promptly and completely.
 
 The fix is **event-level or range-based evaluation**: an event counts as detected if any point within it is flagged (optionally weighted by how early), and false positives are counted per distinct alert rather than per timestamp. I'd also report detection latency, since catching an incident 2 minutes in versus 50 minutes in matters enormously and no point-wise metric captures it.
 

@@ -43,7 +43,7 @@ os.environ["LANGSMITH_PROJECT"] = "my-production-app"  # Project for grouping tr
 
 # That's it: all LangChain/LangGraph calls are auto-traced
 from langchain_anthropic import ChatAnthropic
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 result = llm.invoke("Explain RAG in 3 sentences")
 # This call now appears in LangSmith dashboard
 ```
@@ -69,7 +69,7 @@ def run_rag(question: str) -> str:
     docs = retrieve_documents(question)
     context = "\n".join([d["text"] for d in docs])
     response = llm.invoke(f"Context: {context}\n\nQuestion: {question}")
-    return response.content
+    return response.text  # text blocks only (.content can be a list when the model thinks)
 
 # Nested traces are automatically linked as parent → child
 answer = run_rag("What is RLHF?")
@@ -141,6 +141,11 @@ print(results.to_pandas())  # DataFrame with scores per example
 from langsmith.evaluation import evaluate
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
+from pydantic import BaseModel, Field
+
+class JudgeResult(BaseModel):
+    score: int = Field(description="Accuracy score from 1 to 5")
+    reasoning: str = Field(description="Why this score was given")
 
 # Custom LLM-as-judge evaluator
 judge_prompt = ChatPromptTemplate.from_messages([
@@ -149,21 +154,21 @@ judge_prompt = ChatPromptTemplate.from_messages([
 Question: {input}
 Expected: {reference}
 Actual: {prediction}
-
-Return JSON: {{"score": <1-5>, "reasoning": "<why>"}}
 """)
 ])
 
 def custom_judge(inputs: dict, outputs: dict, reference_outputs: dict) -> dict:
-    judge_llm = ChatAnthropic(model="claude-opus-4-6")
-    response = judge_llm.invoke(judge_prompt.format_messages(
+    # Structured output instead of json.loads(response.content): current Claude
+    # models return thinking blocks, so .content is a list, not a JSON string.
+    judge_llm = ChatAnthropic(model="claude-opus-5-5").with_structured_output(
+        JudgeResult, method="json_schema"  # native structured outputs, no forced tool call
+    )
+    result = judge_llm.invoke(judge_prompt.format_messages(
         input=inputs["question"],
         reference=reference_outputs["answer"],
         prediction=outputs["answer"]
     ))
-    import json
-    result = json.loads(response.content)
-    return {"score": result["score"] / 5.0, "comment": result["reasoning"]}
+    return {"score": result.score / 5.0, "comment": result.reasoning}
 
 results = evaluate(
     my_rag_app,

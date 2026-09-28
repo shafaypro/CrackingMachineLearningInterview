@@ -30,7 +30,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 # Simple chain: prompt → LLM → parse
 chain = (
@@ -71,7 +71,7 @@ embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 vectorstore = Chroma(persist_directory="./db", embedding_function=embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 prompt = ChatPromptTemplate.from_template("""
 Answer the question based on the context below.
@@ -137,7 +137,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
 from langchain.agents import create_agent  # LangChain 1.0+
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 # Define tools with @tool decorator
 @tool
@@ -168,7 +168,9 @@ agent = create_agent(
 result = agent.invoke(
     {"messages": [{"role": "user", "content": "How many users do we have and what's the weather in NYC?"}]}
 )
-print(result["messages"][-1].content)
+# Claude Sonnet 5 thinks by default, so .content can be a list of blocks
+# (thinking + text). .text joins just the text blocks.
+print(result["messages"][-1].text)
 
 # Pre-1.0 code used create_tool_calling_agent + AgentExecutor; those now live in langchain-classic.
 ```
@@ -193,7 +195,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import BaseMessage, ToolMessage
 import json
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 # State schema
 class AgentState(TypedDict):
@@ -244,7 +246,7 @@ app = graph.compile()
 
 # Run
 result = app.invoke({"messages": [("user", "What's our user count and NYC weather?")]})
-print(result["messages"][-1].content)
+print(result["messages"][-1].text)
 ```
 
 ---
@@ -266,17 +268,17 @@ class ResearchState(TypedDict):
 def researcher(state: ResearchState) -> ResearchState:
     """Searches and collects information."""
     response = llm.invoke(f"Research: {state['task']}")
-    return {"research": response.content}
+    return {"research": response.text}
 
 def writer(state: ResearchState) -> ResearchState:
     """Writes a draft based on research."""
     response = llm.invoke(f"Write a report based on:\n{state['research']}")
-    return {"draft": response.content}
+    return {"draft": response.text}
 
 def reviewer(state: ResearchState) -> ResearchState:
     """Reviews and improves the draft."""
     response = llm.invoke(f"Review and improve:\n{state['draft']}")
-    return {"review": response.content, "final": response.content}
+    return {"review": response.text, "final": response.text}
 
 # Linear pipeline
 workflow = StateGraph(ResearchState)
@@ -321,7 +323,7 @@ from langchain_classic.memory import ConversationBufferMemory, ConversationSumma
 from langchain_anthropic import ChatAnthropic
 from langchain_classic.chains import ConversationChain
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 # Buffer memory: keeps all messages (good for short conversations)
 memory = ConversationBufferMemory()
@@ -368,7 +370,7 @@ class ProductReview(BaseModel):
     summary: str = Field(description="One-sentence summary")
     key_points: list[str] = Field(description="List of key points")
 
-llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm = ChatAnthropic(model="claude-sonnet-5")
 
 # Structured output via Pydantic
 structured_llm = llm.with_structured_output(ProductReview)

@@ -353,13 +353,14 @@ docker network disconnect my-network my-app
 
 ## Docker Compose
 
-Docker Compose defines and runs **multi-container applications** from a single `docker-compose.yml` file.
+Docker Compose defines and runs **multi-container applications** from a single `compose.yaml` file (the older `docker-compose.yml` name is still read). Use the Compose v2 plugin, `docker compose` (space); the standalone Python `docker-compose` v1 binary is end-of-life.
 
 ### Example: Full-Stack App
 
 ```yaml
-# docker-compose.yml
-version: "3.9"
+# compose.yaml
+# No top-level "version:" key: it is obsolete in the Compose Specification
+# and current Compose prints a warning and ignores it.
 
 services:
   # PostgreSQL database
@@ -465,16 +466,21 @@ Multi-stage builds keep production images **small** by separating build-time dep
 # Stage 1: Build
 FROM python:3.12 AS builder
 
-WORKDIR /app
+# Install dependencies into a virtualenv that is easy to copy as one directory
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Production (lean)
 FROM python:3.12-slim AS production
 
-# Copy only installed packages from builder
-COPY --from=builder /root/.local /root/.local
-COPY --from=builder /app .
+# Copy only the installed packages from builder (no compilers, no build cache)
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+WORKDIR /app
+COPY . .
 
 # Create non-root user
 RUN useradd -r -s /bin/false appuser
@@ -488,13 +494,13 @@ CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000
 
 ```dockerfile
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Stage 2: Build
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -502,7 +508,7 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Production
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
@@ -529,7 +535,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -542,7 +548,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -608,7 +614,7 @@ RUN --mount=type=secret,id=mysecret \
 | **Buildx / BuildKit** | Default build backend; multi-platform builds standard |
 | **Docker Init** | `docker init` generates Dockerfile + Compose automatically |
 | **Testcontainers** | Standard for integration testing with real containers |
-| **Wasm support** | Docker can run WebAssembly workloads alongside Linux containers |
+| **Wasm support** | Docker Desktop shipped Wasm workloads as a beta feature, since announced for deprecation; treat it as experimental |
 | **OCI standard** | All major runtimes (containerd, podman) are OCI-compliant |
 
 ### Alternatives to Know

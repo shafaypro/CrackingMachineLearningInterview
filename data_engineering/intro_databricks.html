@@ -944,22 +944,22 @@
         </tbody>
       </table>
 
-      <div class="sh">Getting Started: Community Edition</div>
-      <p class="body">The <span class="highlight">Databricks Community Edition</span> is free and perfect for learning. Sign up at <code style="color:var(--accent2); font-family:var(--mono); font-size:12px;">community.cloud.databricks.com</code>.</p>
+      <div class="sh">Getting Started: Free Edition</div>
+      <p class="body">The <span class="highlight">Databricks Free Edition</span> (successor to the older Community Edition) is free and suited to learning. Sign up from the Databricks website.</p>
 
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
             <h5>Create Account</h5>
-            <p>Visit community.cloud.databricks.com → Sign Up → Verify email. No credit card required.</p>
+            <p>Sign up for Databricks Free Edition (it replaced the older Community Edition) → Verify email. No credit card required.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
             <h5>Create Your First Cluster</h5>
-            <p>Go to Compute → Create Cluster → Select runtime version → Start. Community edition provides a single-node cluster.</p>
+            <p>Free Edition runs notebooks on serverless compute, so there is no cluster to create. In a paid workspace: Compute → Create compute → Select runtime version → Start.</p>
           </div>
         </div>
         <div class="step">
@@ -1089,7 +1089,7 @@
         <ul>
           <li><strong>DBR X.Y:</strong> Standard runtime: Spark + Python/R/Scala/Java</li>
           <li><strong>DBR X.Y ML:</strong> Includes TensorFlow, PyTorch, scikit-learn, MLflow</li>
-          <li><strong>DBR X.Y Photon:</strong> Vectorized query engine written in C++: up to 12x faster SQL</li>
+          <li><strong>Photon:</strong> Vectorized query engine written in C++, enabled as a compute option; often much faster for SQL and DataFrame workloads</li>
           <li><strong>DBR X.Y GPU:</strong> CUDA-enabled for deep learning workloads</li>
         </ul>
       </div>
@@ -1196,7 +1196,7 @@ dbutils.widgets.dropdown(<span class="str">"env"</span>, <span class="str">"dev"
   arguments={<span class="str">"param1"</span>: <span class="str">"value1"</span>}
 )
 
-<span class="cm"># Mount cloud storage</span>
+<span class="cm"># Mount cloud storage (legacy: with Unity Catalog, prefer external locations and volumes)</span>
 dbutils.fs.mount(
   source=<span class="str">"s3a://my-bucket/data"</span>,
   mount_point=<span class="str">"/mnt/my-data"</span>,
@@ -1727,6 +1727,7 @@ raw_df.writeStream \
           <li><strong>@dlt.expect_or_drop("msg", "condition"):</strong> Drop rows that fail</li>
           <li><strong>@dlt.expect_or_fail("msg", "condition"):</strong> Fail the entire pipeline on violation</li>
         </ul>
+        <p class="body">Databricks now calls DLT <strong>Lakeflow Declarative Pipelines</strong>; existing <code>import dlt</code> code keeps working.</p>
       </div>
     </div>
 
@@ -1871,15 +1872,16 @@ mlflow.set_experiment(<span class="str">"/Users/you@co.com/churn-prediction"</sp
     mlflow.log_artifact(<span class="str">"feature_importance.png"</span>)
     mlflow.log_dict({<span class="str">"features"</span>: feature_names}, <span class="str">"features.json"</span>)
 
-<span class="cm"># Promote model to production</span>
+<span class="cm"># Promote model to production with an alias (registry stages are deprecated,</span>
+<span class="cm"># and Unity Catalog models do not support them)</span>
 <span class="kw">from</span> mlflow.tracking <span class="kw">import</span> MlflowClient
 <span class="var">client</span> <span class="op">=</span> MlflowClient()
-client.transition_model_version_stage(
-    name=<span class="str">"ChurnPredictor"</span>, version=<span class="num">3</span>, stage=<span class="str">"Production"</span>
+client.set_registered_model_alias(
+    name=<span class="str">"ChurnPredictor"</span>, alias=<span class="str">"champion"</span>, version=<span class="num">3</span>
 )
 
 <span class="cm"># Load production model for inference</span>
-<span class="var">prod_model</span> <span class="op">=</span> mlflow.pyfunc.load_model(<span class="str">"models:/ChurnPredictor/Production"</span>)
+<span class="var">prod_model</span> <span class="op">=</span> mlflow.pyfunc.load_model(<span class="str">"models:/ChurnPredictor@champion"</span>)
 predictions <span class="op">=</span> prod_model.predict(new_data)</pre>
       </div>
 

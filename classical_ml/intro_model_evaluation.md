@@ -50,12 +50,12 @@ Ask in every interview: **what does a false positive cost, and what does a false
 | Accuracy | `(TP+TN)/(TP+TN+FP+FN)` | Overall correctness | Balanced classes, symmetric costs |
 | Precision | `TP/(TP+FP)` | "Of my positive calls, how many were right?" | False positives are costly |
 | Recall (Sensitivity, TPR) | `TP/(TP+FN)` | "Of all real positives, how many did I catch?" | Misses are costly |
-| Specificity (TNR) | `TN/(TN+FP)` | "Of all real negatives, how many did I clear?" | Screening, ROC's x-axis |
+| Specificity (TNR) | `TN/(TN+FP)` | "Of all real negatives, how many did I clear?" | Screening; ROC's x-axis is FPR = 1 - specificity |
 | F1 | `2PR/(P+R)` | Harmonic mean of P and R | Need one number, imbalanced data |
 | Fβ | `(1+β²)PR/(β²P+R)` | Weighted P/R tradeoff | β=2 favors recall, β=0.5 favors precision |
 | Balanced accuracy | `(TPR+TNR)/2` | Accuracy corrected for imbalance | Imbalanced, both classes matter |
 | MCC | correlation of predictions and labels | Single balanced score in [-1, 1] | Imbalanced, want one honest number |
-| Log loss | `-Σ[y log p + (1-y) log(1-p)]` | Probability quality | You need calibrated probabilities |
+| Log loss | `-mean[y log p + (1-y) log(1-p)]` | Probability quality | You need calibrated probabilities |
 | Brier score | `mean((p - y)²)` | Squared probability error | Calibration + sharpness together |
 
 **Why the harmonic mean in F1?** It punishes imbalance between P and R. A model with P=1.0 and R=0.01 has arithmetic mean 0.505 but F1 = 0.0198: the harmonic mean refuses to reward a model that gets one number by destroying the other.
@@ -93,9 +93,9 @@ Always print the prevalence baseline. A PR-AUC of 0.30 is excellent at 1% preval
 - Recall = 90/100 = **90%**
 - Precision = 90/1000 = **9%**
 - FPR = 910/99,900 = **0.9%** → ROC looks superb
-- Accuracy = 99.0%: *worse than predicting "never fraud"* (99.9%)
+- Accuracy = (100,000 - 910 - 10)/100,000 = 99.08%: *worse than predicting "never fraud"* (99.9%)
 
-ROC-AUC will read ~0.98 here because FPR is normalized by the huge negative class. PR-AUC honestly reports that 91% of the analyst's review queue is noise. **On heavy imbalance, report PR-AUC; use ROC-AUC only as a secondary ranking check.**
+This operating point sits at TPR 0.90, FPR 0.009, right in ROC's top-left corner, so ROC-AUC can look excellent because FPR is normalized by the huge negative class. PR-AUC honestly reports that 91% of the analyst's review queue is noise. **On heavy imbalance, report PR-AUC; use ROC-AUC only as a secondary ranking check.**
 
 ---
 
@@ -141,12 +141,13 @@ A model is calibrated if, among predictions of 0.7, roughly 70% are positive. Ra
 
 ```python
 from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.frozen import FrozenEstimator   # sklearn >= 1.6; replaces the removed cv='prefit'
 from sklearn.metrics import brier_score_loss
 
 prob_true, prob_pred = calibration_curve(y_val, y_proba, n_bins=10, strategy='quantile')
 # Perfect calibration lies on y = x; plot and look at the deviation.
 
-calibrated = CalibratedClassifierCV(model, method='isotonic', cv='prefit')
+calibrated = CalibratedClassifierCV(FrozenEstimator(model), method='isotonic')
 calibrated.fit(X_cal, y_cal)      # a held-out calibration set, not the training set
 print(f"Brier before: {brier_score_loss(y_val, y_proba):.4f}")
 print(f"Brier after : {brier_score_loss(y_val, calibrated.predict_proba(X_val)[:,1]):.4f}")
@@ -158,7 +159,7 @@ print(f"Brier after : {brier_score_loss(y_val, calibrated.predict_proba(X_val)[:
 | **Isotonic regression** | Any monotonic | Larger (~1000+) | More flexible, overfits on small sets |
 | **Temperature scaling** | Single scalar on logits | Very small | Standard for neural networks, preserves argmax |
 
-Which models need calibration? SVMs and naive Bayes are badly calibrated by construction. Boosted trees are pushed toward 0 and 1 by the loss. Random Forests are compressed toward the middle (averaging pulls away from extremes). Logistic regression trained with log loss is usually close to calibrated already. Anything trained with class reweighting or on a resampled dataset is miscalibrated by design and must be corrected before its scores feed a downstream cost calculation.
+Which models need calibration? SVMs do not output probabilities at all, and naive Bayes pushes scores toward 0 and 1 because of its independence assumption. AdaBoost-style boosting distorts scores into a sigmoid shape; gradient boosting trained with log loss is often reasonably calibrated but can drift with many trees or reweighting. Random Forests are compressed toward the middle (averaging pulls away from extremes). Logistic regression trained with log loss is usually close to calibrated already. Anything trained with class reweighting or on a resampled dataset is miscalibrated by design and must be corrected before its scores feed a downstream cost calculation.
 
 Calibration matters when the score is **used as a number**: expected-value decisions, pricing, ranking against a cost threshold, or feeding another model. If you only threshold once, ranking is enough.
 
@@ -168,19 +169,19 @@ Calibration matters when the score is **used as a number**: expected-value decis
 
 | Metric | Formula | Units | Sensitivity to outliers | Use when |
 |---|---|---|---|---|
-| MAE | `mean|y - ŷ|` | Target units | Low | Outliers are noise; you want the median behavior |
+| MAE | `mean\|y - ŷ\|` | Target units | Low | Outliers are noise; you want the median behavior |
 | MSE | `mean(y - ŷ)²` | Squared units | High | Large errors are disproportionately bad |
 | RMSE | `√MSE` | Target units | High | Same as MSE but readable |
-| MAPE | `mean|y-ŷ|/|y|` | Percent | Medium | Comparing across scales: breaks near `y=0` |
+| MAPE | `mean\|y-ŷ\|/\|y\|` | Percent | Medium | Comparing across scales: breaks near `y=0` |
 | SMAPE | symmetric variant | Percent | Medium | MAPE with bounded blow-up |
 | R² | `1 - SSE/SST` | Unitless | High | Explaining variance vs the mean baseline |
-| Quantile / pinch loss | asymmetric | Target units | Tunable | Over- and under-prediction cost differently |
+| Quantile / pinball loss | asymmetric | Target units | Tunable | Over- and under-prediction cost differently |
 | Huber | quadratic then linear | Target units | Medium | Want MSE's gradients with MAE's robustness |
 
 Two things worth saying out loud in an interview:
 
 - **MAE optimizes the median, MSE optimizes the mean.** If you train with MSE on a right-skewed target (revenue, latency), the model systematically over-predicts the typical case. That's a modeling choice, not a bug, but it should be deliberate.
-- **R² can be negative** (worse than predicting the mean) and always increases when you add features, so use adjusted R² when comparing models with different feature counts. R² is also not comparable across datasets with different target variance.
+- **R² can be negative** (worse than predicting the mean) and never decreases on the training data when you add features (for least squares with an intercept), so use adjusted R² when comparing models with different feature counts. R² is also not comparable across datasets with different target variance.
 
 For skewed positive targets, training on `log1p(y)` and reporting RMSE in log space (RMSLE) penalizes under-prediction more than over-prediction and stops a few huge values from dominating the loss.
 

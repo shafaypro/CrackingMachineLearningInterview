@@ -122,8 +122,8 @@ def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:
     if not intervals:
         return []
 
-    intervals.sort(key=lambda x: x[0])
-    merged = [intervals[0]]
+    intervals = sorted(intervals, key=lambda x: x[0])   # don't reorder the caller's list
+    merged = [list(intervals[0])]                        # copy, so merging never mutates the input
 
     for start, end in intervals[1:]:
         last = merged[-1]

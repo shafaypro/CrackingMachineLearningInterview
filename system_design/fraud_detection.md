@@ -172,7 +172,7 @@ Hybrid: Rules Engine + ML Model
 
 4. Fallback:
    - If ML model unavailable: rules engine only
-   - If < 500ms: allow but flag for review
+   - If ML scoring exceeds its timeout (latency budget): decide on rules, flag for review
 ```
 
 ```python
@@ -247,7 +247,7 @@ S3 Transaction Files → Spark Job → Feature Join → Model Scoring → Risk D
 | Cost-sensitive learning | Weight misclassification by fraud amount | Custom loss function |
 | Stratified splitting | Ensure fraud rate consistent across folds | Critical for cross-validation |
 
-**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior.
+**Practical recommendation:** Use `scale_pos_weight` + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior. Note that heavy class weights inflate predicted probabilities, so calibrate the scores (Platt or isotonic on unweighted validation data) before treating thresholds like P > 0.9 as probabilities.
 
 ---
 
@@ -388,7 +388,8 @@ Alerts:
 ```
 Training window: Rolling 90 days
 ├── Include recent fraud confirmed via chargebacks (30-60 day lag)
-├── Balance: ~2% fraud rate in training set via class weights
+├── Balance: keep the natural fraud rate and use class weights, or downsample
+│   legitimate transactions (e.g. to ~2% fraud) and correct scores before thresholding
 ├── Temporal split: train on oldest 80%, validate on most recent 20%
 └── Never shuffle: time ordering is critical (prevents leakage)
 ```

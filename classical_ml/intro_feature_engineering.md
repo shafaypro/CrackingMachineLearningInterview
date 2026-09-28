@@ -44,11 +44,14 @@ X = pd.DataFrame({
     'category': ['A', 'B', np.nan, 'A', 'B']
 })
 
+# 0. Record missingness BEFORE imputing (afterwards the indicator would be all zeros)
+X['age_missing'] = X['age'].isna().astype(int)
+
 # 1. Simple: mean/median/mode
 num_imputer = SimpleImputer(strategy='median')  # Median is robust to outliers
 cat_imputer = SimpleImputer(strategy='most_frequent')
 
-X['age'] = num_imputer.fit_transform(X[['age']])
+X['age'] = num_imputer.fit_transform(X[['age']]).ravel()
 X['category'] = cat_imputer.fit_transform(X[['category']]).ravel()
 
 # 2. KNN Imputation: use k nearest neighbors to fill gaps
@@ -59,9 +62,8 @@ X_imputed = knn_imputer.fit_transform(X[['age', 'salary']])
 iterative_imp = IterativeImputer(max_iter=10, random_state=42)
 X_mice = iterative_imp.fit_transform(X[['age', 'salary']])
 
-# 4. Add a missingness indicator (preserves information about missingness)
-X['age_missing'] = X['age'].isna().astype(int)
-X['age'] = X['age'].fillna(X['age'].median())
+# 4. Missingness indicator (step 0) preserves information about missingness;
+#    SimpleImputer(add_indicator=True) does the same inside a pipeline
 ```
 
 ---
@@ -91,6 +93,7 @@ X_ohe = ohe.fit_transform(df[['color']])
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 
 # Ordinal: preserves order
+df = pd.DataFrame({'size': ['M', 'S', 'XL', 'L']})
 size_order = [['S', 'M', 'L', 'XL']]
 oe = OrdinalEncoder(categories=size_order)
 df['size_encoded'] = oe.fit_transform(df[['size']])
@@ -118,6 +121,7 @@ def target_encode(train_df, valid_df, col, target, smoothing=10):
 ### Embedding Encoding (for very high cardinality)
 
 ```python
+import tensorflow as tf
 from tensorflow.keras.layers import Embedding, Flatten
 
 # For user_id with 1M+ unique values
@@ -225,7 +229,7 @@ corpus = ["the cat sat on the mat", "the dog played in the park", "machine learn
 tfidf = TfidfVectorizer(
     max_features=10000,
     ngram_range=(1, 2),       # Unigrams and bigrams
-    min_df=2,                 # Ignore terms in <2 documents
+    min_df=1,                 # Toy corpus; on real data use min_df=2+ to drop rare terms
     max_df=0.95,              # Ignore terms in >95% of documents
     stop_words='english',
     sublinear_tf=True         # Replace tf with 1 + log(tf) to dampen high freq
@@ -315,7 +319,9 @@ importance_df = pd.DataFrame({
 import shap
 explainer = shap.TreeExplainer(rf)
 shap_values = explainer.shap_values(X)
-mean_shap = np.abs(shap_values[1]).mean(axis=0)
+# Recent shap returns an array (n_samples, n_features, n_classes); older versions a list per class
+sv_pos = shap_values[1] if isinstance(shap_values, list) else shap_values[..., 1]
+mean_shap = np.abs(sv_pos).mean(axis=0)
 top_features = pd.Series(mean_shap, index=feature_names).sort_values(ascending=False)
 ```
 

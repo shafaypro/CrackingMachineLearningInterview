@@ -71,7 +71,8 @@ test_stationarity(ts)
 # Method 1: Differencing (most common)
 ts_diff = ts.diff().dropna()
 
-# Method 2: Log transform (stabilizes variance)
+# Method 2: Log transform (stabilizes variance; needs strictly positive values,
+# so it gives NaN on the random walk above, which goes negative)
 ts_log = np.log(ts)
 
 # Method 3: Log + differencing (handles both trend and variance)
@@ -159,12 +160,18 @@ Facebook Prophet is designed for business forecasting with:
 
 ```python
 from prophet import Prophet
+import numpy as np
 import pandas as pd
 
 # Prophet requires columns: 'ds' (datetime) and 'y' (value)
 df = pd.DataFrame({'ds': pd.date_range('2020-01-01', periods=365), 'y': np.random.randn(365).cumsum()})
 
+# Add holidays (passed to the constructor; re-creating the model would drop the settings below)
+from prophet.make_holidays import make_holidays_df
+holidays = make_holidays_df(year_list=[2020, 2021, 2022], country='US')
+
 model = Prophet(
+    holidays=holidays,
     yearly_seasonality=True,
     weekly_seasonality=True,
     daily_seasonality=False,
@@ -174,11 +181,6 @@ model = Prophet(
 
 # Add custom seasonality
 model.add_seasonality(name='monthly', period=30.5, fourier_order=5)
-
-# Add holidays
-from prophet.make_holidays import make_holidays_df
-holidays = make_holidays_df(year_list=[2020, 2021, 2022], country='US')
-model = Prophet(holidays=holidays)
 
 # Add external regressors
 # model.add_regressor('temperature')
@@ -240,7 +242,8 @@ def create_sequences(data, seq_length=30):
     return np.array(X), np.array(y)
 
 scaler = MinMaxScaler()
-scaled = scaler.fit_transform(ts.values.reshape(-1, 1))
+scaler.fit(ts.values[:-30].reshape(-1, 1))            # fit on the training period only
+scaled = scaler.transform(ts.values.reshape(-1, 1))
 
 X, y = create_sequences(scaled, seq_length=30)
 X = X.reshape(X.shape[0], X.shape[1], 1)  # (samples, timesteps, features)
@@ -295,7 +298,7 @@ def time_series_features(df, date_col='date'):
 | **MSE** | mean((y - ŷ)²) | Penalizes large errors |
 | **RMSE** | √MSE | Same units as target |
 | **MAPE** | mean(\|y-ŷ\|/\|y\|) × 100 | Percentage error, but unstable when y≈0 |
-| **sMAPE** | mean(2\|y-ŷ\|/(|y|+\|ŷ\|)) | Symmetric MAPE, bounded 0-200% |
+| **sMAPE** | mean(2\|y-ŷ\|/(\|y\|+\|ŷ\|)) | Symmetric MAPE, bounded 0-200% |
 | **MASE** | MAE / MAE_naive | Scale-free; compares to naive forecast |
 
 ```python
@@ -346,7 +349,7 @@ A stationary series has constant mean, variance, and autocorrelation over time. 
 - Alternatively: use `auto_arima` with AIC/BIC minimization
 
 **Q4: When would you use Prophet over ARIMA?**
-Use Prophet when: data has strong multiple seasonalities (weekly + yearly), there are holidays/events to model, stakeholders need interpretable components, or you have missing data. Prophet handles these automatically. Use ARIMA when: data is low-frequency (monthly), you need strict statistical rigor, or you're doing multivariate forecasting.
+Use Prophet when: data has strong multiple seasonalities (weekly + yearly), there are holidays/events to model, stakeholders need interpretable components, or you have missing data. Prophet handles these automatically. Use ARIMA when: data is low-frequency (monthly), the series is well described by its own autocorrelation, or you need a classical statistical model with well-understood intervals. ARIMA is univariate (ARIMAX adds exogenous regressors); for jointly forecasting several interacting series, VAR is the classical choice.
 
 **Q5: What is data leakage in time series?**
 Using future information to predict the past. Common mistakes:
@@ -372,7 +375,7 @@ Use MASE (Mean Absolute Scaled Error): it's scale-free so it's comparable across
 |---------|---------|-----|
 | Random CV on time series | Data leakage from future | Use `TimeSeriesSplit` |
 | Not checking stationarity | ARIMA fails or gives spurious results | ADF test; difference if needed |
-| Forgetting to shift lag features | Target leakage | Always `.shift(1)` before computing lags |
+| Forgetting to shift rolling features | Target leakage | `.shift(1)` before computing rolling statistics so the window excludes the current value |
 | Scaling before split | Test statistics contaminate training | Fit scaler on training set only |
 | MAPE on near-zero values | Division by zero / infinity | Use sMAPE or MASE instead |
 | Ignoring holidays | Poor accuracy around holidays | Add holiday indicators or use Prophet |

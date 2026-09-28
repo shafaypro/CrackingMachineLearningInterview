@@ -240,7 +240,7 @@ def ipw_weighted_loss(clicks, positions, propensities, model_scores):
 NDCG is the default because it captures both that relevance is graded and that position matters:
 
 ```
-DCG@k = Σ (2^rel_i - 1) / log₂(i+1)      NDCG@k = DCG@k / IDCG@k
+DCG@k = Σ_{i=1..k} (2^rel_i - 1) / log₂(i+1)      NDCG@k = DCG@k / IDCG@k
 ```
 
 **Interleaving** deserves specific mention: it's far more sensitive than A/B testing for ranking changes. Instead of splitting users, you interleave results from both rankers into one list and attribute clicks. Because each user sees both rankers, within-user variance is removed and you need roughly an order of magnitude less traffic to detect the same difference. Team-draft interleaving is the standard variant.
@@ -281,7 +281,7 @@ Worth doing out loud: interviewers look for it.
 ```
 100M docs × 768-dim fp32 embeddings = 100e6 × 768 × 4 B ≈ 307 GB
   → int8 quantization: ~77 GB
-  → 384-dim model instead: ~38 GB   → fits in memory across a few nodes
+  → 384-dim model + int8: ~38 GB   → fits in memory across a few nodes
 
 5k QPS, 200 ms p99, ~50 ms average service time
   → concurrency ≈ 5000 × 0.05 = 250 in-flight requests
@@ -339,7 +339,7 @@ An A/B test splits users, so the comparison is between-user and the metric carri
 
 Interleaving merges results from both rankers into a single list shown to every user, then attributes each click to whichever ranker contributed that result. Every user experiences both systems, so the comparison is within-user and the between-user variance cancels. In practice that's roughly an order of magnitude more sensitive, so you can detect real differences with far less traffic and iterate much faster.
 
-The limits: it measures relative ranking preference, not absolute business metrics like revenue or session length, and it can't evaluate changes to the *set* of results (like a new UI layout). So the usual pattern is interleaving to select among ranker candidates, then a conventional A/B test on the winner to confirm business impact.
+The limits: it measures relative ranking preference, not absolute business metrics like revenue or session length, and it can't evaluate changes outside the ranked list itself (like a new UI layout or snippet format). So the usual pattern is interleaving to select among ranker candidates, then a conventional A/B test on the winner to confirm business impact.
 
 #### Your search returns results but users keep reformulating their query. What do you investigate?
 

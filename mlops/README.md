@@ -257,9 +257,9 @@ Both lead to model degradation but require different responses.
 
 **Q6: What is a model registry and why is it important?** 🟡 Intermediate
 
-A model registry is a centralized store for versioned model artifacts, metadata, and lifecycle stages (Staging, Production, Archived). It enables:
+A model registry is a centralized store for versioned model artifacts, metadata, and lifecycle state (aliases such as `champion`/`challenger` in current MLflow; older tools and MLflow versions use fixed stages such as Staging, Production, Archived). It enables:
 - Versioned model storage with metadata (metrics, parameters, data version)
-- Controlled promotion workflows (Staging → Production)
+- Controlled promotion workflows (candidate → production)
 - Rollback capability
 - Audit trails for compliance
 - Team collaboration on model lifecycle management

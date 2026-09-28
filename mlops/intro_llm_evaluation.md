@@ -35,15 +35,17 @@ input → deterministic fn       input → probabilistic LLM
 def exact_match(prediction: str, reference: str) -> float:
     return float(prediction.strip().lower() == reference.strip().lower())
 
-# F1 Token Overlap: for extractive QA (SQuAD-style)
+# F1 Token Overlap: for extractive QA (SQuAD-style, counts repeated tokens)
+from collections import Counter
+
 def token_f1(prediction: str, reference: str) -> float:
-    pred_tokens = set(prediction.lower().split())
-    ref_tokens = set(reference.lower().split())
+    pred_tokens = prediction.lower().split()
+    ref_tokens = reference.lower().split()
     if not pred_tokens or not ref_tokens:
         return 0.0
-    common = pred_tokens & ref_tokens
-    precision = len(common) / len(pred_tokens)
-    recall = len(common) / len(ref_tokens)
+    num_common = sum((Counter(pred_tokens) & Counter(ref_tokens)).values())
+    precision = num_common / len(pred_tokens)
+    recall = num_common / len(ref_tokens)
     if precision + recall == 0:
         return 0.0
     return 2 * (precision * recall) / (precision + recall)
@@ -99,15 +101,12 @@ def llm_judge(
 
     ref_section = f"\nReference answer: {reference}" if reference else ""
 
-    response = client.messages.create(
-        model="claude-opus-4-6",  # Use strongest model as judge
-        max_tokens=1024,
-        tools=[{
-            "name": "submit_evaluation",
-            "description": "Submit evaluation result",
-            "input_schema": EvaluationResult.model_json_schema()
-        }],
-        tool_choice={"type": "tool", "name": "submit_evaluation"},
+    # Structured outputs: the SDK validates the reply against the Pydantic model.
+    # (Forcing a tool with tool_choice={"type": "tool"} is rejected by newer models.)
+    response = client.messages.parse(
+        model="claude-opus-5-5",  # Use a strong current model as judge
+        max_tokens=16000,
+        output_format=EvaluationResult,
         messages=[{
             "role": "user",
             "content": f"""Evaluate this answer based on {criteria}.
@@ -120,7 +119,7 @@ Be strict and objective."""
         }]
     )
 
-    return EvaluationResult.model_validate(response.content[0].input)
+    return response.parsed_output
 
 # Example
 result = llm_judge(
@@ -140,8 +139,8 @@ def pairwise_judge(question: str, answer_a: str, answer_b: str) -> dict:
     client = Anthropic()
 
     response = client.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=512,
+        model="claude-opus-5-5",
+        max_tokens=16000,
         messages=[{
             "role": "user",
             "content": f"""Compare these two answers to: "{question}"
@@ -155,7 +154,9 @@ Return JSON: {{"winner": "A" or "B" or "tie", "reason": "...", "confidence": 0-1
         }]
     )
 
-    return json.loads(response.content[0].text)
+    # Newer models may return thinking blocks first: read the text block by type
+    text = next(b.text for b in response.content if b.type == "text")
+    return json.loads(text)
 
 # Run both orders to detect position bias
 result_1 = pairwise_judge(q, model_a_output, model_b_output)
@@ -177,8 +178,8 @@ prompts:
   - "As an ML interview coach with 10 years experience, explain: {{question}}"
 
 providers:
-  - anthropic:claude-sonnet-4-6
-  - anthropic:claude-haiku-4-5
+  - anthropic:messages:claude-sonnet-5
+  - anthropic:messages:claude-haiku-4-5-20251001
 
 tests:
   - description: "L1 vs L2 regularization"
@@ -340,8 +341,8 @@ def check_faithfulness(context: str, answer: str) -> float:
     client = Anthropic()
 
     response = client.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=512,
+        model="claude-opus-5-5",
+        max_tokens=16000,
         messages=[{
             "role": "user",
             "content": f"""Analyze each claim in the answer and determine if it's supported by the context.
@@ -358,7 +359,8 @@ Return JSON: {{
         }]
     )
 
-    result = json.loads(response.content[0].text)
+    text = next(b.text for b in response.content if b.type == "text")
+    result = json.loads(text)
     return result["faithfulness_score"]
 ```
 

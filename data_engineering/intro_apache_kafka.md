@@ -50,7 +50,7 @@ Producer → Topic → Partition → Consumer Group
 | **Consumer** | Reads events from topics |
 | **Consumer Group** | Group of consumers sharing load. Each partition → one consumer per group. |
 | **Broker** | A Kafka server. Cluster = multiple brokers. |
-| **ZooKeeper/KRaft** | Cluster metadata management. KRaft replaces ZooKeeper in modern Kafka. |
+| **KRaft (formerly ZooKeeper)** | Cluster metadata management. Kafka 4.0+ runs only in KRaft mode; ZooKeeper support was removed. |
 | **Replication Factor** | How many copies of each partition (for fault tolerance) |
 
 ### Consumer Groups
@@ -77,11 +77,10 @@ Both groups read independently: no coordination.
 ### Docker (local development)
 
 ```yaml
-# docker-compose.yml
-version: "3"
+# docker-compose.yml  (single-node KRaft: no ZooKeeper container needed)
 services:
   kafka:
-    image: apache/kafka:3.8.0
+    image: apache/kafka:4.0.0
     ports:
       - "9092:9092"
     environment:
@@ -106,7 +105,6 @@ docker compose up -d
 | **Confluent Cloud** | Confluent | Feature-rich, expensive |
 | **Amazon MSK** | AWS | Managed Kafka on AWS |
 | **Aiven for Kafka** | Aiven | Multi-cloud managed |
-| **Upstash Kafka** | Upstash | Serverless, pay-per-use |
 | **Redpanda Cloud** | Redpanda | Kafka-compatible, lower latency |
 
 ---
@@ -157,7 +155,7 @@ import json
 producer = Producer({
     "bootstrap.servers": "localhost:9092",
     "acks": "all",                    # wait for all replicas to confirm
-    "enable.idempotence": True,       # exactly-once delivery
+    "enable.idempotence": True,       # no duplicates from retries (full exactly-once needs transactions)
     "compression.type": "snappy",     # compress messages
     "linger.ms": 5,                   # batch messages for 5ms
     "batch.size": 65536,              # 64KB batch size
@@ -217,6 +215,10 @@ consumer = Consumer({
 
 consumer.subscribe(["orders", "returns"])
 
+def process_order(order: dict):
+    # Your business logic here
+    pass
+
 try:
     while True:
         msg = consumer.poll(timeout=1.0)
@@ -245,16 +247,13 @@ try:
 
 finally:
     consumer.close()
-
-def process_order(order: dict):
-    # Your business logic here
-    pass
 ```
 
 ### Batch Consumer
 
 ```python
 # Process in batches for efficiency
+import json
 from confluent_kafka import Consumer
 
 consumer = Consumer({
@@ -268,18 +267,17 @@ consumer.subscribe(["events"])
 BATCH_SIZE = 1000
 BATCH_TIMEOUT = 5.0  # seconds
 
-batch = []
+def process_batch(batch: list[dict]):
+    ...  # your bulk write / transformation
+
 while True:
-    msg = consumer.poll(timeout=0.1)
+    # consume() returns up to BATCH_SIZE messages, or fewer once the timeout expires
+    msgs = consumer.consume(num_messages=BATCH_SIZE, timeout=BATCH_TIMEOUT)
+    batch = [json.loads(m.value()) for m in msgs if not m.error()]
 
-    if msg and not msg.error():
-        batch.append(json.loads(msg.value()))
-
-    if len(batch) >= BATCH_SIZE or (batch and consumer.poll(timeout=BATCH_TIMEOUT) is None):
-        # Process batch
+    if batch:
         process_batch(batch)
-        consumer.commit(asynchronous=False)
-        batch = []
+        consumer.commit(asynchronous=False)   # commit only after the batch succeeded
 ```
 
 ---
@@ -392,6 +390,7 @@ Analytics / BI
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
+# Match the connector to your Spark and Scala versions (Spark 4.x builds use Scala 2.13)
 spark = SparkSession.builder \
     .appName("KafkaStreaming") \
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0") \
@@ -429,7 +428,7 @@ query = orders.writeStream \
 | Config | Recommended | Purpose |
 |--------|-------------|---------|
 | `acks=all` | Production | Wait for all replicas |
-| `enable.idempotence=true` | Production | Exactly-once |
+| `enable.idempotence=true` | Production | No duplicates from producer retries |
 | `compression.type=snappy` | Production | Compress messages |
 | `linger.ms=5-50` | Production | Batch messages |
 | `retries=INT_MAX` | Production | Retry on transient errors |
@@ -460,9 +459,9 @@ query = orders.writeStream \
 | Trend | Description |
 |-------|-------------|
 | **KRaft mode** | ZooKeeper fully removed in Kafka 4.0 |
-| **Kafka 4.0** | KRaft-only, tiered storage GA, improved quota system |
+| **Kafka 4.0** | KRaft-only, new consumer rebalance protocol (KIP-848) GA, early-access queues / share groups (KIP-932) |
 | **Tiered Storage** | Offload old segments to S3/GCS: cheaper long retention |
-| **Redpanda** | Kafka-compatible alternative in C++: 10x lower latency |
+| **Redpanda** | Kafka-compatible alternative in C++: no JVM, vendor claims lower tail latency |
 | **WarpStream** | Kafka-compatible, disaggregated architecture, zero inter-zone costs |
-| **Apache Flink** | Primary stream processor alongside Kafka (replaced Kafka Streams at scale) |
+| **Apache Flink** | Common stream processor alongside Kafka, often chosen over Kafka Streams for large stateful jobs |
 | **Confluent Tableflow** | Auto-sync Kafka topics to Iceberg tables |

@@ -68,10 +68,10 @@ That gap is exactly what the VAE fixes, and stating it is the natural way into a
 
 A VAE makes the latent space **probabilistic and structured**. The encoder outputs a distribution (a mean and variance) rather than a point, and a KL term forces that distribution toward a standard Gaussian prior. Now sampling `z ~ N(0, I)` and decoding produces valid samples.
 
-The loss has two terms:
+The objective has two terms. The ELBO (maximized; the training loss is its negative, as in `vae_loss` below) is:
 
 ```
-L = E[log p(x|z)]  -  β · KL(q(z|x) ‖ p(z))
+ELBO = E_q[log p(x|z)]  -  β · KL(q(z|x) ‖ p(z))
     └ reconstruction ┘   └ regularizer: keep latents near N(0,I) ┘
 ```
 
@@ -185,7 +185,7 @@ def diffusion_training_step(model, x0, scheduler):
     return nn.functional.mse_loss(noise_pred, noise)   # that's the entire loss
 ```
 
-**Why this is so much more stable than a GAN**: it's a plain regression problem with a fixed target and a single network: no adversary, no minimax, no mode collapse. The loss is meaningful and decreases monotonically. Coverage is good because the model must explain the *whole* data distribution rather than find one region that fools a critic.
+**Why this is so much more stable than a GAN**: it's a plain regression problem with a fixed target and a single network: no adversary, no minimax, no mode collapse. The loss is meaningful and trends down steadily (it is noisy per step because timesteps are sampled at random). Coverage is good because the model must explain the *whole* data distribution rather than find one region that fools a critic.
 
 The cost is sampling: generation requires many sequential forward passes (originally 1,000), versus one for a GAN. Everything since has been about reducing that.
 
@@ -221,7 +221,7 @@ def cfg_predict(model, x_t, t, cond, uncond, guidance_scale=7.5):
     return eps_uncond + guidance_scale * (eps_cond - eps_uncond)
 ```
 
-The scale trades prompt adherence against diversity and realism: around 1 ignores the prompt, 7-8 is the usual sweet spot, and very high values produce over-saturated, artifact-heavy images that rigidly obey the prompt. It costs **two forward passes per step**, which is why it roughly doubles inference cost.
+The scale trades prompt adherence against diversity and realism: 0 is purely unconditional, 1 is plain conditional sampling with no extra push (adherence is usually weak), 7-8 is the usual sweet spot for Stable Diffusion-style models, and very high values produce over-saturated, artifact-heavy images that rigidly obey the prompt. It costs **two forward passes per step**, which is why it roughly doubles inference cost.
 
 Other conditioning mechanisms worth naming: **ControlNet** (a trainable copy of the encoder that injects spatial conditions like depth maps or poses), **IP-Adapter** (image prompting), and **LoRA** (the same parameter-efficient fine-tuning idea as in LLMs, used for styles and characters).
 
@@ -314,7 +314,7 @@ The cost is sampling speed: many sequential forward passes versus one. DDIM, ODE
 
 During training, the conditioning signal is randomly dropped some fraction of the time, so a single network learns both conditional and unconditional noise prediction. At sampling, you extrapolate: `ε = ε_uncond + s·(ε_cond - ε_uncond)`, pushing the prediction away from the unconditional direction and further toward the conditional one.
 
-The guidance scale trades prompt adherence against diversity and naturalness. Near 1, the prompt is barely followed; around 7-8 is typically the sweet spot; very high values give rigid prompt-following with over-saturated colours and artifacts, and noticeably less variation across seeds. It also costs two forward passes per step, roughly doubling inference cost, which is why some deployments use distilled guidance to fold it into one pass.
+The guidance scale trades prompt adherence against diversity and naturalness. At 0 the prompt is ignored and at 1 there is no extra guidance, so adherence is usually weak; around 7-8 is typically the sweet spot; very high values give rigid prompt-following with over-saturated colours and artifacts, and noticeably less variation across seeds. It also costs two forward passes per step, roughly doubling inference cost, which is why some deployments use distilled guidance to fold it into one pass.
 
 #### What problem does latent diffusion solve, and how?
 

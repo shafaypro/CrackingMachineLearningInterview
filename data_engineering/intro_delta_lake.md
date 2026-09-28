@@ -50,6 +50,7 @@ pip install delta-spark pyspark
 ```python
 from pyspark.sql import SparkSession
 
+# Match Delta to Spark: Delta 3.x targets Spark 3.5, Delta 4.x targets Spark 4.0
 spark = SparkSession.builder \
     .appName("DeltaLake") \
     .master("local[*]") \
@@ -107,7 +108,9 @@ new_data = spark.createDataFrame([(3, "Charlie", 78.3, "2025-01-02")], ["id", "n
 new_data.write.format("delta").mode("append").save("/data/scores")
 
 # Writer 2: update existing records
-# Both complete successfully without corrupting data
+# The table never ends up corrupted: if the two commits truly conflict (e.g. the
+# update read files the append changed), one fails with a concurrent-modification
+# error and must retry; non-conflicting commits both succeed
 ```
 
 ---
@@ -252,7 +255,8 @@ spark.sql("OPTIMIZE orders ZORDER BY (customer_id, date)")
 # Vacuum: remove old files to save storage
 # (default retainDurationHours=168, i.e., 7 days for time travel)
 dt.vacuum()           # keep 7 days of history
-dt.vacuum(24)         # keep only 24 hours (less time travel)
+dt.vacuum(24)         # keep only 24 hours (less time travel); retention below 168h is
+                      # rejected unless spark.databricks.delta.retentionDurationCheck.enabled=false
 ```
 
 ---
@@ -268,9 +272,10 @@ query = df_stream.writeStream \
     .table("orders")
 
 # Streaming read from Delta (reads new changes as they arrive)
+# Change Data Feed (requires delta.enableChangeDataFeed = true on the table)
 changes = spark.readStream \
     .format("delta") \
-    .option("readChangeFeed", "true") \    # Change Data Feed
+    .option("readChangeFeed", "true") \
     .option("startingVersion", 0) \
     .table("orders")
 ```
@@ -355,23 +360,28 @@ BI Tools / ML Models / Data Apps
 
 | Feature | Description |
 |---------|-------------|
-| **Delta Lake 4.0** | Standalone library (no Spark required for reads) |
-| **Liquid Clustering** | Replaces partitioning + Z-Order; auto-optimizes layout |
+| **Delta Lake 4.0** | Release line built on Apache Spark 4.0 (adds variant type, type widening, and more) |
+| **Liquid Clustering** | Recommended over partitioning + Z-Order for new tables; incremental layout optimization |
 | **Deletion Vectors** | Soft-deletes without rewriting files (faster deletes) |
 | **Variant type** | Native semi-structured data type for JSON |
-| **Universal Format (UniForm)** | Delta tables readable as Iceberg and Hudi automatically |
-| **Delta Kernel** | Embeddable library for building Delta connectors |
+| **Universal Format (UniForm)** | Delta tables readable as Iceberg (and Hudi) once enabled via table properties |
+| **Delta Kernel / delta-rs** | Libraries for reading and writing Delta without Spark (connectors, Python via `deltalake`) |
 | **DuckDB + Delta** | `SELECT * FROM delta_scan('s3://...')`: no Spark needed |
 
 ### Liquid Clustering (Replaces Partitioning)
 
 ```sql
--- Create table with liquid clustering (Databricks / Delta 4.0)
-CREATE TABLE orders
-CLUSTER BY (customer_id, order_date)
-USING DELTA;
+-- Create table with liquid clustering (Databricks and open-source Delta)
+CREATE TABLE orders (
+    order_id    BIGINT,
+    customer_id BIGINT,
+    order_date  DATE
+)
+USING DELTA
+CLUSTER BY (customer_id, order_date);
 
--- Automatically maintained - no manual OPTIMIZE needed
+-- Clustering is applied incrementally when OPTIMIZE runs
+-- (Databricks can run it for you via predictive optimization / CLUSTER BY AUTO)
 -- Better than partitioning for high-cardinality columns
 ```
 
@@ -405,7 +415,7 @@ dt.merge(source, condition)            # upsert
 dt.optimize().executeCompaction()
 dt.optimize().executeZOrderBy("col1", "col2")
 dt.vacuum()
-dt.vacuum(retainHours=24)
+dt.vacuum(retentionHours=24)
 
 # SQL
 spark.sql("DESCRIBE HISTORY my_table")

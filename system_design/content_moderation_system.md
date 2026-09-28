@@ -283,7 +283,7 @@ def normalize_text(s: str) -> str:
     s = unicodedata.normalize("NFKC", s)                 # fold compatibility forms
     s = remove_zero_width(s)
     s = map_confusables(s)                               # Cyrillic 'а' → Latin 'a', etc.
-    s = LEET_MAP.translate(s)                            # 4→a, 3→e, 0→o, $→s ...
+    s = s.translate(LEET_MAP)                            # LEET_MAP = str.maketrans("430$", "aeos")
     s = collapse_repeats_and_separators(s)               # "h . a . t . e" → "hate"
     return s
 
@@ -365,7 +365,7 @@ The age term keeps low-reach items from starving in the queue. Queues are also s
 
 **Quality and agreement:**
 
-- Route a percentage of items to multiple reviewers and track inter-annotator agreement (for example Cohen's or Krippendorff's alpha) per label and per language.
+- Route a percentage of items to multiple reviewers and track inter-annotator agreement (for example Cohen's kappa or Krippendorff's alpha) per label and per language.
 - Seed the queues with **golden items** of known label to measure individual reviewer accuracy.
 - Escalation path: frontline → specialist → policy team for cases that expose ambiguity in the policy. Those escalations are a direct input to taxonomy revisions.
 

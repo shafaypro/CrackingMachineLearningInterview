@@ -56,24 +56,20 @@ Airflow defines this as a **DAG** (Directed Acyclic Graph) in Python.
 ## Installation
 
 ```bash
-# Local (virtualenv)
-pip install apache-airflow==2.10.0
+# Local (virtualenv); pin a version with the official constraints file in real projects
+pip install "apache-airflow>=3.0"
 
-# Initialize database
-airflow db init
+# Quickest local setup: migrates the DB, creates a login, starts every component
+airflow standalone
 
-# Start webserver + scheduler
-airflow webserver --port 8080 &
+# Or run the Airflow 3 components individually
+airflow db migrate                 # `airflow db init` was removed in Airflow 3
+airflow api-server --port 8080 &   # replaces `airflow webserver`
 airflow scheduler &
+airflow dag-processor &            # DAG parsing runs as its own process in Airflow 3
 
-# Create admin user
-airflow users create \
-    --username admin \
-    --firstname Admin \
-    --lastname User \
-    --role Admin \
-    --email admin@example.com \
-    --password admin
+# `airflow users create` needs the FAB auth manager provider; Airflow 3 defaults to
+# the simple auth manager, which `airflow standalone` configures for you
 ```
 
 ### Docker Compose (recommended)
@@ -92,19 +88,18 @@ docker compose up -d
 ### TaskFlow API (modern, recommended)
 
 ```python
-# dags/my_pipeline.py
-from airflow.decorators import dag, task
-from airflow.utils.dates import days_ago
+# dags/my_pipeline.py  (Airflow 3: DAG authoring imports come from airflow.sdk)
+from airflow.sdk import dag, task, Variable
 from datetime import timedelta
+import pendulum
 import requests
-import json
 
 @dag(
     dag_id="daily_sales_pipeline",
     description="Extract sales data, transform, load to warehouse",
     schedule="0 2 * * *",          # 2am daily (cron)
-    start_date=days_ago(1),
-    catchup=False,                  # don't backfill past runs
+    start_date=pendulum.datetime(2025, 1, 1, tz="UTC"),  # days_ago() was removed in Airflow 3
+    catchup=False,                  # don't backfill past runs (default in Airflow 3)
     max_active_runs=1,              # prevent concurrent runs
     tags=["sales", "etl"],
     default_args={
@@ -118,11 +113,13 @@ import json
 def daily_sales_pipeline():
 
     @task
-    def extract_sales() -> list[dict]:
+    def extract_sales(ds=None) -> list[dict]:
         """Extract sales from API."""
+        # Jinja is not rendered inside a @task body; ask for context values
+        # such as `ds` (the logical date, YYYY-MM-DD) as keyword arguments
         response = requests.get(
             "https://api.company.com/sales",
-            params={"date": "{{ ds }}"},     # Jinja template: execution date
+            params={"date": ds},
             headers={"Authorization": "Bearer ..."}
         )
         return response.json()["sales"]
@@ -157,7 +154,7 @@ def daily_sales_pipeline():
         """Run dbt transformations."""
         import subprocess
         result = subprocess.run(
-            ["dbt", "run", "--models", "tag:sales", "--profiles-dir", "/etc/dbt"],
+            ["dbt", "run", "--select", "tag:sales", "--profiles-dir", "/etc/dbt"],
             capture_output=True, text=True
         )
         if result.returncode != 0:
@@ -187,24 +184,25 @@ daily_sales_pipeline()
 ### Classic Operators (older style, still widely used)
 
 ```python
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.utils.dates import days_ago
+# Airflow 3: core operators moved to the apache-airflow-providers-standard package
+from airflow.sdk import DAG
+from airflow.providers.standard.operators.python import PythonOperator
+from airflow.providers.standard.operators.bash import BashOperator
+from airflow.providers.http.operators.http import HttpOperator  # replaces SimpleHttpOperator
+import pendulum
 
 def my_python_fn(**context):
-    execution_date = context["ds"]
-    print(f"Running for date: {execution_date}")
+    ds = context["ds"]   # logical date; `execution_date` was removed in Airflow 3
+    print(f"Running for date: {ds}")
 
 with DAG(
     "classic_dag",
     schedule="@daily",
-    start_date=days_ago(1),
+    start_date=pendulum.datetime(2025, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
 
-    extract = SimpleHttpOperator(
+    extract = HttpOperator(
         task_id="extract",
         http_conn_id="sales_api",
         endpoint="/api/sales",
@@ -219,7 +217,7 @@ with DAG(
 
     dbt_run = BashOperator(
         task_id="dbt_run",
-        bash_command="dbt run --models tag:sales --profiles-dir /etc/dbt",
+        bash_command="dbt run --select tag:sales --profiles-dir /etc/dbt",
     )
 
     # Dependencies
@@ -231,31 +229,32 @@ with DAG(
 ## Common Operators
 
 ```python
+# Airflow 3 import paths (most core operators now live in the standard provider)
+
 # Python
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.decorators import task
+from airflow.providers.standard.operators.python import PythonOperator, BranchPythonOperator
+from airflow.sdk import task
 
 # Bash
-from airflow.operators.bash import BashOperator
+from airflow.providers.standard.operators.bash import BashOperator
 
 # dbt
 from cosmos import DbtTaskGroup, ProjectConfig, ProfileConfig, ExecutionConfig  # astronomer-cosmos
 
-# Email
-from airflow.operators.email import EmailOperator
+# Email (SMTP provider)
+from airflow.providers.smtp.operators.smtp import EmailOperator
 
 # Trigger another DAG
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator
 
 # Sensors (wait for something to be true)
-from airflow.sensors.filesystem import FileSensor
-from airflow.sensors.time_delta import TimeDeltaSensor
+from airflow.providers.standard.sensors.filesystem import FileSensor
+from airflow.providers.standard.sensors.time_delta import TimeDeltaSensor
 from airflow.providers.http.sensors.http import HttpSensor
 
-# Data warehouse
-from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
+# Data warehouse (generic SQL operator replaces SnowflakeOperator / RedshiftSQLOperator)
+from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator
-from airflow.providers.amazon.aws.operators.redshift_sql import RedshiftSQLOperator
 
 # Cloud
 from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
@@ -269,7 +268,11 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobO
 ### Dynamic Task Mapping
 
 ```python
-@dag(schedule="@daily", start_date=days_ago(1))
+import subprocess
+import pendulum
+from airflow.sdk import dag, task
+
+@dag(schedule="@daily", start_date=pendulum.datetime(2025, 1, 1, tz="UTC"))
 def parallel_processing():
 
     @task
@@ -280,7 +283,7 @@ def parallel_processing():
     def process_table(table: str) -> str:
         # This will create one task per table, running in parallel
         print(f"Processing table: {table}")
-        subprocess.run(["dbt", "run", "--models", table])
+        subprocess.run(["dbt", "run", "--select", table], check=True)
         return f"Done: {table}"
 
     @task
@@ -297,7 +300,7 @@ parallel_processing()
 ### Branching
 
 ```python
-@dag(schedule="@daily", start_date=days_ago(1))
+@dag(schedule="@daily", start_date=pendulum.datetime(2025, 1, 1, tz="UTC"))
 def branching_dag():
 
     @task.branch
@@ -324,7 +327,7 @@ branching_dag()
 ### Sensors
 
 ```python
-from airflow.sensors.filesystem import FileSensor
+from airflow.providers.standard.sensors.filesystem import FileSensor
 
 wait_for_file = FileSensor(
     task_id="wait_for_file",
@@ -362,6 +365,7 @@ report(stats)
 from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
 from cosmos.profiles import SnowflakeUserPasswordProfileMapping
 from pathlib import Path
+import pendulum
 
 dbt_dag = DbtDag(
     dag_id="dbt_pipeline",
@@ -383,7 +387,7 @@ dbt_dag = DbtDag(
         select=["tag:daily"],     # only run daily-tagged models
     ),
     schedule="@daily",
-    start_date=days_ago(1),
+    start_date=pendulum.datetime(2025, 1, 1, tz="UTC"),
 )
 ```
 
@@ -392,14 +396,14 @@ dbt_dag = DbtDag(
 ## Variables & Connections
 
 ```python
-from airflow.models import Variable
+from airflow.sdk import Variable   # Airflow 3 (was airflow.models.Variable)
 
 # In DAG code
 my_var = Variable.get("my_variable")
 json_var = Variable.get("my_json_var", deserialize_json=True)
 
-# With default
-api_key = Variable.get("api_key", default_var="fallback_key")
+# With default (the Task SDK uses `default`; Airflow 2 used `default_var`)
+api_key = Variable.get("api_key", default="fallback_key")
 ```
 
 ```bash
@@ -420,7 +424,8 @@ airflow connections add snowflake_prod \
 ## Monitoring & Alerts
 
 ```python
-from airflow.utils.email import send_email
+from datetime import timedelta
+from airflow.sdk import Variable
 
 def on_failure_callback(context):
     dag_id = context["dag"].dag_id
@@ -468,10 +473,10 @@ helm upgrade --install airflow apache-airflow/airflow \
 
 | Feature | Description |
 |---------|-------------|
-| **Airflow 3.0** | Major release: asset-based scheduling, improved UI, edge labels, decoupled scheduler |
-| **AIP-72 (Assets)** | Schedule DAGs based on data readiness, not just time |
-| **Airflow ObjectStore** | Built-in artifact storage |
-| **Task SDK** | Separate package for writing tasks without full Airflow dependency |
+| **Airflow 3.0** | Major release (April 2025): new React UI, DAG versioning, Task Execution API, API server replaces the webserver; SubDAGs, `execution_date`, and `days_ago` removed |
+| **Assets** | Datasets were renamed to assets in Airflow 3: schedule DAGs based on data readiness, not just time |
+| **ObjectStoragePath** | fsspec-based path abstraction for reading and writing cloud object storage from tasks |
+| **Task SDK** | `airflow.sdk`: the stable authoring interface, and a separate package so tasks can run without the full Airflow install |
 | **Astronomer** | Managed Airflow cloud service (most popular) |
 | **MWAA** | AWS Managed Workflows for Apache Airflow |
 | **Cloud Composer** | GCP's managed Airflow |
@@ -479,9 +484,9 @@ helm upgrade --install airflow apache-airflow/airflow \
 ### Asset-based Scheduling (Airflow 3.0)
 
 ```python
-from airflow.sdk import Asset
+from airflow.sdk import Asset, dag, task
 
-sales_asset = Asset("s3://bucket/sales/{{ ds }}/")
+sales_asset = Asset("s3://bucket/sales/")   # asset URIs are static, not Jinja-templated
 
 @dag(schedule=sales_asset)   # runs when asset is updated
 def process_sales():
@@ -502,8 +507,8 @@ def extract_sales():
 # CLI
 airflow dags list
 airflow dags trigger my_dag
-airflow dags trigger my_dag --exec-date 2025-01-01
-airflow dags backfill my_dag --start-date 2025-01-01 --end-date 2025-01-31
+airflow dags trigger my_dag --logical-date 2025-01-01
+airflow backfill create --dag-id my_dag --from-date 2025-01-01 --to-date 2025-01-31  # Airflow 3
 airflow tasks test my_dag my_task 2025-01-01
 airflow dags pause my_dag
 airflow dags unpause my_dag

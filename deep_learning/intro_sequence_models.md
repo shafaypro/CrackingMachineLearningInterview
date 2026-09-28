@@ -82,7 +82,7 @@ def run_sequence(cell, xs, hidden_size):
 Differentiating the loss at step `T` with respect to `h_1` produces a product of Jacobians:
 
 ```
-∂h_T/∂h_1 = Π_{t=2..T} W_hh^T · diag(tanh'(z_t))
+∂h_T/∂h_1 = Π_{t=2..T} diag(tanh'(z_t)) · W_hh
 ```
 
 Two things go wrong, both exponential in sequence length:
@@ -90,7 +90,7 @@ Two things go wrong, both exponential in sequence length:
 | Failure | Condition | Symptom | Fix |
 |---|---|---|---|
 | **Vanishing** | Largest singular value of `W_hh` < 1, or `tanh'` saturated | Early steps get no gradient; model learns only recent context | Gated units (LSTM/GRU), orthogonal init, skip connections |
-| **Exploding** | Largest singular value > 1 | Loss spikes to NaN; weights blow up | **Gradient clipping**, lower LR |
+| **Exploding** | Largest singular value > 1 (necessary, not sufficient) | Loss spikes to NaN; weights blow up | **Gradient clipping**, lower LR |
 
 Note `tanh'(z) = 1 - tanh²(z) ≤ 1`, and it approaches 0 as the unit saturates, so the activation derivative alone shrinks the signal at every step. This is why vanishing is the *typical* case and exploding is the dramatic one.
 
@@ -138,7 +138,8 @@ output, (h_n, c_n) = lstm(embedded)
 for name, param in lstm.named_parameters():
     if 'bias_ih' in name or 'bias_hh' in name:
         n = param.size(0)
-        param.data[n // 4 : n // 2].fill_(1.0)   # PyTorch gate order: i, f, g, o
+        param.data[n // 4 : n // 2].fill_(0.5)   # PyTorch gate order: i, f, g, o
+# bias_ih and bias_hh are summed, so 0.5 in each gives an effective forget bias of 1
 ```
 
 ---

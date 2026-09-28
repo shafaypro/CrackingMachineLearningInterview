@@ -41,7 +41,7 @@ This walks the full design for a concrete brief and flags the decisions intervie
 
 **Working brief for this guide:** internal employee assistant over 500k company documents (wikis, tickets, PDFs, code), 5,000 employees, ~10 queries/day each, document-level permissions, answers must cite sources, p95 time-to-first-token under 2 s, budget ~$5k/month.
 
-That's ~50k queries/day, roughly 1 QPS average with peaks around 10 QPS: modest scale, which means the hard parts are quality, permissions, and cost, not throughput. Saying that out loud reframes the problem correctly.
+That's ~50k queries/day, about 0.6 QPS averaged over 24 hours (higher during working hours) with peaks around 10 QPS: modest scale, which means the hard parts are quality, permissions, and cost, not throughput. Saying that out loud reframes the problem correctly.
 
 ---
 
@@ -322,7 +322,7 @@ Ship with a **feature flag and a fallback** (traditional keyword search), so the
 
 #### Walk me through the architecture.
 
-I'd start by pinning the requirements, because they change the design: audience and permissions, corpus size and formats, whether it can take actions, latency and budget, and what a wrong answer costs. For an internal assistant over 500k documents at 50k queries a day, the interesting constraints are quality, permissions, and cost, not throughput, since that's about 1 QPS average.
+I'd start by pinning the requirements, because they change the design: audience and permissions, corpus size and formats, whether it can take actions, latency and budget, and what a wrong answer costs. For an internal assistant over 500k documents at 50k queries a day, the interesting constraints are quality, permissions, and cost, not throughput, since that's under 1 QPS on average.
 
 Offline: CDC-driven connectors pull from each source, format-aware parsing, structure-aware chunking with metadata including ACLs, batched embedding with content hashing to skip unchanged chunks, into a hybrid index.
 

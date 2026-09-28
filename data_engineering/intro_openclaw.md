@@ -2,6 +2,8 @@
 
 A guide to OpenClaw: defining pipelines, tracking dataset lineage, and running them in production.
 
+> **Read this first:** the "OpenClaw" data-lineage framework described in this guide does not match any published, documented package we can verify. The name OpenClaw is best known for an unrelated open-source personal AI agent project. Treat the APIs, CLI commands, and URNs below as **illustrative pseudocode** for lineage and data-contract concepts, not as a tool you can install. For real implementations of the same ideas, look at OpenLineage (with Marquez), DataHub, OpenMetadata, and dbt's own contracts and tests.
+
 ---
 
 
@@ -503,8 +505,8 @@ OpenClaw will notify all downstream dataset owners automatically and block any n
 
 ### Recommended Learning Order
 
-1. Work through the official docs quickstart (`openclaw.io/docs/quickstart`)
-2. Build a local pipeline using SQLite as the metadata backend
+1. Map these concepts onto a real lineage stack (OpenLineage + Marquez, DataHub, or OpenMetadata)
+2. Build a local pipeline that emits lineage events to that stack
 3. Integrate with your team's existing dbt project
 4. Add contracts to your three most critical datasets
 5. Explore the Lineage API and connect it to your data catalog

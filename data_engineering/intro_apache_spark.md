@@ -37,7 +37,7 @@ Single Machine         →         Spark Cluster
                       │
               ┌───────▼────────┐
               │  Cluster Manager│
-              │ (YARN/K8s/Mesos)│
+              │ (YARN/K8s/etc.) │
               └───────┬────────┘
                       │
         ┌─────────────┼─────────────┐
@@ -71,11 +71,13 @@ Single Machine         →         Spark Cluster
 from pyspark.sql import SparkSession
 
 # Create SparkSession (entry point)
-spark = SparkSession.builder \
-    .appName("MyApp") \
-    .master("local[*]") \             # local mode: use all CPU cores
-    .config("spark.sql.adaptive.enabled", "true") \  # enable AQE
+spark = (
+    SparkSession.builder
+    .appName("MyApp")
+    .master("local[*]")                               # local mode: use all CPU cores
+    .config("spark.sql.adaptive.enabled", "true")     # AQE (already the default)
     .getOrCreate()
+)
 
 sc = spark.sparkContext  # for low-level RDD operations (rarely needed)
 ```
@@ -405,7 +407,7 @@ result = large_table.join(broadcast(small_table), "product_id")
 ### Adaptive Query Execution (AQE)
 
 ```python
-# Enable AQE (default in Spark 3.x)
+# Enable AQE (on by default since Spark 3.2)
 spark.conf.set("spark.sql.adaptive.enabled", "true")
 
 # AQE automatically:
@@ -437,11 +439,11 @@ dbutils.notebook.run("./other_notebook", timeout_seconds=300)
 | Feature | Status |
 |---------|--------|
 | **Spark Connect** | Remote Spark client: use PySpark from anywhere without running on the cluster |
-| **Delta Lake 3.x** | Native Delta support in Spark, liquid clustering |
-| **Python UDFs** | Arrow-optimized UDFs (Pandas UDFs) are now the default |
+| **Delta Lake** | Separate open-source library (not bundled with Apache Spark): ACID tables, liquid clustering |
+| **Python UDFs** | Pandas UDFs and Arrow-optimized Python UDFs (`useArrow=True`) cut serialization overhead |
 | **Spark on K8s** | Standard deployment method alongside YARN |
 | **Unity Catalog** | Databricks' data governance layer across Delta Lake |
-| **Spark 4.0** | Python 3.12+, improved structured streaming, better SQL compatibility |
+| **Spark 4.0** | ANSI SQL mode on by default, VARIANT type, Python data source API; requires Java 17+ and Python 3.9+; Mesos support removed |
 
 ---
 

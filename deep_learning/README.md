@@ -352,7 +352,7 @@ Used in: Stable Diffusion (images), DALL-E 3, AudioLDM (audio), protein generati
 import torchvision.models as models
 
 # Load pretrained model
-resnet = models.resnet50(pretrained=True)
+resnet = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)  # `pretrained=True` is deprecated
 
 # Option 1: Feature extraction, freeze all but classifier
 for param in resnet.parameters():
@@ -520,7 +520,7 @@ Gradient checkpointing trades compute for memory. Normally, all intermediate act
 
 **Q16: What is knowledge distillation?** 🔴 Advanced
 
-Knowledge distillation trains a small "student" model to mimic a large "teacher" model. The student learns from soft probability distributions (temperature-scaled logits) output by the teacher rather than just hard labels. Soft targets carry richer information about class relationships (e.g., "30% likely class A, 20% likely class B"). This allows small models to achieve performance close to large models, enabling deployment on constrained hardware. Example: DistilBERT (66% of BERT parameters, 97% of BERT performance).
+Knowledge distillation trains a small "student" model to mimic a large "teacher" model. The student learns from soft probability distributions (temperature-scaled logits) output by the teacher rather than just hard labels. Soft targets carry richer information about class relationships (e.g., "30% likely class A, 20% likely class B"). This allows small models to achieve performance close to large models, enabling deployment on constrained hardware. Example: DistilBERT (about 40% fewer parameters than BERT-base, 66M vs 110M, while retaining about 97% of its GLUE performance).
 
 ---
 

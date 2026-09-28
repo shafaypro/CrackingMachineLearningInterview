@@ -44,7 +44,8 @@ Great Expectations (GX) is the most popular open-source data quality framework. 
 |---------|-------------|
 | **Expectation** | A declarative assertion about data (e.g., column not null, values in range) |
 | **Expectation Suite** | A collection of expectations for a dataset |
-| **Checkpoint** | Runs a suite against a batch of data and produces validation results |
+| **Validation Definition** | Pairs an expectation suite with a batch definition (the data to check) |
+| **Checkpoint** | Runs one or more validation definitions and triggers actions (alerts, Data Docs) |
 | **Data Docs** | Auto-generated HTML report of validation results |
 | **Data Context** | The entry point: manages expectations, stores, and checkpoints |
 
@@ -52,8 +53,9 @@ Great Expectations (GX) is the most popular open-source data quality framework. 
 
 ```bash
 pip install great_expectations
-great_expectations init
 ```
+
+The examples use GX Core 1.x. The `great_expectations init` CLI, `context.sources`, validators and `add_or_update_*` methods belong to the 0.x API and were removed in 1.0; the project context is now created from Python with `gx.get_context()`.
 
 ### Defining Expectations
 
@@ -67,44 +69,41 @@ df = pd.read_csv("users.csv")
 # Create a data context
 context = gx.get_context()
 
-# Create an expectation suite
-suite = context.add_or_update_expectation_suite("users_suite")
+# Connect data: data source -> data asset -> batch definition
+data_source = context.data_sources.add_pandas("users_datasource")
+data_asset = data_source.add_dataframe_asset(name="users_asset")
+batch_definition = data_asset.add_batch_definition_whole_dataframe("users_batch")
 
-# Connect data source
-datasource = context.sources.add_pandas("users_datasource")
-data_asset = datasource.add_dataframe_asset("users_asset")
-batch_request = data_asset.build_batch_request(dataframe=df)
-
-# Get a validator
-validator = context.get_validator(
-    batch_request=batch_request,
-    expectation_suite_name="users_suite",
-)
+# Create an expectation suite (expectations are classes in GX 1.x)
+suite = context.suites.add(gx.ExpectationSuite(name="users_suite"))
+E = gx.expectations
 
 # Define expectations
-validator.expect_column_to_exist("user_id")
-validator.expect_column_values_to_not_be_null("user_id")
-validator.expect_column_values_to_be_unique("user_id")
-validator.expect_column_values_to_not_be_null("email")
-validator.expect_column_values_to_match_regex("email", r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+suite.add_expectation(E.ExpectColumnToExist(column="user_id"))
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column="user_id"))
+suite.add_expectation(E.ExpectColumnValuesToBeUnique(column="user_id"))
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column="email"))
+suite.add_expectation(E.ExpectColumnValuesToMatchRegex(
+    column="email", regex=r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
 
 # Numeric expectations
-validator.expect_column_values_to_be_between("age", min_value=0, max_value=120)
-validator.expect_column_values_to_be_between("salary", min_value=0, max_value=10_000_000)
+suite.add_expectation(E.ExpectColumnValuesToBeBetween(column="age", min_value=0, max_value=120))
+suite.add_expectation(E.ExpectColumnValuesToBeBetween(column="salary", min_value=0, max_value=10_000_000))
 
 # Distribution expectations
-validator.expect_column_mean_to_be_between("age", min_value=20, max_value=60)
-validator.expect_column_stdev_to_be_between("salary", min_value=1000, max_value=100000)
+suite.add_expectation(E.ExpectColumnMeanToBeBetween(column="age", min_value=20, max_value=60))
+suite.add_expectation(E.ExpectColumnStdevToBeBetween(column="salary", min_value=1000, max_value=100000))
 
 # Categorical expectations
-validator.expect_column_values_to_be_in_set("status", ["active", "inactive", "pending"])
-validator.expect_column_proportion_of_unique_values_to_be_between("country", min_value=0.01, max_value=1.0)
+suite.add_expectation(E.ExpectColumnValuesToBeInSet(column="status", value_set=["active", "inactive", "pending"]))
+suite.add_expectation(E.ExpectColumnProportionOfUniqueValuesToBeBetween(column="country", min_value=0.01, max_value=1.0))
 
 # Null rate expectations
-validator.expect_column_values_to_not_be_null("age", mostly=0.95)  # Allow 5% nulls
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column="age", mostly=0.95))  # Allow 5% nulls
 
-# Save the suite
-validator.save_expectation_suite()
+# Quick interactive check against one batch
+batch = batch_definition.get_batch(batch_parameters={"dataframe": df})
+print(batch.validate(suite).success)
 ```
 
 ### Running Validations in a Pipeline
@@ -114,29 +113,30 @@ import great_expectations as gx
 
 context = gx.get_context()
 
-# Create a checkpoint
-checkpoint = context.add_or_update_checkpoint(
-    name="users_checkpoint",
-    validations=[
-        {
-            "batch_request": batch_request,
-            "expectation_suite_name": "users_suite",
-        }
-    ],
+# Pair the suite with the data it should validate
+validation_definition = context.validation_definitions.add(
+    gx.ValidationDefinition(name="users_validation", data=batch_definition, suite=suite)
 )
 
-# Run the checkpoint
-result = checkpoint.run()
+# Create a checkpoint that runs the validation and updates Data Docs
+checkpoint = context.checkpoints.add(gx.Checkpoint(
+    name="users_checkpoint",
+    validation_definitions=[validation_definition],
+    actions=[gx.checkpoint.UpdateDataDocsAction(name="update_data_docs")],
+))
+
+# Run the checkpoint on today's dataframe
+result = checkpoint.run(batch_parameters={"dataframe": df})
 
 # Check if all expectations passed
 if result.success:
     print("All data quality checks passed")
 else:
     # Get failed expectations
-    for validation_result in result.list_validation_results():
+    for validation_result in result.run_results.values():
         failed = [r for r in validation_result.results if not r.success]
         for f in failed:
-            print(f"FAILED: {f.expectation_config.expectation_type} on {f.expectation_config.kwargs}")
+            print(f"FAILED: {f.expectation_config.type} on {f.expectation_config.kwargs}")
 
 # Build and open Data Docs (HTML report)
 context.build_data_docs()
@@ -285,35 +285,35 @@ Concept drift: P_train(churn|features) ≠ P_serve(churn|features) → model is 
 
 ```python
 import pandas as pd
-from evidently.report import Report
-from evidently.metric_preset import DataDriftPreset, DataQualityPreset
-from evidently.metrics import ColumnDriftMetric, DatasetDriftMetric
+from evidently import Report  # Evidently 0.7+ API; the old one lives in evidently.legacy
+from evidently.presets import DataDriftPreset, DataSummaryPreset
+from evidently.metrics import DriftedColumnsCount, ValueDrift
 
 # Reference data (training distribution) vs current data (production)
 reference_df = pd.read_parquet("reference_data.parquet")
 current_df = pd.read_parquet("current_data.parquet")
 
 # Full data drift report
-report = Report(metrics=[
+report = Report([
     DataDriftPreset(),         # Drift for all features
-    DataQualityPreset(),       # Null rates, outliers, distribution stats
+    DataSummaryPreset(),       # Null rates, distribution stats
 ])
 
-report.run(reference_data=reference_df, current_data=current_df)
-report.save_html("drift_report.html")
+snapshot = report.run(current_data=current_df, reference_data=reference_df)
+snapshot.save_html("drift_report.html")
 
-# Check specific columns programmatically
-result = report.as_dict()
-drift_score = result['metrics'][0]['result']['share_of_drifted_columns']
-print(f"Fraction of drifted columns: {drift_score:.2%}")
+# Check results programmatically (first metric of the preset is DriftedColumnsCount)
+result = snapshot.dict()
+drift_share = result['metrics'][0]['value']['share']
+print(f"Fraction of drifted columns: {drift_share:.2%}")
 
 # Per-column drift
-col_report = Report(metrics=[
-    ColumnDriftMetric(column_name="age"),
-    ColumnDriftMetric(column_name="salary"),
-    DatasetDriftMetric(drift_share=0.3),  # Alert if >30% columns drift
+col_report = Report([
+    ValueDrift(column="age"),
+    ValueDrift(column="salary"),
+    DriftedColumnsCount(drift_share=0.3),  # Dataset counts as drifted if >30% columns drift
 ])
-col_report.run(reference_data=reference_df, current_data=current_df)
+col_snapshot = col_report.run(current_data=current_df, reference_data=reference_df)
 ```
 
 ### Statistical Tests for Drift

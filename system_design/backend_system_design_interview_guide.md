@@ -11,23 +11,25 @@ This guide adapts the provided standalone HTML system design guide into the repo
 3. [How to Use This Guide](#how-to-use-this-guide)
 4. [Reference Backend Architecture](#reference-backend-architecture)
 5. [How to Explain Architecture in an Interview](#how-to-explain-architecture-in-an-interview)
-6. [Scalability](#1-scalability)
-7. [Databases](#2-databases)
-8. [Data Modeling, DDD, and Data-Driven Development](#data-modeling-ddd-and-data-driven-development)
-9. [Caching](#3-caching)
-10. [Distributed Systems](#4-distributed-systems)
-11. [Messaging and Events](#5-messaging-and-events)
-12. [Networking and APIs](#6-networking-and-apis)
-13. [Storage](#7-storage)
-14. [Reliability and Fault Tolerance](#8-reliability-and-fault-tolerance)
-15. [Search and Real-Time Systems](#9-search-and-real-time-systems)
-16. [Worked Architecture Examples](#worked-architecture-examples)
-17. [Operational Review Checklist](#operational-review-checklist)
-18. [Key Trade-Off Cheat Sheet](#key-trade-off-cheat-sheet)
-19. [Suggested Interview Walkthrough](#suggested-interview-walkthrough)
-20. [Common Mistakes in Backend Interviews](#common-mistakes-in-backend-interviews)
-21. [References](#references)
-22. [Recommended Follow-Ups in This Repo](#recommended-follow-ups-in-this-repo)
+6. [Interview Q&A (Scalability and Databases)](#interview-qa-scalability-and-databases)
+   - [Scalability](#1-scalability)
+   - [Databases](#2-databases)
+7. [Data Modeling, DDD, and Data-Driven Development](#data-modeling-ddd-and-data-driven-development)
+8. [Interview Q&A (Caching, Distribution, and Reliability)](#interview-qa-caching-distribution-and-reliability)
+   - [Caching](#3-caching)
+   - [Distributed Systems](#4-distributed-systems)
+   - [Messaging and Events](#5-messaging-and-events)
+   - [Networking and APIs](#6-networking-and-apis)
+   - [Storage](#7-storage)
+   - [Reliability and Fault Tolerance](#8-reliability-and-fault-tolerance)
+   - [Search and Real-Time Systems](#9-search-and-real-time-systems)
+9. [Worked Architecture Examples](#worked-architecture-examples)
+10. [Operational Review Checklist](#operational-review-checklist)
+11. [Key Trade-Off Cheat Sheet](#key-trade-off-cheat-sheet)
+12. [Suggested Interview Walkthrough](#suggested-interview-walkthrough)
+13. [Common Mistakes in Backend Interviews](#common-mistakes-in-backend-interviews)
+14. [References](#references)
+15. [Recommended Follow-Ups in This Repo](#recommended-follow-ups-in-this-repo)
 
 ---
 
@@ -199,9 +201,13 @@ You do not need exact precision. You need enough math to justify architecture ch
 
 ---
 
-## 1. Scalability
+## Interview Q&A (Scalability and Databases)
 
-### 1. Horizontal vs Vertical Scaling
+The 32 core concepts are written as interview questions. Each answer covers the definition, why it matters, an example, common prompts, and the trade-off.
+
+### 1. Scalability
+
+#### Q1: What is the difference between horizontal and vertical scaling?
 
 - Definition: Vertical scaling adds more CPU, RAM, or disk to one machine. Horizontal scaling adds more machines and distributes load across them.
 - Why it matters: Almost every "design for millions of users" problem starts with a scaling decision.
@@ -209,7 +215,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: "How would you scale this API by 10x?" "Design YouTube, Twitter, or Instagram."
 - Trade-off: Vertical scaling is simpler but capped. Horizontal scaling removes the single-box limit but introduces distributed systems complexity.
 
-### 2. Load Balancing
+#### Q2: What is load balancing and which strategies are common?
 
 - Definition: A load balancer distributes incoming requests across multiple backends. Common strategies include round robin, least connections, and layer-7 routing.
 - Why it matters: It is usually the first scaling component interviewers expect you to mention.
@@ -217,7 +223,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: URL shortener, API gateway, "How do you handle traffic spikes?"
 - Trade-off: Stateless backends are easier to balance; sticky sessions reduce rehydration costs but can create hot spots.
 
-### 3. Rate Limiting
+#### Q3: What is rate limiting and which algorithms implement it?
 
 - Definition: Rate limiting constrains how many requests a client can issue in a time window. Common algorithms include token bucket, leaky bucket, fixed window, and sliding window.
 - Why it matters: Protects against abuse, DDoS-style bursts, and noisy neighbors.
@@ -225,7 +231,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: "Design a rate limiter." "How would you protect a shared API platform?"
 - Trade-off: Tight limits protect infrastructure but can punish legitimate bursty traffic. Token bucket is a common compromise.
 
-### 4. Auto-Scaling
+#### Q4: What is auto-scaling and what metrics should drive it?
 
 - Definition: Auto-scaling changes capacity dynamically based on metrics like CPU, request rate, queue depth, or latency.
 - Why it matters: Shows you understand cost control as well as performance.
@@ -235,9 +241,9 @@ You do not need exact precision. You need enough math to justify architecture ch
 
 ---
 
-## 2. Databases
+### 2. Databases
 
-### 5. SQL vs NoSQL
+#### Q5: How do you choose between SQL and NoSQL?
 
 - Definition: SQL databases favor relational structure, transactions, and rich querying. NoSQL systems favor flexible schemas and scale-oriented access patterns.
 - Why it matters: Database choice is foundational in almost every design.
@@ -245,7 +251,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: "Which database would you choose and why?" "How do you store user content at scale?"
 - Trade-off: SQL is strong on joins, consistency, and transactions. NoSQL is strong on horizontal scale and schema flexibility.
 
-### 6. Database Indexing
+#### Q6: How does database indexing work and what does it cost?
 
 - Definition: Indexes create fast access paths for lookups, sorting, and filtering without scanning the full table.
 - Why it matters: Interviewers often check whether you understand how queries stay fast as data grows.
@@ -253,7 +259,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: "Why is the query slow?" "How do you optimize lookup latency?"
 - Trade-off: Indexes improve reads but increase storage and write amplification.
 
-### 7. Replication
+#### Q7: What is replication and what trade-offs does it introduce?
 
 - Definition: Replication copies data across multiple nodes for availability, durability, and read scaling.
 - Why it matters: It is one of the first tools for high availability.
@@ -261,7 +267,7 @@ You do not need exact precision. You need enough math to justify architecture ch
 - Common prompts: "How do you improve read throughput?" "How do you survive node failure?"
 - Trade-off: Replication improves resilience but introduces lag, failover complexity, and consistency questions.
 
-### 8. Sharding
+#### Q8: What is sharding and when do you need it?
 
 - Definition: Sharding partitions data across multiple databases so one machine does not hold all data or traffic.
 - Why it matters: Eventually many fast-growing systems outgrow a single database instance.
@@ -537,9 +543,11 @@ How this helps:
 
 ---
 
-## 3. Caching
+## Interview Q&A (Caching, Distribution, and Reliability)
 
-### 9. Cache-Aside
+### 3. Caching
+
+#### Q9: What is the cache-aside pattern?
 
 - Definition: The application checks the cache first, falls back to the database on a miss, then writes the result into cache.
 - Why it matters: It is the most common caching pattern in production systems.
@@ -547,7 +555,7 @@ How this helps:
 - Common prompts: "How do you reduce read load?" "How would you speed up a feed or profile page?"
 - Trade-off: Simple to implement, but cache invalidation and staleness management become your responsibility.
 
-### 10. Write-Through and Write-Behind Cache
+#### Q10: What are write-through and write-behind caching?
 
 - Definition: Write-through updates cache and backing store together. Write-behind writes to cache first and persists asynchronously later.
 - Why it matters: Interviewers look for whether you understand caching on the write path, not only reads.
@@ -555,7 +563,7 @@ How this helps:
 - Common prompts: "How do you cache hot writes?" "How would you handle very frequent updates?"
 - Trade-off: Write-through improves consistency but increases write latency. Write-behind boosts throughput but risks data loss on failure.
 
-### 11. CDN and Edge Caching
+#### Q11: How do CDN and edge caching work?
 
 - Definition: A CDN caches content near users at edge locations to reduce latency and origin load.
 - Why it matters: Global systems nearly always rely on edge caching for static and semi-static assets.
@@ -563,7 +571,7 @@ How this helps:
 - Common prompts: "How do you improve global latency?" "How would you scale an image or video platform?"
 - Trade-off: Excellent for read-heavy content, but invalidation and personalization can be difficult.
 
-### 12. Consistent Hashing
+#### Q12: What is consistent hashing and why use it?
 
 - Definition: Consistent hashing maps keys to cache or storage nodes so that adding or removing nodes remaps only a small fraction of keys.
 - Why it matters: It is a standard answer for distributed caches and partitioned key-value systems.
@@ -573,9 +581,9 @@ How this helps:
 
 ---
 
-## 4. Distributed Systems
+### 4. Distributed Systems
 
-### 13. CAP Theorem
+#### Q13: What is the CAP theorem?
 
 - Definition: In the presence of a network partition, a distributed system can prioritize consistency or availability, but not fully guarantee both.
 - Why it matters: It gives a framework for discussing consistency trade-offs clearly.
@@ -583,7 +591,7 @@ How this helps:
 - Common prompts: "Would you choose CP or AP here?" "What happens during a partition?"
 - Trade-off: The theorem is not a design recipe, but it forces you to decide what the system sacrifices under failure.
 
-### 14. Strong vs Eventual Consistency
+#### Q14: What is the difference between strong and eventual consistency?
 
 - Definition: Strong consistency means every read reflects the latest successful write. Eventual consistency means replicas converge over time.
 - Why it matters: Many interview questions hinge on whether stale reads are acceptable.
@@ -591,7 +599,7 @@ How this helps:
 - Common prompts: "Can users see stale data?" "How much inconsistency can the product tolerate?"
 - Trade-off: Strong consistency improves correctness but usually costs latency and availability.
 
-### 15. Leader Election
+#### Q15: What is leader election and where is it used?
 
 - Definition: A distributed system may elect one node as leader to coordinate writes, scheduling, or ownership.
 - Why it matters: It appears in consensus systems, schedulers, and service coordination.
@@ -599,7 +607,7 @@ How this helps:
 - Common prompts: "How do you prevent two coordinators from acting at once?" "How does failover happen?"
 - Trade-off: Central leadership simplifies coordination but creates failover and split-brain considerations.
 
-### 16. Consensus and Raft
+#### Q16: What is consensus, and how does Raft achieve it?
 
 - Definition: Consensus protocols let distributed nodes agree on a sequence of operations even when some nodes fail. Raft is a commonly discussed protocol because it is easier to reason about than Paxos.
 - Why it matters: It comes up when discussing metadata stores, configuration management, and distributed locks.
@@ -607,7 +615,7 @@ How this helps:
 - Common prompts: "How do you keep replicas in sync?" "How does a distributed lock service work?"
 - Trade-off: Consensus gives stronger guarantees but requires quorum and increases write-path coordination cost.
 
-### 17. Two-Phase Commit
+#### Q17: What is two-phase commit (2PC)?
 
 - Definition: Two-phase commit coordinates atomic changes across multiple participants by asking each to prepare, then commit or abort.
 - Why it matters: Interviewers may ask how to preserve consistency across systems.
@@ -615,7 +623,7 @@ How this helps:
 - Common prompts: "How do you commit changes across services atomically?" "How do you avoid partial updates?"
 - Trade-off: Strong but blocking, coordinator-dependent, and often avoided in large microservice architectures.
 
-### 18. Saga Pattern
+#### Q18: What is the saga pattern?
 
 - Definition: A saga models a distributed transaction as a sequence of local transactions with compensating actions if a later step fails.
 - Why it matters: It is the modern answer when 2PC is too rigid for microservices.
@@ -625,17 +633,17 @@ How this helps:
 
 ---
 
-## 5. Messaging and Events
+### 5. Messaging and Events
 
-### 19. Message Queues and Event Streaming
+#### Q19: What are message queues and event streaming, and how do they differ?
 
-- Definition: Message queues decouple producers and consumers for task processing. Event streams provide durable ordered logs that multiple consumers can replay.
+- Definition: Message queues decouple producers and consumers for task processing. Event streams provide durable logs (ordered within a partition, in Kafka) that multiple consumers can replay.
 - Why it matters: Async communication is core to modern large systems.
 - Example: Kafka powers activity feeds, audit streams, and analytics pipelines in many companies.
 - Common prompts: Notification service, analytics pipeline, "How do you decouple services with different speeds?"
 - Trade-off: Improves resilience and throughput, but increases operational complexity and requires idempotent consumers.
 
-### 20. Event Sourcing
+#### Q20: What is event sourcing?
 
 - Definition: Instead of storing only current state, the system stores the sequence of events that produced that state.
 - Why it matters: Useful for auditability, replay, and debugging in domains with strict history requirements.
@@ -643,7 +651,7 @@ How this helps:
 - Common prompts: "How do you support audit trails?" "How would you implement time travel or rollback?"
 - Trade-off: Great for history and recovery, but current-state queries usually require snapshots or derived views.
 
-### 21. CQRS
+#### Q21: What is CQRS?
 
 - Definition: Command Query Responsibility Segregation separates the write model from the read model so each can be optimized independently.
 - Why it matters: Often paired with event-driven architectures when reads and writes have very different shapes.
@@ -653,9 +661,9 @@ How this helps:
 
 ---
 
-## 6. Networking and APIs
+### 6. Networking and APIs
 
-### 22. REST vs GraphQL vs gRPC
+#### Q22: How do you choose between REST, GraphQL, and gRPC?
 
 - Definition: REST is resource-oriented over HTTP. GraphQL lets clients request exactly the fields they need. gRPC uses strongly typed schemas and efficient binary transport, usually over HTTP/2.
 - Why it matters: API protocol choice affects latency, evolution, client ergonomics, and caching.
@@ -663,7 +671,7 @@ How this helps:
 - Common prompts: "How do you design the API?" "What protocol should mobile clients use?"
 - Trade-off: REST is simple and cache-friendly, GraphQL reduces over-fetching, and gRPC is fast and typed but less browser-native.
 
-### 23. WebSockets and Long Polling
+#### Q23: When do you use WebSockets versus long polling?
 
 - Definition: WebSockets keep a persistent bidirectional connection open. Long polling keeps an HTTP request open until data is available and then reconnects.
 - Why it matters: Real-time systems need a push mechanism.
@@ -671,7 +679,7 @@ How this helps:
 - Common prompts: Chat system, live sports, collaborative editing, "How do you push updates in real time?"
 - Trade-off: WebSockets are efficient at scale for bidirectional traffic but require connection state management.
 
-### 24. DNS and Anycast Routing
+#### Q24: How do DNS and anycast routing work in large systems?
 
 - Definition: DNS maps names to addresses. Anycast advertises the same IP from many locations so traffic naturally reaches the nearest healthy edge.
 - Why it matters: Global systems start with traffic steering before application logic even runs.
@@ -681,9 +689,9 @@ How this helps:
 
 ---
 
-## 7. Storage
+### 7. Storage
 
-### 25. Object vs Block vs File Storage
+#### Q25: What is the difference between object, block, and file storage?
 
 - Definition: Object storage handles blobs at large scale, block storage acts like attached disks, and file storage exposes shared hierarchical file systems.
 - Why it matters: Choosing the wrong storage type can hurt latency, cost, and operational simplicity.
@@ -691,7 +699,7 @@ How this helps:
 - Common prompts: "How would you store uploads?" "Where should user-generated media live?"
 - Trade-off: Object storage is cheap and durable but higher latency; block storage is fast but less elastic; file storage is convenient but not always the most scalable.
 
-### 26. Data Partitioning Strategies
+#### Q26: What data partitioning strategies exist and how do you choose one?
 
 - Definition: Range, hash, and list partitioning distribute data based on different keying schemes.
 - Why it matters: Partitioning strategy strongly affects balance, query efficiency, and hot spot risk.
@@ -701,9 +709,9 @@ How this helps:
 
 ---
 
-## 8. Reliability and Fault Tolerance
+### 8. Reliability and Fault Tolerance
 
-### 27. Circuit Breaker Pattern
+#### Q27: What is the circuit breaker pattern?
 
 - Definition: A circuit breaker stops repeated calls to a failing dependency after an error threshold and retries only after a cooldown window.
 - Why it matters: Prevents cascading failures in service meshes and microservice graphs.
@@ -711,7 +719,7 @@ How this helps:
 - Common prompts: "What happens if a downstream service is failing?" "How do you contain blast radius?"
 - Trade-off: Improves system stability, but threshold tuning matters or you risk false opens or slow protection.
 
-### 28. Idempotency
+#### Q28: What is idempotency and why does it matter?
 
 - Definition: An operation is idempotent if repeating it does not change the final result beyond the first successful application.
 - Why it matters: Safe retries depend on idempotency.
@@ -719,7 +727,7 @@ How this helps:
 - Common prompts: "How do you handle duplicate requests?" "How do retries avoid creating duplicate orders?"
 - Trade-off: Usually requires request tracking, deduplication state, and careful API contract design.
 
-### 29. Health Checks, Timeouts, and Retries
+#### Q29: How should you design health checks, timeouts, and retries?
 
 - Definition: Health checks remove unhealthy instances, timeouts bound waiting time, and retries recover from transient faults.
 - Why it matters: These are baseline reliability controls for any production system.
@@ -727,7 +735,7 @@ How this helps:
 - Common prompts: "How do you handle slow dependencies?" "What do you do when a service becomes flaky?"
 - Trade-off: Retries improve transient-failure handling but can create retry storms without backoff, jitter, and circuit breakers.
 
-### 30. Replication Factor and Quorum
+#### Q30: What are replication factor and quorum?
 
 - Definition: Replication factor decides how many copies of data exist. Quorum reads and writes require a majority or another chosen threshold.
 - Why it matters: It lets you tune durability, availability, and consistency explicitly.
@@ -737,9 +745,9 @@ How this helps:
 
 ---
 
-## 9. Search and Real-Time Systems
+### 9. Search and Real-Time Systems
 
-### 31. Search Indexes
+#### Q31: How do search indexes work?
 
 - Definition: Inverted indexes map terms to documents so full-text search can run efficiently at scale.
 - Why it matters: Traditional database indexes are not enough for large search products.
@@ -747,7 +755,7 @@ How this helps:
 - Common prompts: "How would you build search?" "How do you implement autocomplete or faceted discovery?"
 - Trade-off: Search engines are powerful but create sync and consistency work between the primary database and the index.
 
-### 32. Time-Series Data and Storage
+#### Q32: How do you store and query time-series data?
 
 - Definition: Time-series systems are optimized for append-heavy writes, retention policies, and range queries over timestamps.
 - Why it matters: Monitoring, IoT, analytics, and location streams all produce time-based data.

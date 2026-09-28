@@ -113,7 +113,7 @@ Remove weights or structures deemed unimportant.
 
 This is the crux. Unstructured pruning produces a matrix full of zeros; a standard dense GEMM kernel multiplies those zeros just as fast as any other number, so you save storage (if stored sparse) and nothing else. Structured pruning removes an entire channel, so the weight matrix is physically smaller and every kernel benefits automatically.
 
-**Semi-structured (2:4) sparsity** is the middle ground: exactly 2 of every 4 contiguous weights are zero, a pattern NVIDIA Ampere+ tensor cores accelerate natively for roughly 2× on those matmuls.
+**Semi-structured (2:4) sparsity** is the middle ground: exactly 2 of every 4 contiguous weights are zero, a pattern NVIDIA Ampere+ tensor cores accelerate natively, for up to 2× on those matmuls (end-to-end gains are usually smaller).
 
 ```python
 import torch.nn.utils.prune as prune
@@ -177,7 +177,7 @@ The central difficulty in LLM quantization is **activation outliers**: a small n
 ```python
 # int8 dynamic quantization: one line, works well for CPU-bound linear layers
 import torch
-model_int8 = torch.quantization.quantize_dynamic(
+model_int8 = torch.ao.quantization.quantize_dynamic(   # torch.quantization is the legacy alias
     model, {torch.nn.Linear}, dtype=torch.qint8
 )
 ```
@@ -282,7 +282,7 @@ Benchmark honestly: warm up before timing, use realistic input distributions rat
 
 Because it was **unstructured** pruning. The weights are zero, but the tensor is the same shape, and a dense GEMM kernel multiplies zeros at exactly the same speed as anything else. You've saved storage (if you actually store it in a sparse format), and no compute.
 
-To get real speedup you need one of: **structured pruning**, which removes whole channels or heads so the matrices are physically smaller and every kernel benefits; **2:4 semi-structured sparsity**, which Ampere+ tensor cores accelerate natively for around 2× on those matmuls; or a genuine sparse kernel, which typically needs very high sparsity (>95%) before it beats dense.
+To get real speedup you need one of: **structured pruning**, which removes whole channels or heads so the matrices are physically smaller and every kernel benefits; **2:4 semi-structured sparsity**, which Ampere+ tensor cores accelerate natively for up to about 2× on those matmuls; or a genuine sparse kernel, which typically needs very high sparsity (>95%) before it beats dense.
 
 The general lesson is that parameter count and latency are different currencies, and compression targets one or the other.
 
