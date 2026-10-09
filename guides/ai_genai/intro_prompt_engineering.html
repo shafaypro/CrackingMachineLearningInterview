@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Engineering Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Prompt Engineering: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_prompt_engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Prompt Engineering Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Prompt Engineering: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_prompt_engineering.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prompt Engineering Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Prompt Engineering: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Prompt Engineering",
+   "description": "Prompt Engineering: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_prompt_engineering.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Prompt Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_prompt_engineering.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Prompt Engineering</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_prompt_engineering.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="prompt-engineering">Prompt Engineering</h1>
+<h2 id="why-prompt-engineering-is-an-engineering-discipline">Why Prompt Engineering Is an Engineering Discipline</h2>
+<p>Prompt engineering is not &quot;magic words.&quot; It is a systematic process of designing, testing, and iterating on instructions that reliably elicit the behavior you need from an LLM. Like software, prompts have versions, test cases, and failure modes.</p>
+<p>Poor prompt engineering causes:</p>
+<ul>
+<li>Inconsistent output format → broken parsing</li>
+<li>Hallucinated content → user trust issues</li>
+<li>Model refusals → blocked workflows</li>
+<li>Context overload → degraded quality</li>
+</ul>
+<hr />
+<h2 id="fundamental-techniques">Fundamental Techniques</h2>
+<h3 id="zero-shot-prompting">Zero-Shot Prompting</h3>
+<p>No examples: just instructions. Works well for tasks the model has seen frequently during training.</p>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;
+Classify the sentiment of the following review as Positive, Negative, or Neutral.
+Return only the label with no explanation.
+
+Review: &quot;The delivery was two days late but the product itself is excellent.&quot;
+&quot;&quot;&quot;
+# Output: Positive
+</code></pre>
+<p><strong>When it fails:</strong> Novel tasks, tasks requiring specific formats, tasks with ambiguous criteria.</p>
+<h3 id="few-shot-prompting">Few-Shot Prompting</h3>
+<p>Provide worked examples before the actual input. The model learns the pattern from examples.</p>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;
+Extract the company name and action from each sentence.
+Format: {&quot;company&quot;: &quot;...&quot;, &quot;action&quot;: &quot;...&quot;}
+
+Sentence: Apple announced a new chip called M4 Ultra.
+{&quot;company&quot;: &quot;Apple&quot;, &quot;action&quot;: &quot;announced new chip&quot;}
+
+Sentence: Tesla recalled 120,000 vehicles over software issues.
+{&quot;company&quot;: &quot;Tesla&quot;, &quot;action&quot;: &quot;recalled vehicles&quot;}
+
+Sentence: Microsoft acquired Activision Blizzard for $69 billion.
+&quot;&quot;&quot;
+# Model follows the pattern: {&quot;company&quot;: &quot;Microsoft&quot;, &quot;action&quot;: &quot;acquired Activision Blizzard&quot;}
+</code></pre>
+<p><strong>Few-shot tips:</strong></p>
+<ul>
+<li>Order examples: put the most similar example last (closest to the actual input)</li>
+<li>Balance examples across classes to avoid bias</li>
+<li>3-8 examples is usually optimal: diminishing returns beyond 10</li>
+<li>Use examples that cover edge cases you care about</li>
+</ul>
+<h3 id="chain-of-thought-cot-prompting">Chain-of-Thought (CoT) Prompting</h3>
+<p>For reasoning tasks, instructing the model to &quot;think step by step&quot; dramatically improves accuracy. The model's intermediate reasoning steps catch logical errors that would otherwise be skipped.</p>
+<pre><code class="language-python"># Standard (fails on complex reasoning)
+prompt = &quot;A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost?&quot;
+# Model often outputs: $0.10 (wrong)
+
+# Chain-of-thought
+prompt = &quot;&quot;&quot;
+A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball.
+How much does the ball cost?
+
+Think step by step before giving your final answer.
+&quot;&quot;&quot;
+# Model output:
+# Let ball = x cents
+# Bat = x + 100 cents
+# x + (x + 100) = 110
+# 2x = 10
+# x = 5 cents
+# Answer: $0.05
+</code></pre>
+<p><strong>Few-shot CoT:</strong> Provide examples that show the reasoning chain explicitly:</p>
+<pre><code class="language-python">few_shot_cot = &quot;&quot;&quot;
+Q: Roger has 5 tennis balls. He buys 2 cans of tennis balls, each containing 3 balls. How many does he have now?
+A: Roger starts with 5. He buys 2 × 3 = 6 more. 5 + 6 = 11. Answer: 11.
+
+Q: Shawn has five toys. For Christmas he got two toys each from his mom and dad. How many toys does he have now?
+A: &quot;&quot;&quot;
+</code></pre>
+<h3 id="self-consistency">Self-Consistency</h3>
+<p>For high-stakes reasoning, sample multiple CoT paths and take the majority vote:</p>
+<pre><code class="language-python">from collections import Counter
+
+def self_consistent_answer(prompt: str, model, n_samples: int = 5) -&gt; str:
+    &quot;&quot;&quot;
+    Sample n reasoning paths, return the most common final answer.
+    More reliable than single CoT for mathematical reasoning.
+    &quot;&quot;&quot;
+    answers = []
+    for _ in range(n_samples):
+        response = model.generate(prompt, temperature=0.7)  # some temperature for diversity
+        # Extract final answer from response (last number, last sentence, etc.)
+        answer = extract_final_answer(response)
+        answers.append(answer)
+    
+    # Return the majority answer
+    return Counter(answers).most_common(1)[0][0]
+</code></pre>
+<p><strong>When to use:</strong> Math problems, logic puzzles, medical reasoning, tasks where a single wrong step invalidates the answer and you can afford multiple API calls.</p>
+<h3 id="react-reason--act">ReAct (Reason + Act)</h3>
+<p>Interleaves reasoning traces with tool actions. Lets the model plan a thought, execute an action, observe the result, and repeat.</p>
+<pre><code>Thought: I need to find the current population of Japan to answer this question.
+Action: search(&quot;Japan current population 2024&quot;)
+Observation: Japan has approximately 123.3 million people as of 2024.
+Thought: Now I can answer the question.
+Final Answer: Japan's population is approximately 123 million.
+</code></pre>
+<pre><code class="language-python">react_system_prompt = &quot;&quot;&quot;
+You are an assistant with access to tools. For each step:
+1. Write &quot;Thought:&quot; explaining what you need to do next
+2. Write &quot;Action:&quot; with the tool call (format: tool_name(args))
+3. You will receive &quot;Observation:&quot; with the result
+4. Repeat until you can write &quot;Final Answer:&quot;
+
+Available tools:
+- search(query: str) → web search results
+- calculator(expression: str) → numeric result
+- lookup(term: str) → definition or fact
+
+If you can answer without tools, go directly to Final Answer.
+&quot;&quot;&quot;
+</code></pre>
+<h3 id="tree-of-thought-tot">Tree of Thought (ToT)</h3>
+<p>For very hard problems, explore multiple reasoning branches in parallel, score them, and backtrack from dead ends:</p>
+<pre><code>Problem: &quot;What's the best way to implement a distributed cache?&quot;
+
+Branch 1: Redis cluster     → Evaluate pros/cons → Score: 8/10
+Branch 2: Memcached         → Evaluate pros/cons → Score: 6/10  
+Branch 3: Custom in-memory  → Evaluate pros/cons → Score: 4/10
+
+→ Explore Branch 1 further with sub-branches
+</code></pre>
+<p>ToT is expensive (many model calls): use for one-off hard problems, not production pipelines.</p>
+<hr />
+<h2 id="system-prompt-design">System Prompt Design</h2>
+<p>The system prompt defines the model's persona, constraints, and operating context. It is the most durable part of your prompt: it doesn't change per request.</p>
+<pre><code class="language-python">system_prompt = &quot;&quot;&quot;
+You are a customer support assistant for Acme Software.
+
+## Your Role
+Answer questions about Acme's products, pricing, and troubleshooting.
+Escalate to a human agent when: the customer is angry, the issue involves billing disputes &gt; $500, or the question is outside your knowledge.
+
+## Constraints
+- Never discuss competitors by name
+- Never make promises about future features
+- Always end with &quot;Is there anything else I can help you with?&quot;
+- Respond in the same language the customer uses
+
+## Format
+- Use bullet points for step-by-step instructions
+- Keep responses under 200 words unless troubleshooting requires more
+- Reference documentation links when relevant
+&quot;&quot;&quot;
+</code></pre>
+<p><strong>System prompt principles:</strong></p>
+<ol>
+<li><strong>Role</strong>: who is the model being?</li>
+<li><strong>Scope</strong>: what topics are in/out of bounds?</li>
+<li><strong>Behavior</strong>: what consistent actions should it take?</li>
+<li><strong>Format</strong>: how should output be structured?</li>
+<li><strong>Escalation</strong>: when should it hand off or refuse?</li>
+</ol>
+<hr />
+<h2 id="output-format-control">Output Format Control</h2>
+<h3 id="explicit-format-instructions">Explicit Format Instructions</h3>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;
+Analyze the following customer complaint and return a JSON object with these exact fields:
+- sentiment: &quot;positive&quot; | &quot;negative&quot; | &quot;neutral&quot;
+- urgency: &quot;low&quot; | &quot;medium&quot; | &quot;high&quot;
+- category: &quot;billing&quot; | &quot;technical&quot; | &quot;shipping&quot; | &quot;other&quot;
+- summary: one sentence, under 20 words
+- requires_escalation: boolean
+
+Return only the JSON with no explanation or markdown.
+
+Complaint: &quot;My order hasn't arrived after 3 weeks and no one is responding to my emails!&quot;
+&quot;&quot;&quot;
+</code></pre>
+<h3 id="delimiters-for-reliable-parsing">Delimiters for Reliable Parsing</h3>
+<p>Use XML-style tags to clearly separate instructions from content:</p>
+<pre><code class="language-python">prompt = f&quot;&quot;&quot;
+Summarize the following article in 3 bullet points.
+Return the bullets inside &lt;summary&gt; tags.
+
+&lt;article&gt;
+{article_text}
+&lt;/article&gt;
+
+&lt;summary&gt;
+&quot;&quot;&quot;
+# Model naturally completes the &lt;summary&gt; block
+</code></pre>
+<h3 id="using-json-mode-api-level">Using JSON Mode (API-level)</h3>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI()
+response = client.chat.completions.create(
+    model=&quot;gpt-4o&quot;,
+    response_format={&quot;type&quot;: &quot;json_object&quot;},  # Guarantees valid JSON output
+    messages=[
+        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a data extraction assistant. Always respond with valid JSON.&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: f&quot;Extract entities from: {text}&quot;}
+    ]
+)
+import json
+result = json.loads(response.choices[0].message.content)
+</code></pre>
+<hr />
+<h2 id="context-management">Context Management</h2>
+<h3 id="token-budgeting">Token Budgeting</h3>
+<pre><code class="language-python">import tiktoken
+
+def count_tokens(text: str, model: str = &quot;gpt-4o&quot;) -&gt; int:
+    enc = tiktoken.encoding_for_model(model)
+    return len(enc.encode(text))
+
+def build_prompt_within_budget(
+    system: str,
+    history: list[dict],
+    user_message: str,
+    context_docs: list[str],
+    max_tokens: int = 128_000,
+    output_reserve: int = 4_000
+) -&gt; tuple[str, list[dict]]:
+    &quot;&quot;&quot;
+    Fit conversation history and context docs within the token budget.
+    Trims oldest history and least relevant docs first.
+    &quot;&quot;&quot;
+    available = max_tokens - output_reserve
+    
+    # Always include: system + latest user message
+    base_tokens = count_tokens(system) + count_tokens(user_message)
+    remaining = available - base_tokens
+    
+    # Add history from newest to oldest (trim old turns)
+    trimmed_history = []
+    for turn in reversed(history):
+        turn_tokens = count_tokens(str(turn))
+        if remaining - turn_tokens &gt; 1000:  # keep 1K buffer for docs
+            trimmed_history.insert(0, turn)
+            remaining -= turn_tokens
+        else:
+            break
+    
+    # Fill remaining budget with context docs
+    selected_docs = []
+    for doc in context_docs:
+        doc_tokens = count_tokens(doc)
+        if remaining - doc_tokens &gt; 0:
+            selected_docs.append(doc)
+            remaining -= doc_tokens
+    
+    return selected_docs, trimmed_history
+</code></pre>
+<h3 id="conversation-history-compression">Conversation History Compression</h3>
+<p>For long conversations, summarize older turns instead of truncating:</p>
+<pre><code class="language-python">def compress_history(history: list[dict], threshold_turns: int = 20) -&gt; list[dict]:
+    if len(history) &lt;= threshold_turns:
+        return history
+    
+    old_turns = history[:-threshold_turns]
+    recent_turns = history[-threshold_turns:]
+    
+    summary_prompt = f&quot;&quot;&quot;
+    Summarize the following conversation history concisely, preserving:
+    - Key decisions made
+    - Important facts established
+    - User preferences mentioned
+    
+    History:
+    {format_turns(old_turns)}
+    &quot;&quot;&quot;
+    
+    summary = llm.generate(summary_prompt)
+    
+    # Replace old turns with a single summary turn
+    return [{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: f&quot;Earlier conversation summary: {summary}&quot;}] + recent_turns
+</code></pre>
+<hr />
+<h2 id="prompt-testing--evaluation">Prompt Testing &amp; Evaluation</h2>
+<p>Treat prompts like code: version them, test them, measure regressions.</p>
+<pre><code class="language-python">import json
+from dataclasses import dataclass
+from typing import Callable
+
+@dataclass
+class PromptTestCase:
+    input: str
+    expected_output: str | dict
+    evaluator: Callable  # function that checks if output matches expected
+
+class PromptTestSuite:
+    def __init__(self, prompt_template: str, model):
+        self.prompt = prompt_template
+        self.model = model
+        self.test_cases: list[PromptTestCase] = []
+
+    def add_case(self, test: PromptTestCase):
+        self.test_cases.append(test)
+
+    def run(self) -&gt; dict:
+        results = {&quot;passed&quot;: 0, &quot;failed&quot;: 0, &quot;cases&quot;: []}
+        for case in self.test_cases:
+            output = self.model.generate(self.prompt.format(input=case.input))
+            passed = case.evaluator(output, case.expected_output)
+            results[&quot;passed&quot; if passed else &quot;failed&quot;] += 1
+            results[&quot;cases&quot;].append({
+                &quot;input&quot;: case.input,
+                &quot;output&quot;: output,
+                &quot;expected&quot;: case.expected_output,
+                &quot;passed&quot;: passed,
+            })
+        return results
+
+# Evaluator examples
+def exact_match(output: str, expected: str) -&gt; bool:
+    return output.strip().lower() == expected.strip().lower()
+
+def json_field_match(output: str, expected: dict) -&gt; bool:
+    try:
+        parsed = json.loads(output)
+        return all(parsed.get(k) == v for k, v in expected.items())
+    except json.JSONDecodeError:
+        return False
+
+def contains_all(output: str, expected: list[str]) -&gt; bool:
+    return all(term.lower() in output.lower() for term in expected)
+</code></pre>
+<hr />
+<h2 id="advanced-patterns">Advanced Patterns</h2>
+<h3 id="meta-prompting">Meta-Prompting</h3>
+<p>Use the model to improve its own prompt:</p>
+<pre><code class="language-python">meta_prompt = &quot;&quot;&quot;
+Here is a prompt I use for a customer support chatbot:
+&lt;current_prompt&gt;
+{current_prompt}
+&lt;/current_prompt&gt;
+
+Here are 3 cases where it failed:
+{failure_examples}
+
+Rewrite the prompt to handle these failure cases while keeping what works.
+Return only the improved prompt inside &lt;improved_prompt&gt; tags.
+&quot;&quot;&quot;
+</code></pre>
+<h3 id="prompt-chaining">Prompt Chaining</h3>
+<p>Break complex tasks into a sequence of simpler prompts, passing outputs between steps:</p>
+<pre><code class="language-python">def analyze_document_pipeline(document: str) -&gt; dict:
+    # Step 1: Extract key facts
+    facts = llm.generate(f&quot;List the 5 most important facts from this document:\n{document}&quot;)
+    
+    # Step 2: Identify claims that need verification
+    claims = llm.generate(f&quot;From these facts, which claims need external verification?\n{facts}&quot;)
+    
+    # Step 3: Assess confidence
+    confidence = llm.generate(f&quot;Rate the overall reliability of this document (1-10) based on:\nFacts: {facts}\nUnverified claims: {claims}&quot;)
+    
+    return {&quot;facts&quot;: facts, &quot;unverified_claims&quot;: claims, &quot;confidence_score&quot;: confidence}
+</code></pre>
+<h3 id="dynamic-few-shot-selection">Dynamic Few-Shot Selection</h3>
+<p>Use semantic search to select the most relevant examples for each input:</p>
+<pre><code class="language-python">class DynamicFewShot:
+    def __init__(self, example_bank: list[dict], embedder):
+        self.examples = example_bank
+        self.embedder = embedder
+        # Pre-compute embeddings for all examples
+        self.embeddings = embedder.embed([ex[&quot;input&quot;] for ex in example_bank])
+
+    def select_examples(self, query: str, n: int = 3) -&gt; list[dict]:
+        &quot;&quot;&quot;Return the n most similar examples to the query.&quot;&quot;&quot;
+        query_embedding = self.embedder.embed([query])[0]
+        similarities = cosine_similarity([query_embedding], self.embeddings)[0]
+        top_indices = similarities.argsort()[-n:][::-1]
+        return [self.examples[i] for i in top_indices]
+
+    def build_prompt(self, query: str, task_instructions: str) -&gt; str:
+        examples = self.select_examples(query)
+        example_text = &quot;\n\n&quot;.join(
+            f&quot;Input: {ex['input']}\nOutput: {ex['output']}&quot;
+            for ex in examples
+        )
+        return f&quot;{task_instructions}\n\n{example_text}\n\nInput: {query}\nOutput:&quot;
+</code></pre>
+<hr />
+<h2 id="common-interview-questions">Common Interview Questions</h2>
+<p><strong>Q: What is the difference between zero-shot, few-shot, and fine-tuning? When would you choose each?</strong>
+Zero-shot: model answers with only instructions, no examples. Use when the task is straightforward and the model generalizes well. Few-shot: provide 3-8 worked examples in the prompt. Use when zero-shot fails or you need a specific output format. Fine-tuning: train model weights on many examples. Use when few-shot is inconsistent, you need persistent behavior across all calls, or you have a high-volume task where prompt token cost matters. The cost/complexity order: zero-shot &lt; few-shot &lt; fine-tuning.</p>
+<p><strong>Q: Why does chain-of-thought prompting improve performance on reasoning tasks?</strong>
+CoT forces the model to produce intermediate steps before the final answer. These steps are also subject to the model's next-token prediction: generating a correct intermediate step makes the next correct step more likely. The model essentially &quot;checks its work&quot; by reasoning aloud. For tasks where the correct answer depends on a chain of logical steps, any single wrong step cascades to a wrong final answer. CoT dramatically reduces this by making each step explicit and correctable.</p>
+<p><strong>Q: How would you prevent prompt injection in a production LLM application?</strong>
+Prompt injection is when user input contains instructions that override the system prompt. Defenses: (1) delimiter-based isolation: wrap user input in XML tags and instruct the model never to act on instructions inside those tags; (2) input sanitization, filter or escape known injection patterns before sending to the model; (3) structured outputs, if you only accept JSON back, a prompt injection telling the model to &quot;ignore previous instructions&quot; won't affect a parseable JSON response; (4) output validation, validate the model's response against expected schemas and flag anomalies; (5) privileged/unprivileged tiers, distinguish system instructions from user content in your architecture.</p>
+<p><strong>Q: What is the &quot;lost in the middle&quot; problem?</strong>
+LLMs have worse recall for information placed in the middle of long contexts compared to information at the beginning or end. This is a known limitation of attention-based models. In practice: place the most important context at the start and end of the prompt, not buried in the middle. For RAG, order retrieved documents so the most relevant is first.</p>
+<p><strong>Q: How do you evaluate whether a prompt change improved things?</strong>
+Define evaluation criteria before changing the prompt (avoid HARKing). Run the old and new prompts on a fixed test set of inputs. Use multiple evaluators: exact match for structured outputs, LLM-as-judge for open-ended quality, human evaluation for subtle quality. Track failure modes separately from aggregate metrics: a prompt change might improve average quality but introduce a new failure mode.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_llm_fundamentals.html"><small>Previous</small>LLM Fundamentals</a><a rel="next" class="next" href="intro_context_engineering.html"><small>Next</small>Context Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_prompt_engineering.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

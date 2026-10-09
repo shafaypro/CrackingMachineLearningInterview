@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LangSmith: LLM Observability &amp; Evaluation Platform | Cracking ML Interviews</title>
+<meta name="description" content="LangSmith: LLM Observability &amp; Evaluation Platform: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langsmith.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LangSmith: LLM Observability &amp; Evaluation Platform | Cracking ML Interviews">
+<meta property="og:description" content="LangSmith: LLM Observability &amp; Evaluation Platform: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langsmith.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LangSmith: LLM Observability &amp; Evaluation Platform | Cracking ML Interviews">
+<meta name="twitter:description" content="LangSmith: LLM Observability &amp; Evaluation Platform: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LangSmith: LLM Observability & Evaluation Platform",
+   "description": "LangSmith: LLM Observability & Evaluation Platform: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langsmith.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LangSmith",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langsmith.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LangSmith</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_langsmith.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="langsmith-llm-observability--evaluation-platform">LangSmith: LLM Observability &amp; Evaluation Platform</h1>
+<h2 id="what-is-langsmith">What is LangSmith?</h2>
+<p>LangSmith is Anthropic/LangChain's platform for <strong>tracing, debugging, testing, and evaluating</strong> LLM applications. It provides end-to-end visibility into every LLM call, chain execution, and agent decision: critical for production AI systems.</p>
+<pre><code>  Your App → LangSmith SDK → LangSmith Platform
+               (trace)          ↓
+                          [Traces Dashboard]
+                          [Evaluation Runs]
+                          [Prompt Playground]
+                          [Datasets &amp; Evals]
+</code></pre>
+<hr />
+<h2 id="core-capabilities">Core Capabilities</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tracing</strong></td>
+<td>Record every LLM call, tool use, chain step with inputs/outputs/latency</td>
+</tr>
+<tr>
+<td><strong>Debugging</strong></td>
+<td>Inspect failed runs, see exact prompts sent, token counts</td>
+</tr>
+<tr>
+<td><strong>Datasets</strong></td>
+<td>Curate golden datasets of (input, expected_output) pairs</td>
+</tr>
+<tr>
+<td><strong>Evaluations</strong></td>
+<td>Run automated evals: LLM-as-judge, exact match, custom metrics</td>
+</tr>
+<tr>
+<td><strong>Prompt Hub</strong></td>
+<td>Version-controlled prompt storage and deployment</td>
+</tr>
+<tr>
+<td><strong>A/B Testing</strong></td>
+<td>Compare prompt versions on the same dataset</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>Production dashboards for latency, cost, error rates</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="setup">Setup</h2>
+<pre><code class="language-python"># Install
+# pip install langsmith langchain-anthropic
+
+import os
+os.environ[&quot;LANGSMITH_TRACING&quot;] = &quot;true&quot;
+os.environ[&quot;LANGSMITH_API_KEY&quot;] = &quot;your-api-key&quot;
+os.environ[&quot;LANGSMITH_PROJECT&quot;] = &quot;my-production-app&quot;  # Project for grouping traces
+# (older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY / LANGCHAIN_PROJECT names still work)
+
+# That's it: all LangChain/LangGraph calls are auto-traced
+from langchain_anthropic import ChatAnthropic
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+result = llm.invoke(&quot;Explain RAG in 3 sentences&quot;)
+# This call now appears in LangSmith dashboard
+</code></pre>
+<hr />
+<h2 id="manual-tracing-non-langchain-code">Manual Tracing (Non-LangChain Code)</h2>
+<pre><code class="language-python">from langsmith import traceable, Client
+
+client = Client()
+
+@traceable(name=&quot;custom-retrieval&quot;, tags=[&quot;rag&quot;, &quot;production&quot;])
+def retrieve_documents(query: str, top_k: int = 5) -&gt; list[dict]:
+    &quot;&quot;&quot;Any function decorated with @traceable is auto-traced&quot;&quot;&quot;
+    # Your retrieval logic here
+    results = vector_db.search(query, top_k=top_k)
+    return results
+
+@traceable(name=&quot;rag-pipeline&quot;)
+def run_rag(question: str) -&gt; str:
+    docs = retrieve_documents(question)
+    context = &quot;\n&quot;.join([d[&quot;text&quot;] for d in docs])
+    response = llm.invoke(f&quot;Context: {context}\n\nQuestion: {question}&quot;)
+    return response.text  # text blocks only (.content can be a list when the model thinks)
+
+# Nested traces are automatically linked as parent → child
+answer = run_rag(&quot;What is RLHF?&quot;)
+</code></pre>
+<hr />
+<h2 id="dataset-creation--evaluation">Dataset Creation &amp; Evaluation</h2>
+<h3 id="create-a-dataset">Create a Dataset</h3>
+<pre><code class="language-python">from langsmith import Client
+
+client = Client()
+
+# Create dataset from examples
+examples = [
+    {&quot;input&quot;: {&quot;question&quot;: &quot;What is RAG?&quot;},
+     &quot;output&quot;: {&quot;answer&quot;: &quot;RAG combines retrieval with generation...&quot;}},
+    {&quot;input&quot;: {&quot;question&quot;: &quot;Explain RLHF&quot;},
+     &quot;output&quot;: {&quot;answer&quot;: &quot;RLHF uses human feedback to fine-tune LLMs...&quot;}},
+]
+
+dataset = client.create_dataset(
+    dataset_name=&quot;ML Interview QA&quot;,
+    description=&quot;Golden set for ML interview Q&amp;A evaluation&quot;
+)
+
+client.create_examples(
+    inputs=[e[&quot;input&quot;] for e in examples],
+    outputs=[e[&quot;output&quot;] for e in examples],
+    dataset_id=dataset.id
+)
+</code></pre>
+<h3 id="run-evaluation">Run Evaluation</h3>
+<pre><code class="language-python">from langsmith.evaluation import evaluate, LangChainStringEvaluator
+
+# The function to evaluate
+def my_rag_app(inputs: dict) -&gt; dict:
+    answer = run_rag(inputs[&quot;question&quot;])
+    return {&quot;answer&quot;: answer}
+
+# Evaluators
+correctness_evaluator = LangChainStringEvaluator(
+    &quot;qa&quot;,  # Uses LLM to judge correctness
+    config={&quot;llm&quot;: ChatAnthropic(model=&quot;claude-opus-4-6&quot;)}
+)
+
+results = evaluate(
+    my_rag_app,
+    data=&quot;ML Interview QA&quot;,           # Dataset name
+    evaluators=[correctness_evaluator],
+    experiment_prefix=&quot;rag-v2-test&quot;,  # For comparison in UI
+    num_repetitions=1                 # Run each example N times
+)
+
+print(results.to_pandas())  # DataFrame with scores per example
+</code></pre>
+<hr />
+<h2 id="llm-as-judge-evaluators">LLM-as-Judge Evaluators</h2>
+<pre><code class="language-python">from langsmith.evaluation import evaluate
+from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+from pydantic import BaseModel, Field
+
+class JudgeResult(BaseModel):
+    score: int = Field(description=&quot;Accuracy score from 1 to 5&quot;)
+    reasoning: str = Field(description=&quot;Why this score was given&quot;)
+
+# Custom LLM-as-judge evaluator
+judge_prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;You are an expert evaluator. Score the answer 1-5 for accuracy.&quot;),
+    (&quot;human&quot;, &quot;&quot;&quot;
+Question: {input}
+Expected: {reference}
+Actual: {prediction}
+&quot;&quot;&quot;)
+])
+
+def custom_judge(inputs: dict, outputs: dict, reference_outputs: dict) -&gt; dict:
+    # Structured output instead of json.loads(response.content): current Claude
+    # models return thinking blocks, so .content is a list, not a JSON string.
+    judge_llm = ChatAnthropic(model=&quot;claude-opus-5-5&quot;).with_structured_output(
+        JudgeResult, method=&quot;json_schema&quot;  # native structured outputs, no forced tool call
+    )
+    result = judge_llm.invoke(judge_prompt.format_messages(
+        input=inputs[&quot;question&quot;],
+        reference=reference_outputs[&quot;answer&quot;],
+        prediction=outputs[&quot;answer&quot;]
+    ))
+    return {&quot;score&quot;: result.score / 5.0, &quot;comment&quot;: result.reasoning}
+
+results = evaluate(
+    my_rag_app,
+    data=&quot;ML Interview QA&quot;,
+    evaluators=[custom_judge],
+    experiment_prefix=&quot;claude-judge-v1&quot;
+)
+</code></pre>
+<hr />
+<h2 id="prompt-hub-version-controlled-prompts">Prompt Hub: Version-Controlled Prompts</h2>
+<pre><code class="language-python">from langsmith import Client
+
+client = Client()
+
+# Pull a prompt from the LangSmith prompt hub
+prompt = client.pull_prompt(&quot;rag-qa-prompt:v3&quot;)  # Pin to a tag or commit
+
+# Use it
+chain = prompt | llm
+result = chain.invoke({&quot;context&quot;: &quot;...&quot;, &quot;question&quot;: &quot;...&quot;})
+
+# Push updated prompt (creates a new commit)
+client.push_prompt(&quot;rag-qa-prompt&quot;, object=updated_prompt)
+
+# Older code used `from langchain import hub`; in LangChain 1.0 that moved to langchain-classic.
+</code></pre>
+<hr />
+<h2 id="production-monitoring">Production Monitoring</h2>
+<p>LangSmith captures these metrics automatically per project:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency P50/P95/P99</strong></td>
+<td>End-to-end and per-node latency</td>
+</tr>
+<tr>
+<td><strong>Token usage</strong></td>
+<td>Input + output tokens per call</td>
+</tr>
+<tr>
+<td><strong>Cost</strong></td>
+<td>Estimated cost based on model pricing</td>
+</tr>
+<tr>
+<td><strong>Error rate</strong></td>
+<td>% of runs that raised exceptions</td>
+</tr>
+<tr>
+<td><strong>Feedback scores</strong></td>
+<td>User thumbs up/down or custom ratings</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="attaching-user-feedback">Attaching User Feedback</h3>
+<pre><code class="language-python">from langsmith import Client
+
+client = Client()
+
+# After getting user feedback on a response
+run_id = &quot;...&quot;  # From trace
+
+client.create_feedback(
+    run_id=run_id,
+    key=&quot;user_rating&quot;,
+    score=0.8,  # 0-1 scale
+    comment=&quot;Good answer but missing implementation detail&quot;
+)
+</code></pre>
+<hr />
+<h2 id="regression-testing-workflow">Regression Testing Workflow</h2>
+<pre><code class="language-python"># CI/CD pipeline integration
+# 1. Add new test cases when bugs are found
+# 2. Run eval suite on each PR
+# 3. Block merge if eval score drops &gt; 5%
+
+import subprocess
+
+def run_eval_gate(threshold: float = 0.85):
+    results = evaluate(
+        my_rag_app,
+        data=&quot;ML Interview QA - Regression&quot;,
+        evaluators=[correctness_evaluator]
+    )
+
+    avg_score = results.to_pandas()[&quot;feedback.qa&quot;].mean()
+
+    if avg_score &lt; threshold:
+        raise ValueError(f&quot;Eval score {avg_score:.2f} below threshold {threshold}&quot;)
+
+    print(f&quot;Eval passed: {avg_score:.2f} &gt;= {threshold}&quot;)
+
+# In GitHub Actions:
+# - run: python -c &quot;from eval import run_eval_gate; run_eval_gate(0.85)&quot;
+</code></pre>
+<hr />
+<h2 id="tracing-architecture">Tracing Architecture</h2>
+<pre><code>Request comes in
+       │
+       ▼
+  [Root Run]  ← LangSmith traces this
+  ├── [LLM Call 1]  {prompt, response, latency, tokens}
+  ├── [Tool: search_web]  {input, output, duration}
+  │   └── [HTTP Request]  {url, status, latency}
+  ├── [LLM Call 2]  {prompt, response}
+  └── [Output Parser]  {raw, parsed}
+       │
+       ▼
+   Response returned
+</code></pre>
+<hr />
+<h2 id="langsmith-vs-alternatives">LangSmith vs Alternatives</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Strength</th>
+<th>Weakness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LangSmith</strong></td>
+<td>Deep LangChain integration, evals, datasets</td>
+<td>Paid for production scale</td>
+</tr>
+<tr>
+<td><strong>Weights &amp; Biases</strong></td>
+<td>ML experiment tracking, sweeps</td>
+<td>Less LLM-native</td>
+</tr>
+<tr>
+<td><strong>Arize AI</strong></td>
+<td>Enterprise ML monitoring, drift</td>
+<td>Complex setup</td>
+</tr>
+<tr>
+<td><strong>Helicone</strong></td>
+<td>Simple proxy-based tracing</td>
+<td>Less eval tooling</td>
+</tr>
+<tr>
+<td><strong>Literal AI</strong></td>
+<td>Open source, self-hostable</td>
+<td>Smaller ecosystem</td>
+</tr>
+<tr>
+<td><strong>Phoenix (Arize)</strong></td>
+<td>Open source observability</td>
+<td>Less eval automation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: Why is LangSmith important in production LLM systems?</strong></p>
+<blockquote>
+<p>Without observability, LLM apps are black boxes. LangSmith traces every call, showing exact prompts sent, tokens used, latency, and errors. This is essential for debugging hallucinations, optimizing costs, and catching regressions when prompts or models change.</p>
+</blockquote>
+<p><strong>Q: How do you evaluate whether a RAG system improved after a change?</strong></p>
+<blockquote>
+<p>Create a golden dataset with (question, expected_answer) pairs. Run the old and new system on the same dataset with LLM-as-judge evaluators. Compare scores in LangSmith's experiment comparison view. Block deployment if score drops below threshold.</p>
+</blockquote>
+<p><strong>Q: What's the difference between online and offline evaluation?</strong></p>
+<blockquote>
+<p>Offline: evaluate on a fixed dataset before deployment (regression tests, benchmarks). Online: collect real user feedback and monitor metrics in production (thumbs up/down, implicit signals like follow-up questions). Both are needed: offline catches regressions, online catches real-world failures.</p>
+</blockquote>
+<p><strong>Q: How would you implement regression testing for an LLM application?</strong></p>
+<blockquote>
+<p>Curate a golden dataset of critical test cases. Integrate <code>evaluate()</code> into CI/CD. Set a score threshold (e.g., 85%). Add new test cases whenever a production bug is found (golden negative examples). This creates a growing safety net.</p>
+</blockquote>
+<p><strong>Q: What is LLM-as-judge and what are its limitations?</strong></p>
+<blockquote>
+<p>Using a powerful LLM (like Claude Opus) to score another LLM's output. Limitations: positional bias (judges prefer first option), verbosity bias (longer = better), self-consistency issues, and cost. Mitigate with structured scoring rubrics, multiple judge calls, and human validation on a sample.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_langgraph.html"><small>Previous</small>LangGraph</a><a rel="next" class="next" href="intro_crewai.html"><small>Next</small>CrewAI</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_langsmith.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

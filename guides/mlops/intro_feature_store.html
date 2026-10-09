@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature Store Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_feature_store.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Feature Store Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_feature_store.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Feature Store Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Feature Store Guide",
+   "description": "A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_feature_store.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Feature Store Guide",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_feature_store.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Feature Store Guide</span></nav>
+<p class="meta"><a href="../../#mlops/intro_feature_store.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="feature-store-guide">Feature Store Guide</h1>
+<p>A guide to feature stores: centralized repositories for storing, versioning, and serving ML features.</p>
+<blockquote>
+<p><strong>Related guide:</strong> this track also has <a href="intro_feature_stores.html">Feature Stores</a>, which covers the same
+topic from a different angle: point-in-time correctness, when a feature store is and isn't worth it, and
+common pitfalls. This guide leans toward the motivation, tool comparison, and a Feast walkthrough.
+Read both if you are preparing the topic for an interview.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-a-feature-store">What is a Feature Store</a></li>
+<li><a href="#why-use-a-feature-store">Why Use a Feature Store</a></li>
+<li><a href="#online-vs-offline-store">Online vs Offline Store</a></li>
+<li><a href="#feature-engineering-pipeline">Feature Engineering Pipeline</a></li>
+<li><a href="#tool-comparison">Tool Comparison</a></li>
+<li><a href="#feast-example">Feast Example</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="what-is-a-feature-store">What is a Feature Store</h2>
+<p>A feature store is a data system that manages the creation, storage, and serving of features used by ML models. It acts as a bridge between raw data (in data warehouses or data lakes) and ML models (in training and production serving).</p>
+<pre><code>Raw Data Sources              Feature Store                   ML Models
+─────────────────    →    ────────────────────    →    ──────────────────
+Data Warehouse            Feature Definitions            Training Pipeline
+Kafka Streams             Offline Store (S3)             Online Serving
+Databases                 Online Store (Redis)           Batch Predictions
+Event Logs                Feature Registry
+</code></pre>
+<hr />
+<h2 id="why-use-a-feature-store">Why Use a Feature Store</h2>
+<h3 id="problem-1-training-serving-skew">Problem 1: Training-Serving Skew</h3>
+<p>Without a feature store, data scientists compute features in notebooks (Python/SQL) and engineers re-implement them in production code (Java, C++). Differences in implementation lead to <strong>training-serving skew</strong>: the model sees different data at serving time than it was trained on.</p>
+<p><strong>Feature store solution:</strong> Define features once, use them for both training and serving.</p>
+<h3 id="problem-2-feature-duplication">Problem 2: Feature Duplication</h3>
+<p>Different teams compute the same features independently: wasted compute, inconsistent results, no shared governance.</p>
+<p><strong>Feature store solution:</strong> Centralized feature registry with reusable, discoverable features.</p>
+<h3 id="problem-3-data-leakage">Problem 3: Data Leakage</h3>
+<p>When creating training datasets, using future data that wouldn't be available at prediction time leads to overly optimistic models that fail in production.</p>
+<p><strong>Feature store solution:</strong> Point-in-time correct joins, retrieve feature values as they existed at the time of each training example.</p>
+<h3 id="problem-4-feature-freshness">Problem 4: Feature Freshness</h3>
+<p>Models need fresh features at serving time. Manually managing caching and refresh logic is error-prone.</p>
+<p><strong>Feature store solution:</strong> Automated feature pipelines with configurable freshness requirements.</p>
+<hr />
+<h2 id="online-vs-offline-store">Online vs Offline Store</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Online Store</th>
+<th>Offline Store</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Real-time feature retrieval for inference</td>
+<td>Historical feature retrieval for training</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Low latency (&lt; 10ms)</td>
+<td>High throughput, high latency OK</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>Redis, DynamoDB, Bigtable</td>
+<td>S3, GCS, BigQuery, Parquet files</td>
+</tr>
+<tr>
+<td><strong>Data size</strong></td>
+<td>Current/recent feature values</td>
+<td>Full historical feature values</td>
+</tr>
+<tr>
+<td><strong>Access pattern</strong></td>
+<td>Key-value lookup by entity ID</td>
+<td>Bulk reads, time-range queries</td>
+</tr>
+<tr>
+<td><strong>Use case</strong></td>
+<td>Real-time model serving</td>
+<td>Model training, backtesting</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="data-flow">Data Flow</h3>
+<pre><code>                    Batch Feature Pipeline
+Raw Data → Compute Features → Write to Offline Store (S3)
+                                        ↓
+                              Materialize to Online Store (Redis)
+                                        ↓
+                           Production API → Read from Online Store
+                                              (low latency, &lt; 10ms)
+
+                    Training
+Training Pipeline → Read from Offline Store (point-in-time correct)
+                  → Train model
+</code></pre>
+<hr />
+<h2 id="feature-engineering-pipeline">Feature Engineering Pipeline</h2>
+<pre><code class="language-python"># Example: Feature pipeline architecture
+
+# 1. Raw data ingestion (from data warehouse)
+transactions_df = spark.read.parquet(&quot;s3://data-lake/transactions/&quot;)
+
+# 2. Feature computation
+def compute_user_features(df):
+    &quot;&quot;&quot;Compute user-level aggregated features.&quot;&quot;&quot;
+    return df.groupBy(&quot;user_id&quot;).agg(
+        F.count(&quot;transaction_id&quot;).alias(&quot;transaction_count_30d&quot;),
+        F.sum(&quot;amount&quot;).alias(&quot;total_spend_30d&quot;),
+        F.avg(&quot;amount&quot;).alias(&quot;avg_transaction_amount_30d&quot;),
+        F.countDistinct(&quot;merchant_id&quot;).alias(&quot;unique_merchants_30d&quot;),
+        F.max(&quot;timestamp&quot;).alias(&quot;last_transaction_time&quot;)
+    )
+
+# 3. Write to offline store
+user_features = compute_user_features(transactions_df)
+user_features.write.parquet(&quot;s3://feature-store/user_features/&quot;)
+
+# 4. Register features in feature registry
+feature_definitions = {
+    &quot;user_features&quot;: {
+        &quot;entity&quot;: &quot;user_id&quot;,
+        &quot;features&quot;: [
+            &quot;transaction_count_30d&quot;,
+            &quot;total_spend_30d&quot;,
+            &quot;avg_transaction_amount_30d&quot;
+        ],
+        &quot;freshness&quot;: &quot;24h&quot;,
+        &quot;owner&quot;: &quot;ml-team@company.com&quot;
+    }
+}
+</code></pre>
+<hr />
+<h2 id="tool-comparison">Tool Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Type</th>
+<th>Online Store</th>
+<th>Offline Store</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Feast</strong></td>
+<td>Open source</td>
+<td>Redis, DynamoDB, Bigtable</td>
+<td>BigQuery, Redshift, S3</td>
+<td>Flexible, community</td>
+<td>Manual setup, limited governance</td>
+</tr>
+<tr>
+<td><strong>Tecton</strong></td>
+<td>Managed SaaS</td>
+<td>Redis</td>
+<td>S3, Snowflake</td>
+<td>Enterprise-grade, real-time</td>
+<td>Expensive, vendor lock-in</td>
+</tr>
+<tr>
+<td><strong>Hopsworks</strong></td>
+<td>Open source / managed</td>
+<td>Redis, RonDB</td>
+<td>Hudi on S3</td>
+<td>Full platform, feature monitoring</td>
+<td>Complex deployment</td>
+</tr>
+<tr>
+<td><strong>Vertex AI Feature Store</strong></td>
+<td>GCP managed</td>
+<td>Bigtable</td>
+<td>BigQuery</td>
+<td>Tight GCP integration</td>
+<td>GCP-only</td>
+</tr>
+<tr>
+<td><strong>AWS SageMaker Feature Store</strong></td>
+<td>AWS managed</td>
+<td>DynamoDB</td>
+<td>S3</td>
+<td>AWS integration</td>
+<td>AWS-only</td>
+</tr>
+<tr>
+<td><strong>Databricks Feature Store</strong></td>
+<td>Databricks managed</td>
+<td>Delta tables</td>
+<td>Delta Lake</td>
+<td>Unity Catalog integration</td>
+<td>Databricks-only</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="feast-example">Feast Example</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="language-bash">pip install feast
+</code></pre>
+<h3 id="define-features">Define Features</h3>
+<pre><code class="language-python"># feature_repo/features.py
+from datetime import timedelta
+from feast import Entity, FeatureView, Field, FileSource
+from feast.types import Float32, Int64
+
+# Define entities (primary keys)
+user = Entity(
+    name=&quot;user&quot;,
+    join_keys=[&quot;user_id&quot;],
+    description=&quot;User identifier&quot;
+)
+
+# Define data source
+user_stats_source = FileSource(
+    path=&quot;data/user_stats.parquet&quot;,
+    timestamp_field=&quot;event_timestamp&quot;,
+    created_timestamp_column=&quot;created&quot;
+)
+
+# Define feature view
+user_stats_view = FeatureView(
+    name=&quot;user_stats&quot;,
+    entities=[user],
+    ttl=timedelta(days=30),
+    schema=[  # `Feature`/`features=` were removed; use `Field`/`schema=`
+        Field(name=&quot;transaction_count_30d&quot;, dtype=Int64),
+        Field(name=&quot;total_spend_30d&quot;, dtype=Float32),
+        Field(name=&quot;avg_transaction_amount_30d&quot;, dtype=Float32),
+        Field(name=&quot;unique_merchants_30d&quot;, dtype=Int64),
+    ],
+    source=user_stats_source,
+)
+</code></pre>
+<h3 id="initialize-and-apply">Initialize and Apply</h3>
+<pre><code class="language-bash">feast apply
+feast materialize-incremental $(date -u +&quot;%Y-%m-%dT%H:%M:%S&quot;)
+</code></pre>
+<h3 id="retrieve-features-for-training">Retrieve Features for Training</h3>
+<pre><code class="language-python">from feast import FeatureStore
+import pandas as pd
+from datetime import datetime
+
+store = FeatureStore(repo_path=&quot;feature_repo&quot;)
+
+# Training data with entity IDs and timestamps
+training_df = pd.DataFrame({
+    &quot;user_id&quot;: [101, 102, 103, 104],
+    &quot;event_timestamp&quot;: [
+        datetime(2024, 1, 15),
+        datetime(2024, 1, 16),
+        datetime(2024, 1, 17),
+        datetime(2024, 1, 18),
+    ],
+    &quot;label&quot;: [0, 1, 0, 1]  # fraud label
+})
+
+# Point-in-time correct feature retrieval
+training_features = store.get_historical_features(
+    entity_df=training_df,
+    features=[
+        &quot;user_stats:transaction_count_30d&quot;,
+        &quot;user_stats:total_spend_30d&quot;,
+        &quot;user_stats:avg_transaction_amount_30d&quot;,
+    ]
+).to_df()
+
+print(training_features.head())
+</code></pre>
+<h3 id="online-feature-retrieval-serving">Online Feature Retrieval (Serving)</h3>
+<pre><code class="language-python">from feast import FeatureStore
+
+store = FeatureStore(repo_path=&quot;feature_repo&quot;)
+
+# Retrieve current features for a specific user
+features = store.get_online_features(
+    features=[
+        &quot;user_stats:transaction_count_30d&quot;,
+        &quot;user_stats:total_spend_30d&quot;,
+        &quot;user_stats:avg_transaction_amount_30d&quot;,
+    ],
+    entity_rows=[{&quot;user_id&quot;: 101}]
+).to_dict()
+
+print(features)
+# {'user_id': [101], 'transaction_count_30d': [42], 'total_spend_30d': [1250.50], ...}
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is a feature store and why do ML teams use it?</strong> 🟢 Beginner</p>
+<p>A feature store is a centralized system for storing and serving ML features. Teams use it to: (1) eliminate training-serving skew by defining features once for both training and production, (2) enable feature reuse across teams and models, (3) provide point-in-time correct feature retrieval to prevent data leakage, and (4) manage feature freshness and monitoring.</p>
+<hr />
+<p><strong>Q2: What is the difference between the online store and offline store in a feature store?</strong> 🟢 Beginner</p>
+<p>The <strong>online store</strong> is a low-latency key-value store (Redis, DynamoDB) that serves the most recent feature values for real-time model inference. The <strong>offline store</strong> is a scalable storage system (S3, BigQuery) that holds the full historical feature history for model training. Data flows from offline to online via a materialization process.</p>
+<hr />
+<p><strong>Q3: What is training-serving skew and how does a feature store prevent it?</strong> 🟡 Intermediate</p>
+<p>Training-serving skew occurs when features are computed differently during training vs production serving. Example: data scientists compute a 30-day rolling average in Python during training, but engineers implement it differently in Java for production. The model sees different feature values and performs worse.</p>
+<p>A feature store prevents this by providing a single feature definition that is used for both training (reading from the offline store) and serving (reading from the online store). The same transformation logic runs in both contexts.</p>
+<hr />
+<p><strong>Q4: What is point-in-time correctness and why is it important?</strong> 🔴 Advanced</p>
+<p>Point-in-time correctness means that when creating a training dataset, each training example only uses feature values that were available at the time of that event, not future data.</p>
+<p>Without it, data leakage occurs. Example: if you train a fraud model and join the user's features as of today (which include transactions that happened after the fraud event), the model learns from future information and appears much more accurate than it will be in production.</p>
+<p>Feast and other feature stores provide point-in-time correct joins by looking up the feature values that existed at the event's timestamp.</p>
+<hr />
+<p><strong>Q5: How would you decide between building a custom feature pipeline vs using a feature store?</strong> 🔴 Advanced</p>
+<p><strong>Use a custom pipeline when:</strong></p>
+<ul>
+<li>Small team, few models, simple feature requirements</li>
+<li>Strong existing data infrastructure (dbt, Airflow) that already handles features</li>
+<li>Budget constraints: feature stores add operational overhead</li>
+</ul>
+<p><strong>Use a feature store when:</strong></p>
+<ul>
+<li>Multiple models share features across teams</li>
+<li>Real-time serving requires low-latency feature lookup</li>
+<li>Training-serving skew is causing production issues</li>
+<li>Need point-in-time correct feature retrieval for training data</li>
+<li>Feature governance and discovery are important at scale</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.feast.dev/">Feast Documentation</a></li>
+<li><a href="https://www.tecton.ai/blog/what-is-a-feature-store/">Tecton Feature Store Guide</a></li>
+<li><a href="https://docs.hopsworks.ai/">Hopsworks Documentation</a></li>
+<li><a href="https://www.featurestore.org/">Feature Store Comparison: featurestore.org</a></li>
+<li><a href="https://huyenchip.com/2020/12/27/real-time-machine-learning.html">Chip Huyen: Real-time Machine Learning Inference (Feature Stores)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_feature_stores.html"><small>Previous</small>Feature Stores</a><a rel="next" class="next" href="intro_model_serving.html"><small>Next</small>Model Serving</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_feature_store.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retrieval-Augmented Generation Engineering | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on the engineering decisions behind production RAG systems rather than only the concept.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag_engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Retrieval-Augmented Generation Engineering | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on the engineering decisions behind production RAG systems rather than only the concept.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag_engineering.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrieval-Augmented Generation Engineering | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on the engineering decisions behind production RAG systems rather than only the concept.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Retrieval-Augmented Generation Engineering",
+   "description": "This guide focuses on the engineering decisions behind production RAG systems rather than only the concept.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag_engineering.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "RAG Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag_engineering.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">RAG Engineering</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_rag_engineering.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="retrieval-augmented-generation-engineering">Retrieval-Augmented Generation Engineering</h1>
+<p>This guide focuses on the engineering decisions behind production RAG systems rather than only the concept.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Retrieval-Augmented Generation combines search with generation. Instead of asking the model to answer from parametric memory alone, the system retrieves relevant documents and injects them into the prompt.</p>
+<p>RAG matters because it improves:</p>
+<ul>
+<li>factual grounding</li>
+<li>access to private knowledge</li>
+<li>freshness of information</li>
+<li>debuggability compared with pure prompting</li>
+</ul>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="document-ingestion">Document ingestion</h3>
+<p>The ingestion pipeline determines what the system can retrieve later. In practice this includes parsing, cleaning, metadata extraction, deduplication, and indexing.</p>
+<h3 id="chunking-strategies">Chunking strategies</h3>
+<p>Chunking controls the tradeoff between recall and context quality. Small chunks improve retrieval granularity; large chunks preserve context but can dilute relevance.</p>
+<h3 id="retrieval-methods">Retrieval methods</h3>
+<p>Common retrieval approaches include:</p>
+<ul>
+<li>dense vector search</li>
+<li>keyword search</li>
+<li>hybrid retrieval</li>
+<li>reranking after initial retrieval</li>
+</ul>
+<h3 id="context-injection">Context injection</h3>
+<p>Retrieved evidence must be placed into prompts cleanly. Good context injection preserves source boundaries, prioritizes relevant passages, and avoids overwhelming the model with noise.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="designing-retrieval-pipelines">Designing retrieval pipelines</h3>
+<p>A strong engineer can decide:</p>
+<ul>
+<li>how data is ingested</li>
+<li>which metadata matters</li>
+<li>when to use hybrid retrieval</li>
+<li>how many documents to return</li>
+</ul>
+<h3 id="optimizing-recall-vs-precision">Optimizing recall vs precision</h3>
+<p>This means tuning chunk size, overlap, <code>top_k</code>, metadata filters, and reranking until the system returns enough relevant evidence without excessive noise.</p>
+<h3 id="handling-long-context-data">Handling long-context data</h3>
+<p>In practice, this involves hierarchical retrieval, map-reduce summarization, and context compression rather than blindly increasing prompt size.</p>
+<h3 id="hybrid-search">Hybrid search</h3>
+<p>Hybrid search combines lexical and semantic retrieval. It is especially useful for exact terms, IDs, code snippets, and acronyms that pure vector search can miss.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pinecone</td>
+<td>Managed vector database</td>
+<td>Hosted semantic search at scale</td>
+</tr>
+<tr>
+<td>Weaviate</td>
+<td>Vector database with hybrid search support</td>
+<td>Rich metadata filters and semantic retrieval</td>
+</tr>
+<tr>
+<td>FAISS</td>
+<td>Local high-performance vector index</td>
+<td>Prototyping or self-managed retrieval</td>
+</tr>
+<tr>
+<td>Chroma</td>
+<td>Lightweight embedding store</td>
+<td>Local experiments and simple apps</td>
+</tr>
+<tr>
+<td>BM25 / keyword search</td>
+<td>Lexical search baseline</td>
+<td>Exact-match-heavy corpora and hybrid systems</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="document-qa-system">Document Q&amp;A system</h3>
+<ul>
+<li>Goal: Answer questions from a document set with citations.</li>
+<li>Key components: parser, chunker, retriever, prompt template, answer formatter.</li>
+<li>Suggested tech stack: Python, Chroma or FAISS, FastAPI.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="knowledge-base-assistant">Knowledge base assistant</h3>
+<ul>
+<li>Goal: Build an assistant over internal docs, runbooks, and onboarding material.</li>
+<li>Key components: ingestion pipeline, metadata filters, access control, feedback loop.</li>
+<li>Suggested tech stack: vector DB, FastAPI, SSO-aware backend, evaluation harness.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="internal-company-search-tool">Internal company search tool</h3>
+<ul>
+<li>Goal: Search across policies, docs, and tickets using hybrid retrieval.</li>
+<li>Key components: BM25 + vector retrieval, reranker, query rewriting, result snippets.</li>
+<li>Suggested tech stack: Weaviate or Elasticsearch + vectors, Python.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="multi-source-rag-pipeline">Multi-source RAG pipeline</h3>
+<ul>
+<li>Goal: Combine structured and unstructured data in one retrieval flow.</li>
+<li>Key components: SQL tool access, document retrieval, ranking, source-aware answer generation.</li>
+<li>Suggested tech stack: Postgres, vector store, FastAPI, LangGraph or custom orchestration.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">def build_rag_context(chunks: list[str], max_chunks: int = 4) -&gt; str:
+    selected = chunks[:max_chunks]
+    return &quot;\n\n&quot;.join(
+        f&quot;[Source {i + 1}]\n{chunk}&quot;
+        for i, chunk in enumerate(selected)
+    )
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">knowledge-base-assistant/
+├── ingest/
+├── retriever/
+├── prompts/
+├── evals/
+├── api/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="walk-me-through-the-components-of-a-production-rag-system">Walk me through the components of a production RAG system.</h4>
+<p>Ingestion (parse, clean, deduplicate, extract metadata), chunking, embedding, indexing into a vector store, then at query time: query understanding or rewriting, retrieval (usually hybrid), reranking, context assembly, generation with citations, and finally logging and evaluation.</p>
+<p>The parts candidates usually omit are the ones that decide whether the system works: <strong>reranking</strong>, which fixes the &quot;right document, wrong position&quot; problem cheaply; <strong>metadata filtering</strong>, which is usually a larger accuracy win than a better embedding model and is where access control lives; and the <strong>evaluation loop</strong>, without which you cannot tell whether any change helped.</p>
+<h4 id="retrieval-returns-documents-that-look-relevant-but-the-answer-is-wrong-whats-happening">Retrieval returns documents that look relevant but the answer is wrong. What's happening?</h4>
+<p>Several distinct causes, and they need different fixes:</p>
+<ul>
+<li><strong>Topically similar but not answer-bearing.</strong> Embeddings measure relatedness, not whether a passage contains the answer. A reranker (cross-encoder) scores query-document pairs jointly and fixes most of this.</li>
+<li><strong>The chunk is truncated.</strong> The answer spans a boundary and each half looks partially relevant. Increase overlap or use small-to-big retrieval.</li>
+<li><strong>Stale content.</strong> The index still holds a document that was updated or deleted. Check the ingest pipeline's handling of updates.</li>
+<li><strong>Contradictory sources.</strong> Two documents disagree and the model picked one arbitrarily. Add recency and authority metadata, and prefer the newest authoritative source in context assembly.</li>
+<li><strong>The model ignored the context.</strong> Verify by feeding the gold chunk directly; if the answer is still wrong, it's a prompt or model problem, not retrieval.</li>
+</ul>
+<h4 id="how-do-you-evaluate-a-rag-system">How do you evaluate a RAG system?</h4>
+<p>Separately at each stage, or you cannot localize a regression.</p>
+<p><strong>Retrieval</strong>: recall@k and MRR against a labeled set of questions with known-relevant chunk IDs. Recall@k is the ceiling on everything downstream: if the evidence isn't retrieved, no prompt fixes it.</p>
+<p><strong>Generation given context</strong>: faithfulness (is every claim supported by the retrieved text?), answer relevance, and citation correctness. LLM-as-judge works here if the judge is validated against human labels on a sample.</p>
+<p><strong>End to end</strong>: task success rate on a fixed regression suite, run on every prompt, model, or index change.</p>
+<p><strong>Production</strong>: user feedback signals, escalation rate, and the frequency of &quot;I don't know&quot; responses: a sudden rise usually means retrieval broke, not that the model got more cautious.</p>
+<h4 id="how-do-you-handle-queries-the-corpus-cannot-answer">How do you handle queries the corpus cannot answer?</h4>
+<p>Explicitly, because the default behavior is confident fabrication. Set a relevance-score floor and return &quot;I don't have information on that&quot; below it. Instruct the model in the prompt to answer only from the provided context and to say when it can't. Require citations, and validate post-hoc that the cited spans exist in the retrieved text. Then monitor the abstention rate as a first-class metric: too low means hallucination, too high means retrieval is failing.</p>
+<h4 id="why-use-hybrid-retrieval-instead-of-pure-vector-search">Why use hybrid retrieval instead of pure vector search?</h4>
+<p>Because they fail in complementary ways. Dense retrieval handles paraphrase and synonymy but blurs exact identifiers (error codes, SKUs, function names, rare proper nouns), since those carry little distributional meaning. BM25 nails exact terms but returns nothing when the query shares no vocabulary with the document.</p>
+<p>Fusing with Reciprocal Rank Fusion (<code>score = Σ 1/(k + rank)</code>, k≈60) avoids having to calibrate BM25 scores against cosine similarities, which live on incomparable scales.</p>
+<h4 id="your-rag-system-is-too-expensive-where-do-you-cut">Your RAG system is too expensive. Where do you cut?</h4>
+<p>Input tokens dominate RAG cost, so start there:</p>
+<ol>
+<li><strong>Retrieve more, send less</strong>: retrieve 20 candidates, rerank, pass the top 3-5. Usually cheaper <em>and</em> more accurate, since irrelevant context degrades answers.</li>
+<li><strong>Prompt caching</strong>: put the stable system prompt and instructions first so the cached prefix is reused; cached input is typically ~10% of the price.</li>
+<li><strong>Semantic caching</strong> for repeated questions, with a tuned threshold and a real invalidation strategy.</li>
+<li><strong>Model routing</strong>: a small model handles simple lookups, escalating only for synthesis-heavy questions.</li>
+<li><strong>Smaller embedding dimensions or quantized vectors</strong> to cut index cost, verified against recall@k.</li>
+</ol>
+<h4 id="how-do-you-keep-the-index-fresh">How do you keep the index fresh?</h4>
+<p>Drive index mutations from the source of truth's change stream rather than periodic full reindexes: on create/update, re-chunk and upsert; on delete, remove by document ID. Store a content hash per chunk so unchanged chunks are skipped. Keep the ingest timestamp in metadata so retrieval can prefer recent content and so you can audit staleness.</p>
+<p>For an embedding model upgrade, the whole corpus must be re-embedded: vectors from two models are not comparable. Standard practice is a blue/green reindex into a new collection with an atomic cutover.</p>
+<h4 id="when-is-rag-the-wrong-tool">When is RAG the wrong tool?</h4>
+<p>When the knowledge is small and static enough to fit in the prompt, just put it in the context and skip the infrastructure. When the task needs reasoning over the <em>entire</em> corpus (aggregate questions like &quot;how many contracts expire this quarter&quot;), which is a database query, not retrieval. When the model needs to internalize a style or format rather than facts, that's fine-tuning. And when the data is highly structured, where SQL or a graph query gives exact answers that top-k similarity cannot.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chunks too large</td>
+<td>The vector averages several topics and matches none well</td>
+<td>300-800 tokens, or small-to-big retrieval</td>
+</tr>
+<tr>
+<td>No reranking stage</td>
+<td>Right document retrieved but ranked below the cutoff</td>
+<td>Cross-encoder rerank of the top 20-50</td>
+</tr>
+<tr>
+<td>Skipping metadata</td>
+<td>No filtering, no access control, no recency preference</td>
+<td>Attach source, section, timestamp, permissions at ingest</td>
+</tr>
+<tr>
+<td>Post-filtering by permissions</td>
+<td>Empty result pages and leaked document existence</td>
+<td>Filter inside the vector search</td>
+</tr>
+<tr>
+<td>Different embedding models for index and query</td>
+<td>Vectors are incomparable; results are noise</td>
+<td>Pin the model version; reindex on change</td>
+</tr>
+<tr>
+<td>No abstention path</td>
+<td>The model fabricates when nothing relevant is retrieved</td>
+<td>Score floor + explicit &quot;not in context&quot; instruction + citation validation</td>
+</tr>
+<tr>
+<td>Evaluating end to end only</td>
+<td>You cannot tell retrieval failures from generation failures</td>
+<td>Measure recall@k and faithfulness separately</td>
+</tr>
+<tr>
+<td>Stuffing all retrieved chunks in &quot;just in case&quot;</td>
+<td>Higher cost and measurably worse answers</td>
+<td>Rerank and pass fewer, better chunks</td>
+</tr>
+<tr>
+<td>Ignoring updates and deletes</td>
+<td>The system cites documents that no longer exist</td>
+<td>Drive index writes from the source change stream</td>
+</tr>
+<tr>
+<td>Variable content at the top of the prompt</td>
+<td>Destroys prefix cache hits and inflates cost</td>
+<td>Stable prefix first, retrieved context last</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_rag.html">Intro to RAG</a></li>
+<li><a href="intro_vector_databases.html">Vector Databases</a></li>
+<li><a href="intro_vector_databases_advanced.html">Vector Databases Advanced</a></li>
+<li><a href="../mlops/intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_rag.html"><small>Previous</small>Intro to RAG</a><a rel="next" class="next" href="intro_vector_databases.html"><small>Next</small>Vector Databases</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_rag_engineering.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

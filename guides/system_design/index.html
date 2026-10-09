@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to approaching ML system design interview questions with structured frameworks and full design examples.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ML System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to approaching ML system design interview questions with structured frameworks and full design examples.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ML System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to approaching ML system design interview questions with structured frameworks and full design examples.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ML System Design",
+   "description": "A guide to approaching ML system design interview questions with structured frameworks and full design examples.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Design Framework",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Design Framework</span></nav>
+<p class="meta"><a href="../../#system_design/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ml-system-design">ML System Design</h1>
+<p>A guide to approaching ML system design interview questions with structured frameworks and full design examples.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#framework-for-ml-system-design">Framework for ML System Design</a></li>
+<li><a href="#backend-interview-guide">Backend Interview Guide</a></li>
+<li><a href="#key-components">Key Components</a></li>
+<li><a href="#scalability-considerations">Scalability Considerations</a></li>
+<li><a href="#system-design-qa">System Design Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="framework-for-ml-system-design">Framework for ML System Design</h2>
+<p>When approaching an ML system design question, follow this structured framework:</p>
+<h3 id="step-1-clarify-requirements-5-minutes">Step 1: Clarify Requirements (5 minutes)</h3>
+<p>Ask these questions:</p>
+<ul>
+<li>What is the business goal and success metric?</li>
+<li>What is the scale? (users/day, QPS, data volume)</li>
+<li>What is the acceptable latency?</li>
+<li>Is this real-time or batch?</li>
+<li>What data is available?</li>
+<li>Are there regulatory/compliance requirements?</li>
+</ul>
+<h3 id="step-2-define-the-ml-problem-5-minutes">Step 2: Define the ML Problem (5 minutes)</h3>
+<ul>
+<li>Convert business goal → ML objective</li>
+<li>What is the input? What is the output?</li>
+<li>Is this classification, regression, ranking, generation?</li>
+<li>What is the training signal (labels)?</li>
+<li>Offline vs online evaluation</li>
+</ul>
+<h3 id="step-3-data-pipeline-10-minutes">Step 3: Data Pipeline (10 minutes)</h3>
+<ul>
+<li>Data sources and collection</li>
+<li>Data storage and format</li>
+<li>Feature engineering</li>
+<li>Training/validation/test splits</li>
+<li>Handling class imbalance, missing data</li>
+</ul>
+<h3 id="step-4-model-selection-5-minutes">Step 4: Model Selection (5 minutes)</h3>
+<ul>
+<li>Start simple (baseline), then go complex</li>
+<li>Justify model choice based on data size, latency, interpretability</li>
+<li>Consider ensemble approaches</li>
+</ul>
+<h3 id="step-5-serving-architecture-10-minutes">Step 5: Serving Architecture (10 minutes)</h3>
+<ul>
+<li>Real-time (API) vs batch inference</li>
+<li>Model serving infrastructure</li>
+<li>Latency optimization (caching, model compression)</li>
+<li>A/B testing and canary deployment</li>
+</ul>
+<h3 id="step-6-monitoring-and-maintenance-5-minutes">Step 6: Monitoring and Maintenance (5 minutes)</h3>
+<ul>
+<li>What metrics to monitor?</li>
+<li>When to retrain?</li>
+<li>How to handle concept/data drift?</li>
+</ul>
+<hr />
+<h2 id="backend-interview-guide">Backend Interview Guide</h2>
+<p>If you want the broader non-ML backend concepts that often get mixed into ML system design interviews, use this companion page:</p>
+<ul>
+<li><a href="backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+</ul>
+<p>It adds a structured review of:</p>
+<ul>
+<li>scalability primitives such as load balancing, auto-scaling, and rate limiting</li>
+<li>data-system fundamentals such as indexing, replication, and sharding</li>
+<li>data modeling, DDD boundaries, and data-driven development patterns</li>
+<li>caching, messaging, and distributed transaction patterns</li>
+<li>reliability topics such as circuit breakers, idempotency, timeouts, and quorum</li>
+</ul>
+<p>Use this page for the ML-specific framework and design examples, then use the backend guide as the general system design revision sheet.</p>
+<p>For design-heavy rounds, especially senior backend, platform, or applied AI interviews, pay special attention to:</p>
+<ul>
+<li>data modeling and transactional versus analytical data shapes</li>
+<li>bounded contexts and aggregate boundaries</li>
+<li>instrumentation, event schemas, and experiment-friendly backend design</li>
+</ul>
+<hr />
+<h2 id="key-components">Key Components</h2>
+<h3 id="data-pipeline">Data Pipeline</h3>
+<pre><code>Raw Data Sources:
+├── Transactional DB (PostgreSQL, MySQL)
+├── Event streams (Kafka)
+├── Data warehouse (Snowflake, BigQuery)
+└── Third-party APIs
+
+ETL Pipeline:
+├── Ingestion (Spark, Airflow)
+├── Transformation (dbt, Spark)
+├── Validation (Great Expectations)
+└── Storage (S3/GCS parquet, Delta Lake)
+
+Feature Pipeline:
+├── Batch features → Offline Feature Store
+├── Streaming features → Online Feature Store (Redis)
+└── Feature Registry (Feast/Tecton)
+</code></pre>
+<h3 id="model-training">Model Training</h3>
+<pre><code>Experiment Tracking:
+├── MLflow / W&amp;B for logging parameters, metrics
+├── DVC for data versioning
+└── Hyperparameter optimization (Optuna, Ray Tune)
+
+Training Infrastructure:
+├── Single GPU / Multi-GPU
+├── Distributed training (PyTorch DDP, DeepSpeed)
+└── Cloud (AWS SageMaker, GCP Vertex AI, Azure ML)
+
+Model Registry:
+├── Versioned artifact storage
+├── Staging → Production lifecycle
+└── Rollback capability
+</code></pre>
+<h3 id="model-serving">Model Serving</h3>
+<pre><code>Inference Options:
+├── REST API (FastAPI + Docker + Kubernetes)
+├── gRPC (lower latency, binary protocol)
+├── Batch prediction jobs (Spark, Airflow)
+└── Streaming inference (Kafka + model)
+
+Serving Frameworks:
+├── Triton Inference Server (NVIDIA, multi-framework)
+├── TorchServe (PyTorch)
+├── TF Serving (TensorFlow)
+├── BentoML / Seldon (framework-agnostic)
+└── KServe (Kubernetes-native)
+
+Optimization:
+├── Model quantization (INT8, FP16)
+├── ONNX export for cross-platform inference
+├── TensorRT for NVIDIA GPU optimization
+└── Response caching for repeated queries
+</code></pre>
+<h3 id="monitoring">Monitoring</h3>
+<pre><code>Infrastructure Metrics:
+├── Latency (p50, p95, p99)
+├── Throughput (RPS)
+├── Error rate
+└── GPU/CPU utilization
+
+Data/Model Metrics:
+├── Feature drift (PSI, KS test)
+├── Prediction distribution shift
+├── Performance metrics (if labels available)
+└── Business KPIs
+
+Tools:
+├── Grafana + Prometheus (infrastructure)
+├── Evidently AI (drift detection)
+├── Arize AI / WhyLogs (model observability)
+└── PagerDuty / OpsGenie (alerting)
+</code></pre>
+<hr />
+<h2 id="scalability-considerations">Scalability Considerations</h2>
+<h3 id="read-heavy-systems">Read-Heavy Systems</h3>
+<ul>
+<li>Cache feature lookups (Redis)</li>
+<li>Replicate model serving behind load balancer</li>
+<li>Pre-compute predictions for common inputs</li>
+</ul>
+<h3 id="write-heavy-systems">Write-Heavy Systems</h3>
+<ul>
+<li>Async logging and feedback collection</li>
+<li>Batch writes to storage</li>
+<li>Event-driven architecture (Kafka)</li>
+</ul>
+<h3 id="high-throughput-inference">High-Throughput Inference</h3>
+<ul>
+<li>Horizontal scaling (multiple model replicas)</li>
+<li>Request batching (batch multiple requests per inference)</li>
+<li>Model distillation (smaller, faster model)</li>
+<li>GPU inference servers (vLLM, Triton)</li>
+</ul>
+<h3 id="low-latency-inference">Low-Latency Inference</h3>
+<ul>
+<li>Online store for features (Redis, DynamoDB)</li>
+<li>Model warm-up to avoid cold starts</li>
+<li>Edge deployment for on-device inference</li>
+<li>Quantized models (FP16, INT8)</li>
+</ul>
+<hr />
+<h2 id="system-design-qa">System Design Q&amp;A</h2>
+<p><strong>Q1: Design a movie recommendation system.</strong> 🔴 Advanced</p>
+<p>See detailed design: <a href="recommendation_system.html">Recommendation System</a></p>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>Candidate generation (two-tower model): narrow 10M movies to 1000</li>
+<li>Ranking model (wide &amp; deep or gradient boosting): score 1000 candidates</li>
+<li>Re-ranking: apply business rules (diversity, promotions, freshness)</li>
+<li>Real-time features: user's last 5 clicks, current session</li>
+<li>A/B test new algorithms continuously</li>
+</ul>
+<hr />
+<p><strong>Q2: Design a fraud detection system.</strong> 🔴 Advanced</p>
+<p>See detailed design: <a href="fraud_detection.html">Fraud Detection System</a></p>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>Real-time scoring (&lt; 50ms) on every transaction</li>
+<li>Features: user history, device fingerprint, merchant risk, velocity</li>
+<li>Model: gradient boosting + rules engine</li>
+<li>Extreme class imbalance: 0.1% fraud rate</li>
+<li>Monitoring: alert rate, false positive rate, fraud amount caught</li>
+</ul>
+<hr />
+<p><strong>Q3: Design an ML pipeline for a spam email classifier.</strong> 🟡 Intermediate</p>
+<p><strong>Problem definition:</strong></p>
+<ul>
+<li>Input: Email (subject, body, sender, metadata)</li>
+<li>Output: Binary classification (spam/not spam)</li>
+<li>Goal: High precision (don't block legitimate email), reasonable recall</li>
+</ul>
+<p><strong>Data:</strong></p>
+<ul>
+<li>Labeled emails from user feedback (marked as spam)</li>
+<li>Email headers, content, sender reputation</li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul>
+<li>TF-IDF of subject/body</li>
+<li>Sender domain reputation</li>
+<li>Email header features (SPF, DKIM pass/fail)</li>
+<li>User-sender relationship</li>
+<li>Reply/engagement history</li>
+</ul>
+<p><strong>Models:</strong></p>
+<ul>
+<li>Baseline: Logistic Regression on TF-IDF</li>
+<li>Production: Gradient Boosting + text embeddings</li>
+<li>Optional: Fine-tuned BERT for semantic spam detection</li>
+</ul>
+<p><strong>Serving:</strong></p>
+<ul>
+<li>&lt; 100ms latency for real-time email filtering</li>
+<li>Pre-compute sender reputation features</li>
+</ul>
+<p><strong>Monitoring:</strong></p>
+<ul>
+<li>False positive rate (users marking legitimate email as not spam)</li>
+<li>New spam patterns (concept drift)</li>
+<li>Adversarial adaptation by spammers</li>
+</ul>
+<hr />
+<p><strong>Q4: Design a search ranking system.</strong> 🔴 Advanced</p>
+<p><strong>Problem definition:</strong></p>
+<ul>
+<li>Input: User query, candidate documents, user context</li>
+<li>Output: Ranked list of documents</li>
+</ul>
+<p><strong>Learning to Rank paradigm:</strong></p>
+<ul>
+<li>Pointwise: Predict relevance score independently per doc</li>
+<li>Pairwise: Predict which of two docs is more relevant</li>
+<li>Listwise: Optimize directly on ranking metrics (NDCG, MAP)</li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul>
+<li>Query features: query length, query type (informational vs navigational)</li>
+<li>Document features: PageRank, freshness, content quality</li>
+<li>Query-document features: BM25, embedding similarity, click history</li>
+<li>User features: search history, location, device</li>
+</ul>
+<p><strong>Model:</strong></p>
+<ul>
+<li>Candidate retrieval: dense retrieval (bi-encoder, ANN search)</li>
+<li>Ranking: LambdaMART (gradient boosting for ranking) or LambdaRank</li>
+<li>Re-ranking: BERT cross-encoder for top-100 candidates</li>
+</ul>
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Offline: NDCG@10, MAP</li>
+<li>Online: Click-through rate, session success rate (user found what they needed)</li>
+</ul>
+<hr />
+<p><strong>Q5: Design a real-time content moderation system.</strong> 🔴 Advanced</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Detect harmful content (hate speech, NSFW, misinformation)</li>
+<li>Scale: 10M posts per day</li>
+<li>Latency: &lt; 200ms for real-time decisions</li>
+</ul>
+<p><strong>Architecture:</strong></p>
+<ul>
+<li><strong>Fast path (&lt; 50ms):</strong> Rule-based filters + lightweight ML model (DistilBERT/quantized)</li>
+<li><strong>Slow path (async):</strong> Heavy model (full BERT fine-tuned) + human review queue</li>
+</ul>
+<p><strong>Models:</strong></p>
+<ul>
+<li>Multi-label classification (a post can be multiple violation types)</li>
+<li>Binary classifiers per category (hate, NSFW, spam, misinformation)</li>
+<li>Ensemble of text + image models for multimedia content</li>
+</ul>
+<p><strong>Human-in-the-loop:</strong></p>
+<ul>
+<li>Low-confidence predictions → human review queue</li>
+<li>Human labels → training data for model improvement</li>
+<li>Appeals process for incorrect decisions</li>
+</ul>
+<p><strong>Monitoring:</strong></p>
+<ul>
+<li>False positive rate (legitimate content blocked)</li>
+<li>False negative rate (harmful content allowed through)</li>
+<li>Model latency percentiles</li>
+<li>Human review queue length</li>
+</ul>
+<hr />
+<p><strong>Q6: How would you A/B test a new recommendation model?</strong> 🟡 Intermediate</p>
+<p><strong>Setup:</strong></p>
+<ol>
+<li>Define the primary metric (CTR, conversion, session time)</li>
+<li>Define guardrail metrics (things that must not degrade)</li>
+<li>Compute minimum detectable effect (MDE) to size the experiment</li>
+<li>Randomly assign users to control (old model) and treatment (new model)</li>
+<li>Ensure consistent assignment (same user always gets same variant)</li>
+</ol>
+<p><strong>Statistical rigor:</strong></p>
+<ul>
+<li>Use t-test or z-test for continuous metrics</li>
+<li>Use Fisher's exact or Chi-squared for binary metrics</li>
+<li>Set significance level α = 0.05 and power 1-β = 0.80</li>
+<li>Run for minimum 1-2 full business cycles (avoid weekday effects)</li>
+<li>Correct for multiple comparisons if testing multiple metrics</li>
+</ul>
+<p><strong>Pitfalls:</strong></p>
+<ul>
+<li><strong>Novelty effect:</strong> Users interact more with new things</li>
+<li><strong>Peeking problem:</strong> Don't stop early because p &lt; 0.05 at one point</li>
+<li><strong>Network effects:</strong> In social systems, users in control can be influenced by treatment</li>
+<li><strong>Sample ratio mismatch:</strong> Verify actual split matches intended split</li>
+</ul>
+<hr />
+<p><strong>Q7: Design a time-series anomaly detection system.</strong> 🟡 Intermediate</p>
+<p><strong>Use case:</strong> Detect anomalies in server metrics, financial transactions, IoT sensors</p>
+<p><strong>Approaches:</strong></p>
+<ul>
+<li><strong>Statistical:</strong> Z-score, IQR, ARIMA residuals, works for stationary data</li>
+<li><strong>ML-based:</strong> Isolation Forest, LOF for multivariate tabular data</li>
+<li><strong>Deep learning:</strong> LSTM Autoencoder, learns normal patterns, flags high reconstruction error</li>
+<li><strong>Forecasting-based:</strong> Predict expected value, flag when actual &gt; threshold×predicted</li>
+</ul>
+<p><strong>Pipeline:</strong></p>
+<ul>
+<li>Rolling window features: mean, std, min, max over last N periods</li>
+<li>Seasonal decomposition (STL) to separate trend, seasonality, residual</li>
+<li>Threshold on residuals using dynamic baselines</li>
+</ul>
+<p><strong>Production considerations:</strong></p>
+<ul>
+<li>Online vs batch detection (near-real-time requires streaming pipeline)</li>
+<li>Alert deduplication (correlate alerts from related metrics)</li>
+<li>Seasonality handling (different baselines for weekday vs weekend)</li>
+<li>Adaptive thresholds that update as system behavior evolves</li>
+</ul>
+<hr />
+<p><strong>Q8: How would you handle the cold start problem in recommendations?</strong> 🟡 Intermediate</p>
+<p><strong>Cold start types:</strong></p>
+<ul>
+<li><strong>New user:</strong> No interaction history available</li>
+<li><strong>New item:</strong> No engagement data for this content</li>
+</ul>
+<p><strong>Strategies for new users:</strong></p>
+<ul>
+<li>Onboarding flow to collect explicit preferences (genres, interests)</li>
+<li>Demographic-based recommendations (age, location, device)</li>
+<li>Popularity-based recommendations as fallback</li>
+<li>Collaborative filtering with similar users (based on sparse signals)</li>
+<li>Quick learning from early interactions (contextual bandits)</li>
+</ul>
+<p><strong>Strategies for new items:</strong></p>
+<ul>
+<li>Content-based filtering using item features (genre, author, metadata)</li>
+<li>Two-tower model where item tower uses only content features</li>
+<li>Explore-exploit (epsilon-greedy or UCB): show new items to some users to gather signals</li>
+<li>Transfer learning from similar existing items</li>
+</ul>
+<hr />
+<p><strong>Q9: What is the trade-off between model complexity and latency in production?</strong> 🟡 Intermediate</p>
+<p>Latency directly impacts user experience: even small slowdowns can measurably reduce engagement and conversion, so measure the effect on your own product. Model complexity trade-offs:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Simple Model</th>
+<th>Complex Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency</td>
+<td>&lt; 10ms</td>
+<td>100ms-1s</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Low</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Debugging</td>
+<td>Easy</td>
+<td>Hard</td>
+</tr>
+<tr>
+<td>Serving cost</td>
+<td>Low</td>
+<td>High</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Strategies to manage the trade-off:</strong></p>
+<ul>
+<li>Model distillation: Train large model, distill into small fast model</li>
+<li>Cascading: Use fast model first, escalate hard cases to slow model</li>
+<li>Quantization: FP32 → INT8 reduces latency 2-4x</li>
+<li>Async enrichment: Return initial result, update asynchronously with better prediction</li>
+<li>Request batching: Batch multiple requests for GPU efficiency</li>
+</ul>
+<hr />
+<p><strong>Q10: How do you ensure reproducibility in ML pipelines?</strong> 🟡 Intermediate</p>
+<ol>
+<li><strong>Code versioning:</strong> Git tags for every production training run</li>
+<li><strong>Data versioning:</strong> DVC or Delta Lake to snapshot training datasets</li>
+<li><strong>Environment reproducibility:</strong> Docker containers with pinned dependency versions</li>
+<li><strong>Seed management:</strong> Set random seeds for data splitting, model initialization, sampling</li>
+<li><strong>Parameter logging:</strong> Log all hyperparameters (MLflow, W&amp;B)</li>
+<li><strong>Artifact storage:</strong> Store model files, tokenizers, preprocessors with the run</li>
+<li><strong>Pipeline automation:</strong> Airflow/Kubeflow DAGs for reproducible training runs</li>
+<li><strong>Testing:</strong> Unit tests for feature computation, regression tests for model outputs</li>
+</ol>
+<hr />
+<h2 id="guides-in-this-track">Guides in This Track</h2>
+<p>Every guide in <code>system_design/</code>. Start with the overview above, then work through these.</p>
+<ul>
+<li><a href="ads_ctr_prediction.html">Ads Click-Through-Rate Prediction System Design</a></li>
+<li><a href="intro_backend_ai_system_design.html">Backend and System Design for AI</a></li>
+<li><a href="backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+<li><a href="content_moderation_system.html">Content Moderation System Design</a></li>
+<li><a href="llm_assistant_system.html">Designing a Production LLM Assistant</a></li>
+<li><a href="dynamic_pricing.html">Dynamic Pricing System Design</a></li>
+<li><a href="enterprise_rag_search.html">Enterprise RAG Search System Design</a></li>
+<li><a href="eta_prediction.html">ETA Prediction System Design</a></li>
+<li><a href="fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns: 2026 Production Guide</a></li>
+<li><a href="news_feed_ranking.html">News Feed Ranking System Design</a></li>
+<li><a href="notification_ranking.html">Notification Ranking System Design</a></li>
+<li><a href="people_you_may_know.html">People You May Know System Design</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="visual_search_system.html">Visual Search System Design</a></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/">Designing Machine Learning Systems: Chip Huyen (O'Reilly)</a></li>
+<li><a href="https://www.amazon.com/Machine-Learning-System-Design-Interview/dp/1736049127">Machine Learning System Design Interview: Alex Xu, Sahn Lam</a></li>
+<li><a href="https://proceedings.mlsys.org/">ML Systems Design at Recsys, KDD, and MLSys conferences</a></li>
+<li><a href="https://developers.google.com/machine-learning/guides/rules-of-ml">Google's Rules of Machine Learning</a></li>
+<li><a href="https://engineering.fb.com/category/ml-applications/">Meta's AI Infrastructure blog</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_backend_ai_system_design.html"><small>Next</small>Backend AI Systems</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

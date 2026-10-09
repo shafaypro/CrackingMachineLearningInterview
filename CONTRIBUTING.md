@@ -64,9 +64,14 @@ Follow the content and formatting guidelines below. Then check that all links wo
 python3 tools/check_links.py                 # whole repo, plus the index.html nav entries
 python3 tools/check_links.py path/to/new.md  # just your file
 python3 tools/check_style.py                 # no em or en dashes; use colons, commas, parentheses or hyphens
+python3 tools/build_question_bank.py         # refresh data/questions.json for the practice drill
+pip install markdown-it-py==4.0.0            # once, for the next command
+python3 tools/build_site.py                  # refresh guides/*.html and sitemap.xml (the search-engine pages)
 ```
 
-The same check runs in CI on every pull request. If you add a new guide, also add it to the track list in
+The same checks run in CI on every pull request, including `--check` runs that fail if
+`data/questions.json`, `guides/` or `sitemap.xml` are out of date. Never edit `guides/` by hand: it is generated
+from the Markdown. If you add a new guide, also add it to the track list in
 `README.md`, the track's own `README.md`, and the `files` list of the right track in `index.html`.
 
 ### 4. Commit Your Changes

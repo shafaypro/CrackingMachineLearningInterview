@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pydantic: Data Validation for AI Systems Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Pydantic: Data Validation for AI Systems: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pydantic.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Pydantic: Data Validation for AI Systems Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Pydantic: Data Validation for AI Systems: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pydantic.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pydantic: Data Validation for AI Systems Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Pydantic: Data Validation for AI Systems: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Pydantic: Data Validation for AI Systems",
+   "description": "Pydantic: Data Validation for AI Systems: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pydantic.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Pydantic",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pydantic.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">Pydantic</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_pydantic.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="pydantic-data-validation-for-ai-systems">Pydantic: Data Validation for AI Systems</h1>
+<h2 id="what-is-pydantic">What is Pydantic?</h2>
+<p>Pydantic is a Python data validation library that uses <strong>type annotations</strong> to define schemas and validate data at runtime. In AI/ML systems, it's used for:</p>
+<ul>
+<li><strong>API request/response validation</strong> (FastAPI integration)</li>
+<li><strong>LLM structured output</strong> enforcement</li>
+<li><strong>Configuration management</strong></li>
+<li><strong>Data pipeline schema validation</strong></li>
+</ul>
+<hr />
+<h2 id="core-concepts-pydantic-v2">Core Concepts (Pydantic v2)</h2>
+<pre><code class="language-python">from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+from typing import Optional, Literal
+from datetime import datetime
+import json
+
+class MLModel(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    version: str = Field(default=&quot;1.0.0&quot;, pattern=r&quot;^\d+\.\d+\.\d+$&quot;)
+    accuracy: float = Field(..., ge=0.0, le=1.0, description=&quot;Test accuracy 0-1&quot;)
+    model_type: Literal[&quot;classification&quot;, &quot;regression&quot;, &quot;generation&quot;]
+    tags: list[str] = Field(default_factory=list, max_length=10)
+    metadata: dict = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=datetime.now)
+    is_production: bool = False
+
+    @field_validator(&quot;name&quot;)
+    @classmethod
+    def name_must_be_snake_case(cls, v: str) -&gt; str:
+        if &quot; &quot; in v:
+            raise ValueError(&quot;Model name must not contain spaces&quot;)
+        return v.lower()
+
+    @model_validator(mode=&quot;after&quot;)
+    def check_production_requirements(self) -&gt; &quot;MLModel&quot;:
+        if self.is_production and self.accuracy &lt; 0.85:
+            raise ValueError(&quot;Production models require accuracy &gt;= 0.85&quot;)
+        return self
+
+# Usage
+try:
+    model = MLModel(
+        name=&quot;bert_classifier&quot;,
+        accuracy=0.94,
+        model_type=&quot;classification&quot;,
+        is_production=True
+    )
+    print(model.model_dump())
+    print(model.model_dump_json(indent=2))
+except ValidationError as e:
+    print(e.errors())  # Detailed error list
+</code></pre>
+<hr />
+<h2 id="pydantic-for-llm-structured-output">Pydantic for LLM Structured Output</h2>
+<p>The most critical use case in 2026: forcing LLMs to return validated, typed outputs.</p>
+<h3 id="with-langchain">With LangChain</h3>
+<pre><code class="language-python">from typing import Optional, Literal
+from pydantic import BaseModel, Field
+from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+
+class InterviewAnswer(BaseModel):
+    &quot;&quot;&quot;Structured answer to an ML interview question&quot;&quot;&quot;
+    main_answer: str = Field(description=&quot;Core answer in 2-3 sentences&quot;)
+    key_concepts: list[str] = Field(description=&quot;Top 3-5 concepts to mention&quot;)
+    code_example: Optional[str] = Field(default=None, description=&quot;Python code example if relevant&quot;)
+    follow_up_questions: list[str] = Field(description=&quot;2 likely follow-up questions&quot;)
+    difficulty: Literal[&quot;easy&quot;, &quot;medium&quot;, &quot;hard&quot;] = Field(description=&quot;Question difficulty&quot;)
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+structured_llm = llm.with_structured_output(InterviewAnswer)
+
+prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;You are an ML interview coach. Answer the question in the exact format requested.&quot;),
+    (&quot;human&quot;, &quot;Question: {question}&quot;)
+])
+
+chain = prompt | structured_llm
+
+result: InterviewAnswer = chain.invoke({
+    &quot;question&quot;: &quot;Explain the difference between bagging and boosting&quot;
+})
+
+# result is a fully typed, validated Python object
+print(result.main_answer)
+print(result.key_concepts)
+print(result.difficulty)
+</code></pre>
+<h3 id="direct-with-anthropic-sdk">Direct with Anthropic SDK</h3>
+<pre><code class="language-python">from typing import Literal
+from anthropic import Anthropic
+from pydantic import BaseModel, Field
+
+class RAGEvaluation(BaseModel):
+    relevance_score: float = Field(ge=0.0, le=1.0)
+    faithfulness_score: float = Field(ge=0.0, le=1.0)
+    issues: list[str]
+    recommendation: Literal[&quot;approve&quot;, &quot;review&quot;, &quot;reject&quot;]
+
+client = Anthropic()
+
+def evaluate_rag_response(question: str, context: str, answer: str) -&gt; RAGEvaluation:
+    # Structured outputs: the API constrains the reply to the model's JSON schema
+    # and the SDK validates it into a RAGEvaluation. The older trick (a forced
+    # tool_choice plus response.content[0].input) returns a 400 on Claude Opus 5.5,
+    # and content[0] may be a thinking block on current models anyway.
+    response = client.messages.parse(
+        model=&quot;claude-opus-5-5&quot;,
+        max_tokens=16000,
+        output_format=RAGEvaluation,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;Evaluate this RAG response:\nQuestion: {question}\nContext: {context}\nAnswer: {answer}&quot;
+        }]
+    )
+
+    return response.parsed_output  # a validated RAGEvaluation instance
+
+result = evaluate_rag_response(
+    question=&quot;What is RLHF?&quot;,
+    context=&quot;RLHF stands for Reinforcement Learning from Human Feedback...&quot;,
+    answer=&quot;RLHF is a technique to align LLMs using human preferences.&quot;
+)
+print(result)
+</code></pre>
+<hr />
+<h2 id="nested-models-for-complex-ai-outputs">Nested Models for Complex AI Outputs</h2>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+from typing import Optional
+
+class CodeExample(BaseModel):
+    language: Literal[&quot;python&quot;, &quot;sql&quot;, &quot;bash&quot;, &quot;yaml&quot;]
+    code: str
+    explanation: str
+
+class SystemDesignAnswer(BaseModel):
+    problem_statement: str
+    requirements: list[str] = Field(min_length=2, max_length=10)
+    architecture_components: list[str]
+    data_flow: str = Field(description=&quot;Step-by-step data flow description&quot;)
+    scalability_considerations: list[str]
+    tradeoffs: dict[str, str] = Field(description=&quot;Key: tradeoff name, Value: explanation&quot;)
+    code_examples: list[CodeExample] = Field(default_factory=list, max_length=3)
+    interview_tips: list[str]
+
+# LLM outputs complex nested structure, Pydantic validates it
+llm = ChatAnthropic(model=&quot;claude-opus-4-6&quot;)
+structured_llm = llm.with_structured_output(SystemDesignAnswer)
+result = structured_llm.invoke(&quot;Design a real-time fraud detection system for ML interview&quot;)
+</code></pre>
+<hr />
+<h2 id="configuration-management">Configuration Management</h2>
+<pre><code class="language-python">from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import SecretStr, AnyUrl
+from functools import lru_cache
+
+class AppSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=&quot;.env&quot;,
+        env_prefix=&quot;APP_&quot;,     # APP_ANTHROPIC_API_KEY, etc.
+        case_sensitive=False
+    )
+
+    # LLM Settings
+    anthropic_api_key: SecretStr
+    default_model: str = &quot;claude-sonnet-5&quot;
+    max_tokens: int = 2048
+    temperature: float | None = None  # leave unset: Claude Sonnet 5 rejects non-default sampling params
+
+    # Vector DB
+    pinecone_api_key: SecretStr
+    pinecone_index: str = &quot;production-index&quot;
+    pinecone_environment: str = &quot;us-east-1&quot;
+
+    # Database
+    database_url: AnyUrl
+    db_pool_size: int = 10
+
+    # Rate Limiting
+    rate_limit_rpm: int = 60
+    rate_limit_tpm: int = 100000
+
+    # Feature Flags
+    enable_streaming: bool = True
+    enable_cache: bool = True
+
+@lru_cache()
+def get_settings() -&gt; AppSettings:
+    return AppSettings()
+
+# Use in FastAPI
+from fastapi import Depends
+
+@app.get(&quot;/config-check&quot;)
+async def config_check(settings: AppSettings = Depends(get_settings)):
+    return {
+        &quot;model&quot;: settings.default_model,
+        &quot;streaming&quot;: settings.enable_streaming
+    }
+</code></pre>
+<hr />
+<h2 id="data-pipeline-validation">Data Pipeline Validation</h2>
+<pre><code class="language-python">from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+from datetime import datetime
+import logging
+import uuid
+import numpy as np
+
+logger = logging.getLogger(__name__)
+
+class TrainingExample(BaseModel):
+    features: list[float] = Field(..., min_length=1)
+    label: int = Field(..., ge=0)
+    weight: float = Field(default=1.0, gt=0)
+    source: str
+
+    @field_validator(&quot;features&quot;)
+    @classmethod
+    def features_must_be_finite(cls, v: list[float]) -&gt; list[float]:
+        if any(not np.isfinite(x) for x in v):
+            raise ValueError(&quot;Features cannot contain NaN or Inf&quot;)
+        return v
+
+class DataBatch(BaseModel):
+    examples: list[TrainingExample] = Field(..., min_length=1)
+    batch_id: str
+    created_at: datetime
+
+    @model_validator(mode=&quot;after&quot;)
+    def check_label_distribution(self) -&gt; &quot;DataBatch&quot;:
+        labels = [e.label for e in self.examples]
+        unique_labels = set(labels)
+        if len(unique_labels) == 1 and len(self.examples) &gt; 100:
+            import warnings
+            warnings.warn(&quot;Batch contains only one class label: possible data issue&quot;)
+        return self
+
+# Validate incoming training data
+def process_batch(raw_data: list[dict]) -&gt; DataBatch:
+    try:
+        batch = DataBatch(
+            examples=[TrainingExample(**ex) for ex in raw_data],
+            batch_id=str(uuid.uuid4()),
+            created_at=datetime.now()
+        )
+        return batch
+    except ValidationError as e:
+        logger.error(f&quot;Data validation failed: {e.errors()}&quot;)
+        raise
+</code></pre>
+<hr />
+<h2 id="pydantic-v1-vs-v2-differences">Pydantic v1 vs v2 Differences</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>v1</th>
+<th>v2 (current)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Validators</strong></td>
+<td><code>@validator</code></td>
+<td><code>@field_validator</code>, <code>@model_validator</code></td>
+</tr>
+<tr>
+<td><strong>Export</strong></td>
+<td><code>.dict()</code>, <code>.json()</code></td>
+<td><code>.model_dump()</code>, <code>.model_dump_json()</code></td>
+</tr>
+<tr>
+<td><strong>JSON schema</strong></td>
+<td><code>.schema()</code></td>
+<td><code>.model_json_schema()</code></td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Python</td>
+<td>Rust core (<code>pydantic-core</code>), typically several times to tens of times faster</td>
+</tr>
+<tr>
+<td><strong>Config</strong></td>
+<td><code>class Config:</code></td>
+<td><code>model_config = ConfigDict(...)</code> (<code>SettingsConfigDict</code> for <code>BaseSettings</code>)</td>
+</tr>
+<tr>
+<td><strong>Parsing</strong></td>
+<td><code>parse_obj()</code>, <code>parse_raw()</code></td>
+<td><code>model_validate()</code>, <code>model_validate_json()</code></td>
+</tr>
+<tr>
+<td><strong>Strict mode</strong></td>
+<td>Manual</td>
+<td>Built-in <code>model_validate(data, strict=True)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="common-patterns-in-ai-systems">Common Patterns in AI Systems</h2>
+<h3 id="output-parser-with-fallback">Output Parser with Fallback</h3>
+<pre><code class="language-python">from pydantic import ValidationError
+from langchain_core.output_parsers import PydanticOutputParser
+from langchain_core.output_parsers import StrOutputParser
+
+parser = PydanticOutputParser(pydantic_object=InterviewAnswer)
+
+# Try structured output, fall back to raw string
+def safe_parse(llm_output: str) -&gt; InterviewAnswer | str:
+    try:
+        return parser.parse(llm_output)
+    except (ValidationError, ValueError) as e:
+        logger.warning(f&quot;Failed to parse structured output: {e}&quot;)
+        return llm_output  # Return raw string as fallback
+</code></pre>
+<h3 id="discriminated-unions-for-multi-agent-routing">Discriminated Unions (for Multi-Agent Routing)</h3>
+<pre><code class="language-python">from pydantic import BaseModel, Discriminator, TypeAdapter
+from typing import Union, Annotated, Literal
+
+class ResearchTask(BaseModel):
+    task_type: Literal[&quot;research&quot;] = &quot;research&quot;
+    query: str
+    max_sources: int = 10
+
+class CodeTask(BaseModel):
+    task_type: Literal[&quot;code&quot;] = &quot;code&quot;
+    description: str
+    language: str = &quot;python&quot;
+
+class WritingTask(BaseModel):
+    task_type: Literal[&quot;write&quot;] = &quot;write&quot;
+    topic: str
+    word_count: int = 500
+
+# Pydantic auto-selects the right type based on task_type discriminator
+AgentTask = Annotated[
+    Union[ResearchTask, CodeTask, WritingTask],
+    Discriminator(&quot;task_type&quot;)
+]
+
+task_data = {&quot;task_type&quot;: &quot;code&quot;, &quot;description&quot;: &quot;Write a binary search&quot;, &quot;language&quot;: &quot;python&quot;}
+task = TypeAdapter(AgentTask).validate_python(task_data)
+# task is a CodeTask instance
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: Why is Pydantic important in LLM applications?</strong></p>
+<blockquote>
+<p>LLMs return unstructured text. Pydantic enforces that outputs conform to a schema, catching missing fields, wrong types, invalid values before they cause downstream failures. With <code>with_structured_output()</code>, the LLM is guided via JSON Schema / tool calling to produce valid structured data.</p>
+</blockquote>
+<p><strong>Q: How does Pydantic v2 differ from v1 in performance?</strong></p>
+<blockquote>
+<p>Pydantic v2's core is written in Rust (via the <code>pydantic-core</code> library), making validation substantially faster than v1 (often by several times or more, depending on the workload). API changes: <code>@validator</code> → <code>@field_validator</code>, <code>.dict()</code> → <code>.model_dump()</code>, <code>parse_obj()</code> → <code>model_validate()</code>, <code>class Config</code> → <code>model_config = ConfigDict(...)</code> (or <code>SettingsConfigDict</code> in <code>pydantic-settings</code>).</p>
+</blockquote>
+<p><strong>Q: How do you handle LLM output validation failures?</strong></p>
+<blockquote>
+<p>Retry with a clearer prompt that includes the schema and error message. Use fallback to a raw string parser if structured parsing fails after N retries. Log all failures for dataset curation: these become training examples for improving prompts.</p>
+</blockquote>
+<p><strong>Q: What's the difference between <code>model_validate</code> and direct instantiation?</strong></p>
+<blockquote>
+<p>Direct instantiation (<code>MyModel(field=value)</code>) validates kwargs. <code>model_validate(dict_or_object)</code> validates from a dict/object: useful when data comes from JSON. <code>model_validate(data, strict=True)</code> enforces strict type matching (no coercion). Use strict mode when accepting external data to avoid silent type coercions.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_fastapi.html"><small>Previous</small>FastAPI</a><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_pydantic.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

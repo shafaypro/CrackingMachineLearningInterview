@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL Coding Challenges for Interviews | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on SQL interview rounds for ML, data, analytics, and platform roles. Most real interview SQL is not about obscure syntax. It is about…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/sql_coding_challenges.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="SQL Coding Challenges for Interviews | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on SQL interview rounds for ML, data, analytics, and platform roles. Most real interview SQL is not about obscure syntax. It is about…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/sql_coding_challenges.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL Coding Challenges for Interviews | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on SQL interview rounds for ML, data, analytics, and platform roles. Most real interview SQL is not about obscure syntax. It is about…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "SQL Coding Challenges for Interviews",
+   "description": "This guide focuses on SQL interview rounds for ML, data, analytics, and platform roles. Most real interview SQL is not about obscure syntax. It is about…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/sql_coding_challenges.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#coding-challenges"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "SQL Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/sql_coding_challenges.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#coding-challenges">Coding Challenges</a> <span aria-hidden="true">/</span> <span aria-current="page">SQL Coding Challenges</span></nav>
+<p class="meta"><a href="../../#coding_challenges/sql_coding_challenges.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="sql-coding-challenges-for-interviews">SQL Coding Challenges for Interviews</h1>
+<p>This guide focuses on SQL interview rounds for ML, data, analytics, and platform roles.</p>
+<p>Most real interview SQL is not about obscure syntax. It is about whether you can turn a business question into a correct query with clean logic.</p>
+<hr />
+<h2 id="what-interviewers-usually-test">What Interviewers Usually Test</h2>
+<ul>
+<li>correct joins and aggregation logic</li>
+<li>clean step-by-step query decomposition with CTEs</li>
+<li>window functions</li>
+<li>deduplication</li>
+<li>time-based analytics</li>
+<li>practical reasoning about data grain and nulls</li>
+</ul>
+<hr />
+<h2 id="1-core-aggregations">1. Core Aggregations</h2>
+<h3 id="concepts-to-know">Concepts to know</h3>
+<ul>
+<li><code>GROUP BY</code></li>
+<li><code>HAVING</code></li>
+<li>conditional aggregation with <code>CASE WHEN</code></li>
+<li>choosing the correct grain before you aggregate</li>
+</ul>
+<h3 id="typical-prompts">Typical prompts</h3>
+<ul>
+<li>revenue by customer</li>
+<li>average order value by region</li>
+<li>count active users by day</li>
+<li>number of failed jobs by service</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code class="language-sql">SELECT
+    customer_id,
+    COUNT(*) AS order_count,
+    SUM(amount) AS total_revenue,
+    AVG(amount) AS avg_order_value
+FROM orders
+WHERE status = 'completed'
+GROUP BY customer_id
+HAVING COUNT(*) &gt;= 3;
+</code></pre>
+<h3 id="what-to-watch">What to watch</h3>
+<ul>
+<li>Are you aggregating at the right grain?</li>
+<li>Does <code>WHERE</code> filter rows before or after grouping?</li>
+<li>Should the filter belong in <code>HAVING</code> instead?</li>
+</ul>
+<hr />
+<h2 id="2-joins-and-null-handling">2. Joins and Null Handling</h2>
+<h3 id="concepts-to-know-1">Concepts to know</h3>
+<ul>
+<li>inner join</li>
+<li>left join</li>
+<li>join cardinality</li>
+<li><code>COALESCE</code></li>
+<li>avoiding accidental row multiplication</li>
+</ul>
+<h3 id="typical-prompts-1">Typical prompts</h3>
+<ul>
+<li>users with no orders</li>
+<li>orders with customer metadata</li>
+<li>products never purchased</li>
+<li>combine fact and dimension tables</li>
+</ul>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-sql">SELECT
+    c.customer_id,
+    c.customer_name,
+    COALESCE(SUM(o.amount), 0) AS lifetime_value
+FROM customers c
+LEFT JOIN orders o
+    ON c.customer_id = o.customer_id
+   AND o.status = 'completed'
+GROUP BY c.customer_id, c.customer_name;
+</code></pre>
+<h3 id="what-to-say-in-the-interview">What to say in the interview</h3>
+<p>Mention the join grain explicitly:</p>
+<ul>
+<li><code>customers</code> is one row per customer</li>
+<li><code>orders</code> is many rows per customer</li>
+<li>left join preserves customers with zero orders</li>
+</ul>
+<hr />
+<h2 id="3-deduplication-and-latest-row-logic">3. Deduplication and Latest-Row Logic</h2>
+<h3 id="concepts-to-know-2">Concepts to know</h3>
+<ul>
+<li><code>row_number()</code></li>
+<li>partitioning by business key</li>
+<li>ordering by update timestamp</li>
+</ul>
+<h3 id="typical-prompts-2">Typical prompts</h3>
+<ul>
+<li>keep the latest status per user</li>
+<li>remove duplicate transactions</li>
+<li>select the most recent model run</li>
+</ul>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-sql">WITH ranked AS (
+    SELECT
+        user_id,
+        status,
+        updated_at,
+        ROW_NUMBER() OVER (
+            PARTITION BY user_id
+            ORDER BY updated_at DESC
+        ) AS rn
+    FROM user_status_history
+)
+SELECT
+    user_id,
+    status,
+    updated_at
+FROM ranked
+WHERE rn = 1;
+</code></pre>
+<p>If two rows share the same <code>updated_at</code>, <code>ROW_NUMBER()</code> picks one arbitrarily and the result can change between runs. Add a tie-breaker to the <code>ORDER BY</code> (for example a unique <code>event_id</code> or load sequence) so the dedup is deterministic.</p>
+<h3 id="why-it-matters">Why it matters</h3>
+<p>This is one of the most common warehouse and dbt patterns.</p>
+<p>Related repo reading:</p>
+<ul>
+<li><a href="../data_engineering/interview_dbt.html">dbt Interview Q&amp;A</a></li>
+</ul>
+<hr />
+<h2 id="4-ranking-and-top-n-per-group">4. Ranking and Top-N Per Group</h2>
+<h3 id="concepts-to-know-3">Concepts to know</h3>
+<ul>
+<li><code>row_number()</code></li>
+<li><code>rank()</code></li>
+<li><code>dense_rank()</code></li>
+<li>top-N within each partition</li>
+</ul>
+<h3 id="typical-prompts-3">Typical prompts</h3>
+<ul>
+<li>top 3 products per category</li>
+<li>highest revenue user per country</li>
+<li>top model per experiment</li>
+</ul>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-sql">WITH ranked_products AS (
+    SELECT
+        category,
+        product_id,
+        revenue,
+        ROW_NUMBER() OVER (
+            PARTITION BY category
+            ORDER BY revenue DESC
+        ) AS rn
+    FROM product_revenue
+)
+SELECT
+    category,
+    product_id,
+    revenue
+FROM ranked_products
+WHERE rn &lt;= 3;
+</code></pre>
+<p><code>ROW_NUMBER()</code> returns exactly 3 rows per category and breaks revenue ties arbitrarily. If tied products should all be kept, use <code>RANK()</code> or <code>DENSE_RANK()</code> and say which one the business question wants.</p>
+<hr />
+<h2 id="5-window-functions">5. Window Functions</h2>
+<h3 id="concepts-to-know-4">Concepts to know</h3>
+<ul>
+<li>running totals</li>
+<li>moving averages</li>
+<li><code>lag()</code> and <code>lead()</code></li>
+<li>partitioned calculations</li>
+</ul>
+<h3 id="typical-prompts-4">Typical prompts</h3>
+<ul>
+<li>running revenue by day</li>
+<li>compare each event to the previous event</li>
+<li>rolling 7-day average</li>
+<li>detect changes in user behavior</li>
+</ul>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-sql">SELECT
+    event_date,
+    daily_signups,
+    SUM(daily_signups) OVER (
+        ORDER BY event_date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS cumulative_signups,
+    AVG(daily_signups) OVER (
+        ORDER BY event_date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) AS rolling_7d_avg
+FROM daily_signup_metrics;
+</code></pre>
+<p><code>ROWS BETWEEN 6 PRECEDING AND CURRENT ROW</code> means the last 7 <em>rows</em>, which equals the last 7 days only if the table has exactly one row per day with no missing dates. If days can be missing, join to a date spine first, or use a time-based frame such as <code>RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW</code> where supported (PostgreSQL 11+, DuckDB; support varies elsewhere; SQLite only accepts numeric <code>RANGE</code> offsets, for example over <code>julianday(event_date)</code>).</p>
+<h3 id="related-repo-reading">Related repo reading</h3>
+<ul>
+<li><a href="../data_engineering/intro_duckdb.html">DuckDB Complete Guide</a></li>
+</ul>
+<hr />
+<h2 id="6-time-bucketing-and-cohort-logic">6. Time Bucketing and Cohort Logic</h2>
+<h3 id="concepts-to-know-5">Concepts to know</h3>
+<ul>
+<li><code>date_trunc</code></li>
+<li>grouping by day, week, or month</li>
+<li>cohort assignment</li>
+<li>retention windows</li>
+</ul>
+<h3 id="typical-prompts-5">Typical prompts</h3>
+<ul>
+<li>monthly active users</li>
+<li>week-1 retention</li>
+<li>cohort revenue by signup month</li>
+<li>daily model inference counts</li>
+</ul>
+<h3 id="example-monthly-active-users">Example: monthly active users</h3>
+<p><code>DATE_TRUNC('month', ts)</code> is PostgreSQL, DuckDB, Snowflake, and Redshift syntax. BigQuery uses <code>DATE_TRUNC(ts_date, MONTH)</code> / <code>TIMESTAMP_TRUNC(ts, MONTH)</code>, MySQL has no <code>DATE_TRUNC</code> (use <code>DATE_FORMAT(ts, '%Y-%m-01')</code>), and SQLite uses <code>strftime('%Y-%m-01', ts)</code>.</p>
+<pre><code class="language-sql">SELECT
+    DATE_TRUNC('month', event_time) AS month_start,
+    COUNT(DISTINCT user_id) AS monthly_active_users
+FROM user_events
+WHERE event_name = 'session_start'
+GROUP BY DATE_TRUNC('month', event_time)
+ORDER BY month_start;
+</code></pre>
+<h3 id="example-previous-event-per-user-the-input-to-a-gap-calculation">Example: previous event per user (the input to a gap calculation)</h3>
+<pre><code class="language-sql">SELECT
+    user_id,
+    event_time,
+    LAG(event_time) OVER (
+        PARTITION BY user_id
+        ORDER BY event_time
+    ) AS previous_event_time
+FROM user_events;
+</code></pre>
+<p>The gap itself is <code>event_time - previous_event_time</code>, and timestamp subtraction is dialect-specific: an <code>INTERVAL</code> in PostgreSQL and DuckDB, <code>DATEDIFF(second, prev, cur)</code> in Snowflake, <code>TIMESTAMP_DIFF(cur, prev, SECOND)</code> in BigQuery, and <code>(julianday(cur) - julianday(prev)) * 86400</code> in SQLite. The first event per user has a <code>NULL</code> previous time. Use <code>LEAD()</code> instead of <code>LAG()</code> for the time until the next event.</p>
+<hr />
+<h2 id="7-funnel-and-conversion-queries">7. Funnel and Conversion Queries</h2>
+<h3 id="concepts-to-know-6">Concepts to know</h3>
+<ul>
+<li>staged CTEs</li>
+<li>one row per user or session before final aggregation</li>
+<li>conditional counting</li>
+</ul>
+<h3 id="typical-prompts-6">Typical prompts</h3>
+<ul>
+<li>view -&gt; click -&gt; purchase funnel</li>
+<li>signup -&gt; activation -&gt; subscription</li>
+<li>experiment exposure -&gt; conversion</li>
+</ul>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-sql">WITH user_steps AS (
+    SELECT
+        user_id,
+        MAX(CASE WHEN event_name = 'view_product' THEN 1 ELSE 0 END) AS viewed,
+        MAX(CASE WHEN event_name = 'add_to_cart' THEN 1 ELSE 0 END) AS added_to_cart,
+        MAX(CASE WHEN event_name = 'purchase' THEN 1 ELSE 0 END) AS purchased
+    FROM events
+    GROUP BY user_id
+)
+SELECT
+    SUM(viewed) AS users_viewed,
+    SUM(added_to_cart) AS users_added_to_cart,
+    SUM(purchased) AS users_purchased
+FROM user_steps;
+</code></pre>
+<p>This counts users who ever did each step, in any order: a user who purchased without viewing still counts toward <code>users_purchased</code>. For a strict funnel, require the earlier steps (for example <code>SUM(viewed * added_to_cart * purchased)</code>), and if order matters, compare the first timestamp of each step per user.</p>
+<hr />
+<h2 id="8-clean-query-design-with-ctes">8. Clean Query Design with CTEs</h2>
+<h3 id="concepts-to-know-7">Concepts to know</h3>
+<ul>
+<li>one transformation per CTE</li>
+<li>naming CTEs by purpose</li>
+<li>separate filtering, enrichment, and final aggregation</li>
+</ul>
+<h3 id="typical-prompts-7">Typical prompts</h3>
+<ul>
+<li>messy analytics question with multiple joins</li>
+<li>retention question with several business rules</li>
+<li>interviewers asking you to &quot;make it cleaner&quot;</li>
+</ul>
+<h3 id="example-structure">Example structure</h3>
+<pre><code class="language-sql">WITH filtered_orders AS (
+    SELECT *
+    FROM orders
+    WHERE status = 'completed'
+),
+customer_revenue AS (
+    SELECT
+        customer_id,
+        SUM(amount) AS revenue
+    FROM filtered_orders
+    GROUP BY customer_id
+)
+SELECT
+    customer_id,
+    revenue
+FROM customer_revenue
+ORDER BY revenue DESC;
+</code></pre>
+<h3 id="what-interviewers-like">What interviewers like</h3>
+<ul>
+<li>readable stages</li>
+<li>correct naming</li>
+<li>clear grain in each step</li>
+</ul>
+<hr />
+<h2 id="practice-checklist">Practice Checklist</h2>
+<h3 id="easy">Easy</h3>
+<ul>
+<li>aggregation by one dimension</li>
+<li>left join with null handling</li>
+<li>distinct counts</li>
+<li>simple date filters</li>
+</ul>
+<h3 id="medium">Medium</h3>
+<ul>
+<li>dedup with <code>row_number()</code></li>
+<li>top-N per group</li>
+<li>running totals</li>
+<li>lag/lead comparisons</li>
+<li>clean CTE decomposition</li>
+</ul>
+<h3 id="harder-but-high-value">Harder but high value</h3>
+<ul>
+<li>retention</li>
+<li>funnels</li>
+<li>sessionization</li>
+<li>cohort analysis</li>
+<li>performance reasoning on large tables</li>
+</ul>
+<hr />
+<h2 id="common-mistakes">Common Mistakes</h2>
+<ul>
+<li>using <code>COUNT(*)</code> when <code>COUNT(DISTINCT user_id)</code> is needed</li>
+<li>filtering after a left join in a way that turns it into an inner join</li>
+<li>forgetting the data grain before aggregation</li>
+<li>using <code>rank()</code> when <code>row_number()</code> is required</li>
+<li>mixing event-level rows with user-level metrics without a normalization step</li>
+<li>ordering windows incorrectly</li>
+</ul>
+<hr />
+<h2 id="good-interview-habits">Good Interview Habits</h2>
+<ol>
+<li>State the table grain first.</li>
+<li>State the output grain next.</li>
+<li>Say whether you need a join, a dedup step, a window, or a CTE pipeline.</li>
+<li>Write the query in layers.</li>
+<li>Validate it with one small example in words.</li>
+</ol>
+<hr />
+<h2 id="repo-concepts-to-pair-with-practice">Repo Concepts to Pair With Practice</h2>
+<ul>
+<li><a href="../data_engineering/intro_duckdb.html">DuckDB Complete Guide</a></li>
+<li><a href="../data_engineering/interview_dbt.html">dbt Interview Q&amp;A</a></li>
+<li><a href="../data_engineering/intro_data_engineering_for_ai.html">Data Engineering for AI</a></li>
+<li><a href="../classical_ml/intro_statistics_probability.html">Statistics &amp; Probability Guide</a></li>
+</ul>
+<p>If you can solve medium SQL questions quickly and explain the underlying grain, windows, and business logic, you are already strong for many ML-adjacent interview loops.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="pandas_numpy_challenges.html"><small>Previous</small>Pandas &amp; NumPy Challenges</a><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/coding_challenges/sql_coding_challenges.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

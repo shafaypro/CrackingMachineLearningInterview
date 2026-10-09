@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLflow: Experiment Tracking, Model Registry, and Deployment | Cracking ML Interviews</title>
+<meta name="description" content="MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_mlflow.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="MLflow: Experiment Tracking, Model Registry, and Deployment | Cracking ML Interviews">
+<meta property="og:description" content="MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_mlflow.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MLflow: Experiment Tracking, Model Registry, and Deployment | Cracking ML Interviews">
+<meta name="twitter:description" content="MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "MLflow: Experiment Tracking, Model Registry, and Deployment",
+   "description": "MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_mlflow.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "MLflow",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_mlflow.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">MLflow</span></nav>
+<p class="meta"><a href="../../#mlops/intro_mlflow.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="mlflow-experiment-tracking-model-registry-and-deployment">MLflow: Experiment Tracking, Model Registry, and Deployment</h1>
+<p>MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into reproducible runs, sharing and deploying models, and managing the model lifecycle in a central registry.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-mlflow">Why MLflow?</a></li>
+<li><a href="#core-components">Core Components</a></li>
+<li><a href="#tracking-experiments">Tracking Experiments</a></li>
+<li><a href="#logging-metrics-parameters-and-artifacts">Logging Metrics, Parameters, and Artifacts</a></li>
+<li><a href="#mlflow-projects">MLflow Projects</a></li>
+<li><a href="#mlflow-models-and-flavors">MLflow Models and Flavors</a></li>
+<li><a href="#model-registry-lifecycle">Model Registry Lifecycle</a></li>
+<li><a href="#mlflow-serve-and-deployment">MLflow Serve and Deployment</a></li>
+<li><a href="#autologging">Autologging</a></li>
+<li><a href="#comparison-mlflow-vs-wb-vs-comet">Comparison: MLflow vs W&amp;B vs Comet</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-mlflow">Why MLflow?</h2>
+<p>Machine learning development is inherently experimental. Teams run hundreds of experiments with different hyperparameters, datasets, and model architectures. Without a systematic tracking system:</p>
+<ul>
+<li>Results become impossible to reproduce</li>
+<li>It is unclear which model version is in production</li>
+<li>Knowledge is lost when team members leave</li>
+<li>Regulatory compliance becomes difficult</li>
+</ul>
+<p>MLflow solves these problems by providing a unified platform that works with any ML library, language, or cloud.</p>
+<p><strong>Key design principles:</strong></p>
+<ul>
+<li>Library-agnostic (works with scikit-learn, PyTorch, TensorFlow, XGBoost, etc.)</li>
+<li>Language-agnostic (Python, R, Java APIs)</li>
+<li>Cloud-agnostic (runs locally, on AWS, GCP, Azure, or Databricks)</li>
+<li>Open standard (uses open formats like YAML, JSON, MLmodel)</li>
+</ul>
+<hr />
+<h2 id="core-components">Core Components</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLflow Tracking</td>
+<td>Log and query experiments (parameters, metrics, artifacts)</td>
+</tr>
+<tr>
+<td>MLflow Projects</td>
+<td>Package ML code in a reusable, reproducible format</td>
+</tr>
+<tr>
+<td>MLflow Models</td>
+<td>Package models for deployment across serving environments</td>
+</tr>
+<tr>
+<td>MLflow Model Registry</td>
+<td>Centralized model store with lifecycle management</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="tracking-experiments">Tracking Experiments</h2>
+<p>Every MLflow run belongs to an <strong>experiment</strong>. An experiment groups related runs together: for example, all runs tuning hyperparameters for a specific model.</p>
+<pre><code class="language-python">import mlflow
+
+# Set the tracking URI (defaults to ./mlruns locally)
+mlflow.set_tracking_uri(&quot;http://localhost:5000&quot;)  # Remote MLflow server
+# mlflow.set_tracking_uri(&quot;sqlite:///mlflow.db&quot;)  # SQLite backend
+
+# Create or set an experiment
+mlflow.set_experiment(&quot;fraud-detection-v2&quot;)
+
+# Start a run
+with mlflow.start_run(run_name=&quot;xgboost-baseline&quot;) as run:
+    print(f&quot;Run ID: {run.info.run_id}&quot;)
+    print(f&quot;Artifact URI: {run.info.artifact_uri}&quot;)
+
+    # Your training code here
+    ...
+</code></pre>
+<h3 id="nested-runs">Nested Runs</h3>
+<p>Useful for hyperparameter search where each trial is a child run:</p>
+<pre><code class="language-python">with mlflow.start_run(run_name=&quot;hyperparameter-search&quot;) as parent_run:
+    for lr in [0.01, 0.001, 0.0001]:
+        with mlflow.start_run(run_name=f&quot;lr-{lr}&quot;, nested=True):
+            mlflow.log_param(&quot;learning_rate&quot;, lr)
+            # train and log metrics
+</code></pre>
+<h3 id="querying-runs-programmatically">Querying Runs Programmatically</h3>
+<pre><code class="language-python">from mlflow.tracking import MlflowClient
+
+client = MlflowClient()
+
+# Search runs in an experiment
+runs = client.search_runs(
+    experiment_ids=[&quot;1&quot;],
+    filter_string=&quot;metrics.val_accuracy &gt; 0.90&quot;,
+    order_by=[&quot;metrics.val_accuracy DESC&quot;],
+    max_results=10
+)
+
+for run in runs:
+    print(run.info.run_id, run.data.metrics[&quot;val_accuracy&quot;])
+</code></pre>
+<hr />
+<h2 id="logging-metrics-parameters-and-artifacts">Logging Metrics, Parameters, and Artifacts</h2>
+<h3 id="parameters">Parameters</h3>
+<p>Parameters are key-value pairs that describe your run's configuration. They are logged once and are not expected to change during a run.</p>
+<pre><code class="language-python">with mlflow.start_run():
+    # Log individual parameters
+    mlflow.log_param(&quot;n_estimators&quot;, 100)
+    mlflow.log_param(&quot;max_depth&quot;, 6)
+    mlflow.log_param(&quot;learning_rate&quot;, 0.1)
+
+    # Log a dictionary of parameters at once
+    params = {
+        &quot;n_estimators&quot;: 100,
+        &quot;max_depth&quot;: 6,
+        &quot;learning_rate&quot;: 0.1,
+        &quot;subsample&quot;: 0.8
+    }
+    mlflow.log_params(params)
+</code></pre>
+<h3 id="metrics">Metrics</h3>
+<p>Metrics are numeric values that can be updated over time (e.g., loss per epoch):</p>
+<pre><code class="language-python">import numpy as np
+
+with mlflow.start_run():
+    for epoch in range(100):
+        train_loss = np.exp(-epoch * 0.05)
+        val_loss = np.exp(-epoch * 0.04) + np.random.normal(0, 0.01)
+
+        # Log with step for time-series visualization
+        mlflow.log_metric(&quot;train_loss&quot;, train_loss, step=epoch)
+        mlflow.log_metric(&quot;val_loss&quot;, val_loss, step=epoch)
+
+    # Log final summary metrics
+    mlflow.log_metrics({
+        &quot;final_accuracy&quot;: 0.923,
+        &quot;final_f1&quot;: 0.918,
+        &quot;inference_latency_ms&quot;: 12.4
+    })
+</code></pre>
+<h3 id="artifacts">Artifacts</h3>
+<p>Artifacts are files associated with a run: model files, plots, datasets, reports:</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import os
+
+with mlflow.start_run():
+    # Log a single file
+    mlflow.log_artifact(&quot;model_config.yaml&quot;)
+
+    # Log a directory
+    mlflow.log_artifacts(&quot;outputs/&quot;, artifact_path=&quot;training_outputs&quot;)
+
+    # Log a figure directly
+    fig, ax = plt.subplots()
+    ax.plot([1, 2, 3], [1, 4, 9])
+    ax.set_title(&quot;Training Curve&quot;)
+    mlflow.log_figure(fig, &quot;training_curve.png&quot;)
+
+    # Log a dictionary as JSON
+    mlflow.log_dict({&quot;class_0&quot;: 0.95, &quot;class_1&quot;: 0.89}, &quot;per_class_metrics.json&quot;)
+
+    # Log text
+    mlflow.log_text(&quot;Model trained on 2024-01-15 dataset&quot;, &quot;training_notes.txt&quot;)
+</code></pre>
+<h3 id="tags">Tags</h3>
+<p>Tags are string key-value pairs used for metadata and filtering:</p>
+<pre><code class="language-python">with mlflow.start_run():
+    mlflow.set_tag(&quot;team&quot;, &quot;fraud-detection&quot;)
+    mlflow.set_tag(&quot;data_version&quot;, &quot;v2.3&quot;)
+    mlflow.set_tag(&quot;mlflow.runName&quot;, &quot;experiment-42&quot;)  # Built-in tag
+
+    mlflow.set_tags({
+        &quot;environment&quot;: &quot;staging&quot;,
+        &quot;git_commit&quot;: &quot;a3f9b2c&quot;,
+        &quot;triggered_by&quot;: &quot;nightly_job&quot;
+    })
+</code></pre>
+<hr />
+<h2 id="mlflow-projects">MLflow Projects</h2>
+<p>An MLflow Project is a convention for organizing ML code so it can be run reproducibly. It is defined by an <code>MLproject</code> file:</p>
+<pre><code class="language-yaml"># MLproject
+name: fraud-detection
+
+conda_env: conda.yaml
+# OR: docker_env:
+#       image: fraud-detection:latest
+
+entry_points:
+  main:
+    parameters:
+      n_estimators: {type: int, default: 100}
+      max_depth: {type: int, default: 6}
+      data_path: {type: str, default: &quot;data/train.csv&quot;}
+    command: &quot;python train.py --n-estimators {n_estimators} --max-depth {max_depth} --data {data_path}&quot;
+
+  evaluate:
+    parameters:
+      model_uri: {type: str}
+      test_data: {type: str}
+    command: &quot;python evaluate.py --model-uri {model_uri} --test-data {test_data}&quot;
+</code></pre>
+<p><strong>Running a project:</strong></p>
+<pre><code class="language-bash"># Run locally
+mlflow run . -P n_estimators=200 -P max_depth=8
+
+# Run from GitHub
+mlflow run https://github.com/org/fraud-detection -P n_estimators=200
+
+# Run on Kubernetes
+mlflow run . --backend kubernetes --backend-config kubernetes_config.json
+</code></pre>
+<hr />
+<h2 id="mlflow-models-and-flavors">MLflow Models and Flavors</h2>
+<p>An MLflow Model is a directory containing the model files plus an <code>MLmodel</code> metadata file. A <strong>flavor</strong> is a model format that a particular tool understands.</p>
+<h3 id="built-in-flavors">Built-in Flavors</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Flavor</th>
+<th>Library</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mlflow.sklearn</code></td>
+<td>scikit-learn</td>
+</tr>
+<tr>
+<td><code>mlflow.pytorch</code></td>
+<td>PyTorch</td>
+</tr>
+<tr>
+<td><code>mlflow.tensorflow</code></td>
+<td>TensorFlow/Keras</td>
+</tr>
+<tr>
+<td><code>mlflow.xgboost</code></td>
+<td>XGBoost</td>
+</tr>
+<tr>
+<td><code>mlflow.lightgbm</code></td>
+<td>LightGBM</td>
+</tr>
+<tr>
+<td><code>mlflow.transformers</code></td>
+<td>Hugging Face Transformers</td>
+</tr>
+<tr>
+<td><code>mlflow.pyfunc</code></td>
+<td>Custom Python models</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="saving-and-loading-models">Saving and Loading Models</h3>
+<pre><code class="language-python">from sklearn.ensemble import GradientBoostingClassifier
+import mlflow.sklearn
+
+# Training
+model = GradientBoostingClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+with mlflow.start_run() as run:
+    # MLflow 3 uses `name=`; `artifact_path=` is deprecated
+    model_info = mlflow.sklearn.log_model(
+        sk_model=model,
+        name=&quot;model&quot;,
+        registered_model_name=&quot;FraudDetector&quot;,  # Automatically registers
+        signature=mlflow.models.infer_signature(X_train, model.predict(X_train)),
+        input_example=X_train[:5]  # Saves example for documentation
+    )
+
+# Loading for inference (model_info.model_uri points at the logged model)
+model_uri = model_info.model_uri
+loaded_model = mlflow.sklearn.load_model(model_uri)
+
+# Load as generic pyfunc (framework-agnostic)
+pyfunc_model = mlflow.pyfunc.load_model(model_uri)
+predictions = pyfunc_model.predict(X_test)
+</code></pre>
+<h3 id="custom-pyfunc-models">Custom pyfunc Models</h3>
+<pre><code class="language-python">import mlflow.pyfunc
+import pandas as pd
+
+class PreprocessAndPredict(mlflow.pyfunc.PythonModel):
+    def load_context(self, context):
+        import joblib
+        self.model = joblib.load(context.artifacts[&quot;model_path&quot;])
+        self.scaler = joblib.load(context.artifacts[&quot;scaler_path&quot;])
+
+    def predict(self, context, model_input):
+        scaled = self.scaler.transform(model_input)
+        predictions = self.model.predict_proba(scaled)
+        return pd.DataFrame(predictions, columns=[&quot;prob_legit&quot;, &quot;prob_fraud&quot;])
+
+# Log the custom model
+with mlflow.start_run():
+    mlflow.pyfunc.log_model(
+        name=&quot;custom_model&quot;,
+        python_model=PreprocessAndPredict(),
+        artifacts={
+            &quot;model_path&quot;: &quot;model.joblib&quot;,
+            &quot;scaler_path&quot;: &quot;scaler.joblib&quot;
+        },
+        conda_env=&quot;conda.yaml&quot;
+    )
+</code></pre>
+<hr />
+<h2 id="model-registry-lifecycle">Model Registry Lifecycle</h2>
+<p>The Model Registry provides a central hub for managing model versions and their lifecycle.</p>
+<h3 id="lifecycle-stages-legacy">Lifecycle Stages (Legacy)</h3>
+<p>Fixed stages are deprecated since MLflow 2.9 in favour of <strong>aliases</strong> and <strong>tags</strong> (shown below). You will still meet them in older codebases and interviews:</p>
+<pre><code>None → Staging → Production → Archived
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td>Newly registered, under evaluation</td>
+</tr>
+<tr>
+<td>Staging</td>
+<td>Candidate for production, undergoing testing</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>Currently serving live traffic</td>
+</tr>
+<tr>
+<td>Archived</td>
+<td>Retired, kept for reference</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="working-with-the-registry">Working with the Registry</h3>
+<pre><code class="language-python">from mlflow.tracking import MlflowClient
+
+client = MlflowClient()
+
+# Register a model from a run
+result = mlflow.register_model(
+    model_uri=f&quot;runs:/{run_id}/model&quot;,
+    name=&quot;FraudDetector&quot;
+)
+print(f&quot;Version: {result.version}&quot;)
+
+# Mark as a candidate (aliases replace the deprecated Staging stage)
+client.set_registered_model_alias(&quot;FraudDetector&quot;, &quot;challenger&quot;, result.version)
+client.set_model_version_tag(&quot;FraudDetector&quot;, result.version, &quot;validation_status&quot;, &quot;pending&quot;)
+
+# Add a description
+client.update_model_version(
+    name=&quot;FraudDetector&quot;,
+    version=result.version,
+    description=&quot;XGBoost model trained on Q4 2024 data. F1=0.918&quot;
+)
+
+# Promote to production: move the alias (an alias points at exactly one version)
+client.set_registered_model_alias(&quot;FraudDetector&quot;, &quot;champion&quot;, result.version)
+
+# Load the current production model
+production_model = mlflow.pyfunc.load_model(
+    model_uri=&quot;models:/FraudDetector@champion&quot;
+)
+
+# Load a specific version
+v3_model = mlflow.pyfunc.load_model(
+    model_uri=&quot;models:/FraudDetector/3&quot;
+)
+</code></pre>
+<h3 id="model-aliases-mlflow-23">Model Aliases (MLflow 2.3+)</h3>
+<p>Aliases are mutable, named pointers to a model version and are the recommended replacement for stages:</p>
+<pre><code class="language-python"># Set an alias
+client.set_registered_model_alias(&quot;FraudDetector&quot;, &quot;champion&quot;, version=5)
+client.set_registered_model_alias(&quot;FraudDetector&quot;, &quot;challenger&quot;, version=6)
+
+# Load by alias
+champion = mlflow.pyfunc.load_model(&quot;models:/FraudDetector@champion&quot;)
+</code></pre>
+<hr />
+<h2 id="mlflow-serve-and-deployment">MLflow Serve and Deployment</h2>
+<h3 id="local-serving">Local Serving</h3>
+<pre><code class="language-bash"># Serve a registered model
+mlflow models serve -m &quot;models:/FraudDetector@champion&quot; --port 5001
+
+# Serve from a run, using the current Python environment
+mlflow models serve -m &quot;runs:/abc123/model&quot; --port 5001 --env-manager local
+</code></pre>
+<p><strong>Making predictions via REST:</strong></p>
+<pre><code class="language-bash">curl -X POST http://localhost:5001/invocations \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;dataframe_split&quot;: {&quot;columns&quot;: [&quot;feature1&quot;, &quot;feature2&quot;], &quot;data&quot;: [[1.0, 2.0]]}}'
+</code></pre>
+<h3 id="building-docker-images">Building Docker Images</h3>
+<pre><code class="language-bash"># Build a Docker image for the model
+mlflow models build-docker \
+  -m &quot;models:/FraudDetector@champion&quot; \
+  -n &quot;fraud-detector:v1&quot;
+
+# Run the container
+docker run -p 5001:8080 fraud-detector:v1
+</code></pre>
+<h3 id="deployment-to-cloud-platforms">Deployment to Cloud Platforms</h3>
+<pre><code class="language-python"># Deploy to SageMaker via the deployments client
+# (the old mlflow.sagemaker.deploy() function was removed in MLflow 2.0)
+from mlflow.deployments import get_deploy_client
+
+client = get_deploy_client(&quot;sagemaker:/us-east-1&quot;)
+client.create_deployment(
+    name=&quot;fraud-detector-prod&quot;,
+    model_uri=&quot;models:/FraudDetector@champion&quot;,
+    config={
+        &quot;execution_role_arn&quot;: &quot;arn:aws:iam::123456789:role/SageMakerRole&quot;,
+        &quot;image_url&quot;: &quot;123456789.dkr.ecr.us-east-1.amazonaws.com/mlflow-pyfunc:latest&quot;,
+    },
+)
+</code></pre>
+<hr />
+<h2 id="autologging">Autologging</h2>
+<p>MLflow can automatically log parameters, metrics, and models without explicit log calls:</p>
+<pre><code class="language-python">import mlflow
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+
+# Enable autologging for all supported libraries
+mlflow.autolog()
+
+# OR enable for specific libraries
+mlflow.sklearn.autolog(
+    log_input_examples=True,
+    log_model_signatures=True,
+    log_models=True,
+    max_tuning_runs=5  # Limit nested runs for CV
+)
+
+with mlflow.start_run():
+    model = RandomForestClassifier(n_estimators=100, max_depth=6)
+    model.fit(X_train, y_train)
+    # MLflow automatically logs: n_estimators, max_depth, accuracy, F1, etc.
+</code></pre>
+<p><strong>Supported libraries for autologging:</strong> scikit-learn, Keras, TensorFlow, PyTorch Lightning, XGBoost, LightGBM, Spark MLlib, Statsmodels, Fastai.</p>
+<hr />
+<h2 id="comparison-mlflow-vs-wb-vs-comet">Comparison: MLflow vs W&amp;B vs Comet</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>MLflow</th>
+<th>Weights &amp; Biases (W&amp;B)</th>
+<th>Comet ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open source</td>
+<td>Yes (Apache 2.0)</td>
+<td>No (SaaS, limited free tier)</td>
+<td>No (SaaS, limited free tier)</td>
+</tr>
+<tr>
+<td>Self-hosted</td>
+<td>Yes (full control)</td>
+<td>Yes (enterprise)</td>
+<td>Yes (enterprise)</td>
+</tr>
+<tr>
+<td>Experiment tracking</td>
+<td>Yes</td>
+<td>Yes (richer UI)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Model registry</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dataset versioning</td>
+<td>Limited</td>
+<td>Yes (Artifacts)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Hyperparameter sweep</td>
+<td>Via Optuna/Ray</td>
+<td>Built-in (Sweeps)</td>
+<td>Built-in (Optimizer)</td>
+</tr>
+<tr>
+<td>Collaboration UI</td>
+<td>Basic</td>
+<td>Excellent</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>Yes (serve, SageMaker)</td>
+<td>Limited</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Databricks integration</td>
+<td>Native</td>
+<td>Good</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Free tier</td>
+<td>Fully free (self-hosted)</td>
+<td>Limited runs</td>
+<td>Limited compute</td>
+</tr>
+<tr>
+<td>Learning curve</td>
+<td>Medium</td>
+<td>Low</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Enterprise, self-hosted, MLOps pipelines</td>
+<td>Research teams, rich visualizations</td>
+<td>Teams wanting SaaS with compliance</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Recommendation:</strong> Use MLflow when you need a fully open-source, self-hosted solution with strong deployment capabilities. Use W&amp;B for research-heavy teams that value visualization. Use Comet when compliance and audit trails are critical.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between an MLflow experiment and a run?</strong></p>
+<p>An <strong>experiment</strong> is a logical grouping of related runs: for example, all attempts to build a fraud detection model. A <strong>run</strong> is a single execution of your training code with a specific set of parameters. One experiment contains many runs. You can think of an experiment as a folder and runs as files within it.</p>
+<p><strong>Q2: How does the MLflow Model Registry differ from just storing model artifacts in a run?</strong></p>
+<p>Run artifacts are just files stored in a blob store: there is no lifecycle management, versioning, or discoverability. The Model Registry adds: named versioning (v1, v2, v3), aliases such as <code>champion</code>/<code>challenger</code> (which replace the deprecated Staging/Production/Archived stages), descriptions, and tags for governance. It acts as a single source of truth for what model is in production, enabling CI/CD pipelines to fetch <code>models:/ModelName@champion</code> without hardcoding run IDs.</p>
+<p><strong>Q3: What is an MLflow flavor and why does it matter?</strong></p>
+<p>A flavor defines how a model can be loaded and used by a specific tool. For example, the <code>python_function</code> flavor allows any model to be loaded generically via <code>mlflow.pyfunc.load_model()</code>, while the <code>sklearn</code> flavor lets you load it with <code>mlflow.sklearn.load_model()</code> and get a native scikit-learn estimator. Flavors enable a single saved model to be consumed by multiple deployment targets (REST API, batch scoring, Spark UDF) without reformatting.</p>
+<p><strong>Q4: How would you implement a blue-green deployment strategy using MLflow?</strong></p>
+<p>Keep two registered models: <code>ModelName-Blue</code> (current production) and <code>ModelName-Green</code> (new version). After validating Green in staging, update your load balancer/feature flag to route traffic to the Green version. Only then archive Blue. Alternatively, use MLflow aliases: set <code>champion</code> to the current production version and <code>challenger</code> to the new one. Gradually shift traffic using your infrastructure layer, then update <code>champion</code> to point to the challenger version once validated.</p>
+<p><strong>Q5: What is the <code>mlflow.models.infer_signature</code> function and why should you use it?</strong></p>
+<p><code>infer_signature</code> inspects sample input and output data to produce a typed schema (the model signature). This signature is stored in the <code>MLmodel</code> file and enables: input validation at serving time, automatic documentation generation, compatibility with MLflow's REST API data formats (splitting/record formats), and integration with model monitoring tools. Without a signature, the serving endpoint cannot validate incoming request shapes.</p>
+<p><strong>Q6: How does MLflow handle experiment tracking in a distributed training environment?</strong></p>
+<p>In distributed training (e.g., PyTorch DDP), only the rank-0 (master) process should call MLflow logging functions. In Horovod or DDP setups, wrap logging calls with <code>if hvd.rank() == 0:</code> or <code>if dist.get_rank() == 0:</code>. MLflow's tracking server is a centralized service accessed via HTTP, so all workers can technically log, but this causes duplicate entries. For Spark MLlib, MLflow's autologging handles this automatically.</p>
+<p><strong>Q7: What backends does MLflow support for storing tracking data and artifacts?</strong></p>
+<p>Tracking metadata (params, metrics, tags) can be stored in: local filesystem (<code>./mlruns</code>), SQLite, MySQL, PostgreSQL, or MSSQL. Artifacts (model files, plots) can be stored in: local filesystem, Amazon S3, Azure Blob Storage, Google Cloud Storage, SFTP, HDFS, or NFS. In production, you typically use a SQL database for metadata and cloud object storage for artifacts.</p>
+<p><strong>Q8: How would you set up MLflow in a team environment?</strong></p>
+<p>Deploy an MLflow Tracking Server with: a SQL database backend (PostgreSQL recommended) for metadata, cloud object storage (S3/GCS/Azure Blob) for artifacts, and optional authentication via a reverse proxy (nginx + OAuth). Use <code>mlflow.set_tracking_uri(&quot;http://mlflow-server:5000&quot;)</code> or the <code>MLFLOW_TRACKING_URI</code> environment variable. Set up the Model Registry on the same server. For access control, MLflow OSS has limited auth: consider Databricks MLflow or add an auth proxy.</p>
+<p><strong>Q9: What is the difference between <code>mlflow.log_metric</code> with a <code>step</code> parameter and without?</strong></p>
+<p>Without <code>step</code>, every value is recorded at <code>step=0</code> (distinguished only by timestamp), so the UI cannot draw a meaningful per-step curve and summaries show only the latest value. With <code>step</code>, MLflow stores a time-series of (step, value) pairs, enabling you to plot learning curves in the UI. Use <code>step=epoch</code> for training loops so you can see how loss or accuracy evolved over training.</p>
+<p><strong>Q10: How do you reproduce an MLflow run exactly?</strong></p>
+<p>An MLflow run stores: all parameters (<code>run.data.params</code>), the git commit hash (if logged), the conda/pip environment (if using MLflow Projects), and all artifacts including the source code (if logged). To reproduce: fetch the run via <code>client.get_run(run_id)</code>, check out the git commit, reconstruct the environment from the stored <code>conda.yaml</code> or <code>requirements.txt</code>, and re-run with the logged parameters. MLflow Projects make this fully automated via <code>mlflow run</code>.</p>
+<p><strong>Q11: What are the limitations of MLflow autologging?</strong></p>
+<p>Autologging can: produce excessive runs if not scoped properly (e.g., each cross-validation fold becomes a run), fail silently in some edge cases, log more than needed (increasing storage), not capture custom business metrics, and behave differently across library versions. It also does not log data lineage or dataset versions. Always combine autologging with explicit <code>log_metric</code> calls for business-critical metrics.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<p><strong>1. Not setting a tracking URI in team environments</strong>
+Defaulting to <code>./mlruns</code> means each developer's runs are stored locally and invisible to teammates. Always set <code>MLFLOW_TRACKING_URI</code> in your shell profile or CI/CD environment.</p>
+<p><strong>2. Logging inside a loop without steps</strong>
+Calling <code>mlflow.log_metric(&quot;loss&quot;, value)</code> inside a training loop without <code>step=epoch</code> records every value at step 0. The run summary shows only the last value and the per-epoch training curve is lost.</p>
+<p><strong>3. Registering models without signatures or input examples</strong>
+Models without signatures cannot validate inputs at serving time. This leads to cryptic errors in production. Always use <code>infer_signature</code> or define the signature manually.</p>
+<p><strong>4. Using stages instead of aliases for flexible routing</strong>
+The traditional stage system (Staging/Production) is rigid and has been deprecated since MLflow 2.9. Aliases (MLflow 2.3+) allow multiple simultaneously active versions with custom names, enabling champion/challenger setups.</p>
+<p><strong>5. Storing large datasets as artifacts</strong>
+MLflow artifacts are not designed for versioning large datasets. Use a dedicated tool (DVC, Delta Lake, LakeFS) for dataset versioning and only log a reference (path or hash) in MLflow.</p>
+<p><strong>6. Not tracking which version is actually serving</strong>
+Leaving several versions tagged or staged as &quot;production&quot; creates confusion about which is actually serving. Point a single <code>champion</code> alias at the serving version (an alias always resolves to exactly one version) and move it on promotion.</p>
+<p><strong>7. Hardcoding run IDs in deployment scripts</strong>
+Scripts like <code>load_model(&quot;runs:/abc123/model&quot;)</code> break when a new model version is trained. Always load from the registry: <code>load_model(&quot;models:/ModelName@champion&quot;)</code>.</p>
+<p><strong>8. Ignoring the conda environment in MLflow Projects</strong>
+Skipping the environment definition with <code>--env-manager local</code> (the replacement for the removed <code>--no-conda</code> flag) eliminates reproducibility. Always specify a <code>conda.yaml</code> or <code>python_env.yaml</code> for Projects used in production pipelines.</p>
+<p><strong>9. Not tagging runs with metadata</strong>
+Without tags like <code>git_commit</code>, <code>data_version</code>, <code>triggered_by</code>, and <code>environment</code>, it becomes impossible to audit runs months later. Establish a tagging convention and enforce it in code templates.</p>
+<p><strong>10. Running the tracking server without authentication</strong>
+The default MLflow server has no authentication. Anyone with network access can read and write experiments. Always place the server behind an authenticated reverse proxy or use a managed service.</p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="../devops/intro_kubernetes.html">Kubernetes</a>: Orchestrating ML workloads and pipelines on Kubernetes</li>
+<li><a href="intro_model_serving.html">Intro to Model Serving</a>: TF Serving, Triton, BentoML, and serving strategies</li>
+<li><a href="intro_feature_stores.html">Intro to Feature Stores</a>: Feast, Tecton, and managing ML features</li>
+<li><a href="intro_model_explainability.html">Intro to Model Explainability</a>: SHAP, LIME, and interpretability</li>
+<li><a href="intro_data_quality.html">Intro to Data Quality</a>: Great Expectations, data contracts, and drift detection</li>
+<li><a href="../devops/intro_github_actions.html">GitHub Actions</a>: Automating ML pipelines and model CI/CD</li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_cicd_for_ml.html"><small>Previous</small>CI/CD for ML</a><a rel="next" class="next" href="intro_feature_stores.html"><small>Next</small>Feature Stores</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_mlflow.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

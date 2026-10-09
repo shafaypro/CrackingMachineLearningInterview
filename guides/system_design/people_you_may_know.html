@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People You May Know System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design a People You May Know system&quot; is a recommendation problem where the items are other users and the data is a graph. That changes almost everything…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/people_you_may_know.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="People You May Know System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design a People You May Know system&quot; is a recommendation problem where the items are other users and the data is a graph. That changes almost everything…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/people_you_may_know.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="People You May Know System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design a People You May Know system&quot; is a recommendation problem where the items are other users and the data is a graph. That changes almost everything…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "People You May Know System Design",
+   "description": "\"Design a People You May Know system\" is a recommendation problem where the items are other users and the data is a graph. That changes almost everything…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/people_you_may_know.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "People You May Know",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/people_you_may_know.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">People You May Know</span></nav>
+<p class="meta"><a href="../../#system_design/people_you_may_know.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="people-you-may-know-system-design">People You May Know System Design</h1>
+<p>&quot;Design a People You May Know system&quot; is a recommendation problem where the items are other users and the data is a graph. That changes almost everything that makes it interesting. The candidate set is huge but highly structured (most future connections are two hops away), the label is a two-sided decision (one person sends, the other accepts), and a bad suggestion is not just irrelevant: it can reveal something private, push an unwanted invite, or connect a minor to a stranger. The model also changes the graph it learns from, so every experiment and every training set is affected by earlier versions of the system. Strong answers spend their time on candidate generation over the graph, label construction, leakage, experiment interference, and privacy, and treat the generic ranking stack as known.</p>
+<p>For two-tower retrieval and a baseline recsys serving stack, see <a href="recommendation_system.html">Recommendation System Design</a>. For GNN mechanics, see <a href="../deep_learning/intro_graph_neural_networks.html">Graph Neural Networks</a>. This guide focuses on what is specific to connection recommendation.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#defining-the-objective">Defining the Objective</a></li>
+<li><a href="#the-pymk-funnel">The PYMK Funnel</a></li>
+<li><a href="#candidate-generation">Candidate Generation</a></li>
+<li><a href="#link-prediction-features">Link-Prediction Features</a></li>
+<li><a href="#ranking-model-and-labels">Ranking Model and Labels</a></li>
+<li><a href="#leakage-in-link-prediction">Leakage in Link Prediction</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#serving-architecture">Serving Architecture</a></li>
+<li><a href="#cold-start">Cold Start</a></li>
+<li><a href="#privacy-and-safety">Privacy and Safety</a></li>
+<li><a href="#feedback-loops">Feedback Loops</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p><strong>What kind of edge?</strong> A <strong>symmetric friendship</strong> (both sides must agree, as in a request and accept flow) or an <strong>asymmetric follow</strong> (one side acts, no approval). Symmetric edges make the label two-sided and make unwanted invites a cost to the recipient. Follow graphs look more like creator recommendation and have a much heavier degree tail.</p>
+<p><strong>What kind of network?</strong> A personal social network, a professional network, or a messaging app with a contact graph. This decides which side signals exist (schools, employers, groups, phone contacts) and which relationships are sensitive.</p>
+<p><strong>Where do suggestions surface?</strong> A dedicated PYMK page, a carousel inside the feed, post-signup onboarding, notifications or emails (&quot;You may know X&quot;), and profile pages (&quot;People also viewed&quot;). Each surface has its own position effects and its own tolerance for mistakes. A push notification about a person is far more intrusive than a row in a carousel.</p>
+<p><strong>How fresh must suggestions be?</strong> After a user accepts a request or joins a group, should new suggestions appear within minutes, or is a daily refresh enough? New users are the case where freshness matters most, since their graph changes fastest in the first sessions.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Number of users and edges, and the degree distribution (median degree, size of the largest hubs)</li>
+<li>Daily active users and PYMK impressions per user per day</li>
+<li>Latency budget for the PYMK module (usually a slice of a page load, so tens of ms)</li>
+<li>New edges created per day and new signups per day</li>
+</ul>
+<p>For the rest of this guide, assume a concrete brief: <strong>a symmetric friendship network, 1B users, a few hundred friends at the median with a long tail of hubs, 300M DAU, suggestions on a PYMK page, a feed carousel and onboarding, a p99 of ~50 ms for serving, and suggestions reflecting new friendships within minutes for new users and within a day for everyone else.</strong> These are working assumptions for the exercise, not figures from any real platform.</p>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serving latency (p99)</td>
+<td>~50 ms, which rules out heavy graph traversal at request time</td>
+</tr>
+<tr>
+<td>Freshness</td>
+<td>Minutes for new users and after big graph events; daily batch otherwise</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Blocks, removals, and &quot;don't suggest&quot; choices take effect immediately, even from caches</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Fall back to cached suggestions or hide the module; never show unfiltered candidates</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="defining-the-objective">Defining the Objective</h2>
+<h3 id="what-a-good-suggestion-is">What a good suggestion is</h3>
+<p>The obvious label is &quot;a request was sent.&quot; That is the wrong target on its own, because the easiest way to get more requests sent is to suggest people the viewer is curious about but who do not want to hear from them. A better chain of outcomes:</p>
+<pre><code>impression ──► request sent ──► request accepted ──► connection is used
+   (viewer)       (viewer)        (recipient)        (both: messages,
+                                                     comments, views)
+</code></pre>
+<p>A reasonable value score for a candidate pair (u, v):</p>
+<pre><code>score(u, v) =  P(send | u, v, shown) · P(accept | u, v, sent) · value(u, v, accepted)
+             - w_ignore · P(send | ...) · (1 - P(accept | ...))
+             - w_report · P(report or &quot;don't know&quot; | u, v, shown)
+</code></pre>
+<p>The first term is the expected accepted connection, weighted by how much the new edge will be used. The second term charges for requests that go unanswered, since those are a cost to the recipient. The third term charges for suggestions that feel wrong. As in feed ranking, the weights are a product and policy decision, and each probability must be calibrated for the sum to mean anything.</p>
+<h3 id="asymmetric-costs">Asymmetric costs</h3>
+<p>The cost of mistakes is not symmetric:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing a good suggestion</td>
+<td>The user connects later or not at all; a small, recoverable loss</td>
+</tr>
+<tr>
+<td>Suggesting a stranger</td>
+<td>A wasted slot; mild annoyance</td>
+</tr>
+<tr>
+<td>Suggesting someone who will ignore the request</td>
+<td>A pending request the recipient did not want; spam-like if repeated</td>
+</tr>
+<tr>
+<td>Suggesting a &quot;creepy&quot; match</td>
+<td>Reveals that the system knows something private (a therapist, an ex, a secret contact); damages trust in the whole product</td>
+</tr>
+<tr>
+<td>Suggesting an adult stranger to a minor</td>
+<td>A safety failure, not a relevance failure</td>
+</tr>
+</tbody>
+</table></div>
+<p>Because of this, the system optimizes for precision near the top and applies hard filters for sensitive cases before any score is computed. A model that raises accepted connections by 3% while doubling &quot;I don't know this person&quot; reports is a regression.</p>
+<h3 id="downstream-value-and-network-health">Downstream value and network health</h3>
+<p>Accepted requests are still a proxy. Connections that never produce any interaction add little. Longer-horizon targets:</p>
+<ul>
+<li><strong>Engagement on the new edge</strong> in the next 28 days (messages, comments, profile views).</li>
+<li><strong>Retention of the new user</strong>, since early connections are one of the strongest predictors of whether a new account stays.</li>
+<li><strong>Recipient experience</strong>: incoming requests per user, and the share accepted. A user flooded with low-quality requests is being harmed even if the sender is happy.</li>
+</ul>
+<hr />
+<h2 id="the-pymk-funnel">The PYMK Funnel</h2>
+<pre><code>PYMK request (viewer, surface)
+  │
+  ▼
+┌──────────────────────────────┐   ~1B users ──► ~1-5k
+│ Candidate generation         │  friends-of-friends, PPR / random walks,
+└──────────────┬───────────────┘  embedding ANN, contacts, co-membership
+               ▼
+┌──────────────────────────────┐
+│ Hard filters                 │  existing friends, pending requests, blocks,
+└──────────────┬───────────────┘  &quot;don't suggest&quot;, age rules, privacy settings
+               ▼
+┌──────────────────────────────┐   ~5k ──► ~200
+│ Light ranking                │  GBDT or small model on cheap graph features
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐   ~200 ──► ~50
+│ Heavy ranking                │  multi-task: P(send), P(accept), P(report)
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐
+│ Re-ranking                   │  diversity of source, request caps per
+└──────────────┬───────────────┘  recipient, dedup across surfaces
+               ▼
+     PYMK module ──► impressions, sends, accepts, dismissals ──► training data
+</code></pre>
+<p>Most of the funnel is precomputed in batch (candidate generation, graph features, often the ranking itself), with a light online layer that applies filters and fresh signals. See <a href="#serving-architecture">Serving Architecture</a>.</p>
+<hr />
+<h2 id="candidate-generation">Candidate Generation</h2>
+<p>Most new friendships close a triangle: two people with a mutual friend become friends. That makes the two-hop neighbourhood the main candidate source. The other sources cover what triangles miss.</p>
+<h3 id="friends-of-friends-fof">Friends of friends (FoF)</h3>
+<p>For viewer u, every friend-of-friend v is a candidate, scored by the number of common neighbours. The computation is a walk over the two-hop neighbourhood:</p>
+<pre><code>for each friend f of u:
+    for each friend v of f:
+        if v != u and v not in friends(u):
+            count[v] += 1
+</code></pre>
+<p>The cost is the sum of the friends' degrees. For a user with 500 friends of average degree 500, that is 250k edge reads, fine in batch and too slow per request.</p>
+<p><strong>The hub (celebrity) problem.</strong> If one of u's friends has 100k friends, that single friend contributes 100k candidates, each with a common-neighbour count of 1, and dominates the work. Hubs are also weak evidence: being connected through a person who knows everyone says little about whether u knows v. Mitigations:</p>
+<ul>
+<li><strong>Skip or sample hubs.</strong> Cap the number of neighbours read per intermediate node (for example, sample 1,000 of a hub's neighbours) or skip intermediate nodes above a degree threshold.</li>
+<li><strong>Down-weight hubs in the score.</strong> Adamic-Adar does this directly by weighting each common neighbour by 1 / log(degree).</li>
+<li><strong>Cap per-viewer work.</strong> Stop after a budget of edge reads and keep the top candidates by partial count.</li>
+</ul>
+<p>At full-graph scale, FoF counting is a batch job. It can be written as a sparse matrix product (A · A gives common-neighbour counts), but A² is far denser than A, so real pipelines compute it per viewer in a distributed join with hub sampling and keep only the top candidates per viewer.</p>
+<h3 id="random-walks-and-personalized-pagerank">Random walks and personalized PageRank</h3>
+<p>Personalized PageRank (PPR) from u estimates how often a random walk that restarts at u visits each node. It generalizes FoF: it reaches three hops and beyond, rewards many short paths, and naturally down-weights hubs because their probability mass is spread over many neighbours. Monte Carlo estimation (run many short walks with restart probability around 0.15 to 0.3 and count visits) is easy to distribute and to bound in cost, and it makes the hub problem a sampling problem.</p>
+<h3 id="embedding-ann">Embedding ANN</h3>
+<p>Learn a vector per user so that connected users are close, then retrieve nearest neighbours with an ANN index.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>How it learns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>node2vec / DeepWalk</strong></td>
+<td>Skip-gram over random-walk sequences</td>
+<td>Transductive: new users have no vector until retraining</td>
+</tr>
+<tr>
+<td><strong>GNN (GraphSAGE-style)</strong></td>
+<td>Aggregates neighbour features over 2-3 hops, trained on link prediction</td>
+<td>Inductive: can embed a new user from profile features and a few edges</td>
+</tr>
+<tr>
+<td><strong>Two-tower on side features</strong></td>
+<td>User towers over profile, school, employer, location, interests</td>
+<td>Works for users with no edges; weaker on graph structure</td>
+</tr>
+</tbody>
+</table></div>
+<p>Embedding retrieval catches candidates with few or no common friends who share context (same employer, same city and school years). Its weakness is that proximity in embedding space does not guarantee the pair actually knows each other, so these candidates need strong ranking features to avoid &quot;similar stranger&quot; suggestions. See <a href="../deep_learning/intro_graph_neural_networks.html#scaling-to-large-graphs">Scaling to Large Graphs</a> for why GNN embeddings are usually precomputed in batch.</p>
+<h3 id="contact-book-and-co-membership">Contact book and co-membership</h3>
+<ul>
+<li><strong>Uploaded contacts.</strong> If u uploaded their phone contacts and v's number is in them, that is strong evidence. Only use contacts the uploader consented to share for this purpose, respect the other person's settings on discoverability by phone or email, and never use one person's uploaded contacts to reveal information to a third party (see <a href="#privacy-and-safety">Privacy and Safety</a>).</li>
+<li><strong>Co-membership.</strong> Same school and graduation year, same employer and team, same group, same event. Large groups (a 200k-member group) are weak evidence, so weight membership by group size, the same way Adamic-Adar weights hubs.</li>
+<li><strong>Interaction without an edge.</strong> Profile views, tags in the same photo, replies in the same thread. These are strong but some are sensitive (profile views in particular), so they should be used as ranking features, never exposed as explanations.</li>
+</ul>
+<p>Each source gets a quota, and each is evaluated on recall of connections formed later. A pair found by several sources is usually a better candidate, so the set of sources that produced a candidate is itself a ranking feature.</p>
+<hr />
+<h2 id="link-prediction-features">Link-Prediction Features</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Neighbourhood overlap</strong></td>
+<td>Common neighbours, Adamic-Adar, Jaccard, resource allocation, common neighbours among close friends only</td>
+</tr>
+<tr>
+<td><strong>Paths</strong></td>
+<td>Shortest-path distance (capped at 3 or 4), number of 2-hop and 3-hop paths, PPR score from u to v and v to u</td>
+</tr>
+<tr>
+<td><strong>Degree</strong></td>
+<td>Degree of u and v, ratio of degrees, v's recent incoming request volume</td>
+</tr>
+<tr>
+<td><strong>Shared context</strong></td>
+<td>Same school or employer (with overlap years), same city, same groups weighted by group size, contact-book match, same language</td>
+</tr>
+<tr>
+<td><strong>Interaction</strong></td>
+<td>u viewed v's profile, v viewed u's profile, co-tagged in photos, comments on the same posts, messages in shared group chats</td>
+</tr>
+<tr>
+<td><strong>Embedding</strong></td>
+<td>Cosine similarity of graph embeddings, GNN pair score</td>
+</tr>
+<tr>
+<td><strong>Viewer and candidate</strong></td>
+<td>Account age, activity level, acceptance rate of requests v receives, how many requests u has sent recently</td>
+</tr>
+<tr>
+<td><strong>Source</strong></td>
+<td>Which candidate generators produced the pair, and rank within each</td>
+</tr>
+</tbody>
+</table></div>
+<p>A small pure-Python version of the core pair features:</p>
+<pre><code class="language-python">import math
+from collections import deque
+
+def pair_features(adj, u, v, max_dist=4):
+    &quot;&quot;&quot;Link-prediction features for (u, v) from an undirected adjacency dict
+    {node: set(neighbours)}. Caller must pass a graph that excludes the edge
+    being predicted and any edges created after the prediction time.&quot;&quot;&quot;
+    nu, nv = adj.get(u, set()), adj.get(v, set())
+    common = nu &amp; nv
+    union = nu | nv
+    adamic_adar = sum(1.0 / math.log(len(adj[w])) for w in common if len(adj[w]) &gt; 1)
+    resource_alloc = sum(1.0 / len(adj[w]) for w in common)
+    return {
+        &quot;common_neighbours&quot;: len(common),
+        &quot;jaccard&quot;: len(common) / len(union) if union else 0.0,
+        &quot;adamic_adar&quot;: adamic_adar,
+        &quot;resource_allocation&quot;: resource_alloc,
+        &quot;pref_attachment&quot;: len(nu) * len(nv),
+        &quot;distance&quot;: shortest_path(adj, u, v, max_dist),
+    }
+
+def shortest_path(adj, src, dst, max_dist):
+    &quot;&quot;&quot;BFS distance, capped: returns max_dist + 1 if farther or unreachable.&quot;&quot;&quot;
+    if src == dst:
+        return 0
+    seen, frontier = {src}, deque([(src, 0)])
+    while frontier:
+        node, d = frontier.popleft()
+        if d == max_dist:
+            continue
+        for nb in adj.get(node, ()):
+            if nb == dst:
+                return d + 1
+            if nb not in seen:
+                seen.add(nb)
+                frontier.append((nb, d + 1))
+    return max_dist + 1
+
+def fof_candidates(adj, u, hub_cap=1000, top_k=100):
+    &quot;&quot;&quot;Friends-of-friends by common-neighbour count, skipping large hubs.&quot;&quot;&quot;
+    counts = {}
+    for f in adj.get(u, ()):
+        if len(adj[f]) &gt; hub_cap:
+            continue                      # or sample hub_cap neighbours instead
+        for v in adj[f]:
+            if v != u and v not in adj[u]:
+                counts[v] = counts.get(v, 0) + 1
+    return sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:top_k]
+
+if __name__ == &quot;__main__&quot;:
+    edges = [(&quot;ana&quot;, &quot;ben&quot;), (&quot;ana&quot;, &quot;cai&quot;), (&quot;ben&quot;, &quot;cai&quot;), (&quot;ben&quot;, &quot;dee&quot;),
+             (&quot;cai&quot;, &quot;dee&quot;), (&quot;dee&quot;, &quot;eli&quot;), (&quot;hub&quot;, &quot;ana&quot;), (&quot;hub&quot;, &quot;dee&quot;),
+             (&quot;hub&quot;, &quot;eli&quot;), (&quot;hub&quot;, &quot;fay&quot;)]
+    adj = {}
+    for a, b in edges:
+        adj.setdefault(a, set()).add(b)
+        adj.setdefault(b, set()).add(a)
+    print(fof_candidates(adj, &quot;ana&quot;))      # [('dee', 3), ('eli', 1), ('fay', 1)]
+    print(pair_features(adj, &quot;ana&quot;, &quot;dee&quot;))
+</code></pre>
+<p>Two notes. Adamic-Adar and resource allocation beat raw common neighbours mainly because they discount hubs. And these features are only honest if <code>adj</code> is the graph as it existed at prediction time, which is the subject of <a href="#leakage-in-link-prediction">Leakage in Link Prediction</a>.</p>
+<hr />
+<h2 id="ranking-model-and-labels">Ranking Model and Labels</h2>
+<h3 id="label-construction">Label construction</h3>
+<p>There are three natural labels, each defined on a different population:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Population</th>
+<th>What it measures</th>
+<th>Pitfall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Send</strong></td>
+<td>Impressions (viewport, not just returned)</td>
+<td>Viewer interest</td>
+<td>Rewards curiosity about people who will not accept</td>
+</tr>
+<tr>
+<td><strong>Accept</strong></td>
+<td>Sent requests</td>
+<td>Recipient agreement</td>
+<td>Only defined on sends, so it has selection bias</td>
+</tr>
+<tr>
+<td><strong>Used edge</strong></td>
+<td>Accepted connections</td>
+<td>Downstream value</td>
+<td>Sparse, delayed by weeks</td>
+</tr>
+</tbody>
+</table></div>
+<p>The standard design is a multi-task model with separate heads trained on their own populations, combined as P(send) · P(accept | send), like CTR · CVR in ads. Training P(accept) only on sent requests means it never sees pairs the viewer would not send to, so it is biased on the full candidate set. Options are to train it with inverse propensity weights from the send head, or to train an end-to-end P(send and accept | impression) head alongside it (the ESMM idea from ads).</p>
+<p><strong>Negatives.</strong> Use impressions with no send, not random pairs. Random pairs are trivially unconnected and teach the model to rank by degree. Label windows matter: a request can be accepted days later, so wait a fixed window (such as 14 days) before labelling a send as &quot;not accepted,&quot; or treat recent examples as censored.</p>
+<p><strong>Explicit negatives.</strong> &quot;Remove&quot; or &quot;I don't know this person&quot; on a suggestion, ignoring or declining a request, and reports are strong negative labels and should drive a separate head with a large negative weight.</p>
+<h3 id="model-choice">Model choice</h3>
+<ul>
+<li><strong>Light ranker:</strong> gradient-boosted trees on the overlap, path, and context features. Trees handle count features with heavy tails well and are cheap enough to score thousands of pairs per viewer in batch.</li>
+<li><strong>Heavy ranker:</strong> a multi-task neural network over the same features plus user and pair embeddings (from node2vec or a GNN), with heads for send, accept, and report. A GNN can also be the heavy ranker directly, scoring pairs from message-passed embeddings, but it is usually cheaper to precompute GNN embeddings and feed them to a standard ranker.</li>
+</ul>
+<p><strong>Position and surface.</strong> A suggestion in slot 1 of the feed carousel gets far more sends than the same suggestion in slot 8 of the PYMK page. Include surface and position as training features and set them to a fixed value at serving time, or model them with a separate bias tower.</p>
+<hr />
+<h2 id="leakage-in-link-prediction">Leakage in Link Prediction</h2>
+<p>Link prediction has a leakage trap that ordinary tabular ranking does not: the features are computed from the graph, and the graph contains the answer.</p>
+<p><strong>Remove the edge being predicted.</strong> If u and v are friends in the snapshot used to compute features, then v is in u's neighbourhood, common-neighbour counts are shifted, the shortest-path distance is 1, and a GNN aggregates v directly into u's embedding. Any model trained this way learns &quot;distance = 1 means they will connect.&quot;</p>
+<p><strong>Remove all future edges, not just the target.</strong> Suppose u and v connected on day 10, and u also connected to w (a friend of v) on day 9. If features are computed from a day-12 snapshot, the u-w edge inflates common neighbours for (u, v), and it was often caused by the same event (u joined a new school). Point-in-time correctness means every feature for an example at time t uses only edges created before t.</p>
+<p><strong>Use temporal splits.</strong> Train on connections formed before a cutoff and evaluate on connections formed after it, with features computed from the graph at the cutoff. Random edge splits let the model use later edges to predict earlier ones and overstate offline quality.</p>
+<p><strong>Embeddings leak too.</strong> node2vec or GNN embeddings trained on today's graph encode edges that did not exist at the time of older training examples. Train embeddings on the snapshot at the training cutoff, or log the embedding versions used at serving time. See <a href="../deep_learning/intro_graph_neural_networks.html#how-do-you-split-data-for-link-prediction-without-leaking">How do you split data for link prediction without leaking?</a>.</p>
+<pre><code>            graph snapshot G(t0)                     edges formed in (t0, t1]
+ ─────────────────────────────────────────┬─────────────────────────────────────
+  features, embeddings, candidates         │  labels: which candidate pairs
+  computed from edges created before t0    │  became connections
+ ─────────────────────────────────────────┴─────────────────────────────────────
+                                          t0                                   t1
+</code></pre>
+<p>The cleanest guarantee is to log the features served at impression time and train on those, which also removes training/serving skew.</p>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recall@k of candidate generation on future edges</strong></td>
+<td>Share of connections formed in (t0, t1] that were in each source's top k at t0</td>
+</tr>
+<tr>
+<td><strong>Recall@k / NDCG@k of the ranker</strong></td>
+<td>Ordering quality against future accepted connections</td>
+</tr>
+<tr>
+<td><strong>AUC and log loss per head</strong></td>
+<td>Send, accept, report heads separately</td>
+</tr>
+<tr>
+<td><strong>Calibration per head</strong></td>
+<td>Needed because heads are multiplied and summed</td>
+</tr>
+<tr>
+<td><strong>Precision@k on &quot;don't know&quot; reports</strong></td>
+<td>How often top suggestions are strangers</td>
+</tr>
+<tr>
+<td><strong>Sliced metrics</strong></td>
+<td>New users, low-degree users, minors, users with contacts uploaded or not</td>
+</tr>
+</tbody>
+</table></div>
+<p>Recall on future edges is biased toward the old system: many future edges were formed because the old PYMK suggested them. A new model that finds different good candidates is penalized. Exploration traffic (a small share of randomized suggestions from the candidate pool) gives a less biased evaluation set.</p>
+<h3 id="online">Online</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary</strong></td>
+<td>Accepted connections per viewer, connections that produce interaction within 28 days, new-user retention</td>
+</tr>
+<tr>
+<td><strong>Funnel</strong></td>
+<td>Impressions, send rate, acceptance rate</td>
+</tr>
+<tr>
+<td><strong>Guardrails</strong></td>
+<td>&quot;Don't know&quot; and remove rates, reports, pending-request backlog per recipient, incoming requests per user, requests to minors</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Network growth effects.</strong> Every accepted connection changes the graph: both users get new friends of friends, their feeds change, and they may attract more requests. A good PYMK change shows effects well beyond the PYMK surface (more feed engagement, more messages), and those effects compound over weeks. Run tests long enough to see them.</p>
+<h3 id="interference-in-ab-tests-on-graphs">Interference in A/B tests on graphs</h3>
+<p>User-level randomization assumes one user's treatment does not affect another's outcome. PYMK breaks this directly. When a treated user sends more requests, control users receive them and accept them, so control acceptance and connection counts also rise. The treatment effect on &quot;connections formed&quot; is double-counted across arms, and on the recipient side is attributed to the wrong arm.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>How it works</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Graph cluster randomization</strong></td>
+<td>Partition the graph into clusters with few cross-cluster edges (for example with a balanced graph partitioner) and randomize whole clusters</td>
+<td>Fewer, larger units, so less power; clusters are never perfectly isolated</td>
+</tr>
+<tr>
+<td><strong>Ego-network randomization</strong></td>
+<td>Treat a user and their neighbourhood as a unit, measure outcomes only on the ego</td>
+<td>Neighbourhoods overlap, so needs careful design</td>
+</tr>
+<tr>
+<td><strong>Measure recipient-side metrics by arm</strong></td>
+<td>Attribute incoming requests and acceptances to the sender's arm</td>
+<td>Captures who caused what, not total spillover</td>
+</tr>
+<tr>
+<td><strong>Spillover analysis</strong></td>
+<td>Compare control users with many treated neighbours against those with few</td>
+<td>Estimates the size of the bias</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import hashlib
+
+def cluster_arm(user_id, cluster_of, experiment=&quot;pymk_v7&quot;, treat_share=0.5):
+    &quot;&quot;&quot;Assign treatment by graph cluster, not by user. cluster_of is precomputed
+    by a graph partitioner on a snapshot taken before the experiment starts.&quot;&quot;&quot;
+    key = f&quot;{experiment}:{cluster_of[user_id]}&quot;.encode()
+    bucket = int(hashlib.sha256(key).hexdigest(), 16) % 10_000
+    return &quot;treatment&quot; if bucket &lt; treat_share * 10_000 else &quot;control&quot;
+</code></pre>
+<p>The partition must come from a snapshot taken before the experiment, otherwise the treatment itself changes the clusters. For the causal reasoning behind this, see <a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift</a>.</p>
+<hr />
+<h2 id="serving-architecture">Serving Architecture</h2>
+<pre><code>                         PEOPLE YOU MAY KNOW
+═══════════════════════════════════════════════════════════════════════════
+
+  Graph store (edges, timestamps) ──► Daily batch jobs
+                                         │  FoF with hub sampling
+                                         │  PPR / random walks
+                                         │  node2vec / GNN embeddings ──► ANN index
+                                         │  co-membership joins
+                                         ▼
+                                   Candidate set per user (top ~1-5k)
+                                         │
+                                         ▼
+                                   Batch ranking (light + heavy)
+                                         │
+                                         ▼
+                                   PYMK store: user ──► ranked list (~100-500)
+
+  Graph events (accept, join group, ──► Stream processor ──► Incremental
+  signup, contact upload, block)         │                    refresh for the
+                                         │                    affected users
+                                         ▼
+                                   Real-time filter set
+                                   (blocks, removals, pending requests,
+                                    new friendships, &quot;don't suggest&quot;)
+
+  Client ──► PYMK Service ──► PYMK store ──► filter ──► light re-score with
+                                                        fresh features ──►
+                                                        re-rank ──► response
+                                                                     │
+                                                                     ▼
+            impressions, sends, accepts, dismissals, reports ──► Kafka ──► training
+
+═══════════════════════════════════════════════════════════════════════════
+</code></pre>
+<p><strong>Batch first.</strong> Candidate generation over billions of edges does not fit a 50 ms budget. Run it daily per user, rank in batch, and store a list per user. The online path fetches the list, applies filters, and optionally re-scores with a few fresh features.</p>
+<p><strong>Refresh on graph events.</strong> When a user accepts a request, their friend's friends become new candidates. For most users, waiting until the next batch run is fine. For new users and users who just joined a school or company group, trigger an incremental job: recompute FoF for that user alone (cheap for a low-degree user), add candidates from the new group, and score them. A new edge also makes its two endpoints poor candidates for each other, so the filter set must be updated in seconds.</p>
+<p><strong>Filtering at read time.</strong> Precomputed lists go stale in ways that matter for safety. A block, a new friendship, a pending request, or a &quot;remove suggestion&quot; must take effect immediately. Apply these checks against a fast key-value set at response time, whatever the cache says.</p>
+<p><strong>Deduplication across surfaces.</strong> The same person should not be suggested on the PYMK page, the feed carousel, and in an email on the same day. Keep a per-viewer impression history and apply frequency caps, with a cooldown after a dismissal (often permanent for &quot;don't know this person&quot;).</p>
+<p><strong>Recipient-side caps.</strong> A popular user can be suggested to millions of viewers and receive a flood of requests. Cap how often a user is shown as a candidate, or penalize candidates whose incoming pending requests are already high.</p>
+<p><strong>Fallbacks.</strong> If the store is unavailable, hide the module. Serving an unfiltered or stale list is worse than serving nothing.</p>
+<hr />
+<h2 id="cold-start">Cold Start</h2>
+<p><strong>New users</strong> have no edges, so FoF, PPR, and graph embeddings produce nothing. This is also the moment PYMK matters most, since a user who makes no connections in the first days is likely to leave. Sources that work without edges:</p>
+<ul>
+<li><strong>Contact upload</strong> (with explicit consent), matched against users who allow being found by phone or email.</li>
+<li><strong>Profile context</strong> from onboarding: school, employer, city. Co-membership candidates and an inductive model (a GNN or two-tower model over profile features) can score them.</li>
+<li><strong>Reverse signals:</strong> existing users who have the new user's phone number or email in their contacts. This is powerful but sensitive; see <a href="#privacy-and-safety">Privacy and Safety</a>.</li>
+<li><strong>The inviter.</strong> If the user joined through an invite, the inviter and the inviter's close friends are strong candidates.</li>
+</ul>
+<p>After the first accepted connection, FoF starts working, so trigger an incremental refresh on every early accept. The generic playbook is in <a href="recommendation_system.html#handling-cold-start">Handling Cold Start</a>.</p>
+<p><strong>New edges of old users.</strong> When an existing user joins a new company or moves city, the relevant candidates are in a part of the graph where they have no edges yet. Co-membership and event-triggered refresh handle this.</p>
+<p><strong>Low-degree users.</strong> Users with a handful of friends get few FoF candidates and noisy features. Evaluate them as a separate slice, since averages are dominated by well-connected users.</p>
+<hr />
+<h2 id="privacy-and-safety">Privacy and Safety</h2>
+<p>A PYMK suggestion is a statement: &quot;the system thinks you know this person.&quot; It can reveal information neither user chose to share.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Example</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Revealing sensitive relationships</strong></td>
+<td>Suggesting a patient to their therapist, or two people who share a support group</td>
+<td>Exclude sensitive group memberships and professional contacts as candidate sources; never explain a suggestion with a sensitive signal</td>
+</tr>
+<tr>
+<td><strong>Contact-book leakage</strong></td>
+<td>A user is suggested to someone whose number they never shared, because a third party uploaded both</td>
+<td>Only match on contact data the owner consented to use; respect &quot;don't let people find me by phone&quot; settings</td>
+</tr>
+<tr>
+<td><strong>Location inference</strong></td>
+<td>Suggesting people who were in the same place at the same time</td>
+<td>Do not use precise location or co-location as a signal</td>
+</tr>
+<tr>
+<td><strong>Profile-view leakage</strong></td>
+<td>&quot;People who viewed your profile&quot; leaking through suggestions</td>
+<td>Use views as a feature at most; never as a visible explanation</td>
+</tr>
+<tr>
+<td><strong>Blocked users</strong></td>
+<td>Suggesting someone the viewer blocked, or someone who blocked the viewer</td>
+<td>Symmetric hard filter at read time; also exclude them from explanations (&quot;12 mutual friends&quot; should not list a blocked user)</td>
+</tr>
+<tr>
+<td><strong>Minors</strong></td>
+<td>Suggesting unconnected adults to minors</td>
+<td>Hard rules: no adult-to-minor suggestions without strong existing ties, stricter defaults for minors' discoverability, age-aware filters applied before ranking</td>
+</tr>
+<tr>
+<td><strong>Harassment</strong></td>
+<td>Suggesting an ex or someone a user has tried to avoid</td>
+<td>&quot;Don't suggest&quot; and block controls that act immediately; downrank pairs with recent unfriend or decline history</td>
+</tr>
+<tr>
+<td><strong>Sensitive attribute inference</strong></td>
+<td>Clusters that reveal religion, sexuality, health, or politics</td>
+<td>Avoid features derived from sensitive groups; audit suggestions for these patterns</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Explanations.</strong> &quot;12 mutual friends&quot; or &quot;Works at X&quot; helps acceptance and lets users understand why they see a suggestion. Explanations must only use signals the viewer can already see. &quot;You have this person's number in your contacts&quot; is fine only if it is the viewer's own upload. &quot;This person viewed your profile&quot; is never fine.</p>
+<p><strong>Hard filters before the model.</strong> Safety rules are not features the model can trade off against engagement. They are filters applied before scoring and again at read time. Keep them in a separately owned, audited layer. See <a href="../mlops/intro_responsible_ai_fairness.html">Responsible AI and Fairness</a> for how to structure audits.</p>
+<hr />
+<h2 id="feedback-loops">Feedback Loops</h2>
+<p>PYMK does not just predict the graph; it builds it. A large share of new edges on a platform with a PYMK surface can come from suggestions, and those edges become the next training data and the next FoF candidates.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loop</th>
+<th>Cause</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rich get richer</strong></td>
+<td>Popular users are suggested more, gain more connections, and become even more central (preferential attachment)</td>
+<td>Recipient-side exposure caps; degree-normalized features like Adamic-Adar; monitor concentration of incoming requests</td>
+</tr>
+<tr>
+<td><strong>Homophily</strong></td>
+<td>Suggestions follow existing clusters (same school, same group), so the graph becomes more segregated</td>
+<td>Some exploration outside the dominant cluster; monitor cross-cluster edge share; weigh this against the fact that most real ties are local</td>
+</tr>
+<tr>
+<td><strong>Self-confirming evaluation</strong></td>
+<td>Recall on future edges rewards the old model, whose suggestions caused those edges</td>
+<td>Evaluate on exploration traffic; long-term holdouts</td>
+</tr>
+<tr>
+<td><strong>Triadic closure bias</strong></td>
+<td>FoF dominance means users with few friends get few suggestions, stay small</td>
+<td>Non-graph sources and quotas for low-degree users</td>
+</tr>
+<tr>
+<td><strong>Request spam</strong></td>
+<td>A model trained on sends learns to suggest people who get lots of requests</td>
+<td>Acceptance and recipient-experience terms in the objective</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Long-term holdouts.</strong> Keep a small group of users on an older PYMK model, or with the module removed entirely, for months. This measures how much PYMK changes graph growth, retention, and feed engagement, and it is the only reliable estimate of the causal effect of the system as a whole.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-would-you-generate-candidates-for-pymk-on-a-billion-user-graph">How would you generate candidates for PYMK on a billion-user graph?</h4>
+<p>Several sources in parallel, mostly precomputed in batch. The main one is friends of friends, because most new connections close a triangle. Count common neighbours per two-hop candidate, sample or skip hub nodes so one friend with 100k connections does not dominate the work, and keep the top few thousand per user. Add personalized PageRank or random walks to reach three hops and down-weight hubs naturally, embedding ANN (node2vec or a GNN) for users with shared context but few mutual friends, and co-membership and consented contact matches for new users.</p>
+<p>Each source has a quota and is measured by recall of connections formed after the snapshot. Run it daily, with incremental refresh for new users and after big graph events.</p>
+<h4 id="why-is-adamic-adar-often-better-than-common-neighbours">Why is Adamic-Adar often better than common neighbours?</h4>
+<p>Common neighbours treats all mutual friends equally. A mutual friend with 5,000 connections is weak evidence that two people know each other, while a mutual friend with 30 connections is strong evidence. Adamic-Adar weights each common neighbour by 1 / log(degree), so low-degree mutual friends count more. Resource allocation uses 1 / degree, a stronger discount. In practice you include all of them as features and let the ranker learn the weighting.</p>
+<h4 id="what-label-do-you-train-on-send-accept-or-something-else">What label do you train on: send, accept, or something else?</h4>
+<p>Several, in a multi-task model. P(send | impression) measures viewer interest but rewards curiosity about people who will not accept. P(accept | send) measures whether the recipient agrees but is only observed on sent requests, so it needs correction for selection bias. The product P(send) · P(accept | send) gives the expected accepted connection. Add a head for &quot;don't know this person&quot; or reports with a large negative weight, and, where possible, a longer-term signal such as interaction on the new edge within 28 days. Negatives come from viewed impressions, not random pairs.</p>
+<h4 id="how-can-link-prediction-features-leak">How can link-prediction features leak?</h4>
+<p>Features come from the graph, and the graph contains the label. If the target edge is in the snapshot, the distance is 1 and common neighbours shift. Subtler: other edges formed after the prediction time, often caused by the same event, inflate overlap features. The fix is point-in-time features from a snapshot at the cutoff (or features logged at serving time), temporal train/test splits, and embeddings trained only on the graph as of the training cutoff.</p>
+<h4 id="your-pymk-ab-test-shows-5-connections-in-treatment-what-could-be-wrong">Your PYMK A/B test shows +5% connections in treatment. What could be wrong?</h4>
+<p>Interference. Treated users send more requests, and many recipients are in control. Control users accept those requests, so control connections also rise, and connection counts are shared between arms. The measured difference can be biased in either direction, and totals across the platform are not what the test estimated.</p>
+<p>Use graph cluster randomization, attribute recipient-side outcomes to the sender's arm, and measure spillover by comparing control users with many versus few treated neighbours. Also check guardrails: a lift in connections that comes with more &quot;don't know&quot; reports or more ignored requests is not a win.</p>
+<h4 id="how-do-you-handle-a-brand-new-user-with-no-friends">How do you handle a brand-new user with no friends?</h4>
+<p>Use signals that do not need edges: consented contact upload, onboarding profile (school, employer, city) scored by an inductive model, and the person who invited them. Once the first request is accepted, refresh their candidates right away, since FoF now has something to walk from. New users are the highest-value slice for PYMK, so measure it separately, and be careful with reverse contact matches, which are the easiest place to leak information.</p>
+<h4 id="what-makes-a-suggestion-creepy-and-how-do-you-prevent-it">What makes a suggestion &quot;creepy,&quot; and how do you prevent it?</h4>
+<p>A suggestion is creepy when it shows the system knows something the user did not share: a therapist, someone met at a clinic, an ex, a person whose number was uploaded by a third party. Prevent it by excluding sensitive sources from candidate generation (sensitive groups, precise location, professional-client contacts), respecting contact discoverability settings, never using profile views in explanations, and applying hard filters for blocks and minors before ranking. Track &quot;don't know&quot; and report rates by source, since a spike from one source usually points to a signal that should not be used.</p>
+<h4 id="how-do-you-avoid-rich-get-richer">How do you avoid rich-get-richer?</h4>
+<p>Popular users gain connections through PYMK, which makes them more central and more likely to be suggested. Use degree-discounted features, cap how often a person is shown as a suggestion, penalize candidates with large pending-request backlogs, and monitor the concentration of incoming requests. Long-term holdouts measure how much the system shapes the graph over months.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training only on &quot;request sent&quot;</td>
+<td>Rewards suggestions that will be ignored or feel invasive</td>
+<td>Multi-task: send, accept, report; downstream value</td>
+</tr>
+<tr>
+<td>Target edge left in the feature graph</td>
+<td>Model learns distance = 1; offline scores meaningless</td>
+<td>Point-in-time snapshots; log served features</td>
+</tr>
+<tr>
+<td>Random edge splits</td>
+<td>Future edges predict past ones</td>
+<td>Temporal splits at a cutoff</td>
+</tr>
+<tr>
+<td>Random pairs as negatives</td>
+<td>Trivial; model learns degree</td>
+<td>Viewed impressions with no send as negatives</td>
+</tr>
+<tr>
+<td>Full neighbour expansion through hubs</td>
+<td>Work explodes; weak evidence dominates</td>
+<td>Hub sampling or skipping; Adamic-Adar</td>
+</tr>
+<tr>
+<td>Request-time graph traversal</td>
+<td>Blows the latency budget</td>
+<td>Batch candidates and ranking; online filter only</td>
+</tr>
+<tr>
+<td>Filters only in batch</td>
+<td>Blocked or new friends still suggested</td>
+<td>Read-time filter set updated in seconds</td>
+</tr>
+<tr>
+<td>User-level A/B tests</td>
+<td>Requests cross arms; biased effects</td>
+<td>Graph cluster randomization; sender attribution</td>
+</tr>
+<tr>
+<td>Evaluating only on future edges from logs</td>
+<td>Rewards the old model's own suggestions</td>
+<td>Exploration traffic; long-term holdouts</td>
+</tr>
+<tr>
+<td>Sensitive signals as sources or explanations</td>
+<td>Reveals private relationships</td>
+<td>Exclude sensitive sources; explanations from viewer-visible data only</td>
+</tr>
+<tr>
+<td>No minors policy</td>
+<td>Safety failure</td>
+<td>Age-aware hard filters before ranking</td>
+</tr>
+<tr>
+<td>No recipient-side view</td>
+<td>Popular users flooded with requests</td>
+<td>Exposure caps; pending-request penalties</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="news_feed_ranking.html">News Feed Ranking System Design</a></li>
+<li><a href="ads_ctr_prediction.html">Ads CTR Prediction and Ranking</a></li>
+<li><a href="fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../deep_learning/intro_graph_neural_networks.html">Graph Neural Networks</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift</a></li>
+<li><a href="../ai_genai/intro_embeddings.html">Embeddings</a></li>
+<li><a href="../ai_genai/intro_vector_databases_advanced.html">Vector Databases: Advanced</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Store</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_responsible_ai_fairness.html">Responsible AI and Fairness</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="dynamic_pricing.html"><small>Previous</small>Dynamic Pricing</a><a rel="next" class="next" href="ml_system_design_patterns.html"><small>Next</small>ML System Design Patterns</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/people_you_may_know.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

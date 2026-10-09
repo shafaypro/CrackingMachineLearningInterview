@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Architecture Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Data architecture is the operating design of how data moves, changes, is governed, and creates value across the enterprise. It is broader than a storage…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/data-architecture.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Data Architecture Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Data architecture is the operating design of how data moves, changes, is governed, and creates value across the enterprise. It is broader than a storage…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/data-architecture.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Architecture Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Data architecture is the operating design of how data moves, changes, is governed, and creates value across the enterprise. It is broader than a storage…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Data Architecture",
+   "description": "Data architecture is the operating design of how data moves, changes, is governed, and creates value across the enterprise. It is broader than a storage…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/data-architecture.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Data Architecture",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/data-architecture.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Data Architecture</span></nav>
+<p class="meta"><a href="../../#data_engineering/data-architecture.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="data-architecture">Data Architecture</h1>
+<p>Data architecture is the operating design of how data moves, changes, is governed, and creates value across the enterprise. It is broader than a storage choice and deeper than a reference diagram. A good architecture defines responsibilities, interfaces, failure modes, quality controls, security boundaries, and ownership models that still work when the platform is under real production pressure.</p>
+<p>For principal-level work, the goal is not to chase fashionable patterns. The goal is to choose an architecture that matches business volatility, latency needs, team topology, governance obligations, and cost limits.</p>
+<hr />
+<h2 id="what-data-architecture-is-and-why-it-matters">What Data Architecture Is and Why It Matters</h2>
+<p>Data architecture answers questions such as:</p>
+<ul>
+<li>where data originates</li>
+<li>how data enters the platform</li>
+<li>how raw data becomes trusted data</li>
+<li>which systems perform transformation and serving</li>
+<li>how data is governed, secured, and observed</li>
+<li>who owns which data products and contracts</li>
+</ul>
+<p>It matters because architecture determines:</p>
+<ul>
+<li>delivery speed for new use cases</li>
+<li>platform reliability</li>
+<li>data quality and trust</li>
+<li>recovery from failures and bad releases</li>
+<li>total platform cost</li>
+<li>the number of teams that can work independently without breaking each other</li>
+</ul>
+<p>Weak architecture often looks fine in a diagram and fails in operations. Strong architecture reduces ambiguity in how the platform should behave under change, scale, and incident conditions.</p>
+<hr />
+<h2 id="core-principles-of-modern-data-architecture">Core Principles of Modern Data Architecture</h2>
+<h3 id="1-treat-data-as-a-product">1. Treat Data as a Product</h3>
+<p>Important data assets need:</p>
+<ul>
+<li>clear ownership</li>
+<li>quality expectations</li>
+<li>discoverability</li>
+<li>contracts</li>
+<li>lifecycle management</li>
+</ul>
+<h3 id="2-separate-storage-from-serving-semantics">2. Separate Storage from Serving Semantics</h3>
+<p>Raw landing zones, integration layers, curated marts, and low-latency serving layers should not be conflated. They serve different purposes and should be optimized differently.</p>
+<h3 id="3-design-for-change-not-just-current-volume">3. Design for Change, Not Just Current Volume</h3>
+<p>Most enterprise pain comes from schema drift, source changes, new domains, and evolving ownership, not from the first version of the pipeline.</p>
+<h3 id="4-make-lineage-and-observability-first-class">4. Make Lineage and Observability First-Class</h3>
+<p>If you cannot explain where a metric came from, who changed a schema, or which downstream assets are affected by a failed job, the architecture is incomplete.</p>
+<h3 id="5-prefer-explicit-contracts-over-tribal-knowledge">5. Prefer Explicit Contracts Over Tribal Knowledge</h3>
+<p>Use schema contracts, data product definitions, testable SLAs, and versioned interfaces. Verbal agreements do not scale.</p>
+<h3 id="6-optimize-for-business-value-not-maximal-technical-purity">6. Optimize for Business Value, Not Maximal Technical Purity</h3>
+<p>The most elegant architecture is often the wrong one if the team cannot operate it.</p>
+<hr />
+<h2 id="layers-of-a-data-platform">Layers of a Data Platform</h2>
+<p>The exact implementation differs by organization, but the logical layers are broadly consistent.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Purpose</th>
+<th>Typical Technologies</th>
+<th>Key Design Questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source systems</td>
+<td>Systems that generate data</td>
+<td>SaaS apps, OLTP DBs, event producers, logs, IoT</td>
+<td>Who owns semantics at the source?</td>
+</tr>
+<tr>
+<td>Ingestion</td>
+<td>Move data into the platform</td>
+<td>Fivetran, Kafka, Debezium, Airbyte, custom CDC</td>
+<td>Batch, CDC, or streaming?</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Durable raw and curated persistence</td>
+<td>Data warehouse, object storage, lakehouse tables</td>
+<td>What is the system of record?</td>
+</tr>
+<tr>
+<td>Processing</td>
+<td>Transform, enrich, reconcile</td>
+<td>Spark, dbt, Flink, Beam, SQL engines</td>
+<td>Where do business rules live?</td>
+</tr>
+<tr>
+<td>Serving</td>
+<td>Expose usable data for workloads</td>
+<td>marts, feature stores, serving DBs, APIs</td>
+<td>What latency and freshness are required?</td>
+</tr>
+<tr>
+<td>Consumption</td>
+<td>End-user or system usage</td>
+<td>BI tools, notebooks, ML pipelines, apps</td>
+<td>Who are the consumers and how self-service is it?</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Control policy and trust</td>
+<td>catalog, lineage, RBAC, contracts, quality tools</td>
+<td>How are ownership and policy enforced?</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Monitor system health and data health</td>
+<td>logging, metrics, tracing, anomaly detection</td>
+<td>How do we detect and contain failures?</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="practical-platform-flow">Practical Platform Flow</h3>
+<pre><code class="language-text">Sources -&gt; Ingestion -&gt; Raw Storage -&gt; Processing -&gt; Curated Storage -&gt; Serving -&gt; Consumption
+                           |                |             |
+                      Governance       Observability   Security
+</code></pre>
+<p>This is intentionally simple. Real platforms add feedback loops, replay paths, quarantine zones, and lineage controls.</p>
+<hr />
+<h2 id="batch-vs-streaming-architectures">Batch vs Streaming Architectures</h2>
+<p>This is one of the most over-simplified choices in data engineering. The correct decision depends on freshness, correctness, operational overhead, and downstream actionability.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Batch</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Freshness</td>
+<td>Minutes to days</td>
+<td>Seconds to sub-second</td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Cost predictability</td>
+<td>Higher</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Operational burden</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Typical strengths</td>
+<td>Simplicity, reprocessing, finance-grade reporting</td>
+<td>Event-driven use cases, personalization, monitoring</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="when-to-use-batch">When to Use Batch</h3>
+<ul>
+<li>daily reporting</li>
+<li>finance reconciliation</li>
+<li>warehouse transformations</li>
+<li>ML training data generation</li>
+<li>workloads where a 15-minute or 24-hour delay is acceptable</li>
+</ul>
+<h3 id="when-not-to-use-batch">When Not to Use Batch</h3>
+<ul>
+<li>fraud detection</li>
+<li>low-latency customer notifications</li>
+<li>operational metrics and alerting</li>
+<li>real-time personalization</li>
+</ul>
+<h3 id="when-to-use-streaming">When to Use Streaming</h3>
+<ul>
+<li>event-driven product features</li>
+<li>near-real-time operational analytics</li>
+<li>CDC replication with low freshness tolerance</li>
+<li>online features or risk signals</li>
+</ul>
+<h3 id="when-not-to-use-streaming">When Not to Use Streaming</h3>
+<ul>
+<li>when no consumer acts on fresh data</li>
+<li>when the team lacks capability to operate stateful streaming safely</li>
+<li>when batch satisfies the business requirement at far lower cost</li>
+</ul>
+<h3 id="common-mistakes">Common Mistakes</h3>
+<ul>
+<li>choosing streaming because it feels more advanced</li>
+<li>building streaming pipelines that still land data for hourly reporting only</li>
+<li>underestimating replay, state management, and late data handling</li>
+</ul>
+<hr />
+<h2 id="batch-layer-speed-layer-and-serving-layer">Batch Layer, Speed Layer, and Serving Layer</h2>
+<p>These layers matter most in Lambda-style thinking, but the concepts are useful even outside Lambda architecture.</p>
+<h3 id="batch-layer">Batch Layer</h3>
+<p>The batch layer computes complete, authoritative views from the full historical dataset.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>reprocessing from durable history</li>
+<li>large-scale reconciliations</li>
+<li>high-correctness aggregations</li>
+<li>rebuilding trusted outputs after logic changes</li>
+</ul>
+<p>When the business cares about correctness more than immediacy, the batch layer is the safety net.</p>
+<h3 id="speed-layer">Speed Layer</h3>
+<p>The speed layer computes incremental results from recent events to provide freshness before the batch layer catches up.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>reduce staleness</li>
+<li>maintain real-time or near-real-time views</li>
+<li>provide provisional outputs until full recomputation occurs</li>
+</ul>
+<p>The speed layer is useful when:</p>
+<ul>
+<li>stale data harms the product</li>
+<li>recent events matter materially</li>
+<li>consumers can tolerate eventual correction</li>
+</ul>
+<h3 id="serving-layer">Serving Layer</h3>
+<p>The serving layer exposes data in a form optimized for consumption. It is not just storage. It is a contract boundary.</p>
+<p>Examples:</p>
+<ul>
+<li>BI marts and semantic models</li>
+<li>aggregate tables</li>
+<li>feature store online tables</li>
+<li>low-latency APIs backed by materialized views</li>
+</ul>
+<p>Serving design questions:</p>
+<ul>
+<li>what latency must queries meet</li>
+<li>what freshness guarantees are required</li>
+<li>are consumers human, analytical, or machine-driven</li>
+<li>do we serve raw entities, aggregates, or features</li>
+</ul>
+<p>Common mistake: treating the warehouse itself as the serving layer for every workload, including low-latency application features.</p>
+<hr />
+<h2 id="lambda-architecture">Lambda Architecture</h2>
+<p>Lambda architecture combines:</p>
+<ul>
+<li>a batch layer for correctness</li>
+<li>a speed layer for freshness</li>
+<li>a serving layer that merges the outputs</li>
+</ul>
+<pre><code class="language-text">Incoming events
+   | \
+   |  \-&gt; Speed layer -&gt; Real-time views
+   |
+   \----&gt; Batch layer -&gt; Recomputed views
+                \          /
+                 \-&gt; Serving layer
+</code></pre>
+<h3 id="pros">Pros</h3>
+<ul>
+<li>strong correctness path through batch recomputation</li>
+<li>low-latency visibility through speed processing</li>
+<li>resilient when streaming results need later correction</li>
+</ul>
+<h3 id="cons">Cons</h3>
+<ul>
+<li>duplicate logic across batch and speed paths</li>
+<li>higher engineering and testing cost</li>
+<li>difficult operational model for smaller teams</li>
+</ul>
+<h3 id="when-to-use-lambda-architecture">When to Use Lambda Architecture</h3>
+<ul>
+<li>strict correctness is required</li>
+<li>recent data must be visible quickly</li>
+<li>reprocessing full history is materially valuable</li>
+<li>streaming outputs may need reconciliation later</li>
+</ul>
+<p>Typical examples:</p>
+<ul>
+<li>fraud scoring plus daily correction</li>
+<li>financial event monitoring plus audited end-of-day settlement</li>
+<li>large telemetry platforms with immediate alerting and later canonical recompute</li>
+</ul>
+<h3 id="when-not-to-use-lambda-architecture">When Not to Use Lambda Architecture</h3>
+<ul>
+<li>small teams</li>
+<li>simple warehouse reporting</li>
+<li>platforms that can tolerate micro-batch instead</li>
+<li>cases where one incremental model can satisfy both freshness and correctness</li>
+</ul>
+<h3 id="common-mistakes-1">Common Mistakes</h3>
+<ul>
+<li>implementing Lambda before proving the business need</li>
+<li>letting batch and streaming semantics drift apart</li>
+<li>forgetting that the serving layer must reconcile duplicates and corrections</li>
+</ul>
+<hr />
+<h2 id="kappa-architecture">Kappa Architecture</h2>
+<p>Kappa architecture removes the separate batch path and treats the streaming log as the primary source for both current processing and replay.</p>
+<pre><code class="language-text">Event log -&gt; Stream processing -&gt; Serving outputs
+        \-&gt; Replay same log when logic changes
+</code></pre>
+<h3 id="pros-1">Pros</h3>
+<ul>
+<li>one processing model instead of two</li>
+<li>cleaner mental model for event-native systems</li>
+<li>strong fit for log-centric architectures</li>
+</ul>
+<h3 id="cons-1">Cons</h3>
+<ul>
+<li>replay and backfill can still be operationally hard</li>
+<li>not every analytical workload fits cleanly into streaming-first processing</li>
+<li>historical recomputation at scale may be less straightforward than a dedicated batch layer</li>
+</ul>
+<h3 id="when-to-use-kappa-architecture">When to Use Kappa Architecture</h3>
+<ul>
+<li>event-first systems with durable logs</li>
+<li>operational analytics and real-time data products</li>
+<li>teams mature in stream processing</li>
+<li>use cases where replaying the log is realistic and sufficient</li>
+</ul>
+<h3 id="when-not-to-use-kappa-architecture">When Not to Use Kappa Architecture</h3>
+<ul>
+<li>heavy warehouse-centric analytics programs</li>
+<li>environments without durable, replayable event logs</li>
+<li>teams that primarily operate SQL batch transformations</li>
+</ul>
+<h3 id="common-mistakes-2">Common Mistakes</h3>
+<ul>
+<li>assuming Kappa eliminates all backfill complexity</li>
+<li>forcing every domain into streaming when many are batch-native</li>
+<li>underinvesting in event schemas and replay tooling</li>
+</ul>
+<hr />
+<h2 id="delta-architecture">Delta Architecture</h2>
+<p>The term &quot;Delta architecture&quot; is used inconsistently in the industry. In practice, teams usually mean an incremental architecture centered on transactional lakehouse tables, CDC, and change propagation rather than separate Lambda-style paths.</p>
+<p>In this model:</p>
+<ul>
+<li>raw data lands in append-friendly tables</li>
+<li>changes are merged incrementally into curated tables</li>
+<li>downstream consumers read transactional snapshots or change feeds</li>
+<li>batch and streaming often converge on the same table abstraction</li>
+</ul>
+<h3 id="how-it-differs-from-lambda-and-kappa">How It Differs from Lambda and Kappa</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Lambda</th>
+<th>Kappa</th>
+<th>Delta Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary abstraction</td>
+<td>Two computation paths</td>
+<td>Event log</td>
+<td>Transactional change tables</td>
+</tr>
+<tr>
+<td>Batch vs stream split</td>
+<td>Explicit</td>
+<td>Mostly stream-first</td>
+<td>Often unified on table format</td>
+</tr>
+<tr>
+<td>Replay model</td>
+<td>Batch recompute + stream</td>
+<td>Replay log</td>
+<td>Rebuild from raw plus change tables</td>
+</tr>
+<tr>
+<td>Common technology fit</td>
+<td>Hadoop-era hybrid stacks</td>
+<td>Kafka/Flink-heavy stacks</td>
+<td>Delta Lake, Iceberg, Hudi, streaming upserts</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="when-to-use-delta-architecture">When to Use Delta Architecture</h3>
+<ul>
+<li>lakehouse platforms</li>
+<li>CDC-heavy ingestion</li>
+<li>mixed batch and near-real-time requirements</li>
+<li>teams that want simpler convergence than full Lambda</li>
+</ul>
+<h3 id="when-not-to-use-it">When Not to Use It</h3>
+<ul>
+<li>purely operational event systems better served by log-native Kappa patterns</li>
+<li>small organizations where a managed warehouse is simpler</li>
+</ul>
+<h3 id="pros-2">Pros</h3>
+<ul>
+<li>reduced duplication of logic</li>
+<li>strong compatibility with medallion design</li>
+<li>good fit for replay, time travel, and incremental processing</li>
+</ul>
+<h3 id="cons-2">Cons</h3>
+<ul>
+<li>requires disciplined table maintenance</li>
+<li>performance can degrade without compaction and clustering</li>
+<li>teams may overestimate how &quot;real-time&quot; table-centric pipelines are</li>
+</ul>
+<h3 id="common-mistakes-3">Common Mistakes</h3>
+<ul>
+<li>assuming table ACID features eliminate the need for contracts and observability</li>
+<li>mixing raw and curated semantics in the same table tier</li>
+<li>ignoring file layout and compaction economics</li>
+</ul>
+<hr />
+<h2 id="lakehouse-architecture">Lakehouse Architecture</h2>
+<p>Lakehouse architecture combines:</p>
+<ul>
+<li>low-cost object storage</li>
+<li>table semantics such as ACID transactions and schema evolution</li>
+<li>support for analytics, data science, and ML on shared storage</li>
+</ul>
+<h3 id="pros-3">Pros</h3>
+<ul>
+<li>one platform for multiple workloads</li>
+<li>open storage format options</li>
+<li>better alignment between analytics and ML data access</li>
+</ul>
+<h3 id="cons-3">Cons</h3>
+<ul>
+<li>governance can be weaker than in tightly managed warehouses</li>
+<li>performance engineering becomes the platform team’s responsibility</li>
+<li>easy to accumulate raw-data sprawl</li>
+</ul>
+<h3 id="when-to-use-lakehouse">When to Use Lakehouse</h3>
+<ul>
+<li>mixed BI, ML, and data science workloads</li>
+<li>large historical storage needs</li>
+<li>multi-engine access patterns</li>
+<li>organizations that want open table formats and reduced warehouse lock-in</li>
+</ul>
+<h3 id="when-not-to-use-lakehouse">When Not to Use Lakehouse</h3>
+<ul>
+<li>small analytics teams with no platform engineering capacity</li>
+<li>organizations needing a simpler managed operating model</li>
+</ul>
+<h3 id="lakehouse-vs-data-warehouse">Lakehouse vs Data Warehouse</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Data Warehouse</th>
+<th>Lakehouse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operational model</td>
+<td>More managed</td>
+<td>More flexible, more responsibility</td>
+</tr>
+<tr>
+<td>Workload breadth</td>
+<td>Analytics-first</td>
+<td>Analytics plus DS and ML</td>
+</tr>
+<tr>
+<td>Open storage</td>
+<td>Usually less open</td>
+<td>Usually more open</td>
+</tr>
+<tr>
+<td>Governance defaults</td>
+<td>Often stronger out of the box</td>
+<td>Must be implemented carefully</td>
+</tr>
+</tbody>
+</table></div>
+<p>Opinionated guidance: if the organization mainly needs governed analytics and standard BI, a warehouse is often the better operating choice. If the organization needs a shared data platform for analytics, ML, and large-scale raw retention, a lakehouse is often the better architectural choice.</p>
+<hr />
+<h2 id="medallion-architecture">Medallion Architecture</h2>
+<p>Medallion architecture structures data into quality tiers, commonly:</p>
+<ul>
+<li>Bronze: raw landed data</li>
+<li>Silver: cleaned, standardized, conformed data</li>
+<li>Gold: serving-ready business models and aggregates</li>
+</ul>
+<h3 id="when-to-use">When to Use</h3>
+<ul>
+<li>lakehouse programs</li>
+<li>teams needing clear separation of raw, conformed, and serving layers</li>
+<li>environments with multiple consumers and replay needs</li>
+</ul>
+<h3 id="when-not-to-use">When Not to Use</h3>
+<ul>
+<li>if teams interpret medallion as a substitute for ownership and semantics</li>
+<li>if every dataset is copied through every layer with no reason</li>
+</ul>
+<h3 id="common-mistakes-4">Common Mistakes</h3>
+<ul>
+<li>defining tiers physically but not semantically</li>
+<li>creating unnecessary copies at every stage</li>
+<li>turning gold into an uncontrolled dumping ground</li>
+</ul>
+<hr />
+<h2 id="data-mesh">Data Mesh</h2>
+<p>Data mesh is an organizational and architectural model where domains own their data products and publish them through shared platform standards.</p>
+<h3 id="core-ideas">Core Ideas</h3>
+<ul>
+<li>domain ownership</li>
+<li>data as a product</li>
+<li>self-serve platform capabilities</li>
+<li>federated computational governance</li>
+</ul>
+<h3 id="pros-4">Pros</h3>
+<ul>
+<li>aligns ownership with domain knowledge</li>
+<li>scales better across many business units</li>
+<li>reduces central bottlenecks when implemented well</li>
+</ul>
+<h3 id="cons-4">Cons</h3>
+<ul>
+<li>requires strong platform enablement</li>
+<li>governance is harder than most teams expect</li>
+<li>uneven domain maturity creates uneven data quality</li>
+</ul>
+<h3 id="when-to-use-1">When to Use</h3>
+<ul>
+<li>large organizations with many domains</li>
+<li>central data team is a delivery bottleneck</li>
+<li>business units have genuine engineering capability</li>
+</ul>
+<h3 id="when-not-to-use-1">When Not to Use</h3>
+<ul>
+<li>small organizations</li>
+<li>weak engineering standards</li>
+<li>no shared metadata, identity, or governance platform</li>
+</ul>
+<h3 id="common-mistakes-5">Common Mistakes</h3>
+<ul>
+<li>declaring &quot;mesh&quot; while keeping no product contracts</li>
+<li>decentralizing ownership without funding platform capabilities</li>
+<li>confusing federation with lack of standards</li>
+</ul>
+<hr />
+<h2 id="data-fabric">Data Fabric</h2>
+<p>Data fabric focuses on connecting and governing data across distributed systems through metadata, automation, policy, and integration tooling.</p>
+<p>It is more about interoperability and intelligent control across a fragmented estate than about domain ownership itself.</p>
+<h3 id="pros-5">Pros</h3>
+<ul>
+<li>helps unify discovery, lineage, policy, and integration</li>
+<li>useful in heterogeneous enterprise environments</li>
+<li>can improve governance across existing fragmented platforms</li>
+</ul>
+<h3 id="cons-5">Cons</h3>
+<ul>
+<li>sometimes marketed too vaguely</li>
+<li>can become tool-led rather than architecture-led</li>
+<li>does not solve ownership problems by itself</li>
+</ul>
+<h3 id="when-to-use-2">When to Use</h3>
+<ul>
+<li>complex enterprise environments with many platforms</li>
+<li>strong need for cross-system lineage, metadata, and policy automation</li>
+<li>modernization programs where full platform consolidation is unrealistic</li>
+</ul>
+<h3 id="when-not-to-use-2">When Not to Use</h3>
+<ul>
+<li>as a substitute for clear operating ownership</li>
+<li>if the real problem is weak domain accountability rather than metadata connectivity</li>
+</ul>
+<hr />
+<h2 id="data-mesh-vs-data-fabric">Data Mesh vs Data Fabric</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Data Mesh</th>
+<th>Data Fabric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary focus</td>
+<td>Ownership model and domain-aligned products</td>
+<td>Cross-platform integration, metadata, and automation</td>
+</tr>
+<tr>
+<td>Main problem solved</td>
+<td>Central team bottlenecks and domain scalability</td>
+<td>Fragmented systems and inconsistent governance</td>
+</tr>
+<tr>
+<td>Dependency</td>
+<td>Requires strong platform standards</td>
+<td>Requires strong metadata and policy tooling</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>Inconsistent domain execution</td>
+<td>Tool sprawl without operating model clarity</td>
+</tr>
+</tbody>
+</table></div>
+<p>They are not direct opposites. Large enterprises may use both:</p>
+<ul>
+<li>mesh for ownership</li>
+<li>fabric capabilities for metadata, discovery, policy, and integration across the estate</li>
+</ul>
+<hr />
+<h2 id="centralized-vs-decentralized-data-platforms">Centralized vs Decentralized Data Platforms</h2>
+<h3 id="centralized-platform">Centralized Platform</h3>
+<p>A central platform team owns ingestion, transformation, governance, and often modeling standards.</p>
+<h4 id="pros-6">Pros</h4>
+<ul>
+<li>strong consistency</li>
+<li>lower governance fragmentation</li>
+<li>easier platform standardization</li>
+</ul>
+<h4 id="cons-6">Cons</h4>
+<ul>
+<li>can become a delivery bottleneck</li>
+<li>central team may lack deep domain context</li>
+</ul>
+<h3 id="decentralized-or-federated-platform">Decentralized or Federated Platform</h3>
+<p>Domain teams own more of their pipelines and data products while a platform team provides shared capabilities and guardrails.</p>
+<h4 id="pros-7">Pros</h4>
+<ul>
+<li>closer alignment to business context</li>
+<li>more scalable ownership model in larger organizations</li>
+</ul>
+<h4 id="cons-7">Cons</h4>
+<ul>
+<li>higher risk of divergence</li>
+<li>requires mature governance and enablement</li>
+</ul>
+<h3 id="tradeoffs-between-centralized-and-federated-ownership">Tradeoffs Between Centralized and Federated Ownership</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Centralized</th>
+<th>Federated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standardization</td>
+<td>Stronger</td>
+<td>Harder</td>
+</tr>
+<tr>
+<td>Domain responsiveness</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Governance overhead</td>
+<td>Lower initially</td>
+<td>Higher by design</td>
+</tr>
+<tr>
+<td>Platform leverage</td>
+<td>High</td>
+<td>High only with good enablement</td>
+</tr>
+</tbody>
+</table></div>
+<p>Practical guidance: centralize foundational platform capabilities, security, metadata, and standards. Federate domain semantics and product ownership only when domain teams are capable of sustaining them.</p>
+<hr />
+<h2 id="monolith-vs-domain-oriented-data-platforms">Monolith vs Domain-Oriented Data Platforms</h2>
+<p>A monolithic platform often means:</p>
+<ul>
+<li>one team</li>
+<li>one repo or transformation project</li>
+<li>one release flow</li>
+<li>weak separation of ownership boundaries</li>
+</ul>
+<p>A domain-oriented platform usually means:</p>
+<ul>
+<li>bounded domain ownership</li>
+<li>domain-level contracts</li>
+<li>shared platform services</li>
+<li>explicit interfaces between domains</li>
+</ul>
+<p>Monoliths are not always wrong. Small teams often benefit from one coherent platform until scale and coordination costs justify separation.</p>
+<h3 id="when-to-use-a-monolith">When to Use a Monolith</h3>
+<ul>
+<li>early-stage teams</li>
+<li>low domain complexity</li>
+<li>few engineers</li>
+</ul>
+<h3 id="when-to-move-toward-domain-orientation">When to Move Toward Domain Orientation</h3>
+<ul>
+<li>conflicting priorities between business domains</li>
+<li>release coordination overhead</li>
+<li>repeated ownership ambiguity</li>
+<li>metrics or entities with domain-specific semantics that keep colliding</li>
+</ul>
+<hr />
+<h2 id="event-driven-architectures-in-data-engineering">Event-Driven Architectures in Data Engineering</h2>
+<p>Event-driven architecture treats business events as first-class integration contracts.</p>
+<p>Examples:</p>
+<ul>
+<li><code>order_created</code></li>
+<li><code>payment_authorized</code></li>
+<li><code>shipment_delivered</code></li>
+<li><code>user_subscription_cancelled</code></li>
+</ul>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li>strong decoupling</li>
+<li>better support for streaming use cases</li>
+<li>auditable change history</li>
+<li>easier propagation of business events across systems</li>
+</ul>
+<h3 id="risks">Risks</h3>
+<ul>
+<li>low-quality event definitions create platform-wide confusion</li>
+<li>ordering and idempotency must be handled explicitly</li>
+<li>schema evolution becomes critical</li>
+</ul>
+<h3 id="best-practices">Best Practices</h3>
+<ul>
+<li>define event ownership clearly</li>
+<li>separate event name from payload version</li>
+<li>include event time, idempotency key, and producer identity</li>
+<li>distinguish business events from technical events</li>
+</ul>
+<hr />
+<h2 id="real-time-and-near-real-time-processing-tradeoffs">Real-Time and Near-Real-Time Processing Tradeoffs</h2>
+<p>Real-time has a cost. The business should earn that cost.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Recommended Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seconds matter and action is immediate</td>
+<td>Streaming or event-driven serving</td>
+</tr>
+<tr>
+<td>Minutes are acceptable</td>
+<td>Micro-batch or incremental table updates</td>
+</tr>
+<tr>
+<td>Daily or hourly is fine</td>
+<td>Batch</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="decision-questions">Decision Questions</h3>
+<ul>
+<li>what decision depends on freshness</li>
+<li>what is the economic value of lower latency</li>
+<li>can downstream systems act on fresher data</li>
+<li>what is the cost of wrong early results versus later corrected results</li>
+</ul>
+<p>Common mistake: demanding &quot;real-time&quot; for dashboards nobody checks more than twice a day.</p>
+<hr />
+<h2 id="data-orchestration-and-workflow-design">Data Orchestration and Workflow Design</h2>
+<p>Orchestration manages dependency, retries, scheduling, and recoverability. It should not become the home of every transformation detail.</p>
+<h3 id="good-workflow-design">Good Workflow Design</h3>
+<ul>
+<li>tasks are idempotent</li>
+<li>retries are safe</li>
+<li>dependencies are explicit</li>
+<li>backfills are designed, not improvised</li>
+<li>failure domains are contained</li>
+</ul>
+<h3 id="common-orchestration-mistakes">Common Orchestration Mistakes</h3>
+<ul>
+<li>embedding large business logic directly in the orchestrator</li>
+<li>creating DAGs that are impossible to backfill safely</li>
+<li>mixing infrastructure concerns with transformation semantics</li>
+<li>using cron complexity where event triggers would be cleaner</li>
+</ul>
+<h3 id="when-to-use-central-orchestration">When to Use Central Orchestration</h3>
+<ul>
+<li>batch dependencies are material</li>
+<li>SLAs need explicit tracking</li>
+<li>cross-system coordination is required</li>
+</ul>
+<h3 id="when-not-to-over-orchestrate">When Not to Over-Orchestrate</h3>
+<ul>
+<li>purely declarative warehouse transformations that can run within a simpler build graph</li>
+<li>streaming systems where event-time processing should be native to the stream engine</li>
+</ul>
+<hr />
+<h2 id="metadata-lineage-governance-and-security">Metadata, Lineage, Governance, and Security</h2>
+<p>These are not add-ons. They are architectural controls.</p>
+<h3 id="metadata">Metadata</h3>
+<p>You need technical metadata and business metadata:</p>
+<ul>
+<li>schema</li>
+<li>ownership</li>
+<li>freshness</li>
+<li>tags</li>
+<li>lineage</li>
+<li>business definitions</li>
+</ul>
+<h3 id="lineage">Lineage</h3>
+<p>Lineage should answer:</p>
+<ul>
+<li>where did this dataset come from</li>
+<li>which transformations produced it</li>
+<li>which dashboards, models, or APIs consume it</li>
+<li>what breaks if this table changes</li>
+</ul>
+<h3 id="governance">Governance</h3>
+<p>Governance should be implemented as operating controls, not just review boards:</p>
+<ul>
+<li>data classification</li>
+<li>retention policies</li>
+<li>access approval flows</li>
+<li>quality SLAs</li>
+<li>contract versioning</li>
+</ul>
+<h3 id="security">Security</h3>
+<p>Security design should include:</p>
+<ul>
+<li>least privilege access</li>
+<li>row and column controls where required</li>
+<li>encryption in transit and at rest</li>
+<li>secret management</li>
+<li>audit logging</li>
+</ul>
+<p>Common mistake: centralizing sensitive data in one lake without sufficiently granular access boundaries.</p>
+<hr />
+<h2 id="reliability-scalability-and-cost-optimization">Reliability, Scalability, and Cost Optimization</h2>
+<p>Architecture choices should be evaluated on all three together. Optimizing only one usually backfires.</p>
+<h3 id="reliability">Reliability</h3>
+<p>Design for:</p>
+<ul>
+<li>replayability</li>
+<li>idempotency</li>
+<li>failure isolation</li>
+<li>schema rollback or compatibility</li>
+<li>observability and alerting</li>
+</ul>
+<h3 id="scalability">Scalability</h3>
+<p>Design for:</p>
+<ul>
+<li>partition-aware processing</li>
+<li>horizontal scaling of stateless components</li>
+<li>bounded state in streaming jobs</li>
+<li>controlled concurrency in orchestration</li>
+</ul>
+<h3 id="cost-optimization">Cost Optimization</h3>
+<p>Design for:</p>
+<ul>
+<li>storage lifecycle tiers</li>
+<li>query pruning</li>
+<li>right-sized compute</li>
+<li>materialization only where reuse justifies it</li>
+<li>avoiding duplicate copies of low-value data</li>
+</ul>
+<h3 id="practical-guidance">Practical Guidance</h3>
+<ul>
+<li>compute near data where possible</li>
+<li>compact small files in lakehouse platforms</li>
+<li>do not materialize every intermediate table permanently</li>
+<li>align retention policy with legal and analytical need</li>
+</ul>
+<hr />
+<h2 id="common-anti-patterns">Common Anti-Patterns</h2>
+<ul>
+<li>one central platform with no documented ownership boundaries</li>
+<li>&quot;real-time&quot; everywhere, regardless of business value</li>
+<li>lakehouse raw zones treated as trusted data</li>
+<li>every domain inventing its own event conventions</li>
+<li>duplicated logic across streaming, batch, BI, and ML pipelines</li>
+<li>governance committees with no technical enforcement</li>
+<li>architecture diagrams that ignore failure handling and replay</li>
+<li>adopting mesh without platform capabilities</li>
+<li>adopting fabric tooling without solving ownership ambiguity</li>
+</ul>
+<hr />
+<h2 id="best-practices-and-decision-framework">Best Practices and Decision Framework</h2>
+<p>Use this sequence when choosing or revising a data architecture:</p>
+<ol>
+<li>Identify the primary workloads.
+<ul>
+<li>BI</li>
+<li>regulatory reporting</li>
+<li>operational analytics</li>
+<li>machine learning</li>
+<li>event-driven product features</li>
+</ul>
+</li>
+<li>Identify freshness requirements.</li>
+<li>Identify ownership model and team maturity.</li>
+<li>Decide where canonical truth lives.</li>
+<li>Choose the minimum architecture pattern that satisfies the need.</li>
+<li>Define serving contracts explicitly.</li>
+<li>Attach metadata, lineage, and quality controls at design time.</li>
+<li>Revisit cost, replay, and failure recovery before production rollout.</li>
+</ol>
+<h3 id="opinionated-guidance">Opinionated Guidance</h3>
+<ul>
+<li>Start simpler than you think.</li>
+<li>Add streaming only when the business benefits materially.</li>
+<li>Use lakehouse patterns when workload diversity justifies them.</li>
+<li>Use domain ownership only when domain teams can sustain data products.</li>
+<li>Invest early in metadata, lineage, contracts, and security boundaries.</li>
+</ul>
+<hr />
+<h2 id="final-summary">Final Summary</h2>
+<p>Modern data architecture is not a choice between buzzwords. It is the disciplined design of:</p>
+<ul>
+<li>how data enters the platform</li>
+<li>how truth is refined</li>
+<li>how products are served</li>
+<li>how change is governed</li>
+<li>how teams collaborate without chaos</li>
+</ul>
+<p>Lambda architecture remains useful when correctness and low latency both matter and the organization can afford the complexity. Kappa architecture works well in event-native systems with durable logs and strong stream-processing maturity. Delta-style lakehouse architectures are often the most practical middle ground for modern platforms that need incremental processing, historical traceability, and shared analytics and ML access. Data mesh addresses ownership scaling; data fabric addresses interoperability and metadata-driven control. Lakehouses broaden platform flexibility, while warehouses often remain the better operating model for analytics-first teams that value managed simplicity.</p>
+<p>The best architecture is the one that makes data trustworthy, usable, governable, and evolvable under real business conditions.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="data-modeling.html"><small>Previous</small>Data Modeling</a><a rel="next" class="next" href="intro_data_processing_pipelines.html"><small>Next</small>Data Processing Pipelines</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/data-architecture.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

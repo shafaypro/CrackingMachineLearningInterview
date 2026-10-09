@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS vs GCP vs Azure: Service Mapping for ML Engineers | Cracking ML Interviews</title>
+<meta name="description" content="Most ML engineers know one cloud well and the other two loosely. Interviewers know this, so cross-cloud questions usually test whether you understand the…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/cloud_service_mapping.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="AWS vs GCP vs Azure: Service Mapping for ML Engineers | Cracking ML Interviews">
+<meta property="og:description" content="Most ML engineers know one cloud well and the other two loosely. Interviewers know this, so cross-cloud questions usually test whether you understand the…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/cloud_service_mapping.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWS vs GCP vs Azure: Service Mapping for ML Engineers | Cracking ML Interviews">
+<meta name="twitter:description" content="Most ML engineers know one cloud well and the other two loosely. Interviewers know this, so cross-cloud questions usually test whether you understand the…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "AWS vs GCP vs Azure: Service Mapping for ML Engineers",
+   "description": "Most ML engineers know one cloud well and the other two loosely. Interviewers know this, so cross-cloud questions usually test whether you understand the…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/cloud_service_mapping.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "AWS vs GCP vs Azure Mapping",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/cloud_service_mapping.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">AWS vs GCP vs Azure Mapping</span></nav>
+<p class="meta"><a href="../../#cloud_ml/cloud_service_mapping.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 15 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="aws-vs-gcp-vs-azure-service-mapping-for-ml-engineers">AWS vs GCP vs Azure: Service Mapping for ML Engineers</h1>
+<p>Most ML engineers know one cloud well and the other two loosely. Interviewers know this, so cross-cloud questions usually test whether you understand the underlying concept well enough to translate it, not whether you memorized three product catalogs.</p>
+<p>How to use this guide in an interview:</p>
+<ol>
+<li><strong>Name the concept first.</strong> &quot;We need a workload identity for the training job so it can read the bucket without a static key.&quot;</li>
+<li><strong>Then name the service on the cloud you know.</strong> &quot;On AWS that is the SageMaker AI execution role.&quot;</li>
+<li><strong>Then translate, and say where the analogy breaks.</strong> &quot;On GCP it would be a service account attached to the Vertex AI custom job; the difference is that GCP grants the role on the bucket or project rather than through a policy document attached to the role.&quot;</li>
+</ol>
+<p>This guide focuses on the infrastructure around ML: identity, networking, storage, compute, data, GenAI and cost. For the ML platforms themselves (Amazon SageMaker AI, Vertex AI, Azure Machine Learning) feature by feature, see the <a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a>; the ML platform table below is intentionally brief.</p>
+<blockquote>
+<p>Product names in this space change often (several services in these tables were renamed in 2024 and 2025). Names are believed current as of 2026, and the ones most likely to drift are marked &quot;check current name&quot;. In an interview, getting the concept right matters more than getting the newest brand name.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#service-mapping-tables">Service mapping tables</a>
+<ul>
+<li><a href="#identity-and-access">Identity and access</a></li>
+<li><a href="#networking">Networking</a></li>
+<li><a href="#storage">Storage</a></li>
+<li><a href="#compute">Compute</a></li>
+<li><a href="#data-and-streaming">Data and streaming</a></li>
+<li><a href="#ml-platform">ML platform</a></li>
+<li><a href="#generative-ai">Generative AI</a></li>
+<li><a href="#observability-and-cost">Observability and cost</a></li>
+</ul>
+</li>
+<li><a href="#key-behavioural-differences">Key behavioural differences</a></li>
+<li><a href="#cloud-agnostic-ml-architecture">Cloud-agnostic ML architecture</a></li>
+<li><a href="#migration-and-multi-cloud-scenarios">Migration and multi-cloud scenarios</a></li>
+<li><a href="#terraform-example-one-versioned-bucket-on-three-clouds">Terraform example: one versioned bucket on three clouds</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="service-mapping-tables">Service mapping tables</h2>
+<p>Read each row as &quot;same job, different implementation&quot;. Where the Notes column says there is no clean equivalent, say that in an interview instead of forcing a match: it signals real experience.</p>
+<h3 id="identity-and-access">Identity and access</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resource hierarchy</td>
+<td>AWS Organizations: management account, organizational units (OUs), member accounts</td>
+<td>Organization, folders, projects</td>
+<td>Microsoft Entra tenant, management groups, subscriptions, resource groups</td>
+<td>AWS accounts are hard isolation boundaries with their own IAM. GCP projects inherit IAM from folders and the org. Azure has two levels below management groups: subscriptions (billing, quota, policy scope) and resource groups (lifecycle grouping). See <a href="#key-behavioural-differences">Key behavioural differences</a>.</td>
+</tr>
+<tr>
+<td>Human identity and SSO</td>
+<td>AWS IAM Identity Center (federates to an external IdP)</td>
+<td>Cloud Identity or Google Workspace; Workforce Identity Federation for external IdPs</td>
+<td>Microsoft Entra ID (formerly Azure AD)</td>
+<td>Entra ID is both the directory and the IdP for Azure, so Azure identity is the most tightly integrated with corporate accounts.</td>
+</tr>
+<tr>
+<td>Permission bundle</td>
+<td>IAM policies (JSON documents of actions, resources, conditions)</td>
+<td>IAM roles (predefined or custom collections of permissions)</td>
+<td>Azure RBAC role definitions (built-in or custom)</td>
+<td>On AWS the policy is the unit you attach. On GCP and Azure you bind a role to a principal at a scope. AWS &quot;role&quot; means an assumable identity, not a permission bundle, which confuses people moving between clouds.</td>
+</tr>
+<tr>
+<td>Workload identity for compute</td>
+<td>IAM role via instance profile, task role, Lambda or SageMaker AI execution role; EKS Pod Identity or IRSA for pods</td>
+<td>Service account attached to the VM, job or Cloud Run service; Workload Identity Federation for GKE for pods</td>
+<td>Managed identity (system-assigned or user-assigned); Microsoft Entra Workload ID for AKS pods</td>
+<td>All three issue short-lived credentials from a metadata endpoint or token exchange. On GCP a service account is both an identity and a resource you can grant access to (for example, who may impersonate it).</td>
+</tr>
+<tr>
+<td>Keyless CI federation</td>
+<td>IAM OIDC identity provider plus <code>sts:AssumeRoleWithWebIdentity</code></td>
+<td>Workload Identity Federation (workload identity pools and providers)</td>
+<td>Workload identity federation via federated credentials on an app registration or user-assigned managed identity</td>
+<td>All three trust an external OIDC issuer (for example GitHub Actions) and exchange its token for short-lived cloud credentials. Scope the trust to repository, branch or environment claims.</td>
+</tr>
+<tr>
+<td>Secrets</td>
+<td>AWS Secrets Manager (also SSM Parameter Store for config)</td>
+<td>Secret Manager</td>
+<td>Azure Key Vault (secrets)</td>
+<td>Rotation differs: Secrets Manager has managed rotation with Lambda; Secret Manager rotation schedules send notifications that you act on; Key Vault emits near-expiry events. Check current rotation features before claiming &quot;automatic&quot;.</td>
+</tr>
+<tr>
+<td>Key management</td>
+<td>AWS KMS (CloudHSM for dedicated HSMs)</td>
+<td>Cloud KMS (Cloud HSM, Cloud External Key Manager)</td>
+<td>Azure Key Vault keys, Azure Key Vault Managed HSM</td>
+<td>GCP calls customer-managed keys &quot;CMEK&quot;. Not every managed ML resource supports customer-managed keys on every cloud; verify per service.</td>
+</tr>
+<tr>
+<td>Audit logs</td>
+<td>AWS CloudTrail</td>
+<td>Cloud Audit Logs</td>
+<td>Azure Activity Log (control plane), resource logs via diagnostic settings, Entra sign-in and audit logs</td>
+<td>Defaults differ: CloudTrail records management events by default but data events (such as S3 object reads) must be enabled. GCP Admin Activity logs are always on, while Data Access logs are mostly off by default (BigQuery is an exception). Azure data-plane logs need diagnostic settings.</td>
+</tr>
+<tr>
+<td>Org-wide guardrails</td>
+<td>Service control policies (SCPs) and resource control policies (RCPs) in AWS Organizations</td>
+<td>Organization Policy Service constraints; IAM deny policies</td>
+<td>Azure Policy (assigned at management group, subscription or resource group)</td>
+<td>SCPs and RCPs cap the maximum permissions and never grant anything. GCP organization policies restrict resource configuration (allowed locations, no service account keys, no external IPs), not who can act. Azure Policy evaluates resource properties with effects such as deny, audit, modify and deployIfNotExists.</td>
+</tr>
+<tr>
+<td>Data exfiltration perimeter</td>
+<td>&quot;Data perimeter&quot; pattern: SCPs, RCPs and VPC endpoint policies combined</td>
+<td>VPC Service Controls (service perimeters around projects)</td>
+<td>No single equivalent: private endpoints, disabling public network access, Azure Policy; Network Security Perimeter for supported services (check availability)</td>
+<td>VPC Service Controls is the most direct product for &quot;data in this perimeter cannot leave&quot;. On AWS and Azure you assemble the same guarantee from several controls.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="networking">Networking</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual network</td>
+<td>VPC (regional); subnets are zonal (one Availability Zone each)</td>
+<td>VPC network (global); subnets are regional</td>
+<td>Virtual network (VNet, regional); subnets span the region's zones</td>
+<td>GCP is the outlier: one VPC can hold subnets in many regions that talk over internal IPs without peering.</td>
+</tr>
+<tr>
+<td>Network sharing across teams</td>
+<td>VPC sharing via AWS Resource Access Manager; Transit Gateway</td>
+<td>Shared VPC (host project, service projects); Network Connectivity Center</td>
+<td>Hub-and-spoke with VNet peering; Azure Virtual WAN</td>
+<td>Shared VPC is a very common GCP enterprise pattern: networking lives in a host project and ML projects attach to it.</td>
+</tr>
+<tr>
+<td>Peering</td>
+<td>VPC peering (non-transitive)</td>
+<td>VPC Network Peering (non-transitive)</td>
+<td>VNet peering (non-transitive; gateway transit is an option)</td>
+<td>Non-transitivity bites in all three. Hubs (Transit Gateway, NCC, Virtual WAN or a hub VNet) solve it.</td>
+</tr>
+<tr>
+<td>Private access to managed services</td>
+<td>Interface VPC endpoints (AWS PrivateLink); gateway endpoints for S3 and DynamoDB</td>
+<td>Private Service Connect (PSC) endpoints; Private Google Access for subnets without external IPs</td>
+<td>Private Endpoint (Azure Private Link); service endpoints (older, coarser)</td>
+<td>All three give a private IP inside your network for a managed service. DNS is the usual failure point: the service hostname must resolve to the private IP.</td>
+</tr>
+<tr>
+<td>Publishing your own private service</td>
+<td>PrivateLink endpoint service (behind a Network Load Balancer)</td>
+<td>PSC service attachment (published service)</td>
+<td>Azure Private Link service (behind a Standard Load Balancer)</td>
+<td>Useful for exposing a model-serving API to another account, project or tenant without peering networks.</td>
+</tr>
+<tr>
+<td>Outbound NAT</td>
+<td>NAT gateway (per Availability Zone)</td>
+<td>Cloud NAT (regional, configured on a Cloud Router)</td>
+<td>Azure NAT Gateway</td>
+<td>Training jobs in private subnets need NAT or private endpoints to pull packages and images.</td>
+</tr>
+<tr>
+<td>Firewalling</td>
+<td>Security groups (stateful, per network interface); network ACLs (stateless, per subnet)</td>
+<td>VPC firewall rules and firewall policies (target by network tag or service account)</td>
+<td>Network security groups (on subnet or NIC); Azure Firewall</td>
+<td>GCP rules can target by service account, which maps neatly to workload identity.</td>
+</tr>
+<tr>
+<td>L7 load balancer</td>
+<td>Application Load Balancer</td>
+<td>Application Load Balancer (global external, regional external, internal)</td>
+<td>Azure Application Gateway (regional); Azure Front Door (global)</td>
+<td>GCP's global external load balancer uses a single anycast IP in front of backends in many regions. AWS and Azure typically add a global layer (Global Accelerator, CloudFront, Front Door) for the same effect.</td>
+</tr>
+<tr>
+<td>L4 load balancer</td>
+<td>Network Load Balancer</td>
+<td>Network Load Balancer (proxy or passthrough)</td>
+<td>Azure Load Balancer</td>
+<td>Used for gRPC or TCP model servers and for private service publishing.</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>Amazon CloudFront</td>
+<td>Cloud CDN (Media CDN for large media)</td>
+<td>Azure Front Door</td>
+<td>Older Azure CDN offerings are being retired in favour of Front Door; check current status.</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>Amazon Route 53 (public and private hosted zones)</td>
+<td>Cloud DNS (public and private zones)</td>
+<td>Azure DNS and Azure Private DNS zones</td>
+<td>Private endpoint DNS on Azure (the <code>privatelink.*</code> zones) is a classic source of &quot;works from my laptop, fails from the cluster&quot; bugs.</td>
+</tr>
+<tr>
+<td>Hybrid connectivity</td>
+<td>AWS Direct Connect; Site-to-Site VPN</td>
+<td>Cloud Interconnect; Cloud VPN</td>
+<td>Azure ExpressRoute; VPN Gateway</td>
+<td>Relevant when training data stays on premises or another cloud.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="storage">Storage</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object storage</td>
+<td>Amazon S3</td>
+<td>Cloud Storage (GCS)</td>
+<td>Azure Blob Storage inside a storage account; ADLS Gen2 when hierarchical namespace is enabled</td>
+<td>Azure adds a level: buckets map to containers inside a storage account, and many settings (redundancy, network rules, versioning) live on the account.</td>
+</tr>
+<tr>
+<td>Storage classes</td>
+<td>S3 Standard, Standard-IA, One Zone-IA, Intelligent-Tiering, Glacier Instant Retrieval, Glacier Flexible Retrieval, Glacier Deep Archive; S3 Express One Zone for low latency</td>
+<td>Standard, Nearline, Coldline, Archive; Autoclass for automatic tiering</td>
+<td>Hot, Cool, Cold, Archive access tiers</td>
+<td>Retrieval semantics differ: GCS colder classes stay online with retrieval fees and minimum storage durations; Azure Archive is offline and needs rehydration; S3 Glacier Flexible Retrieval and Deep Archive need a restore. Never put training data you read every epoch in an archive tier.</td>
+</tr>
+<tr>
+<td>Lifecycle rules</td>
+<td>S3 Lifecycle</td>
+<td>Object Lifecycle Management</td>
+<td>Blob lifecycle management policies</td>
+<td>Use these to expire old checkpoints and intermediate pipeline artifacts.</td>
+</tr>
+<tr>
+<td>Block storage</td>
+<td>Amazon EBS</td>
+<td>Persistent Disk and Hyperdisk</td>
+<td>Azure Managed Disks</td>
+<td>Each also has ephemeral local NVMe (instance store, Local SSD, temp or NVMe disks) that is fast but lost when the VM stops.</td>
+</tr>
+<tr>
+<td>Shared file (NFS/SMB)</td>
+<td>Amazon EFS; FSx for NetApp ONTAP, OpenZFS, Windows File Server</td>
+<td>Filestore; NetApp Volumes</td>
+<td>Azure Files (SMB, NFS); Azure NetApp Files</td>
+<td>General shared storage, usually not the fastest option for large-scale training input.</td>
+</tr>
+<tr>
+<td>High-throughput file for training</td>
+<td>Amazon FSx for Lustre (can link to an S3 bucket)</td>
+<td>Google Cloud Managed Lustre (newer; check region availability); Cloud Storage FUSE with caching</td>
+<td>Azure Managed Lustre (can integrate with Blob Storage)</td>
+<td>Lustre keeps GPUs fed when many workers read small files. Object storage mounts (Mountpoint for Amazon S3, Cloud Storage FUSE, BlobFuse2) are simpler and often enough for sharded, sequential reads.</td>
+</tr>
+<tr>
+<td>Data lake catalog</td>
+<td>AWS Glue Data Catalog; AWS Lake Formation for fine-grained access; Amazon S3 Tables for managed Iceberg tables</td>
+<td>Dataplex Universal Catalog; BigLake for open table formats (check current names)</td>
+<td>Microsoft Purview for governance; OneLake catalog in Microsoft Fabric; Unity Catalog on Azure Databricks</td>
+<td>No clean one-to-one match. On Azure the catalog depends on whether the data platform is Fabric, Databricks or both.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="compute">Compute</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual machines</td>
+<td>Amazon EC2</td>
+<td>Compute Engine</td>
+<td>Azure Virtual Machines</td>
+<td>GCP also offers custom machine types for some families.</td>
+</tr>
+<tr>
+<td>VM autoscaling groups</td>
+<td>EC2 Auto Scaling groups</td>
+<td>Managed instance groups (MIGs)</td>
+<td>Virtual Machine Scale Sets</td>
+<td>Same concept: a template plus desired count plus health checks.</td>
+</tr>
+<tr>
+<td>NVIDIA GPU VMs</td>
+<td>P and G instance families</td>
+<td>Accelerator-optimized A-series and G-series machine types; GPUs attachable to N1</td>
+<td>NC, ND and NV series</td>
+<td>Family names and generations change often; check the current catalog and, more importantly, your regional GPU quota. Azure ND series also includes AMD GPU options.</td>
+</tr>
+<tr>
+<td>First-party ML accelerators</td>
+<td>AWS Trainium (training) and AWS Inferentia (inference), via the AWS Neuron SDK</td>
+<td>Cloud TPU, via JAX, PyTorch/XLA or TensorFlow</td>
+<td>No first-party accelerator offered as a general VM family to my knowledge; use GPU VMs</td>
+<td>Porting to Trainium or TPU is a software project (compiler, kernels, sharding), not just an instance swap.</td>
+</tr>
+<tr>
+<td>Spot capacity</td>
+<td>EC2 Spot Instances (two-minute interruption notice); SageMaker AI Managed Spot Training</td>
+<td>Spot VMs (short preemption notice, around 30 seconds; no maximum runtime unlike legacy preemptible VMs)</td>
+<td>Azure Spot Virtual Machines (eviction notice via Scheduled Events, around 30 seconds); &quot;low priority&quot; tier in Azure ML compute clusters</td>
+<td>Checkpoint often and make the job resumable. Spot availability for large GPU types varies a lot by region and time.</td>
+</tr>
+<tr>
+<td>Reserved or scheduled GPU capacity</td>
+<td>On-Demand Capacity Reservations; EC2 Capacity Blocks for ML</td>
+<td>Reservations; Dynamic Workload Scheduler (check current modes)</td>
+<td>On-demand capacity reservations</td>
+<td>Getting GPUs at all is often the real constraint. Ask about quota and reservation strategy, not just price.</td>
+</tr>
+<tr>
+<td>Managed Kubernetes</td>
+<td>Amazon EKS (EKS Auto Mode for managed nodes)</td>
+<td>GKE (Standard and Autopilot)</td>
+<td>AKS (AKS Automatic for a more managed mode; check status)</td>
+<td>Kubernetes is the most portable compute layer, but node pools, GPU drivers, autoscalers and identity integration still differ per cloud.</td>
+</tr>
+<tr>
+<td>Serverless containers</td>
+<td>Amazon ECS on AWS Fargate; AWS App Runner for simple web services (check current status)</td>
+<td>Cloud Run (services and jobs; GPU support in selected regions)</td>
+<td>Azure Container Apps (serverless GPU support in selected regions)</td>
+<td>Cloud Run and Container Apps scale to zero on request traffic. Fargate runs tasks without servers but has no GPU support, so there is no exact AWS equivalent of serverless GPU containers.</td>
+</tr>
+<tr>
+<td>Functions</td>
+<td>AWS Lambda</td>
+<td>Cloud Run functions (formerly Cloud Functions)</td>
+<td>Azure Functions</td>
+<td>Fine for glue (triggering pipelines on events), poor for model inference beyond small CPU models.</td>
+</tr>
+<tr>
+<td>Batch jobs</td>
+<td>AWS Batch</td>
+<td>Batch (Google Cloud Batch)</td>
+<td>Azure Batch</td>
+<td>Useful for embarrassingly parallel preprocessing or scoring outside the ML platform.</td>
+</tr>
+<tr>
+<td>Container registry</td>
+<td>Amazon ECR</td>
+<td>Artifact Registry (replaced the deprecated Container Registry)</td>
+<td>Azure Container Registry</td>
+<td>Cross-cloud image pulls cost egress and add latency; mirror images per cloud.</td>
+</tr>
+<tr>
+<td>Large training clusters</td>
+<td>Amazon SageMaker HyperPod; AWS ParallelCluster</td>
+<td>GKE with GPU or TPU node pools; Cluster Toolkit</td>
+<td>Azure CycleCloud; ND series with InfiniBand; Azure ML compute clusters</td>
+<td>Interconnect differs (EFA on AWS, Google's GPU networking stack, InfiniBand on Azure ND), which matters for multi-node training throughput.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="data-and-streaming">Data and streaming</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data warehouse</td>
+<td>Amazon Redshift (provisioned or Redshift Serverless)</td>
+<td>BigQuery</td>
+<td>Microsoft Fabric Warehouse; Azure Synapse Analytics dedicated and serverless SQL pools; Databricks SQL on Azure Databricks</td>
+<td>BigQuery is serverless by design. Microsoft's direction is Fabric, but many enterprises still run Synapse. See <a href="#bigquery-vs-redshift-vs-synapse-and-fabric">BigQuery vs Redshift vs Synapse and Fabric</a>.</td>
+</tr>
+<tr>
+<td>Managed Spark</td>
+<td>Amazon EMR (on EC2, on EKS, Serverless); AWS Glue Spark jobs</td>
+<td>Dataproc; Google Cloud Serverless for Apache Spark (formerly Dataproc Serverless)</td>
+<td>Azure Databricks; Fabric Spark; Synapse Spark pools</td>
+<td>Databricks is available on all three clouds and is often the portable choice for Spark-heavy teams.</td>
+</tr>
+<tr>
+<td>ETL and data integration</td>
+<td>AWS Glue</td>
+<td>Dataflow (Apache Beam); Cloud Data Fusion</td>
+<td>Azure Data Factory; Data Factory in Fabric</td>
+<td>Dataflow runs Beam, so pipelines are portable in principle to other Beam runners (Flink, Spark).</td>
+</tr>
+<tr>
+<td>Managed Airflow</td>
+<td>Amazon Managed Workflows for Apache Airflow (MWAA)</td>
+<td>Cloud Composer</td>
+<td>Apache Airflow jobs in Microsoft Fabric (check current name); the older Data Factory managed Airflow option has been announced for retirement</td>
+<td>Airflow DAGs are portable; operators and connections are not. Many Azure teams self-host Airflow on AKS.</td>
+</tr>
+<tr>
+<td>Streaming log or event bus</td>
+<td>Amazon Kinesis Data Streams; Amazon MSK (managed Kafka)</td>
+<td>Pub/Sub; Google Cloud Managed Service for Apache Kafka</td>
+<td>Azure Event Hubs (with a Kafka-compatible endpoint)</td>
+<td>Kinesis and Event Hubs are partitioned logs where consumers track offsets. Pub/Sub is subscription-based with per-message acknowledgement, plus ordering keys and seek for replay. Managed Kafka gives the most portable semantics.</td>
+</tr>
+<tr>
+<td>Queues and pub/sub messaging</td>
+<td>Amazon SQS, Amazon SNS, Amazon EventBridge</td>
+<td>Pub/Sub, Cloud Tasks, Eventarc</td>
+<td>Azure Service Bus, Storage Queues, Event Grid</td>
+<td>Pub/Sub covers both streaming ingest and messaging on GCP; the other clouds split these across products.</td>
+</tr>
+<tr>
+<td>Stream processing</td>
+<td>Amazon Managed Service for Apache Flink</td>
+<td>Dataflow (Beam streaming)</td>
+<td>Azure Stream Analytics; Spark Structured Streaming on Azure Databricks; Fabric Real-Time Intelligence</td>
+<td>No first-party managed Flink on Azure that I would rely on today; teams use Databricks or run Flink on AKS.</td>
+</tr>
+<tr>
+<td>NoSQL (key-value, document, wide-column)</td>
+<td>Amazon DynamoDB</td>
+<td>Firestore; Bigtable (wide-column)</td>
+<td>Azure Cosmos DB</td>
+<td>Bigtable is a common online feature store backend on GCP. Cosmos DB exposes several APIs (NoSQL, MongoDB, Cassandra and others).</td>
+</tr>
+<tr>
+<td>In-memory cache</td>
+<td>Amazon ElastiCache (Valkey, Redis OSS, Memcached); Amazon MemoryDB</td>
+<td>Memorystore</td>
+<td>Azure Managed Redis; Azure Cache for Redis (older offering, retirement announced; check timeline)</td>
+<td>Used for low-latency feature lookups and prediction caching.</td>
+</tr>
+<tr>
+<td>Postgres with pgvector</td>
+<td>Amazon RDS for PostgreSQL; Amazon Aurora PostgreSQL</td>
+<td>Cloud SQL for PostgreSQL; AlloyDB</td>
+<td>Azure Database for PostgreSQL flexible server</td>
+<td>pgvector on managed Postgres is the most portable vector option across clouds.</td>
+</tr>
+<tr>
+<td>Vector-capable search</td>
+<td>Amazon OpenSearch Service (k-NN); Amazon S3 Vectors (newer); Aurora with pgvector</td>
+<td>Vertex AI Vector Search; BigQuery vector search; AlloyDB vector search</td>
+<td>Azure AI Search; vector search in Azure Cosmos DB</td>
+<td>Product boundaries differ: Azure AI Search is a full search engine (keyword, vector, hybrid, semantic ranking), while Vertex AI Vector Search is primarily an approximate nearest-neighbour index.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ml-platform">ML platform</h3>
+<p>This table is deliberately short. The <a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a> covers the platforms feature by feature, and the provider guides (<a href="intro_sagemaker.html">SageMaker</a>, <a href="intro_vertex_ai.html">Vertex AI</a>, <a href="intro_azure_ml.html">Azure ML</a>) cover each one in depth.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Platform</td>
+<td>Amazon SageMaker AI (inside the broader Amazon SageMaker umbrella with SageMaker Unified Studio)</td>
+<td>Vertex AI</td>
+<td>Azure Machine Learning (GenAI work increasingly in Microsoft Foundry)</td>
+<td>Azure splits classic ML (Azure ML workspace) from GenAI (Foundry projects), although they share some underlying resources.</td>
+</tr>
+<tr>
+<td>Notebooks</td>
+<td>SageMaker Studio (JupyterLab and Code Editor spaces)</td>
+<td>Vertex AI Workbench instances; Colab Enterprise</td>
+<td>Azure ML compute instances</td>
+<td>All are VMs underneath; idle shutdown is the main cost control.</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>Training jobs; HyperPod for large clusters</td>
+<td>Custom training jobs</td>
+<td>Command jobs on compute clusters or serverless compute</td>
+<td>Container contract differs (paths and environment variables); see the <a href="#migrating-a-sagemaker-ai-pipeline-to-vertex-ai">migration walkthrough</a>.</td>
+</tr>
+<tr>
+<td>Pipelines</td>
+<td>SageMaker Pipelines</td>
+<td>Vertex AI Pipelines (Kubeflow Pipelines SDK, TFX)</td>
+<td>Azure ML pipelines (components)</td>
+<td>Pipeline definitions are not portable between clouds. Vertex AI Pipelines uses the open KFP format, which also runs on self-managed Kubeflow.</td>
+</tr>
+<tr>
+<td>Experiment tracking</td>
+<td>Managed MLflow in SageMaker AI</td>
+<td>Vertex AI Experiments</td>
+<td>MLflow-compatible tracking built into the workspace</td>
+<td>MLflow is the portable layer. Azure ML speaks the MLflow protocol natively; Vertex AI needs a self-hosted MLflow if you want it.</td>
+</tr>
+<tr>
+<td>Model registry</td>
+<td>SageMaker Model Registry (model package groups, approval status)</td>
+<td>Vertex AI Model Registry (versions, aliases)</td>
+<td>Azure ML model registry; registries for cross-workspace sharing</td>
+<td>Approval semantics differ: SageMaker has an explicit approval status; on Vertex AI you typically use aliases and labels plus your own gate.</td>
+</tr>
+<tr>
+<td>Feature store</td>
+<td>SageMaker Feature Store</td>
+<td>Vertex AI Feature Store (BigQuery as offline source)</td>
+<td>Azure ML managed feature store</td>
+<td>See <a href="../mlops/intro_feature_stores.html">Feature Stores</a> for the general pattern.</td>
+</tr>
+<tr>
+<td>Online endpoints</td>
+<td>Real-time, serverless and asynchronous inference endpoints</td>
+<td>Vertex AI endpoints</td>
+<td>Managed online endpoints; Kubernetes online endpoints</td>
+<td>Traffic splitting across model versions exists on all three.</td>
+</tr>
+<tr>
+<td>Batch prediction</td>
+<td>Batch Transform</td>
+<td>Batch prediction</td>
+<td>Batch endpoints</td>
+<td>Batch scoring is often cheaper done directly in the warehouse or Spark when the model is small.</td>
+</tr>
+<tr>
+<td>Model monitoring</td>
+<td>SageMaker Model Monitor; SageMaker Clarify</td>
+<td>Vertex AI Model Monitoring</td>
+<td>Azure ML model monitoring</td>
+<td>All cover drift and data quality; business KPI monitoring is still yours.</td>
+</tr>
+<tr>
+<td>AutoML</td>
+<td>Autopilot capabilities in SageMaker Canvas</td>
+<td>Vertex AI AutoML</td>
+<td>Azure Automated ML</td>
+<td>Good baselines; outputs are the least portable artefact on this list.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="generative-ai">Generative AI</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Managed foundation model API</td>
+<td>Amazon Bedrock (Amazon Nova plus third-party models)</td>
+<td>Gemini API on Vertex AI; Vertex AI Model Garden for partner and open models</td>
+<td>Microsoft Foundry (formerly Azure AI Foundry), including Azure OpenAI models and other catalog models</td>
+<td>Catalogs overlap but are not identical, and availability differs by region. The &quot;home&quot; model families differ: OpenAI models on Azure, Gemini on Google Cloud, Nova on AWS. Check the current catalog per region before committing.</td>
+</tr>
+<tr>
+<td>Self-hosting open-weight models</td>
+<td>SageMaker AI endpoints and JumpStart; Bedrock Custom Model Import</td>
+<td>Model Garden deployment to Vertex AI endpoints; GKE</td>
+<td>Foundry managed compute deployments; Azure ML online endpoints</td>
+<td>Same tradeoff everywhere: you manage capacity and scaling, but control the model and serving stack (for example vLLM).</td>
+</tr>
+<tr>
+<td>Fine-tuning</td>
+<td>Bedrock model customization; SageMaker AI training jobs</td>
+<td>Vertex AI tuning (supervised fine-tuning for Gemini and open models)</td>
+<td>Fine-tuning in Foundry (including Azure OpenAI models)</td>
+<td>Which base models can be tuned, and with which methods, differs and changes frequently.</td>
+</tr>
+<tr>
+<td>Reserved throughput</td>
+<td>Bedrock Provisioned Throughput</td>
+<td>Vertex AI Provisioned Throughput</td>
+<td>Provisioned deployments (provisioned throughput units) in Foundry</td>
+<td>All three sell reserved capacity for predictable latency on top of pay-per-token.</td>
+</tr>
+<tr>
+<td>Managed RAG</td>
+<td>Amazon Bedrock Knowledge Bases</td>
+<td>Vertex AI RAG Engine; Vertex AI Search (check current branding)</td>
+<td>Azure AI Search with integrated vectorization; Foundry knowledge features (check current names)</td>
+<td>Managed RAG speeds up a first version; chunking, retrieval evaluation and access control still need engineering. See <a href="../ai_genai/intro_rag.html">RAG</a>.</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>Amazon Bedrock Agents; Amazon Bedrock AgentCore</td>
+<td>Vertex AI Agent Engine; Agent Development Kit (ADK)</td>
+<td>Foundry Agent Service</td>
+<td>Agent products are the fastest-changing names in this guide. Interviewers care more about tool permissions, memory and evaluation than the brand.</td>
+</tr>
+<tr>
+<td>Guardrails and content safety</td>
+<td>Amazon Bedrock Guardrails</td>
+<td>Gemini safety settings; Model Armor</td>
+<td>Azure AI Content Safety (content filters, Prompt Shields)</td>
+<td>Coverage differs (PII redaction, prompt injection detection, grounding checks). Layer your own checks for domain-specific policy.</td>
+</tr>
+<tr>
+<td>GenAI evaluation</td>
+<td>Bedrock evaluations</td>
+<td>Gen AI evaluation service in Vertex AI</td>
+<td>Foundry evaluations</td>
+<td>Useful for regression suites; keep your golden dataset portable.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="observability-and-cost">Observability and cost</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>AWS</th>
+<th>GCP</th>
+<th>Azure</th>
+<th>Notes on differences</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Metrics and logs</td>
+<td>Amazon CloudWatch (metrics, Logs, alarms)</td>
+<td>Cloud Monitoring and Cloud Logging</td>
+<td>Azure Monitor (metrics, Log Analytics workspaces, alerts)</td>
+<td>Query languages differ (CloudWatch Logs Insights, Logging query language or Log Analytics in BigQuery, KQL). Logs volume is a real cost on all three.</td>
+</tr>
+<tr>
+<td>Distributed tracing and APM</td>
+<td>AWS X-Ray; CloudWatch Application Signals</td>
+<td>Cloud Trace</td>
+<td>Application Insights</td>
+<td>All three accept OpenTelemetry data in some form, which is the portable instrumentation choice.</td>
+</tr>
+<tr>
+<td>Managed Prometheus and Grafana</td>
+<td>Amazon Managed Service for Prometheus; Amazon Managed Grafana</td>
+<td>Google Cloud Managed Service for Prometheus</td>
+<td>Azure Monitor managed service for Prometheus; Azure Managed Grafana</td>
+<td>Good for GPU and Kubernetes metrics (for example DCGM exporter) with the same dashboards on every cloud.</td>
+</tr>
+<tr>
+<td>Budgets and alerts</td>
+<td>AWS Budgets; AWS Cost Anomaly Detection</td>
+<td>Cloud Billing budgets and alerts</td>
+<td>Cost Management budgets and anomaly alerts</td>
+<td>Budgets alert by default; they do not stop spending. Capping requires automation (for example a budget notification that triggers a function to stop resources).</td>
+</tr>
+<tr>
+<td>Detailed billing data</td>
+<td>AWS Cost and Usage Report via Data Exports</td>
+<td>Cloud Billing export to BigQuery</td>
+<td>Cost Management exports to a storage account</td>
+<td>All three now offer some support for the FinOps FOCUS format, which helps normalise multi-cloud cost data.</td>
+</tr>
+<tr>
+<td>Cost allocation metadata</td>
+<td>Tags (cost allocation tags must be activated in Billing)</td>
+<td>Labels (flow into billing export); separate resource manager tags used for policy and IAM conditions</td>
+<td>Tags on resources, resource groups and subscriptions</td>
+<td>GCP's labels vs tags split surprises people. Azure tags are not inherited by default; use Azure Policy to enforce or inherit them.</td>
+</tr>
+<tr>
+<td>Quotas</td>
+<td>Service Quotas (per account, per Region)</td>
+<td>Cloud Quotas (per project, per region, plus some global GPU quotas)</td>
+<td>Quotas per subscription, per region, often per VM family</td>
+<td>GPU quota is a common launch blocker; request it early.</td>
+</tr>
+<tr>
+<td>Rightsizing recommendations</td>
+<td>AWS Compute Optimizer; AWS Trusted Advisor</td>
+<td>Recommender (Active Assist)</td>
+<td>Azure Advisor</td>
+<td>Treat recommendations as hints; ML workloads are bursty and confuse utilisation-based advice.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="key-behavioural-differences">Key behavioural differences</h2>
+<p>Mapping tables hide the differences that actually cause incidents and wrong interview answers. These are the ones worth explaining out loud.</p>
+<h3 id="global-vpc-on-gcp-vs-regional-networks-on-aws-and-azure">Global VPC on GCP vs regional networks on AWS and Azure</h3>
+<ul>
+<li><strong>GCP:</strong> a VPC network is a global resource. Subnets are regional, but VMs in <code>us-central1</code> and <code>europe-west4</code> on the same VPC reach each other over internal IPs with no peering. Firewall rules and routes are defined once for the whole network.</li>
+<li><strong>AWS:</strong> a VPC lives in one Region, and each subnet sits in one Availability Zone. Multi-region means multiple VPCs connected with peering or Transit Gateway, and route tables to match.</li>
+<li><strong>Azure:</strong> a VNet lives in one region, and subnets span the region's availability zones. Multi-region means multiple VNets with peering or Virtual WAN.</li>
+</ul>
+<p>Why it matters for ML: on GCP a training job in one region reading from a store in another region &quot;just works&quot; on the network, which makes it easy to pay for cross-region traffic without noticing. On AWS and Azure the network topology forces you to make the cross-region decision explicitly.</p>
+<h3 id="projects-vs-accounts-vs-subscriptions-and-resource-groups">Projects vs accounts vs subscriptions and resource groups</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>AWS account</th>
+<th>GCP project</th>
+<th>Azure subscription</th>
+<th>Azure resource group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Isolation strength</td>
+<td>Strong: separate IAM, separate quotas</td>
+<td>Medium: IAM inherited from folders and org</td>
+<td>Strong for billing, quota and policy</td>
+<td>Weak: a lifecycle and RBAC grouping</td>
+</tr>
+<tr>
+<td>Typical granularity</td>
+<td>Per team per environment</td>
+<td>Per workload per environment (cheap to create)</td>
+<td>Per environment or business unit</td>
+<td>Per application or ML workspace</td>
+</tr>
+<tr>
+<td>Billing</td>
+<td>Consolidated through the management account</td>
+<td>Linked to a billing account (separate from the hierarchy)</td>
+<td>Linked to a billing account or profile</td>
+<td>Rolls up to subscription</td>
+</tr>
+</tbody>
+</table></div>
+<p>A common mapping: one AWS account per environment maps to one GCP project per environment and to one Azure subscription per environment, with resource groups per application inside it. Azure ML adds a twist: a workspace has dependent resources (storage account, key vault, container registry, Application Insights) that usually sit in the same resource group, so deleting the group deletes all of them.</p>
+<h3 id="iam-models">IAM models</h3>
+<ul>
+<li><strong>AWS:</strong> policies are JSON documents of <code>Effect</code>, <code>Action</code>, <code>Resource</code> and <code>Condition</code>. They attach to principals (identity-based) or to resources (resource-based, such as S3 bucket policies and KMS key policies). Evaluation starts from an implicit deny; an explicit <code>Deny</code> anywhere (identity policy, resource policy, permission boundary, SCP, RCP) wins. Cross-account access usually needs both sides: the caller's identity policy and the target's resource or trust policy.</li>
+<li><strong>GCP:</strong> allow policies bind principals to roles on a resource (organization, folder, project or individual resource) and are inherited downward. You cannot remove an inherited allow lower in the tree; you either grant it lower in the first place or add an IAM deny policy, which is evaluated before allow policies. IAM Conditions add attribute-based restrictions.</li>
+<li><strong>Azure:</strong> a role assignment binds a principal to a role definition at a scope (management group, subscription, resource group or resource) and is inherited downward. Azure Policy is a separate system that governs what resources may look like, not who can act. Two traps: control-plane roles (such as Owner or Contributor) do not automatically grant data-plane access (for example reading blobs needs a data role like Storage Blob Data Reader), and Microsoft Entra directory roles are a separate permission system from Azure RBAC roles. Deny assignments exist but are created by platform features (such as deployment stacks or managed applications), not directly by you.</li>
+</ul>
+<p>Interview shorthand: AWS is &quot;policy documents with explicit deny&quot;, GCP is &quot;role bindings inherited down a resource tree, plus deny policies&quot;, Azure is &quot;role assignments at scopes, plus Azure Policy for configuration&quot;.</p>
+<h3 id="bigquery-vs-redshift-vs-synapse-and-fabric">BigQuery vs Redshift vs Synapse and Fabric</h3>
+<ul>
+<li><strong>BigQuery</strong> is serverless: there is no cluster to size. Storage and compute are separate, and you pay either for data scanned (on-demand) or for reserved compute capacity (slots via editions). For ML this means ad hoc feature exploration needs no infrastructure, but unpartitioned <code>SELECT *</code> queries over large tables become a cost problem fast. BigQuery ML and remote models let you train or call models from SQL.</li>
+<li><strong>Redshift</strong> started as a provisioned cluster you size, now with managed storage and a Serverless option that scales compute automatically. Tuning concepts (distribution keys, sort keys, workload management) still matter more than in BigQuery.</li>
+<li><strong>Azure</strong> is in transition: Synapse dedicated SQL pools are provisioned, Synapse serverless SQL pools query the lake on demand, and Microsoft Fabric bundles warehouse, lakehouse, Spark and pipelines on a shared capacity model with OneLake storage. Many Azure ML teams instead use Azure Databricks as the warehouse and feature engineering layer.</li>
+</ul>
+<p>When an interviewer asks &quot;what is the Azure BigQuery?&quot;, the honest answer is &quot;it depends on whether the company is on Fabric, Synapse or Databricks&quot;, followed by the concept: a columnar warehouse with separated storage and compute.</p>
+<h3 id="egress-and-data-movement-charges">Egress and data movement charges</h3>
+<p>All three clouds charge for data leaving the cloud to the internet, and for traffic between regions. Traffic between zones in the same region is also billed on some clouds and not others, and the rules change, so check the current pricing pages rather than quoting from memory. Ingress is generally free. Consequences for ML:</p>
+<ul>
+<li>Training where the data lives is usually cheaper than moving the data to the GPUs.</li>
+<li>Cross-cloud architectures pay egress on every training read and every replication run, so design for one bulk copy plus incremental syncs, not repeated reads across clouds.</li>
+<li>Container image pulls, dataset downloads from public hubs and log shipping to a third-party observability vendor are easy to forget.</li>
+<li>All three providers have announced waived egress for customers moving data out to leave the cloud (on request, with conditions). That helps one-time migrations, not ongoing multi-cloud traffic.</li>
+</ul>
+<hr />
+<h2 id="cloud-agnostic-ml-architecture">Cloud-agnostic ML architecture</h2>
+<p>&quot;Cloud-agnostic&quot; should not mean &quot;use nothing managed&quot;. It means keeping the parts that are expensive to rewrite portable, and accepting managed services where the switching cost is small or the value is large.</p>
+<h3 id="what-to-keep-portable">What to keep portable</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Portable choice</th>
+<th>Why it is worth it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Packaging</td>
+<td>Containers (OCI images) for training and serving</td>
+<td>The same image runs on SageMaker AI, Vertex AI, Azure ML, Kubernetes or a laptop.</td>
+</tr>
+<tr>
+<td>Orchestration and runtime</td>
+<td>Kubernetes (EKS, GKE, AKS) with Kubeflow, Argo or Airflow</td>
+<td>Workflow definitions move between clusters; the cluster itself is commodity.</td>
+</tr>
+<tr>
+<td>Infrastructure as code</td>
+<td>Terraform or OpenTofu with one module per cloud behind a common interface</td>
+<td>Rebuilding environments is repeatable. Resources are not portable, but the workflow and review process are. See <a href="../devops/intro_terraform.html">Terraform</a>.</td>
+</tr>
+<tr>
+<td>Experiment tracking and registry</td>
+<td>MLflow</td>
+<td>Runs, metrics, model versions and model formats survive a platform move. See <a href="../mlops/intro_mlflow.html">MLflow</a>.</td>
+</tr>
+<tr>
+<td>Data format</td>
+<td>Parquet with open table formats (Apache Iceberg, Delta Lake)</td>
+<td>Engines on every cloud read them; the warehouse becomes replaceable. See <a href="../data_engineering/intro_apache_iceberg.html">Iceberg</a> and <a href="../data_engineering/intro_delta_lake.html">Delta Lake</a>.</td>
+</tr>
+<tr>
+<td>Feature logic</td>
+<td>Feature definitions in code (SQL, dbt models, Python transforms) separated from the store</td>
+<td>The store can change; the definitions and their tests should not.</td>
+</tr>
+<tr>
+<td>Model serving interface</td>
+<td>Open model servers (for example vLLM, Triton, KServe) behind a stable HTTP or gRPC contract</td>
+<td>Clients do not care which cloud serves the model.</td>
+</tr>
+<tr>
+<td>Telemetry</td>
+<td>OpenTelemetry SDKs and the Collector</td>
+<td>Swap the backend (CloudWatch, Cloud Monitoring, Azure Monitor or a vendor) without touching application code. See <a href="../devops/intro_observability.html">Observability</a>.</td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td>GitHub Actions or similar with OIDC federation to each cloud</td>
+<td>One pipeline, no long-lived cloud keys. See <a href="../devops/intro_github_actions.html">GitHub Actions</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="where-managed-services-usually-win">Where managed services usually win</h3>
+<ul>
+<li><strong>Warehouses</strong> (BigQuery, Redshift, Fabric or Synapse): running your own is rarely worth it; keep data in open formats so the engine is swappable.</li>
+<li><strong>Foundation model APIs</strong> (Bedrock, Gemini on Vertex AI, Foundry): frontier closed models are only available as managed APIs. Hide them behind an internal gateway or client library so the provider is a configuration choice.</li>
+<li><strong>Identity, KMS, secrets and audit:</strong> always use the native service. Abstracting these usually weakens security.</li>
+<li><strong>Spot and accelerator scheduling:</strong> managed training services handle capacity, retries and checkpoint plumbing that is tedious to rebuild.</li>
+<li><strong>Small teams:</strong> a single managed ML platform beats a portable platform nobody has time to operate.</li>
+</ul>
+<h3 id="portable-training-and-serving-stack">Portable training and serving stack</h3>
+<pre><code class="language-text">                         +----------------------------------------+
+   git push ------------&gt;|  CI (OIDC to each cloud, no keys)      |
+                         |  build images, terraform/tofu plan     |
+                         +-------------------+--------------------+
+                                             |
+   ==================== PORTABLE CORE (same code everywhere) ====================
+                                             v
+   +-------------------+   +-------------------------+   +-----------------------+
+   | Data              |   | Training                |   | Serving               |
+   | Iceberg / Delta   |--&gt;| container image         |--&gt;| container image       |
+   | tables on object  |   | (PyTorch, JAX, sklearn) |   | (vLLM, Triton, FastAPI|
+   | storage; feature  |   | run by Kubeflow / Argo  |   |  or KServe)           |
+   | logic in SQL/dbt  |   | or a managed job        |   | stable HTTP/gRPC API  |
+   +-------------------+   +-----------+-------------+   +-----------+-----------+
+                                       |                             |
+                                       v                             v
+                           +-----------------------+     +-----------------------+
+                           | MLflow tracking and   |     | OpenTelemetry SDK     |
+                           | model registry        |     | and Collector         |
+                           +-----------------------+     +-----------------------+
+   ==============================================================================
+                                             |
+                 thin cloud-specific adapters (Terraform modules, config)
+                                             |
+        +--------------------------+---------+---------+--------------------------+
+        v                          v                   v                          v
+   AWS adapter               GCP adapter          Azure adapter          Managed extras
+   S3, EKS, ECR,             GCS, GKE,            Blob/ADLS, AKS, ACR,   (opt-in, behind
+   Pod Identity or IRSA,     Artifact Registry,   Entra Workload ID,     interfaces)
+   KMS, Secrets Manager,     WIF for GKE, KMS,    Key Vault,             Bedrock, Gemini,
+   CloudWatch                Secret Manager,      Azure Monitor          Foundry, BigQuery,
+                             Cloud Monitoring                            managed endpoints
+</code></pre>
+<p>The adapters should be thin and boring: storage URIs, identity bindings, registry endpoints and exporters. If business logic leaks into an adapter, portability is gone.</p>
+<hr />
+<h2 id="migration-and-multi-cloud-scenarios">Migration and multi-cloud scenarios</h2>
+<h3 id="migrating-a-sagemaker-ai-pipeline-to-vertex-ai">Migrating a SageMaker AI pipeline to Vertex AI</h3>
+<p>Assume a SageMaker Pipeline that runs a processing job, a training job, an evaluation step, registers a model with an approval status, and deploys to a real-time endpoint.</p>
+<ol>
+<li><strong>Inventory the contract, not the code.</strong> List inputs (S3 prefixes, Feature Store groups), outputs (model artifacts, metrics), the IAM execution role's permissions, triggers (EventBridge rules, schedules) and consumers of the endpoint.</li>
+<li><strong>Move data first.</strong> Bulk-copy training data from S3 to GCS with Storage Transfer Service, then decide whether the source of truth moves or stays (if it stays on AWS, you now have a cross-cloud data path; see the next scenario). If features live in SageMaker Feature Store, rebuild them as BigQuery tables registered with Vertex AI Feature Store.</li>
+<li><strong>Adapt the training container.</strong> SageMaker containers read channels from <code>/opt/ml/input/data/&lt;channel&gt;</code> (or <code>SM_CHANNEL_*</code> variables) and write the model to <code>/opt/ml/model</code> (<code>SM_MODEL_DIR</code>). Vertex AI custom training passes an output location in <code>AIP_MODEL_DIR</code> (a <code>gs://</code> path) and exposes Cloud Storage buckets through Cloud Storage FUSE under <code>/gcs/</code>. Make the script take paths as arguments so both work.</li>
+<li><strong>Adapt the serving container.</strong> SageMaker expects <code>GET /ping</code> and <code>POST /invocations</code> on port 8080. Vertex AI custom containers read the port and routes from <code>AIP_HTTP_PORT</code>, <code>AIP_HEALTH_ROUTE</code> and <code>AIP_PREDICT_ROUTE</code>, and requests use an <code>{&quot;instances&quot;: [...]}</code> envelope with <code>{&quot;predictions&quot;: [...]}</code> responses. A small routing shim keeps one image working on both.</li>
+<li><strong>Rewrite the pipeline definition.</strong> SageMaker Pipelines steps become KFP v2 components and a pipeline compiled for Vertex AI Pipelines. This is a rewrite, not a translation; keep step logic in the container so the DSL layer is thin.</li>
+<li><strong>Replace governance.</strong> SageMaker Model Registry approval status has no direct equivalent: use Vertex AI Model Registry versions with aliases (for example <code>champion</code>) and labels, with the approval gate in CI or a pipeline step. Replace EventBridge triggers with Cloud Scheduler, Pub/Sub or Eventarc.</li>
+<li><strong>Translate identity.</strong> The SageMaker AI execution role becomes a dedicated service account on the custom job and endpoint, with roles granted on the specific bucket, dataset and Artifact Registry repository. Replace any CI access keys with Workload Identity Federation.</li>
+<li><strong>Run in parallel, then cut over.</strong> Shadow traffic or dual-run batch scoring, compare predictions and latency, then shift traffic and keep the SageMaker endpoint available for rollback until confidence is high.</li>
+</ol>
+<h3 id="training-on-one-cloud-serving-on-another">Training on one cloud, serving on another</h3>
+<p>Typical reason: TPUs or reserved GPUs on GCP for training, while the product and its users run on AWS.</p>
+<ul>
+<li><strong>Data gravity:</strong> keep training data next to the training compute. Replicate only what training needs (curated feature tables, not raw logs), on a schedule, in an open format.</li>
+<li><strong>Egress:</strong> the big transfer should be the training dataset copy, and that should be incremental. Model artifacts are small by comparison; ship them once per release.</li>
+<li><strong>Artifacts:</strong> export the model in a framework-neutral or serving-ready format (for example SavedModel, ONNX or safetensors weights) and register it in a shared MLflow registry or copy it to the serving cloud's object storage. Build the serving image in CI and push it to the serving cloud's registry.</li>
+<li><strong>Identity federation between clouds:</strong> do not copy access keys across clouds. A GCP workload can obtain AWS credentials with <code>AssumeRoleWithWebIdentity</code> using a Google-issued OIDC token for its service account. In the other direction, GCP Workload Identity Federation accepts AWS identities directly, and Microsoft Entra workload identity federation accepts external OIDC issuers. For workloads without a cloud identity, AWS IAM Roles Anywhere uses X.509 certificates.</li>
+<li><strong>Serving parity:</strong> feature computation at serving time on AWS must match what training used on GCP. Keep feature logic in shared code and run a skew check that compares online features against the offline training snapshot.</li>
+<li><strong>Networking:</strong> for private paths use VPN or a cross-cloud interconnect product instead of the public internet if data is sensitive; check current offerings, as cross-cloud interconnect products are relatively new.</li>
+</ul>
+<h3 id="choosing-a-cloud-for-a-new-ml-team">Choosing a cloud for a new ML team</h3>
+<p>Structure the answer around constraints, in this order:</p>
+<ol>
+<li><strong>Where the data and the company already are.</strong> Existing identity, security review, data warehouse and procurement agreements usually decide it. Fighting the company's main cloud costs more than any feature gap.</li>
+<li><strong>Accelerator access.</strong> If the roadmap needs large-scale training, ask which cloud can actually provide GPU or TPU capacity and quota in your regions, and whether the team can use Trainium or TPU software stacks.</li>
+<li><strong>Model access for GenAI.</strong> If a specific model family is required (OpenAI models, Gemini, a particular partner model), check which cloud offers it in the required regions with the needed data-residency terms.</li>
+<li><strong>Team skills.</strong> A team fluent in one cloud ships faster there.</li>
+<li><strong>Compliance and residency.</strong> Regions, certifications and sovereign cloud offerings.</li>
+<li><strong>Total cost of ownership,</strong> not list prices: engineering time, egress, idle resources and negotiated commitments.</li>
+</ol>
+<p>Then keep the <a href="#what-to-keep-portable">portable core</a> so the decision is not irreversible.</p>
+<hr />
+<h2 id="terraform-example-one-versioned-bucket-on-three-clouds">Terraform example: one versioned bucket on three clouds</h2>
+<p>The same intent (a private object store with versioning) expressed for each provider. Provider configuration is kept minimal: in practice you would split this into per-cloud modules, use remote state and supply credentials through OIDC federation in CI. Bucket and account names must be globally unique (the Azure storage account name must be 3 to 24 lowercase letters and digits).</p>
+<pre><code class="language-hcl">terraform {
+  required_providers {
+    aws = {
+      source  = &quot;hashicorp/aws&quot;
+      version = &quot;~&gt; 6.0&quot;
+    }
+    google = {
+      source  = &quot;hashicorp/google&quot;
+      version = &quot;~&gt; 7.0&quot;
+    }
+    azurerm = {
+      source  = &quot;hashicorp/azurerm&quot;
+      version = &quot;~&gt; 4.20&quot;
+    }
+  }
+}
+
+# Minimal provider configuration. Credentials come from the environment
+# (for example OIDC federation in CI), never from this file.
+provider &quot;aws&quot; {
+  region = &quot;us-east-1&quot;
+}
+
+provider &quot;google&quot; {
+  project = &quot;my-ml-project&quot;
+  region  = &quot;us-central1&quot;
+}
+
+provider &quot;azurerm&quot; {
+  features {}
+  # subscription_id is read from ARM_SUBSCRIPTION_ID if not set here.
+}
+
+# ---------- AWS: S3 bucket with versioning ----------
+resource &quot;aws_s3_bucket&quot; &quot;ml_artifacts&quot; {
+  bucket = &quot;example-ml-artifacts-aws&quot;
+}
+
+resource &quot;aws_s3_bucket_versioning&quot; &quot;ml_artifacts&quot; {
+  bucket = aws_s3_bucket.ml_artifacts.id
+
+  versioning_configuration {
+    status = &quot;Enabled&quot;
+  }
+}
+
+# ---------- GCP: Cloud Storage bucket with versioning ----------
+resource &quot;google_storage_bucket&quot; &quot;ml_artifacts&quot; {
+  name                        = &quot;example-ml-artifacts-gcp&quot;
+  location                    = &quot;US-CENTRAL1&quot;
+  uniform_bucket_level_access = true
+  public_access_prevention    = &quot;enforced&quot;
+
+  versioning {
+    enabled = true
+  }
+}
+
+# ---------- Azure: storage account + container with blob versioning ----------
+resource &quot;azurerm_resource_group&quot; &quot;ml&quot; {
+  name     = &quot;rg-ml-artifacts&quot;
+  location = &quot;eastus&quot;
+}
+
+resource &quot;azurerm_storage_account&quot; &quot;ml_artifacts&quot; {
+  name                            = &quot;examplemlartifacts&quot;
+  resource_group_name             = azurerm_resource_group.ml.name
+  location                        = azurerm_resource_group.ml.location
+  account_tier                    = &quot;Standard&quot;
+  account_replication_type        = &quot;ZRS&quot;
+  min_tls_version                 = &quot;TLS1_2&quot;
+  allow_nested_items_to_be_public = false
+
+  blob_properties {
+    versioning_enabled = true
+  }
+}
+
+resource &quot;azurerm_storage_container&quot; &quot;ml_artifacts&quot; {
+  name                  = &quot;ml-artifacts&quot;
+  storage_account_id    = azurerm_storage_account.ml_artifacts.id
+  container_access_type = &quot;private&quot;
+}
+</code></pre>
+<p>Points worth saying in an interview:</p>
+<ul>
+<li><strong>Versioning lives in different places.</strong> AWS uses a separate <code>aws_s3_bucket_versioning</code> resource (since AWS provider v4 split bucket settings out), GCP uses a block on the bucket, and Azure sets it on the storage account, so it applies to every container in that account.</li>
+<li><strong>Public access defaults.</strong> New S3 buckets block public access by default. On GCP, <code>public_access_prevention</code> and uniform bucket-level access make IAM the only access path. On Azure, <code>allow_nested_items_to_be_public = false</code> stops containers from being made public.</li>
+<li><strong>Azure's extra layer.</strong> The storage account is where redundancy, network rules, TLS and versioning live; the container is closer to an S3 or GCS bucket. Older azurerm examples pass <code>storage_account_name</code> to the container; recent 4.x releases use <code>storage_account_id</code>.</li>
+<li><strong>Versioning costs storage.</strong> Pair it with lifecycle rules that expire noncurrent versions, or checkpoints will accumulate indefinitely.</li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-is-the-gcp-equivalent-of-an-aws-iam-role-for-a-workload">What is the GCP equivalent of an AWS IAM role for a workload?</h4>
+<p>The closest equivalent is a service account attached to the workload: the VM, the Vertex AI custom job, the Cloud Run service, or a Kubernetes service account mapped through Workload Identity Federation for GKE. Like an AWS role used by EC2 or SageMaker AI, it gives the workload short-lived credentials from the metadata server, so there are no static keys. The difference is where permissions live. On AWS you attach policy documents to the role. On GCP you grant roles to the service account on the resources it needs (a bucket, a dataset, a project), and those grants are inherited down the hierarchy. A GCP service account is also a resource, so you control who can impersonate it, which is the rough counterpart of an AWS role trust policy. On Azure the equivalent is a managed identity plus Azure RBAC role assignments at the right scope. A common mistake is downloading service account keys on GCP &quot;because it is easier&quot;; organization policy can and usually should block key creation.</p>
+<h4 id="how-do-privatelink-private-service-connect-and-private-endpoint-compare">How do PrivateLink, Private Service Connect and Private Endpoint compare?</h4>
+<p>All three put a private IP address for a managed service (or a partner's service) inside your own network, so traffic never traverses the public internet and you can disable public access to the service. AWS PrivateLink creates interface endpoints per service per VPC, and S3 and DynamoDB also have cheaper gateway endpoints that work through route tables. GCP Private Service Connect creates an endpoint for Google APIs or for a published service; Private Google Access is a separate, simpler option that lets VMs without external IPs reach Google APIs. Azure Private Endpoint attaches a NIC for a specific resource (for example one storage account or one Azure ML workspace), which is more granular than per-service. In every case DNS is what usually breaks: the public hostname must resolve to the private IP from inside the network, and Azure in particular relies on <code>privatelink.*</code> private DNS zones. For ML, remember that a private workspace or endpoint also needs private paths to its dependencies (storage, registry, key vault), or jobs fail in confusing ways.</p>
+<h4 id="how-do-aws-accounts-gcp-projects-and-azure-subscriptions-map-to-each-other">How do AWS accounts, GCP projects and Azure subscriptions map to each other?</h4>
+<p>For environment separation the usual mapping is one AWS account, one GCP project, or one Azure subscription per team per environment. They are not equally strong boundaries, though. An AWS account is a hard boundary: separate IAM, separate quotas, and cross-account access must be explicitly allowed on both sides. A GCP project is cheaper to create and is the unit for APIs, quotas and billing linkage, but IAM granted on a parent folder or the organization flows into it. An Azure subscription is the billing, quota and policy boundary, while resource groups inside it are lightweight lifecycle groupings with their own role assignments. So &quot;one ML workspace per resource group in a per-environment subscription&quot; on Azure is roughly analogous to &quot;one project per environment&quot; on GCP. The tradeoff is blast radius against overhead: more boundaries mean better isolation but more networking, IAM and quota requests to manage.</p>
+<h4 id="how-would-you-let-a-github-actions-workflow-deploy-to-all-three-clouds-without-long-lived-keys">How would you let a GitHub Actions workflow deploy to all three clouds without long-lived keys?</h4>
+<p>Use OIDC federation on each cloud. GitHub issues a signed OIDC token per workflow run that includes claims such as repository, branch and environment. On AWS you register GitHub as an IAM OIDC identity provider and create a role whose trust policy restricts the <code>sub</code> claim; the workflow calls <code>AssumeRoleWithWebIdentity</code>. On GCP you create a workload identity pool and provider with an attribute condition on the repository, then either grant roles directly to the federated principal or let it impersonate a service account. On Azure you add a federated credential to an app registration or user-assigned managed identity matching the repository and environment. The benefits are no secrets to rotate or leak and a clear audit trail per run. The main risk is overly broad trust conditions, such as trusting every repository in an organization or every branch, which would let a pull request from a fork or a feature branch deploy to production.</p>
+<h4 id="when-is-multi-cloud-worth-it-for-ml-and-when-is-it-a-trap">When is multi-cloud worth it for ML, and when is it a trap?</h4>
+<p>It is worth it when there is a concrete reason that a single cloud cannot satisfy: accelerator capacity or a specific chip (for example TPUs) available only elsewhere, a required foundation model only offered on another cloud, customers or regulators requiring deployment in their cloud, or an acquisition that brought a second cloud with it. It is a trap when the motivation is vague &quot;avoid lock-in&quot; or &quot;negotiate leverage&quot; for a team that has not yet mastered one cloud. The costs are real: duplicate identity and network setups, egress on every cross-cloud data path, two sets of on-call knowledge, lowest-common-denominator tooling and slower delivery. A middle ground that usually works is a portable core (containers, Terraform, MLflow, open table formats) on one primary cloud, with a second cloud used for one well-bounded job such as training or a specific model API. I would also separate &quot;multi-cloud capable&quot; (could move in months) from &quot;active multi-cloud&quot; (runs on two clouds today), because the second is much more expensive.</p>
+<h4 id="how-would-you-design-a-feature-pipeline-that-could-move-between-clouds">How would you design a feature pipeline that could move between clouds?</h4>
+<p>Separate feature definitions from feature infrastructure. Write the transformations in SQL (for example dbt models) or Python in a framework that runs on several engines (Spark, Beam or DuckDB for small data), and keep them in version control with tests. Store offline features as Iceberg or Delta tables on object storage, so BigQuery, Redshift, Spark on Databricks or Fabric can all read them. For online serving, put a thin interface in front of the key-value store (DynamoDB, Bigtable, Cosmos DB or Redis) so the serving code calls <code>get_features(entity_id)</code> and not a cloud SDK; an open-source feature store such as Feast can provide that layer. Orchestrate with Airflow or another portable scheduler, and keep cloud-specific connection details in configuration. The tradeoff is that you give up some managed conveniences, such as native BigQuery-backed feature serving in Vertex AI Feature Store, so do this only if moving clouds is a realistic requirement.</p>
+<h4 id="why-might-the-same-training-job-cost-very-differently-across-clouds">Why might the same training job cost very differently across clouds?</h4>
+<p>Several factors differ even when the GPU model is identical. Instance shapes bundle different amounts of CPU, memory, local disk and network bandwidth with the same GPU, and some shapes only come in large multi-GPU sizes. Spot availability and interruption rates differ by cloud, region and time, and frequent interruptions without good checkpointing waste paid compute. Storage throughput matters: if the data loader cannot keep GPUs busy, you pay for idle accelerators, and the fast-storage options (Lustre-based services, local NVMe caching) differ. Data location adds egress if the data lives on another cloud or region. Managed ML services price their instances separately from raw VMs, and discount instruments (savings plans, committed use discounts, reservations) have different scopes and terms. Finally, switching hardware (for example to TPUs or Trainium) can change cost a lot in either direction, but only after engineering work to port and tune the model. I would compare cost per completed training run, including failed and restarted attempts, not hourly instance price.</p>
+<h4 id="what-is-the-azure-equivalent-of-bigquery-and-why-is-the-answer-not-a-single-service">What is the Azure equivalent of BigQuery, and why is the answer not a single service?</h4>
+<p>The concept is a managed columnar warehouse with separated storage and compute. On Azure that can be a Microsoft Fabric Warehouse or Lakehouse, Azure Synapse Analytics (dedicated SQL pools are provisioned, serverless SQL pools query the lake on demand), or Databricks SQL on Azure Databricks. Microsoft is steering new analytics work toward Fabric, but many enterprises still run Synapse or standardize on Databricks. BigQuery differs from most of these in being serverless by default: there is no cluster to size, and cost scales with data scanned or reserved slots. That changes ML habits, because exploration is easy but careless queries are expensive, so partitioning, clustering and query cost controls matter. In an interview I would ask which data platform the company uses before mapping, and then talk about where features are computed and how the ML platform reads them.</p>
+<h4 id="how-does-pubsub-differ-from-kinesis-data-streams-and-event-hubs-for-ml-event-pipelines">How does Pub/Sub differ from Kinesis Data Streams and Event Hubs for ML event pipelines?</h4>
+<p>Kinesis Data Streams and Event Hubs are partitioned logs: producers write to shards or partitions, ordering is per partition, and consumers track their own position and can replay within the retention window. Pub/Sub is a topic-and-subscription service: each subscription gets every message, delivery is tracked per message with acknowledgements, ordering is opt-in through ordering keys, and replay uses seek to a timestamp or snapshot when retention is configured. For ML this changes how you build things like feature backfills and exactly-once processing. Log semantics make &quot;reprocess the last day from offset X&quot; natural, while Pub/Sub is simpler to scale and operate with no shard management. If portability matters, managed Kafka exists on all three clouds (Amazon MSK, Managed Service for Apache Kafka on GCP, and the Kafka endpoint on Event Hubs), which keeps the client code and semantics consistent.</p>
+<h4 id="if-you-know-amazon-bedrock-how-would-you-explain-vertex-ai-and-microsoft-foundry-to-a-team">If you know Amazon Bedrock, how would you explain Vertex AI and Microsoft Foundry to a team?</h4>
+<p>All three are managed APIs for foundation models with similar building blocks: a model catalog, pay-per-token and provisioned throughput, fine-tuning, managed RAG, agent services, guardrails and evaluation. On Google Cloud, Gemini is the first-party model family accessed through Vertex AI, and Model Garden adds partner and open models that can be called as APIs or deployed to your own endpoints. On Azure, Microsoft Foundry (formerly Azure AI Foundry) is the umbrella for model access, including Azure OpenAI models, plus agents, evaluation and content safety. The practical differences are which models are available in which regions, data residency terms, quota models and how identity and networking integrate (IAM roles, service accounts, Entra ID and private endpoints). Agent and RAG product names change frequently, so I would map them by function. For portability, put an internal client or gateway in front of all providers and keep prompts, evaluation sets and guardrail policies in your own repository.</p>
+<h4 id="how-do-you-prevent-data-exfiltration-from-an-ml-environment-on-each-cloud">How do you prevent data exfiltration from an ML environment on each cloud?</h4>
+<p>Combine identity, network and organization controls, because any one layer alone has gaps. On GCP, VPC Service Controls is the most direct tool: it draws a perimeter around projects so that even a valid credential cannot copy data from BigQuery or Cloud Storage to a project outside the perimeter. On AWS you build a data perimeter from SCPs and RCPs that restrict access to trusted identities and resources, VPC endpoint policies that limit which buckets can be reached from inside the network, and bucket policies that require access through your endpoints. On Azure you disable public network access on storage and workspaces, use private endpoints, restrict outbound traffic (Azure ML managed virtual networks support an outbound mode that allows only approved destinations), and enforce it with Azure Policy. On all three, notebooks with open internet egress are the weak point, so restrict outbound traffic and package mirrors as well. The tradeoff is developer friction: package installs and model downloads need approved mirrors or allow-lists.</p>
+<h4 id="how-would-you-serve-a-model-trained-on-tpus-to-users-whose-application-runs-on-aws">How would you serve a model trained on TPUs to users whose application runs on AWS?</h4>
+<p>First, make sure the model artifact is not tied to the TPU: JAX or PyTorch/XLA training can export weights in a standard format, and the serving stack on AWS will run them on GPUs or CPUs (or on Inferentia after compiling with the Neuron SDK). I would build the serving image in CI and push it to Amazon ECR, then deploy to a SageMaker AI endpoint or to EKS with an open model server. The artifact moves once per release from GCS to S3, using a pipeline step whose identity is federated (no long-lived keys). Online features must be computed on AWS with the same logic used for training on GCP, so I would keep feature code shared and run a skew check. Monitoring data flows back to GCP for retraining in batches, not per request, to limit egress. The tradeoff is operating two clouds for one model; it is worth it if TPU access substantially lowers training cost or time.</p>
+<h4 id="what-breaks-first-when-you-lift-a-sagemaker-ai-training-script-onto-vertex-ai-or-azure-ml">What breaks first when you lift a SageMaker AI training script onto Vertex AI or Azure ML?</h4>
+<p>Usually the container contract, not the model code. SageMaker AI injects channel paths and the model output directory through <code>/opt/ml/...</code> paths and <code>SM_*</code> environment variables, and uploads <code>/opt/ml/model</code> to S3 at the end. Vertex AI custom training passes <code>AIP_MODEL_DIR</code> and mounts buckets through Cloud Storage FUSE under <code>/gcs/</code>, while Azure ML passes inputs and outputs as command arguments bound to datastore URIs. Next come credentials and SDK calls (boto3 calls to S3 or Secrets Manager inside the script), distributed training environment setup, and checkpoint locations for spot recovery. The fix is to make the script take every path and secret as arguments or environment variables, read and write through <code>fsspec</code>-style URIs or mounted paths, and keep cloud SDK calls out of training code. Then a thin launcher per cloud maps the platform's contract onto the script's arguments.</p>
+<h4 id="how-do-spot-capacity-semantics-differ-and-how-do-you-make-training-robust-to-them">How do spot capacity semantics differ, and how do you make training robust to them?</h4>
+<p>All three clouds sell interruptible capacity at a discount with a short warning before reclaim: EC2 Spot gives a two-minute notice, while GCP Spot VMs and Azure Spot VMs give a much shorter notice (around 30 seconds). GCP Spot VMs have no maximum runtime, unlike the older preemptible VMs, and Azure lets you choose eviction behavior and a maximum price. Managed ML services wrap this differently: SageMaker AI Managed Spot Training syncs a checkpoint directory to S3 and resumes, Vertex AI custom training can run on Spot VMs, and Azure ML compute clusters offer a low-priority tier. Regardless of cloud, the job must checkpoint to durable storage frequently enough that losing the time since the last checkpoint is acceptable, and resume idempotently, including optimizer state and data loader position. For multi-node training, one interrupted node stops the whole job, so elastic training or smaller jobs reduce wasted compute. I would use spot for fault-tolerant training and hyperparameter search, and on-demand or reserved capacity for latency-sensitive serving.</p>
+<h4 id="how-do-you-keep-cost-attribution-consistent-across-three-clouds">How do you keep cost attribution consistent across three clouds?</h4>
+<p>Define one tagging schema (for example <code>team</code>, <code>env</code>, <code>project</code>, <code>cost_center</code>, <code>model</code>) and enforce it with each cloud's policy engine: SCPs or tag policies on AWS, organization policies and required labels in Terraform on GCP, and Azure Policy on Azure. Remember the naming differences: AWS tags must be activated as cost allocation tags, GCP uses labels for billing and separate tags for policy, and Azure tags are not inherited by default. Export detailed billing data from each cloud (Cost and Usage Report data exports, BigQuery billing export, Cost Management exports) into one place, ideally normalised to the FOCUS format, and build dashboards on that. ML-specific gaps include shared GPU clusters, where you need Kubernetes-level allocation by namespace or label, and managed services that create untagged child resources. Enforce tags in CI through Terraform modules, because tags added by hand drift quickly.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forcing a one-to-one service match in interviews</td>
+<td>Signals memorization and leads to wrong designs (for example &quot;Pub/Sub is just Kinesis&quot;)</td>
+<td>Name the concept, map the service, then state where the analogy breaks</td>
+</tr>
+<tr>
+<td>Assuming a GCP VPC is regional like AWS and Azure</td>
+<td>Cross-region traffic happens silently over the same network and shows up on the bill</td>
+<td>Pin training and data to one region on purpose; review cross-region flows</td>
+</tr>
+<tr>
+<td>Treating Azure Owner or Contributor as data access</td>
+<td>Jobs fail reading blobs despite &quot;full&quot; permissions, or people grant overly broad roles to compensate</td>
+<td>Assign data-plane roles (for example Storage Blob Data Reader) to the job's managed identity</td>
+</tr>
+<tr>
+<td>Downloading service account keys or access keys for CI</td>
+<td>Long-lived secrets leak through logs, laptops and forks</td>
+<td>Use OIDC workload identity federation on every cloud; block key creation with org policy</td>
+</tr>
+<tr>
+<td>Private endpoints without private DNS</td>
+<td>Services resolve to public IPs, so traffic fails or bypasses the private path</td>
+<td>Configure private DNS zones and test resolution from inside the cluster and job subnets</td>
+</tr>
+<tr>
+<td>Reading training data across clouds every epoch</td>
+<td>Egress costs and slow, unpredictable data loading</td>
+<td>Copy once, sync incrementally and train next to the data</td>
+</tr>
+<tr>
+<td>Pipeline logic written in a cloud-specific DSL</td>
+<td>Migration becomes a rewrite of business logic, not just orchestration</td>
+<td>Keep step logic in containers; keep the DSL layer thin</td>
+</tr>
+<tr>
+<td>Assuming budgets cap spend</td>
+<td>Budgets only alert by default, so runaway GPU jobs keep running</td>
+<td>Add automated actions on budget notifications and set quotas as hard limits</td>
+</tr>
+<tr>
+<td>Archive tier for active datasets</td>
+<td>Restore delays and retrieval fees stall training</td>
+<td>Use lifecycle rules on old checkpoints only; keep active data in standard or infrequent tiers</td>
+</tr>
+<tr>
+<td>Quoting a new product name with full confidence</td>
+<td>Names in GenAI and data platforms change often, and a wrong one undermines credibility</td>
+<td>Describe the capability first and hedge the brand (&quot;currently called...&quot;)</td>
+</tr>
+<tr>
+<td>Abstracting identity, KMS and secrets &quot;for portability&quot;</td>
+<td>Weakens security and duplicates mature native services</td>
+<td>Use native identity and key services; keep portability in data, code and packaging</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why it is related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></td>
+<td>Feature-by-feature comparison of SageMaker AI, Vertex AI and Azure ML</td>
+</tr>
+<tr>
+<td><a href="intro_sagemaker.html">AWS SageMaker Interview Guide</a></td>
+<td>Depth on the AWS ML platform</td>
+</tr>
+<tr>
+<td><a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a></td>
+<td>Depth on the GCP ML platform</td>
+</tr>
+<tr>
+<td><a href="intro_azure_ml.html">Azure Machine Learning Interview Guide</a></td>
+<td>Depth on the Azure ML platform</td>
+</tr>
+<tr>
+<td><a href="aws_for_ml_engineers.html">AWS for ML Engineers</a></td>
+<td>AWS infrastructure services around ML</td>
+</tr>
+<tr>
+<td><a href="gcp_for_ml_engineers.html">GCP for ML Engineers</a></td>
+<td>GCP infrastructure services around ML</td>
+</tr>
+<tr>
+<td><a href="azure_for_ml_engineers.html">Azure for ML Engineers</a></td>
+<td>Azure infrastructure services around ML</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_terraform.html">Terraform</a></td>
+<td>Infrastructure as code across clouds</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>The most portable compute layer</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_docker.html">Docker</a></td>
+<td>Container images as the unit of portability</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_github_actions.html">GitHub Actions</a></td>
+<td>CI with OIDC federation to each cloud</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_observability.html">Observability</a></td>
+<td>OpenTelemetry and monitoring patterns</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_iceberg.html">Apache Iceberg</a></td>
+<td>Open table format for portable data</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_delta_lake.html">Delta Lake</a></td>
+<td>Open table format used heavily with Databricks</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></td>
+<td>Portable streaming semantics across clouds</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_spark.html">Apache Spark</a></td>
+<td>Engine available on every cloud</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_airflow.html">Apache Airflow</a></td>
+<td>Portable orchestration</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_mlflow.html">MLflow</a></td>
+<td>Portable tracking and model registry</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_feature_stores.html">Feature Stores</a></td>
+<td>Online and offline feature patterns</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_rag.html">RAG</a></td>
+<td>The pattern behind managed RAG services</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="azure_for_ml_engineers.html"><small>Previous</small>Azure for ML Engineers</a><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/cloud_service_mapping.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

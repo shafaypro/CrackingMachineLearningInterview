@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud ML Platforms Comparison Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major managed ML platforms. Choosing the right platform depends on your existing…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_cloud_ml_platforms.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Cloud ML Platforms Comparison Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major managed ML platforms. Choosing the right platform depends on your existing…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_cloud_ml_platforms.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cloud ML Platforms Comparison Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major managed ML platforms. Choosing the right platform depends on your existing…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Cloud ML Platforms Comparison",
+   "description": "AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major managed ML platforms. Choosing the right platform depends on your existing…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_cloud_ml_platforms.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_cloud_ml_platforms.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">Cloud ML Platforms</span></nav>
+<p class="meta"><a href="../../#cloud_ml/intro_cloud_ml_platforms.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="cloud-ml-platforms-comparison">Cloud ML Platforms Comparison</h1>
+<p>AWS SageMaker, Google Vertex AI, and Azure Machine Learning are the three major managed ML platforms. Choosing the right platform depends on your existing cloud ecosystem, team expertise, and specific feature requirements.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#platform-overview">Platform Overview</a></li>
+<li><a href="#feature-comparison">Feature Comparison</a></li>
+<li><a href="#aws-sagemaker">AWS SageMaker</a></li>
+<li><a href="#google-vertex-ai">Google Vertex AI</a></li>
+<li><a href="#azure-machine-learning">Azure Machine Learning</a></li>
+<li><a href="#when-to-choose-each-platform">When to Choose Each Platform</a></li>
+<li><a href="#cost-optimization-strategies">Cost Optimization Strategies</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="platform-overview">Platform Overview</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>AWS SageMaker</th>
+<th>Google Vertex AI</th>
+<th>Azure ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>AWS</td>
+<td>GCP</td>
+<td>Azure</td>
+</tr>
+<tr>
+<td><strong>Launched</strong></td>
+<td>2017</td>
+<td>2021 (unified)</td>
+<td>2018</td>
+</tr>
+<tr>
+<td><strong>Strength</strong></td>
+<td>Breadth, scale, enterprise</td>
+<td>AutoML, built-in data tools</td>
+<td>Azure integration, responsible AI</td>
+</tr>
+<tr>
+<td><strong>LLM/GenAI</strong></td>
+<td>Bedrock + JumpStart</td>
+<td>Vertex AI Studio + Gemini</td>
+<td>Azure OpenAI Service</td>
+</tr>
+<tr>
+<td><strong>Pricing model</strong></td>
+<td>Pay-per-use</td>
+<td>Pay-per-use</td>
+<td>Pay-per-use</td>
+</tr>
+<tr>
+<td><strong>Free tier</strong></td>
+<td>Limited free tier for new accounts</td>
+<td>Trial credits for new accounts</td>
+<td>Trial credits for new accounts</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="feature-comparison">Feature Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>SageMaker</th>
+<th>Vertex AI</th>
+<th>Azure ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Managed notebooks</strong></td>
+<td>Studio (JupyterLab / Code Editor spaces)</td>
+<td>Workbench instances</td>
+<td>Compute Instances / Studio</td>
+</tr>
+<tr>
+<td><strong>Training jobs</strong></td>
+<td>Training Jobs (built-in containers)</td>
+<td>Custom Training</td>
+<td>Compute Clusters</td>
+</tr>
+<tr>
+<td><strong>AutoML</strong></td>
+<td>Autopilot (now surfaced in SageMaker Canvas)</td>
+<td>AutoML (tabular, image, video)</td>
+<td>Automated ML</td>
+</tr>
+<tr>
+<td><strong>Model registry</strong></td>
+<td>Model Registry</td>
+<td>Model Registry</td>
+<td>Model Registry</td>
+</tr>
+<tr>
+<td><strong>Feature store</strong></td>
+<td>SageMaker Feature Store</td>
+<td>Vertex AI Feature Store</td>
+<td>Azure ML Feature Store</td>
+</tr>
+<tr>
+<td><strong>Pipelines / MLflow</strong></td>
+<td>SageMaker Pipelines</td>
+<td>Vertex AI Pipelines (Kubeflow)</td>
+<td>Azure ML Pipelines</td>
+</tr>
+<tr>
+<td><strong>Real-time endpoints</strong></td>
+<td>Real-time Endpoints</td>
+<td>Online Prediction</td>
+<td>Managed Online Endpoints</td>
+</tr>
+<tr>
+<td><strong>Batch inference</strong></td>
+<td>Batch Transform</td>
+<td>Batch Prediction</td>
+<td>Batch Endpoints</td>
+</tr>
+<tr>
+<td><strong>Model monitoring</strong></td>
+<td>Model Monitor</td>
+<td>Model Monitoring (skew/drift)</td>
+<td>Model monitoring (drift, data quality)</td>
+</tr>
+<tr>
+<td><strong>Experiment tracking</strong></td>
+<td>Experiments (basic) / MLflow</td>
+<td>Vertex AI Experiments</td>
+<td>MLflow integrated</td>
+</tr>
+<tr>
+<td><strong>A/B testing</strong></td>
+<td>Production variants</td>
+<td>Traffic split endpoints</td>
+<td>Traffic split / mirroring</td>
+</tr>
+<tr>
+<td><strong>Edge deployment</strong></td>
+<td>Edge Manager was discontinued in 2024 (use AWS IoT Greengrass)</td>
+<td>AutoML edge model export / Coral Edge TPU</td>
+<td>Azure IoT Edge</td>
+</tr>
+<tr>
+<td><strong>Distributed training</strong></td>
+<td>Distributed training libraries, PyTorch FSDP</td>
+<td>Reduction Server</td>
+<td>Distributed training</td>
+</tr>
+<tr>
+<td><strong>Spot/preemptible</strong></td>
+<td>Managed Spot Training</td>
+<td>Spot VMs (successor to preemptible)</td>
+<td>Low-priority / spot VMs</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="aws-sagemaker">AWS SageMaker</h2>
+<p>SageMaker is the broadest ML platform, with the most managed components. Since late 2024 AWS brands the ML service as <strong>Amazon SageMaker AI</strong>; &quot;Amazon SageMaker&quot; now also covers SageMaker Unified Studio for data, analytics, and AI.</p>
+<h3 id="key-components">Key Components</h3>
+<pre><code>SageMaker Studio          → Web-based IDE (notebooks, experiments, pipelines; replaced Studio Classic)
+SageMaker Training Jobs   → Managed training with built-in algorithms or custom containers
+SageMaker Endpoints       → Real-time inference with auto-scaling
+SageMaker Pipelines       → ML workflow orchestration (CI/CD for ML)
+SageMaker Model Registry  → Version and approve models before deployment
+SageMaker Feature Store   → Offline (S3) + Online (low-latency) feature serving
+SageMaker Model Monitor   → Data quality, model quality, bias, explainability monitoring
+SageMaker Clarify         → Bias detection and explainability
+SageMaker Autopilot       → AutoML: automatic model selection and tuning (now part of SageMaker Canvas)
+SageMaker JumpStart       → Pre-trained models (foundation models, fine-tuning)
+</code></pre>
+<h3 id="training-example">Training Example</h3>
+<pre><code class="language-python">import sagemaker
+from sagemaker.sklearn import SKLearn
+from sagemaker import get_execution_role
+
+role = get_execution_role()
+session = sagemaker.Session()
+
+# Define the estimator
+estimator = SKLearn(
+    entry_point='train.py',        # Your training script
+    role=role,
+    instance_type='ml.m5.xlarge',
+    instance_count=1,
+    framework_version='1.2-1',
+    py_version='py3',
+    hyperparameters={
+        'n_estimators': 100,
+        'max_depth': 5,
+    },
+    use_spot_instances=True,       # Large savings vs on-demand (check current pricing)
+    max_run=3600,
+    max_wait=7200,                 # Must be &gt;= max_run
+)
+
+# Train
+estimator.fit({'train': 's3://my-bucket/train/', 'test': 's3://my-bucket/test/'})
+
+# Deploy
+predictor = estimator.deploy(
+    initial_instance_count=1,
+    instance_type='ml.m5.large',
+)
+
+# Predict
+result = predictor.predict([[25, 50000, 1, 0]])
+print(result)
+</code></pre>
+<h3 id="sagemaker-pipelines">SageMaker Pipelines</h3>
+<pre><code class="language-python">from sagemaker.workflow.pipeline import Pipeline
+from sagemaker.workflow.steps import TrainingStep, ProcessingStep
+from sagemaker.workflow.step_collections import RegisterModel
+from sagemaker.workflow.parameters import ParameterInteger, ParameterString
+
+# Pipeline parameters
+model_approval_status = ParameterString(name=&quot;ModelApprovalStatus&quot;, default_value=&quot;PendingManualApproval&quot;)
+
+# Define steps
+step_train = TrainingStep(name=&quot;TrainModel&quot;, estimator=estimator, inputs={...})
+step_register = RegisterModel(
+    name=&quot;RegisterModel&quot;,
+    estimator=estimator,
+    model_data=step_train.properties.ModelArtifacts.S3ModelArtifacts,
+    content_types=[&quot;text/csv&quot;],
+    response_types=[&quot;text/csv&quot;],
+    model_package_group_name=&quot;FraudDetectionModels&quot;,
+    approval_status=model_approval_status,
+)
+
+# Create pipeline
+pipeline = Pipeline(
+    name=&quot;FraudDetectionPipeline&quot;,
+    parameters=[model_approval_status],
+    steps=[step_train, step_register],
+)
+pipeline.upsert(role_arn=role)
+pipeline.start()
+</code></pre>
+<p>Newer SageMaker Python SDK releases favor <code>ModelStep</code> with <code>step_args</code> over <code>RegisterModel</code>, and add <code>ModelTrainer</code> / <code>ModelBuilder</code> interfaces; check the SDK version you pin.</p>
+<hr />
+<h2 id="google-vertex-ai">Google Vertex AI</h2>
+<p>Vertex AI is Google's unified ML platform, tight integration with BigQuery and Google's AI research.</p>
+<h3 id="key-components-1">Key Components</h3>
+<pre><code>Vertex AI Workbench       → Managed JupyterLab notebooks
+Vertex AI Training        → Custom training on GCP infrastructure
+Vertex AI Prediction      → Online (real-time) and Batch endpoints
+Vertex AI Pipelines       → Kubeflow Pipelines-based ML orchestration
+Vertex AI Feature Store   → Managed feature store with BigQuery backend
+Vertex AI Model Registry  → Register, version, and manage models
+Vertex AI Experiments     → Track runs, metrics, parameters
+Vertex AI AutoML          → No-code training for tabular, image, video (text use cases moved to Gemini tuning)
+Vertex AI Studio          → Prompt design and LLM experimentation (Gemini)
+Vertex AI Search          → Enterprise search and recommendations
+Model Garden              → Pre-trained models (Gemini, Llama, etc.)
+</code></pre>
+<h3 id="training-example-1">Training Example</h3>
+<pre><code class="language-python">from google.cloud import aiplatform
+
+aiplatform.init(project='my-project', location='us-central1')
+
+# Custom training job
+job = aiplatform.CustomTrainingJob(
+    display_name=&quot;fraud-detection-training&quot;,
+    script_path=&quot;train.py&quot;,
+    container_uri=&quot;us-docker.pkg.dev/vertex-ai/training/sklearn-cpu.1-2:latest&quot;,
+    requirements=[&quot;scikit-learn==1.2.0&quot;, &quot;pandas==2.0.0&quot;],
+    model_serving_container_image_uri=&quot;us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.1-2:latest&quot;,
+)
+
+model = job.run(
+    dataset=dataset,
+    model_display_name=&quot;fraud-detector&quot;,
+    machine_type=&quot;n1-standard-4&quot;,
+    accelerator_type=&quot;NVIDIA_TESLA_T4&quot;,  # Optional GPU
+    accelerator_count=1,
+    replica_count=1,
+    args=[&quot;--n_estimators=100&quot;, &quot;--max_depth=5&quot;],
+)
+
+# Deploy to endpoint
+endpoint = model.deploy(
+    machine_type=&quot;n1-standard-2&quot;,
+    min_replica_count=1,
+    max_replica_count=5,  # Auto-scaling
+)
+
+# Predict
+prediction = endpoint.predict(instances=[[25, 50000, 1, 0]])
+</code></pre>
+<h3 id="vertex-ai-pipelines">Vertex AI Pipelines</h3>
+<pre><code class="language-python">from kfp import compiler, dsl
+from google.cloud.aiplatform import pipeline_jobs
+
+@dsl.component(packages_to_install=['scikit-learn', 'pandas'])
+def train_model(data_path: str, model_output: dsl.Output[dsl.Model]):
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+    import joblib
+
+    df = pd.read_csv(data_path)
+    X, y = df.drop('label', axis=1), df['label']
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X, y)
+    joblib.dump(model, model_output.path)  # artifact path is a file path
+
+@dsl.pipeline(name=&quot;fraud-detection-pipeline&quot;)
+def fraud_pipeline(data_path: str = &quot;gs://my-bucket/data.csv&quot;):
+    train_task = train_model(data_path=data_path)
+
+compiler.Compiler().compile(fraud_pipeline, &quot;pipeline.json&quot;)
+
+pipeline_job = pipeline_jobs.PipelineJob(
+    display_name=&quot;fraud-detection&quot;,
+    template_path=&quot;pipeline.json&quot;,
+    pipeline_root=&quot;gs://my-bucket/pipeline-root&quot;,
+)
+pipeline_job.run()
+</code></pre>
+<hr />
+<h2 id="azure-machine-learning">Azure Machine Learning</h2>
+<p>Azure ML integrates tightly with the Azure ecosystem (Azure DevOps, Azure Data Factory, Synapse Analytics) and has strong responsible AI features.</p>
+<h3 id="key-components-2">Key Components</h3>
+<pre><code>Azure ML Studio           → Web-based UI for all ML tasks
+Compute Instances         → Managed notebook VMs
+Compute Clusters          → Scalable training clusters (auto-scale to 0)
+Azure ML Pipelines        → ML workflow orchestration
+Model Registry            → Version and deploy models
+Online Endpoints          → Managed online endpoints (or Kubernetes online endpoints on your own AKS / Arc cluster)
+Batch Endpoints           → Large-scale batch inference
+Automated ML              → AutoML for tabular, vision, NLP
+Azure ML Designer         → Drag-and-drop pipeline builder (current designer uses custom components; classic prebuilt components are legacy v1)
+MLflow Integration        → Built-in MLflow for experiment tracking
+Responsible AI Dashboard  → Fairness, explainability, error analysis
+Azure OpenAI              → OpenAI models hosted in Azure, managed through Azure AI Foundry (now Microsoft Foundry)
+</code></pre>
+<h3 id="training-with-mlflow-tracking-sdk-v2">Training with MLflow Tracking (SDK v2)</h3>
+<p>The v1 SDK (<code>azureml-core</code>, <code>Workspace</code>, <code>Experiment</code>, <code>AciWebservice</code>) is deprecated and past its announced end of support, and ACI deployment from Azure ML is legacy. Use SDK v2 (<code>azure-ai-ml</code>, <code>MLClient</code>) and managed online endpoints.</p>
+<pre><code class="language-python">import mlflow
+import mlflow.sklearn
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import ManagedOnlineDeployment, ManagedOnlineEndpoint
+from azure.identity import DefaultAzureCredential
+from sklearn.ensemble import RandomForestClassifier
+
+# Connect to Azure ML workspace
+ml_client = MLClient.from_config(credential=DefaultAzureCredential())
+ws = ml_client.workspaces.get(ml_client.workspace_name)
+mlflow.set_tracking_uri(ws.mlflow_tracking_uri)
+mlflow.set_experiment(&quot;fraud-detection&quot;)
+
+with mlflow.start_run():
+    # Train
+    model = RandomForestClassifier(n_estimators=100, max_depth=5)
+    model.fit(X_train, y_train)
+
+    # Log metrics
+    accuracy = model.score(X_test, y_test)
+    mlflow.log_metric(&quot;accuracy&quot;, accuracy)
+    mlflow.log_param(&quot;n_estimators&quot;, 100)
+
+    # Register model
+    mlflow.sklearn.log_model(model, &quot;fraud_model&quot;, registered_model_name=&quot;fraud-detector&quot;)
+
+# Deploy to a managed online endpoint (MLflow models need no scoring script)
+endpoint = ManagedOnlineEndpoint(name=&quot;fraud-endpoint&quot;, auth_mode=&quot;key&quot;)
+ml_client.online_endpoints.begin_create_or_update(endpoint).result()
+
+deployment = ManagedOnlineDeployment(
+    name=&quot;blue&quot;,
+    endpoint_name=&quot;fraud-endpoint&quot;,
+    model=&quot;azureml:fraud-detector:1&quot;,
+    instance_type=&quot;Standard_DS3_v2&quot;,
+    instance_count=1,
+)
+ml_client.online_deployments.begin_create_or_update(deployment).result()
+
+endpoint.traffic = {&quot;blue&quot;: 100}
+ml_client.online_endpoints.begin_create_or_update(endpoint).result()
+</code></pre>
+<h3 id="automated-ml-sdk-v2">Automated ML (SDK v2)</h3>
+<pre><code class="language-python">from azure.ai.ml import Input, automl
+
+classification_job = automl.classification(
+    compute=&quot;cpu-cluster&quot;,
+    experiment_name=&quot;automl-fraud&quot;,
+    training_data=Input(type=&quot;mltable&quot;, path=&quot;azureml:fraud-train:1&quot;),
+    target_column_name=&quot;is_fraud&quot;,
+    primary_metric=&quot;AUC_weighted&quot;,
+    n_cross_validations=5,
+)
+classification_job.set_limits(
+    max_trials=50,
+    trial_timeout_minutes=5,
+    enable_early_termination=True,
+)
+classification_job.set_featurization(mode=&quot;auto&quot;)
+classification_job.set_training(enable_onnx_compatible_models=True)
+
+returned_job = ml_client.jobs.create_or_update(classification_job)
+ml_client.jobs.stream(returned_job.name)
+# Inspect the best trial in Studio or via MLflow on the parent run
+</code></pre>
+<hr />
+<h2 id="when-to-choose-each-platform">When to Choose Each Platform</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommendation</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Existing AWS infrastructure</td>
+<td><strong>SageMaker</strong></td>
+<td>Native S3, IAM, VPC integration</td>
+</tr>
+<tr>
+<td>BigQuery as data warehouse</td>
+<td><strong>Vertex AI</strong></td>
+<td>Direct BigQuery connector, no data movement</td>
+</tr>
+<tr>
+<td>Microsoft Entra ID (formerly Azure AD) / compliance</td>
+<td><strong>Azure ML</strong></td>
+<td>Enterprise integration, compliance certifications</td>
+</tr>
+<tr>
+<td>Strong managed AutoML for tabular data</td>
+<td><strong>Vertex AI AutoML</strong> or <strong>Azure Automated ML</strong></td>
+<td>Mature tabular AutoML; benchmark on your own data</td>
+</tr>
+<tr>
+<td>LLM fine-tuning / GenAI</td>
+<td><strong>Vertex AI</strong> or <strong>SageMaker</strong></td>
+<td>Model Garden vs JumpStart</td>
+</tr>
+<tr>
+<td>Responsible AI &amp; fairness</td>
+<td><strong>Azure ML</strong></td>
+<td>Built-in Responsible AI dashboard</td>
+</tr>
+<tr>
+<td>Cheapest for small experiments</td>
+<td><strong>Depends</strong></td>
+<td>Free tiers and trial credits change; idle notebooks usually dominate cost</td>
+</tr>
+<tr>
+<td>Most built-in algorithms</td>
+<td><strong>SageMaker</strong></td>
+<td>Large catalog of built-in algorithms</td>
+</tr>
+<tr>
+<td>Kubeflow-based pipelines</td>
+<td><strong>Vertex AI Pipelines</strong></td>
+<td>Native Kubeflow support</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cost-optimization-strategies">Cost Optimization Strategies</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>SageMaker</th>
+<th>Vertex AI</th>
+<th>Azure ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spot/preemptible instances</td>
+<td>Managed Spot Training</td>
+<td>Spot VMs</td>
+<td>Low-priority VMs</td>
+</tr>
+<tr>
+<td>Auto-scaling to zero</td>
+<td>Serverless Inference, or scale to zero where supported</td>
+<td>Batch prediction, or scale to zero where supported</td>
+<td>Clusters with min nodes = 0</td>
+</tr>
+<tr>
+<td>Right-sizing instances</td>
+<td>Inference Recommender</td>
+<td>Recommender</td>
+<td>Compute SKU comparison</td>
+</tr>
+<tr>
+<td>Multi-model endpoints</td>
+<td>Multi-Model Endpoints</td>
+<td>Shared deployment resource pools</td>
+<td>Multiple deployments per endpoint</td>
+</tr>
+<tr>
+<td>Caching predictions</td>
+<td>ElastiCache integration</td>
+<td>Cloud Memorystore</td>
+<td>Azure Cache for Redis</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># SageMaker: Managed Spot Training
+estimator = SKLearn(
+    ...,
+    use_spot_instances=True,      # Use spot instances
+    max_run=3600,                  # Max training time in seconds
+    max_wait=7200,                 # Max wait including spot interruptions
+)
+
+# Azure ML (SDK v2): Low-priority compute cluster
+from azure.ai.ml.entities import AmlCompute
+
+cluster = AmlCompute(
+    name='cpu-cluster',
+    size='Standard_D3_v2',
+    tier='low_priority',           # Low-priority = significant cost savings
+    min_instances=0,               # Scale to zero when idle
+    max_instances=4,
+    idle_time_before_scale_down=300,
+)
+ml_client.compute.begin_create_or_update(cluster).result()
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What are the key differences between SageMaker and Vertex AI?</strong>
+SageMaker has greater breadth and more managed services (many built-in algorithms, several endpoint types, SageMaker Clarify for bias). Vertex AI has tighter BigQuery integration (less data movement for tabular data), strong AutoML, and is built on open standards (Kubeflow Pipelines, TFX). SageMaker is better if you're already on AWS; Vertex AI if you're on GCP with BigQuery as your warehouse.</p>
+<p><strong>Q2: What is the purpose of a model registry in a cloud ML platform?</strong>
+A model registry centralizes model versioning and lifecycle management. It stores trained model artifacts, metadata (metrics, hyperparameters, training data version), approval status (pending/approved/rejected), and deployment history. It enables governance: only approved models go to production, and you can trace which model version is currently serving.</p>
+<p><strong>Q3: How would you design a CI/CD pipeline for ML on AWS SageMaker?</strong></p>
+<ol>
+<li>Code commit triggers GitHub Actions</li>
+<li>Build and push Docker training image to ECR</li>
+<li>Run SageMaker Training Job</li>
+<li>Evaluate model: if metrics pass threshold, register in Model Registry with &quot;PendingManualApproval&quot;</li>
+<li>Manual approval step (or automated if metrics exceed threshold)</li>
+<li>Upon approval, an EventBridge rule on the approval status change triggers deployment (e.g. via CodePipeline) to a staging endpoint</li>
+<li>Integration tests on staging</li>
+<li>Promote to production endpoint with canary deployment</li>
+</ol>
+<p><strong>Q4: What is the difference between online prediction and batch prediction endpoints?</strong>
+Online (real-time) endpoints are always-running services that respond to individual requests within milliseconds: used for interactive applications. Batch prediction endpoints process large datasets efficiently (millions of records in parallel) on a schedule: used for pre-computing predictions (daily scoring runs). Online: higher cost (always on), low latency. Batch: cost-efficient, high latency acceptable.</p>
+<p><strong>Q5: How do AutoML platforms differ from custom model training?</strong>
+AutoML automatically searches the model architecture and hyperparameter space: no ML expertise required, faster time-to-first-model. Custom training: full control over architecture, features, and optimization: better ceiling performance but requires more expertise. AutoML is best for establishing a baseline, quick prototyping, and non-ML teams. Custom training is best when you need maximum accuracy or have unique domain requirements.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not using spot/preemptible instances</td>
+<td>Much higher training costs</td>
+<td>Default to spot for training; save on-demand for serving</td>
+</tr>
+<tr>
+<td>Endpoints running 24/7 at full capacity</td>
+<td>Expensive waste during low traffic</td>
+<td>Enable auto-scaling; scale to zero or use serverless/batch for dev/staging where supported</td>
+</tr>
+<tr>
+<td>Storing data on instance storage</td>
+<td>Data lost on shutdown</td>
+<td>Use S3, GCS, or Azure Blob for all datasets</td>
+</tr>
+<tr>
+<td>No pipeline versioning</td>
+<td>Can't reproduce training runs</td>
+<td>Use SageMaker/Vertex pipelines with parameter versioning</td>
+</tr>
+<tr>
+<td>Choosing platform before cloud commitment</td>
+<td>Vendor lock-in without benefit</td>
+<td>Align with existing cloud infrastructure investment</td>
+</tr>
+<tr>
+<td>Not monitoring endpoint drift</td>
+<td>Silent model degradation</td>
+<td>Enable Model Monitor / Skew Detection from day one</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../mlops/intro_mlflow.html">MLflow</a></td>
+<td>All three platforms support MLflow for experiment tracking</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_serving.html">Model Serving</a></td>
+<td>Endpoints are the cloud platform's serving layer</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_feature_stores.html">Feature Stores</a></td>
+<td>All three have managed feature stores</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>Managed endpoints hide the cluster, but Azure ML can also deploy to your own Kubernetes (AKS / Arc)</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_docker.html">Docker</a></td>
+<td>Custom containers are the basis for cloud ML training</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>Cloud ML Platforms are an Advanced (🔴) topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_sagemaker.html"><small>Next</small>AWS SageMaker</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/intro_cloud_ml_platforms.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

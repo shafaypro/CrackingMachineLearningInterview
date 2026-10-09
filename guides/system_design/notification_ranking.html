@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notification Ranking System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design a system that decides which push notifications and emails to send, to whom, and when&quot; looks like feed ranking with a different surface. It is not…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/notification_ranking.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Notification Ranking System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design a system that decides which push notifications and emails to send, to whom, and when&quot; looks like feed ranking with a different surface. It is not…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/notification_ranking.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Notification Ranking System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design a system that decides which push notifications and emails to send, to whom, and when&quot; looks like feed ranking with a different surface. It is not…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Notification Ranking System Design",
+   "description": "\"Design a system that decides which push notifications and emails to send, to whom, and when\" looks like feed ranking with a different surface. It is not…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/notification_ranking.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Notification Ranking",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/notification_ranking.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Notification Ranking</span></nav>
+<p class="meta"><a href="../../#system_design/notification_ranking.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="notification-ranking-system-design">Notification Ranking System Design</h1>
+<p>&quot;Design a system that decides which push notifications and emails to send, to whom, and when&quot; looks like feed ranking with a different surface. It is not. A feed is pulled: the user opens the app and asks for content, and the ranker only decides the order. A notification is pushed: the system interrupts someone who did not ask, and it can always choose to send nothing. A bad feed item costs a scroll. A bad notification costs attention, and if it happens often enough the user turns notifications off at the OS level or unsubscribes, and that channel is gone for good. Most of the design follows from that asymmetry: the objective is incremental value minus long-term damage, volume is a budget, and the evaluation needs holdouts that receive nothing at all.</p>
+<p>For generic ranking machinery (retrieval, multi-task rankers, calibration) see <a href="news_feed_ranking.html">News Feed Ranking System Design</a> and <a href="recommendation_system.html">Recommendation System Design</a>. This guide focuses on what is specific to notifications.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#why-notifications-differ-from-feeds">Why Notifications Differ from Feeds</a></li>
+<li><a href="#candidate-generation">Candidate Generation</a></li>
+<li><a href="#defining-the-objective">Defining the Objective</a></li>
+<li><a href="#uplift-would-the-user-have-come-back-anyway">Uplift: Would the User Have Come Back Anyway?</a></li>
+<li><a href="#models-and-features">Models and Features</a></li>
+<li><a href="#selection-under-a-budget">Selection Under a Budget</a></li>
+<li><a href="#volume-control">Volume Control</a></li>
+<li><a href="#send-time-optimisation">Send-Time Optimisation</a></li>
+<li><a href="#channel-selection">Channel Selection</a></li>
+<li><a href="#dedup-and-aggregation">Dedup and Aggregation</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#delivery-pipeline">Delivery Pipeline</a></li>
+<li><a href="#cold-start">Cold Start</a></li>
+<li><a href="#feedback-loops">Feedback Loops</a></li>
+<li><a href="#consent-privacy-and-regulation">Consent, Privacy and Regulation</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p>&quot;Notifications&quot; covers several products with different rules. Separate them before designing.</p>
+<p><strong>Which notification types?</strong></p>
+<ul>
+<li><strong>Transactional:</strong> password resets, payment receipts, security alerts, order shipped. The user expects them. They are not ranked or throttled by the ML system, and they usually bypass marketing opt-outs (but not all legal rules).</li>
+<li><strong>Social / activity:</strong> &quot;Alex commented on your photo&quot;, &quot;3 new followers&quot;. Triggered by events involving the user. High relevance, high volume for active users.</li>
+<li><strong>Content / recommendation:</strong> &quot;A post you might like&quot;, &quot;New video from a creator you follow&quot;, &quot;Trending near you&quot;. Generated by the platform, no direct event. This is where most of the ML value and most of the fatigue risk sit.</li>
+<li><strong>Re-engagement / lifecycle:</strong> &quot;You haven't posted in a while&quot;, digests, onboarding nudges. Aimed at dormant or new users.</li>
+</ul>
+<p><strong>Which channels?</strong> Mobile push, email, SMS, in-app inbox (the bell icon), web push. Each has different cost, reach, and opt-out behaviour.</p>
+<p><strong>What does success mean?</strong> Opens are easy to measure and easy to game. Ask whether the goal is daily active users, sessions, retention at 28 days, or a specific action (purchases, posts). Also ask what counts as harm: notification disables, unsubscribes, spam reports, uninstalls.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Users reachable per channel (push-enabled devices, email-subscribed addresses)</li>
+<li>Candidate events per day (every like, comment, follow, new post from a followed account)</li>
+<li>Latency expectations: a direct message notification should arrive in seconds; a &quot;you might like&quot; push can wait hours</li>
+</ul>
+<p>For the rest of this guide, assume: <strong>a social app with a few hundred million monthly users, billions of candidate events per day, mobile push plus email plus an in-app inbox, and a goal of long-term retention without raising the disable rate.</strong> These are working assumptions for the exercise, not industry figures.</p>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency for real-time types</td>
+<td>Seconds from event to delivery for DMs and security alerts</td>
+</tr>
+<tr>
+<td>Latency for ranked types</td>
+<td>Minutes to hours is acceptable; batch or micro-batch decisions</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>Peaks of millions of sends per minute (global events, digest runs)</td>
+</tr>
+<tr>
+<td>Correctness</td>
+<td>No duplicate sends, no sends to opted-out users, no sends during quiet hours</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Transactional path must stay up even if the ranking system is down</td>
+</tr>
+<tr>
+<td>Auditability</td>
+<td>Every send and every suppression is logged with the reason</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="why-notifications-differ-from-feeds">Why Notifications Differ from Feeds</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Feed</th>
+<th>Notification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who initiates</td>
+<td>User opens the app</td>
+<td>System interrupts the user</td>
+</tr>
+<tr>
+<td>&quot;Show nothing&quot; option</td>
+<td>Not really; the feed must fill</td>
+<td>Always available, often the right answer</td>
+</tr>
+<tr>
+<td>Cost of a bad item</td>
+<td>A scroll past it</td>
+<td>Interruption, annoyance, lost trust</td>
+</tr>
+<tr>
+<td>Worst outcome</td>
+<td>Short session</td>
+<td>OS-level disable, unsubscribe, uninstall</td>
+</tr>
+<tr>
+<td>Reversibility</td>
+<td>Next session is a fresh start</td>
+<td>Disables and unsubscribes are close to permanent</td>
+</tr>
+<tr>
+<td>Position bias</td>
+<td>Strong within a ranked list</td>
+<td>Weak within a send; strong across time (what else arrived today)</td>
+</tr>
+<tr>
+<td>Counterfactual</td>
+<td>User was in the app anyway</td>
+<td>User may have come back without the push</td>
+</tr>
+<tr>
+<td>Hard limits</td>
+<td>Screen space</td>
+<td>OS delivery limits, platform policies, laws, per-user caps</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three points deserve emphasis in an interview:</p>
+<p><strong>The &quot;send nothing&quot; option.</strong> A feed ranker picks the best k items from a candidate pool. A notification system decides whether the best candidate is worth an interruption at all. The threshold is per user: for a user who opens the app ten times a day, most notifications add nothing; for a user drifting away, one well-chosen push may matter.</p>
+<p><strong>Interruption cost.</strong> Every send spends a little of the user's tolerance. The cost is not visible in the send's own metrics: a push can get opened and still move the user closer to turning notifications off.</p>
+<p><strong>Opt-outs are permanent in practice.</strong> Once a user disables push in iOS or Android settings, the app cannot re-enable it; it can only ask the user to go to settings, which few do. Email unsubscribes must be honoured by law in many regions. So the loss from an opt-out is the value of every future notification to that user. That makes disable risk the dominant negative term in the objective.</p>
+<hr />
+<h2 id="candidate-generation">Candidate Generation</h2>
+<p>Candidates come from two very different sources, and they need different pipelines.</p>
+<pre><code> Event-triggered                              Scheduled / generated
+ ---------------                              ---------------------
+ like, comment, follow, DM, mention           daily/weekly digest jobs
+ new post from followed account               &quot;you might like&quot; recommendations
+ friend joined, live stream started           re-engagement for dormant users
+ price drop, back in stock                    onboarding sequences
+        |                                              |
+        v                                              v
+ Kafka event stream --&gt; fan-out to              Batch job over user segments
+ recipients (followers, thread members)         --&gt; retrieval (recsys candidates)
+        |                                              |
+        +------------------+---------------------------+
+                           v
+              Per-user candidate queue (pending notifications)
+                           |
+                           v
+              Eligibility filters --&gt; Scoring --&gt; Selection --&gt; Scheduling
+</code></pre>
+<p><strong>Event-triggered candidates</strong> arrive in a stream. The design question is how long to hold them. Sending instantly gives the best freshness but makes aggregation impossible (&quot;Alex liked your post&quot; followed a minute later by &quot;Sam liked your post&quot;). Holding for a short window allows batching and better decisions. Most systems use per-type hold windows: zero for DMs, minutes for likes, longer for &quot;new post from followed account&quot;.</p>
+<p><strong>Fan-out.</strong> A post by an account with millions of followers creates millions of candidates at once. Treat it like feed fan-out: do not generate a candidate for every follower immediately. Generate for followers with a high predicted affinity first, rate-limit the rest, and let the ranker drop most of them.</p>
+<p><strong>Scheduled candidates</strong> come from batch jobs: pick users (by segment, timezone, days since last visit), retrieve content for each (using the same retrieval models as the feed), and write candidates into the per-user queue with an expiry time.</p>
+<p><strong>Every candidate carries:</strong> type, source event, recipient, content IDs, creation time, expiry time (a live stream notification is worthless after the stream ends), priority class, and allowed channels.</p>
+<p><strong>Eligibility filters</strong> run before any model: opted out of this type or channel, quiet hours, account state (suspended, deleted), content removed or blocked, the actor is muted or blocked by the recipient, already seen in-app (the user already read the comment, so do not notify).</p>
+<hr />
+<h2 id="defining-the-objective">Defining the Objective</h2>
+<p>The naive objective is P(open). It fails for three reasons.</p>
+<ol>
+<li><strong>It rewards clickbait.</strong> Vague or alarming copy gets opens and erodes trust.</li>
+<li><strong>It ignores harm.</strong> A push that gets opened but pushes the user toward disabling notifications is scored as a success.</li>
+<li><strong>It ignores what would have happened anyway.</strong> A daily user opens the app at 8am regardless. A push at 7:58 gets &quot;credit&quot; for an open that was going to happen.</li>
+</ol>
+<p>A better per-candidate value:</p>
+<pre><code>value(u, n) =   w_1 * delta P(visit | send)                       # incremental visit, not raw open
+              + w_2 * delta E[downstream actions]                 # posts, purchases, replies after open
+              + w_3 * delta long-term retention proxy             # e.g. change in P(active in 28 days)
+              - w_4 * P(disable or unsubscribe | send)
+              - w_5 * P(spam report / negative feedback | send)
+              - c_interrupt(u)                                    # per-user cost of an interruption
+</code></pre>
+<p>The delta terms are uplifts: the difference between sending and not sending. The disable term is multiplied by a large weight because a disable removes all future value on that channel. A rough way to size it: <code>w_4 ~ expected future value of the channel for this user</code>, which is larger for users who currently get a lot from notifications.</p>
+<p><strong>Long-term proxies.</strong> Retention takes weeks to observe. Teams often train a model that predicts long-term outcomes (such as 28-day activity) from short-term signals, then use it as a surrogate target, validating it periodically against long-running holdouts.</p>
+<p><strong>Weights come from experiments, not intuition.</strong> Tune <code>w</code> by running policy variants against each other and measuring the long-term outcome, then pick the weights whose short-term proxies correlate with it.</p>
+<hr />
+<h2 id="uplift-would-the-user-have-come-back-anyway">Uplift: Would the User Have Come Back Anyway?</h2>
+<p>This is the question that separates a strong answer. The value of a notification is the causal effect of sending it:</p>
+<pre><code>uplift(u, n) = P(visit within T | send n) - P(visit within T | no send)
+</code></pre>
+<p>A user with a 95% daily visit probability has at most 5 points of headroom. A user with 20% has much more. P(open) models are highest for the first user; uplift is often highest for the second.</p>
+<h3 id="estimating-uplift">Estimating uplift</h3>
+<p>You need data where sending was randomised. Logs from the production policy are confounded: the policy sent to users it predicted would open, so &quot;sent&quot; and &quot;would have visited anyway&quot; are correlated.</p>
+<p><strong>Randomised exploration.</strong> Hold out a small random share of eligible candidates (do not send them), and randomly send a small share of candidates the policy would have dropped. Log the propensity of every decision.</p>
+<p><strong>Model families:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Idea</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Two-model (T-learner)</strong></td>
+<td>Train P(visit | send) and P(visit | no send) separately; subtract</td>
+<td>Simple; errors of two models add up</td>
+</tr>
+<tr>
+<td><strong>Single model with treatment feature (S-learner)</strong></td>
+<td>One model with <code>sent</code> as an input; predict with it set to 1 and 0</td>
+<td>Can underweight the treatment feature if its effect is small</td>
+</tr>
+<tr>
+<td><strong>X-learner / DR-learner</strong></td>
+<td>Impute individual effects, then regress them; doubly robust versions use propensities</td>
+<td>Better when treatment and control are imbalanced</td>
+</tr>
+<tr>
+<td><strong>Direct uplift trees / forests</strong></td>
+<td>Splits chosen to maximise difference in effect</td>
+<td>Interpretable; good for segment analysis</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+import lightgbm as lgb
+
+def fit_t_learner(X, sent, visited):
+    &quot;&quot;&quot;X: features; sent: 0/1 randomised treatment; visited: 0/1 outcome within T.&quot;&quot;&quot;
+    params = dict(objective=&quot;binary&quot;, n_estimators=500, learning_rate=0.05,
+                  num_leaves=63, min_child_samples=500)
+    m_treat = lgb.LGBMClassifier(**params).fit(X[sent == 1], visited[sent == 1])
+    m_ctrl = lgb.LGBMClassifier(**params).fit(X[sent == 0], visited[sent == 0])
+    return m_treat, m_ctrl
+
+def predict_uplift(m_treat, m_ctrl, X):
+    return m_treat.predict_proba(X)[:, 1] - m_ctrl.predict_proba(X)[:, 1]
+</code></pre>
+<p><strong>Evaluating uplift models</strong> uses the Qini curve or uplift-at-k on randomised data: sort by predicted uplift, and check that the observed treatment-minus-control difference is highest in the top buckets. Ordinary AUC on opens says nothing about uplift.</p>
+<p><strong>Practical compromise.</strong> Pure uplift models are noisy because individual effects are small and labels are binary. Many systems keep a multi-task model for P(open), P(disable), and downstream actions, and add a &quot;baseline visit probability&quot; feature or a separate uplift correction, so the ranker learns to discount users who were going to come back anyway.</p>
+<hr />
+<h2 id="models-and-features">Models and Features</h2>
+<h3 id="per-candidate-scoring">Per-candidate scoring</h3>
+<p>A multi-task model scores every eligible candidate:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Head</th>
+<th>Label</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P(open)</td>
+<td>Tapped push or opened email within a window</td>
+<td>Relevance</td>
+</tr>
+<tr>
+<td>P(visit | send) and baseline P(visit)</td>
+<td>Session within T hours, treated and control</td>
+<td>Uplift</td>
+</tr>
+<tr>
+<td>P(downstream action | open)</td>
+<td>Replied, posted, purchased</td>
+<td>Value beyond the open</td>
+</tr>
+<tr>
+<td>P(disable | send)</td>
+<td>Turned off push or unsubscribed within a window after the send</td>
+<td>Harm</td>
+</tr>
+<tr>
+<td>P(negative feedback)</td>
+<td>Swiped away quickly, &quot;not interested&quot;, spam report</td>
+<td>Harm</td>
+</tr>
+</tbody>
+</table></div>
+<p>Disable and unsubscribe events are rare, so that head needs care: aggregate over a window after the send, use class weighting, and check calibration, since its output is multiplied by a large weight.</p>
+<p>GBDTs work well on the tabular user-history features. A deep multi-task model helps when there are many notification types and content embeddings to share across heads. Calibration matters for every head because the outputs are combined in a weighted sum and compared against a threshold.</p>
+<h3 id="features">Features</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User engagement</strong></td>
+<td>Visits per day over 1, 7, 28 days, days since last visit, typical active hours, platform</td>
+</tr>
+<tr>
+<td><strong>Notification history</strong></td>
+<td>Sends in last 24h and 7d, open rate by type, time since last send, time since last open, recent ignored streak</td>
+</tr>
+<tr>
+<td><strong>Fatigue signals</strong></td>
+<td>Recent swipe-aways, recent disable of a sub-type, declining open rate trend</td>
+</tr>
+<tr>
+<td><strong>Candidate</strong></td>
+<td>Type, age of event, actor, content embedding, content popularity</td>
+</tr>
+<tr>
+<td><strong>User-actor affinity</strong></td>
+<td>Interaction frequency with the actor, mutual connections, DM history</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Local time, day of week, device state if available (recent foreground), timezone</td>
+</tr>
+<tr>
+<td><strong>Channel</strong></td>
+<td>Push-enabled, email engagement, in-app inbox activity</td>
+</tr>
+<tr>
+<td><strong>Queue context</strong></td>
+<td>Number and scores of other pending candidates for this user</td>
+</tr>
+</tbody>
+</table></div>
+<p>The last group matters: the value of a candidate depends on what else the user will receive today.</p>
+<hr />
+<h2 id="selection-under-a-budget">Selection Under a Budget</h2>
+<p>Scoring each candidate is only half the job. The system must choose a set of sends for each user over a time window under constraints. That is a knapsack-style problem.</p>
+<pre><code>maximise    sum_i  x_i * value_i
+subject to  sum_i  x_i * cost_i        &lt;= budget_u     (per-user daily budget)
+            x_i in {0, 1}
+            per-type caps, min spacing between sends, quiet hours
+            value_i &gt; threshold_u    (never send something worse than nothing)
+</code></pre>
+<p>With unit costs, this reduces to &quot;take the top candidates by value until the budget or the threshold is hit&quot;. Costs vary when different types have different interruption costs (a push costs more than an in-app inbox entry), which makes it a real knapsack; a greedy by <code>value / cost</code> ratio is the usual practical solution.</p>
+<p><strong>Online versus batch selection.</strong> Candidates arrive over the day, so the system cannot see the whole day's pool at the start. Two common approaches:</p>
+<ul>
+<li><strong>Periodic batch:</strong> every N minutes, score the pending queue and send the best if it clears a threshold that reflects the remaining budget.</li>
+<li><strong>Threshold policy:</strong> learn a per-user threshold from history (the value of the k-th best candidate on a typical day, where k is the budget). Send anything above it immediately, subject to caps. This is the online knapsack / secretary-problem framing.</li>
+</ul>
+<p><strong>Global constraints with Lagrangian relaxation.</strong> If there is a platform-wide goal (for example, total sends must not increase, or disable rate must stay under a target), attach a price lambda to the constrained quantity and subtract it from every candidate's value. Tune lambda so the constraint holds. This turns one global problem into independent per-user decisions.</p>
+<pre><code class="language-python">def select_sends(candidates, budget, threshold, lam=0.0):
+    &quot;&quot;&quot;candidates: list of dicts with 'value', 'cost', 'p_disable'.
+    lam: shadow price on disable risk from a global constraint.&quot;&quot;&quot;
+    scored = []
+    for c in candidates:
+        adj = c[&quot;value&quot;] - lam * c[&quot;p_disable&quot;]
+        if adj &gt; threshold:
+            scored.append((adj / c[&quot;cost&quot;], adj, c))
+    scored.sort(key=lambda t: t[0], reverse=True)
+    chosen, spent = [], 0.0
+    for ratio, adj, c in scored:
+        if spent + c[&quot;cost&quot;] &lt;= budget:
+            chosen.append(c)
+            spent += c[&quot;cost&quot;]
+    return chosen
+</code></pre>
+<p><strong>Learned budgets.</strong> The budget itself can be personalised: estimate the marginal value of the k-th notification per day for each user (from randomised volume experiments) and set the budget where marginal value drops below marginal harm.</p>
+<hr />
+<h2 id="volume-control">Volume Control</h2>
+<p>Volume control is the layer that keeps the system safe regardless of what the model says.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Per-user budget</strong></td>
+<td>Sends per day or week per user and channel</td>
+<td>Limit fatigue; personalised by engagement</td>
+</tr>
+<tr>
+<td><strong>Frequency cap per type</strong></td>
+<td>e.g. at most one &quot;you might like&quot; per day</td>
+<td>Stop one type from crowding out others</td>
+</tr>
+<tr>
+<td><strong>Minimum spacing</strong></td>
+<td>Minimum gap between pushes</td>
+<td>Avoid bursts</td>
+</tr>
+<tr>
+<td><strong>Per-actor cap</strong></td>
+<td>Limits sends about one actor</td>
+<td>Prevent one prolific friend from flooding a user</td>
+</tr>
+<tr>
+<td><strong>Global throttle</strong></td>
+<td>Sends per second per channel, per region</td>
+<td>Protect provider limits and backend load (a push that works drives traffic to the app)</td>
+</tr>
+<tr>
+<td><strong>Kill switch</strong></td>
+<td>Per type, per campaign</td>
+<td>Stop a bad campaign or buggy trigger in seconds</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Priority classes.</strong> Transactional and security messages sit above all caps. Direct messages come next. Ranked content comes last and is the first to be dropped when budgets are tight.</p>
+<p><strong>Global throttles shape load.</strong> A digest sent to every user at 9am local time still produces a spike per timezone. Spread sends across a window and smooth by region, both to protect the delivery providers and because a synchronised burst of app opens can overload the backend.</p>
+<hr />
+<h2 id="send-time-optimisation">Send-Time Optimisation</h2>
+<p>The same notification has different value at different times. Send-time optimisation (STO) picks when to deliver deferrable notifications.</p>
+<p><strong>Signals.</strong> The user's historical active hours, open latency by hour, timezone, and day of week. A simple baseline is the user's most common session start hour, smoothed toward the population profile for their region.</p>
+<p><strong>Model.</strong> Predict P(open within 1 hour | send at hour h) for each candidate hour, and pick the best hour within the notification's allowed window (before it expires, outside quiet hours).</p>
+<pre><code class="language-python">import numpy as np
+
+def best_send_hour(p_open_by_hour, allowed_hours, prior_by_hour, n_user_sends, k=20):
+    &quot;&quot;&quot;Shrink the user's hourly open-rate estimate toward a population prior,
+    then choose the best allowed hour.&quot;&quot;&quot;
+    w = n_user_sends / (n_user_sends + k)
+    blended = w * np.asarray(p_open_by_hour) + (1 - w) * np.asarray(prior_by_hour)
+    mask = np.zeros(24, dtype=bool)
+    mask[list(allowed_hours)] = True
+    blended[~mask] = -np.inf
+    return int(np.argmax(blended))
+</code></pre>
+<p><strong>Pitfalls in STO:</strong></p>
+<ul>
+<li><strong>Selection bias.</strong> You only observe opens at hours the old policy sent. Add randomised send-time exploration.</li>
+<li><strong>Open-time is not uplift.</strong> The hour when the user is most likely to open may be when they are already in the app. The incremental effect can be higher at a time they would not otherwise visit.</li>
+<li><strong>Freshness trade-off.</strong> Delaying a social notification to the &quot;best&quot; hour makes it stale. Only defer types whose value decays slowly.</li>
+<li><strong>Bandits are a good fit.</strong> Treat hours as arms with a contextual bandit (Thompson sampling or UCB) to balance exploration and exploitation per user.</li>
+</ul>
+<hr />
+<h2 id="channel-selection">Channel Selection</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Push</strong></td>
+<td>Immediate, high visibility</td>
+<td>Highest interruption cost; OS disable is permanent in practice</td>
+<td>Time-sensitive, high-relevance items</td>
+</tr>
+<tr>
+<td><strong>Email</strong></td>
+<td>Rich content, persistent, low interruption</td>
+<td>Low open rates, spam filters, unsubscribe</td>
+<td>Digests, summaries, lifecycle messages</td>
+</tr>
+<tr>
+<td><strong>In-app inbox</strong></td>
+<td>Zero interruption, no opt-out risk</td>
+<td>Only seen when the user already opens the app</td>
+<td>Lower-value items, overflow from push budget</td>
+</tr>
+<tr>
+<td><strong>SMS</strong></td>
+<td>Very high reach</td>
+<td>Costs money per message, strict consent rules</td>
+<td>Security codes, critical transactional</td>
+</tr>
+</tbody>
+</table></div>
+<p>Model channel choice as part of selection: each (candidate, channel) pair is an option with its own value, cost, and harm terms, and at most one channel per candidate is chosen. Rules on top: if a push was sent and opened, suppress the email version; if a user has push disabled, fall back to email for high-value items; and anything dropped from the push budget can still go to the in-app inbox, which costs nothing.</p>
+<p><strong>Cross-channel coordination.</strong> Keep one per-user ledger of sends across channels so budgets and dedup work across them. Separate teams owning email and push with separate caps is a common source of over-messaging.</p>
+<hr />
+<h2 id="dedup-and-aggregation">Dedup and Aggregation</h2>
+<p><strong>Dedup.</strong> The same underlying event can produce several candidates (a comment that is also a mention, a post that is both &quot;from a followed account&quot; and &quot;trending&quot;). Key candidates by <code>(recipient, content_id, action)</code> and keep only the highest-value version. Also suppress anything the user has already seen in-app since the candidate was created.</p>
+<p><strong>Aggregation.</strong> Many small events are better sent as one: &quot;Alex, Sam and 3 others liked your post&quot; instead of five pushes.</p>
+<pre><code> t=0   Alex liked post P    --+
+ t=1m  Sam liked post P       |   hold window for (user, post P, &quot;like&quot;)
+ t=3m  Kim liked post P       +--&gt; window closes or count threshold hit
+ t=4m  Lee liked post P       |
+ t=6m  Ana liked post P     --+
+                                   v
+                  &quot;Alex, Sam and 3 others liked your post&quot;
+                  (actors ordered by recipient's affinity)
+</code></pre>
+<p>Design choices:</p>
+<ul>
+<li><strong>Aggregation key:</strong> usually <code>(recipient, target object, action type)</code>.</li>
+<li><strong>Window:</strong> fixed hold, or send the first event immediately and aggregate subsequent ones into a later update. The second gives freshness for the first event but risks two pushes.</li>
+<li><strong>Which names to show:</strong> rank actors by the recipient's affinity; the value of an aggregate depends mainly on the best actor in it.</li>
+<li><strong>Score the aggregate, not the parts.</strong> The ranker scores the combined notification with count and top-actor features.</li>
+<li><strong>Update in place.</strong> Some platforms support replacing a delivered push (using a collapse or thread identifier), so a later aggregate can replace the earlier one rather than add a new alert.</li>
+</ul>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AUC / log loss per head</td>
+<td>Ranking and calibration of open, disable, action predictions</td>
+</tr>
+<tr>
+<td>Calibration by segment</td>
+<td>Needed because heads are combined in a weighted sum</td>
+</tr>
+<tr>
+<td>Qini / uplift-at-k on randomised data</td>
+<td>Whether the uplift model finds users with real incremental effect</td>
+</tr>
+<tr>
+<td>Off-policy estimates (IPS, doubly robust)</td>
+<td>Expected value of a new policy using logged propensities</td>
+</tr>
+</tbody>
+</table></div>
+<p>Offline results are weak evidence here, because the target is long-term and causal. Treat them as a filter before online tests.</p>
+<h3 id="online-holdouts-and-incrementality">Online: holdouts and incrementality</h3>
+<p><strong>Global holdout.</strong> Keep a small random share of users who receive no ranked notifications at all (transactional still go out), for months. Comparing them with everyone else measures the total incremental value of the notification system, and it is the only clean way to answer &quot;are we just taking credit for organic visits?&quot;</p>
+<p><strong>Policy A/B tests.</strong> Randomise users between ranking policies and compare:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary</strong></td>
+<td>Daily active users, sessions per user, retention at 7 and 28 days</td>
+</tr>
+<tr>
+<td><strong>Notification</strong></td>
+<td>Sends per user, open rate, downstream actions per send</td>
+</tr>
+<tr>
+<td><strong>Guardrails</strong></td>
+<td>Push disable rate, email unsubscribe rate, spam reports, uninstalls, app-store rating mentions</td>
+</tr>
+<tr>
+<td><strong>System</strong></td>
+<td>Delivery latency, duplicate rate, quiet-hour violations (should be zero)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Novelty and fatigue effects.</strong> More notifications almost always look good in week one: opens and visits go up. Disables accumulate slowly and retention effects take weeks to show. So:</p>
+<ul>
+<li>Run volume experiments for weeks, not days, and plot the treatment effect over time. A rising-then-falling curve is the fatigue signature.</li>
+<li>Watch the cumulative disable rate per arm, not the daily rate.</li>
+<li>Keep some long-running holdouts at the old volume level to measure effects that only appear after months.</li>
+</ul>
+<p><strong>Measuring the value of a lost channel.</strong> Compare users who disabled push with similar users who did not (matched on pre-disable activity) to estimate the long-term cost of a disable. That estimate is what sets <code>w_4</code>.</p>
+<pre><code class="language-python">import numpy as np
+
+def incrementality(treat_active, holdout_active):
+    &quot;&quot;&quot;Daily-active indicators for the treatment population and the no-notification holdout.
+    Returns absolute lift and a normal-approximation 95% CI.&quot;&quot;&quot;
+    p_t, p_h = np.mean(treat_active), np.mean(holdout_active)
+    se = np.sqrt(p_t * (1 - p_t) / len(treat_active) + p_h * (1 - p_h) / len(holdout_active))
+    lift = p_t - p_h
+    return lift, (lift - 1.96 * se, lift + 1.96 * se)
+</code></pre>
+<p><strong>Network interference.</strong> Social notifications involve two users: a treatment policy that notifies more about comments may lead to more replies, which generate notifications to control users. Use cluster-randomised designs (by graph community) when the change affects what users send each other.</p>
+<hr />
+<h2 id="delivery-pipeline">Delivery Pipeline</h2>
+<pre><code>                           NOTIFICATION SYSTEM
+===============================================================================
+
+ Product events --&gt; Kafka --&gt; Candidate generator --&gt; Pending store
+ (likes, posts,               (fan-out, dedup key,      (per-user queue,
+  DMs, follows)                expiry, priority)         keyed by user_id)
+                                                              |
+ Batch jobs --&gt; digests, recs, re-engagement -----------------+
+                                                              v
+                                     +---- Eligibility (consent, quiet hours,
+                                     |     blocks, already seen)
+                                     v
+ Feature store --------------&gt; Scoring service (multi-task + uplift)
+                                     |
+                                     v
+                              Selection (budget, caps, channel, send time)
+                                     |
+                                     v
+                              Scheduler (delay queue by send time, local TZ)
+                                     |
+                                     v
+                              Delivery workers --&gt; rate limiter --&gt; APNs / FCM
+                              (idempotency key,                     Email provider
+                               retries, backoff)                    In-app inbox
+                                     |
+                                     v
+ Delivery receipts, opens, disables, unsubscribes --&gt; Kafka --&gt; Logs + labels
+                                                                   |
+                                  Retrain --&gt; Offline eval --&gt; A/B --&gt; Rollout
+
+===============================================================================
+</code></pre>
+<p><strong>Queueing.</strong> Separate queues by priority class so a large digest campaign cannot delay security alerts or DMs. Deferred sends go into a delay queue (a sorted set by send time, or a scheduler with time-bucketed partitions).</p>
+<p><strong>Rate limiting.</strong> Push providers (APNs for iOS, FCM for Android) and email providers throttle senders and can penalise bursts. Use token buckets per provider and per region. Email reputation also depends on bounce and complaint rates, so suppress addresses that hard-bounce.</p>
+<p><strong>Timezone handling.</strong> Store each user's timezone (from the device, updated on change) and compute quiet hours and send times in local time. Travel makes this stale; prefer the latest device-reported timezone. Watch daylight-saving transitions: schedule in UTC but compute from local rules at scheduling time, using a timezone library, not fixed offsets.</p>
+<p><strong>Idempotency.</strong> Workers retry, and at-least-once queues redeliver. Assign every send a deterministic idempotency key, such as a hash of <code>(recipient, dedup key, channel, send window)</code>, and check-and-set it in a fast store before calling the provider. A duplicate push is a visible bug to the user.</p>
+<p><strong>Retries.</strong> Retry transient provider errors with exponential backoff and jitter, but give up after the notification's expiry. Handle permanent errors by updating state: an invalid device token means the app was uninstalled or the token rotated, so remove it; a hard email bounce means suppress that address.</p>
+<p><strong>Re-check at send time.</strong> Between selection and delivery, the user may have opened the app, seen the content, or opted out. Re-check consent and &quot;already seen&quot; right before sending.</p>
+<p><strong>Transactional path.</strong> Keep it separate from the ranking path, with its own capacity, so a ranking outage never blocks password resets.</p>
+<p><strong>Logging.</strong> Log every decision, including suppressed candidates with the reason (below threshold, over budget, quiet hours) and their propensity. Suppressed candidates are the control data for uplift models.</p>
+<hr />
+<h2 id="cold-start">Cold Start</h2>
+<p><strong>New users.</strong> No history, and the first days decide whether they stay. Use onboarding-specific rules (a small number of welcome and social-connection notifications), population priors by acquisition channel, region, and platform, and conservative budgets. Asking for push permission is itself a design decision: on iOS the OS prompt can be shown only once, so many apps first show an in-app explanation and ask at a moment when the value is clear (for example, after the user follows someone).</p>
+<p><strong>New notification types.</strong> No training labels for the new type. Start with a rule-based policy and a small exposure share, randomise sends to collect clean labels, share model heads with similar existing types, and scale up once disable rates look acceptable.</p>
+<p><strong>Dormant users.</strong> Their recent features are empty, and they are the most at risk of unsubscribing. Re-engagement campaigns should use tight caps and stop quickly if there is no response (&quot;sunsetting&quot;: stop emailing after a long streak of no opens, which also protects sender reputation).</p>
+<p>Shrink per-user estimates toward segment priors as data accumulates, for example <code>(n x user_rate + k x prior_rate) / (n + k)</code>.</p>
+<hr />
+<h2 id="feedback-loops">Feedback Loops</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loop</th>
+<th>Mechanism</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Confounded training data</strong></td>
+<td>Labels only exist for sent notifications, chosen by the old policy</td>
+<td>Randomised exploration with logged propensities; IPS weighting</td>
+</tr>
+<tr>
+<td><strong>Taking credit for organic visits</strong></td>
+<td>Model learns to notify users who were about to visit</td>
+<td>Uplift modelling; global holdout</td>
+</tr>
+<tr>
+<td><strong>Survivorship</strong></td>
+<td>Users most annoyed by notifications disable them and leave the data</td>
+<td>Keep disabled users in analysis; model disable risk explicitly</td>
+</tr>
+<tr>
+<td><strong>Open-rate inflation</strong></td>
+<td>Policy learns clickbait copy that gets opens but hurts trust</td>
+<td>Downstream action and negative-feedback terms; copy review</td>
+</tr>
+<tr>
+<td><strong>Volume creep</strong></td>
+<td>Each team adds a type that tests positive in isolation; total volume rises</td>
+<td>Shared per-user budget across all types and teams</td>
+</tr>
+<tr>
+<td><strong>Social amplification</strong></td>
+<td>Notifications cause replies, which cause more notifications</td>
+<td>Per-thread and per-actor caps; cluster experiments</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Volume creep</strong> is the one to mention unprompted. Each new notification type is usually tested alone, wins its short A/B test, and ships. The sum of all of them is never tested. A central budget and a global holdout are the structural fixes.</p>
+<hr />
+<h2 id="consent-privacy-and-regulation">Consent, Privacy and Regulation</h2>
+<p>These are hard constraints, enforced in the eligibility layer and again at send time, not model features.</p>
+<ul>
+<li><strong>Consent.</strong> Push requires OS permission. Marketing email and SMS require consent in many jurisdictions (for example, opt-in rules under GDPR and ePrivacy in the EU; CAN-SPAM in the US requires a working unsubscribe; SMS rules such as the TCPA in the US are strict). Store consent per channel and type, with timestamp and source.</li>
+<li><strong>Unsubscribe handling.</strong> Email needs a visible unsubscribe link, and major mailbox providers now expect one-click unsubscribe headers for bulk senders. Process unsubscribes promptly and propagate them to every sending system.</li>
+<li><strong>Granular preferences.</strong> Let users turn off individual types. A user who can mute &quot;trending&quot; pushes is less likely to disable all push.</li>
+<li><strong>Quiet hours.</strong> Default no-send windows at night in local time, plus user-configured windows. Some jurisdictions restrict marketing messages at certain hours. Only critical transactional messages bypass them.</li>
+<li><strong>Content privacy.</strong> Push previews appear on lock screens. Do not include sensitive content (health, finance, private messages if the user chose hidden previews) in the visible text.</li>
+<li><strong>Data minimisation.</strong> Notification logs contain behavioural data; apply retention limits and honour deletion requests across logs and training sets.</li>
+<li><strong>Minors.</strong> Stricter defaults and limits for younger users, as required by platform policy and local law.</li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-is-popen-not-a-good-objective">Why is P(open) not a good objective?</h4>
+<p>It rewards the wrong things. Clickbait copy raises opens and erodes trust. It counts opens from users who would have visited anyway, so it favours the most active users, where the incremental effect is smallest. And it ignores harm: a push that gets opened but increases the chance of the user disabling notifications is scored as a win. The objective should be the incremental effect on visits and downstream actions, minus a heavily weighted disable and unsubscribe risk, minus an interruption cost.</p>
+<h4 id="how-do-you-know-notifications-are-adding-value-rather-than-taking-credit-for-organic-visits">How do you know notifications are adding value rather than taking credit for organic visits?</h4>
+<p>A long-running global holdout: a small random group that gets no ranked notifications. The difference in activity and retention between them and everyone else is the true incremental value. Per-decision, randomised exploration (randomly suppressing some sends the policy chose, and sending some it dropped) gives the data to train uplift models that estimate <code>P(visit | send) - P(visit | no send)</code> per user and candidate.</p>
+<h4 id="how-would-you-decide-how-many-notifications-a-user-should-get">How would you decide how many notifications a user should get?</h4>
+<p>Treat it as a budgeted selection. Score candidates, then pick the best under a per-user budget and a threshold below which sending is worse than nothing. The budget should be personalised: run randomised volume experiments to estimate the marginal value and marginal disable risk of the k-th notification per day for different segments, and set the budget where they cross. Layer hard caps and per-type limits on top as safety rails.</p>
+<h4 id="your-new-policy-sends-20-more-pushes-and-raises-dau-in-a-one-week-test-do-you-ship">Your new policy sends 20% more pushes and raises DAU in a one-week test. Do you ship?</h4>
+<p>Not yet. More pushes almost always lift short-term activity. The costs (disables, unsubscribes, lower open rates as users learn to ignore pushes) accumulate slowly. I would run it for several weeks, plot the treatment effect over time, and check the cumulative disable rate per arm. If the lift decays while disables rise, the long-term effect may be negative, because a disabled user is lost for every future notification.</p>
+<h4 id="how-do-you-choose-between-push-email-and-in-app">How do you choose between push, email, and in-app?</h4>
+<p>Score each (candidate, channel) pair with its own value and harm, then pick at most one channel per candidate during selection. Push is for time-sensitive, high-relevance items because it has the highest interruption cost. Email suits digests. The in-app inbox has no interruption cost and no opt-out risk, so it receives anything that did not make the push budget. Coordinate through one cross-channel ledger so a push that was opened suppresses the matching email.</p>
+<h4 id="five-people-liked-a-users-post-in-ten-minutes-what-gets-sent">Five people liked a user's post in ten minutes. What gets sent?</h4>
+<p>One aggregated notification. Hold like-events for that <code>(recipient, post, action)</code> key for a short window, then send &quot;Alex, Sam and 3 others liked your post&quot;, naming the actors the recipient has the highest affinity with. The ranker scores the aggregate using count and top-actor features. If the platform supports replacing a delivered notification, later updates replace the earlier one instead of alerting again.</p>
+<h4 id="how-do-you-guarantee-no-duplicate-pushes">How do you guarantee no duplicate pushes?</h4>
+<p>Queues deliver at least once and workers retry, so duplicates are prevented at the send step with a deterministic idempotency key derived from recipient, dedup key, channel, and send window, set atomically in a fast store before calling the provider. Candidate-level dedup upstream removes the same event arriving through two paths. Monitor the duplicate rate as a system metric.</p>
+<h4 id="how-do-you-train-when-all-your-data-comes-from-the-current-policy">How do you train when all your data comes from the current policy?</h4>
+<p>The logs only contain sends the current policy chose, so the model never sees outcomes for dropped candidates, and &quot;sent&quot; is correlated with &quot;likely to visit anyway&quot;. Add a small amount of randomised exploration, log the propensity of every decision, including suppressions, and use inverse propensity weighting or doubly robust estimators for training and for off-policy evaluation. The global holdout gives the clean no-send baseline.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Optimising P(open)</td>
+<td>Clickbait, fatigue, credit for organic visits</td>
+<td>Uplift on visits and actions minus disable risk</td>
+</tr>
+<tr>
+<td>No &quot;send nothing&quot; option</td>
+<td>Every user gets their top candidate every day</td>
+<td>Per-user value threshold</td>
+</tr>
+<tr>
+<td>Ignoring disable and unsubscribe risk</td>
+<td>Permanent channel loss is invisible in open metrics</td>
+<td>Model P(disable) and weight it by channel value</td>
+</tr>
+<tr>
+<td>Short A/B tests for volume changes</td>
+<td>Novelty lift hides slow fatigue</td>
+<td>Multi-week tests, cumulative disable rate, long holdouts</td>
+</tr>
+<tr>
+<td>No global holdout</td>
+<td>Cannot measure total incrementality</td>
+<td>Keep a small no-notification holdout</td>
+</tr>
+<tr>
+<td>Training only on sent notifications</td>
+<td>Confounded labels, no counterfactual</td>
+<td>Randomised exploration and logged propensities</td>
+</tr>
+<tr>
+<td>Separate caps per team or channel</td>
+<td>Volume creep, over-messaging</td>
+<td>One shared per-user budget and ledger</td>
+</tr>
+<tr>
+<td>Sending each like separately</td>
+<td>Floods the user</td>
+<td>Aggregation windows keyed by target and action</td>
+</tr>
+<tr>
+<td>Scheduling with fixed UTC offsets</td>
+<td>Wrong local times around DST and travel</td>
+<td>Store the timezone and use a timezone library</td>
+</tr>
+<tr>
+<td>No idempotency key</td>
+<td>Duplicate pushes on retry</td>
+<td>Deterministic key checked before send</td>
+</tr>
+<tr>
+<td>Not re-checking at send time</td>
+<td>Sends after opt-out or after the user already saw it</td>
+<td>Re-check consent and seen state before delivery</td>
+</tr>
+<tr>
+<td>Transactional sharing the ranked path</td>
+<td>A ranking outage blocks password resets</td>
+<td>Separate path and capacity</td>
+</tr>
+<tr>
+<td>Sensitive content in lock-screen text</td>
+<td>Privacy harm</td>
+<td>Generic preview text for sensitive types</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="news_feed_ranking.html">News Feed Ranking System Design</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="ads_ctr_prediction.html">Ads CTR Prediction and Ranking</a></li>
+<li><a href="eta_prediction.html">ETA Prediction System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../deep_learning/intro_reinforcement_learning.html">Reinforcement Learning</a></li>
+<li><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Store</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_responsible_ai_fairness.html">Responsible AI and Fairness</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="enterprise_rag_search.html"><small>Previous</small>Enterprise RAG Search</a><a rel="next" class="next" href="dynamic_pricing.html"><small>Next</small>Dynamic Pricing</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/notification_ranking.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

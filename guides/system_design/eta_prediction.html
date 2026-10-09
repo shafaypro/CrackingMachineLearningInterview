@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ETA Prediction System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design an ETA prediction system for a ride-hailing or food-delivery app&quot; sounds like a plain regression problem: predict minutes, minimize error…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/eta_prediction.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ETA Prediction System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design an ETA prediction system for a ride-hailing or food-delivery app&quot; sounds like a plain regression problem: predict minutes, minimize error…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/eta_prediction.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ETA Prediction System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design an ETA prediction system for a ride-hailing or food-delivery app&quot; sounds like a plain regression problem: predict minutes, minimize error…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ETA Prediction System Design",
+   "description": "\"Design an ETA prediction system for a ride-hailing or food-delivery app\" sounds like a plain regression problem: predict minutes, minimize error…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/eta_prediction.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "ETA Prediction",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/eta_prediction.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">ETA Prediction</span></nav>
+<p class="meta"><a href="../../#system_design/eta_prediction.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 9 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="eta-prediction-system-design">ETA Prediction System Design</h1>
+<p>&quot;Design an ETA prediction system for a ride-hailing or food-delivery app&quot; sounds like a plain regression problem: predict minutes, minimize error. Candidates who stop there miss most of the design. The ETA is shown to users, used to price trips, and fed into the dispatcher that decides which driver or courier gets which job. A routing engine already produces a decent physics-based estimate from the road graph, so the ML model's job is usually to correct it, not to replace it. And the cost of an error depends on its sign: telling someone &quot;5 minutes&quot; when it is really 12 does more damage than the reverse. Those facts drive the choices below.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#why-eta-matters">Why ETA Matters</a></li>
+<li><a href="#baseline-the-routing-engine">Baseline: The Routing Engine</a></li>
+<li><a href="#decomposing-a-delivery-eta">Decomposing a Delivery ETA</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#labels-and-data-cleaning">Labels and Data Cleaning</a></li>
+<li><a href="#model-progression">Model Progression</a></li>
+<li><a href="#loss-functions-and-uncertainty">Loss Functions and Uncertainty</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#serving-architecture">Serving Architecture</a></li>
+<li><a href="#re-prediction-during-the-trip">Re-Prediction During the Trip</a></li>
+<li><a href="#feedback-loops">Feedback Loops</a></li>
+<li><a href="#cold-start-in-new-cities">Cold Start in New Cities</a></li>
+<li><a href="#monitoring-and-drift">Monitoring and Drift</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p>&quot;ETA&quot; means several different things on one platform. Pin down which one before designing anything.</p>
+<p><strong>Which ETA?</strong></p>
+<ul>
+<li><strong>Pickup ETA (ride-hailing):</strong> time for a driver to reach the rider. Shown before the rider requests, and used by the dispatcher to choose a driver.</li>
+<li><strong>Trip ETA (ride-hailing):</strong> time from pickup to dropoff. Shown in the fare quote and during the trip.</li>
+<li><strong>Delivery ETA (food):</strong> time from order placement to food at the door. It includes restaurant prep time, courier assignment, travel to the restaurant, waiting, and travel to the customer. Much of it is not driving at all.</li>
+</ul>
+<p><strong>When is it shown and who consumes it?</strong> Before the order (a quote on the home screen or checkout page, shown for many candidate restaurants or products at once), at order time (a promise), and continuously during the trip (a live countdown). Internal consumers matter as much as users: dispatch, pricing, and batching all call the same service, often at much higher volume than the UI does.</p>
+<p><strong>Point estimate or range?</strong> Food apps commonly show a range (&quot;25 to 35 min&quot;). A range needs a calibrated distribution, not a single number.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Requests per second, peak and average. Dispatch may score every (driver, request) pair in a neighbourhood, so internal calls can be an order of magnitude above user-facing ones.</li>
+<li>Latency budget: ETA sits inside the dispatch loop and the page render, so the model usually gets a slice in the range of single-digit to tens of milliseconds.</li>
+<li>Number of cities and how different they are (road networks, traffic patterns, two-wheelers versus cars).</li>
+</ul>
+<p>For the rest of this guide, assume: <strong>a food-delivery and ride-hailing platform in a few hundred cities, ~200k ETA requests/sec at peak including internal dispatch calls, p99 of 30 ms for the ETA service, shown as a range for delivery and a point estimate for rides.</strong> These are working assumptions for the exercise, not industry figures.</p>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency (p99)</td>
+<td>~30 ms per call, lower for batched dispatch calls</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>~200k requests/sec peak</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Must always return something; a routing-only ETA is an acceptable fallback</td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>Low absolute error and low bias, per city and per time band</td>
+</tr>
+<tr>
+<td>Interval quality</td>
+<td>An &quot;80% interval&quot; should contain the actual time about 80% of the time</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="why-eta-matters">Why ETA Matters</h2>
+<p>ETA is an input to three separate decisions, which is why small improvements are worth a lot:</p>
+<ul>
+<li><strong>Dispatch and matching.</strong> The dispatcher assigns drivers or couriers by minimizing something like total pickup time. A biased pickup ETA leads to worse assignments across the whole fleet, not just one bad trip.</li>
+<li><strong>Pricing.</strong> Upfront fares are usually a function of predicted distance and duration. Underestimate duration and the platform or driver is underpaid; overestimate and riders are overcharged or leave.</li>
+<li><strong>User trust and conversion.</strong> The ETA shown on the menu or quote screen affects whether people order at all. A late order against a promised time produces refunds, support tickets, and churn.</li>
+</ul>
+<h3 id="asymmetric-cost">Asymmetric cost</h3>
+<p>Errors do not cost the same in both directions.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Underestimate</strong> (arrives later than promised)</td>
+<td>Broken promise, angry customer, cold food, refunds, cancellations, worse ratings</td>
+</tr>
+<tr>
+<td><strong>Overestimate</strong> (arrives earlier than promised)</td>
+<td>Lower conversion at quote time (the app looks slow), idle couriers, food waiting at the door; mild if small</td>
+</tr>
+</tbody>
+</table></div>
+<p>So the target is usually not the mean. For the displayed promise, many teams aim for a higher quantile, or add a buffer, so that &quot;late&quot; is rare. For dispatch, where ETAs are compared against each other, an unbiased mean estimate is what you want. <strong>The same model can serve both if it predicts a distribution</strong>, and each consumer reads the quantile it needs.</p>
+<hr />
+<h2 id="baseline-the-routing-engine">Baseline: The Routing Engine</h2>
+<p>Before any ML, a routing engine computes an ETA from the road network.</p>
+<p><strong>Road graph.</strong> Nodes are intersections, edges are road segments. Each edge carries a travel time, derived from length divided by an expected speed, plus turn costs and penalties for traffic lights.</p>
+<p><strong>Shortest path.</strong></p>
+<ul>
+<li><strong>Dijkstra</strong> finds the minimum-time path but explores too many nodes on a continental graph to meet a millisecond budget.</li>
+<li><strong>A*</strong> adds a heuristic (straight-line distance divided by maximum speed) to guide the search toward the goal. Faster, but still not enough at scale.</li>
+<li><strong>Contraction hierarchies (CH)</strong> preprocess the graph: nodes are contracted in order of importance and shortcut edges are added so that queries only move &quot;upward&quot; through the hierarchy in a bidirectional search. Queries become very fast. The catch is that preprocessing assumes fixed weights.</li>
+<li><strong>Customizable approaches</strong> (for example customizable route planning or customizable CH) split preprocessing into a metric-independent part and a fast &quot;customization&quot; step, so edge weights can be refreshed with live traffic every few minutes without redoing everything.</li>
+</ul>
+<p><strong>Segment speeds.</strong> Edge weights come from historical speed profiles (by segment, time of day, day of week) blended with real-time speeds computed from recent GPS traces on that segment.</p>
+<pre><code>routing_eta = Σ over segments in route  (length_s / speed_s(t))  +  Σ turn and signal penalties
+</code></pre>
+<h3 id="why-ml-on-top-residual-correction">Why ML on top: residual correction</h3>
+<p>The routing ETA is systematically wrong in predictable ways. It ignores time spent finding parking, entering a gated complex, walking to the door, waiting at pickup, driver-specific behaviour, and local quirks the speed profile does not capture. Rather than learning travel time from scratch, the standard design trains a model to predict the <strong>residual</strong>:</p>
+<pre><code>final_eta = routing_eta + f(features)          # additive residual
+final_eta = routing_eta × g(features)          # or multiplicative correction
+</code></pre>
+<p>Reasons this works well:</p>
+<ul>
+<li>The routing engine already encodes route geometry and traffic; the model does not have to rediscover physics.</li>
+<li>The residual has a smaller range and simpler structure than raw duration, so it is easier to learn.</li>
+<li>If the model fails, <code>routing_eta</code> is a sensible fallback.</li>
+<li>Routing improvements (better maps, fresher speeds) help automatically; the model only needs retraining to recalibrate.</li>
+</ul>
+<p>The routing engine also exposes useful intermediate outputs: route distance, number of turns, share of time on highways, and the list of segments. Those become model features.</p>
+<hr />
+<h2 id="decomposing-a-delivery-eta">Decomposing a Delivery ETA</h2>
+<p>A food-delivery ETA is a sum of stages with very different drivers. Modelling them separately makes each easier to learn, debug, and update as the order progresses.</p>
+<pre><code>Order placed
+   │
+   ├── Restaurant accepts ─────────────── (seconds to minutes)
+   │
+   ├── Food preparation ───────────────── prep model: restaurant, items, current load
+   │
+   ├── Courier assignment ─────────────── dispatch latency, courier supply nearby
+   │
+   ├── Courier travels to restaurant ──── routing ETA + residual
+   │
+   ├── Wait at restaurant ─────────────── max(0, food_ready − courier_arrival) + handoff
+   │
+   ├── Travel to customer ─────────────── routing ETA + residual
+   │
+   └── Last mile (parking, building, walk) ── location-specific model
+Delivered
+</code></pre>
+<p>The stages are not simply additive. Pickup time is roughly <code>max(food_ready_time, courier_arrival_time) + handoff</code>, which means the total depends on which of two uncertain times is later. Two ways to handle it:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Idea</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stage models + composition</strong></td>
+<td>Predict each stage (ideally as a distribution) and combine with the max and sums, possibly by Monte Carlo sampling</td>
+<td>Interpretable; each stage re-predicts as it completes; composition errors add up</td>
+</tr>
+<tr>
+<td><strong>End-to-end model with stage features</strong></td>
+<td>One model predicts total time, using stage predictions as inputs</td>
+<td>Learns correlations between stages; harder to debug; must still update as stages complete</td>
+</tr>
+</tbody>
+</table></div>
+<p>A common compromise is stage models for the operational parts (prep, travel) and an end-to-end model on top that uses them as features and is trained on the total.</p>
+<pre><code class="language-python">import numpy as np
+
+def delivery_eta_samples(prep_samples, courier_to_rest_samples,
+                         handoff_samples, rest_to_cust_samples, last_mile_samples):
+    &quot;&quot;&quot;Compose stage distributions into a total delivery-time distribution.
+    Each argument is an array of samples (minutes) from that stage's model.&quot;&quot;&quot;
+    pickup = np.maximum(prep_samples, courier_to_rest_samples) + handoff_samples
+    return pickup + rest_to_cust_samples + last_mile_samples
+
+# total = delivery_eta_samples(...)
+# low, high = np.percentile(total, [10, 90])   # range to display
+</code></pre>
+<p>Note that sampling stages independently ignores correlations (a busy Friday evening slows the kitchen and the roads at once). Either sample stages jointly from shared context, or let the end-to-end model correct for it.</p>
+<hr />
+<h2 id="features">Features</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Route</strong></td>
+<td>Routing ETA, route distance, segment IDs along the route, road classes, number of turns and traffic lights, share of highway, bridges or tolls</td>
+</tr>
+<tr>
+<td><strong>Traffic</strong></td>
+<td>Historical speed per segment and time band, real-time speed from recent GPS pings, ratio of current to typical speed, incidents and closures</td>
+</tr>
+<tr>
+<td><strong>Time</strong></td>
+<td>Hour of day, day of week, holiday flags, minutes since rush hour start; encode cyclically or as embeddings</td>
+</tr>
+<tr>
+<td><strong>Geography</strong></td>
+<td>Origin and destination H3 cells at a few resolutions, city ID, zone type (dense downtown, suburb, airport)</td>
+</tr>
+<tr>
+<td><strong>Weather</strong></td>
+<td>Rain, snow, temperature; ideally current and forecast for the trip duration</td>
+</tr>
+<tr>
+<td><strong>Events</strong></td>
+<td>Concerts, sports games, large public events near the route</td>
+</tr>
+<tr>
+<td><strong>Driver / courier</strong></td>
+<td>Vehicle type (car, bike, scooter, walking), driver's historical speed relative to routing ETA, experience, current state</td>
+</tr>
+<tr>
+<td><strong>Restaurant</strong></td>
+<td>Historical prep time by hour, prep time for similar item counts, current open orders (kitchen load), recent handoff delays</td>
+</tr>
+<tr>
+<td><strong>Destination</strong></td>
+<td>Historical last-mile time at this building or cell (apartments, campuses, gated areas take longer)</td>
+</tr>
+<tr>
+<td><strong>Supply / demand</strong></td>
+<td>Available couriers nearby, open orders in the zone, recent assignment latency</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="geospatial-cells">Geospatial cells</h3>
+<p>Raw latitude and longitude are poor features for most models. Discretize with a hierarchical grid such as <strong>H3</strong>, which tiles the earth with hexagons at multiple resolutions. Hexagons have uniform neighbour distances, which makes smoothing and neighbour lookups simple.</p>
+<ul>
+<li>Use coarse cells (city-district scale) for stable aggregates and fine cells (block scale) for last-mile and pickup-point effects.</li>
+<li>Aggregate targets per cell with hierarchical backoff: fine cell → coarse cell → city, so sparse cells borrow strength from their parents.</li>
+<li>Origin-destination cell pairs are useful for caching and for aggregates like &quot;typical residual between these two areas at this hour.&quot;</li>
+</ul>
+<pre><code class="language-python">import h3   # h3-py v4 API
+
+def geo_features(lat, lng, resolutions=(7, 9)):
+    &quot;&quot;&quot;Hex cell IDs at multiple resolutions, used as categorical keys
+    for embeddings and for looking up aggregated statistics.&quot;&quot;&quot;
+    return {f&quot;h3_r{r}&quot;: h3.latlng_to_cell(lat, lng, r) for r in resolutions}
+</code></pre>
+<h3 id="point-in-time-correctness">Point-in-time correctness</h3>
+<p>Traffic and kitchen-load features change minute by minute. The training example must use the value <strong>as it was at prediction time</strong>, not a later snapshot. The safest approach is to log the feature vector at serving time and train on those logs. Recomputing features from tables after the fact leaks information (for example, a &quot;current speed&quot; that already reflects the congestion the trip ran into).</p>
+<hr />
+<h2 id="labels-and-data-cleaning">Labels and Data Cleaning</h2>
+<p>The label is simple in principle: actual arrival time minus the time of prediction. In practice it is noisy.</p>
+<p><strong>GPS noise.</strong> Pings drift in urban canyons, jump between parallel roads, and drop out in tunnels. Map-match traces to the road graph (typically with an HMM-style matcher) before computing segment speeds or trip durations.</p>
+<p><strong>Event timestamp noise.</strong> &quot;Arrived&quot; and &quot;delivered&quot; are often button presses. Couriers mark delivered early or late, drivers start trips before the rider is in the car. Where possible, derive events from geofences and GPS rather than taps, or use taps only when they agree with GPS within a tolerance.</p>
+<p><strong>Trip cleaning.</strong> Drop or separately label:</p>
+<ul>
+<li>Cancelled or reassigned trips (the label is censored, not a valid duration)</li>
+<li>Trips with long unexplained stops, detours far off the planned route, or implausible speeds</li>
+<li>Batched deliveries where the courier carried several orders; label each leg separately or include batch features</li>
+<li>Test orders and internal traffic</li>
+</ul>
+<p><strong>Outliers.</strong> Some trips take much longer (accident, wrong address). Do not blindly delete them: users experience those too, and removing them makes the model overconfident. Instead cap extreme values for the mean model, keep them for the tail quantile models, and use robust losses.</p>
+<p><strong>Censoring.</strong> A trip cancelled after 20 minutes of waiting tells you the true time was <em>more than</em> 20 minutes. Dropping these biases the data toward fast trips. Survival-style losses or at least tracking the share of censored trips per segment keeps this visible.</p>
+<p><strong>Which ETA is the label for?</strong> Pickup ETA labels exist only for the driver actually dispatched, not for the alternatives the dispatcher considered. That is a selection effect that matters for the feedback loop discussed below.</p>
+<hr />
+<h2 id="model-progression">Model Progression</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>What it adds</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Routing ETA only</strong></td>
+<td>Physics and traffic; no training needed</td>
+<td>Misses parking, pickup waits, local quirks; systematic bias by area</td>
+</tr>
+<tr>
+<td><strong>Routing ETA + per-cell/hour bias table</strong></td>
+<td>Cheap correction for known biases</td>
+<td>No interactions; sparse cells are noisy</td>
+</tr>
+<tr>
+<td><strong>GBDT on aggregates (residual)</strong></td>
+<td>Nonlinear interactions between route summary, time, weather, city; strong on tabular data; fast on CPU</td>
+<td>Sees the route only through summary statistics</td>
+</tr>
+<tr>
+<td><strong>Deep model over features (transformer / MLP)</strong></td>
+<td>Embeddings for high-cardinality categoricals (cells, segments, restaurants); scales with data</td>
+<td>Needs more data and care to serve fast</td>
+</tr>
+<tr>
+<td><strong>Sequence / graph models over route segments</strong></td>
+<td>Models the route as a sequence or subgraph; captures spatial propagation of congestion</td>
+<td>Heavier to train and serve; latency pressure</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="gbdt-on-aggregates">GBDT on aggregates</h3>
+<p>The strong first model. Inputs are the routing ETA, route summaries (distance, highway share, turn count), time and weather features, and aggregated statistics such as the median residual for this origin cell at this hour. Target is the residual or the log-ratio <code>log(actual / routing_eta)</code>. It trains quickly, handles missing values natively, and serves in well under a millisecond.</p>
+<pre><code class="language-python">import lightgbm as lgb
+import numpy as np
+
+# Target: log ratio of actual to routing ETA; errors become relative
+y = np.log(df[&quot;actual_min&quot;] / df[&quot;routing_eta_min&quot;])
+
+model = lgb.LGBMRegressor(
+    objective=&quot;huber&quot;, alpha=0.3,       # robust to label outliers (alpha is the Huber delta)
+    n_estimators=1000, learning_rate=0.05, num_leaves=127,
+    min_child_samples=200,
+)
+model.fit(X_train, y_train, eval_set=[(X_val, y_val)],
+          callbacks=[lgb.early_stopping(50)])
+
+eta = df_serve[&quot;routing_eta_min&quot;] * np.exp(model.predict(X_serve))
+</code></pre>
+<h3 id="transformer-over-features">Transformer over features</h3>
+<p>One published industry approach embeds every feature (continuous features after discretization into buckets, categorical features such as cells, time buckets, vehicle type) as a token, then uses self-attention across those tokens to learn feature interactions. The output head predicts the residual on top of the routing ETA. The ideas that matter generically:</p>
+<ul>
+<li><strong>Bucketize continuous features</strong> and embed the buckets. This lets the model learn nonlinear effects without hand-tuned transforms.</li>
+<li><strong>Attention across feature tokens</strong> learns interactions (for example, rain × downtown × rush hour) instead of relying on manual crosses.</li>
+<li><strong>Keep it shallow and use efficient attention</strong> so it fits the latency budget; the feature count is small, so this is cheaper than it sounds.</li>
+<li><strong>Separate output calibration per request type</strong> (pickup, dropoff, delivery) with a small bias term or head, since each has a different error profile.</li>
+</ul>
+<h3 id="sequence-and-graph-models-over-the-route">Sequence and graph models over the route</h3>
+<p>A trip is a sequence of road segments. Summary statistics lose where the slow part is and how congestion on one segment affects its neighbours.</p>
+<ul>
+<li><strong>Sequence model:</strong> encode each segment (ID embedding, length, road class, current and typical speed) and run an RNN, 1D convolution, or transformer over the sequence, then pool to predict total time.</li>
+<li><strong>Graph neural network on the road graph:</strong> nodes are segments (or groups of adjacent segments), edges connect segments that feed into each other. Message passing propagates congestion: a jam downstream slows segments upstream in the next few minutes. Published work on large-scale map ETAs has used GNNs over groups of connected segments for exactly this reason. Per-segment travel times from the GNN can be summed along the route or used to refresh routing weights.</li>
+</ul>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class RouteSequenceETA(nn.Module):
+    &quot;&quot;&quot;Encode the segments along a route and predict a correction to routing ETA.&quot;&quot;&quot;
+    def __init__(self, n_segments, n_dense, d=64):
+        super().__init__()
+        self.seg_emb = nn.Embedding(n_segments, d)
+        self.dense_proj = nn.Linear(n_dense, d)      # length, speeds, road class...
+        layer = nn.TransformerEncoderLayer(d, nhead=4, batch_first=True)
+        self.encoder = nn.TransformerEncoder(layer, num_layers=2)
+        self.head = nn.Linear(d, 1)
+
+    def forward(self, seg_ids, seg_dense, pad_mask):
+        x = self.seg_emb(seg_ids) + self.dense_proj(seg_dense)   # (B, L, d)
+        h = self.encoder(x, src_key_padding_mask=pad_mask)
+        h = h.masked_fill(pad_mask.unsqueeze(-1), 0).sum(1) / (~pad_mask).sum(1, keepdim=True)
+        return self.head(h).squeeze(-1)    # log-ratio correction
+</code></pre>
+<p><strong>Practical choice:</strong> start with GBDT on the residual. Move to a deep model when the data volume justifies it and you need embeddings for high-cardinality entities. Use sequence or graph models where congestion dynamics dominate the error (dense cities, long trips), and weigh their latency against the gain.</p>
+<hr />
+<h2 id="loss-functions-and-uncertainty">Loss Functions and Uncertainty</h2>
+<p>The loss decides what &quot;best&quot; means, so tie it to how the ETA is used.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loss</th>
+<th>Optimal prediction</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MSE</strong></td>
+<td>Conditional mean</td>
+<td>Dominated by outlier trips; rarely the right choice with noisy labels</td>
+</tr>
+<tr>
+<td><strong>MAE</strong></td>
+<td>Conditional median</td>
+<td>Robust; a good default for a point estimate</td>
+</tr>
+<tr>
+<td><strong>Huber</strong></td>
+<td>Between mean and median</td>
+<td>Robust to outliers while smooth near zero</td>
+</tr>
+<tr>
+<td><strong>MAPE</strong></td>
+<td>Biased low (penalizes overestimates more, relative to actual)</td>
+<td>Explodes on very short trips; tends to push predictions down, which is the wrong direction for ETA</td>
+</tr>
+<tr>
+<td><strong>MAE on log duration</strong></td>
+<td>Median of duration; errors are relative</td>
+<td>Good compromise when relative error matters across short and long trips</td>
+</tr>
+<tr>
+<td><strong>Quantile (pinball)</strong></td>
+<td>Chosen quantile <em>q</em></td>
+<td>Directly encodes asymmetric cost: <em>q</em> &gt; 0.5 penalizes underestimates more</td>
+</tr>
+<tr>
+<td><strong>Distributional (e.g. Gaussian/log-normal NLL, mixture)</strong></td>
+<td>Full distribution</td>
+<td>Gives intervals and any quantile from one model</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pinball loss for quantile <em>q</em>, with residual <code>r = y − ŷ</code>:</p>
+<pre><code>L_q(r) = q · r          if r ≥ 0     (underestimate: actual later than predicted)
+         (q − 1) · r    if r &lt; 0     (overestimate)
+</code></pre>
+<p>With <em>q</em> = 0.8, an underestimate costs four times as much per minute as an overestimate, and the optimal prediction is the 80th percentile.</p>
+<pre><code class="language-python">import torch
+
+def pinball_loss(pred, target, quantiles=(0.1, 0.5, 0.9)):
+    &quot;&quot;&quot;pred: (B, Q) one column per quantile; target: (B,).&quot;&quot;&quot;
+    q = torch.tensor(quantiles, device=pred.device)
+    r = target.unsqueeze(1) - pred
+    return torch.maximum(q * r, (q - 1) * r).mean()
+</code></pre>
+<h3 id="predicting-intervals">Predicting intervals</h3>
+<p>Train several quantile heads (e.g. P10, P50, P90) together, or a parametric distribution. Practical details:</p>
+<ul>
+<li><strong>Quantile crossing.</strong> Independent heads can produce P90 &lt; P50. Predict P50 and non-negative offsets (via softplus) instead of raw quantiles.</li>
+<li><strong>Conformal calibration.</strong> On a recent holdout, measure how often actuals fall inside the predicted interval and widen or shrink it until coverage matches the target, per segment. This is cheap and robust.</li>
+<li><strong>Display policy is separate from the model.</strong> The product decides whether to show P50-P90, round to five minutes, or pad for new restaurants. Keep that logic outside the model so it can change without retraining.</li>
+</ul>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MAE</strong></td>
+<td>Average absolute error in minutes; easy to explain</td>
+</tr>
+<tr>
+<td><strong>MAPE</strong> or <strong>MAE on log</strong></td>
+<td>Relative error; compares short and long trips fairly (watch MAPE on very short trips)</td>
+</tr>
+<tr>
+<td><strong>P90 / P95 absolute error</strong></td>
+<td>The tail; the bad experiences that drive complaints</td>
+</tr>
+<tr>
+<td><strong>Mean signed error (bias)</strong></td>
+<td>Systematic early or late predictions; a model can have good MAE and be biased late in one city</td>
+</tr>
+<tr>
+<td><strong>Late rate</strong></td>
+<td>Share of trips arriving after the promised time (or after the upper end of the range)</td>
+</tr>
+<tr>
+<td><strong>Interval coverage</strong></td>
+<td>Share of actuals inside the P10-P90 interval; should be close to 80%</td>
+</tr>
+<tr>
+<td><strong>Interval width</strong></td>
+<td>Narrow intervals are only useful if coverage holds</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Slice everything.</strong> Report each metric by city, hour band, trip-length bucket, vehicle type, stage (pickup vs dropoff), and new versus established restaurants. Aggregate MAE hides the segments where the model is badly biased, and those are usually where complaints come from.</p>
+<p><strong>Compare against the routing baseline</strong> in every slice. A model that improves overall MAE but gets worse than plain routing on airport trips has a problem to explain.</p>
+<p>Evaluate on <strong>time-based splits</strong> (train on weeks 1 to N, test on week N+1), and include holiday weeks in the test set at least once a year, since those are where drift shows.</p>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+
+def eta_report(df, by=&quot;city&quot;):
+    &quot;&quot;&quot;df has columns: actual, pred, p10, p90, and the slicing column.&quot;&quot;&quot;
+    err = df[&quot;pred&quot;] - df[&quot;actual&quot;]
+    out = df.assign(abs_err=err.abs(), signed_err=err,
+                    late=df[&quot;actual&quot;] &gt; df[&quot;pred&quot;],
+                    covered=(df[&quot;actual&quot;] &gt;= df[&quot;p10&quot;]) &amp; (df[&quot;actual&quot;] &lt;= df[&quot;p90&quot;]))
+    return out.groupby(by).agg(
+        n=(&quot;abs_err&quot;, &quot;size&quot;), mae=(&quot;abs_err&quot;, &quot;mean&quot;),
+        p90_abs=(&quot;abs_err&quot;, lambda s: np.percentile(s, 90)),
+        bias=(&quot;signed_err&quot;, &quot;mean&quot;), late_rate=(&quot;late&quot;, &quot;mean&quot;),
+        coverage_80=(&quot;covered&quot;, &quot;mean&quot;))
+</code></pre>
+<h3 id="online">Online</h3>
+<p>Offline accuracy does not guarantee better outcomes, because the ETA changes behaviour: dispatch picks different drivers, users order from different restaurants, drivers react to the times they see. A/B test.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Accuracy (live)</strong></td>
+<td>MAE, bias, late rate, coverage measured on completed trips in each arm</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td>Conversion from quote to order, cancellations after ordering, support contacts about lateness, ratings, retention</td>
+</tr>
+<tr>
+<td><strong>Marketplace</strong></td>
+<td>Average pickup time, courier utilization, idle time at restaurants, completed trips per hour</td>
+</tr>
+<tr>
+<td><strong>Guardrails</strong></td>
+<td>Latency, fallback rate, fare accuracy</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Marketplace interference.</strong> Treatment and control share the same drivers. If the new ETA makes dispatch pull drivers toward treatment requests, control gets worse and the difference is overstated. Use city- or region-level switchback experiments (alternate the model across time windows within a city) when the change affects dispatch.</p>
+<hr />
+<h2 id="serving-architecture">Serving Architecture</h2>
+<pre><code>                              ETA PREDICTION SYSTEM
+═══════════════════════════════════════════════════════════════════════════════
+
+ Rider / Eater app ──┐
+ Dispatch service ───┼──► ETA API ──┬──► Cache (H3 origin-dest pair, time bucket)
+ Pricing service ────┘              │        │ hit ─────────────────────────┐
+                                    │        ▼ miss                         │
+                                    ├──► Routing Engine ──► route, segments,│
+                                    │    (CH / customizable graph,          │
+                                    │     live segment weights)             │
+                                    │                                       │
+                                    ├──► Feature Store ───► restaurant load,│
+                                    │    (online KV)         courier supply,│
+                                    │                        cell aggregates│
+                                    │                                       ▼
+                                    └──► Model Server ──► residual / quantiles
+                                         (GBDT or small NN, batched)        │
+                                                                            ▼
+                                                            Interval calibration
+                                                            + display policy
+                                                                            │
+                                                                            ▼
+                                                                 ETA response
+                                                                  (logged with
+                                                                   features)
+
+ GPS pings ──► Kafka ──► Map matching ──► Segment speed aggregator ──► Routing weights
+                               │                   (1-5 min windows)   + feature store
+                               ▼
+                   Trip events (pickup, dropoff) ──► Label join ──► Training data
+                                                                        │
+                                            Retrain ──► Offline eval ──► Shadow ──► Rollout
+
+═══════════════════════════════════════════════════════════════════════════════
+</code></pre>
+<p><strong>Latency budget.</strong> The routing query is often the most expensive step. The model itself, if GBDT or a small MLP, is cheap. Batch dispatch calls: the dispatcher asks for ETAs from many drivers to one pickup at once, which maps to a one-to-many routing query that is much cheaper than many separate queries.</p>
+<p><strong>Precomputation and caching.</strong> Many requests are near-duplicates. The menu screen asks for delivery ETAs to one user location from dozens of restaurants; nearby users ask for nearly the same things.</p>
+<ul>
+<li>Cache routing results and even full ETAs keyed on <code>(origin H3 cell, destination H3 cell, time bucket)</code> at a resolution fine enough that the error introduced is small relative to model error. Short TTLs (a minute or two) keep traffic fresh.</li>
+<li>Precompute one-to-many travel time tables for high-demand zones (for example, restaurant clusters to surrounding cells) on a schedule.</li>
+<li>Use the cache for browsing screens where approximate is fine, and compute fresh ETAs for order confirmation and dispatch.</li>
+</ul>
+<p><strong>Feature freshness.</strong> Real-time speeds and kitchen load come from streaming aggregates over the last few minutes, written to an online key-value store. Each feature carries a timestamp, and the model receives its age as a feature, or falls back to the historical value if it is too stale.</p>
+<p><strong>Fallbacks</strong>, in order:</p>
+<ol>
+<li>Model unavailable or timed out → routing ETA × a per-city/hour correction factor from a lookup table.</li>
+<li>Routing engine unavailable → historical travel time for the H3 cell pair and time bucket.</li>
+<li>No history → straight-line distance / typical city speed, with a wide interval.</li>
+</ol>
+<p>Log which fallback level produced each response, so accuracy dashboards can separate model quality from infrastructure problems.</p>
+<hr />
+<h2 id="re-prediction-during-the-trip">Re-Prediction During the Trip</h2>
+<p>Once a trip starts, the ETA should update as new information arrives: the driver's current position, whether food is ready, current speed.</p>
+<ul>
+<li><strong>Re-predict on events and on a timer.</strong> Recompute when a stage completes (food ready, courier picked up) and every 30 to 60 seconds in between, or when the driver deviates from the planned route.</li>
+<li><strong>Condition on elapsed progress.</strong> The remaining-time model uses features such as distance remaining, time already spent, and how the trip has gone so far relative to the original ETA. A trip running slow often continues to run slow.</li>
+<li><strong>Smooth what the user sees.</strong> Raw re-predictions jitter. Users notice when the countdown jumps up and down. Apply damping, allow the displayed time to decrease freely but increase only when the change exceeds a threshold, and never show a remaining time that is negative.</li>
+<li><strong>Training data for re-prediction</strong> is multiple examples per trip, one per re-prediction point. Weight or subsample so long trips do not dominate, and split train/test by trip, not by row, so examples from one trip do not leak across the split.</li>
+</ul>
+<pre><code class="language-python">def displayed_eta(prev_display, new_pred, alpha=0.3, jump_threshold=2.0):
+    &quot;&quot;&quot;Exponential smoothing with a threshold for upward revisions (minutes remaining).&quot;&quot;&quot;
+    smoothed = alpha * new_pred + (1 - alpha) * prev_display
+    if new_pred &gt; prev_display and new_pred - prev_display &lt; jump_threshold:
+        return prev_display                    # ignore small upward noise
+    return max(0.0, smoothed)
+</code></pre>
+<hr />
+<h2 id="feedback-loops">Feedback Loops</h2>
+<p>ETA is not a passive forecast. It changes the outcomes it predicts.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loop</th>
+<th>Mechanism</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dispatch selection</strong></td>
+<td>The dispatcher picks the driver with the lowest predicted ETA. Underestimates are selected more often, so the observed errors on chosen drivers are biased late (a winner's-curse effect)</td>
+<td>Evaluate on all candidates with small randomized exploration; correct with propensity weighting; monitor bias on dispatched vs. all</td>
+</tr>
+<tr>
+<td><strong>Promise shapes behaviour</strong></td>
+<td>Couriers and restaurants pace themselves to the displayed time; a padded ETA gets used up</td>
+<td>Evaluate on hard labels (GPS events), not taps; A/B test padding changes</td>
+</tr>
+<tr>
+<td><strong>Demand shifts</strong></td>
+<td>Short ETAs attract more orders to a restaurant or area, overloading it and making ETAs longer</td>
+<td>Include live load features; re-predict frequently; coordinate with demand shaping</td>
+</tr>
+<tr>
+<td><strong>Routing and traffic</strong></td>
+<td>Drivers follow the suggested route; if many do, they create congestion on it</td>
+<td>Real-time speeds pick it up; mainly a concern at very high fleet share</td>
+</tr>
+<tr>
+<td><strong>Training on own predictions</strong></td>
+<td>Features derived from past ETAs (e.g. &quot;promised time&quot;) leak model behaviour into the labels</td>
+<td>Avoid feeding the model's own previous outputs as features without care</td>
+</tr>
+</tbody>
+</table></div>
+<p>The dispatch selection effect is the one interviewers most often probe. When you choose the minimum over noisy estimates, the chosen estimate is optimistic on average. Labels only exist for the chosen option, so the model never sees the counterfactual, and it can drift toward underestimating exactly the cases dispatch prefers.</p>
+<hr />
+<h2 id="cold-start-in-new-cities">Cold Start in New Cities</h2>
+<p>A new city has a road graph (from map data) but no trip history, no segment speed profiles from your fleet, and no restaurant prep history.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>How it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Routing-only ETA first</strong></td>
+<td>Map data and posted speed limits give a physics baseline from day one</td>
+</tr>
+<tr>
+<td><strong>Transfer from similar cities</strong></td>
+<td>Train a global model with city features (density, road mix, climate, vehicle mix); a new city borrows from similar ones</td>
+</tr>
+<tr>
+<td><strong>Hierarchical backoff</strong></td>
+<td>Restaurant → cuisine type and city → global prep-time priors; fine cell → coarse cell → city for residuals</td>
+</tr>
+<tr>
+<td><strong>Third-party traffic data</strong></td>
+<td>Licensed historical and real-time speeds fill the gap until your own GPS volume builds up</td>
+</tr>
+<tr>
+<td><strong>Wider intervals and conservative padding</strong></td>
+<td>Uncertainty is higher; widen displayed ranges and aim for a higher quantile until coverage is verified</td>
+</tr>
+<tr>
+<td><strong>Fast feedback</strong></td>
+<td>Retrain or recalibrate city bias terms frequently in the first weeks</td>
+</tr>
+</tbody>
+</table></div>
+<p>The same logic applies to a new restaurant in an established city: use cuisine, menu size, and neighbourhood priors for prep time, then shrink toward the restaurant's own history as orders arrive, e.g. <code>(n × own_mean + k × prior_mean) / (n + k)</code>.</p>
+<hr />
+<h2 id="monitoring-and-drift">Monitoring and Drift</h2>
+<p>ETA models drift constantly, because the world they model changes: roads close, new buildings open, seasons change traffic, and the fleet mix shifts.</p>
+<p><strong>What to monitor, per city and hour:</strong></p>
+<ul>
+<li>Live MAE, bias, late rate, and interval coverage on completed trips (labels arrive within an hour, so this is fast compared with fraud or ads conversions)</li>
+<li>Distribution of routing ETA versus final ETA; a sudden shift in the residual suggests routing or map changes</li>
+<li>Feature freshness: age of real-time speed features, share of requests falling back to historical values</li>
+<li>Fallback rate and latency</li>
+</ul>
+<p><strong>Known sources of drift and responses:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Holidays and special days</strong></td>
+<td>Holiday features, training on prior years' holidays, or a separate calibration for known dates</td>
+</tr>
+<tr>
+<td><strong>Road closures and construction</strong></td>
+<td>Map updates feed the routing engine; real-time speed features catch unannounced closures; residual per segment spikes are an alert</td>
+</tr>
+<tr>
+<td><strong>Weather events</strong></td>
+<td>Weather features; real-time speeds adapt within minutes</td>
+</tr>
+<tr>
+<td><strong>Large events</strong></td>
+<td>Event calendar features; zone-level real-time demand and speeds</td>
+</tr>
+<tr>
+<td><strong>Seasonal and long-term change</strong></td>
+<td>Regular retraining on a rolling window</td>
+</tr>
+<tr>
+<td><strong>Fleet or product changes</strong></td>
+<td>New vehicle types or batching logic change the label distribution; segment metrics by vehicle and batch type</td>
+</tr>
+</tbody>
+</table></div>
+<p>A useful safety net is an <strong>online bias corrector</strong>: a per-(city, hour) additive term updated continuously from the last hour of residuals. It catches sudden systematic shifts much faster than a full retrain, and it is easy to reason about. Cap how far it can move so a data bug cannot push ETAs to absurd values.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-not-just-use-the-routing-engines-eta">Why not just use the routing engine's ETA?</h4>
+<p>It is a strong baseline and should always be the fallback, but it has systematic errors. It does not model parking, building access, waiting at pickup, driver-specific speed, restaurant prep, or local effects that speed profiles miss. Those errors are predictable from features like location, time, and vehicle type, so a model trained on the residual between actual and routing ETA removes much of the bias. Keeping the routing ETA as an input also means the model inherits map and traffic improvements for free.</p>
+<h4 id="why-predict-a-residual-instead-of-total-duration">Why predict a residual instead of total duration?</h4>
+<p>The routing ETA already captures most of the variance from distance and traffic, so the residual has a smaller range and simpler structure. The model spends its capacity on what routing misses. Predicting <code>log(actual / routing_eta)</code> makes errors relative, so short and long trips contribute comparably. It also gives a natural fallback: if the model fails, the correction is zero.</p>
+<h4 id="which-loss-would-you-use">Which loss would you use?</h4>
+<p>It depends on the consumer. For dispatch, which compares ETAs across drivers, an unbiased median or mean estimate matters, so MAE or Huber on the log ratio. For the promise shown to customers, underestimates cost more than overestimates, so a quantile loss at <em>q</em> above 0.5, or better, predict several quantiles and let the product choose. I would avoid MAPE as the training loss: it is unstable on short trips and pulls predictions low, which is the wrong direction when lateness is the expensive error.</p>
+<h4 id="how-do-you-show-a-range-like-25-to-35-minutes-and-make-sure-its-honest">How do you show a range like &quot;25 to 35 minutes&quot; and make sure it's honest?</h4>
+<p>Predict quantiles (e.g. P10, P50, P90) with pinball loss, using offset parameterization so they don't cross. Then calibrate on recent data: measure empirical coverage per city and time band and adjust interval width with a conformal-style correction until an 80% interval contains about 80% of actuals. Monitor coverage live. Rounding and display rules live in a separate policy layer.</p>
+<h4 id="how-would-you-structure-a-food-delivery-eta">How would you structure a food-delivery ETA?</h4>
+<p>Decompose it into stages: restaurant acceptance, prep, courier assignment, travel to restaurant, handoff, travel to customer, last mile. Pickup time is the max of food-ready time and courier arrival, plus handoff, so it is not a simple sum. I would build stage models (especially prep time and travel), then a total-time model that uses them as features. As each stage completes, its uncertainty drops to zero and the total is re-predicted.</p>
+<h4 id="dispatch-picks-the-driver-with-the-lowest-eta-what-problem-does-that-create-for-the-model">Dispatch picks the driver with the lowest ETA. What problem does that create for the model?</h4>
+<p>Selection bias. Choosing the minimum over several noisy estimates favours drivers whose ETA was underestimated, so the realized pickup times for chosen drivers run later than predicted even if the model is unbiased across all candidates. Labels only exist for chosen drivers, so retraining on them does not fix it. Mitigations: measure bias separately for dispatched trips, use small amounts of randomized assignment to get unbiased labels, reweight by selection propensity, and include driver-level features that reduce the noise that selection exploits.</p>
+<h4 id="how-do-you-serve-this-at-200k-requests-per-second-within-30-ms">How do you serve this at 200k requests per second within 30 ms?</h4>
+<p>Most cost is in routing, not the model. Use a precomputed hierarchy (contraction hierarchies or a customizable variant that accepts live weights), one-to-many queries for dispatch, and a cache keyed on origin and destination H3 cells plus a time bucket for browsing screens. Features come from an online store fed by streaming aggregates. The model is GBDT or a small network, batched per request. A tiered fallback (lookup correction, historical cell-pair time, distance heuristic) guarantees a response.</p>
+<h4 id="eta-accuracy-in-one-city-got-worse-overnight-how-do-you-debug-it">ETA accuracy in one city got worse overnight. How do you debug it?</h4>
+<p>First check whether the routing ETA or the residual changed: a jump in routing ETA points to a map or traffic-feed problem, a jump in the residual points to the model or its features. Check feature freshness (stale real-time speeds are a common cause) and fallback rate. Slice by zone and hour to see if it is local (a road closure, an event) or city-wide (weather, holiday, a logging change in trip events). Check whether a product change such as new batching rules changed what the label means. The online bias corrector buys time while the root cause is fixed.</p>
+<h4 id="how-do-you-launch-in-a-new-city">How do you launch in a new city?</h4>
+<p>Start from routing with posted speeds, plus a global model that uses city-level features so the new city borrows from similar cities. Use third-party traffic data if available. Show wider intervals and aim for a higher quantile at first. Recalibrate per-city bias terms daily as trips accumulate, and switch to the regular model once coverage and bias are verified on local data.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ignoring the routing baseline</td>
+<td>Model relearns physics poorly; no fallback</td>
+<td>Predict a residual on top of routing ETA</td>
+</tr>
+<tr>
+<td>Training with MSE on raw minutes</td>
+<td>Dominated by outlier trips; mean is not what users need</td>
+<td>MAE/Huber on log ratio; quantile loss for promises</td>
+</tr>
+<tr>
+<td>Using MAPE as the loss</td>
+<td>Unstable on short trips; biases predictions low</td>
+<td>Log-space loss or quantile loss</td>
+</tr>
+<tr>
+<td>Treating over- and under-estimates equally</td>
+<td>Late deliveries cost far more than early ones</td>
+<td>Asymmetric or quantile loss; separate display policy</td>
+</tr>
+<tr>
+<td>Reporting only overall MAE</td>
+<td>Hides bias in specific cities, hours, trip types</td>
+<td>Slice MAE, bias, P90 error, coverage by segment</td>
+</tr>
+<tr>
+<td>Recomputing features after the fact</td>
+<td>Leaks congestion the trip experienced into features</td>
+<td>Log served features; train on logs</td>
+</tr>
+<tr>
+<td>Using tap events as labels</td>
+<td>Couriers tap early or late; noisy labels</td>
+<td>Derive events from GPS geofences; clean trips</td>
+</tr>
+<tr>
+<td>Dropping cancelled trips</td>
+<td>Biases data toward fast trips</td>
+<td>Treat as censored; track censoring rate</td>
+</tr>
+<tr>
+<td>Summing stage estimates naively</td>
+<td>Pickup is a max, not a sum; stages are correlated</td>
+<td>Compose distributions; end-to-end model on top</td>
+</tr>
+<tr>
+<td>Random train/test split</td>
+<td>Leaks traffic conditions across the split</td>
+<td>Time-based split; split re-predictions by trip</td>
+</tr>
+<tr>
+<td>Ignoring dispatch selection bias</td>
+<td>Model looks unbiased offline, runs late in production</td>
+<td>Monitor dispatched-trip bias; exploration; reweighting</td>
+</tr>
+<tr>
+<td>Jittery live countdown</td>
+<td>Users lose trust when the ETA jumps</td>
+<td>Smoothing and thresholds on upward revisions</td>
+</tr>
+<tr>
+<td>User-level A/B test for dispatch changes</td>
+<td>Arms share drivers; results biased</td>
+<td>Switchback or region-level experiments</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="ads_ctr_prediction.html">Ads CTR Prediction System Design</a></li>
+<li><a href="fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../data_engineering/intro_geospatial.html">Geospatial Data Engineering</a></li>
+<li><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></li>
+<li><a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../classical_ml/intro_ensemble_methods.html">Ensemble Methods</a></li>
+<li><a href="../classical_ml/intro_time_series.html">Time Series</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../deep_learning/intro_graph_neural_networks.html">Graph Neural Networks</a></li>
+<li><a href="../deep_learning/intro_sequence_models.html">Sequence Models</a></li>
+<li><a href="../deep_learning/intro_transformers.html">Transformers</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Store</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="content_moderation_system.html"><small>Previous</small>Content Moderation</a><a rel="next" class="next" href="news_feed_ranking.html"><small>Next</small>News Feed Ranking</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/eta_prediction.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

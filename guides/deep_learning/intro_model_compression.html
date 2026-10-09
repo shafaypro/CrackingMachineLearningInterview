@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Compression: Distillation, Pruning, and Quantization | Cracking ML Interviews</title>
+<meta name="description" content="Training a model is a research problem; making it small and fast enough to serve is an engineering one. Compression is where most of the cost and latency…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_model_compression.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Compression: Distillation, Pruning, and Quantization | Cracking ML Interviews">
+<meta property="og:description" content="Training a model is a research problem; making it small and fast enough to serve is an engineering one. Compression is where most of the cost and latency…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_model_compression.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Compression: Distillation, Pruning, and Quantization | Cracking ML Interviews">
+<meta name="twitter:description" content="Training a model is a research problem; making it small and fast enough to serve is an engineering one. Compression is where most of the cost and latency…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Compression: Distillation, Pruning, and Quantization",
+   "description": "Training a model is a research problem; making it small and fast enough to serve is an engineering one. Compression is where most of the cost and latency…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_model_compression.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Model Compression",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_model_compression.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Model Compression</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_model_compression.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="model-compression-distillation-pruning-and-quantization">Model Compression: Distillation, Pruning, and Quantization</h1>
+<p>Training a model is a research problem; making it small and fast enough to serve is an engineering one. Compression is where most of the cost and latency of a deployed system is actually won, and it comes up constantly in ML Engineer and MLOps interviews as &quot;how would you make this fit / run faster / cost less?&quot;</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-compress">Why Compress</a></li>
+<li><a href="#where-the-size-goes">Where the Size Goes</a></li>
+<li><a href="#knowledge-distillation">Knowledge Distillation</a></li>
+<li><a href="#pruning">Pruning</a></li>
+<li><a href="#quantization">Quantization</a></li>
+<li><a href="#low-rank-factorization">Low-Rank Factorization</a></li>
+<li><a href="#architecture-level-efficiency">Architecture-Level Efficiency</a></li>
+<li><a href="#compiling-and-runtime-optimization">Compiling and Runtime Optimization</a></li>
+<li><a href="#combining-techniques">Combining Techniques</a></li>
+<li><a href="#measuring-what-matters">Measuring What Matters</a></li>
+<li><a href="#technique-selection">Technique Selection</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-compress">Why Compress</h2>
+<p>Four distinct pressures, and naming which one you're solving determines the technique:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pressure</th>
+<th>Symptom</th>
+<th>Best levers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory</strong></td>
+<td>Model doesn't fit on the device</td>
+<td>Quantization, pruning, distillation</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>p99 misses the SLO</td>
+<td>Distillation, structured pruning, compilation</td>
+</tr>
+<tr>
+<td><strong>Throughput / cost</strong></td>
+<td>GPU bill or QPS ceiling</td>
+<td>Quantization, batching, smaller model</td>
+</tr>
+<tr>
+<td><strong>Energy</strong></td>
+<td>Battery or thermal limits on edge</td>
+<td>Quantization (especially int8), architecture choice</td>
+</tr>
+</tbody>
+</table></div>
+<p>The mistake to avoid: assuming &quot;smaller&quot; means &quot;faster&quot;. <strong>Unstructured pruning can cut 80% of weights and change latency by nothing at all</strong>, because dense hardware kernels still process the zeros. Compression that reduces parameter count is not automatically compression that reduces time. That distinction is the single most useful thing to know here.</p>
+<hr />
+<h2 id="where-the-size-goes">Where the Size Goes</h2>
+<p>For a transformer with hidden size <code>d</code> and <code>L</code> layers, parameters are roughly:</p>
+<pre><code>Attention per layer:  4 · d²           (Q, K, V, O projections)
+MLP per layer:        8 · d²           (typically 4× expansion, up and down)
+Total:               ~12 · L · d²  + embeddings (vocab × d)
+</code></pre>
+<p>Two consequences worth stating in an interview:</p>
+<ul>
+<li><strong>The MLP is about two-thirds of the parameters</strong>, so compression targeting only attention leaves most of the model untouched.</li>
+<li><strong>Embeddings dominate for small models</strong> with large vocabularies: a 100k-token vocabulary at <code>d=768</code> is 77M parameters before any layers exist. Weight tying (sharing input and output embeddings) is the standard fix.</li>
+</ul>
+<p>At inference, memory is weights + activations + (for generative models) the KV cache, which grows with sequence length and batch size and frequently exceeds the weights entirely.</p>
+<hr />
+<h2 id="knowledge-distillation">Knowledge Distillation</h2>
+<p>Train a small <strong>student</strong> to imitate a large <strong>teacher</strong>, using the teacher's full output distribution rather than just hard labels.</p>
+<p><strong>Why soft targets help</strong> is the core interview question. A hard label says &quot;this is a cat&quot;. The teacher's soft distribution says &quot;cat 0.85, lynx 0.10, dog 0.03, car 0.0001&quot;: encoding that lynxes resemble cats and cars do not. That similarity structure, sometimes called <em>dark knowledge</em>, is a much richer training signal per example than a one-hot vector, so the student learns more from the same data.</p>
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+def distillation_loss(student_logits, teacher_logits, labels, T=4.0, alpha=0.7):
+    &quot;&quot;&quot;Blend soft teacher targets with hard ground-truth labels.&quot;&quot;&quot;
+    # Temperature softens both distributions, exposing the small-probability structure
+    soft_loss = F.kl_div(
+        F.log_softmax(student_logits / T, dim=-1),
+        F.softmax(teacher_logits / T, dim=-1),
+        reduction='batchmean',
+    ) * (T ** 2)          # rescale: soft gradients shrink as 1/T², this restores their magnitude
+
+    hard_loss = F.cross_entropy(student_logits, labels)
+    return alpha * soft_loss + (1 - alpha) * hard_loss
+</code></pre>
+<p>The <code>T²</code> factor is a detail interviewers like: raising temperature shrinks gradient magnitudes by roughly <code>1/T²</code>, so without rescaling the soft term silently loses influence as <code>T</code> grows.</p>
+<p><strong>Variants:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Matches</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Response (logit)</strong></td>
+<td>Output distribution</td>
+<td>Classification; the classic</td>
+</tr>
+<tr>
+<td><strong>Feature</strong></td>
+<td>Intermediate activations</td>
+<td>Deeper transfer; needs a projection when widths differ</td>
+</tr>
+<tr>
+<td><strong>Attention transfer</strong></td>
+<td>Attention maps</td>
+<td>Transformers; cheap and effective</td>
+</tr>
+<tr>
+<td><strong>Sequence-level</strong></td>
+<td>Generated sequences</td>
+<td>Translation, generation; teacher generates the training data</td>
+</tr>
+<tr>
+<td><strong>Self-distillation</strong></td>
+<td>The model teaches itself</td>
+<td>Regularization; often improves the teacher-sized model too</td>
+</tr>
+</tbody>
+</table></div>
+<p>For LLMs, the dominant practical form is <strong>sequence-level distillation on generated data</strong>: have the large model produce outputs for a large prompt set, then fine-tune the small model on those. It's simple, needs no logit access (so it works with API-only teachers, subject to terms of service), and captures reasoning style rather than only token distributions.</p>
+<p>Distillation is the one technique that reliably delivers <strong>real latency wins</strong>, because the student is a smaller architecture (fewer layers, narrower), not a large model with holes in it.</p>
+<hr />
+<h2 id="pruning">Pruning</h2>
+<p>Remove weights or structures deemed unimportant.</p>
+<h3 id="unstructured-vs-structured-the-distinction-that-matters">Unstructured vs structured: the distinction that matters</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Unstructured</th>
+<th>Structured</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Removes</td>
+<td>Individual weights</td>
+<td>Whole neurons, channels, heads, layers</td>
+</tr>
+<tr>
+<td>Sparsity achievable</td>
+<td>80-95%</td>
+<td>30-50%</td>
+</tr>
+<tr>
+<td>Accuracy at equal sparsity</td>
+<td><strong>Better</strong></td>
+<td>Worse</td>
+</tr>
+<tr>
+<td><strong>Actual speedup on GPU</strong></td>
+<td><strong>~None</strong> without special kernels</td>
+<td><strong>Real</strong>: the tensor is smaller</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>Sparse matrix, same shape</td>
+<td>Smaller dense model</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is the crux. Unstructured pruning produces a matrix full of zeros; a standard dense GEMM kernel multiplies those zeros just as fast as any other number, so you save storage (if stored sparse) and nothing else. Structured pruning removes an entire channel, so the weight matrix is physically smaller and every kernel benefits automatically.</p>
+<p><strong>Semi-structured (2:4) sparsity</strong> is the middle ground: exactly 2 of every 4 contiguous weights are zero, a pattern NVIDIA Ampere+ tensor cores accelerate natively, for up to 2× on those matmuls (end-to-end gains are usually smaller).</p>
+<pre><code class="language-python">import torch.nn.utils.prune as prune
+
+# Unstructured magnitude pruning: smaller |w| assumed less important
+prune.l1_unstructured(layer, name='weight', amount=0.5)
+
+# Structured: remove entire output channels by L2 norm, this actually shrinks compute
+prune.ln_structured(layer, name='weight', amount=0.3, n=2, dim=0)
+
+prune.remove(layer, 'weight')   # make it permanent (otherwise it's a mask at runtime)
+</code></pre>
+<p><strong>Iterative magnitude pruning</strong> works far better than one-shot: prune a fraction, fine-tune to recover, repeat. Removing 50% at once and retraining loses much more accuracy than five rounds of 13%.</p>
+<p><strong>The Lottery Ticket Hypothesis</strong> is worth knowing: within a large randomly-initialized network there exist sparse subnetworks (&quot;winning tickets&quot;) that, <em>when reset to their original initialization</em>, train to comparable accuracy alone. The rewinding detail is the whole finding: the same sparse structure with fresh random weights does not work, which suggests initialization and structure are jointly what matters.</p>
+<hr />
+<h2 id="quantization">Quantization</h2>
+<p>Reduce numerical precision. The most effective technique for LLM inference, because decode is memory-bandwidth-bound: fewer bytes per weight translates almost directly into faster generation.</p>
+<pre><code>fp32 → fp16/bf16   2× smaller,  ~free
+     → int8        4× smaller,  small quality cost
+     → int4        8× smaller,  measurable but usually acceptable cost
+</code></pre>
+<p>The affine mapping:</p>
+<pre><code>scale = (max - min) / (2^bits - 1)
+q = round(x / scale) + zero_point
+x̂ = (q - zero_point) · scale        # dequantized, with error
+</code></pre>
+<h3 id="ptq-vs-qat">PTQ vs QAT</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Post-Training Quantization</th>
+<th>Quantization-Aware Training</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Needs training?</td>
+<td>No: a small calibration set</td>
+<td>Yes, full fine-tune</td>
+</tr>
+<tr>
+<td>Effort</td>
+<td>Hours</td>
+<td>Days</td>
+</tr>
+<tr>
+<td>Quality at int8</td>
+<td>Usually fine</td>
+<td>Slightly better</td>
+</tr>
+<tr>
+<td>Quality at int4 and below</td>
+<td>Degrades</td>
+<td><strong>Noticeably better</strong></td>
+</tr>
+<tr>
+<td>Use when</td>
+<td>Default; 8-bit</td>
+<td>Aggressive bit widths, or PTQ failed</td>
+</tr>
+</tbody>
+</table></div>
+<p>QAT inserts fake quantization during training so the model learns weights robust to the rounding, using a <strong>straight-through estimator</strong> to pass gradients through the non-differentiable rounding operation.</p>
+<h3 id="granularity-and-the-outlier-problem">Granularity and the outlier problem</h3>
+<p>Per-tensor quantization uses one scale for a whole weight matrix; <strong>per-channel</strong> uses one per output channel and is substantially better for almost no cost. For activations, <strong>per-token</strong> granularity is common in LLMs.</p>
+<p>The central difficulty in LLM quantization is <strong>activation outliers</strong>: a small number of feature dimensions carry values orders of magnitude larger than the rest, and they dominate the quantization range, crushing precision for everything else. The named solutions all address exactly this:</p>
+<ul>
+<li><strong>LLM.int8()</strong>: isolate outlier dimensions and compute them in fp16, the rest in int8.</li>
+<li><strong>SmoothQuant</strong>: migrate difficulty from activations to weights by rescaling, since weights are easier to quantize.</li>
+<li><strong>GPTQ</strong>: layer-wise quantization using second-order information to compensate error as it goes.</li>
+<li><strong>AWQ</strong>: identify salient weight channels (by activation magnitude) and protect them.</li>
+</ul>
+<pre><code class="language-python"># int8 dynamic quantization: one line, works well for CPU-bound linear layers
+import torch
+model_int8 = torch.ao.quantization.quantize_dynamic(   # torch.quantization is the legacy alias
+    model, {torch.nn.Linear}, dtype=torch.qint8
+)
+</code></pre>
+<p><strong>The framing that lands in interviews</strong>: quantization is usually better spent buying a <em>bigger</em> model than shrinking a fixed one. A 4-bit 70B model (~35 GB) generally beats an fp16 13B (~26 GB) on quality at comparable memory. Treat bit-width as a knob for &quot;which model fits&quot;, not merely &quot;how small can this get&quot;.</p>
+<hr />
+<h2 id="low-rank-factorization">Low-Rank Factorization</h2>
+<p>Replace a <code>d × d</code> weight matrix with <code>A·B</code> where <code>A</code> is <code>d × r</code> and <code>B</code> is <code>r × d</code>, cutting parameters from <code>d²</code> to <code>2dr</code>. Meaningful only when <code>r ≪ d/2</code>.</p>
+<p>Applied post-hoc via SVD it tends to lose accuracy, because trained weight matrices are often not low-rank. It shines in two other places: <strong>LoRA</strong>, where the <em>update</em> rather than the weight is constrained to low rank (updates are low-rank, which is why it works so well), and in factorized embedding layers, where large vocabularies make the saving substantial.</p>
+<hr />
+<h2 id="architecture-level-efficiency">Architecture-Level Efficiency</h2>
+<p>Often better than compressing a bad architecture. Worth naming because it shows breadth:</p>
+<ul>
+<li><strong>GQA / MQA</strong>: share key/value heads across query heads, shrinking the KV cache by 4-8× with minimal quality loss. This is the highest-impact efficiency change in modern LLMs.</li>
+<li><strong>Mixture of Experts</strong>: many parameters, few active per token; high capacity at low inference FLOPs, at the cost of memory and routing complexity.</li>
+<li><strong>Depthwise separable convolutions</strong>: MobileNet's core trick, factorizing a convolution into depthwise + pointwise for ~8-9× fewer operations.</li>
+<li><strong>Early exit / cascades</strong>: a cheap model handles the easy majority and escalates only uncertain cases. Frequently a 60-80% cost reduction for negligible quality change, and it requires no model surgery at all.</li>
+</ul>
+<p>Cascading deserves emphasis: it's the cheapest big win available, purely a serving-layer change, and candidates routinely forget it while reaching for exotic compression.</p>
+<hr />
+<h2 id="compiling-and-runtime-optimization">Compiling and Runtime Optimization</h2>
+<p>No accuracy cost at all: do these before touching the weights.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Typical gain</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operator fusion</strong></td>
+<td>1.2-2×</td>
+<td>Fewer kernel launches and memory round-trips</td>
+</tr>
+<tr>
+<td><strong><code>torch.compile</code> / TensorRT / ONNX Runtime</strong></td>
+<td>1.3-3×</td>
+<td>Graph optimization, kernel selection, fusion</td>
+</tr>
+<tr>
+<td><strong>CUDA graphs</strong></td>
+<td>Meaningful at small batch</td>
+<td>Removes per-launch overhead</td>
+</tr>
+<tr>
+<td><strong>FlashAttention</strong></td>
+<td>2-4× on attention</td>
+<td>Tiling in SRAM; avoids materializing the score matrix</td>
+</tr>
+<tr>
+<td><strong>Batching</strong></td>
+<td>Large on throughput</td>
+<td>Amortizes weight reads across requests</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">model = torch.compile(model, mode=&quot;max-autotune&quot;)   # free speedup, no quality change
+</code></pre>
+<hr />
+<h2 id="combining-techniques">Combining Techniques</h2>
+<p>They compose, in a sensible order:</p>
+<pre><code>1. Fix the architecture      (GQA, right model size)
+2. Distill                   → smaller student
+3. Structured prune          → remove redundant channels/heads
+4. Quantize                  → int8 or int4
+5. Compile                   → fusion, kernel selection
+6. Serve well                → batching, caching, cascading
+</code></pre>
+<p>Do the <strong>free</strong> things first: compilation, batching, cascading cost no accuracy. Then distillation, which gives real architectural savings. Quantization last, because it's easy to apply and easy to reverse if quality drops.</p>
+<p>Compounding losses are the risk: each step may cost 1% and the stack costs 5%. Evaluate after every step, not only at the end, so you know which one broke it.</p>
+<hr />
+<h2 id="measuring-what-matters">Measuring What Matters</h2>
+<p>Report all of these, not just size:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Task accuracy on your eval set</strong></td>
+<td>Not perplexity: see below</td>
+</tr>
+<tr>
+<td><strong>p50 / p95 / p99 latency</strong></td>
+<td>At realistic batch size and sequence length</td>
+</tr>
+<tr>
+<td><strong>Throughput (QPS or tokens/s)</strong></td>
+<td>The cost-relevant number</td>
+</tr>
+<tr>
+<td><strong>Peak memory</strong></td>
+<td>Weights + activations + KV cache</td>
+</tr>
+<tr>
+<td><strong>Cost per 1k requests</strong></td>
+<td>What the business asks about</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Perplexity is a trap for compression evaluation.</strong> It barely moves under quantization while task accuracy (especially on reasoning, structured output, and tool calling) can drop noticeably. Always run the application's own eval set, and look at the tails rather than the mean.</p>
+<p>Benchmark honestly: warm up before timing, use realistic input distributions rather than fixed-length dummies, measure on the target hardware, and include tokenization and pre/post-processing.</p>
+<hr />
+<h2 id="technique-selection">Technique Selection</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>First choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model won't fit in memory</td>
+<td><strong>Quantization</strong></td>
+<td>Largest immediate reduction, minimal effort</td>
+</tr>
+<tr>
+<td>Need lower latency</td>
+<td><strong>Distillation + compilation</strong></td>
+<td>Fewer FLOPs and better kernels</td>
+</tr>
+<tr>
+<td>Need higher throughput</td>
+<td><strong>Quantization + batching</strong></td>
+<td>Decode is bandwidth-bound</td>
+</tr>
+<tr>
+<td>Edge / mobile deployment</td>
+<td><strong>Distill → structured prune → int8</strong></td>
+<td>Compounding, and int8 is well supported</td>
+</tr>
+<tr>
+<td>Have GPU, tight budget</td>
+<td><strong>Cascading + quantization</strong></td>
+<td>Cheapest wins first</td>
+</tr>
+<tr>
+<td>Cannot lose any accuracy</td>
+<td><strong>Compilation, batching, caching</strong></td>
+<td>Zero quality cost by construction</td>
+</tr>
+<tr>
+<td>Large vocabulary model</td>
+<td><strong>Weight tying + factorized embeddings</strong></td>
+<td>Embeddings dominate at small <code>d</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="you-pruned-80-of-the-weights-and-latency-didnt-change-why">You pruned 80% of the weights and latency didn't change. Why?</h4>
+<p>Because it was <strong>unstructured</strong> pruning. The weights are zero, but the tensor is the same shape, and a dense GEMM kernel multiplies zeros at exactly the same speed as anything else. You've saved storage (if you actually store it in a sparse format), and no compute.</p>
+<p>To get real speedup you need one of: <strong>structured pruning</strong>, which removes whole channels or heads so the matrices are physically smaller and every kernel benefits; <strong>2:4 semi-structured sparsity</strong>, which Ampere+ tensor cores accelerate natively for up to about 2× on those matmuls; or a genuine sparse kernel, which typically needs very high sparsity (&gt;95%) before it beats dense.</p>
+<p>The general lesson is that parameter count and latency are different currencies, and compression targets one or the other.</p>
+<h4 id="explain-knowledge-distillation-why-do-soft-targets-work-better-than-hard-labels">Explain knowledge distillation. Why do soft targets work better than hard labels?</h4>
+<p>You train a small student to match a large teacher's output distribution, usually blending a KL term against the teacher's softened logits with the ordinary cross-entropy against ground truth.</p>
+<p>Soft targets carry more information per example. A one-hot label says &quot;cat&quot; and nothing else. The teacher's distribution says cat 0.85, lynx 0.10, dog 0.03, car 1e-4, encoding which classes are similar and how confident the teacher is. That relative structure (&quot;dark knowledge&quot;) is a far richer signal, effectively teaching the student the teacher's learned similarity metric rather than just the answer.</p>
+<p>Temperature exposes that structure: softmax at T=1 can be nearly one-hot, hiding the small probabilities that carry the signal. Raising T flattens the distribution so those relationships influence the loss. The <code>T²</code> rescaling matters because soft-target gradients scale as <code>1/T²</code>, so without it the soft term fades as you raise the temperature.</p>
+<h4 id="walk-me-through-quantization-what-makes-llms-hard-to-quantize">Walk me through quantization. What makes LLMs hard to quantize?</h4>
+<p>Quantization maps high-precision values to a small integer grid via a scale and zero point, then dequantizes at compute time. Going fp16 → int8 is 2× smaller, int4 is 4× smaller, and because decode is memory-bandwidth-bound, fewer bytes per weight means proportionally faster generation.</p>
+<p>What makes LLMs specifically hard is <strong>activation outliers</strong>: in large transformers, a handful of hidden dimensions carry values orders of magnitude larger than the rest. Since the quantization scale must cover the full range, those few outliers stretch the range and crush the resolution available to every normal value, so quality collapses.</p>
+<p>Every well-known method addresses precisely this: LLM.int8() keeps outlier dimensions in fp16 and quantizes the rest; SmoothQuant rescales to shift the difficulty from activations onto weights, which quantize more gracefully; GPTQ uses second-order information to compensate error layer by layer; AWQ protects the channels that matter most by activation magnitude.</p>
+<h4 id="ptq-or-qat">PTQ or QAT?</h4>
+<p>PTQ by default. It needs only a small calibration set, takes hours instead of days, and at 8 bits the quality difference is usually negligible. Start there and measure.</p>
+<p>QAT when PTQ isn't good enough, typically at 4 bits and below, or in domains sensitive to small numerical changes. It simulates quantization during training with a straight-through estimator so the model learns weights robust to rounding, which recovers much of the gap at aggressive bit widths. The cost is a full fine-tuning run and the pipeline complexity that comes with it, so I'd only pay it after PTQ demonstrably fails on the actual eval set.</p>
+<h4 id="how-do-you-verify-a-compressed-model-is-still-good-enough">How do you verify a compressed model is still good enough?</h4>
+<p>Not with perplexity. It's the classic trap: perplexity barely moves under quantization while task performance can degrade noticeably, especially on reasoning chains, structured output validity, and tool-call correctness.</p>
+<p>I'd run the <strong>application's own eval set</strong> and compare task success rate, schema validity, and any domain metric against the uncompressed baseline. I'd look at the tails rather than the mean, since compression often hurts hard examples specifically. Then benchmark p50/p95/p99 latency, throughput, and peak memory on the <strong>target hardware</strong> with realistic input lengths.</p>
+<p>If several techniques are stacked, I'd evaluate after each step rather than only at the end, otherwise a 5% total drop gives no clue which stage caused it.</p>
+<h4 id="whats-the-cheapest-way-to-cut-inference-cost-without-touching-the-model">What's the cheapest way to cut inference cost without touching the model?</h4>
+<p><strong>Cascading</strong>, and it's routinely overlooked. Route every request to a small cheap model first, and escalate to the large one only when a confidence signal, schema check, or verifier says the cheap answer isn't good enough. For typical traffic where most requests are easy, 60-80% of volume never touches the expensive model, and quality is essentially preserved because hard cases still escalate.</p>
+<p>Alongside that: <strong>batching</strong>, which amortizes the memory-bandwidth cost of reading weights across requests and is the largest single throughput lever; <strong>caching</strong>, both exact-match and prefix/prompt caching; and <strong>compilation</strong> via <code>torch.compile</code> or TensorRT, which is a pure win with no accuracy change. All of these are serving-layer changes with zero risk to model quality, so they should be exhausted before any weight surgery.</p>
+<h4 id="what-is-the-lottery-ticket-hypothesis">What is the Lottery Ticket Hypothesis?</h4>
+<p>The claim that a large randomly-initialized network contains sparse subnetworks (winning tickets), that can be trained in isolation to accuracy comparable to the full network, in similar time.</p>
+<p>The essential detail is <strong>rewinding</strong>: the winning subnetwork must be reset to its <em>original</em> initialization values. Take the same sparse structure with fresh random weights and it trains poorly. That implies the structure and the specific initialization are jointly responsible, which is why the result was interesting rather than just an observation that networks are overparameterized.</p>
+<p>Practically, it's more an explanation of why iterative magnitude pruning works than a deployable recipe, since finding the ticket requires training the dense model first. Its lasting influence is the norm of iterative prune-and-retrain rather than one-shot pruning.</p>
+<h4 id="a-7b-model-doesnt-fit-your-gpu-options-in-order">A 7B model doesn't fit your GPU. Options in order?</h4>
+<ol>
+<li><strong>Quantize</strong>: int8 roughly halves it versus fp16, int4 quarters it. A 7B model goes from ~14 GB to ~4 GB at 4-bit, which fits almost anything. Cheapest and most effective first move.</li>
+<li><strong>Reduce KV cache</strong>: it frequently exceeds the weights at long context. Cap <code>max_model_len</code> to real p99 usage, quantize the cache, and use a GQA model.</li>
+<li><strong>Offload</strong>: keep some layers in CPU memory. Works, but the PCIe transfer makes it slow; a last resort for latency-tolerant workloads.</li>
+<li><strong>Distill to a smaller student</strong>: real work, but yields a smaller model rather than a compressed large one.</li>
+<li><strong>Tensor parallelism</strong> across GPUs: adds an all-reduce per layer, so it only pays off over fast interconnect.</li>
+</ol>
+<p>And the framing point: rather than squeezing the 7B, ask whether a 4-bit 13B in the same memory budget would be <em>better</em>. Quantization is usually best spent on fitting a larger model than on shrinking a fixed one.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Expecting unstructured pruning to speed things up</td>
+<td>Dense kernels process zeros at full cost</td>
+<td>Structured pruning, 2:4 sparsity, or accept storage-only savings</td>
+</tr>
+<tr>
+<td>Evaluating compression by perplexity</td>
+<td>Barely moves while task accuracy drops</td>
+<td>Run the application eval set; check the tails</td>
+</tr>
+<tr>
+<td>One-shot pruning to the target sparsity</td>
+<td>Much larger accuracy loss</td>
+<td>Iterative prune → fine-tune → repeat</td>
+</tr>
+<tr>
+<td>Per-tensor quantization for LLM weights</td>
+<td>Outliers destroy resolution</td>
+<td>Per-channel weights, per-token activations</td>
+</tr>
+<tr>
+<td>Ignoring activation outliers</td>
+<td>int8 quality collapses</td>
+<td>SmoothQuant, LLM.int8(), AWQ, GPTQ</td>
+</tr>
+<tr>
+<td>Stacking techniques and evaluating once</td>
+<td>Can't attribute the accuracy loss</td>
+<td>Evaluate after each stage</td>
+</tr>
+<tr>
+<td>Forgetting <code>prune.remove()</code></td>
+<td>Pruning stays a runtime mask; no benefit</td>
+<td>Make it permanent before export</td>
+</tr>
+<tr>
+<td>Benchmarking without warm-up</td>
+<td>First-call overhead dominates the number</td>
+<td>Warm up, then measure p50/p95/p99</td>
+</tr>
+<tr>
+<td>Benchmarking on fixed-length dummy inputs</td>
+<td>Hides real-world variance</td>
+<td>Use the production length distribution</td>
+</tr>
+<tr>
+<td>Compressing before compiling and batching</td>
+<td>Spends accuracy on wins that were free</td>
+<td>Do zero-cost optimizations first</td>
+</tr>
+<tr>
+<td>Dropping the <code>T²</code> factor in distillation</td>
+<td>Soft loss silently loses weight as T rises</td>
+<td>Multiply the soft term by <code>T²</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="intro_fine_tuning.html">Fine-Tuning</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../frameworks/intro_vllm.html">vLLM</a></li>
+<li><a href="../frameworks/intro_ollama.html">Ollama</a></li>
+<li><a href="./">Deep Learning Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_graph_neural_networks.html"><small>Previous</small>Graph Neural Networks</a><a rel="next" class="next" href="intro_distributed_training.html"><small>Next</small>Distributed Training</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_model_compression.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

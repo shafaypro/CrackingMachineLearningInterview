@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vector Databases &amp; Advanced RAG: 2026 Production Guide | Cracking ML Interviews</title>
+<meta name="description" content="Vector Databases &amp; Advanced RAG: 2026 Production Guide: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases_advanced.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Vector Databases &amp; Advanced RAG: 2026 Production Guide | Cracking ML Interviews">
+<meta property="og:description" content="Vector Databases &amp; Advanced RAG: 2026 Production Guide: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases_advanced.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vector Databases &amp; Advanced RAG: 2026 Production Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Vector Databases &amp; Advanced RAG: 2026 Production Guide: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Vector Databases & Advanced RAG: 2026 Production Guide",
+   "description": "Vector Databases & Advanced RAG: 2026 Production Guide: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases_advanced.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Vector Databases (Advanced)",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases_advanced.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Vector Databases (Advanced)</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_vector_databases_advanced.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="vector-databases--advanced-rag-2026-production-guide">Vector Databases &amp; Advanced RAG: 2026 Production Guide</h1>
+<h2 id="vector-database-comparison">Vector Database Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Pinecone</th>
+<th>Weaviate</th>
+<th>FAISS</th>
+<th>pgvector</th>
+<th>Chroma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td>Managed cloud</td>
+<td>Self-hosted / cloud</td>
+<td>Library</td>
+<td>Postgres extension</td>
+<td>Library / cloud</td>
+</tr>
+<tr>
+<td><strong>Scale</strong></td>
+<td>100M+ vectors</td>
+<td>100M+ vectors</td>
+<td>Billions (GPU)</td>
+<td>10M-50M vectors</td>
+<td>Prototype-scale</td>
+</tr>
+<tr>
+<td><strong>Hybrid search</strong></td>
+<td>Yes (sparse+dense)</td>
+<td>Yes (BM25+dense)</td>
+<td>No (dense only)</td>
+<td>Partial</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Metadata filtering</strong></td>
+<td>Yes</td>
+<td>Yes (GraphQL)</td>
+<td>No</td>
+<td>Yes (SQL)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Replication</strong></td>
+<td>Managed</td>
+<td>Manual / cloud</td>
+<td>No</td>
+<td>Postgres replication</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Cost</strong></td>
+<td>$$$-$$$$</td>
+<td>$$-$$$</td>
+<td>Free (self-hosted)</td>
+<td>$ (Postgres cost)</td>
+<td>Free / $</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Production SaaS</td>
+<td>Hybrid search, rich schema</td>
+<td>Research, on-prem</td>
+<td>Existing Postgres apps</td>
+<td>Prototyping</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="pinecone">Pinecone</h2>
+<h3 id="architecture">Architecture</h3>
+<pre><code>Your App → Pinecone API → Pinecone Pod/Serverless
+                              ├── Index (namespace)
+                              │   ├── Vectors (id, values, metadata)
+                              │   └── Namespaces (multi-tenant isolation)
+                              └── Replicas (HA)
+</code></pre>
+<h3 id="key-concepts">Key Concepts</h3>
+<ul>
+<li><strong>Serverless</strong>: Pay per query/storage, no pod management</li>
+<li><strong>Pod-based</strong>: Dedicated compute, predictable latency, better for high-QPS</li>
+<li><strong>Namespaces</strong>: Logical partitions within an index (e.g., per user, per document set)</li>
+<li><strong>Metadata filtering</strong>: Pre-filter before ANN search (reduces candidate set)</li>
+</ul>
+<h3 id="code-example">Code Example</h3>
+<pre><code class="language-python">from pinecone import Pinecone, ServerlessSpec
+from langchain_openai import OpenAIEmbeddings
+
+# Initialize
+pc = Pinecone(api_key=&quot;your-api-key&quot;)
+
+# Create serverless index
+pc.create_index(
+    name=&quot;ml-knowledge-base&quot;,
+    dimension=1536,  # OpenAI text-embedding-3-small
+    metric=&quot;cosine&quot;,
+    spec=ServerlessSpec(cloud=&quot;aws&quot;, region=&quot;us-east-1&quot;)
+)
+
+index = pc.Index(&quot;ml-knowledge-base&quot;)
+
+# Upsert vectors
+embeddings = OpenAIEmbeddings(model=&quot;text-embedding-3-small&quot;)
+texts = [&quot;RAG combines retrieval with generation&quot;, &quot;Fine-tuning updates model weights&quot;]
+vectors = embeddings.embed_documents(texts)
+
+index.upsert(vectors=[
+    {&quot;id&quot;: &quot;doc-1&quot;, &quot;values&quot;: vectors[0], &quot;metadata&quot;: {&quot;topic&quot;: &quot;rag&quot;, &quot;source&quot;: &quot;guide&quot;}},
+    {&quot;id&quot;: &quot;doc-2&quot;, &quot;values&quot;: vectors[1], &quot;metadata&quot;: {&quot;topic&quot;: &quot;finetuning&quot;, &quot;source&quot;: &quot;guide&quot;}},
+], namespace=&quot;ml-guide&quot;)
+
+# Query with metadata filter
+query_vector = embeddings.embed_query(&quot;How does RAG work?&quot;)
+results = index.query(
+    vector=query_vector,
+    top_k=5,
+    namespace=&quot;ml-guide&quot;,
+    filter={&quot;topic&quot;: {&quot;$eq&quot;: &quot;rag&quot;}},  # Metadata pre-filter
+    include_metadata=True
+)
+
+for match in results[&quot;matches&quot;]:
+    print(f&quot;Score: {match['score']:.3f} | {match['metadata']}&quot;)
+</code></pre>
+<h3 id="pinecone-pitfalls">Pinecone Pitfalls</h3>
+<ol>
+<li><strong>Cold start</strong>: Serverless indexes have cold start latency (100-500ms). Use pod-based for latency-sensitive apps.</li>
+<li><strong>Metadata bloat</strong>: Storing large metadata slows queries. Keep metadata small; store full documents in a separate DB.</li>
+<li><strong>Namespace isolation</strong>: Data in different namespaces is NOT shared. Use namespaces for multi-tenancy, not topic grouping.</li>
+<li><strong>Dimension lock</strong>: Index dimension cannot be changed after creation. Plan embedding model choice upfront.</li>
+</ol>
+<hr />
+<h2 id="weaviate">Weaviate</h2>
+<h3 id="architecture-1">Architecture</h3>
+<pre><code>Weaviate Instance
+├── Schema (Classes = like tables)
+│   ├── Class: Document
+│   │   ├── Properties: title, content, source
+│   │   └── Vectorizer: text2vec-openai
+│   └── Class: Chunk
+│       └── Reference: belongsTo → Document
+├── Modules
+│   ├── text2vec-openai (auto-vectorize on insert)
+│   ├── reranker-cohere (cross-encoder reranking)
+│   └── generative-anthropic (RAG generation)
+└── HNSW Index (per class)
+</code></pre>
+<h3 id="code-example-1">Code Example</h3>
+<pre><code class="language-python">import weaviate
+import weaviate.classes as wvc
+
+# Connect
+client = weaviate.connect_to_weaviate_cloud(
+    cluster_url=&quot;your-cluster.weaviate.network&quot;,
+    auth_credentials=weaviate.auth.AuthApiKey(&quot;your-api-key&quot;)
+)
+
+# Create collection
+client.collections.create(
+    name=&quot;MLConcept&quot;,
+    vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(),
+    generative_config=wvc.config.Configure.Generative.anthropic(
+        model=&quot;claude-sonnet-4-6&quot;
+    ),
+    properties=[
+        wvc.config.Property(name=&quot;concept&quot;, data_type=wvc.config.DataType.TEXT),
+        wvc.config.Property(name=&quot;category&quot;, data_type=wvc.config.DataType.TEXT),
+        wvc.config.Property(name=&quot;difficulty&quot;, data_type=wvc.config.DataType.INT),
+    ]
+)
+
+collection = client.collections.get(&quot;MLConcept&quot;)
+
+# Insert (auto-vectorized)
+collection.data.insert_many([
+    {&quot;concept&quot;: &quot;Attention mechanism scales quadratically with sequence length&quot;,
+     &quot;category&quot;: &quot;transformers&quot;, &quot;difficulty&quot;: 3},
+    {&quot;concept&quot;: &quot;RLHF uses human preferences to align LLMs&quot;,
+     &quot;category&quot;: &quot;alignment&quot;, &quot;difficulty&quot;: 4},
+])
+
+# Hybrid search (BM25 + dense vectors)
+results = collection.query.hybrid(
+    query=&quot;how does attention work&quot;,
+    alpha=0.5,  # 0=pure BM25, 1=pure vector, 0.5=balanced
+    limit=5,
+    filters=wvc.query.Filter.by_property(&quot;difficulty&quot;).less_than(4)
+)
+
+# RAG with generative module
+rag_results = collection.generate.hybrid(
+    query=&quot;explain attention mechanism&quot;,
+    grouped_task=&quot;Summarize these concepts for a senior ML engineer&quot;,
+    alpha=0.75,
+    limit=3
+)
+print(rag_results.generated)
+
+client.close()
+</code></pre>
+<h3 id="weaviate-hybrid-search">Weaviate Hybrid Search</h3>
+<pre><code>Query: &quot;attention mechanism transformers&quot;
+         │
+    ┌────┴────────────┐
+    │                 │
+ BM25 (keyword)   Vector (semantic)
+    │                 │
+ &quot;attention&quot;      cos_sim(q, d)
+ &quot;mechanism&quot;          │
+    │                 │
+    └────────┬────────┘
+             │
+         Fusion (RRF or weighted alpha)
+             │
+         Reranker (cross-encoder)
+             │
+         Top-K results
+</code></pre>
+<hr />
+<h2 id="faiss-facebook-ai-similarity-search">FAISS (Facebook AI Similarity Search)</h2>
+<h3 id="index-types">Index Types</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Description</th>
+<th>Speed</th>
+<th>Memory</th>
+<th>Accuracy</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IndexFlatL2</code></td>
+<td>Exact brute-force L2</td>
+<td>Slow</td>
+<td>High</td>
+<td>100%</td>
+<td>Ground truth, small datasets</td>
+</tr>
+<tr>
+<td><code>IndexFlatIP</code></td>
+<td>Exact inner product</td>
+<td>Slow</td>
+<td>High</td>
+<td>100%</td>
+<td>Cosine (after normalization)</td>
+</tr>
+<tr>
+<td><code>IndexIVFFlat</code></td>
+<td>Inverted file, exact cells</td>
+<td>Fast</td>
+<td>Medium</td>
+<td>~95%</td>
+<td>Medium scale (1M-10M)</td>
+</tr>
+<tr>
+<td><code>IndexIVFPQ</code></td>
+<td>IVF + Product Quantization</td>
+<td>Fastest</td>
+<td>Low</td>
+<td>~90%</td>
+<td>Large scale, memory-constrained</td>
+</tr>
+<tr>
+<td><code>IndexHNSW</code></td>
+<td>Hierarchical NSW graph</td>
+<td>Very fast</td>
+<td>Medium-High</td>
+<td>~98%</td>
+<td>Production, latency-critical</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="code-example-2">Code Example</h3>
+<pre><code class="language-python">import faiss
+import numpy as np
+from langchain_anthropic import ChatAnthropic
+
+# Prepare vectors
+d = 1536  # Embedding dimension
+n = 100000  # Number of vectors
+
+# Normalize for cosine similarity (FAISS uses inner product)
+vectors = np.random.random((n, d)).astype('float32')
+faiss.normalize_L2(vectors)
+
+# Build HNSW index (best for production)
+M = 32  # Connections per node (higher = more accurate, more memory)
+ef_construction = 200  # Build-time search depth
+index = faiss.IndexHNSWFlat(d, M)
+index.hnsw.efConstruction = ef_construction
+index.hnsw.efSearch = 100  # Query-time search depth (tune for accuracy/speed)
+index.add(vectors)
+
+# Save/load
+faiss.write_index(index, &quot;ml_knowledge.faiss&quot;)
+index = faiss.read_index(&quot;ml_knowledge.faiss&quot;)
+
+# Query
+query = np.random.random((1, d)).astype('float32')
+faiss.normalize_L2(query)
+
+distances, indices = index.search(query, k=10)  # Top-10 results
+print(f&quot;Nearest neighbors: {indices[0]}&quot;)
+print(f&quot;Similarity scores: {distances[0]}&quot;)  # 1.0 = identical
+
+# GPU acceleration
+if faiss.get_num_gpus() &gt; 0:
+    res = faiss.StandardGpuResources()
+    gpu_index = faiss.index_cpu_to_gpu(res, 0, index)
+    distances, indices = gpu_index.search(query, k=10)
+</code></pre>
+<h3 id="faiss-ivf-for-large-scale">FAISS IVF for Large Scale</h3>
+<pre><code class="language-python"># IVF: Partition vectors into cells, search only top-N cells
+nlist = 1000  # Number of Voronoi cells
+quantizer = faiss.IndexFlatIP(d)
+index = faiss.IndexIVFFlat(quantizer, d, nlist)
+
+# Must train before adding vectors
+train_vectors = vectors[:50000]  # 10-20x nlist samples recommended
+index.train(train_vectors)
+index.add(vectors)
+
+index.nprobe = 50  # Check 50 cells (higher = more accurate, slower)
+D, I = index.search(query, k=10)
+</code></pre>
+<hr />
+<h2 id="pgvector">pgvector</h2>
+<h3 id="setup-and-usage">Setup and Usage</h3>
+<pre><code class="language-sql">-- Enable extension
+CREATE EXTENSION vector;
+
+-- Create table with vector column
+CREATE TABLE ml_embeddings (
+    id SERIAL PRIMARY KEY,
+    content TEXT NOT NULL,
+    embedding VECTOR(1536),  -- OpenAI dimension
+    metadata JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create HNSW index
+CREATE INDEX ON ml_embeddings
+    USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);
+
+-- Or IVFFlat index
+CREATE INDEX ON ml_embeddings
+    USING ivfflat (embedding vector_cosine_ops)
+    WITH (lists = 100);
+
+-- Similarity search
+SELECT id, content, 1 - (embedding &lt;=&gt; '[0.1, 0.2, ...]'::vector) AS similarity
+FROM ml_embeddings
+WHERE metadata-&gt;&gt;'source' = 'ml-guide'  -- Metadata filter (uses regular index)
+ORDER BY embedding &lt;=&gt; '[0.1, 0.2, ...]'::vector
+LIMIT 5;
+</code></pre>
+<pre><code class="language-python"># Python with SQLAlchemy
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import Column, Integer, Text, Index
+from sqlalchemy.orm import DeclarativeBase
+import numpy as np
+
+class Base(DeclarativeBase):
+    pass
+
+class MLEmbedding(Base):
+    __tablename__ = &quot;ml_embeddings&quot;
+    id = Column(Integer, primary_key=True)
+    content = Column(Text)
+    embedding = Column(Vector(1536))
+
+# pgvector operators:
+# &lt;-&gt;  Euclidean distance
+# &lt;#&gt;  Negative inner product
+# &lt;=&gt;  Cosine distance
+
+results = session.query(MLEmbedding).order_by(
+    MLEmbedding.embedding.cosine_distance(query_embedding)
+).limit(5).all()
+</code></pre>
+<p><strong>When to use pgvector</strong>: You already have Postgres, dataset &lt; 10M vectors, need complex SQL joins with metadata, don't want another service to manage.</p>
+<hr />
+<h2 id="chunking-strategies">Chunking Strategies</h2>
+<h3 id="fixed-size-chunking">Fixed-Size Chunking</h3>
+<pre><code class="language-python">from langchain_text_splitters import CharacterTextSplitter
+
+splitter = CharacterTextSplitter(
+    chunk_size=512,       # Characters per chunk
+    chunk_overlap=50,     # Overlap to preserve context
+    separator=&quot;\n&quot;
+)
+chunks = splitter.split_text(document)
+</code></pre>
+<p><strong>Pros</strong>: Simple, predictable. <strong>Cons</strong>: Cuts mid-sentence, loses context.</p>
+<h3 id="recursive-chunking-recommended-default">Recursive Chunking (Recommended Default)</h3>
+<pre><code class="language-python">from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200,
+    separators=[&quot;\n\n&quot;, &quot;\n&quot;, &quot;. &quot;, &quot; &quot;, &quot;&quot;]  # Try each separator in order
+)
+chunks = splitter.split_text(document)
+</code></pre>
+<p><strong>Pros</strong>: Respects paragraph/sentence boundaries. Better semantic coherence.</p>
+<h3 id="semantic-chunking-best-quality">Semantic Chunking (Best Quality)</h3>
+<pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings
+
+splitter = SemanticChunker(
+    embeddings=OpenAIEmbeddings(),
+    breakpoint_threshold_type=&quot;percentile&quot;,  # Split when similarity drops
+    breakpoint_threshold_amount=95           # 95th percentile of similarity drops
+)
+chunks = splitter.split_text(long_document)
+</code></pre>
+<p><strong>Pros</strong>: Each chunk is semantically coherent. <strong>Cons</strong>: Expensive (embed every sentence), variable chunk sizes.</p>
+<h3 id="document-structure-aware-chunking">Document-Structure-Aware Chunking</h3>
+<pre><code class="language-python"># For markdown/code: split by headers and code blocks
+from langchain_text_splitters import MarkdownHeaderTextSplitter
+
+headers = [(&quot;#&quot;, &quot;h1&quot;), (&quot;##&quot;, &quot;h2&quot;), (&quot;###&quot;, &quot;h3&quot;)]
+splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers)
+chunks = splitter.split_text(markdown_doc)
+# Each chunk retains its header hierarchy as metadata
+</code></pre>
+<h3 id="chunking-strategy-decision-guide">Chunking Strategy Decision Guide</h3>
+<pre><code>Document type?
+├── Structured (markdown, code) → Document-structure-aware
+├── Long-form prose (books, reports) → Semantic chunking
+├── Mixed content → Recursive character splitter
+└── Simple use case / prototyping → Fixed-size with overlap
+
+Embedding model context limit?
+├── &lt; 512 tokens → chunk_size ≈ 300-400 tokens
+├── 512-8192 tokens → chunk_size ≈ 500-1000 tokens
+└── 8192+ tokens (Voyage, OpenAI-3) → chunk_size ≈ 1000-4000 tokens
+</code></pre>
+<hr />
+<h2 id="hybrid-search-bm25--embeddings">Hybrid Search (BM25 + Embeddings)</h2>
+<h3 id="why-hybrid-search">Why Hybrid Search?</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Query Type</th>
+<th>Dense Vector</th>
+<th>BM25</th>
+<th>Hybrid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;explain attention mechanism&quot;</td>
+<td>Excellent</td>
+<td>Good</td>
+<td>Best</td>
+</tr>
+<tr>
+<td>&quot;BERT model F1 score 94.3&quot;</td>
+<td>Poor</td>
+<td>Excellent</td>
+<td>Best</td>
+</tr>
+<tr>
+<td>&quot;what is GPT-4&quot;</td>
+<td>Good</td>
+<td>Good</td>
+<td>Best</td>
+</tr>
+<tr>
+<td>Exact product codes/IDs</td>
+<td>Poor</td>
+<td>Excellent</td>
+<td>Best</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="language-python">from langchain_community.retrievers import BM25Retriever
+from langchain_classic.retrievers import EnsembleRetriever  # LangChain 1.0+: legacy retrievers live in langchain-classic
+from langchain_community.vectorstores import Chroma
+
+# Dense retriever
+dense_retriever = Chroma.from_documents(
+    documents, embeddings
+).as_retriever(search_kwargs={&quot;k&quot;: 10})
+
+# Sparse retriever (BM25)
+bm25_retriever = BM25Retriever.from_documents(documents)
+bm25_retriever.k = 10
+
+# Ensemble with Reciprocal Rank Fusion (RRF)
+ensemble_retriever = EnsembleRetriever(
+    retrievers=[bm25_retriever, dense_retriever],
+    weights=[0.4, 0.6]  # BM25:40%, Dense:60%
+)
+
+results = ensemble_retriever.invoke(&quot;BERT accuracy on GLUE benchmark&quot;)
+</code></pre>
+<hr />
+<h2 id="reranking-with-cross-encoders">Reranking with Cross-Encoders</h2>
+<h3 id="why-reranking">Why Reranking?</h3>
+<p>Bi-encoders (embedding models) encode query and document <strong>independently</strong> → fast but approximate. Cross-encoders encode them <strong>together</strong> → slower but much more accurate.</p>
+<pre><code>Standard Retrieval:
+Query Embedding ──→ [ANN Search] ──→ Top-100 docs
+                                           ↓
+                                     [Reranker]  (cross-encoder)
+                                           ↓
+                                       Top-5 docs (high precision)
+</code></pre>
+<h3 id="implementation-1">Implementation</h3>
+<pre><code class="language-python">from sentence_transformers import CrossEncoder
+from langchain_cohere import CohereRerank
+from langchain_classic.retrievers.contextual_compression import ContextualCompressionRetriever  # pre-1.0: langchain.retrievers
+
+# Option 1: Local cross-encoder
+cross_encoder = CrossEncoder(&quot;cross-encoder/ms-marco-MiniLM-L-6-v2&quot;)
+
+def rerank(query: str, documents: list[str], top_n: int = 5) -&gt; list:
+    pairs = [(query, doc) for doc in documents]
+    scores = cross_encoder.predict(pairs)
+    ranked = sorted(zip(scores, documents), reverse=True)
+    return [doc for _, doc in ranked[:top_n]]
+
+# Option 2: Cohere Rerank API
+compressor = CohereRerank(model=&quot;rerank-v3.5&quot;, top_n=5)
+reranking_retriever = ContextualCompressionRetriever(
+    base_compressor=compressor,
+    base_retriever=dense_retriever
+)
+results = reranking_retriever.invoke(&quot;What is attention mechanism?&quot;)
+</code></pre>
+<hr />
+<h2 id="rag-evaluation-metrics">RAG Evaluation Metrics</h2>
+<h3 id="ragas-framework">RAGAS Framework</h3>
+<pre><code class="language-python">from ragas import evaluate
+from ragas.metrics import (
+    context_precision,     # Are retrieved docs relevant to the question?
+    context_recall,        # Did we retrieve all needed docs?
+    faithfulness,          # Is the answer grounded in retrieved context?
+    answer_relevancy,      # Does the answer address the question?
+)
+from datasets import Dataset
+
+eval_data = Dataset.from_dict({
+    &quot;question&quot;: [&quot;What is RAG?&quot;, &quot;Explain RLHF&quot;],
+    &quot;answer&quot;: [&quot;RAG retrieves documents...&quot;, &quot;RLHF uses human feedback...&quot;],
+    &quot;contexts&quot;: [[&quot;retrieved doc 1&quot;, &quot;retrieved doc 2&quot;], [&quot;retrieved doc 3&quot;]],
+    &quot;ground_truth&quot;: [&quot;RAG stands for...&quot;, &quot;RLHF stands for...&quot;]
+})
+
+results = evaluate(eval_data, metrics=[
+    context_precision, context_recall, faithfulness, answer_relevancy
+])
+print(results.to_pandas())
+</code></pre>
+<h3 id="key-rag-metrics">Key RAG Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Context Precision</strong></td>
+<td>relevant retrieved / total retrieved</td>
+<td>Retrieval precision</td>
+</tr>
+<tr>
+<td><strong>Context Recall</strong></td>
+<td>retrieved relevant / all relevant</td>
+<td>Retrieval recall</td>
+</tr>
+<tr>
+<td><strong>Faithfulness</strong></td>
+<td>supported claims / total claims</td>
+<td>Hallucination rate</td>
+</tr>
+<tr>
+<td><strong>Answer Relevancy</strong></td>
+<td>LLM score of query-answer alignment</td>
+<td>Answer quality</td>
+</tr>
+<tr>
+<td><strong>Hit Rate@K</strong></td>
+<td>∑ (relevant in top-K) / N</td>
+<td>Basic retrieval health</td>
+</tr>
+<tr>
+<td><strong>MRR</strong></td>
+<td>∑ 1/rank_of_first_relevant</td>
+<td>Ranking quality</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="context-window-optimization">Context Window Optimization</h2>
+<h3 id="problem">Problem</h3>
+<p>Stuffing too many retrieved chunks causes:</p>
+<ul>
+<li>LLM &quot;lost in the middle&quot; effect (ignores middle context)</li>
+<li>Higher cost and latency</li>
+<li>Lower answer quality</li>
+</ul>
+<h3 id="solutions">Solutions</h3>
+<pre><code class="language-python"># 1. Rerank and keep only top-3 instead of top-10
+# 2. Contextual compression: extract only relevant sentences
+from langchain_classic.retrievers.document_compressors import LLMChainExtractor
+
+compressor = LLMChainExtractor.from_llm(llm)
+compression_retriever = ContextualCompressionRetriever(
+    base_compressor=compressor,
+    base_retriever=retriever
+)
+
+# 3. Map-reduce for very long documents
+# Split across multiple LLM calls, then combine. The old MapReduceDocumentsChain
+# is deprecated (now in langchain-classic); a small LangGraph graph or a plain
+# LCEL .batch() over chunks followed by a combine step is the current approach.
+
+# 4. Hierarchical retrieval: coarse then fine
+summary_retriever = ...  # Retrieve document summaries
+chunk_retriever = ...    # Then retrieve specific chunks from those docs
+</code></pre>
+<hr />
+<h2 id="system-design-production-rag-pipeline">System Design: Production RAG Pipeline</h2>
+<pre><code>                        ┌─────────────────────────────────────┐
+                        │         INDEXING PIPELINE            │
+                        │                                      │
+Documents → [Chunker] → [Embedder] → [Vector DB]              │
+                │             │           │                    │
+           {metadata}    (batch API)  (upsert)                │
+                └─────────────────────────┘                   │
+                        └─────────────────────────────────────┘
+
+                        ┌─────────────────────────────────────┐
+                        │         QUERY PIPELINE               │
+                        │                                      │
+User Query → [Query Rewriter] → [Hybrid Search] → [Reranker] │
+                                  (BM25 + Dense)      │        │
+                                                      ↓        │
+                                               [Top-5 chunks] │
+                                                      ↓        │
+                                               [LLM + context]│
+                                                      ↓        │
+                                                  Response     │
+                        └─────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: What is hybrid search and when would you use it over pure vector search?</strong></p>
+<blockquote>
+<p>Hybrid search combines BM25 (keyword/exact match) with dense vector search (semantic similarity), fused via Reciprocal Rank Fusion. Use it when your queries include: exact IDs, product codes, names, dates, or technical terms that dense search struggles with. Pure vector search is great for semantic queries, but hybrid is almost always better.</p>
+</blockquote>
+<p><strong>Q: Explain the tradeoffs between Pinecone, pgvector, and FAISS.</strong></p>
+<blockquote>
+<p>Pinecone: managed, fast, expensive, great for production SaaS. pgvector: free if you have Postgres, SQL joins, but limited scale (~10M vectors). FAISS: free, blazing fast on GPU, billions of vectors, but no built-in metadata filtering and requires custom infrastructure.</p>
+</blockquote>
+<p><strong>Q: What are chunking strategies and which would you recommend for a legal document RAG system?</strong></p>
+<blockquote>
+<p>Legal documents have hierarchical structure (sections, clauses). Use document-structure-aware chunking (split by headers/numbering) with moderate overlap (100-200 tokens). Avoid fixed-size: it breaks clause boundaries. Consider semantic chunking for the final split within sections.</p>
+</blockquote>
+<p><strong>Q: Why is reranking important and how does it work?</strong></p>
+<blockquote>
+<p>Bi-encoders produce approximate rankings: fast but imprecise. A cross-encoder evaluates query + document together, scoring true relevance. Reranking takes top-100 from ANN search and re-scores with a cross-encoder to get top-5 with much higher precision. The cost is worthwhile because you only rerank a small candidate set.</p>
+</blockquote>
+<p><strong>Q: How do you evaluate a RAG system?</strong></p>
+<blockquote>
+<p>Use RAGAS metrics: context precision (are retrieved docs relevant?), context recall (did we retrieve all needed info?), faithfulness (is the answer grounded in context?), and answer relevancy. Create a golden dataset manually. Automate eval in CI/CD and compare scores before deploying changes to retrieval or prompts.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_vector_databases.html"><small>Previous</small>Vector Databases</a><a rel="next" class="next" href="intro_embeddings.html"><small>Next</small>Embeddings</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_vector_databases_advanced.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

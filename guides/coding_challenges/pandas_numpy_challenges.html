@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pandas and NumPy Challenges Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/pandas_numpy_challenges.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Pandas and NumPy Challenges Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/pandas_numpy_challenges.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pandas and NumPy Challenges Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Pandas and NumPy Challenges",
+   "description": "Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/pandas_numpy_challenges.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#coding-challenges"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Pandas & NumPy Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/pandas_numpy_challenges.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#coding-challenges">Coding Challenges</a> <span aria-hidden="true">/</span> <span aria-current="page">Pandas &amp; NumPy Challenges</span></nav>
+<p class="meta"><a href="../../#coding_challenges/pandas_numpy_challenges.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="pandas-and-numpy-challenges">Pandas and NumPy Challenges</h1>
+<p>Data-manipulation screens are the most common coding round for Data Scientists and ML Engineers, and the most commonly under-prepared. The tasks are rarely algorithmically hard: they test whether you can reshape real data fluently, avoid the silent-correctness traps, and know why the vectorized version is 100× faster.</p>
+<p>Each challenge below gives the problem, an idiomatic solution, and the follow-up interviewers ask.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-these-rounds-are-scored">How These Rounds Are Scored</a></li>
+<li><a href="#numpy-fundamentals">NumPy Fundamentals</a></li>
+<li><a href="#broadcasting">Broadcasting</a></li>
+<li><a href="#vectorization-over-loops">Vectorization Over Loops</a></li>
+<li><a href="#groupby-patterns">GroupBy Patterns</a></li>
+<li><a href="#window-and-rolling-operations">Window and Rolling Operations</a></li>
+<li><a href="#joins-and-the-duplicate-trap">Joins and the Duplicate Trap</a></li>
+<li><a href="#reshaping">Reshaping</a></li>
+<li><a href="#time-series-operations">Time Series Operations</a></li>
+<li><a href="#missing-data">Missing Data</a></li>
+<li><a href="#performance-and-memory">Performance and Memory</a></li>
+<li><a href="#ml-specific-patterns">ML-Specific Patterns</a></li>
+<li><a href="#complexity-and-cost-reference">Complexity and Cost Reference</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-these-rounds-are-scored">How These Rounds Are Scored</h2>
+<ol>
+<li><strong>Clarify the schema and the grain.</strong> &quot;One row per what?&quot; prevents most wrong answers. Ask about duplicates, nulls, and whether timestamps are sorted and timezone-aware.</li>
+<li><strong>State the approach before typing.</strong> &quot;Group by user, take the last event per group, then join back&quot; earns credit even if the syntax needs a lookup.</li>
+<li><strong>Vectorize, but correctness first.</strong> A working <code>apply</code> beats a broken one-liner. Then say &quot;this is <code>O(n)</code> Python-level calls; here's the vectorized version&quot; and rewrite it.</li>
+<li><strong>Name the traps unprompted.</strong> Chained assignment, silent join fan-out, <code>groupby</code> dropping NaN keys, off-by-one in rolling windows. Mentioning these signals real experience.</li>
+<li><strong>Check your output.</strong> <code>df.shape</code> before and after a merge is the single highest-value habit, it catches fan-out immediately.</li>
+</ol>
+<hr />
+<h2 id="numpy-fundamentals">NumPy Fundamentals</h2>
+<pre><code class="language-python">import numpy as np
+
+a = np.arange(12).reshape(3, 4)     # (3, 4)
+
+a.shape, a.dtype, a.ndim, a.nbytes  # always know these
+
+# Views vs copies: the correctness trap
+b = a[:, 1:3]      # VIEW: writing to b modifies a
+c = a[:, [1, 2]]   # COPY: fancy indexing always copies
+b[0, 0] = 999      # a is now modified
+</code></pre>
+<p><strong>Basic slicing returns a view; fancy (integer/boolean) indexing returns a copy.</strong> This is the source of &quot;why did my original array change?&quot; and its mirror &quot;why didn't my change stick?&quot;. Use <code>np.shares_memory(a, b)</code> to check when unsure.</p>
+<pre><code class="language-python"># Boolean masking
+x = np.array([1, -2, 3, -4, 5])
+x[x &lt; 0] = 0                        # in-place clamp
+np.where(x &gt; 2, x, 0)               # vectorized conditional
+
+# Aggregation along axes: axis is the one that DISAPPEARS
+m = np.arange(12).reshape(3, 4)
+m.sum(axis=0)     # (4,): collapses rows, one value per column
+m.sum(axis=1)     # (3,): collapses columns, one value per row
+m.sum(axis=1, keepdims=True)   # (3, 1): keeps dims for broadcasting
+</code></pre>
+<p><strong>The <code>axis</code> mnemonic worth memorizing</strong>: <code>axis=k</code> is the axis that gets <em>removed</em> by the reduction. That resolves nearly all axis confusion.</p>
+<hr />
+<h2 id="broadcasting">Broadcasting</h2>
+<p>Rules, applied right-to-left: dimensions are compatible if they're equal, or one of them is 1, or one is missing.</p>
+<pre><code class="language-python">A = np.ones((3, 4))
+b = np.array([1, 2, 3, 4])          # (4,)   → (1,4) → (3,4)   ✓
+A + b
+
+c = np.array([1, 2, 3])             # (3,)   → (1,3) vs (3,4)  ✗ error
+A + c[:, None]                      # (3,1) vs (3,4)           ✓ explicit reshape
+</code></pre>
+<p><strong>Challenge: pairwise distances without loops:</strong></p>
+<pre><code class="language-python">def pairwise_sq_dists(X, Y):
+    &quot;&quot;&quot;(n, d), (m, d) -&gt; (n, m) squared Euclidean distances.
+    Uses ||x-y||² = ||x||² - 2x·y + ||y||², avoiding an (n, m, d) tensor.&quot;&quot;&quot;
+    return (
+        (X ** 2).sum(1)[:, None]     # (n, 1)
+        - 2 * X @ Y.T                # (n, m)
+        + (Y ** 2).sum(1)[None, :]   # (1, m)
+    )
+</code></pre>
+<p><strong>Follow-up</strong>: <em>why not <code>((X[:, None, :] - Y[None, :, :]) ** 2).sum(-1)</code>?</em> It materializes an <code>(n, m, d)</code> intermediate. For n=m=10,000 and d=128 that's 10⁸ × 128 × 8 bytes ≈ 100 GB. The expansion above peaks at <code>(n, m)</code> and delegates the heavy work to an optimized BLAS matmul.</p>
+<hr />
+<h2 id="vectorization-over-loops">Vectorization Over Loops</h2>
+<pre><code class="language-python">import pandas as pd
+
+df = pd.DataFrame({&quot;price&quot;: np.random.rand(1_000_000) * 100,
+                   &quot;qty&quot;: np.random.randint(1, 10, 1_000_000)})
+
+# Slowest → fastest
+# df.apply(lambda r: r.price * r.qty, axis=1)   # ~10 s: row-wise Python
+# df[&quot;price&quot;].combine(df[&quot;qty&quot;], lambda a, b: a*b)  # slow
+df[&quot;total&quot;] = df[&quot;price&quot;] * df[&quot;qty&quot;]           # ~5 ms: vectorized
+</code></pre>
+<p>Roughly <strong>1000× difference</strong>. <code>apply(axis=1)</code> constructs a Series per row; the vectorized version is a single C-level operation over contiguous memory.</p>
+<p><strong>Conditional logic without <code>apply</code>:</strong></p>
+<pre><code class="language-python"># np.select for multi-branch conditions
+conditions = [df.price &gt; 80, df.price &gt; 50, df.price &gt; 20]
+choices = [&quot;premium&quot;, &quot;high&quot;, &quot;medium&quot;]
+df[&quot;tier&quot;] = np.select(conditions, choices, default=&quot;low&quot;)
+
+# np.where for two branches
+df[&quot;flag&quot;] = np.where(df.qty &gt; 5, &quot;bulk&quot;, &quot;single&quot;)
+
+# pd.cut for binning
+df[&quot;band&quot;] = pd.cut(df.price, bins=[0, 20, 50, 80, np.inf],
+                    labels=[&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;premium&quot;])
+</code></pre>
+<p>When you need per-row Python (calling an external API, complex branching), <code>apply</code> is acceptable, but say so explicitly rather than reaching for it by default.</p>
+<hr />
+<h2 id="groupby-patterns">GroupBy Patterns</h2>
+<pre><code class="language-python">sales = pd.DataFrame({
+    &quot;region&quot;: [&quot;E&quot;, &quot;W&quot;, &quot;E&quot;, &quot;W&quot;, &quot;E&quot;],
+    &quot;rep&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;a&quot;, &quot;c&quot;, &quot;b&quot;],
+    &quot;amount&quot;: [100, 200, 150, 300, 250],
+    &quot;date&quot;: pd.to_datetime([&quot;2026-01-01&quot;, &quot;2026-01-02&quot;, &quot;2026-02-01&quot;,
+                            &quot;2026-02-03&quot;, &quot;2026-03-01&quot;]),
+})
+
+# Named aggregation: clean, flat column names
+sales.groupby(&quot;region&quot;).agg(
+    total=(&quot;amount&quot;, &quot;sum&quot;),
+    avg=(&quot;amount&quot;, &quot;mean&quot;),
+    n_reps=(&quot;rep&quot;, &quot;nunique&quot;),
+)
+
+# transform: aggregate broadcast back to original shape (no join needed)
+sales[&quot;region_total&quot;] = sales.groupby(&quot;region&quot;)[&quot;amount&quot;].transform(&quot;sum&quot;)
+sales[&quot;pct_of_region&quot;] = sales[&quot;amount&quot;] / sales[&quot;region_total&quot;]
+
+# filter: keep whole groups meeting a condition
+sales.groupby(&quot;region&quot;).filter(lambda g: g[&quot;amount&quot;].sum() &gt; 400)
+</code></pre>
+<p><strong><code>transform</code> vs <code>agg</code> vs <code>apply</code></strong> is a standard question:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agg</code></td>
+<td>One row per group</td>
+<td>Summaries</td>
+</tr>
+<tr>
+<td><code>transform</code></td>
+<td><strong>Same shape as input</strong></td>
+<td>Adding group statistics as a column</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td>Subset of original rows</td>
+<td>Dropping whole groups</td>
+</tr>
+<tr>
+<td><code>apply</code></td>
+<td>Anything</td>
+<td>Last resort: slowest, most flexible</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Challenge: top-N per group:</strong></p>
+<pre><code class="language-python"># Idiomatic and fast
+top2 = sales.sort_values(&quot;amount&quot;, ascending=False).groupby(&quot;region&quot;).head(2)
+
+# Rank-based, keeps ties explicit
+sales[&quot;rk&quot;] = sales.groupby(&quot;region&quot;)[&quot;amount&quot;].rank(method=&quot;dense&quot;, ascending=False)
+top2 = sales[sales.rk &lt;= 2]
+</code></pre>
+<p><strong>Trap</strong>: <code>groupby</code> <strong>drops NaN keys by default</strong>. If a grouping column has nulls those rows vanish silently and totals won't reconcile. Use <code>dropna=False</code> when nulls are meaningful.</p>
+<hr />
+<h2 id="window-and-rolling-operations">Window and Rolling Operations</h2>
+<pre><code class="language-python">df = pd.DataFrame({&quot;date&quot;: pd.date_range(&quot;2026-01-01&quot;, periods=100),
+                   &quot;value&quot;: np.random.randn(100).cumsum()})
+df = df.set_index(&quot;date&quot;)
+
+df[&quot;ma7&quot;] = df[&quot;value&quot;].rolling(7).mean()                  # trailing 7 rows
+df[&quot;ma7_min3&quot;] = df[&quot;value&quot;].rolling(7, min_periods=3).mean()   # tolerate warm-up
+df[&quot;ma_time&quot;] = df[&quot;value&quot;].rolling(&quot;7D&quot;).mean()           # time-based, gap-safe
+df[&quot;expanding&quot;] = df[&quot;value&quot;].expanding().mean()           # all history to date
+df[&quot;ewm&quot;] = df[&quot;value&quot;].ewm(span=7).mean()                 # exponential weighting
+df[&quot;pct_change&quot;] = df[&quot;value&quot;].pct_change()
+df[&quot;lag1&quot;] = df[&quot;value&quot;].shift(1)
+</code></pre>
+<p><strong><code>rolling(7)</code> vs <code>rolling(&quot;7D&quot;)</code></strong> is a favourite follow-up: the first takes 7 <em>rows</em> regardless of dates, the second takes 7 <em>days</em> regardless of row count. With missing days they give different answers, and the row-based version silently reaches further back than intended.</p>
+<p><strong>The leakage trap in ML feature engineering:</strong></p>
+<pre><code class="language-python"># WRONG: includes the current row, leaking the label's own value
+df[&quot;feat&quot;] = df.groupby(&quot;user&quot;)[&quot;target&quot;].transform(lambda s: s.rolling(7).mean())
+
+# RIGHT: shift so only strictly prior values are used
+df[&quot;feat&quot;] = df.groupby(&quot;user&quot;)[&quot;target&quot;].transform(
+    lambda s: s.shift(1).rolling(7).mean()
+)
+</code></pre>
+<p>Forgetting the <code>shift(1)</code> on a target-derived rolling feature is the single most common cause of &quot;amazing offline, useless in production&quot;.</p>
+<hr />
+<h2 id="joins-and-the-duplicate-trap">Joins and the Duplicate Trap</h2>
+<pre><code class="language-python">orders = pd.DataFrame({&quot;order_id&quot;: [1, 2, 3], &quot;cust_id&quot;: [10, 20, 10]})
+custs = pd.DataFrame({&quot;cust_id&quot;: [10, 20, 30], &quot;name&quot;: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]})
+
+m = orders.merge(custs, on=&quot;cust_id&quot;, how=&quot;left&quot;, validate=&quot;many_to_one&quot;)
+</code></pre>
+<p><strong><code>validate=</code> is the highest-value habit in this section.</strong> It raises immediately if the join isn't the cardinality you assumed:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Asserts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>one_to_one</code></td>
+<td>Keys unique on both sides</td>
+</tr>
+<tr>
+<td><code>one_to_many</code></td>
+<td>Left keys unique</td>
+</tr>
+<tr>
+<td><code>many_to_one</code></td>
+<td><strong>Right keys unique</strong>: the usual dimension lookup</td>
+</tr>
+<tr>
+<td><code>many_to_many</code></td>
+<td>No check (the default behavior)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Silent fan-out is the classic disaster: duplicate keys on the right side multiply rows, every downstream sum doubles, and nothing errors. Always compare <code>df.shape</code> before and after.</p>
+<pre><code class="language-python"># Indicator reveals match quality
+m = orders.merge(custs, on=&quot;cust_id&quot;, how=&quot;outer&quot;, indicator=True)
+m[&quot;_merge&quot;].value_counts()    # both / left_only / right_only
+
+# as-of join: match the most recent prior record (time series bread and butter)
+pd.merge_asof(trades.sort_values(&quot;time&quot;), quotes.sort_values(&quot;time&quot;),
+              on=&quot;time&quot;, by=&quot;symbol&quot;, direction=&quot;backward&quot;)
+</code></pre>
+<p><code>merge_asof</code> is worth knowing cold: it's the correct tool for point-in-time correct feature joins, and reaching for it signals experience with temporal data.</p>
+<hr />
+<h2 id="reshaping">Reshaping</h2>
+<pre><code class="language-python">wide = pd.DataFrame({&quot;id&quot;: [1, 2], &quot;jan&quot;: [10, 20], &quot;feb&quot;: [30, 40]})
+
+# Wide → long
+long = wide.melt(id_vars=&quot;id&quot;, var_name=&quot;month&quot;, value_name=&quot;value&quot;)
+
+# Long → wide
+back = long.pivot(index=&quot;id&quot;, columns=&quot;month&quot;, values=&quot;value&quot;).reset_index()
+
+# pivot_table aggregates duplicates (pivot raises on them)
+pd.pivot_table(long, index=&quot;id&quot;, columns=&quot;month&quot;, values=&quot;value&quot;,
+               aggfunc=&quot;sum&quot;, fill_value=0)
+
+# Flatten a MultiIndex after aggregation
+agg = sales.groupby(&quot;region&quot;).agg({&quot;amount&quot;: [&quot;sum&quot;, &quot;mean&quot;]})
+agg.columns = [&quot;_&quot;.join(c) for c in agg.columns]
+</code></pre>
+<p><strong><code>pivot</code> vs <code>pivot_table</code></strong>: <code>pivot</code> raises on duplicate index/column pairs; <code>pivot_table</code> aggregates them. If <code>pivot</code> errors, your data isn't at the grain you thought: investigate rather than swapping to <code>pivot_table</code> reflexively.</p>
+<pre><code class="language-python"># Explode list-valued cells into rows
+df = pd.DataFrame({&quot;id&quot;: [1, 2], &quot;tags&quot;: [[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;]]})
+df.explode(&quot;tags&quot;)
+</code></pre>
+<hr />
+<h2 id="time-series-operations">Time Series Operations</h2>
+<pre><code class="language-python">df = df.set_index(pd.to_datetime(df[&quot;date&quot;]))
+
+df.resample(&quot;D&quot;).sum()          # downsample to daily
+df.resample(&quot;W-SUN&quot;).mean()     # weekly, Monday-to-Sunday bins labeled by the Sunday (&quot;W&quot; is the same)
+df.resample(&quot;ME&quot;).agg({&quot;value&quot;: &quot;sum&quot;, &quot;id&quot;: &quot;nunique&quot;})   # month end; &quot;M&quot; is deprecated since pandas 2.2
+
+# Gaps: resample creates rows for missing periods. sum() puts 0 there,
+# mean() puts NaN, so choose the fill explicitly (fillna(0), ffill, interpolate)
+daily_mean = df.resample(&quot;D&quot;).mean().ffill()
+
+# Timezones
+s = df.index.tz_localize(&quot;UTC&quot;).tz_convert(&quot;Europe/Berlin&quot;)
+
+# Business days
+pd.date_range(&quot;2026-01-01&quot;, periods=10, freq=&quot;B&quot;)
+</code></pre>
+<p><strong>Timezone handling</strong> is a frequent source of silent bugs: mixing naive and aware timestamps raises in comparisons, and localizing data that's already in local time shifts everything. Store UTC, convert at the edges.</p>
+<hr />
+<h2 id="missing-data">Missing Data</h2>
+<pre><code class="language-python">df.isna().sum()                       # count per column
+df.isna().mean().sort_values()        # proportion: more useful
+
+df.dropna(subset=[&quot;important_col&quot;])   # drop rows missing a specific column
+df.fillna({&quot;a&quot;: 0, &quot;b&quot;: df.b.median()})   # per-column strategies
+
+df[&quot;v&quot;].ffill()                       # forward fill: legitimate for time series
+df[&quot;v&quot;].interpolate(method=&quot;time&quot;)    # time-aware interpolation
+</code></pre>
+<p><strong><code>None</code> vs <code>NaN</code> vs <code>NaT</code> vs <code>pd.NA</code></strong> trips people up: <code>NaN</code> is a float, so an integer column with a missing value upcasts to float; <code>NaT</code> is the datetime equivalent; <code>pd.NA</code> is the newer, dtype-agnostic sentinel used by nullable dtypes (<code>Int64</code>, <code>boolean</code>, <code>string</code>). Using <code>Int64</code> (capital I) preserves integer semantics with nulls.</p>
+<p><strong>The critical ML point</strong>: imputation must be <strong>fit on training data only</strong>. Computing the median over the full dataset before splitting leaks test information. Do it inside a <code>Pipeline</code>.</p>
+<hr />
+<h2 id="performance-and-memory">Performance and Memory</h2>
+<pre><code class="language-python"># Memory profile
+df.memory_usage(deep=True).sort_values(ascending=False)
+
+# Downcast numerics
+df[&quot;small_int&quot;] = pd.to_numeric(df[&quot;small_int&quot;], downcast=&quot;integer&quot;)
+df[&quot;f32&quot;] = df[&quot;f64&quot;].astype(&quot;float32&quot;)
+
+# Category dtype: enormous win for low-cardinality strings
+df[&quot;country&quot;] = df[&quot;country&quot;].astype(&quot;category&quot;)   # often 10-50× smaller
+</code></pre>
+<p><strong>Category dtype is the single biggest memory lever</strong> for typical dataframes: a string column with 200 distinct values across 10M rows drops from ~600 MB to ~10 MB, and groupby on it gets faster too.</p>
+<pre><code class="language-python"># Read only what you need
+pd.read_csv(&quot;big.csv&quot;, usecols=[&quot;a&quot;, &quot;b&quot;], dtype={&quot;a&quot;: &quot;int32&quot;})
+
+# Chunked processing for files larger than memory. Combine partial results with
+# concat + groupby: adding Series with `+` or sum() gives NaN for keys missing from a chunk
+partials = [chunk.groupby(&quot;k&quot;)[&quot;v&quot;].sum() for chunk in
+            pd.read_csv(&quot;huge.csv&quot;, chunksize=100_000)]
+totals = pd.concat(partials).groupby(level=0).sum()
+
+# Parquet over CSV: columnar, typed, compressed, ~5-10× faster to read
+df.to_parquet(&quot;data.parquet&quot;)
+</code></pre>
+<p><strong><code>query</code> and <code>eval</code></strong> avoid intermediate allocations on large frames:</p>
+<pre><code class="language-python">df.query(&quot;price &gt; 100 and qty &lt; 5&quot;)     # no boolean intermediates
+</code></pre>
+<p>When pandas isn't enough: <strong>Polars</strong> (multi-threaded, lazy, much faster), <strong>DuckDB</strong> (SQL over dataframes and Parquet, excellent for joins and aggregations), or <strong>Dask</strong>/<strong>Spark</strong> for distributed. Naming DuckDB as the pragmatic middle step is a strong answer.</p>
+<hr />
+<h2 id="ml-specific-patterns">ML-Specific Patterns</h2>
+<pre><code class="language-python"># Train/test split respecting time
+cutoff = df[&quot;date&quot;].quantile(0.8)
+train, test = df[df.date &lt;= cutoff], df[df.date &gt; cutoff]
+
+# One-hot with consistent columns between train and serve
+X_train = pd.get_dummies(train[cats], columns=cats)
+X_test = pd.get_dummies(test[cats], columns=cats).reindex(
+    columns=X_train.columns, fill_value=0        # CRITICAL: align columns
+)
+
+# Target encoding computed out-of-fold to avoid leakage
+from sklearn.model_selection import KFold
+df[&quot;target_enc&quot;] = np.nan
+for tr, va in KFold(5, shuffle=True, random_state=42).split(df):
+    means = df.iloc[tr].groupby(&quot;cat&quot;)[&quot;target&quot;].mean()
+    df.iloc[va, df.columns.get_loc(&quot;target_enc&quot;)] = df.iloc[va][&quot;cat&quot;].map(means)
+</code></pre>
+<p>The <code>reindex</code> on one-hot encoding is a real production bug source: an unseen category at serving time produces a different column set, and the model receives a misaligned feature vector, often without erroring.</p>
+<hr />
+<h2 id="complexity-and-cost-reference">Complexity and Cost Reference</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Cost</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vectorized arithmetic</td>
+<td><code>O(n)</code>, C speed</td>
+<td>Baseline</td>
+</tr>
+<tr>
+<td><code>apply(axis=1)</code></td>
+<td><code>O(n)</code> Python calls</td>
+<td>~100-1000× slower</td>
+</tr>
+<tr>
+<td><code>groupby.agg</code></td>
+<td><code>O(n)</code></td>
+<td>Hash-based, fast</td>
+</tr>
+<tr>
+<td><code>merge</code> on unsorted keys</td>
+<td><code>O(n + m)</code></td>
+<td>Hash join</td>
+</tr>
+<tr>
+<td><code>sort_values</code></td>
+<td><code>O(n log n)</code></td>
+<td>Consider <code>nlargest</code> for top-k</td>
+</tr>
+<tr>
+<td><code>nlargest(k)</code></td>
+<td><code>O(n log k)</code></td>
+<td>Beats full sort</td>
+</tr>
+<tr>
+<td><code>rolling</code></td>
+<td><code>O(n · w)</code> naive, <code>O(n)</code> for mean/sum</td>
+<td>Optimized for common aggregations</td>
+</tr>
+<tr>
+<td><code>pd.concat</code> in a loop</td>
+<td><strong><code>O(n²)</code></strong></td>
+<td>Build a list, concat once</td>
+</tr>
+<tr>
+<td><code>.iterrows()</code></td>
+<td>Very slow</td>
+<td>Almost never correct</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-is-applyaxis1-slow-and-what-do-you-use-instead">Why is <code>apply(axis=1)</code> slow, and what do you use instead?</h4>
+<p>It calls a Python function once per row, and each call constructs a Series object for that row. So you pay Python interpreter overhead plus object allocation <code>n</code> times, with no opportunity for the underlying C loops or SIMD to help. On a million rows that's typically 100-1000× slower than the vectorized equivalent.</p>
+<p>Instead: plain vectorized arithmetic for math, <code>np.where</code> for two-branch conditionals, <code>np.select</code> for multi-branch, <code>pd.cut</code> for binning, <code>map</code> for dictionary lookups, and <code>groupby().transform()</code> for group-relative computations. If the logic can't vectorize (calling an external service, say) <code>apply</code> is fine, but I'd name that explicitly rather than defaulting to it.</p>
+<h4 id="explain-views-versus-copies-in-numpy">Explain views versus copies in NumPy.</h4>
+<p>Basic slicing (<code>a[1:3, :]</code>) returns a <strong>view</strong> (a new array object pointing at the same memory), so writing through it modifies the original. Fancy indexing (integer arrays or boolean masks) returns a <strong>copy</strong>, so writes don't propagate back.</p>
+<p>That asymmetry causes both classic bugs: &quot;why did my source array change?&quot; when someone modifies a slice, and &quot;why didn't my change stick?&quot; when they write through a boolean mask expecting a view. <code>np.shares_memory(a, b)</code> settles it when unsure, and <code>.copy()</code> makes the intent explicit.</p>
+<p>The pandas analogue is <code>SettingWithCopyWarning</code>, which fires when chained indexing makes it ambiguous whether you're writing to a view or a temporary. The fix is a single <code>.loc</code> call: <code>df.loc[mask, &quot;col&quot;] = value</code> rather than <code>df[mask][&quot;col&quot;] = value</code>. Under Copy-on-Write (opt-in in pandas 2.x via <code>pd.options.mode.copy_on_write = True</code>, and the default in pandas 3.0) the chained form never updates <code>df</code> at all, so the single <code>.loc</code> call is the only correct version.</p>
+<h4 id="your-merge-produced-more-rows-than-the-left-dataframe-what-happened">Your merge produced more rows than the left dataframe. What happened?</h4>
+<p>Duplicate keys on the right side, so each left row matched multiple right rows and fanned out. It's the most damaging silent bug in data work: nothing errors, but every downstream sum is inflated.</p>
+<p>The prevention is <code>validate=&quot;many_to_one&quot;</code> on the merge, which raises immediately if the right keys aren't unique. The diagnosis is comparing <code>df.shape</code> before and after (a habit worth having on every merge), and <code>custs[&quot;cust_id&quot;].duplicated().sum()</code> to confirm.</p>
+<p>Then decide what the duplicates mean: if they're genuine data errors, deduplicate; if the right side is legitimately at a finer grain, aggregate it to the join grain first, or accept the fan-out deliberately and adjust the downstream aggregation.</p>
+<h4 id="whats-the-difference-between-agg-transform-and-apply-on-a-groupby">What's the difference between <code>agg</code>, <code>transform</code>, and <code>apply</code> on a groupby?</h4>
+<p><code>agg</code> reduces each group to a single row: use it for summaries. <code>transform</code> returns something the <strong>same shape as the input</strong>, broadcasting the group result back to every row, which is what you want when adding a group statistic as a new column without a join. <code>filter</code> keeps or drops whole groups based on a group-level predicate. <code>apply</code> can return anything and is the most flexible, but it's also the slowest and its return-shape behaviour is inconsistent enough to be surprising.</p>
+<p>The practical rule: if you're about to compute a group aggregate and merge it back onto the original frame, use <code>transform</code> instead: it's one operation, faster, and can't fan out.</p>
+<h4 id="how-do-you-compute-a-rolling-feature-without-leaking-the-label">How do you compute a rolling feature without leaking the label?</h4>
+<p>Shift before rolling. A rolling window that includes the current row incorporates the very value you're predicting, which produces spectacular offline metrics and a useless production model.</p>
+<pre><code class="language-python">df[&quot;feat&quot;] = df.groupby(&quot;user&quot;)[&quot;target&quot;].transform(lambda s: s.shift(1).rolling(7).mean())
+</code></pre>
+<p>Two more temporal cautions: sort by time within each group first, or the window is meaningless; and prefer <code>rolling(&quot;7D&quot;)</code> over <code>rolling(7)</code> when rows aren't evenly spaced, because the row-based window silently reaches back further than intended when data is missing.</p>
+<p>The general habit is to write down, for each feature, &quot;what would I actually have known at prediction time?&quot;, and if the answer involves the future, the feature is wrong regardless of how well it scores.</p>
+<h4 id="your-dataframe-uses-8-gb-and-you-have-4-options">Your dataframe uses 8 GB and you have 4. Options?</h4>
+<p>In order of effort:</p>
+<p><strong>Dtypes first</strong>: usually the biggest win for the least work. <code>category</code> for low-cardinality strings often gives 10-50× on those columns; downcast <code>int64</code> → <code>int32</code>/<code>int16</code> and <code>float64</code> → <code>float32</code> where precision allows. Check with <code>df.memory_usage(deep=True)</code>.</p>
+<p><strong>Load less</strong>: <code>usecols</code> to read only needed columns, <code>dtype=</code> on read so you never materialize the wide version, and Parquet instead of CSV since it's columnar (read only the columns you need) and compressed.</p>
+<p><strong>Chunk</strong>: process in pieces with <code>chunksize</code> and aggregate incrementally, if the operation allows it.</p>
+<p><strong>Change tool</strong>: DuckDB runs SQL directly over Parquet files with out-of-core execution and is often the pragmatic answer for joins and aggregations; Polars is much more memory-efficient and multi-threaded for dataframe work; Dask or Spark when it's distributed-scale.</p>
+<p>I'd try dtypes and Parquet first, since they're minutes of work and frequently sufficient.</p>
+<h4 id="why-is-pdconcat-inside-a-loop-a-problem">Why is <code>pd.concat</code> inside a loop a problem?</h4>
+<p>Each <code>concat</code> allocates a new dataframe and copies everything accumulated so far, so appending <code>n</code> times copies <code>1 + 2 + ... + n</code> rows: quadratic. For a few thousand iterations it's the difference between milliseconds and minutes.</p>
+<p>The fix is to accumulate into a Python list and call <code>pd.concat(parts)</code> once at the end, which allocates a single result. The same reasoning applies to repeatedly appending to a Series or growing a NumPy array with <code>np.append</code>: preallocate or collect and combine once.</p>
+<h4 id="how-do-you-avoid-one-hot-encoding-mismatches-between-training-and-serving">How do you avoid one-hot encoding mismatches between training and serving?</h4>
+<p>Never call <code>get_dummies</code> independently on the two sets: the column set depends on which categories happen to appear, so an unseen category at serving time, or a missing one, produces a different shape or a misaligned feature vector.</p>
+<p>Two robust options. <strong><code>reindex</code> against the training columns</strong> with <code>fill_value=0</code>, which forces the serving frame to exactly the training schema. Better, use <strong><code>sklearn.OneHotEncoder(handle_unknown=&quot;ignore&quot;)</code> inside a <code>Pipeline</code></strong>: it learns the categories at fit time, produces a consistent output width, and handles unseen values gracefully. Putting it in the pipeline also means the same object is serialized with the model, so training and serving can't diverge.</p>
+<p>The failure mode this prevents is nasty because it often doesn't raise: the model receives numbers in the wrong columns and returns confident nonsense.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apply(axis=1)</code> by default</td>
+<td>100-1000× slower than vectorized</td>
+<td><code>np.where</code>, <code>np.select</code>, arithmetic, <code>transform</code></td>
+</tr>
+<tr>
+<td>Chained assignment <code>df[m][&quot;c&quot;] = v</code></td>
+<td>May write to a temporary; silently no-ops</td>
+<td>Single <code>.loc[m, &quot;c&quot;] = v</code></td>
+</tr>
+<tr>
+<td><code>merge</code> without <code>validate=</code></td>
+<td>Silent fan-out inflates every downstream sum</td>
+<td><code>validate=&quot;many_to_one&quot;</code>; check <code>.shape</code></td>
+</tr>
+<tr>
+<td><code>groupby</code> with NaN keys</td>
+<td>Rows silently dropped; totals don't reconcile</td>
+<td><code>dropna=False</code></td>
+</tr>
+<tr>
+<td>Rolling feature without <code>shift(1)</code></td>
+<td>Leaks the target into its own feature</td>
+<td>Shift before rolling</td>
+</tr>
+<tr>
+<td><code>rolling(7)</code> on irregular timestamps</td>
+<td>Window spans an unintended time range</td>
+<td><code>rolling(&quot;7D&quot;)</code></td>
+</tr>
+<tr>
+<td><code>pd.concat</code> in a loop</td>
+<td>Quadratic copying</td>
+<td>Collect in a list, concat once</td>
+</tr>
+<tr>
+<td><code>get_dummies</code> fit separately per split</td>
+<td>Column mismatch at serving</td>
+<td><code>reindex</code> or <code>OneHotEncoder</code> in a pipeline</td>
+</tr>
+<tr>
+<td>Imputing before the train/test split</td>
+<td>Leaks test statistics into training</td>
+<td>Fit imputers inside a <code>Pipeline</code></td>
+</tr>
+<tr>
+<td>Object dtype for repeated strings</td>
+<td>Huge memory cost</td>
+<td><code>astype(&quot;category&quot;)</code></td>
+</tr>
+<tr>
+<td>Mixing tz-naive and tz-aware timestamps</td>
+<td>Comparison errors or silent offsets</td>
+<td>Store UTC, convert at the edges</td>
+</tr>
+<tr>
+<td><code>int</code> columns silently becoming float</td>
+<td>NaN forces float upcast</td>
+<td>Nullable <code>Int64</code> dtype</td>
+</tr>
+<tr>
+<td>Full sort to get top-k</td>
+<td><code>O(n log n)</code> when <code>O(n log k)</code> suffices</td>
+<td><code>nlargest(k)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="python_coding_challenges.html">Python Coding Challenges</a></li>
+<li><a href="sql_coding_challenges.html">SQL Coding Challenges</a></li>
+<li><a href="ml_coding_challenges.html">ML Coding Challenges</a></li>
+<li><a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_time_series.html">Time Series</a></li>
+<li><a href="../data_engineering/intro_duckdb.html">DuckDB</a></li>
+<li><a href="../data_engineering/intro_apache_spark.html">Apache Spark</a></li>
+<li><a href="../docs/take-home-projects.html">Take-Home Projects</a></li>
+<li><a href="./">Coding Challenges Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="ml_coding_challenges.html"><small>Previous</small>ML Coding Challenges</a><a rel="next" class="next" href="sql_coding_challenges.html"><small>Next</small>SQL Coding Challenges</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/coding_challenges/pandas_numpy_challenges.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML | Cracking ML Interviews</title>
+<meta name="description" content="Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_geospatial.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML | Cracking ML Interviews">
+<meta property="og:description" content="Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_geospatial.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML | Cracking ML Interviews">
+<meta name="twitter:description" content="Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Geospatial AI Systems: Google Solar API, ArcGIS & Production ML",
+   "description": "Geospatial AI Systems: Google Solar API, ArcGIS & Production ML: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_geospatial.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Geospatial AI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_geospatial.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Geospatial AI</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_geospatial.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="geospatial-ai-systems-google-solar-api-arcgis--production-ml">Geospatial AI Systems: Google Solar API, ArcGIS &amp; Production ML</h1>
+<h2 id="why-geospatial-matters-in-aiml-2026">Why Geospatial Matters in AI/ML (2026)</h2>
+<p>Geospatial data is everywhere in production ML:</p>
+<ul>
+<li><strong>Energy</strong>: Solar potential assessment, grid optimization, EV charging placement</li>
+<li><strong>Logistics</strong>: Route optimization, demand forecasting, last-mile delivery</li>
+<li><strong>Climate Tech</strong>: Carbon mapping, deforestation detection, flood risk modeling</li>
+<li><strong>Urban Planning</strong>: Zoning optimization, infrastructure planning</li>
+<li><strong>Agriculture</strong>: Crop yield prediction, irrigation optimization</li>
+<li><strong>Insurance</strong>: Risk modeling by location, catastrophe modeling</li>
+</ul>
+<hr />
+<h2 id="coordinate-systems-epsg-basics">Coordinate Systems (EPSG Basics)</h2>
+<p>Understanding coordinate systems is essential before building any geospatial ML pipeline.</p>
+<h3 id="common-epsg-codes">Common EPSG Codes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>EPSG</th>
+<th>Name</th>
+<th>Type</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>4326</strong></td>
+<td>WGS84</td>
+<td>Geographic (lat/lon degrees)</td>
+<td>GPS, most APIs, GeoJSON</td>
+</tr>
+<tr>
+<td><strong>3857</strong></td>
+<td>Web Mercator</td>
+<td>Projected (meters)</td>
+<td>Web maps (Google Maps, OSM)</td>
+</tr>
+<tr>
+<td><strong>32632</strong></td>
+<td>UTM Zone 32N</td>
+<td>Projected (meters, local)</td>
+<td>Accurate local distance calculations (Europe)</td>
+</tr>
+<tr>
+<td><strong>4269</strong></td>
+<td>NAD83</td>
+<td>Geographic</td>
+<td>US government data</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import pyproj
+from pyproj import Transformer
+
+# Transform GPS coordinates (WGS84) → meters (UTM zone 10N, which covers San Francisco)
+transformer = Transformer.from_crs(&quot;EPSG:4326&quot;, &quot;EPSG:32610&quot;, always_xy=True)
+
+# San Francisco: (lon, lat) in WGS84
+lon, lat = -122.4194, 37.7749
+x_meters, y_meters = transformer.transform(lon, lat)
+print(f&quot;UTM: ({x_meters:.0f}, {y_meters:.0f}) meters&quot;)
+
+# Use a local projected CRS (e.g. the right UTM zone) or geodesic math for distance/area
+# Always use WGS84 for API inputs and GeoJSON
+</code></pre>
+<h3 id="critical-rule-for-ml">Critical Rule for ML</h3>
+<blockquote>
+<p><strong>Never compute distances with lat/lon directly.</strong> 1 degree of longitude ≠ same distance at different latitudes. Project to a local metric CRS first, or use geodesic distance on the ellipsoid. Web Mercator (EPSG:3857) is in &quot;meters&quot; but badly distorts distances away from the equator, so it is not a distance CRS.</p>
+</blockquote>
+<pre><code class="language-python">import geopandas as gpd
+from pyproj import Geod
+from shapely.geometry import Point
+
+# Create GeoDataFrame in WGS84
+gdf = gpd.GeoDataFrame(
+    {&quot;name&quot;: [&quot;NYC&quot;, &quot;LA&quot;], &quot;value&quot;: [100, 200]},
+    geometry=[Point(-74.0060, 40.7128), Point(-118.2437, 34.0522)],
+    crs=&quot;EPSG:4326&quot;
+)
+
+# NYC and LA span several UTM zones, so use geodesic distance on the WGS84 ellipsoid
+geod = Geod(ellps=&quot;WGS84&quot;)
+nyc, la = gdf.geometry.iloc[0], gdf.geometry.iloc[1]
+_, _, distance_meters = geod.inv(nyc.x, nyc.y, la.x, la.y)
+print(f&quot;Distance NYC→LA: {distance_meters / 1000:.0f} km&quot;)
+
+# For points within one region, reproject to that region's UTM zone instead:
+# gdf.to_crs(gdf.estimate_utm_crs()).distance(...)
+</code></pre>
+<hr />
+<h2 id="google-solar-api">Google Solar API</h2>
+<h3 id="what-it-does">What It Does</h3>
+<p>Google Solar API analyzes satellite imagery to provide:</p>
+<ul>
+<li><strong>Roof segment detection</strong>: Area, orientation, tilt of each roof section</li>
+<li><strong>Solar panel layout</strong>: Optimal panel placement</li>
+<li><strong>Annual solar energy potential</strong>: kWh/year estimate</li>
+<li><strong>Financial modeling</strong>: Payback period, savings</li>
+</ul>
+<h3 id="api-overview">API Overview</h3>
+<pre><code class="language-python">import requests
+import json
+
+API_KEY = &quot;your-google-solar-api-key&quot;
+BASE_URL = &quot;https://solar.googleapis.com/v1&quot;
+
+def get_building_insights(lat: float, lon: float) -&gt; dict:
+    &quot;&quot;&quot;Get solar potential for a building at given coordinates&quot;&quot;&quot;
+    url = f&quot;{BASE_URL}/buildingInsights:findClosest&quot;
+    params = {
+        &quot;key&quot;: API_KEY,
+        &quot;location.latitude&quot;: lat,
+        &quot;location.longitude&quot;: lon,
+        &quot;requiredQuality&quot;: &quot;HIGH&quot;  # HIGH, MEDIUM, or LOW
+    }
+
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    return response.json()
+
+def analyze_solar_potential(building: dict) -&gt; dict:
+    &quot;&quot;&quot;Extract key metrics from Solar API response&quot;&quot;&quot;
+    solar_potential = building.get(&quot;solarPotential&quot;, {})
+
+    return {
+        &quot;max_array_area_m2&quot;: solar_potential.get(&quot;maxArrayAreaMeters2&quot;),
+        &quot;max_sunshine_hours_year&quot;: solar_potential.get(&quot;maxSunshineHoursPerYear&quot;),
+        &quot;carbon_offset_kg&quot;: solar_potential.get(&quot;carbonOffsetFactorKgPerMwh&quot;),
+        &quot;panel_configs&quot;: [
+            {
+                &quot;panels&quot;: cfg[&quot;panelsCount&quot;],
+                &quot;yearly_energy_kwh&quot;: cfg[&quot;yearlyEnergyDcKwh&quot;],
+                &quot;roof_segments_used&quot;: len(cfg.get(&quot;roofSegmentSummaries&quot;, []))
+            }
+            for cfg in solar_potential.get(&quot;solarPanelConfigs&quot;, [])[:5]  # Top 5 configs
+        ]
+    }
+
+# Usage
+building = get_building_insights(37.7749, -122.4194)
+analysis = analyze_solar_potential(building)
+print(json.dumps(analysis, indent=2))
+</code></pre>
+<h3 id="ml-integration-solar-potential-scoring-at-scale">ML Integration: Solar Potential Scoring at Scale</h3>
+<pre><code class="language-python">import pandas as pd
+import asyncio
+import aiohttp
+from sklearn.ensemble import GradientBoostingRegressor
+
+async def batch_solar_analysis(addresses: list[dict]) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Analyze solar potential for many buildings in parallel&quot;&quot;&quot;
+
+    async def fetch_one(session, lat, lon, address_id):
+        url = f&quot;{BASE_URL}/buildingInsights:findClosest&quot;
+        params = {&quot;key&quot;: API_KEY, &quot;location.latitude&quot;: lat, &quot;location.longitude&quot;: lon}
+        async with session.get(url, params=params) as resp:
+            data = await resp.json()
+            return {&quot;id&quot;: address_id, &quot;lat&quot;: lat, &quot;lon&quot;: lon, **analyze_solar_potential(data)}
+
+    async with aiohttp.ClientSession() as session:
+        tasks = [
+            fetch_one(session, addr[&quot;lat&quot;], addr[&quot;lon&quot;], addr[&quot;id&quot;])
+            for addr in addresses
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    return pd.DataFrame([r for r in results if not isinstance(r, Exception)])
+
+# ML Model: Predict solar adoption probability
+def train_solar_adoption_model(df: pd.DataFrame) -&gt; GradientBoostingRegressor:
+    features = [
+        &quot;max_array_area_m2&quot;,
+        &quot;max_sunshine_hours_year&quot;,
+        &quot;num_panels_optimal&quot;,
+        &quot;home_value&quot;,           # From external source
+        &quot;electricity_rate&quot;,     # From utility data
+        &quot;roof_age_years&quot;        # From permit data
+    ]
+    target = &quot;solar_adoption_within_2_years&quot;  # Historical data
+
+    X = df[features].fillna(df[features].median())
+    y = df[target]
+
+    model = GradientBoostingRegressor(n_estimators=200, max_depth=5, learning_rate=0.1)
+    model.fit(X, y)
+    return model
+</code></pre>
+<hr />
+<h2 id="arcgis-in-ml-pipelines">ArcGIS in ML Pipelines</h2>
+<h3 id="arcgis-python-api">ArcGIS Python API</h3>
+<pre><code class="language-python">from arcgis.gis import GIS
+from arcgis.features import FeatureLayer, GeoAccessor
+from arcgis.geometry import Geometry
+import pandas as pd
+
+# Connect to ArcGIS Online or Enterprise
+gis = GIS(&quot;https://www.arcgis.com&quot;, &quot;username&quot;, &quot;password&quot;)
+# Or: gis = GIS(&quot;pro&quot;)  # Use ArcGIS Pro credentials
+
+# Load a feature layer
+url = &quot;https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Counties/FeatureServer/0&quot;
+layer = FeatureLayer(url)
+
+# Query features as Spatially Enabled DataFrame (SEDF)
+query_result = layer.query(
+    where=&quot;STATE_NAME = 'California'&quot;,
+    out_fields=[&quot;NAME&quot;, &quot;POPULATION&quot;, &quot;AREA&quot;],
+    return_geometry=True
+)
+df = query_result.sdf  # Spatially Enabled DataFrame (GeoDataFrame-like)
+
+print(df.head())
+print(f&quot;Total CA counties: {len(df)}&quot;)
+print(f&quot;Total population: {df['POPULATION'].sum():,.0f}&quot;)
+</code></pre>
+<h3 id="spatial-analysis-for-ml-feature-engineering">Spatial Analysis for ML Feature Engineering</h3>
+<pre><code class="language-python">from arcgis.features import GeoAccessor, GeoSeriesAccessor
+import pandas as pd
+import numpy as np
+
+# Load parcel data with solar potential scores
+parcels_df = pd.DataFrame({
+    &quot;parcel_id&quot;: range(1000),
+    &quot;lat&quot;: np.random.uniform(37.0, 38.0, 1000),
+    &quot;lon&quot;: np.random.uniform(-122.5, -121.5, 1000),
+    &quot;solar_score&quot;: np.random.uniform(0, 1, 1000)
+})
+
+# Convert to SEDF
+sedf = pd.DataFrame.spatial.from_xy(parcels_df, x_column=&quot;lon&quot;, y_column=&quot;lat&quot;, sr=4326)
+
+# Spatial join: add demographic features from census layer
+census_layer = gis.content.get(&quot;census-layer-id&quot;).layers[0]
+sedf_with_demographics = sedf.spatial.join(
+    right_df=census_layer.query().sdf,
+    how=&quot;left&quot;,
+    op=&quot;within&quot;  # Join parcels within census tracts
+)
+
+# Buffer analysis: count competitors within 5km
+sedf[&quot;competitors_5km&quot;] = sedf.spatial.relationship(
+    other=competitor_locations_sedf,
+    spatial_rel=&quot;within&quot;,
+    distance=5000,
+    units=&quot;meters&quot;
+).groupby(&quot;parcel_id&quot;).size()
+</code></pre>
+<hr />
+<h2 id="spatial-queries-with-postgis">Spatial Queries with PostGIS</h2>
+<h3 id="why-postgis">Why PostGIS?</h3>
+<p>PostGIS extends PostgreSQL with geospatial types and operations: perfect for production ML pipelines that need spatial joins, buffering, and proximity queries at scale.</p>
+<pre><code class="language-sql">-- Enable PostGIS
+CREATE EXTENSION postgis;
+
+-- Create table with geometry
+CREATE TABLE buildings (
+    id SERIAL PRIMARY KEY,
+    address TEXT,
+    geom GEOMETRY(Point, 4326),  -- WGS84 lat/lon
+    solar_score FLOAT,
+    annual_kwh FLOAT,
+    metadata JSONB
+);
+
+-- Index for spatial queries (CRITICAL for performance)
+CREATE INDEX buildings_geom_idx ON buildings USING GIST(geom);
+-- Distance queries below use geography, so index that expression too
+-- (charging_stations needs the same index)
+CREATE INDEX buildings_geog_idx ON buildings USING GIST((geom::geography));
+
+-- Find buildings within 1km of a charging station
+-- geography casts give true meters on the ellipsoid (EPSG:3857 &quot;meters&quot; are distorted)
+SELECT b.id, b.address, b.solar_score,
+       ST_Distance(b.geom::geography, c.geom::geography) / 1000.0 AS distance_km
+FROM buildings b
+JOIN charging_stations c ON ST_DWithin(
+    b.geom::geography,
+    c.geom::geography,
+    1000  -- 1000 meters
+)
+WHERE b.solar_score &gt; 0.7
+ORDER BY distance_km;
+
+-- Aggregate solar potential by neighborhood polygon
+SELECT
+    n.name AS neighborhood,
+    COUNT(b.id) AS building_count,
+    AVG(b.solar_score) AS avg_solar_score,
+    SUM(b.annual_kwh) AS total_annual_kwh
+FROM neighborhoods n
+JOIN buildings b ON ST_Within(b.geom, n.geom)
+GROUP BY n.name
+ORDER BY total_annual_kwh DESC;
+</code></pre>
+<h3 id="python-integration">Python Integration</h3>
+<pre><code class="language-python">import geopandas as gpd
+from sqlalchemy import create_engine
+
+engine = create_engine(&quot;postgresql://user:pass@localhost/geospatial_db&quot;)
+
+# Load spatial data with PostGIS
+gdf = gpd.read_postgis(&quot;&quot;&quot;
+    SELECT id, address, solar_score, annual_kwh, geom
+    FROM buildings
+    WHERE solar_score &gt; 0.5
+    ORDER BY solar_score DESC
+    LIMIT 10000
+&quot;&quot;&quot;, engine, geom_col=&quot;geom&quot;, crs=&quot;EPSG:4326&quot;)
+
+# Write ML predictions back to PostGIS
+gdf[&quot;adoption_probability&quot;] = model.predict(gdf[feature_cols])
+gdf.to_postgis(&quot;ml_predictions&quot;, engine, if_exists=&quot;replace&quot;, index=False)
+</code></pre>
+<hr />
+<h2 id="combining-geospatial-data-with-ml-pipelines">Combining Geospatial Data with ML Pipelines</h2>
+<h3 id="feature-engineering-from-geospatial-data">Feature Engineering from Geospatial Data</h3>
+<pre><code class="language-python">import geopandas as gpd
+from shapely.geometry import Point
+import numpy as np
+
+def engineer_spatial_features(buildings_gdf: gpd.GeoDataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Create ML features from spatial data&quot;&quot;&quot;
+
+    features = pd.DataFrame()
+
+    # 1. Distance to amenities (schools, hospitals, transit)
+    for amenity_name, amenity_gdf in amenity_layers.items():
+        features[f&quot;dist_{amenity_name}_m&quot;] = buildings_gdf.geometry.apply(
+            lambda g: amenity_gdf.geometry.distance(g).min() * 111000  # deg to meters approx
+        )
+
+    # 2. Population density (from census polygons)
+    joined = gpd.sjoin(buildings_gdf, census_gdf, how=&quot;left&quot;, predicate=&quot;within&quot;)
+    features[&quot;population_density&quot;] = joined[&quot;pop_per_sqkm&quot;]
+
+    # 3. Elevation features (from DEM raster)
+    features[&quot;elevation_m&quot;] = extract_raster_values(buildings_gdf.geometry, dem_raster)
+    features[&quot;slope_degrees&quot;] = extract_raster_values(buildings_gdf.geometry, slope_raster)
+
+    # 4. Cluster-based features
+    from sklearn.cluster import KMeans
+    coords = np.column_stack([
+        buildings_gdf.geometry.x,
+        buildings_gdf.geometry.y
+    ])
+    kmeans = KMeans(n_clusters=50, random_state=42)
+    features[&quot;spatial_cluster&quot;] = kmeans.fit_predict(coords)
+
+    # 5. H3 hexagonal grid features (Uber H3)
+    import h3
+    features[&quot;h3_index_res8&quot;] = buildings_gdf.apply(
+        lambda row: h3.latlng_to_cell(row.geometry.y, row.geometry.x, 8),
+        axis=1
+    )
+
+    return features
+</code></pre>
+<h3 id="h3-hexagonal-indexing-for-spatial-ml">H3 Hexagonal Indexing for Spatial ML</h3>
+<pre><code class="language-python">import h3
+import pandas as pd
+
+# H3 is Uber's hierarchical hexagonal spatial index
+# Perfect for spatial feature engineering and aggregation
+
+def aggregate_by_h3(df: pd.DataFrame, resolution: int = 8) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;
+    H3 Resolution Guide:
+    Res 4: ~1,770km² (large metro region)
+    Res 7: ~5km² (neighborhood)
+    Res 8: ~0.7km² (block)
+    Res 10: ~0.015km² (building)
+    &quot;&quot;&quot;
+    df[&quot;h3_index&quot;] = df.apply(
+        lambda row: h3.latlng_to_cell(row[&quot;lat&quot;], row[&quot;lon&quot;], resolution),
+        axis=1
+    )
+
+    return df.groupby(&quot;h3_index&quot;).agg({
+        &quot;solar_score&quot;: [&quot;mean&quot;, &quot;max&quot;, &quot;count&quot;],
+        &quot;annual_kwh&quot;: &quot;sum&quot;,
+        &quot;home_value&quot;: &quot;median&quot;
+    }).reset_index()
+</code></pre>
+<hr />
+<h2 id="real-world-ml-system-solar-lead-scoring-pipeline">Real-World ML System: Solar Lead Scoring Pipeline</h2>
+<pre><code>                    ┌─────────────────────────────────────────────┐
+                    │        SOLAR LEAD SCORING SYSTEM             │
+                    │                                              │
+  Address List → [Geocoder] → [Google Solar API] → [Feature Eng] │
+                     │              │                    │         │
+              {lat, lon}    {solar_potential}    {spatial feats}  │
+                     └──────────────┴────────────────────┘        │
+                                    │                             │
+                              [ML Model]                          │
+                         (GBM Classifier)                         │
+                                    │                             │
+                              [Lead Score]                        │
+                                    │                             │
+                            [PostGIS DB]                         │
+                                    │                             │
+                        [Sales Dashboard / CRM]                   │
+                    └─────────────────────────────────────────────┘
+</code></pre>
+<pre><code class="language-python">from dataclasses import dataclass
+import pandas as pd
+
+@dataclass
+class SolarLead:
+    address: str
+    lat: float
+    lon: float
+    solar_score: float
+    adoption_probability: float
+    estimated_savings_annual: float
+    priority: str  # &quot;hot&quot;, &quot;warm&quot;, &quot;cold&quot;
+
+async def score_leads(addresses: list[str]) -&gt; list[SolarLead]:
+    # Step 1: Geocode addresses
+    geocoded = await batch_geocode(addresses)
+
+    # Step 2: Fetch solar data
+    solar_data = await batch_solar_analysis(geocoded)
+
+    # Step 3: Add spatial features
+    spatial_features = engineer_spatial_features(
+        gpd.GeoDataFrame(solar_data, geometry=gpd.points_from_xy(
+            solar_data[&quot;lon&quot;], solar_data[&quot;lat&quot;]
+        ))
+    )
+
+    # Step 4: Merge and predict
+    X = pd.concat([solar_data, spatial_features], axis=1)[FEATURE_COLS]
+    probabilities = adoption_model.predict_proba(X)[:, 1]
+
+    # Step 5: Create lead objects
+    leads = []
+    for i, (_, row) in enumerate(solar_data.iterrows()):
+        prob = probabilities[i]
+        leads.append(SolarLead(
+            address=row[&quot;address&quot;],
+            lat=row[&quot;lat&quot;],
+            lon=row[&quot;lon&quot;],
+            solar_score=row[&quot;solar_score&quot;],
+            adoption_probability=prob,
+            estimated_savings_annual=row[&quot;annual_kwh&quot;] * 0.12,  # $0.12/kWh
+            priority=&quot;hot&quot; if prob &gt; 0.7 else &quot;warm&quot; if prob &gt; 0.4 else &quot;cold&quot;
+        ))
+
+    return sorted(leads, key=lambda x: x.adoption_probability, reverse=True)
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: What coordinate system would you use for computing distances in a geospatial ML pipeline?</strong></p>
+<blockquote>
+<p>Project to a local metric CRS (e.g., the appropriate UTM zone) before computing distances, or use geodesic distance (pyproj <code>Geod</code>, PostGIS <code>geography</code>) when points span a large area. Never use lat/lon degrees for distance: 1 degree of longitude has different real-world distances at different latitudes. Avoid Web Mercator (EPSG:3857) for distances: its units are meters, but scale grows with latitude. Use pyproj or GeoPandas <code>.to_crs()</code> to reproject.</p>
+</blockquote>
+<p><strong>Q: How would you design a system to score solar potential for 1 million addresses?</strong></p>
+<blockquote>
+<p>Batch geocode addresses → parallel async calls to Google Solar API (respect rate limits with semaphores) → feature engineering with PostGIS spatial joins → batch ML inference → store results in PostGIS with spatial index for downstream queries. Monitor API costs carefully: Solar API is metered.</p>
+</blockquote>
+<p><strong>Q: What is H3 and why is it useful for ML?</strong></p>
+<blockquote>
+<p>H3 is Uber's hexagonal hierarchical spatial index. Each hex cell has a unique ID at multiple resolutions. For ML: use H3 as a groupby key for spatial aggregation features, encode spatial location without leaking exact coordinates, and enable efficient neighbor lookups. H3 cells at a given resolution have roughly similar areas (far more uniform than lat/lon grids, though not exactly equal-area), and every neighbor is equidistant, making them better for spatial statistics.</p>
+</blockquote>
+<p><strong>Q: How do you prevent data leakage in geospatial ML models?</strong></p>
+<blockquote>
+<p>Don't use future data for historical predictions. Don't use spatial proximity as a feature if your train/test split is random (nearby points will be in both sets: use spatial cross-validation: block holdout by region). Avoid using census data that's derived from the same population you're predicting.</p>
+</blockquote>
+<p><strong>Q: How would you combine ArcGIS data with a Python ML pipeline?</strong></p>
+<blockquote>
+<p>Use the ArcGIS Python API (<code>arcgis</code> package) to query feature layers as Spatially Enabled DataFrames or use the REST API directly. Convert to GeoPandas for sklearn-compatible processing. Alternatively, export to PostGIS for complex spatial joins at scale. Always manage CRS transformations explicitly.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_duckdb.html"><small>Previous</small>DuckDB</a><a rel="next" class="next" href="intro_openclaw.html"><small>Next</small>OpenClaw (illustrative)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_geospatial.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

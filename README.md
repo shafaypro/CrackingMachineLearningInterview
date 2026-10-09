@@ -83,6 +83,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`docs/ml-debugging-scenarios.md`](./docs/ml-debugging-scenarios.md): troubleshooting scenarios (leakage, NaN loss, offline/online gaps, drift, RAG regressions) with ranked causes and fixes.
 * [`flashcards.html`](./flashcards.html): interactive flashcards built from the glossary, with progress saved in your browser.
 * [`tools/check_links.py`](./tools/check_links.py): offline link and anchor checker, run in CI on every pull request.
+* [`tools/build_site.py`](./tools/build_site.py): generates a standalone, search-engine-friendly page for every guide (`guides/`) plus `sitemap.xml`.
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG.
 * [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation.

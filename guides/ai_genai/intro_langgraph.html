@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LangGraph: Stateful Agent Orchestration Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="LangGraph: Stateful Agent Orchestration: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langgraph.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LangGraph: Stateful Agent Orchestration Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="LangGraph: Stateful Agent Orchestration: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langgraph.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LangGraph: Stateful Agent Orchestration Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="LangGraph: Stateful Agent Orchestration: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LangGraph: Stateful Agent Orchestration",
+   "description": "LangGraph: Stateful Agent Orchestration: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langgraph.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LangGraph",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langgraph.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LangGraph</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_langgraph.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="langgraph-stateful-agent-orchestration">LangGraph: Stateful Agent Orchestration</h1>
+<h2 id="what-is-langgraph">What is LangGraph?</h2>
+<p>LangGraph is a library built on top of LangChain for creating <strong>stateful, multi-actor applications</strong> with LLMs. It models agent workflows as a <strong>directed graph</strong> (or cyclic graph), where:</p>
+<ul>
+<li><strong>Nodes</strong> = functions or LLM calls</li>
+<li><strong>Edges</strong> = control flow (conditional or fixed)</li>
+<li><strong>State</strong> = a shared typed object that flows through the graph</li>
+</ul>
+<p>This gives you <strong>explicit control</strong> over agent execution flow: the key differentiator from CrewAI or vanilla LangChain agents.</p>
+<pre><code>                    ┌─────────────────────────────────────┐
+                    │           StateGraph                 │
+                    │                                     │
+                    │  START → [agent] → [tools] → END   │
+                    │              ↑         │            │
+                    │              └─────────┘            │
+                    │         (conditional edge:          │
+                    │          loop if tools called)      │
+                    └─────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="state">State</h3>
+<p>State is a <code>TypedDict</code> (or Pydantic model) that carries all information through the graph:</p>
+<pre><code class="language-python">from typing import TypedDict, Annotated, Sequence
+from langchain_core.messages import BaseMessage
+import operator
+
+class AgentState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    next_action: str
+    iteration_count: int
+    final_answer: str | None
+</code></pre>
+<h3 id="nodes">Nodes</h3>
+<p>Nodes are Python functions that receive state and return state updates:</p>
+<pre><code class="language-python">def call_llm(state: AgentState) -&gt; dict:
+    response = llm.invoke(state[&quot;messages&quot;])
+    return {&quot;messages&quot;: [response]}
+
+def call_tool(state: AgentState) -&gt; dict:
+    # Execute tool based on last AI message
+    tool_result = tool.invoke(state[&quot;messages&quot;][-1].tool_calls[0])
+    return {&quot;messages&quot;: [ToolMessage(content=str(tool_result))]}
+</code></pre>
+<h3 id="edges">Edges</h3>
+<pre><code class="language-python">from langgraph.graph import StateGraph, END
+
+def should_continue(state: AgentState) -&gt; str:
+    &quot;&quot;&quot;Conditional edge: route based on state&quot;&quot;&quot;
+    last_message = state[&quot;messages&quot;][-1]
+    if last_message.tool_calls:
+        return &quot;tools&quot;  # Go to tool node
+    return END          # Done
+
+graph = StateGraph(AgentState)
+graph.add_node(&quot;agent&quot;, call_llm)
+graph.add_node(&quot;tools&quot;, call_tool)
+graph.set_entry_point(&quot;agent&quot;)
+graph.add_conditional_edges(&quot;agent&quot;, should_continue, {
+    &quot;tools&quot;: &quot;tools&quot;,
+    END: END
+})
+graph.add_edge(&quot;tools&quot;, &quot;agent&quot;)  # Always return to agent after tool
+
+app = graph.compile()
+</code></pre>
+<hr />
+<h2 id="full-react-agent-example">Full ReAct Agent Example</h2>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain_core.tools import tool
+from langgraph.graph import StateGraph, END
+from langgraph.prebuilt import ToolNode
+from typing import TypedDict, Annotated, Sequence
+from langchain_core.messages import BaseMessage
+import operator
+
+# Define tools
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;Search the web for current information.&quot;&quot;&quot;
+    # In production: call Serper/Tavily API
+    return f&quot;Results for: {query}&quot;
+
+@tool
+def calculate(expression: str) -&gt; float:
+    &quot;&quot;&quot;Evaluate a math expression.&quot;&quot;&quot;
+    return eval(expression)  # Use safer eval in production
+
+tools = [search_web, calculate]
+tool_node = ToolNode(tools)
+
+# LLM with tools bound
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+llm_with_tools = llm.bind_tools(tools)
+
+# State
+class State(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+
+# Nodes
+def agent(state: State):
+    return {&quot;messages&quot;: [llm_with_tools.invoke(state[&quot;messages&quot;])]}
+
+def should_continue(state: State) -&gt; str:
+    if state[&quot;messages&quot;][-1].tool_calls:
+        return &quot;tools&quot;
+    return END
+
+# Graph
+graph = StateGraph(State)
+graph.add_node(&quot;agent&quot;, agent)
+graph.add_node(&quot;tools&quot;, tool_node)
+graph.set_entry_point(&quot;agent&quot;)
+graph.add_conditional_edges(&quot;agent&quot;, should_continue)
+graph.add_edge(&quot;tools&quot;, &quot;agent&quot;)
+
+app = graph.compile()
+
+# Run
+result = app.invoke({
+    &quot;messages&quot;: [(&quot;human&quot;, &quot;What's 15% of 2840, and who won the 2024 US election?&quot;)]
+})
+# .text joins the text blocks; .content can be a list when the model returns thinking blocks
+print(result[&quot;messages&quot;][-1].text)
+</code></pre>
+<hr />
+<h2 id="persistence--memory">Persistence &amp; Memory</h2>
+<p>LangGraph has built-in <strong>checkpointing</strong>: the graph state can be saved after each node execution:</p>
+<pre><code class="language-python">from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.postgres import PostgresSaver
+
+# In-memory (dev)
+from langgraph.checkpoint.memory import MemorySaver
+memory = MemorySaver()
+app = graph.compile(checkpointer=memory)
+
+# Production (Postgres)
+with PostgresSaver.from_conn_string(&quot;postgresql://...&quot;) as checkpointer:
+    app = graph.compile(checkpointer=checkpointer)
+
+# Run with thread_id for session persistence
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;user-123-session-456&quot;}}
+result = app.invoke({&quot;messages&quot;: [(&quot;human&quot;, &quot;Hello&quot;)]}, config=config)
+
+# Resume from same thread: graph &quot;remembers&quot; prior messages
+result2 = app.invoke({&quot;messages&quot;: [(&quot;human&quot;, &quot;What did I just say?&quot;)]}, config=config)
+</code></pre>
+<hr />
+<h2 id="human-in-the-loop-hitl">Human-in-the-Loop (HITL)</h2>
+<pre><code class="language-python">from langgraph.types import interrupt
+
+def review_node(state: State):
+    &quot;&quot;&quot;Pause and wait for human approval&quot;&quot;&quot;
+    human_review = interrupt({
+        &quot;question&quot;: &quot;Do you approve this action?&quot;,
+        &quot;action&quot;: state[&quot;proposed_action&quot;]
+    })
+    if human_review[&quot;approved&quot;]:
+        return {&quot;status&quot;: &quot;approved&quot;}
+    return {&quot;status&quot;: &quot;rejected&quot;}
+
+app = graph.compile(checkpointer=memory, interrupt_before=[&quot;dangerous_action&quot;])
+
+# Run until interrupt
+result = app.invoke(input_data, config=config)
+# result[&quot;__interrupt__&quot;] contains the interrupt payload
+
+# Resume after human decision
+app.invoke(Command(resume={&quot;approved&quot;: True}), config=config)
+</code></pre>
+<hr />
+<h2 id="multi-agent-with-langgraph">Multi-Agent with LangGraph</h2>
+<pre><code class="language-python"># pip install langgraph-supervisor
+from langgraph_supervisor import create_supervisor
+
+# Specialized agents: compiled graphs, each with a unique name
+research_agent = build_research_subgraph().compile(name=&quot;researcher&quot;)
+writing_agent = build_writing_subgraph().compile(name=&quot;writer&quot;)
+
+# Supervisor gets a handoff tool per agent and routes between them
+multi_agent = create_supervisor(
+    agents=[research_agent, writing_agent],   # agent objects, not name strings
+    model=ChatAnthropic(model=&quot;claude-opus-4-6&quot;),
+    prompt=&quot;Route tasks to the appropriate specialist agent.&quot;,
+).compile()
+
+result = multi_agent.invoke({&quot;messages&quot;: [(&quot;human&quot;, &quot;Research and summarize vector DB trends&quot;)]})
+</code></pre>
+<hr />
+<h2 id="streaming">Streaming</h2>
+<pre><code class="language-python"># Stream node-by-node updates
+for chunk in app.stream({&quot;messages&quot;: [(&quot;human&quot;, &quot;Analyze this data&quot;)]}, config=config):
+    for node_name, updates in chunk.items():
+        print(f&quot;Node: {node_name}&quot;)
+        print(updates)
+
+# Stream tokens from LLM
+for chunk in app.astream_events(input_data, config=config, version=&quot;v2&quot;):
+    if chunk[&quot;event&quot;] == &quot;on_chat_model_stream&quot;:
+        print(chunk[&quot;data&quot;][&quot;chunk&quot;].text, end=&quot;&quot;, flush=True)  # text only, skips thinking chunks
+</code></pre>
+<hr />
+<h2 id="langgraph-vs-langchain-agents-vs-crewai">LangGraph vs LangChain Agents vs CrewAI</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>LangGraph</th>
+<th>LangChain Agent</th>
+<th>CrewAI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Control flow</strong></td>
+<td>Explicit graph</td>
+<td>Implicit LLM decides</td>
+<td>Sequential/hierarchical</td>
+</tr>
+<tr>
+<td><strong>State management</strong></td>
+<td>Typed, explicit</td>
+<td>Message list</td>
+<td>Task context</td>
+</tr>
+<tr>
+<td><strong>Cycles/loops</strong></td>
+<td>Native support</td>
+<td>Limited</td>
+<td>Not supported</td>
+</tr>
+<tr>
+<td><strong>Human-in-the-loop</strong></td>
+<td>First-class (interrupt)</td>
+<td>Manual</td>
+<td><code>human_input=True</code></td>
+</tr>
+<tr>
+<td><strong>Persistence</strong></td>
+<td>Built-in checkpointing</td>
+<td>Manual</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>Token + node level</td>
+<td>Token level</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>High</td>
+<td>Low</td>
+<td>Low</td>
+</tr>
+<tr>
+<td><strong>Determinism</strong></td>
+<td>High</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Production agents, complex flows</td>
+<td>Simple chains</td>
+<td>Role-based automation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="when-to-use-langgraph">When to Use LangGraph</h2>
+<p><strong>Use LangGraph when:</strong></p>
+<ul>
+<li>You need <strong>cycles</strong> (agent loops until task complete)</li>
+<li>You need <strong>conditional routing</strong> based on state</li>
+<li>You need <strong>human-in-the-loop</strong> at specific steps</li>
+<li>You need <strong>persistent sessions</strong> across API calls</li>
+<li>You're building production systems requiring auditability</li>
+<li>You need <strong>fine-grained control</strong> over every execution step</li>
+</ul>
+<p><strong>Avoid LangGraph when:</strong></p>
+<ul>
+<li>Simple single-turn Q&amp;A → use direct LLM calls</li>
+<li>Rapid prototyping without state needs → use LangChain LCEL</li>
+<li>Role-based multi-agent with no loops → use CrewAI</li>
+</ul>
+<hr />
+<h2 id="production-pitfalls">Production Pitfalls</h2>
+<ol>
+<li>
+<p><strong>State schema drift</strong>: Changing <code>AgentState</code> fields breaks existing checkpoints. Version your state schemas.</p>
+</li>
+<li>
+<p><strong>Infinite loops</strong>: Without termination conditions, graphs can loop forever. Always add <code>iteration_count</code> to state and add a max-iteration edge.</p>
+</li>
+<li>
+<p><strong>Large state objects</strong>: Storing full message history in state grows unboundedly. Trim or summarize messages periodically.</p>
+</li>
+<li>
+<p><strong>Tool timeouts</strong>: Tools can hang. Wrap in <code>asyncio.wait_for</code> with a timeout.</p>
+</li>
+<li>
+<p><strong>Checkpointer bottleneck</strong>: SQLite checkpointer is single-threaded. Use PostgresSaver for concurrent production workloads.</p>
+</li>
+</ol>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: What makes LangGraph different from LangChain agents?</strong></p>
+<blockquote>
+<p>LangGraph makes control flow explicit via a graph structure. You define exactly which node runs next and under what conditions. LangChain agents let the LLM decide next steps implicitly: less predictable, harder to debug.</p>
+</blockquote>
+<p><strong>Q: How does LangGraph support human-in-the-loop?</strong></p>
+<blockquote>
+<p>Via <code>interrupt()</code>: the graph pauses mid-execution, saves state to a checkpointer, and waits for external input. You resume by calling <code>invoke</code> with a <code>Command(resume=...)</code>. The graph continues from exactly where it stopped.</p>
+</blockquote>
+<p><strong>Q: How do you prevent infinite loops in LangGraph?</strong></p>
+<blockquote>
+<p>Track <code>iteration_count</code> in state. Add a conditional edge that routes to END if <code>iteration_count &gt; MAX_ITERATIONS</code>. Also use <code>recursion_limit</code> in the graph config.</p>
+</blockquote>
+<p><strong>Q: Explain LangGraph checkpointing and why it matters in production.</strong></p>
+<blockquote>
+<p>Checkpointing saves the full graph state after each node execution to a persistent store (SQLite/Postgres). This enables: resumable sessions, time-travel debugging (step back to any state), multi-turn conversations, and disaster recovery without re-running from scratch.</p>
+</blockquote>
+<p><strong>Q: How do you build a multi-agent system with LangGraph?</strong></p>
+<blockquote>
+<p>Each sub-agent is its own compiled graph. A supervisor node routes between them using conditional edges based on the task type. Sub-graphs communicate through shared state. LangGraph's <code>create_supervisor</code> helper simplifies this pattern.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_langchain.html"><small>Previous</small>LangChain</a><a rel="next" class="next" href="intro_langsmith.html"><small>Next</small>LangSmith</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_langgraph.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

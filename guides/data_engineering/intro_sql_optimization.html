@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL Query Optimization Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Writing correct SQL gets you through the coding screen. Making it fast on a billion rows is the Data Engineer interview, and it rests on one skill…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_sql_optimization.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="SQL Query Optimization Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Writing correct SQL gets you through the coding screen. Making it fast on a billion rows is the Data Engineer interview, and it rests on one skill…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_sql_optimization.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL Query Optimization Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Writing correct SQL gets you through the coding screen. Making it fast on a billion rows is the Data Engineer interview, and it rests on one skill…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "SQL Query Optimization",
+   "description": "Writing correct SQL gets you through the coding screen. Making it fast on a billion rows is the Data Engineer interview, and it rests on one skill…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_sql_optimization.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "SQL Query Optimization",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_sql_optimization.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">SQL Query Optimization</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_sql_optimization.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="sql-query-optimization">SQL Query Optimization</h1>
+<p>Writing correct SQL gets you through the coding screen. Making it fast on a billion rows is the Data Engineer interview, and it rests on one skill: reading an execution plan and knowing which operator is the problem.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-a-query-actually-runs">How a Query Actually Runs</a></li>
+<li><a href="#reading-an-execution-plan">Reading an Execution Plan</a></li>
+<li><a href="#indexes">Indexes</a></li>
+<li><a href="#join-algorithms">Join Algorithms</a></li>
+<li><a href="#predicate-pushdown-and-sargability">Predicate Pushdown and Sargability</a></li>
+<li><a href="#statistics-and-cardinality-estimation">Statistics and Cardinality Estimation</a></li>
+<li><a href="#window-functions-and-aggregation">Window Functions and Aggregation</a></li>
+<li><a href="#partitioning-and-clustering">Partitioning and Clustering</a></li>
+<li><a href="#columnar-warehouses-vs-oltp">Columnar Warehouses vs OLTP</a></li>
+<li><a href="#common-rewrites">Common Rewrites</a></li>
+<li><a href="#a-debugging-workflow">A Debugging Workflow</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-a-query-actually-runs">How a Query Actually Runs</h2>
+<p>SQL is declarative, so the engine decides the execution. Logical evaluation order differs from the written order, and knowing it resolves a surprising number of bugs:</p>
+<pre><code>FROM / JOIN  →  WHERE  →  GROUP BY  →  HAVING  →  SELECT  →  DISTINCT  →  ORDER BY  →  LIMIT
+</code></pre>
+<p>Two consequences that come up constantly:</p>
+<ul>
+<li><strong>You cannot reference a <code>SELECT</code> alias in <code>WHERE</code></strong>, because <code>WHERE</code> runs first. (Some engines allow it in <code>GROUP BY</code>/<code>ORDER BY</code> as a convenience.)</li>
+<li><strong><code>WHERE</code> filters rows, <code>HAVING</code> filters groups.</strong> Putting a non-aggregate condition in <code>HAVING</code> works but filters <em>after</em> grouping: much more expensive than filtering before.</li>
+</ul>
+<p>The optimizer then rewrites this logical plan into a physical one: which index to use, which join algorithm, what order to join tables, whether to parallelize.</p>
+<hr />
+<h2 id="reading-an-execution-plan">Reading an Execution Plan</h2>
+<p>This is the skill. Everything else follows from it.</p>
+<pre><code class="language-sql">-- Postgres: ANALYZE actually runs it and reports real numbers
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT c.name, count(*)
+FROM orders o JOIN customers c ON c.id = o.customer_id
+WHERE o.created_at &gt;= '2026-01-01'
+GROUP BY c.name;
+</code></pre>
+<pre><code>HashAggregate  (cost=... rows=1000 width=..) (actual time=850 rows=48200 loops=1)
+  -&gt;  Hash Join  (cost=..) (actual time=620 rows=2100000 loops=1)
+        Hash Cond: (o.customer_id = c.id)
+        -&gt;  Seq Scan on orders o  (actual time=310 rows=2100000 loops=1)
+              Filter: (created_at &gt;= '2026-01-01')
+              Rows Removed by Filter: 47900000
+        -&gt;  Hash  (actual time=95 rows=50000 loops=1)
+              -&gt;  Seq Scan on customers c
+</code></pre>
+<p><strong>What to look for, in priority order:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estimated rows ≫ or ≪ actual rows</strong></td>
+<td>Bad cardinality estimate → wrong plan</td>
+<td>Update statistics; check correlated predicates</td>
+</tr>
+<tr>
+<td><strong>Seq Scan on a large table with a selective filter</strong></td>
+<td>Missing or unusable index</td>
+<td>Add index; check sargability</td>
+</tr>
+<tr>
+<td><strong>Rows Removed by Filter is huge</strong></td>
+<td>Reading far more than needed</td>
+<td>Push the predicate down; partition</td>
+</tr>
+<tr>
+<td><strong>Nested Loop with a large outer side</strong></td>
+<td>Quadratic behaviour</td>
+<td>Force hash join; fix estimates</td>
+</tr>
+<tr>
+<td><strong>Sort spilling to disk</strong> (<code>external merge</code>)</td>
+<td><code>work_mem</code> too small</td>
+<td>Raise memory, or avoid the sort</td>
+</tr>
+<tr>
+<td><strong><code>loops=N</code> with N large</strong></td>
+<td>Inner side executed N times</td>
+<td>Usually a nested-loop problem</td>
+</tr>
+</tbody>
+</table></div>
+<p>The single most valuable habit: <strong>compare estimated to actual rows at every node</strong>. A plan is only as good as its estimates, and almost every catastrophically slow query traces back to an estimate that was off by orders of magnitude.</p>
+<p><code>BUFFERS</code> shows actual I/O: <code>shared hit</code> is cache, <code>shared read</code> is disk. A query that looks fast on a warm cache can be terrible cold.</p>
+<hr />
+<h2 id="indexes">Indexes</h2>
+<p><strong>B-tree</strong> is the default and handles equality, ranges, and sorted retrieval.</p>
+<pre><code class="language-sql">CREATE INDEX idx_orders_customer_created ON orders (customer_id, created_at);
+</code></pre>
+<h3 id="composite-index-column-order">Composite index column order</h3>
+<p>The rule: <strong>equality columns first, then range, then columns used only for ordering.</strong> An index on <code>(a, b)</code> supports lookups on <code>a</code> and on <code>(a, b)</code>, but <strong>not</strong> on <code>b</code> alone: the same reason a phone book sorted by (surname, first name) can't find everyone named &quot;James&quot;.</p>
+<pre><code class="language-sql">-- Supports: WHERE customer_id = 5
+--           WHERE customer_id = 5 AND created_at &gt; '2026-01-01'
+-- Does NOT support: WHERE created_at &gt; '2026-01-01'    (leading column missing)
+</code></pre>
+<h3 id="covering-indexes">Covering indexes</h3>
+<p>If the index contains every column the query needs, the engine never touches the table: an <strong>index-only scan</strong>:</p>
+<pre><code class="language-sql">CREATE INDEX idx_cover ON orders (customer_id, created_at) INCLUDE (amount, status);
+</code></pre>
+<p>This can be an order-of-magnitude win on wide tables because it avoids the random heap lookups.</p>
+<h3 id="partial-indexes">Partial indexes</h3>
+<p>Index only the rows you query, which is smaller and faster to maintain:</p>
+<pre><code class="language-sql">CREATE INDEX idx_pending ON orders (created_at) WHERE status = 'pending';
+</code></pre>
+<p>Excellent when a status column is heavily skewed, indexing 0.1% of rows instead of all of them.</p>
+<h3 id="other-index-types">Other index types</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hash</strong></td>
+<td>Equality only; rarely worth it over B-tree</td>
+</tr>
+<tr>
+<td><strong>GIN</strong></td>
+<td>Arrays, JSONB, full-text search</td>
+</tr>
+<tr>
+<td><strong>GiST / SP-GiST</strong></td>
+<td>Geometric, range, nearest-neighbour</td>
+</tr>
+<tr>
+<td><strong>BRIN</strong></td>
+<td>Very large tables with natural physical ordering (append-only time series): tiny index, coarse filtering</td>
+</tr>
+<tr>
+<td><strong>Bitmap</strong> (warehouses)</td>
+<td>Low-cardinality columns</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="the-cost-of-indexes">The cost of indexes</h3>
+<p>Every index slows <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code>, consumes storage, and must be maintained. Unused indexes are pure overhead: check <code>pg_stat_user_indexes</code> for <code>idx_scan = 0</code> and drop them. &quot;Add an index&quot; is not a free answer, and saying so unprompted is a good signal.</p>
+<hr />
+<h2 id="join-algorithms">Join Algorithms</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Cost</th>
+<th>Chosen when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nested Loop</strong></td>
+<td><code>O(n · m)</code>, or <code>O(n · log m)</code> with an index on the inner side</td>
+<td>Small outer input, indexed inner</td>
+</tr>
+<tr>
+<td><strong>Hash Join</strong></td>
+<td><code>O(n + m)</code></td>
+<td>Large unsorted inputs, equality join, hash table fits memory</td>
+</tr>
+<tr>
+<td><strong>Merge Join</strong></td>
+<td><code>O(n log n + m log m)</code>, or <code>O(n + m)</code> if pre-sorted</td>
+<td>Both inputs already sorted on the key; range joins</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Nested loop is the dangerous one.</strong> It's optimal when the outer side has 10 rows and the inner has an index. It's catastrophic when the optimizer <em>estimated</em> 10 rows and there are actually 10 million: the same plan becomes 10 million index lookups. That mis-estimate is the most common cause of a query that ran in 50 ms yesterday and 50 minutes today.</p>
+<p><strong>Hash join</strong> builds a hash table on the smaller side and probes with the larger. If the build side doesn't fit in memory it spills to disk in batches, which is much slower: watch for that in the plan.</p>
+<p><strong>Join order matters enormously.</strong> With <code>n</code> tables there are factorially many orders; optimizers search heuristically and give up on very large joins. The practical rule: filter early, join the most selective tables first, so intermediate results stay small.</p>
+<hr />
+<h2 id="predicate-pushdown-and-sargability">Predicate Pushdown and Sargability</h2>
+<p><strong>Sargable</strong> (Search ARGument able) means the predicate can use an index. Wrapping an indexed column in a function destroys that:</p>
+<pre><code class="language-sql">-- NOT sargable: function on the column
+WHERE DATE(created_at) = '2026-01-01'
+WHERE UPPER(email) = 'A@B.COM'
+WHERE amount * 2 &gt; 100
+WHERE created_at::text LIKE '2026%'
+
+-- Sargable: column stays bare, transformation moves to the constant
+WHERE created_at &gt;= '2026-01-01' AND created_at &lt; '2026-01-02'
+WHERE email = 'a@b.com'              -- if emails are stored lowercased on write
+WHERE amount &gt; 50
+</code></pre>
+<p>This is the most common single cause of &quot;I added an index and nothing got faster&quot;, and it comes up in interviews constantly.</p>
+<p><strong>Expression indexes</strong> rescue cases where the function is needed:</p>
+<pre><code class="language-sql">CREATE INDEX idx_lower_email ON users (LOWER(email));
+-- now WHERE LOWER(email) = '...' can use it
+</code></pre>
+<p><strong>Leading wildcards</strong> also defeat B-trees: <code>LIKE '%term'</code> cannot use an index because the prefix is unknown. Use a trigram index (<code>pg_trgm</code>) or full-text search instead.</p>
+<p><strong><code>OR</code> across different columns</strong> often prevents index usage; rewriting as <code>UNION ALL</code> of two indexed queries can be dramatically faster.</p>
+<hr />
+<h2 id="statistics-and-cardinality-estimation">Statistics and Cardinality Estimation</h2>
+<p>The optimizer picks plans from estimated row counts, derived from sampled statistics. Bad statistics produce bad plans regardless of indexing.</p>
+<pre><code class="language-sql">ANALYZE orders;                                  -- refresh statistics
+ALTER TABLE orders ALTER COLUMN status SET STATISTICS 1000;   -- finer histogram
+</code></pre>
+<p><strong>Correlated columns</strong> are the classic estimation failure. The optimizer assumes independence, so for <code>WHERE city = 'Paris' AND country = 'France'</code> it multiplies the two selectivities and estimates far too few rows, when in reality the predicates are nearly redundant. Postgres addresses this with extended statistics:</p>
+<pre><code class="language-sql">CREATE STATISTICS stat_city_country (dependencies, ndistinct)
+  ON city, country FROM addresses;
+</code></pre>
+<p><strong>Skew</strong> is the other estimation trap. If 95% of orders have <code>status = 'complete'</code>, an index on <code>status</code> helps for the rare values and is useless for the common one, and the optimizer, seeing average selectivity, may choose wrongly for both.</p>
+<hr />
+<h2 id="window-functions-and-aggregation">Window Functions and Aggregation</h2>
+<p>Window functions avoid self-joins and are usually far faster:</p>
+<pre><code class="language-sql">-- Slow: correlated subquery, executed per row
+SELECT o.*, (SELECT count(*) FROM orders x WHERE x.customer_id = o.customer_id)
+FROM orders o;
+
+-- Fast: single pass with a window
+SELECT o.*, count(*) OVER (PARTITION BY customer_id)
+FROM orders o;
+</code></pre>
+<p><strong>Reuse the window definition</strong> so the engine sorts once rather than repeatedly:</p>
+<pre><code class="language-sql">SELECT
+  customer_id,
+  row_number() OVER w  AS rn,
+  sum(amount)  OVER w  AS running_total,
+  lag(amount)  OVER w  AS prev_amount
+FROM orders
+WINDOW w AS (PARTITION BY customer_id ORDER BY created_at);
+</code></pre>
+<p><strong>Frame clauses</strong> change both semantics and cost. <code>ROWS BETWEEN</code> is cheaper than <code>RANGE BETWEEN</code>, and the default frame for an ordered window is <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>, which surprises people expecting <code>ROWS</code>, particularly with ties.</p>
+<p><strong>Top-N per group</strong>: the perennial interview question, with a performance angle:</p>
+<pre><code class="language-sql">-- Portable
+SELECT * FROM (
+  SELECT *, row_number() OVER (PARTITION BY customer_id ORDER BY amount DESC) rn
+  FROM orders
+) t WHERE rn &lt;= 3;
+
+-- Postgres: DISTINCT ON is faster for top-1
+SELECT DISTINCT ON (customer_id) *
+FROM orders ORDER BY customer_id, amount DESC;
+
+-- Best when there are few groups: LATERAL with an index seek per group
+SELECT c.id, o.*
+FROM customers c
+CROSS JOIN LATERAL (
+  SELECT * FROM orders o WHERE o.customer_id = c.id
+  ORDER BY amount DESC LIMIT 3
+) o;
+</code></pre>
+<p>The <code>LATERAL</code> form wins when groups are few and there's an index on <code>(customer_id, amount DESC)</code>: it does a small index seek per group instead of sorting the whole table.</p>
+<hr />
+<h2 id="partitioning-and-clustering">Partitioning and Clustering</h2>
+<p><strong>Partitioning</strong> splits a table physically so queries can skip whole partitions (<em>partition pruning</em>):</p>
+<pre><code class="language-sql">CREATE TABLE events (id bigint, created_at timestamptz, payload jsonb)
+PARTITION BY RANGE (created_at);
+
+CREATE TABLE events_2026_01 PARTITION OF events
+  FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+</code></pre>
+<p>Pruning only works if the query filters on the <strong>partition key</strong>. A query filtering on <code>user_id</code> when partitioned by date scans everything, so the partition key must match the dominant access pattern.</p>
+<p>The other big benefit: dropping an old partition is instant metadata work, versus a <code>DELETE</code> that has to touch every row and bloat the table.</p>
+<p><strong>Over-partitioning is a real failure mode.</strong> Thousands of tiny partitions make planning slower and each scan less efficient; aim for partitions large enough to be worth the bookkeeping.</p>
+<p><strong>Clustering / sort keys</strong> control physical row order within storage, which drives how much data warehouses can skip:</p>
+<pre><code class="language-sql">-- Snowflake
+ALTER TABLE events CLUSTER BY (created_at, customer_id);
+-- BigQuery
+CREATE TABLE t PARTITION BY DATE(created_at) CLUSTER BY customer_id AS ...;
+</code></pre>
+<hr />
+<h2 id="columnar-warehouses-vs-oltp">Columnar Warehouses vs OLTP</h2>
+<p>The optimization mindset differs, and interviewers check that you know which world you're in.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>OLTP (Postgres, MySQL)</th>
+<th>Columnar (Snowflake, BigQuery, Redshift)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Storage</td>
+<td>Row-oriented</td>
+<td>Column-oriented</td>
+</tr>
+<tr>
+<td>Optimize for</td>
+<td>Point lookups, small transactions</td>
+<td>Large scans and aggregations</td>
+</tr>
+<tr>
+<td>Main lever</td>
+<td><strong>Indexes</strong></td>
+<td><strong>Partition pruning + clustering</strong></td>
+</tr>
+<tr>
+<td><code>SELECT *</code></td>
+<td>Mildly wasteful</td>
+<td><strong>Very expensive</strong>: reads every column</td>
+</tr>
+<tr>
+<td>Row count filters</td>
+<td>Index seek</td>
+<td>File/block skipping via min-max stats</td>
+</tr>
+<tr>
+<td>Joins</td>
+<td>Index nested loop common</td>
+<td>Hash joins, broadcast vs shuffle</td>
+</tr>
+<tr>
+<td>Cost model</td>
+<td>I/O and CPU</td>
+<td><strong>Bytes scanned</strong> (often literally billed)</td>
+</tr>
+</tbody>
+</table></div>
+<p>In a warehouse, <strong>column selection is the primary optimization</strong>: <code>SELECT *</code> on a 200-column table reads 200 columns' worth of data when you needed three. Partition pruning and clustering replace indexes as the mechanism for reading less.</p>
+<p><strong>Broadcast vs shuffle join</strong> in distributed engines: if one side is small it's broadcast to every node (cheap); otherwise both sides are shuffled across the network by join key (expensive). Data <strong>skew</strong> (one key with a disproportionate share of rows) makes one task run far longer than the rest, which is the classic Spark/warehouse performance problem. Salting the key is the standard fix.</p>
+<hr />
+<h2 id="common-rewrites">Common Rewrites</h2>
+<pre><code class="language-sql">-- 1. Existence check: EXISTS short-circuits, COUNT scans everything
+-- Slow
+SELECT * FROM customers c WHERE (SELECT count(*) FROM orders o WHERE o.customer_id = c.id) &gt; 0;
+-- Fast
+SELECT * FROM customers c WHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id);
+
+-- 2. NOT IN with nullable columns is both a correctness AND performance trap
+-- WRONG: returns zero rows if the subquery contains any NULL
+SELECT * FROM customers WHERE id NOT IN (SELECT customer_id FROM orders);
+-- Correct and faster
+SELECT * FROM customers c WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id);
+
+-- 3. Aggregate before joining when the join fans out
+SELECT c.id, c.name, o.total
+FROM customers c
+JOIN (SELECT customer_id, sum(amount) total FROM orders GROUP BY customer_id) o
+  ON o.customer_id = c.id;
+
+-- 4. Deep OFFSET is O(offset): use keyset pagination
+-- Slow at page 10,000
+SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 200000;
+-- Fast: seek directly
+SELECT * FROM orders WHERE id &gt; :last_seen_id ORDER BY id LIMIT 20;
+
+-- 5. UNION deduplicates (sort/hash); UNION ALL does not
+SELECT a FROM t1 UNION ALL SELECT a FROM t2;   -- when duplicates are fine or impossible
+</code></pre>
+<p><strong>The <code>NOT IN</code> NULL trap</strong> is worth internalizing: if the subquery returns any NULL, <code>x NOT IN (...)</code> evaluates to UNKNOWN for every row and the result is empty. It's a correctness bug that looks like a data problem, and <code>NOT EXISTS</code> avoids it entirely while usually planning better.</p>
+<hr />
+<h2 id="a-debugging-workflow">A Debugging Workflow</h2>
+<ol>
+<li><strong>Reproduce and measure.</strong> Get the actual runtime, on warm and cold cache.</li>
+<li><strong><code>EXPLAIN ANALYZE</code>.</strong> Find the node consuming the most actual time.</li>
+<li><strong>Check estimates against actuals</strong> at that node. Off by 100×? Statistics problem.</li>
+<li><strong>Ask what it's reading.</strong> Large <code>Rows Removed by Filter</code>, a Seq Scan on a big table, or a spilling sort each point somewhere specific.</li>
+<li><strong>Check sargability.</strong> Is a function wrapping an indexed column?</li>
+<li><strong>Consider the index.</strong> Does one exist, is the column order right, would a covering or partial index help?</li>
+<li><strong>Consider a rewrite.</strong> <code>EXISTS</code> instead of <code>COUNT</code>, aggregate before join, window instead of correlated subquery.</li>
+<li><strong>Re-measure.</strong> Then confirm the plan actually changed: sometimes it doesn't.</li>
+</ol>
+<p>Optimize the <strong>plan node that dominates actual time</strong>, not the part of the SQL that looks ugliest.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-does-it-mean-for-a-predicate-to-be-sargable">What does it mean for a predicate to be sargable?</h4>
+<p>Sargable means the predicate can use an index to seek rather than forcing a scan. The rule is that the indexed column must appear bare on one side of the comparison: the moment you wrap it in a function or arithmetic, the engine can no longer map the predicate onto the index's sort order.</p>
+<p>So <code>WHERE DATE(created_at) = '2026-01-01'</code> cannot use an index on <code>created_at</code>, while the equivalent <code>WHERE created_at &gt;= '2026-01-01' AND created_at &lt; '2026-01-02'</code> can. Same for <code>UPPER(email) = ...</code> versus comparing against a lowered constant, and <code>amount * 2 &gt; 100</code> versus <code>amount &gt; 50</code>.</p>
+<p>This is the most common reason someone adds an index and sees no improvement. When the function is required, an expression index on <code>LOWER(email)</code> restores index usage. Leading wildcards (<code>LIKE '%foo'</code>) are the related case: no known prefix means no B-tree seek, so you need trigram or full-text indexing.</p>
+<h4 id="explain-the-three-join-algorithms-and-when-each-is-chosen">Explain the three join algorithms and when each is chosen.</h4>
+<p><strong>Nested loop</strong>: for each row of the outer input, look up matches in the inner. <code>O(n·m)</code> naively, but <code>O(n·log m)</code> when the inner side has an index. Chosen when the outer input is small.</p>
+<p><strong>Hash join</strong>: build a hash table on the smaller input, probe with the larger. <code>O(n+m)</code>, the workhorse for large equality joins. Degrades sharply if the build side doesn't fit in memory and has to spill to disk in batches.</p>
+<p><strong>Merge join</strong>: sort both inputs on the key and walk them together. <code>O(n log n + m log m)</code>, but <code>O(n+m)</code> if the inputs are already sorted, so it's the natural choice when an index provides the ordering for free, and it also handles range joins that hash join can't.</p>
+<p>The dangerous one is nested loop, because its cost depends entirely on the outer row count being small. If the optimizer estimates 10 rows and there are actually 10 million, the same plan turns into 10 million lookups. That estimate error is the most common cause of a query that was fast yesterday and is unusable today.</p>
+<h4 id="a-query-got-100-slower-with-no-code-change-what-happened">A query got 100× slower with no code change. What happened?</h4>
+<p>Almost always the plan changed, and almost always because estimates changed.</p>
+<p>I'd start with <code>EXPLAIN ANALYZE</code> and compare estimated to actual rows at each node. The usual causes: <strong>stale statistics</strong> after a large data load, so the optimizer is planning against an old distribution: fixed by <code>ANALYZE</code>. <strong>Data growth crossing a threshold</strong>, where a nested loop that was correct at 1,000 rows is catastrophic at 10 million. <strong>Skew</strong>, where a previously uniform column became heavily concentrated. <strong>Parameter sniffing</strong>, where a cached plan built for a selective parameter value is reused for a non-selective one.</p>
+<p>I'd also check the boring possibilities: an index was dropped, a cold cache (compare <code>shared hit</code> versus <code>shared read</code> in <code>BUFFERS</code>), or resource contention from something else on the box. But statistics and estimate drift account for most of these, and <code>ANALYZE</code> plus a plan comparison usually identifies it in minutes.</p>
+<h4 id="why-cant-an-index-on-a-b-serve-a-query-filtering-only-on-b">Why can't an index on <code>(a, b)</code> serve a query filtering only on <code>b</code>?</h4>
+<p>Because a composite index is sorted lexicographically by <code>a</code> first, then <code>b</code> within each <code>a</code>. Rows with a given <code>b</code> value are scattered across the whole index rather than contiguous, so there's no range to seek to.</p>
+<p>The phone book analogy makes it concrete: a directory sorted by surname then first name lets you find &quot;Smith&quot;, or &quot;Smith, James&quot;, but finding everyone named James means reading the entire book.</p>
+<p>Practically: put equality columns first, then range columns, then ordering columns. If you frequently filter on <code>b</code> alone, you need a separate index, though some engines can do an &quot;index skip scan&quot; when <code>a</code> has very few distinct values, which partly rescues the case.</p>
+<h4 id="how-is-optimizing-a-columnar-warehouse-different-from-optimizing-postgres">How is optimizing a columnar warehouse different from optimizing Postgres?</h4>
+<p>Different levers, because the storage model is different.</p>
+<p>In row-store OLTP, the win is finding the few rows you want without touching the rest, so <strong>indexes</strong> are the primary tool and point lookups are the target workload.</p>
+<p>In a columnar warehouse, data is stored and compressed per column, and queries scan large ranges. There typically are no indexes in the OLTP sense. The levers are <strong>reading fewer columns</strong> (<code>SELECT *</code> on a 200-column table is expensive because it reads all 200), and <strong>reading fewer blocks</strong>, achieved through partition pruning on the partition key and clustering/sort keys so min-max statistics let the engine skip files entirely.</p>
+<p>The cost model also differs: warehouses often bill by <strong>bytes scanned</strong>, so optimization is directly a cost exercise rather than only a latency one. And in distributed engines you additionally care about join strategy (broadcast the small side versus shuffling both) and <strong>data skew</strong>, where one hot key makes a single task run far longer than the rest, usually addressed by salting the key.</p>
+<h4 id="whats-wrong-with-not-in-on-a-subquery">What's wrong with <code>NOT IN</code> on a subquery?</h4>
+<p>Two things, one of them a silent correctness bug.</p>
+<p><strong>Correctness</strong>: if the subquery returns even one NULL, <code>x NOT IN (subquery)</code> evaluates to UNKNOWN for every row, and the query returns zero rows. Three-valued logic means <code>x &lt;&gt; NULL</code> is never true, so the &quot;not in&quot; can never be satisfied. This looks like missing data rather than a bug, which is why it's so pernicious.</p>
+<p><strong>Performance</strong>: <code>NOT IN</code> with a subquery often can't be transformed into an anti-join, so the engine may materialize and re-check the whole subquery.</p>
+<p><code>NOT EXISTS</code> fixes both: it's NULL-safe by construction and typically plans as a proper anti-join. <code>LEFT JOIN ... WHERE right.key IS NULL</code> is the third equivalent form and sometimes plans better still.</p>
+<h4 id="how-would-you-paginate-through-10-million-rows-efficiently">How would you paginate through 10 million rows efficiently?</h4>
+<p>Not with <code>OFFSET</code>. <code>LIMIT 20 OFFSET 200000</code> requires the engine to generate and discard 200,000 rows before returning anything, so cost grows linearly with page depth: the last pages become unusable.</p>
+<p><strong>Keyset (seek) pagination</strong> instead: remember the sort key of the last row returned and use it as a filter, <code>WHERE id &gt; :last_seen ORDER BY id LIMIT 20</code>. With an index on the sort key this is an index seek, so every page costs the same regardless of depth.</p>
+<p>The trade-offs worth stating: you can't jump to an arbitrary page number, only forward and backward; the sort key must be unique or you need a tiebreaker (<code>(created_at, id)</code>) or rows can be skipped or duplicated; and it's a different API contract, so it's a design decision rather than a drop-in change.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Function wrapping an indexed column</td>
+<td>Predicate becomes non-sargable; index unused</td>
+<td>Rewrite as a range; or add an expression index</td>
+</tr>
+<tr>
+<td>Assuming <code>(a, b)</code> index helps <code>WHERE b = ...</code></td>
+<td>Leading column missing; no seek possible</td>
+<td>Separate index, or reorder columns</td>
+</tr>
+<tr>
+<td><code>NOT IN</code> on a nullable subquery</td>
+<td>Returns zero rows silently</td>
+<td><code>NOT EXISTS</code></td>
+</tr>
+<tr>
+<td>Deep <code>OFFSET</code> pagination</td>
+<td>Cost grows with page depth</td>
+<td>Keyset pagination</td>
+</tr>
+<tr>
+<td><code>SELECT *</code> in a columnar warehouse</td>
+<td>Reads every column; billed on bytes scanned</td>
+<td>Select only needed columns</td>
+</tr>
+<tr>
+<td>Trusting <code>EXPLAIN</code> without <code>ANALYZE</code></td>
+<td>Estimates, not reality</td>
+<td><code>EXPLAIN ANALYZE</code> and compare est. vs actual</td>
+</tr>
+<tr>
+<td>Adding indexes without measuring</td>
+<td>Slows writes, wastes storage</td>
+<td>Check <code>idx_scan</code>; drop unused indexes</td>
+</tr>
+<tr>
+<td>Partitioning on a column you don't filter by</td>
+<td>No pruning; full scan anyway</td>
+<td>Partition key = dominant filter</td>
+</tr>
+<tr>
+<td>Thousands of tiny partitions</td>
+<td>Planning overhead exceeds the benefit</td>
+<td>Fewer, larger partitions</td>
+</tr>
+<tr>
+<td>Filtering in <code>HAVING</code> instead of <code>WHERE</code></td>
+<td>Filters after grouping; far more work</td>
+<td>Non-aggregate conditions go in <code>WHERE</code></td>
+</tr>
+<tr>
+<td>Correlated subquery per row</td>
+<td>Executed once per outer row</td>
+<td>Window function or join</td>
+</tr>
+<tr>
+<td>Ignoring skew in distributed joins</td>
+<td>One task dominates runtime</td>
+<td>Salt the hot key; broadcast small sides</td>
+</tr>
+<tr>
+<td><code>UNION</code> when duplicates are impossible</td>
+<td>Pays for a needless dedup sort</td>
+<td><code>UNION ALL</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="../coding_challenges/sql_coding_challenges.html">SQL Coding Challenges</a></li>
+<li><a href="data-modeling.html">Data Modeling</a></li>
+<li><a href="data-architecture.html">Data Architecture</a></li>
+<li><a href="intro_duckdb.html">DuckDB</a></li>
+<li><a href="intro_apache_spark.html">Apache Spark</a></li>
+<li><a href="intro_apache_iceberg.html">Apache Iceberg</a></li>
+<li><a href="intro_delta_lake.html">Delta Lake</a></li>
+<li><a href="intro_dbt.html">dbt</a></li>
+<li><a href="../coding_challenges/pandas_numpy_challenges.html">Pandas and NumPy Challenges</a></li>
+<li><a href="../system_design/backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_data_processing_pipelines.html"><small>Previous</small>Data Processing Pipelines</a><a rel="next" class="next" href="intro_apache_spark.html"><small>Next</small>Apache Spark</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_sql_optimization.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

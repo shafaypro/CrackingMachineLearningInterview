@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observability: Metrics, Logs, and Traces Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Monitoring tells you that something broke. Observability tells you why, for a failure nobody predicted. The distinction matters because ML and AI systems…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_observability.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Observability: Metrics, Logs, and Traces Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Monitoring tells you that something broke. Observability tells you why, for a failure nobody predicted. The distinction matters because ML and AI systems…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_observability.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Observability: Metrics, Logs, and Traces Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Monitoring tells you that something broke. Observability tells you why, for a failure nobody predicted. The distinction matters because ML and AI systems…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Observability: Metrics, Logs, and Traces",
+   "description": "Monitoring tells you that something broke. Observability tells you why, for a failure nobody predicted. The distinction matters because ML and AI systems…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_observability.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Observability",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_observability.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Observability</span></nav>
+<p class="meta"><a href="../../#devops/intro_observability.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="observability-metrics-logs-and-traces">Observability: Metrics, Logs, and Traces</h1>
+<p>Monitoring tells you <em>that</em> something broke. Observability tells you <em>why</em>, for a failure nobody predicted. The distinction matters because ML and AI systems fail in ways dashboards weren't built for: a model degrading silently, one shard adding 800 ms to p99, an agent looping through 40 tool calls before answering.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#monitoring-vs-observability">Monitoring vs Observability</a></li>
+<li><a href="#the-three-pillars">The Three Pillars</a></li>
+<li><a href="#metrics">Metrics</a></li>
+<li><a href="#prometheus-and-promql">Prometheus and PromQL</a></li>
+<li><a href="#structured-logging">Structured Logging</a></li>
+<li><a href="#distributed-tracing">Distributed Tracing</a></li>
+<li><a href="#opentelemetry">OpenTelemetry</a></li>
+<li><a href="#slis-slos-and-error-budgets">SLIs, SLOs, and Error Budgets</a></li>
+<li><a href="#alerting-that-works">Alerting That Works</a></li>
+<li><a href="#dashboards">Dashboards</a></li>
+<li><a href="#observability-for-ml-and-llm-systems">Observability for ML and LLM Systems</a></li>
+<li><a href="#cost-control">Cost Control</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="monitoring-vs-observability">Monitoring vs Observability</h2>
+<p><strong>Monitoring</strong> watches known failure modes: CPU above 80%, error rate above 1%. You decided in advance what to measure.</p>
+<p><strong>Observability</strong> is the property of being able to answer questions you didn't anticipate (&quot;why are requests from Android users in Brazil slow, but only for accounts created this month?&quot;) without shipping new code.</p>
+<p>The practical difference is <strong>cardinality and context</strong>. A monitoring system aggregates away the dimensions you'd need to answer that question. An observable system keeps enough per-request detail to slice by attributes you didn't think of in advance.</p>
+<hr />
+<h2 id="the-three-pillars">The Three Pillars</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Answers</th>
+<th>Cost</th>
+<th>Cardinality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Metrics</strong></td>
+<td><em>Is</em> something wrong? How much, how often?</td>
+<td>Cheap, constant per series</td>
+<td><strong>Low</strong>: must stay bounded</td>
+</tr>
+<tr>
+<td><strong>Logs</strong></td>
+<td>What exactly happened in this one case?</td>
+<td>Expensive at volume</td>
+<td>Unbounded</td>
+</tr>
+<tr>
+<td><strong>Traces</strong></td>
+<td>Where did the time go across services?</td>
+<td>Moderate (sampled)</td>
+<td>High</td>
+</tr>
+</tbody>
+</table></div>
+<p>They complement rather than substitute. The normal workflow: a <strong>metric</strong> alerts, a <strong>trace</strong> localizes the slow or failing span, <strong>logs</strong> for that trace ID explain the specific failure.</p>
+<p>Wire them together with <strong>exemplars</strong> (attach a trace ID to metric samples), so you can jump from a latency spike on a graph straight to a trace of a request that caused it. That linkage is what makes the three pillars a system rather than three silos.</p>
+<hr />
+<h2 id="metrics">Metrics</h2>
+<p>Four types, and choosing correctly matters:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Semantics</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Counter</strong></td>
+<td>Monotonically increasing</td>
+<td><code>http_requests_total</code></td>
+</tr>
+<tr>
+<td><strong>Gauge</strong></td>
+<td>Goes up and down</td>
+<td><code>queue_depth</code>, <code>gpu_memory_bytes</code></td>
+</tr>
+<tr>
+<td><strong>Histogram</strong></td>
+<td>Bucketed distribution, aggregatable across instances</td>
+<td><code>request_duration_seconds</code></td>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>Client-computed quantiles</td>
+<td>Rarely the right choice</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Histogram over summary, almost always.</strong> Summaries compute quantiles on each instance, and <strong>quantiles cannot be averaged</strong>: the p99 across ten servers is not the mean of ten p99s. Histograms ship bucket counts, which <em>are</em> additive, so the aggregate quantile is computed correctly at query time.</p>
+<pre><code class="language-python">from prometheus_client import Counter, Histogram, Gauge
+
+REQUESTS = Counter(&quot;http_requests_total&quot;, &quot;Total requests&quot;, [&quot;method&quot;, &quot;endpoint&quot;, &quot;status&quot;])
+LATENCY = Histogram(
+    &quot;http_request_duration_seconds&quot;, &quot;Request latency&quot;, [&quot;endpoint&quot;],
+    buckets=(0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0),  # tune to your SLO
+)
+IN_FLIGHT = Gauge(&quot;http_requests_in_flight&quot;, &quot;Concurrent requests&quot;)
+
+@LATENCY.labels(endpoint=&quot;/predict&quot;).time()
+def handle_predict(req):
+    with IN_FLIGHT.track_inprogress():
+        resp = model_predict(req)
+    REQUESTS.labels(&quot;POST&quot;, &quot;/predict&quot;, &quot;200&quot;).inc()
+    return resp
+</code></pre>
+<p><strong>Bucket boundaries must bracket your SLO.</strong> If the SLO is 200 ms and your buckets jump 0.1 → 0.5, you cannot measure whether you're meeting it: <code>histogram_quantile</code> interpolates within a bucket, so a 200 ms threshold sitting mid-bucket is a guess.</p>
+<h3 id="the-cardinality-rule">The cardinality rule</h3>
+<p><strong>Total series = product of all label value counts.</strong> This is the single most important operational fact about metrics:</p>
+<pre><code>endpoint (20) × status (5) × region (3)        =    300 series   ✓
+endpoint (20) × status (5) × user_id (1000000) = 100M series     ✗ kills Prometheus
+</code></pre>
+<p>Never put user IDs, request IDs, email addresses, full URLs with parameters, or timestamps in labels. High-cardinality dimensions belong in <strong>logs and traces</strong>, not metrics. A single unbounded label has taken down more monitoring systems than any other cause.</p>
+<hr />
+<h2 id="prometheus-and-promql">Prometheus and PromQL</h2>
+<p>Prometheus <strong>pulls</strong> metrics from HTTP endpoints on a schedule, stores them as time series, and evaluates alert rules.</p>
+<pre><code class="language-promql"># Request rate per second, 5-minute window
+rate(http_requests_total[5m])
+
+# Error ratio
+sum(rate(http_requests_total{status=~&quot;5..&quot;}[5m]))
+  / sum(rate(http_requests_total[5m]))
+
+# p99 latency from a histogram: note rate() inside
+histogram_quantile(0.99,
+  sum by (le, endpoint) (rate(http_request_duration_seconds_bucket[5m])))
+
+# Predict disk exhaustion within 4 hours
+predict_linear(node_filesystem_avail_bytes[6h], 4*3600) &lt; 0
+</code></pre>
+<p><strong><code>rate</code> vs <code>increase</code> vs <code>irate</code></strong>: <code>rate</code> gives per-second average over the window and handles counter resets; <code>increase</code> is total change over the window (<code>rate × window</code>); <code>irate</code> uses only the last two samples and is for volatile graphs, not alerts.</p>
+<p><strong>The most common PromQL error</strong> is applying <code>histogram_quantile</code> without <code>rate</code> inside. The <code>_bucket</code> series are counters, so without <code>rate()</code> you compute the quantile over all history since process start rather than the recent window, which looks plausible and is wrong.</p>
+<p><strong>Pull vs push</strong>: pull gives Prometheus control over scrape frequency and makes target health observable (a target that's down simply fails to scrape). Push is needed for short-lived batch jobs that finish before any scrape happens, that's what the Pushgateway is for, and it's the <em>only</em> thing it's for.</p>
+<hr />
+<h2 id="structured-logging">Structured Logging</h2>
+<p>Log JSON, not prose. Prose is unqueryable at scale.</p>
+<pre><code class="language-python">import structlog
+
+log = structlog.get_logger()
+
+log.info(
+    &quot;prediction_served&quot;,
+    request_id=req_id,
+    trace_id=trace_id,          # links this log to its trace
+    model_version=&quot;v2.3.1&quot;,
+    latency_ms=42,
+    input_tokens=1200,
+    confidence=0.87,
+    user_segment=&quot;enterprise&quot;,  # segment, not user_id: PII discipline
+)
+</code></pre>
+<p><strong>Rules that hold up in production:</strong></p>
+<ul>
+<li><strong>One event per line, structured fields</strong>, so you can filter on <code>latency_ms &gt; 1000 AND model_version = &quot;v2.3.1&quot;</code> without regex.</li>
+<li><strong>Always include the trace ID</strong>, which is what turns logs from isolated records into the detail view of a trace.</li>
+<li><strong>Never log secrets or raw PII.</strong> Redact at the logging layer, not by convention: a redaction filter in the pipeline, because convention fails eventually.</li>
+<li><strong>Sample high-volume success logs</strong>, keep all errors. Logging every one of a million successful requests is expensive and tells you nothing that metrics don't.</li>
+<li><strong>Levels mean something</strong>: ERROR = a human must look; WARN = degraded but handled; INFO = business events; DEBUG = off in production.</li>
+</ul>
+<p>The most common log anti-pattern is using logs as metrics, counting log lines to derive a rate. It works, it's 100× more expensive than a counter, and it breaks when sampling is enabled.</p>
+<hr />
+<h2 id="distributed-tracing">Distributed Tracing</h2>
+<p>A <strong>trace</strong> is one request's journey; a <strong>span</strong> is one operation within it. Spans nest to form a tree, carrying a shared trace ID propagated across service boundaries via HTTP headers.</p>
+<pre><code>Trace: 7f3a9c...                                    total 1240 ms
+├─ api-gateway            [██                    ]    40 ms
+├─ auth-service           [ █                    ]    15 ms
+├─ retrieval-service      [   ████████           ]   320 ms
+│  ├─ embed-query         [   ██                 ]    80 ms
+│  ├─ vector-search       [     ███              ]   150 ms
+│  └─ rerank              [        ██            ]    90 ms
+└─ llm-service            [          ██████████  ]   850 ms   ← the actual cost
+</code></pre>
+<p>The value is immediate: this picture tells you optimizing the vector search is pointless when generation is 70% of the time.</p>
+<pre><code class="language-python">from opentelemetry import trace
+
+tracer = trace.get_tracer(__name__)
+
+def handle_request(query, user):
+    with tracer.start_as_current_span(&quot;handle_request&quot;) as span:
+        span.set_attribute(&quot;user.segment&quot;, user.segment)
+        span.set_attribute(&quot;query.length&quot;, len(query))
+
+        with tracer.start_as_current_span(&quot;retrieve&quot;) as s:
+            docs = retrieve(query)
+            s.set_attribute(&quot;retrieval.doc_count&quot;, len(docs))
+            s.set_attribute(&quot;retrieval.doc_ids&quot;, &quot;,&quot;.join(d.id for d in docs))
+
+        with tracer.start_as_current_span(&quot;generate&quot;) as s:
+            answer = generate(query, docs)
+            s.set_attribute(&quot;llm.model&quot;, MODEL)
+            s.set_attribute(&quot;llm.input_tokens&quot;, answer.usage.input_tokens)
+            s.set_attribute(&quot;llm.output_tokens&quot;, answer.usage.output_tokens)
+        return answer
+</code></pre>
+<p><strong>Sampling</strong> keeps this affordable:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Head-based</strong></td>
+<td>Decide at trace start, e.g. 1%</td>
+<td>Cheap, simple; misses rare errors</td>
+</tr>
+<tr>
+<td><strong>Tail-based</strong></td>
+<td>Buffer the trace, decide after seeing it</td>
+<td>Keeps all errors and slow traces; needs a collector with memory</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tail-based sampling is what you want in practice: keep 100% of errors and traces over the SLO, plus a small random sample of successes for baseline comparison. Head-based at 1% will miss the rare failure you most need to see.</p>
+<hr />
+<h2 id="opentelemetry">OpenTelemetry</h2>
+<p>The vendor-neutral standard for producing all three signals. Its value is that instrumentation is decoupled from backend: instrument once, export to Prometheus, Jaeger, Datadog, or anything else, and switch without touching application code.</p>
+<pre><code class="language-python">from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+provider = TracerProvider()
+provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=&quot;http://collector:4317&quot;)))
+trace.set_tracer_provider(provider)
+
+FastAPIInstrumentor.instrument_app(app)    # auto-instrument the framework
+</code></pre>
+<p><strong>Auto-instrumentation</strong> covers the frameworks and clients (HTTP, database drivers, message queues) for free; add manual spans for domain logic that matters: a retrieval step, a model call, a business decision.</p>
+<p>The <strong>Collector</strong> sits between applications and backends, handling batching, retry, redaction, sampling, and fan-out to multiple destinations. Putting it in the path from the start means changing vendors later is a config change rather than a redeploy of every service.</p>
+<hr />
+<h2 id="slis-slos-and-error-budgets">SLIs, SLOs, and Error Budgets</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SLI</strong></td>
+<td>The measurement: &quot;proportion of requests served under 300 ms&quot;</td>
+</tr>
+<tr>
+<td><strong>SLO</strong></td>
+<td>The target: &quot;99.5% of requests under 300 ms over 30 days&quot;</td>
+</tr>
+<tr>
+<td><strong>SLA</strong></td>
+<td>The contract, with financial consequences. Set it looser than the SLO.</td>
+</tr>
+<tr>
+<td><strong>Error budget</strong></td>
+<td><code>1 - SLO</code>. At 99.5%, you may fail 0.5%: about 3.6 hours a month.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>error budget</strong> is the useful concept because it converts reliability from an argument into arithmetic. Budget remaining means you can ship risky changes; budget exhausted means the team freezes features and works on reliability. It also states plainly that 100% is the wrong target: chasing it costs enormously and prevents shipping.</p>
+<p><strong>Pick SLIs the user experiences.</strong> CPU utilization is not an SLI; latency, error rate, and correctness are. For ML systems, add quality: &quot;95% of predictions served with a model no more than 24 hours stale&quot; is a legitimate SLI.</p>
+<hr />
+<h2 id="alerting-that-works">Alerting That Works</h2>
+<p><strong>Alert on symptoms, not causes.</strong> &quot;p99 latency exceeds the SLO&quot; is actionable and catches every cause. &quot;CPU &gt; 80%&quot; fires when nothing is wrong and stays silent when the failure is a slow dependency.</p>
+<p><strong>Multi-window, multi-burn-rate alerting</strong> is the technique worth knowing by name. A single threshold either fires on brief blips or reacts too slowly to a real outage. Instead, alert on how fast you're consuming the error budget, across two windows:</p>
+<pre><code class="language-promql"># Fast burn: 14.4× budget rate, pages immediately (exhausts 30-day budget in ~2 days)
+(error_ratio_5m &gt; 14.4 * 0.005) and (error_ratio_1h &gt; 14.4 * 0.005)
+
+# Slower burn: 6× budget rate over 6h (short window 30m), still a page
+(error_ratio_6h &gt; 6 * 0.005) and (error_ratio_30m &gt; 6 * 0.005)
+
+# Slow burn: 1× budget rate over 3 days (short window 6h), a ticket, not a page
+(error_ratio_3d &gt; 1 * 0.005) and (error_ratio_6h &gt; 1 * 0.005)
+</code></pre>
+<p>Requiring <strong>both</strong> a short and a long window to breach suppresses one-minute blips while still catching genuine sustained degradation quickly.</p>
+<p><strong>Every page must be actionable.</strong> If the responder's correct action is &quot;acknowledge and go back to sleep&quot;, delete the alert. Alert fatigue is the mechanism by which real incidents get missed, and it's caused by exactly these.</p>
+<p>Include in every alert: what broke, the user impact, a link to the relevant dashboard, and a link to the runbook.</p>
+<hr />
+<h2 id="dashboards">Dashboards</h2>
+<p>Structure by audience:</p>
+<p><strong>Service dashboard: the RED method</strong> (for request-driven services): <strong>R</strong>ate, <strong>E</strong>rrors, <strong>D</strong>uration. Three panels answer most questions.</p>
+<p><strong>Resource dashboard: the USE method</strong> (for infrastructure): <strong>U</strong>tilization, <strong>S</strong>aturation, <strong>E</strong>rrors, per resource (CPU, memory, disk, network).</p>
+<p><strong>Business dashboard</strong>: conversion, revenue, active users: the metrics that say whether the system is achieving anything.</p>
+<p>Practical rules: put the SLO line on the latency graph so &quot;is this bad?&quot; is answerable at a glance; always show p50, p95, and p99 rather than averages; annotate deploys so correlation is visible; and keep the top-level dashboard to one screen. A dashboard with 40 panels is used during exactly zero incidents.</p>
+<hr />
+<h2 id="observability-for-ml-and-llm-systems">Observability for ML and LLM Systems</h2>
+<p>Standard service observability is necessary and insufficient: a model can be 100% available, fast, error-free, and completely wrong.</p>
+<p><strong>Model-specific signals:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prediction distribution</td>
+<td>Shifts before accuracy metrics can be computed</td>
+</tr>
+<tr>
+<td>Input feature drift (PSI, KL)</td>
+<td>Earliest available warning</td>
+</tr>
+<tr>
+<td>Feature null rate and range violations</td>
+<td>Upstream pipeline breakage</td>
+</tr>
+<tr>
+<td>Model version serving traffic</td>
+<td>Confirms the rollout state</td>
+</tr>
+<tr>
+<td>Delayed accuracy (as labels arrive)</td>
+<td>Ground truth, weeks late</td>
+</tr>
+<tr>
+<td>Training/serving skew checks</td>
+<td>The most common silent failure</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>LLM-specific signals:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TTFT and inter-token latency</strong> separately</td>
+<td>Different causes; averaging hides both</td>
+</tr>
+<tr>
+<td>Input/output tokens per request</td>
+<td>Drives cost directly</td>
+</tr>
+<tr>
+<td><strong>Cost per request</strong>, by feature and tenant</td>
+<td>Unbounded per-request cost is unique to LLMs</td>
+</tr>
+<tr>
+<td>Cache hit rate (prefix and semantic)</td>
+<td>The main cost lever</td>
+</tr>
+<tr>
+<td>Tool error rate and step count distribution</td>
+<td>Agent loops surface here first</td>
+</tr>
+<tr>
+<td>Schema validation failure rate</td>
+<td>Earliest signal of a model or prompt regression</td>
+</tr>
+<tr>
+<td>Abstention / refusal rate</td>
+<td>Falling rate often means rising hallucination</td>
+</tr>
+<tr>
+<td>Guardrail trip rate <strong>and false-positive rate</strong></td>
+<td>Over-blocking is the common failure</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two points worth making in an interview. <strong>Schema validation failure rate is the cheapest high-value alert</strong> for an LLM system: it catches provider model changes, prompt regressions, and malformed tool calls in one signal. And <strong>cost needs SLOs like latency does</strong>: a per-request ceiling and a budget circuit breaker, because an agent stuck in a retry loop can burn a month's budget in an afternoon.</p>
+<p>Span-level tracing matters more here than in conventional services, because agent and RAG failures almost never originate in the final step: a wrong answer usually traces to a retrieval five spans earlier.</p>
+<hr />
+<h2 id="cost-control">Cost Control</h2>
+<p>Observability bills routinely rival compute bills. Levers:</p>
+<ul>
+<li><strong>Metrics</strong>: enforce cardinality limits; drop unused series; use recording rules to precompute expensive queries; shorten retention for high-resolution data while keeping downsampled history.</li>
+<li><strong>Logs</strong>: sample successes aggressively, keep all errors; tier storage (hot 7 days, cold 90); stop logging what metrics already cover.</li>
+<li><strong>Traces</strong>: tail-based sampling: 100% of errors and slow traces, ~1% of successes.</li>
+</ul>
+<p>The most effective single action is usually <strong>finding and dropping unused metrics and log fields</strong>. Instrumentation accretes and nobody removes it; auditing what's actually queried typically finds a large fraction of spend on data no one has looked at in a year.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="whats-the-difference-between-monitoring-and-observability">What's the difference between monitoring and observability?</h4>
+<p>Monitoring watches predetermined failure modes: you decide in advance what to measure and alert on thresholds. Observability is the ability to answer questions you didn't anticipate, without shipping new code.</p>
+<p>The practical difference is cardinality and retained context. Monitoring aggregates: you get error rate per endpoint. Observability keeps per-request detail with rich attributes, so when someone asks &quot;why are Android users in Brazil on accounts created this month seeing errors?&quot;, you can slice by dimensions nobody predicted.</p>
+<p>In practice you need both, and they play different roles: metrics are cheap and always-on so they're what you alert from; traces and logs carry the high-cardinality context that lets you diagnose. The handoff (alert fires, trace localizes, logs explain) is the actual workflow.</p>
+<h4 id="why-prefer-histograms-over-summaries-in-prometheus">Why prefer histograms over summaries in Prometheus?</h4>
+<p>Because <strong>quantiles cannot be aggregated</strong>. A summary computes quantiles locally on each instance, so if ten servers each report their p99, there's no valid way to combine them into a fleet-wide p99: averaging ten p99 values is meaningless, and it's the number people accidentally show on dashboards.</p>
+<p>A histogram ships bucket counts, which are plain counters and therefore additive. You sum buckets across instances and compute the quantile at query time with <code>histogram_quantile</code>, which gives a correct fleet-wide figure. It also lets you compute <em>any</em> quantile after the fact, whereas summaries fix the quantiles at instrumentation time.</p>
+<p>The cost is that accuracy depends on bucket boundaries, so buckets must bracket your SLO threshold: with buckets jumping 0.1 to 0.5, a 200 ms SLO is unmeasurable because the quantile is interpolated within that gap.</p>
+<h4 id="why-is-metric-cardinality-dangerous">Why is metric cardinality dangerous?</h4>
+<p>Because series count is the <strong>product</strong> of all label value counts, so it explodes multiplicatively. Endpoint × status × region might be 300 series, which is fine. Add <code>user_id</code> with a million values and it's 100 million series: each with its own memory, index entry, and storage. That will take down a Prometheus server.</p>
+<p>The rule is that metric labels must be <strong>bounded and low-cardinality</strong>: endpoint, status class, region, model version. Anything unbounded (user IDs, request IDs, session IDs, full URLs with query parameters, error messages containing IDs) belongs in logs or trace attributes, where high cardinality is expected and priced accordingly.</p>
+<p>The insidious part is that it's usually accidental: someone adds a label that looks small in staging and is unbounded in production. Cardinality limits enforced at the collector are worth having as a guardrail.</p>
+<h4 id="how-would-you-debug-the-api-is-slow">How would you debug &quot;the API is slow&quot;?</h4>
+<p>Narrow before deep-diving. First, <strong>is it real and who's affected?</strong> Check the latency graph: p50 versus p99 tells you whether everything is slow or only the tail, which are different problems. Slice by endpoint, region, and customer to see whether it's global or localized.</p>
+<p>Then <strong>when did it start</strong>, correlated against deploy annotations, config changes, and traffic volume. A step change at a deploy is a different investigation from gradual degradation.</p>
+<p>Then <strong>traces</strong>: pull traces from the slow population and look at the span breakdown. This localizes it immediately: a slow dependency, a database query, a model call, or time spent queuing before work even starts. Compare against traces from the fast population.</p>
+<p>Then <strong>logs for those trace IDs</strong> to get the specifics, which query, which parameters, which error.</p>
+<p>Common findings in ML systems specifically: a cold cache after deploy, one slow shard dominating a scatter-gather p99, a downstream model provider degrading, queue buildup from insufficient concurrency, or a change that grew the context length and therefore prefill time.</p>
+<h4 id="what-is-an-error-budget-and-why-is-it-useful">What is an error budget and why is it useful?</h4>
+<p>It's the complement of the SLO: with a 99.5% availability SLO, you're permitted 0.5% failure, roughly 3.6 hours a month. That allowance is the budget.</p>
+<p>Its value is converting reliability from an opinion into a shared number. When budget remains, the team ships risky changes freely. When it's exhausted, feature work stops and reliability work starts: a policy agreed in advance, so it isn't renegotiated during an incident.</p>
+<p>It also makes explicit that 100% reliability is the wrong target: it costs enormously, delivers nothing users can perceive above a certain point, and prevents shipping. Some deliberate failure budget is the correct engineering position, and the error budget is how you say that without sounding careless.</p>
+<h4 id="how-do-you-alert-without-alert-fatigue">How do you alert without alert fatigue?</h4>
+<p>Alert on <strong>symptoms users experience</strong>, not causes. &quot;p99 latency exceeds SLO&quot; catches every underlying cause and is always worth investigating. &quot;CPU &gt; 80%&quot; fires constantly when nothing is wrong and misses failures that aren't CPU-bound.</p>
+<p>Use <strong>multi-window, multi-burn-rate</strong> alerting: page when error-budget consumption is fast in <em>both</em> a short and a long window, which suppresses one-minute blips while still catching sustained degradation quickly. Slower burn rates become tickets rather than pages.</p>
+<p>Then be ruthless: <strong>every page must have an action.</strong> If the correct response is &quot;acknowledge and go back to bed&quot;, delete the alert: it's actively harmful, because fatigue is the mechanism by which real incidents get ignored. Route non-urgent signals to tickets or dashboards. And include in every alert what broke, the user impact, and a runbook link, so the responder isn't starting from nothing at 3am.</p>
+<h4 id="what-would-you-monitor-for-an-llm-feature-that-you-wouldnt-for-a-normal-api">What would you monitor for an LLM feature that you wouldn't for a normal API?</h4>
+<p>Four things that don't exist elsewhere.</p>
+<p><strong>Cost per request</strong>, broken down by feature and tenant, with a hard per-request ceiling and a budget circuit breaker. LLM cost varies per request and is effectively unbounded: an agent in a retry loop can burn a month's budget in hours, which no conventional service can do.</p>
+<p><strong>Latency split into TTFT and inter-token latency</strong>, because they have different causes (TTFT is prefill and queueing, inter-token is decode bandwidth), and a combined average hides both.</p>
+<p><strong>Quality signals</strong>, since the service can be 100% available and completely wrong: schema validation failure rate (the cheapest early warning for provider model changes and prompt regressions), abstention rate (a falling rate often means hallucination is rising), sampled groundedness checks, and user feedback.</p>
+<p><strong>Agent behaviour</strong>: tool error rates and the distribution of steps per request, where loops and degradation show up first.</p>
+<p>Plus one operational note: <strong>pin model snapshots</strong> and alert on version changes, because quality can shift with no deploy on your side when a provider updates a floating alias.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unbounded label values</td>
+<td>Cardinality explosion kills the metrics backend</td>
+<td>Bounded labels only; IDs go in logs/traces</td>
+</tr>
+<tr>
+<td>Averaging p99 across instances</td>
+<td>Quantiles aren't additive; the number is meaningless</td>
+<td>Histograms + <code>histogram_quantile</code> at query time</td>
+</tr>
+<tr>
+<td><code>histogram_quantile</code> without <code>rate()</code></td>
+<td>Computes over all history, not the recent window</td>
+<td>Always <code>rate(..._bucket[5m])</code> inside</td>
+</tr>
+<tr>
+<td>Histogram buckets that don't bracket the SLO</td>
+<td>Can't measure whether you're meeting it</td>
+<td>Choose buckets around the threshold</td>
+</tr>
+<tr>
+<td>Alerting on causes (CPU, memory)</td>
+<td>Noisy and incomplete</td>
+<td>Alert on user-facing symptoms</td>
+</tr>
+<tr>
+<td>Single-threshold alerts</td>
+<td>Blips page; slow burns go unnoticed</td>
+<td>Multi-window multi-burn-rate</td>
+</tr>
+<tr>
+<td>Pages with no action</td>
+<td>Fatigue causes real incidents to be missed</td>
+<td>Delete them or downgrade to tickets</td>
+</tr>
+<tr>
+<td>Head-based sampling at 1%</td>
+<td>Misses the rare errors you need most</td>
+<td>Tail-based: all errors, sample successes</td>
+</tr>
+<tr>
+<td>Logging unstructured prose</td>
+<td>Unqueryable at scale</td>
+<td>Structured JSON with consistent fields</td>
+</tr>
+<tr>
+<td>Logs without trace IDs</td>
+<td>Can't connect a log to its request</td>
+<td>Propagate and log the trace ID everywhere</td>
+</tr>
+<tr>
+<td>Counting log lines instead of using counters</td>
+<td>~100× more expensive; breaks under sampling</td>
+<td>Emit a metric</td>
+</tr>
+<tr>
+<td>Monitoring only infrastructure for an ML service</td>
+<td>Model can be available and wrong</td>
+<td>Add drift, quality, and version metrics</td>
+</tr>
+<tr>
+<td>Logging raw PII or secrets</td>
+<td>Compliance incident</td>
+<td>Redact in the pipeline, not by convention</td>
+</tr>
+<tr>
+<td>Never auditing instrumentation</td>
+<td>Large spend on data nobody queries</td>
+<td>Periodically drop unused metrics and fields</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_cicd_for_ml.html">CI/CD for Machine Learning</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="intro_kubernetes.html">Kubernetes</a></li>
+<li><a href="intro_docker.html">Docker</a></li>
+<li><a href="intro_terraform.html">Terraform</a></li>
+<li><a href="intro_testing_ai.html">Testing AI Systems</a></li>
+<li><a href="../ai_genai/intro_llmops.html">LLMOps</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="../system_design/intro_backend_ai_system_design.html">Backend AI System Design</a></li>
+<li><a href="../system_design/llm_assistant_system.html">Designing a Production LLM Assistant</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_github_actions.html"><small>Previous</small>GitHub Actions</a><a rel="next" class="next" href="intro_testing_ai.html"><small>Next</small>Testing AI Systems</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_observability.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

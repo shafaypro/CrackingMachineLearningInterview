@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delta Lake Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Delta Lake is an open-source storage layer that brings ACID transactions, schema enforcement, time travel, and scalable metadata to data lakes on cloud…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_delta_lake.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Delta Lake Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Delta Lake is an open-source storage layer that brings ACID transactions, schema enforcement, time travel, and scalable metadata to data lakes on cloud…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_delta_lake.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Delta Lake Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Delta Lake is an open-source storage layer that brings ACID transactions, schema enforcement, time travel, and scalable metadata to data lakes on cloud…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Delta Lake",
+   "description": "Delta Lake is an open-source storage layer that brings ACID transactions, schema enforcement, time travel, and scalable metadata to data lakes on cloud…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_delta_lake.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Delta Lake",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_delta_lake.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Delta Lake</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_delta_lake.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="delta-lake">Delta Lake</h1>
+<p><strong>Delta Lake</strong> is an open-source storage layer that brings <strong>ACID transactions</strong>, <strong>schema enforcement</strong>, <strong>time travel</strong>, and <strong>scalable metadata</strong> to data lakes on cloud object storage (S3, GCS, ADLS). It's the backbone of the <strong>Lakehouse</strong> architecture.</p>
+<hr />
+<h2 id="what-is-delta-lake">What is Delta Lake?</h2>
+<p>Before Delta Lake, data lakes had serious problems:</p>
+<ul>
+<li><strong>No ACID transactions</strong>: partial writes leave inconsistent data</li>
+<li><strong>No schema enforcement</strong>: garbage data corrupts your tables</li>
+<li><strong>No updates/deletes</strong>: append-only; can't fix mistakes</li>
+<li><strong>Slow reads</strong>: listing millions of files on S3 is slow</li>
+<li><strong>No history</strong>: can't see what data looked like yesterday</li>
+</ul>
+<p>Delta Lake solves all of these on top of Parquet files in S3.</p>
+<pre><code>Data Lake (raw S3/GCS) + Delta Lake = Lakehouse
+                                        ↓
+                           ACID + Schema + Time Travel
+                           + Fast reads + Streaming + ML
+</code></pre>
+<hr />
+<h2 id="core-features">Core Features</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACID Transactions</strong></td>
+<td>Atomic commits: either all changes succeed or none</td>
+</tr>
+<tr>
+<td><strong>Schema Enforcement</strong></td>
+<td>Reject writes that don't match the table schema</td>
+</tr>
+<tr>
+<td><strong>Schema Evolution</strong></td>
+<td>Safely add new columns</td>
+</tr>
+<tr>
+<td><strong>Time Travel</strong></td>
+<td>Query data as it was at any point in time</td>
+</tr>
+<tr>
+<td><strong>Upserts (MERGE)</strong></td>
+<td>Update or insert based on conditions</td>
+</tr>
+<tr>
+<td><strong>Deletes</strong></td>
+<td>Delete specific rows (GDPR compliance)</td>
+</tr>
+<tr>
+<td><strong>Streaming + Batch</strong></td>
+<td>Read and write to same table from batch and stream</td>
+</tr>
+<tr>
+<td><strong>Data Lineage</strong></td>
+<td>Track what changed, when, and how</td>
+</tr>
+<tr>
+<td><strong>Optimize/Compaction</strong></td>
+<td>Combine small files, Z-order for faster queries</td>
+</tr>
+<tr>
+<td><strong>Change Data Feed</strong></td>
+<td>Read only what changed since last read</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="getting-started">Getting Started</h2>
+<pre><code class="language-bash">pip install delta-spark pyspark
+</code></pre>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+
+# Match Delta to Spark: Delta 3.x targets Spark 3.5, Delta 4.x targets Spark 4.0
+spark = SparkSession.builder \
+    .appName(&quot;DeltaLake&quot;) \
+    .master(&quot;local[*]&quot;) \
+    .config(&quot;spark.jars.packages&quot;, &quot;io.delta:delta-spark_2.12:3.3.0&quot;) \
+    .config(&quot;spark.sql.extensions&quot;, &quot;io.delta.sql.DeltaSparkSessionExtension&quot;) \
+    .config(&quot;spark.sql.catalog.spark_catalog&quot;, &quot;org.apache.spark.sql.delta.catalog.DeltaCatalog&quot;) \
+    .getOrCreate()
+</code></pre>
+<hr />
+<h2 id="writing-and-reading">Writing and Reading</h2>
+<pre><code class="language-python">from delta.tables import DeltaTable
+from pyspark.sql import functions as F
+
+# Create a Delta table
+data = [(1, &quot;Alice&quot;, 85.0, &quot;2025-01-01&quot;),
+        (2, &quot;Bob&quot;, 92.5, &quot;2025-01-01&quot;)]
+df = spark.createDataFrame(data, [&quot;id&quot;, &quot;name&quot;, &quot;score&quot;, &quot;date&quot;])
+
+# Write as Delta
+df.write.format(&quot;delta&quot;).mode(&quot;overwrite&quot;).save(&quot;/data/scores&quot;)
+
+# Read Delta table
+scores = spark.read.format(&quot;delta&quot;).load(&quot;/data/scores&quot;)
+scores.show()
+
+# Create table in metastore (SQL access)
+df.write.format(&quot;delta&quot;).saveAsTable(&quot;scores&quot;)
+
+# Or use SQL
+spark.sql(&quot;&quot;&quot;
+    CREATE TABLE IF NOT EXISTS scores (
+        id INT,
+        name STRING,
+        score DOUBLE,
+        date DATE
+    )
+    USING DELTA
+    LOCATION 's3://my-bucket/delta/scores/'
+&quot;&quot;&quot;)
+</code></pre>
+<hr />
+<h2 id="acid-transactions">ACID Transactions</h2>
+<pre><code class="language-python"># Concurrent writers are safe: Delta uses optimistic concurrency control
+
+# Writer 1: append new records
+new_data = spark.createDataFrame([(3, &quot;Charlie&quot;, 78.3, &quot;2025-01-02&quot;)], [&quot;id&quot;, &quot;name&quot;, &quot;score&quot;, &quot;date&quot;])
+new_data.write.format(&quot;delta&quot;).mode(&quot;append&quot;).save(&quot;/data/scores&quot;)
+
+# Writer 2: update existing records
+# The table never ends up corrupted: if the two commits truly conflict (e.g. the
+# update read files the append changed), one fails with a concurrent-modification
+# error and must retry; non-conflicting commits both succeed
+</code></pre>
+<hr />
+<h2 id="schema-enforcement--evolution">Schema Enforcement &amp; Evolution</h2>
+<pre><code class="language-python"># Schema enforcement: this will FAIL if schema doesn't match
+try:
+    bad_df = spark.createDataFrame([(4, &quot;Dave&quot;)], [&quot;id&quot;, &quot;name&quot;])
+    bad_df.write.format(&quot;delta&quot;).mode(&quot;append&quot;).save(&quot;/data/scores&quot;)
+except Exception as e:
+    print(&quot;Schema mismatch blocked:&quot;, e)
+
+# Schema evolution: allow adding new columns
+spark.conf.set(&quot;spark.databricks.delta.schema.autoMerge.enabled&quot;, &quot;true&quot;)
+
+new_df = spark.createDataFrame(
+    [(5, &quot;Eve&quot;, 88.0, &quot;2025-01-03&quot;, &quot;Math&quot;)],
+    [&quot;id&quot;, &quot;name&quot;, &quot;score&quot;, &quot;date&quot;, &quot;subject&quot;]  # new column: subject
+)
+new_df.write.format(&quot;delta&quot;).mode(&quot;append&quot;) \
+    .option(&quot;mergeSchema&quot;, &quot;true&quot;) \
+    .save(&quot;/data/scores&quot;)
+</code></pre>
+<hr />
+<h2 id="time-travel">Time Travel</h2>
+<p>One of Delta Lake's killer features.</p>
+<pre><code class="language-python">dt = DeltaTable.forPath(spark, &quot;/data/scores&quot;)
+
+# View table history
+dt.history().show()
+# version | timestamp | operation | operationParameters | ...
+
+# Query specific version
+spark.read.format(&quot;delta&quot;) \
+    .option(&quot;versionAsOf&quot;, 0) \
+    .load(&quot;/data/scores&quot;) \
+    .show()
+
+# Query at a specific timestamp
+spark.read.format(&quot;delta&quot;) \
+    .option(&quot;timestampAsOf&quot;, &quot;2025-01-01 00:00:00&quot;) \
+    .load(&quot;/data/scores&quot;) \
+    .show()
+
+# SQL time travel
+spark.sql(&quot;SELECT * FROM scores VERSION AS OF 0&quot;)
+spark.sql(&quot;SELECT * FROM scores TIMESTAMP AS OF '2025-01-01'&quot;)
+</code></pre>
+<hr />
+<h2 id="updates-deletes-and-merge-upserts">Updates, Deletes, and MERGE (Upserts)</h2>
+<pre><code class="language-python">from delta.tables import DeltaTable
+
+dt = DeltaTable.forPath(spark, &quot;/data/scores&quot;)
+
+# Update specific rows
+dt.update(
+    condition=F.col(&quot;name&quot;) == &quot;Alice&quot;,
+    set={&quot;score&quot;: F.lit(95.0)}
+)
+
+# Delete rows
+dt.delete(condition=F.col(&quot;score&quot;) &lt; 60)
+
+# MERGE (Upsert): the most powerful operation
+updates = spark.createDataFrame([
+    (1, &quot;Alice&quot;, 99.0, &quot;2025-01-05&quot;),   # update existing
+    (6, &quot;Frank&quot;, 81.5, &quot;2025-01-05&quot;),   # new record
+], [&quot;id&quot;, &quot;name&quot;, &quot;score&quot;, &quot;date&quot;])
+
+dt.alias(&quot;target&quot;).merge(
+    updates.alias(&quot;source&quot;),
+    &quot;target.id = source.id&quot;
+).whenMatchedUpdate(set={
+    &quot;score&quot;: &quot;source.score&quot;,
+    &quot;date&quot;: &quot;source.date&quot;
+}).whenNotMatchedInsert(values={
+    &quot;id&quot;: &quot;source.id&quot;,
+    &quot;name&quot;: &quot;source.name&quot;,
+    &quot;score&quot;: &quot;source.score&quot;,
+    &quot;date&quot;: &quot;source.date&quot;
+}).execute()
+
+# Full upsert in SQL
+spark.sql(&quot;&quot;&quot;
+    MERGE INTO scores AS target
+    USING updates AS source
+    ON target.id = source.id
+    WHEN MATCHED THEN
+        UPDATE SET target.score = source.score
+    WHEN NOT MATCHED THEN
+        INSERT (id, name, score, date) VALUES (source.id, source.name, source.score, source.date)
+    WHEN NOT MATCHED BY SOURCE THEN
+        DELETE
+&quot;&quot;&quot;)
+</code></pre>
+<hr />
+<h2 id="partitioning">Partitioning</h2>
+<pre><code class="language-python"># Write with partitioning
+df.write.format(&quot;delta&quot;) \
+    .partitionBy(&quot;date&quot;, &quot;region&quot;) \
+    .mode(&quot;overwrite&quot;) \
+    .save(&quot;/data/sales&quot;)
+
+# Partition pruning happens automatically on filter
+sales = spark.read.format(&quot;delta&quot;).load(&quot;/data/sales&quot;)
+sales.filter(F.col(&quot;date&quot;) == &quot;2025-01-01&quot;).count()   # only reads 2025-01-01 partition
+</code></pre>
+<hr />
+<h2 id="optimize--z-order">Optimize &amp; Z-Order</h2>
+<pre><code class="language-python">from delta.tables import DeltaTable
+
+dt = DeltaTable.forPath(spark, &quot;/data/orders&quot;)
+
+# Compact small files (bin-packing)
+dt.optimize().executeCompaction()
+
+# Z-Order: co-locate related data for faster filtering
+dt.optimize().executeZOrderBy(&quot;customer_id&quot;, &quot;date&quot;)
+
+# After Z-Order: queries filtering on customer_id or date are much faster
+spark.sql(&quot;OPTIMIZE orders ZORDER BY (customer_id, date)&quot;)
+
+# Vacuum: remove old files to save storage
+# (default retainDurationHours=168, i.e., 7 days for time travel)
+dt.vacuum()           # keep 7 days of history
+dt.vacuum(24)         # keep only 24 hours (less time travel); retention below 168h is
+                      # rejected unless spark.databricks.delta.retentionDurationCheck.enabled=false
+</code></pre>
+<hr />
+<h2 id="streaming-with-delta-lake">Streaming with Delta Lake</h2>
+<pre><code class="language-python"># Streaming write to Delta
+query = df_stream.writeStream \
+    .format(&quot;delta&quot;) \
+    .outputMode(&quot;append&quot;) \
+    .option(&quot;checkpointLocation&quot;, &quot;/checkpoints/orders&quot;) \
+    .table(&quot;orders&quot;)
+
+# Streaming read from Delta (reads new changes as they arrive)
+# Change Data Feed (requires delta.enableChangeDataFeed = true on the table)
+changes = spark.readStream \
+    .format(&quot;delta&quot;) \
+    .option(&quot;readChangeFeed&quot;, &quot;true&quot;) \
+    .option(&quot;startingVersion&quot;, 0) \
+    .table(&quot;orders&quot;)
+</code></pre>
+<hr />
+<h2 id="change-data-feed-cdf">Change Data Feed (CDF)</h2>
+<pre><code class="language-python"># Enable CDF on a table
+spark.sql(&quot;&quot;&quot;
+    ALTER TABLE orders
+    SET TBLPROPERTIES (delta.enableChangeDataFeed = true)
+&quot;&quot;&quot;)
+
+# Read changes since version 5
+cdf = spark.read.format(&quot;delta&quot;) \
+    .option(&quot;readChangeFeed&quot;, &quot;true&quot;) \
+    .option(&quot;startingVersion&quot;, 5) \
+    .table(&quot;orders&quot;)
+
+cdf.select(&quot;_change_type&quot;, &quot;order_id&quot;, &quot;amount&quot;).show()
+# _change_type: insert / update_preimage / update_postimage / delete
+</code></pre>
+<hr />
+<h2 id="delta-lake--dbt">Delta Lake + dbt</h2>
+<pre><code class="language-yaml"># dbt/profiles.yml (Databricks)
+my_profile:
+  target: prod
+  outputs:
+    prod:
+      type: databricks
+      catalog: my_catalog    # Unity Catalog
+      schema: analytics
+      host: &quot;{{ env_var('DBT_DATABRICKS_HOST') }}&quot;
+      http_path: &quot;{{ env_var('DBT_HTTP_PATH') }}&quot;
+      token: &quot;{{ env_var('DATABRICKS_TOKEN') }}&quot;
+</code></pre>
+<pre><code class="language-sql">-- dbt model using Delta features
+{{ config(
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key='order_id',
+    file_format='delta',
+    post_hook=&quot;OPTIMIZE {{ this }} ZORDER BY (customer_id)&quot;
+) }}
+
+SELECT * FROM {{ ref('stg_orders') }}
+{% if is_incremental() %}
+WHERE updated_at &gt; (SELECT MAX(updated_at) FROM {{ this }})
+{% endif %}
+</code></pre>
+<hr />
+<h2 id="delta-lake-architecture-lakehouse">Delta Lake Architecture (Lakehouse)</h2>
+<pre><code>Raw Files (S3/GCS/ADLS)
+        ↓
+Delta Lake Tables (Bronze/Silver/Gold)
+        ↓
+┌───────────────────────────────────────┐
+│         Compute Engines               │
+│  Apache Spark    Apache Flink         │
+│  Trino/Presto    DuckDB               │
+│  Snowflake       Databricks SQL       │
+└───────────────────────────────────────┘
+        ↓
+BI Tools / ML Models / Data Apps
+</code></pre>
+<hr />
+<h2 id="delta-lake-in-2026">Delta Lake in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Delta Lake 4.0</strong></td>
+<td>Release line built on Apache Spark 4.0 (adds variant type, type widening, and more)</td>
+</tr>
+<tr>
+<td><strong>Liquid Clustering</strong></td>
+<td>Recommended over partitioning + Z-Order for new tables; incremental layout optimization</td>
+</tr>
+<tr>
+<td><strong>Deletion Vectors</strong></td>
+<td>Soft-deletes without rewriting files (faster deletes)</td>
+</tr>
+<tr>
+<td><strong>Variant type</strong></td>
+<td>Native semi-structured data type for JSON</td>
+</tr>
+<tr>
+<td><strong>Universal Format (UniForm)</strong></td>
+<td>Delta tables readable as Iceberg (and Hudi) once enabled via table properties</td>
+</tr>
+<tr>
+<td><strong>Delta Kernel / delta-rs</strong></td>
+<td>Libraries for reading and writing Delta without Spark (connectors, Python via <code>deltalake</code>)</td>
+</tr>
+<tr>
+<td><strong>DuckDB + Delta</strong></td>
+<td><code>SELECT * FROM delta_scan('s3://...')</code>: no Spark needed</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="liquid-clustering-replaces-partitioning">Liquid Clustering (Replaces Partitioning)</h3>
+<pre><code class="language-sql">-- Create table with liquid clustering (Databricks and open-source Delta)
+CREATE TABLE orders (
+    order_id    BIGINT,
+    customer_id BIGINT,
+    order_date  DATE
+)
+USING DELTA
+CLUSTER BY (customer_id, order_date);
+
+-- Clustering is applied incrementally when OPTIMIZE runs
+-- (Databricks can run it for you via predictive optimization / CLUSTER BY AUTO)
+-- Better than partitioning for high-cardinality columns
+</code></pre>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-python"># Read
+df = spark.read.format(&quot;delta&quot;).load(&quot;path/&quot;)
+df = spark.read.format(&quot;delta&quot;).option(&quot;versionAsOf&quot;, 5).load(&quot;path/&quot;)
+df = spark.table(&quot;my_delta_table&quot;)
+
+# Write
+df.write.format(&quot;delta&quot;).mode(&quot;overwrite&quot;).save(&quot;path/&quot;)
+df.write.format(&quot;delta&quot;).mode(&quot;append&quot;).save(&quot;path/&quot;)
+df.write.format(&quot;delta&quot;).mode(&quot;overwrite&quot;).option(&quot;overwriteSchema&quot;, &quot;true&quot;).save(&quot;path/&quot;)
+
+# DeltaTable API
+from delta.tables import DeltaTable
+dt = DeltaTable.forPath(spark, &quot;path/&quot;)
+dt = DeltaTable.forName(spark, &quot;my_table&quot;)
+
+dt.history().show()                    # version history
+dt.toDF().show()                       # as DataFrame
+dt.update(condition, set_dict)         # update rows
+dt.delete(condition)                   # delete rows
+dt.merge(source, condition)            # upsert
+
+# Maintenance
+dt.optimize().executeCompaction()
+dt.optimize().executeZOrderBy(&quot;col1&quot;, &quot;col2&quot;)
+dt.vacuum()
+dt.vacuum(retentionHours=24)
+
+# SQL
+spark.sql(&quot;DESCRIBE HISTORY my_table&quot;)
+spark.sql(&quot;OPTIMIZE my_table ZORDER BY (customer_id)&quot;)
+spark.sql(&quot;VACUUM my_table RETAIN 168 HOURS&quot;)
+spark.sql(&quot;ALTER TABLE my_table SET TBLPROPERTIES (delta.enableChangeDataFeed = true)&quot;)
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_apache_iceberg.html"><small>Previous</small>Apache Iceberg</a><a rel="next" class="next" href="intro_duckdb.html"><small>Next</small>DuckDB</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_delta_lake.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

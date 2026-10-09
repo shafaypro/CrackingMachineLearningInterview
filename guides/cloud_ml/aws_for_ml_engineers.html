@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS for ML Engineers Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Most ML interviews that mention AWS are not really about SageMaker. They are about everything around it: who is allowed to read the training data, how a…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/aws_for_ml_engineers.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="AWS for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Most ML interviews that mention AWS are not really about SageMaker. They are about everything around it: who is allowed to read the training data, how a…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/aws_for_ml_engineers.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWS for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Most ML interviews that mention AWS are not really about SageMaker. They are about everything around it: who is allowed to read the training data, how a…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "AWS for ML Engineers",
+   "description": "Most ML interviews that mention AWS are not really about SageMaker. They are about everything around it: who is allowed to read the training data, how a…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/aws_for_ml_engineers.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "AWS for ML Engineers",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/aws_for_ml_engineers.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">AWS for ML Engineers</span></nav>
+<p class="meta"><a href="../../#cloud_ml/aws_for_ml_engineers.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 17 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="aws-for-ml-engineers">AWS for ML Engineers</h1>
+<p>Most ML interviews that mention AWS are not really about SageMaker. They are about everything around it: who is allowed to read the training data, how a GPU job reaches S3 without touching the internet, why the bill doubled last week, and how a model trained in one account ends up serving traffic in another. This guide covers the core AWS services an ML or AI engineer works with outside SageMaker itself and shows how they fit together.</p>
+<p>SageMaker training, hosting, pipelines and the model registry are covered in depth in <a href="intro_sagemaker.html">AWS SageMaker Interview Guide</a>, and cross-cloud platform comparisons live in <a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a>. This guide links to them rather than repeating them.</p>
+<p>AWS renames and extends services often. Where a limit, name or feature is likely to change, this guide says so; treat the AWS documentation as the source of truth and check current pricing before quoting numbers in an interview.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-the-pieces-fit-together">How the pieces fit together</a></li>
+<li><a href="#identity-and-security">Identity and security</a></li>
+<li><a href="#networking-basics">Networking basics</a></li>
+<li><a href="#storage">Storage</a></li>
+<li><a href="#compute">Compute</a></li>
+<li><a href="#data-and-analytics">Data and analytics</a></li>
+<li><a href="#generative-ai-with-amazon-bedrock">Generative AI with Amazon Bedrock</a></li>
+<li><a href="#observability">Observability</a></li>
+<li><a href="#cost-control">Cost control</a></li>
+<li><a href="#reference-architectures">Reference architectures</a></li>
+<li><a href="#code-examples">Code examples</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Core services</th>
+<th>ML question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity and security</td>
+<td>IAM, STS, KMS, Secrets Manager, CloudTrail, Organizations</td>
+<td>Who or what can touch the data and models, and can we prove it?</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>VPC, subnets, NAT gateway, security groups, VPC endpoints</td>
+<td>Can the training job reach S3 and ECR without the public internet?</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>S3, EBS, EFS, FSx for Lustre</td>
+<td>Where do datasets, checkpoints and artifacts live, and how fast can GPUs read them?</td>
+</tr>
+<tr>
+<td>Compute</td>
+<td>EC2 (GPU and accelerator families), Batch, ECS, Fargate, EKS, Lambda, SageMaker</td>
+<td>What runs the training, batch scoring and serving code?</td>
+</tr>
+<tr>
+<td>Data and analytics</td>
+<td>Glue, Athena, EMR, Redshift, Lake Formation, Kinesis, MSK</td>
+<td>How is raw data turned into governed, queryable training sets and features?</td>
+</tr>
+<tr>
+<td>Orchestration and events</td>
+<td>Step Functions, MWAA, EventBridge, SageMaker Pipelines</td>
+<td>What triggers retraining, and what happens when a step fails?</td>
+</tr>
+<tr>
+<td>Generative AI</td>
+<td>Amazon Bedrock (models, Knowledge Bases, Agents, Guardrails)</td>
+<td>How do we call foundation models and build RAG without hosting GPUs?</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>CloudWatch, X-Ray / OpenTelemetry, Model Monitor</td>
+<td>Is the system healthy, and is the model still correct?</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Tags, Budgets, Cost Explorer, Savings Plans, Spot</td>
+<td>What does each model cost to train and serve, and who pays?</td>
+</tr>
+</tbody>
+</table></div>
+<p>A useful mental model for interviews: <strong>IAM decides who, the VPC decides where from, KMS decides whether the bytes are readable, and CloudTrail records what happened.</strong> Every ML architecture answer on AWS should touch all four.</p>
+<hr />
+<h2 id="identity-and-security">Identity and security</h2>
+<h3 id="iam-building-blocks">IAM building blocks</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it is</th>
+<th>ML example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IAM user</td>
+<td>Long-lived identity with optional access keys</td>
+<td>Avoid for workloads; humans should use IAM Identity Center (SSO) instead</td>
+</tr>
+<tr>
+<td>IAM role</td>
+<td>Identity with no long-lived credentials, assumed to get temporary credentials</td>
+<td>SageMaker execution role, ECS task role, Lambda execution role</td>
+</tr>
+<tr>
+<td>Trust policy</td>
+<td>Resource policy on a role saying who may assume it</td>
+<td>Allow <code>sagemaker.amazonaws.com</code> to assume the training role</td>
+</tr>
+<tr>
+<td>Identity-based policy</td>
+<td>Permissions attached to a user, group or role</td>
+<td>Training role may <code>s3:GetObject</code> on <code>datasets/fraud/*</code></td>
+</tr>
+<tr>
+<td>Resource-based policy</td>
+<td>Permissions attached to the resource itself</td>
+<td>S3 bucket policy, KMS key policy, ECR repository policy</td>
+</tr>
+<tr>
+<td>Permissions boundary</td>
+<td>Upper limit on what a role's policies can grant</td>
+<td>Let data scientists create roles that can never exceed a safe ceiling</td>
+</tr>
+<tr>
+<td>Service control policy (SCP)</td>
+<td>Organization-level guardrail; grants nothing, only limits</td>
+<td>Deny any action outside approved regions in all ML accounts</td>
+</tr>
+<tr>
+<td>Session policy / tags</td>
+<td>Extra restrictions or attributes passed at assume time</td>
+<td>Attribute-based access control (ABAC) by <code>team</code> or <code>project</code> tag</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Policy evaluation in one line:</strong> everything is denied by default, an explicit <code>Deny</code> anywhere wins, and an action is allowed only if some applicable policy allows it and no boundary, SCP or session policy blocks it. Cross-account access needs both sides to agree: the caller's identity policy allows it, and the target resource policy (or role trust policy) allows the caller.</p>
+<h3 id="roles-for-workloads">Roles for workloads</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Where code runs</th>
+<th>How it gets credentials</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC2 instance</td>
+<td>Instance profile (role attached to the instance), served through the instance metadata service (use IMDSv2)</td>
+</tr>
+<tr>
+<td>ECS task (EC2 or Fargate)</td>
+<td><strong>Task role</strong> for application calls; the separate <strong>task execution role</strong> is only for pulling images and writing logs</td>
+</tr>
+<tr>
+<td>EKS pod</td>
+<td><strong>IRSA</strong> (IAM Roles for Service Accounts, via the cluster's OIDC provider) or <strong>EKS Pod Identity</strong> (newer, uses an agent add-on and association API; no per-cluster OIDC trust policy edits)</td>
+</tr>
+<tr>
+<td>Lambda</td>
+<td>Execution role</td>
+</tr>
+<tr>
+<td>SageMaker job or endpoint</td>
+<td>Execution role passed at creation; the caller needs <code>iam:PassRole</code> for that role</td>
+</tr>
+<tr>
+<td>CI/CD (for example GitHub Actions)</td>
+<td>OIDC federation to <code>sts:AssumeRoleWithWebIdentity</code>, so no stored access keys</td>
+</tr>
+<tr>
+<td>Another account</td>
+<td><code>sts:AssumeRole</code> into a role whose trust policy names your account or role, optionally with an external ID for third parties</td>
+</tr>
+</tbody>
+</table></div>
+<p>STS issues temporary credentials (access key, secret key, session token) with a configurable duration. Role chaining (assuming a role from an assumed-role session) is limited to a shorter maximum session; check current docs for the exact limits.</p>
+<h3 id="encryption-secrets-and-audit">Encryption, secrets and audit</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+<th>Notes for ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KMS</td>
+<td>Managed encryption keys and envelope encryption</td>
+<td>Use customer managed keys when you need key policies, cross-account grants or audit per key. Enable S3 Bucket Keys to cut KMS request volume on busy buckets</td>
+</tr>
+<tr>
+<td>S3 encryption</td>
+<td>SSE-S3 (default for new objects), SSE-KMS, DSSE-KMS, SSE-C</td>
+<td>Reading an SSE-KMS object needs both S3 permission and <code>kms:Decrypt</code> on the key, a common cause of <code>AccessDenied</code></td>
+</tr>
+<tr>
+<td>Secrets Manager</td>
+<td>Stores and rotates secrets (database passwords, API keys)</td>
+<td>Inject at runtime by ARN; cache in-process; rotation is typically done with a Lambda function</td>
+</tr>
+<tr>
+<td>SSM Parameter Store</td>
+<td>Configuration values and simple secrets (<code>SecureString</code>)</td>
+<td>Cheaper and simpler when you do not need managed rotation</td>
+</tr>
+<tr>
+<td>VPC endpoints / PrivateLink</td>
+<td>Private connectivity to AWS services</td>
+<td>Lets a training job in a private subnet reach S3, ECR, STS and SageMaker APIs without a NAT gateway</td>
+</tr>
+<tr>
+<td>S3 bucket policies</td>
+<td>Resource-side rules on a bucket</td>
+<td>Enforce TLS (<code>aws:SecureTransport</code>), require a specific VPC endpoint (<code>aws:SourceVpce</code>), restrict to your organization (<code>aws:PrincipalOrgID</code>)</td>
+</tr>
+<tr>
+<td>CloudTrail</td>
+<td>API audit log</td>
+<td>Management events are recorded by default; S3 object-level <strong>data events</strong> must be enabled explicitly (and cost extra). Use an organization trail delivered to a locked-down log archive account</td>
+</tr>
+<tr>
+<td>GuardDuty, Macie, Config</td>
+<td>Threat detection, sensitive-data discovery in S3, configuration compliance</td>
+<td>Macie helps find PII in training buckets before it ends up in a model</td>
+</tr>
+</tbody>
+</table></div>
+<p>New S3 buckets have Block Public Access enabled and ACLs disabled by default. Keep it that way and grant access with policies.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>Roles and temporary credentials everywhere; no access keys in code, notebooks, containers or environment files.</li>
+<li>Least privilege scoped to a bucket <strong>and prefix</strong>, not <code>s3:*</code> on <code>*</code>.</li>
+<li>Awareness that KMS key policies, bucket policies and SCPs can each block access independently.</li>
+<li><code>iam:PassRole</code> as the control that stops someone from launching a job with a more powerful role than their own.</li>
+<li>A data perimeter story: VPC endpoints plus bucket and endpoint policies plus SCPs, not just &quot;we encrypt everything&quot;.</li>
+</ul>
+<hr />
+<h2 id="networking-basics">Networking basics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it does</th>
+<th>ML relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPC</td>
+<td>Isolated virtual network in one region</td>
+<td>Training jobs, endpoints and EKS nodes usually run inside one</td>
+</tr>
+<tr>
+<td>Public subnet</td>
+<td>Route table sends <code>0.0.0.0/0</code> to an internet gateway</td>
+<td>Load balancers, NAT gateways, bastions (prefer SSM Session Manager over bastions)</td>
+</tr>
+<tr>
+<td>Private subnet</td>
+<td>No direct route from the internet</td>
+<td>Training, inference, databases, vector stores</td>
+</tr>
+<tr>
+<td>NAT gateway</td>
+<td>Lets private subnets make outbound connections</td>
+<td>Needed for pip installs or external APIs; zonal, so deploy one per AZ for resilience. Charges per hour and per GB processed</td>
+</tr>
+<tr>
+<td>Internet gateway</td>
+<td>Connects the VPC to the internet</td>
+<td>Only public subnets route to it</td>
+</tr>
+<tr>
+<td>Security group</td>
+<td>Stateful, allow-only firewall attached to ENIs</td>
+<td>Reference other security groups (for example &quot;endpoint SG allows 443 from app SG&quot;)</td>
+</tr>
+<tr>
+<td>Network ACL</td>
+<td>Stateless, ordered allow and deny rules at the subnet level</td>
+<td>Coarse subnet guardrails; return traffic must be allowed explicitly</td>
+</tr>
+<tr>
+<td>Gateway VPC endpoint</td>
+<td>Route table entry for S3 or DynamoDB</td>
+<td>No hourly or data processing charge at time of writing; same-region only</td>
+</tr>
+<tr>
+<td>Interface VPC endpoint (PrivateLink)</td>
+<td>ENI with a private IP in your subnet for a service</td>
+<td>Works for most AWS APIs (SageMaker API and runtime, ECR, STS, CloudWatch Logs, Bedrock, Secrets Manager) and for your own services exposed via an NLB. Hourly and per-GB charges apply</td>
+</tr>
+<tr>
+<td>VPC peering / Transit Gateway</td>
+<td>Connect VPCs</td>
+<td>Shared services VPC, cross-account networking</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Security groups vs NACLs:</strong> security groups are stateful (return traffic is automatically allowed), support only allow rules, and attach to network interfaces. NACLs are stateless, support allow and deny, evaluate rules in number order, and apply to whole subnets. Most teams do almost everything with security groups and leave NACLs near default.</p>
+<p><strong>Gateway vs interface endpoints:</strong> S3 supports both. Use the gateway endpoint for in-VPC traffic to S3 (no extra charge, and it removes S3 traffic from the NAT gateway). Use an S3 interface endpoint when traffic comes from on-premises over Direct Connect or VPN, or from another region's network path that cannot use a route table entry.</p>
+<p>A fully private SageMaker or EKS setup typically needs: an S3 gateway endpoint, interface endpoints for ECR (<code>ecr.api</code> and <code>ecr.dkr</code>), STS, CloudWatch Logs, and the SageMaker API and runtime (or Bedrock runtime), plus any other service the code calls. Missing one shows up as a job that hangs or times out rather than a clean permission error.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>Training and inference in private subnets, with egress either blocked or controlled.</li>
+<li>Using gateway endpoints for S3 to cut NAT data processing cost and keep traffic private.</li>
+<li>Knowing that a &quot;hanging&quot; job in a VPC is often a missing endpoint or security group rule.</li>
+<li>Clear explanation of stateful vs stateless filtering.</li>
+</ul>
+<hr />
+<h2 id="storage">Storage</h2>
+<h3 id="s3-essentials">S3 essentials</h3>
+<p>S3 is the system of record for datasets, features, checkpoints, model artifacts and logs.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>What to know</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consistency</td>
+<td>Strong read-after-write consistency for PUTs, overwrites, deletes and LIST operations in all regions (since late 2020). No more &quot;eventual consistency&quot; workarounds</td>
+</tr>
+<tr>
+<td>Prefixes and throughput</td>
+<td>Request rate scales per prefix (AWS documents at least 3,500 writes and 5,500 reads per second per partitioned prefix). Spread hot data across prefixes, and use fewer, larger files (for example 100 MB to 1 GB Parquet or WebDataset shards) rather than millions of tiny ones</td>
+</tr>
+<tr>
+<td>Multipart upload</td>
+<td>Upload large objects in parallel parts, retry parts independently. Required for objects above the single-PUT limit (5 GB at time of writing) and recommended well before that. Add a lifecycle rule to abort incomplete multipart uploads, or orphaned parts keep costing storage</td>
+</tr>
+<tr>
+<td>Versioning</td>
+<td>Keeps prior versions on overwrite or delete (delete adds a delete marker). Protects datasets and model artifacts from accidental loss; required for replication. Pair with lifecycle rules for noncurrent versions</td>
+</tr>
+<tr>
+<td>Object Lock</td>
+<td>Write-once-read-many retention for compliance or audit evidence</td>
+</tr>
+<tr>
+<td>Lifecycle rules</td>
+<td>Transition objects to cheaper classes or expire them by age, prefix or tag</td>
+</tr>
+<tr>
+<td>Replication</td>
+<td>Same-region or cross-region replication for DR, data residency or cross-account copies</td>
+</tr>
+<tr>
+<td>Event notifications</td>
+<td>Trigger Lambda, SQS, SNS or EventBridge when new data lands</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="storage-classes">Storage classes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Use for</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S3 Standard</td>
+<td>Active datasets, current artifacts</td>
+<td>Highest storage price per GB</td>
+</tr>
+<tr>
+<td>S3 Intelligent-Tiering</td>
+<td>Data with unknown or changing access patterns</td>
+<td>Small per-object monitoring fee, so poor fit for millions of tiny objects</td>
+</tr>
+<tr>
+<td>S3 Standard-IA / One Zone-IA</td>
+<td>Infrequently read data that must be available immediately</td>
+<td>Retrieval fees and minimum storage duration; One Zone-IA lives in a single AZ</td>
+</tr>
+<tr>
+<td>S3 Glacier Instant Retrieval</td>
+<td>Archives read rarely but needed in milliseconds</td>
+<td>Higher retrieval cost, minimum duration</td>
+</tr>
+<tr>
+<td>S3 Glacier Flexible Retrieval / Deep Archive</td>
+<td>Old raw data, compliance archives, retired model versions</td>
+<td>Retrieval takes minutes to hours; not for training reads</td>
+</tr>
+<tr>
+<td>S3 Express One Zone</td>
+<td>Very low latency, high request rate data close to compute (directory buckets)</td>
+<td>Single AZ, different bucket type and API behavior; check feature support</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="block-and-file-storage-for-training">Block and file storage for training</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Strengths</th>
+<th>Limits</th>
+<th>Typical ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instance store (local NVMe)</td>
+<td>Ephemeral block</td>
+<td>Fastest local I/O</td>
+<td>Lost when the instance stops or is reclaimed</td>
+<td>Data cache, scratch space</td>
+</tr>
+<tr>
+<td>EBS</td>
+<td>Network block volume, one AZ</td>
+<td>Persistent, snapshots, predictable IOPS on provisioned types</td>
+<td>Attached to one instance in most cases; AZ-bound</td>
+<td>Boot volumes, single-node training scratch, databases</td>
+</tr>
+<tr>
+<td>EFS</td>
+<td>Managed NFS, multi-AZ</td>
+<td>Shared by many instances and pods, elastic size</td>
+<td>Lower per-client throughput than a parallel file system; small-file metadata overhead</td>
+<td>Shared home directories, notebooks, small shared datasets, config</td>
+</tr>
+<tr>
+<td>FSx for Lustre</td>
+<td>Parallel file system</td>
+<td>Very high aggregate throughput for many GPU nodes; can link to an S3 bucket and lazy-load objects</td>
+<td>Provisioned capacity cost; scratch file systems are not durable</td>
+<td>Multi-node distributed training on large datasets</td>
+</tr>
+<tr>
+<td>S3 directly</td>
+<td>Object storage</td>
+<td>Unlimited scale, cheapest durable option</td>
+<td>Per-request latency; needs parallel reads</td>
+<td>Streaming via SageMaker FastFile or Pipe mode, Mountpoint for Amazon S3, or the S3 connector for PyTorch</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rule of thumb: start by streaming sharded data from S3. Move to FSx for Lustre when profiling shows GPUs waiting on I/O across many nodes or many epochs re-read the same data. Use EFS for shared, low-throughput files, not as a high-throughput training data source.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>Knowing S3 is strongly consistent now, and that prefix layout and file size drive throughput.</li>
+<li>Lifecycle rules for raw data, intermediate outputs, old checkpoints and incomplete multipart uploads.</li>
+<li>Versioning (or immutable, versioned paths) for datasets and artifacts, so a model can be traced to the exact data it saw.</li>
+<li>Matching storage to GPU throughput needs instead of defaulting to EFS or EBS.</li>
+</ul>
+<hr />
+<h2 id="compute">Compute</h2>
+<h3 id="gpu-and-accelerator-families">GPU and accelerator families</h3>
+<p>Describe these generically in interviews; instance names and specs change every year.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Hardware</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P family</td>
+<td>High-end NVIDIA data center GPUs, high-bandwidth networking (EFA) on larger sizes</td>
+<td>Large-scale and distributed training, large-model inference</td>
+</tr>
+<tr>
+<td>G family</td>
+<td>NVIDIA GPUs aimed at inference, graphics and smaller training</td>
+<td>Cost-efficient inference, fine-tuning smaller models, experimentation</td>
+</tr>
+<tr>
+<td>Trn (AWS Trainium)</td>
+<td>AWS-designed training accelerators</td>
+<td>Training with the AWS Neuron SDK, often at lower cost per unit of work for supported models</td>
+</tr>
+<tr>
+<td>Inf (AWS Inferentia)</td>
+<td>AWS-designed inference accelerators</td>
+<td>High-throughput, lower-cost inference for models supported by Neuron</td>
+</tr>
+<tr>
+<td>CPU families (general purpose, compute optimized, memory optimized, Graviton/Arm)</td>
+<td>CPUs</td>
+<td>Classical ML, feature engineering, small-model inference, preprocessing</td>
+</tr>
+</tbody>
+</table></div>
+<p>Trainium and Inferentia require compiling or adapting models with the Neuron SDK, so check model and operator support before committing. For multi-node GPU training, look for Elastic Fabric Adapter (EFA) support and cluster placement groups.</p>
+<h3 id="purchase-options">Purchase options</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>What it is</th>
+<th>Best for</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On-Demand</td>
+<td>Pay by the second or hour, no commitment</td>
+<td>Spiky, unpredictable, or short workloads; production when capacity matters</td>
+<td>Highest unit price</td>
+</tr>
+<tr>
+<td>Spot</td>
+<td>Spare capacity at a large discount; can be reclaimed with a two-minute warning</td>
+<td>Fault-tolerant training with checkpoints, batch inference, hyperparameter sweeps</td>
+<td>Interruptions; GPU Spot capacity can be scarce</td>
+</tr>
+<tr>
+<td>Savings Plans</td>
+<td>Commit to an hourly spend for 1 or 3 years. Compute Savings Plans cover EC2, Fargate and Lambda; SageMaker Savings Plans cover SageMaker instance usage</td>
+<td>Steady baseline usage (always-on endpoints, recurring training)</td>
+<td>Commitment risk if usage drops or shifts</td>
+</tr>
+<tr>
+<td>Reserved Instances</td>
+<td>Older commitment model tied to instance attributes</td>
+<td>Existing commitments, some database services</td>
+<td>Less flexible than Savings Plans</td>
+</tr>
+<tr>
+<td>On-Demand Capacity Reservations</td>
+<td>Reserve capacity in an AZ, billed whether used or not</td>
+<td>Guaranteeing GPUs for a launch or critical job</td>
+<td>Pays for idle capacity; no discount on its own</td>
+</tr>
+<tr>
+<td>EC2 Capacity Blocks for ML</td>
+<td>Reserve GPU instances for a defined future time window</td>
+<td>Planned large training runs when on-demand GPU capacity is hard to get</td>
+<td>Fixed window; plan ahead</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not quote discount percentages; they vary by instance type, region and time. Check current pricing.</p>
+<h3 id="spot-interruption-handling">Spot interruption handling</h3>
+<ol>
+<li><strong>Checkpoint regularly</strong> to S3 (or FSx linked to S3): model weights, optimizer state, LR scheduler, data loader position, RNG seeds and step count.</li>
+<li><strong>Resume automatically</strong> from the latest checkpoint on start. Make the training script idempotent.</li>
+<li><strong>Watch for the interruption notice:</strong> a two-minute warning is available from the instance metadata service and as an EventBridge event. EC2 can also send an earlier &quot;rebalance recommendation&quot; when the risk of interruption rises.</li>
+<li><strong>Diversify capacity:</strong> allow several instance types and AZs, and use a capacity-aware allocation strategy (for example <code>price-capacity-optimized</code>) in Auto Scaling groups, EC2 Fleet, Batch or Karpenter.</li>
+<li><strong>Bound the loss:</strong> checkpoint frequency should reflect how much recomputation you can afford, balanced against the time spent writing checkpoints.</li>
+</ol>
+<p>SageMaker Managed Spot Training does much of this for you: set <code>use_spot_instances</code>, <code>max_wait</code>, and a <code>checkpoint_s3_uri</code>, and write checkpoints to the local checkpoint directory (<code>/opt/ml/checkpoints</code> by default) so SageMaker syncs them. See <a href="intro_sagemaker.html#cost-optimization">AWS SageMaker Interview Guide</a>.</p>
+<h3 id="choosing-a-compute-service">Choosing a compute service</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>Fits ML when</th>
+<th>Poor fit when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SageMaker AI</td>
+<td>Managed training, tuning, hosting and pipelines</td>
+<td>You want managed jobs and endpoints with little platform work</td>
+<td>You need full control of the serving stack or already run everything on Kubernetes</td>
+</tr>
+<tr>
+<td>AWS Batch</td>
+<td>Managed job queues on EC2, Spot, Fargate or EKS</td>
+<td>Many independent jobs: batch scoring, array jobs, sweeps, simulation; multi-node parallel jobs</td>
+<td>Low-latency serving</td>
+</tr>
+<tr>
+<td>ECS (EC2 launch type)</td>
+<td>AWS-native container orchestration</td>
+<td>Simple container services, including GPU tasks on GPU instances</td>
+<td>Teams that need the Kubernetes ecosystem</td>
+</tr>
+<tr>
+<td>ECS on Fargate</td>
+<td>Serverless containers, no instances to manage</td>
+<td>CPU inference services, feature APIs, preprocessing workers</td>
+<td>GPU workloads (Fargate has not offered GPUs; check current docs)</td>
+</tr>
+<tr>
+<td>EKS</td>
+<td>Managed Kubernetes control plane</td>
+<td>Platform teams running Ray, Kubeflow, vLLM or Triton, GPU node pools with Karpenter, multi-tenant clusters</td>
+<td>Small teams without Kubernetes skills</td>
+</tr>
+<tr>
+<td>Lambda</td>
+<td>Event-driven functions, maximum 15-minute timeout, no GPUs</td>
+<td>Glue code, S3-triggered preprocessing, light CPU inference, calling Bedrock or SageMaker endpoints</td>
+<td>Long jobs, large models, GPU inference, steady high-throughput traffic where cold starts and per-invocation cost hurt</td>
+</tr>
+<tr>
+<td>EC2 directly</td>
+<td>Raw instances</td>
+<td>Custom research setups, special drivers, full control</td>
+<td>Anything you would rather not patch and babysit</td>
+</tr>
+</tbody>
+</table></div>
+<p>Lambda memory, package size and ephemeral storage limits have grown over time; check current docs rather than quoting them.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>Matching workload shape to compute: batch vs online, GPU vs CPU, steady vs bursty.</li>
+<li>Spot only with checkpointing and automatic resume, never for a job that cannot restart.</li>
+<li>Savings Plans for steady baseline, On-Demand or Spot for the variable part.</li>
+<li>Honest tradeoff between EKS flexibility and its operational cost compared with SageMaker.</li>
+</ul>
+<hr />
+<h2 id="data-and-analytics">Data and analytics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it does</th>
+<th>ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS Glue Data Catalog</td>
+<td>Central metadata store (databases, tables, schemas, partitions) compatible with the Hive metastore</td>
+<td>Shared table definitions for Athena, EMR, Redshift Spectrum and Glue jobs</td>
+</tr>
+<tr>
+<td>Glue crawlers</td>
+<td>Infer schemas and partitions from data in S3 and register them</td>
+<td>Quick cataloging of landing zones (prefer explicit schemas for production tables)</td>
+</tr>
+<tr>
+<td>Glue jobs</td>
+<td>Serverless Spark (and Python shell) ETL with job bookmarks for incremental processing</td>
+<td>Cleaning, joining and featurizing raw data into curated Parquet or Iceberg tables</td>
+</tr>
+<tr>
+<td>Glue Data Quality</td>
+<td>Rule-based data quality checks</td>
+<td>Block training on bad data</td>
+</tr>
+<tr>
+<td>Athena</td>
+<td>Serverless SQL over S3 using the Glue Data Catalog, billed by data scanned</td>
+<td>Ad hoc exploration, label audits, building training sets with CTAS, querying prediction logs</td>
+</tr>
+<tr>
+<td>EMR</td>
+<td>Managed Spark, Hive, Presto/Trino and more, on EC2, on EKS or Serverless</td>
+<td>Large or long-running Spark feature pipelines, custom cluster tuning</td>
+</tr>
+<tr>
+<td>Redshift</td>
+<td>Columnar data warehouse (provisioned or Serverless); Spectrum queries S3</td>
+<td>BI-grade feature tables, aggregations, SQL-first teams; Redshift ML for in-warehouse models</td>
+</tr>
+<tr>
+<td>Lake Formation</td>
+<td>Fine-grained permissions on Data Catalog tables (database, table, column, row and cell level, tag-based)</td>
+<td>Give the fraud team's training role access to only non-PII columns; cross-account data sharing</td>
+</tr>
+<tr>
+<td>Kinesis Data Streams</td>
+<td>Durable, ordered, replayable stream with shards and multiple consumers</td>
+<td>Real-time features, clickstream processing, custom consumers</td>
+</tr>
+<tr>
+<td>Amazon Data Firehose (formerly Kinesis Data Firehose)</td>
+<td>Fully managed buffered delivery into S3, Redshift, OpenSearch and other destinations, with optional transformation and format conversion</td>
+<td>Landing inference logs and events into S3 as Parquet with no consumer code</td>
+</tr>
+<tr>
+<td>MSK</td>
+<td>Managed Apache Kafka (provisioned or Serverless)</td>
+<td>Kafka-native teams, Kafka Connect ecosystem, high fan-out event backbones</td>
+</tr>
+<tr>
+<td>Managed Service for Apache Flink</td>
+<td>Managed Flink for stateful stream processing</td>
+<td>Streaming feature computation (windows, aggregations)</td>
+</tr>
+<tr>
+<td>Step Functions</td>
+<td>Serverless state machines with retries, branching and service integrations (including SageMaker, Glue, Batch, Bedrock, Lambda)</td>
+<td>Orchestrating ML workflows across AWS services; human approval steps</td>
+</tr>
+<tr>
+<td>MWAA</td>
+<td>Amazon Managed Workflows for Apache Airflow</td>
+<td>Teams with existing Airflow DAGs, complex cross-system data dependencies</td>
+</tr>
+<tr>
+<td>EventBridge</td>
+<td>Event bus, rules, Scheduler and Pipes</td>
+<td>Trigger retraining on a schedule or when new data lands; react to model registry approval or Spot interruption events</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="streaming-data-streams-vs-firehose-vs-msk">Streaming: Data Streams vs Firehose vs MSK</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Kinesis Data Streams</th>
+<th>Data Firehose</th>
+<th>MSK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Do you write consumers?</td>
+<td>Yes (Lambda, KCL apps, Flink)</td>
+<td>No, delivery is managed</td>
+<td>Yes (Kafka clients, Connect, Flink)</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>Yes, within the retention window</td>
+<td>No</td>
+<td>Yes, within retention</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Sub-second to seconds</td>
+<td>Buffered (seconds to minutes)</td>
+<td>Sub-second to seconds</td>
+</tr>
+<tr>
+<td>Ordering</td>
+<td>Per shard (partition key)</td>
+<td>Not a design goal</td>
+<td>Per partition</td>
+</tr>
+<tr>
+<td>Ops effort</td>
+<td>Low (on-demand mode removes shard sizing)</td>
+<td>Lowest</td>
+<td>Highest of the three, even when managed</td>
+</tr>
+<tr>
+<td>Pick it when</td>
+<td>You need custom real-time processing on AWS</td>
+<td>You need &quot;get these events into S3 or a warehouse&quot;</td>
+<td>You already use Kafka or need its ecosystem</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="orchestration-which-tool">Orchestration: which tool?</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Strength</th>
+<th>Choose when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SageMaker Pipelines</td>
+<td>ML-native steps, lineage, model registry integration</td>
+<td>The workflow is mostly SageMaker jobs</td>
+</tr>
+<tr>
+<td>Step Functions</td>
+<td>Serverless, deep AWS integrations, Standard (long-running, exactly-once) and Express (high-volume, short) workflows</td>
+<td>Glue to SageMaker to Lambda to Bedrock workflows, event-driven pipelines, no servers to run</td>
+</tr>
+<tr>
+<td>MWAA (Airflow)</td>
+<td>Huge operator ecosystem, Python DAGs, backfills</td>
+<td>Data platform already runs on Airflow or spans many non-AWS systems</td>
+</tr>
+<tr>
+<td>EventBridge</td>
+<td>Scheduling and event routing, not multi-step state</td>
+<td>Triggering any of the above</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>A lake layout (raw, curated, features) in S3 with a catalog, open table formats (Iceberg) where updates or time travel matter, and Lake Formation for column and row access.</li>
+<li>Choosing Firehose for simple delivery and Data Streams or MSK only when replay or custom consumers are needed.</li>
+<li>Separating orchestration (Step Functions, Airflow, Pipelines) from triggers (EventBridge).</li>
+<li>Partitioning and columnar formats to keep Athena scans and costs down.</li>
+</ul>
+<hr />
+<h2 id="generative-ai-with-amazon-bedrock">Generative AI with Amazon Bedrock</h2>
+<p>Amazon Bedrock is a managed, serverless API for foundation models from several providers (including Amazon's own models). You call models without managing GPUs or model servers. AWS states that prompts and outputs are not used to train the base models and are not shared with model providers; confirm the current data-handling terms for your use case.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>What it is</th>
+<th>Interview angle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model access and APIs</td>
+<td><code>bedrock-runtime</code> with <code>InvokeModel</code> (provider-specific body) and the unified <strong>Converse</strong> API (same message format across models, tool use, streaming)</td>
+<td>Converse makes swapping models easier; model availability differs by region, and some models may need access enabled first</td>
+</tr>
+<tr>
+<td>Inference profiles</td>
+<td>Cross-region inference profiles route requests across regions for throughput; application inference profiles let you tag usage for cost allocation</td>
+<td>Higher availability and per-team cost tracking</td>
+</tr>
+<tr>
+<td>Knowledge Bases</td>
+<td>Managed RAG: ingest from data sources such as S3, chunk, embed, store in a vector store (for example OpenSearch Serverless or Aurora PostgreSQL with pgvector; check docs for the current list), then <code>Retrieve</code> or <code>RetrieveAndGenerate</code> with citations and metadata filters</td>
+<td>Fast path to RAG; tradeoff is less control over chunking, retrieval and reranking than a custom pipeline</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>Managed agents that plan, call tools (action groups backed by Lambda or API schemas) and query Knowledge Bases. AWS also offers Bedrock AgentCore for running agents built with other frameworks (newer; check its current feature set)</td>
+<td>Tool permissions, prompt injection risk, observability of tool calls</td>
+</tr>
+<tr>
+<td>Guardrails</td>
+<td>Configurable policies: content filters, denied topics, word filters, sensitive information (PII) masking or blocking, contextual grounding checks and more. Can be attached to model calls or used standalone via the <code>ApplyGuardrail</code> API</td>
+<td>Defense in depth for inputs and outputs; not a replacement for authorization</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Fine-tuning and other customization for supported models, and Custom Model Import for some open-weight architectures</td>
+<td>Usually try prompting and RAG first</td>
+</tr>
+<tr>
+<td>Batch inference</td>
+<td>Asynchronous jobs over files in S3</td>
+<td>Cheaper for offline workloads such as bulk summarization or labeling (check current pricing)</td>
+</tr>
+<tr>
+<td>Model invocation logging</td>
+<td>Log prompts and responses to CloudWatch Logs or S3</td>
+<td>Auditing and evaluation; treat logs as sensitive data</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="on-demand-vs-provisioned-throughput">On-demand vs Provisioned Throughput</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>On-demand</th>
+<th>Provisioned Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Billing</td>
+<td>Per token (input and output), or per image or other unit</td>
+<td>Per model unit per hour, with optional commitment terms</td>
+</tr>
+<tr>
+<td>Capacity</td>
+<td>Shared, subject to account quotas (requests and tokens per minute)</td>
+<td>Dedicated throughput for a specific model</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Most workloads, variable traffic, prototyping</td>
+<td>Very high steady volume with strict throughput needs; historically required for serving many customized models (some custom models now support on-demand; check current docs)</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>Throttling at quota limits</td>
+<td>Paying for idle capacity</td>
+</tr>
+</tbody>
+</table></div>
+<p>Before buying Provisioned Throughput, try quota increases, cross-region inference profiles, prompt caching (for supported models), smaller models for easy requests, and batch inference for offline work.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>When Bedrock beats self-hosting (time to market, no GPU ops, managed security) and when it does not (custom architectures, very high steady volume where dedicated hosting is cheaper, strict latency control, unsupported models).</li>
+<li>RAG access control: filter retrieval by the user's permissions (metadata filters or per-tenant indexes), not only by prompt instructions.</li>
+<li>Guardrails as one layer alongside IAM, input validation, output validation and logging.</li>
+<li>Token and cost tracking per team or feature, and quota planning.</li>
+</ul>
+<p>For RAG design depth, see <a href="../ai_genai/intro_rag.html">RAG</a> and <a href="../ai_genai/intro_vector_databases.html">Vector Databases</a>.</p>
+<hr />
+<h2 id="observability">Observability</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it gives you</th>
+<th>ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CloudWatch Metrics</td>
+<td>Namespaced time series with dimensions; custom metrics (including via the embedded metric format in logs)</td>
+<td>Endpoint invocations, latency and error metrics; custom metrics such as prediction score distribution or tokens per request</td>
+</tr>
+<tr>
+<td>CloudWatch Logs</td>
+<td>Log groups and streams, Logs Insights queries, metric filters, subscriptions</td>
+<td>Training job logs, inference request logs, Bedrock invocation logs. Set retention: the default is to never expire</td>
+</tr>
+<tr>
+<td>CloudWatch Alarms</td>
+<td>Threshold or anomaly-detection alarms, composite alarms, actions (SNS, Auto Scaling, Lambda via EventBridge)</td>
+<td>Page on p99 latency, 5xx rate, endpoint CPU or GPU utilization, failed pipeline runs</td>
+</tr>
+<tr>
+<td>CloudWatch agent / Container Insights</td>
+<td>Host and container metrics, including NVIDIA GPU metrics through the agent</td>
+<td>Detect idle or saturated GPUs</td>
+</tr>
+<tr>
+<td>X-Ray and OpenTelemetry</td>
+<td>Distributed tracing and service maps; AWS Distro for OpenTelemetry (ADOT) is the recommended instrumentation path (check current docs on X-Ray SDK status)</td>
+<td>Find whether latency comes from feature lookup, model call or post-processing</td>
+</tr>
+<tr>
+<td>Amazon Managed Service for Prometheus and Managed Grafana</td>
+<td>Prometheus-compatible metrics and dashboards</td>
+<td>Common on EKS with GPU exporters</td>
+</tr>
+<tr>
+<td>SageMaker Model Monitor</td>
+<td>Data quality, model quality, bias and feature attribution drift for endpoints and batch jobs</td>
+<td>Covered in <a href="intro_sagemaker.html#monitoring-and-governance">AWS SageMaker Interview Guide</a> and <a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Infrastructure health (latency, errors, saturation) and model health (drift, quality, business KPIs) are different signals. A healthy endpoint can serve a badly drifted model with perfect latency.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>The four golden signals plus model-specific signals (input drift, prediction distribution, delayed ground-truth accuracy).</li>
+<li>Alarms tied to actions and owners, not just dashboards.</li>
+<li>Log retention and PII handling for request and prompt logs.</li>
+<li>Tracing across feature store, model and downstream calls.</li>
+</ul>
+<hr />
+<h2 id="cost-control">Cost control</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>How</th>
+<th>Why it matters for ML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tagging</td>
+<td>Tag every resource with <code>team</code>, <code>project</code>, <code>env</code>, <code>model</code>; activate the tags as cost allocation tags in the Billing console; enforce with tag policies or SCPs</td>
+<td>Without tags you cannot say which model costs what</td>
+</tr>
+<tr>
+<td>Budgets and anomaly detection</td>
+<td>AWS Budgets with alerts (and optional actions), Cost Anomaly Detection, Cost Explorer, Data Exports (Cost and Usage Report) queried in Athena</td>
+<td>Catch a forgotten GPU cluster in hours, not at month end</td>
+</tr>
+<tr>
+<td>Spot</td>
+<td>Training, sweeps, batch inference with checkpoints</td>
+<td>Often the single largest saving for training</td>
+</tr>
+<tr>
+<td>Commitments</td>
+<td>Savings Plans (Compute, EC2 Instance, SageMaker) for steady baseline</td>
+<td>Always-on endpoints and recurring training</td>
+</tr>
+<tr>
+<td>Right-sizing</td>
+<td>Watch GPU utilization and memory; use smaller GPUs, CPUs, Inferentia, quantization or batching for inference; Compute Optimizer for EC2</td>
+<td>Many inference endpoints run on GPUs they barely use</td>
+</tr>
+<tr>
+<td>Idle cleanup</td>
+<td>Delete idle endpoints, stop notebooks and Studio spaces (idle shutdown), scale dev endpoints to zero or use serverless or batch options, delete unused OpenSearch Serverless collections and Provisioned Throughput</td>
+<td>Idle resources are the most common surprise bill</td>
+</tr>
+<tr>
+<td>S3 lifecycle</td>
+<td>Expire scratch data and old checkpoints, transition cold data, abort incomplete multipart uploads, limit noncurrent versions</td>
+<td>Storage grows silently with every experiment</td>
+</tr>
+<tr>
+<td>Data transfer</td>
+<td>S3 gateway endpoint instead of NAT for S3 traffic; keep data and compute in the same region and AZ where possible; watch cross-AZ traffic in distributed training and service meshes</td>
+<td>NAT gateway data processing charges on large dataset reads are a classic surprise</td>
+</tr>
+<tr>
+<td>Log retention</td>
+<td>Set CloudWatch Logs retention; avoid logging full payloads at high volume</td>
+<td>Verbose inference logs can cost more than the model</td>
+</tr>
+<tr>
+<td>GenAI usage</td>
+<td>Track tokens per feature with application inference profiles and tags; cache; route easy requests to smaller models; use batch inference for offline jobs</td>
+<td>Token spend scales with traffic and prompt length</td>
+</tr>
+</tbody>
+</table></div>
+<p>Never quote prices or discount percentages from memory in an interview; say you would check current pricing and model it with the AWS Pricing Calculator.</p>
+<p><strong>What interviewers listen for:</strong></p>
+<ul>
+<li>Cost is attributed (tags, accounts per team or environment) before it is optimized.</li>
+<li>Alerts exist before the spike, not after.</li>
+<li>Concrete levers for training (Spot, right GPU, data pipeline efficiency) and serving (autoscaling, batching, smaller hardware, scale to zero).</li>
+<li>Awareness of hidden costs: NAT data processing, cross-AZ traffic, logs, idle vector stores, incomplete multipart uploads.</li>
+</ul>
+<hr />
+<h2 id="reference-architectures">Reference architectures</h2>
+<h3 id="batch-training-pipeline">Batch training pipeline</h3>
+<pre><code class="language-text">  Sources (app DBs, event streams via Firehose, partner drops)
+        |
+        v
+  +-------------------+    crawler or explicit DDL    +---------------------+
+  | S3 raw zone       | ----------------------------&gt; | Glue Data Catalog   |
+  | (versioned, KMS)  |                               | + Lake Formation    |
+  +-------------------+                               +---------------------+
+        |
+        |  Glue job or EMR Spark: validate, dedupe, join, featurize
+        v
+  +-------------------+
+  | S3 curated zone   |  Parquet / Iceberg, partitioned by date
+  +-------------------+
+        |
+        |  SageMaker training job (private subnets, VPC endpoints,
+        |  Spot + checkpoints to S3, data streamed from S3 or FSx for Lustre)
+        v
+  +-------------------+     evaluate vs baseline     +----------------------+
+  | model artifact S3 | ---------------------------&gt; | Model Registry       |
+  +-------------------+                              | (PendingApproval)    |
+                                                     +----------------------+
+                                                                |  approved
+                                                                v
+                                                     +----------------------+
+                                                     | Batch Transform job  |
+                                                     +----------------------+
+                                                                |
+                                                                v
+                                     S3 predictions -&gt; Athena / Redshift -&gt; downstream apps
+
+  Orchestration: SageMaker Pipelines or Step Functions, started by an EventBridge
+  schedule or a &quot;new data landed&quot; event. Alarms on failure via CloudWatch + SNS.
+</code></pre>
+<p>Walkthrough: raw data lands in a versioned, encrypted S3 zone and is registered in the Glue Data Catalog, with Lake Formation controlling which roles see which columns. A Glue or EMR job produces curated, partitioned tables. A SageMaker training job runs in private subnets using its own execution role scoped to the curated prefix and the artifact prefix, on Spot with checkpoints. An evaluation step compares against the current production model; only passing models are registered, and approval (manual or automated) triggers a Batch Transform job that writes predictions back to S3 for analytics and downstream systems. Every run is tagged for cost and traceable from prediction back to dataset version.</p>
+<h3 id="real-time-inference">Real-time inference</h3>
+<pre><code class="language-text">  Client
+    |
+    v
+  API Gateway (auth, throttling, WAF)      or      ALB (internal, inside the VPC)
+    |
+    v
+  Inference service: Lambda, ECS/Fargate, or pods on EKS
+    |   - validate request, fetch features ----------------&gt; Online features:
+    |                                                         SageMaker Feature Store (online),
+    |                                                         DynamoDB or ElastiCache
+    v
+  Model:  SageMaker real-time endpoint (target-tracking autoscaling on
+          invocations per instance or latency)
+     or:  model server pods on EKS (HPA on custom metrics + Karpenter GPU nodes)
+    |
+    v
+  Response to client
+    |
+    +--&gt; async: request/response sample -&gt; Firehose -&gt; S3 -&gt; Model Monitor / Athena
+    +--&gt; CloudWatch metrics and alarms (p99 latency, 5xx, GPU utilization), X-Ray / OTel traces
+</code></pre>
+<p>Walkthrough: a thin service in front of the model handles auth, validation and feature lookup so the model container stays simple. Features come from a low-latency online store populated by the same pipeline that builds training features, which limits training-serving skew. The model runs on a SageMaker endpoint (least ops) or on EKS (most control, shared GPU pools). Autoscaling is based on load metrics with a minimum capacity that covers cold-start time. Requests and predictions are sampled to S3 asynchronously for drift monitoring and later labeling. Deployment safety (canary or blue/green, shadow testing) is covered in <a href="intro_sagemaker.html#deployment-patterns">AWS SageMaker Interview Guide</a> and <a href="../mlops/intro_model_serving.html">Model Serving</a>.</p>
+<h3 id="rag-application-on-bedrock">RAG application on Bedrock</h3>
+<pre><code class="language-text">  Documents (PDF, HTML, wiki exports)
+        |
+        v
+  +---------------------------+
+  | S3 docs bucket            |  versioned, KMS, metadata files with ACL / tenant tags
+  +---------------------------+
+        |
+        |  Knowledge Base sync: parse -&gt; chunk -&gt; embed (Bedrock embedding model)
+        v
+  +---------------------------+
+  | Bedrock Knowledge Base    | ---&gt; vector store: OpenSearch Serverless
+  +---------------------------+      (or another supported store)
+        ^
+        | 1. Retrieve (query + metadata filter for the user's tenant / groups)
+        |
+  User -&gt; App (ECS/Lambda behind API Gateway, authenticated user identity)
+        |
+        | 2. Converse (or RetrieveAndGenerate) with retrieved chunks
+        |    + Guardrail (PII masking, denied topics, grounding check)
+        v
+  +---------------------------+
+  | Bedrock foundation model  | ---&gt; answer + citations ---&gt; user
+  +---------------------------+
+
+  Private access via VPC interface endpoints for Bedrock; invocation logs to S3/CloudWatch;
+  offline evaluation set re-run on every prompt, model or chunking change.
+</code></pre>
+<p>Walkthrough: documents land in S3 with metadata describing who may see them. The Knowledge Base ingests, chunks and embeds them into a vector store. At query time the app authenticates the user, retrieves with a metadata filter derived from the user's identity (so the model never sees documents the user cannot access), then calls a Bedrock model through the Converse API with a guardrail attached. Answers return with citations. Invocation logging and an offline evaluation set catch regressions when prompts, models or chunking change. Move to a custom pipeline (your own chunking, hybrid search, reranking) when the managed Knowledge Base cannot meet quality targets; see <a href="../system_design/enterprise_rag_search.html">Enterprise RAG Search</a>.</p>
+<hr />
+<h2 id="code-examples">Code examples</h2>
+<p>These are minimal boto3 sketches. Bucket names, ARNs and IDs are placeholders. Credentials come from the environment (role, SSO profile), never from code.</p>
+<h3 id="least-privilege-iam-policy-for-one-s3-prefix">Least-privilege IAM policy for one S3 prefix</h3>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;ListOnlyTheFraudPrefix&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;s3:ListBucket&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:s3:::ml-datasets-prod&quot;,
+      &quot;Condition&quot;: { &quot;StringLike&quot;: { &quot;s3:prefix&quot;: [&quot;fraud/v3/*&quot;] } }
+    },
+    {
+      &quot;Sid&quot;: &quot;ReadObjectsUnderThePrefix&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;s3:GetObject&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:s3:::ml-datasets-prod/fraud/v3/*&quot;
+    },
+    {
+      &quot;Sid&quot;: &quot;DecryptWithTheDatasetKey&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;kms:Decrypt&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:kms:us-east-1:111122223333:key/EXAMPLE-KEY-ID&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="bucket-policy-only-reachable-through-your-vpc-endpoint">Bucket policy: only reachable through your VPC endpoint</h3>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;DenyAccessOutsideTheTrainingVpcEndpoint&quot;,
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Principal&quot;: &quot;*&quot;,
+      &quot;Action&quot;: [&quot;s3:GetObject&quot;, &quot;s3:PutObject&quot;],
+      &quot;Resource&quot;: &quot;arn:aws:s3:::ml-datasets-prod/*&quot;,
+      &quot;Condition&quot;: { &quot;StringNotEquals&quot;: { &quot;aws:SourceVpce&quot;: &quot;vpce-0example1234567890&quot; } }
+    },
+    {
+      &quot;Sid&quot;: &quot;DenyInsecureTransport&quot;,
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Principal&quot;: &quot;*&quot;,
+      &quot;Action&quot;: &quot;s3:*&quot;,
+      &quot;Resource&quot;: [&quot;arn:aws:s3:::ml-datasets-prod&quot;, &quot;arn:aws:s3:::ml-datasets-prod/*&quot;],
+      &quot;Condition&quot;: { &quot;Bool&quot;: { &quot;aws:SecureTransport&quot;: &quot;false&quot; } }
+    }
+  ]
+}
+</code></pre>
+<p>Test deny-based bucket policies carefully: a broad deny can also lock out administrators and the console.</p>
+<h3 id="presigned-s3-urls">Presigned S3 URLs</h3>
+<pre><code class="language-python">import boto3
+
+s3 = boto3.client(&quot;s3&quot;)
+
+# Download link valid for 15 minutes. The URL carries the signer's permissions,
+# and it stops working when the signer's temporary credentials expire, even if
+# ExpiresIn is longer.
+download_url = s3.generate_presigned_url(
+    &quot;get_object&quot;,
+    Params={&quot;Bucket&quot;: &quot;ml-reports&quot;, &quot;Key&quot;: &quot;eval/2026-10/fraud-v3.html&quot;},
+    ExpiresIn=900,
+)
+
+# Upload link: lets a labeling tool push one object without AWS credentials.
+upload_url = s3.generate_presigned_url(
+    &quot;put_object&quot;,
+    Params={&quot;Bucket&quot;: &quot;ml-raw-uploads&quot;, &quot;Key&quot;: &quot;incoming/batch-0042.parquet&quot;},
+    ExpiresIn=900,
+)
+
+print(download_url)
+print(upload_url)
+</code></pre>
+<h3 id="assuming-a-role-with-sts">Assuming a role with STS</h3>
+<pre><code class="language-python">from typing import Optional
+
+import boto3
+
+
+def session_for_role(role_arn: str, session_name: str, external_id: Optional[str] = None) -&gt; boto3.Session:
+    &quot;&quot;&quot;Return a boto3 Session that uses temporary credentials for role_arn.&quot;&quot;&quot;
+    params = {&quot;RoleArn&quot;: role_arn, &quot;RoleSessionName&quot;: session_name, &quot;DurationSeconds&quot;: 3600}
+    if external_id:
+        params[&quot;ExternalId&quot;] = external_id  # used when a third party assumes your role
+    creds = boto3.client(&quot;sts&quot;).assume_role(**params)[&quot;Credentials&quot;]
+    return boto3.Session(
+        aws_access_key_id=creds[&quot;AccessKeyId&quot;],
+        aws_secret_access_key=creds[&quot;SecretAccessKey&quot;],
+        aws_session_token=creds[&quot;SessionToken&quot;],
+    )
+
+
+prod = session_for_role(&quot;arn:aws:iam::444455556666:role/ModelDeployer&quot;, &quot;deploy-fraud-v3&quot;)
+print(prod.client(&quot;sts&quot;).get_caller_identity()[&quot;Arn&quot;])
+</code></pre>
+<h3 id="reading-a-secret-from-secrets-manager">Reading a secret from Secrets Manager</h3>
+<pre><code class="language-python">import json
+import time
+
+import boto3
+
+_client = boto3.client(&quot;secretsmanager&quot;)
+_cache = {}
+_TTL_SECONDS = 300  # refresh periodically so rotated secrets are picked up
+
+
+def get_secret(secret_id: str) -&gt; dict:
+    cached = _cache.get(secret_id)
+    if cached and time.time() - cached[0] &lt; _TTL_SECONDS:
+        return cached[1]
+    value = json.loads(_client.get_secret_value(SecretId=secret_id)[&quot;SecretString&quot;])
+    _cache[secret_id] = (time.time(), value)
+    return value
+
+
+db = get_secret(&quot;prod/feature-db/readonly&quot;)
+print(sorted(db.keys()))  # never log the secret values themselves
+</code></pre>
+<p>AWS also provides caching libraries and a Lambda extension for Parameters and Secrets that handle this pattern.</p>
+<h3 id="bedrock-converse-api-model-agnostic">Bedrock Converse API (model-agnostic)</h3>
+<pre><code class="language-python">import os
+
+import boto3
+
+# Use a model ID or inference profile ID available in your account and region.
+MODEL_ID = os.environ[&quot;BEDROCK_MODEL_ID&quot;]
+GUARDRAIL_ID = os.environ.get(&quot;BEDROCK_GUARDRAIL_ID&quot;)
+
+client = boto3.client(&quot;bedrock-runtime&quot;)
+
+request = {
+    &quot;modelId&quot;: MODEL_ID,
+    &quot;system&quot;: [{&quot;text&quot;: &quot;You answer questions about internal ML runbooks. Be concise.&quot;}],
+    &quot;messages&quot;: [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [{&quot;text&quot;: &quot;How do we roll back a production endpoint?&quot;}]}
+    ],
+    &quot;inferenceConfig&quot;: {&quot;maxTokens&quot;: 512, &quot;temperature&quot;: 0.2},
+}
+if GUARDRAIL_ID:
+    request[&quot;guardrailConfig&quot;] = {
+        &quot;guardrailIdentifier&quot;: GUARDRAIL_ID,
+        &quot;guardrailVersion&quot;: os.environ.get(&quot;BEDROCK_GUARDRAIL_VERSION&quot;, &quot;DRAFT&quot;),
+    }
+
+response = client.converse(**request)
+print(response[&quot;output&quot;][&quot;message&quot;][&quot;content&quot;][0][&quot;text&quot;])
+print(response[&quot;usage&quot;])       # input and output token counts, useful for cost tracking
+print(response[&quot;stopReason&quot;])  # for example &quot;end_turn&quot;, &quot;max_tokens&quot;, &quot;guardrail_intervened&quot;
+</code></pre>
+<h3 id="retrieving-from-a-knowledge-base-then-generating">Retrieving from a Knowledge Base, then generating</h3>
+<pre><code class="language-python">import os
+
+import boto3
+
+agent_runtime = boto3.client(&quot;bedrock-agent-runtime&quot;)
+runtime = boto3.client(&quot;bedrock-runtime&quot;)
+
+question = &quot;What is our policy for retraining the fraud model?&quot;
+results = agent_runtime.retrieve(
+    knowledgeBaseId=os.environ[&quot;KNOWLEDGE_BASE_ID&quot;],
+    retrievalQuery={&quot;text&quot;: question},
+    retrievalConfiguration={&quot;vectorSearchConfiguration&quot;: {&quot;numberOfResults&quot;: 5}},
+)[&quot;retrievalResults&quot;]
+
+context = &quot;\n\n&quot;.join(r[&quot;content&quot;][&quot;text&quot;] for r in results)
+prompt = f&quot;Answer using only this context. Say if it is not covered.\n\n{context}\n\nQuestion: {question}&quot;
+
+answer = runtime.converse(
+    modelId=os.environ[&quot;BEDROCK_MODEL_ID&quot;],
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [{&quot;text&quot;: prompt}]}],
+    inferenceConfig={&quot;maxTokens&quot;: 400},
+)
+print(answer[&quot;output&quot;][&quot;message&quot;][&quot;content&quot;][0][&quot;text&quot;])
+</code></pre>
+<p>In production, add a metadata <code>filter</code> to <code>vectorSearchConfiguration</code> based on the caller's identity so retrieval respects document permissions.</p>
+<h3 id="detecting-a-spot-interruption-notice-imdsv2">Detecting a Spot interruption notice (IMDSv2)</h3>
+<pre><code class="language-python">import urllib.error
+import urllib.request
+
+IMDS = &quot;http://169.254.169.254/latest&quot;
+
+
+def spot_interruption_pending(timeout: float = 1.0) -&gt; bool:
+    &quot;&quot;&quot;True if EC2 has scheduled this Spot instance for interruption.&quot;&quot;&quot;
+    token_request = urllib.request.Request(
+        f&quot;{IMDS}/api/token&quot;,
+        method=&quot;PUT&quot;,
+        headers={&quot;X-aws-ec2-metadata-token-ttl-seconds&quot;: &quot;60&quot;},
+    )
+    token = urllib.request.urlopen(token_request, timeout=timeout).read().decode()
+    action_request = urllib.request.Request(
+        f&quot;{IMDS}/meta-data/spot/instance-action&quot;,
+        headers={&quot;X-aws-ec2-metadata-token&quot;: token},
+    )
+    try:
+        urllib.request.urlopen(action_request, timeout=timeout)
+        return True  # 200 means an interruption action is scheduled
+    except urllib.error.HTTPError as err:
+        if err.code == 404:
+            return False  # nothing scheduled
+        raise
+
+
+# Inside the training loop (save_checkpoint is your own function):
+# if step % 50 == 0 and spot_interruption_pending():
+#     save_checkpoint(step)  # write to S3 or FSx, then exit cleanly
+</code></pre>
+<p>From inside a container, IMDS may need a higher hop limit on the instance to be reachable; EventBridge Spot interruption events are an alternative signal.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-would-you-give-a-training-job-read-access-to-one-s3-prefix-and-nothing-else">How would you give a training job read access to one S3 prefix and nothing else?</h4>
+<p>Create a dedicated execution role for the job and attach an identity policy that allows <code>s3:GetObject</code> only on <code>arn:aws:s3:::bucket/prefix/*</code> and <code>s3:ListBucket</code> on the bucket with an <code>s3:prefix</code> condition limited to that prefix. If the data is encrypted with SSE-KMS, the role also needs <code>kms:Decrypt</code> on that specific key, and the key policy must allow it. Write access should go to a separate output prefix, ideally in another bucket, so the job cannot overwrite its own training data. For defense in depth, add a bucket policy that denies access unless the request comes through your VPC endpoint or from principals in your organization. Restrict who can launch jobs with this role using <code>iam:PassRole</code>. The tradeoff is more roles to manage, which teams handle with infrastructure as code or attribute-based access control using tags.</p>
+<h4 id="what-is-the-difference-between-an-iam-user-and-an-iam-role-and-why-should-ml-workloads-use-roles">What is the difference between an IAM user and an IAM role, and why should ML workloads use roles?</h4>
+<p>An IAM user is a long-lived identity that can have permanent access keys, while a role has no permanent credentials and is assumed to obtain temporary credentials from STS. Workloads such as training jobs, ECS tasks, Lambda functions and EKS pods should always use roles, because the credentials rotate automatically and are never stored in code, images or notebooks. Leaked long-lived keys are one of the most common causes of cloud incidents, and ML repos and notebooks are frequent leak sources. Humans should sign in through IAM Identity Center or federation and also receive role-based temporary credentials. CI/CD systems should use OIDC federation to assume a role rather than storing keys as secrets. The remaining use for IAM users is narrow, such as legacy tools that cannot use federation.</p>
+<h4 id="how-do-pods-on-eks-get-aws-permissions-without-static-keys">How do pods on EKS get AWS permissions without static keys?</h4>
+<p>There are two mechanisms: IAM Roles for Service Accounts (IRSA) and EKS Pod Identity. IRSA uses the cluster's OIDC provider; the role's trust policy trusts that provider and a specific namespace and service account, and the SDK exchanges the projected service account token for role credentials. EKS Pod Identity is newer: you install the Pod Identity agent add-on and create an association between a service account and a role, and the role trusts the EKS Pod Identity service principal instead of a per-cluster OIDC provider. Pod Identity is simpler to reuse across many clusters because you do not edit trust policies per cluster, while IRSA is widely supported and works in more environments. Either way, each workload should get its own service account and role rather than relying on the node's instance role, which every pod on the node could otherwise use. Blocking pod access to the node's instance metadata is part of that hardening.</p>
+<h4 id="when-would-you-use-a-gateway-vpc-endpoint-versus-an-interface-endpoint">When would you use a gateway VPC endpoint versus an interface endpoint?</h4>
+<p>Gateway endpoints exist only for S3 and DynamoDB; they are route table entries, have no extra charge at time of writing, and keep traffic from private subnets off the NAT gateway. Interface endpoints (PrivateLink) create network interfaces with private IPs in your subnets, support most AWS services and your own services, can be protected with security groups, and have hourly and per-GB charges. For a private ML environment you typically use a gateway endpoint for S3 plus interface endpoints for ECR, STS, CloudWatch Logs, SageMaker API and runtime, Bedrock runtime and Secrets Manager. An S3 interface endpoint makes sense when on-premises clients reach S3 over Direct Connect or VPN, since they cannot use a VPC route table. Both endpoint types support endpoint policies, which are useful for restricting access to your own buckets. The common mistake is forgetting the S3 gateway endpoint, so terabytes of training data flow through the NAT gateway and are billed as data processing.</p>
+<h4 id="your-aws-bill-jumped-overnight-how-do-you-find-the-cause-and-stop-it-from-happening-again">Your AWS bill jumped overnight. How do you find the cause and stop it from happening again?</h4>
+<p>Start in Cost Explorer grouped by service, then by usage type, region, linked account and cost allocation tag, to see whether the jump is compute, storage, data transfer or a managed service. Cost Anomaly Detection, if enabled, may already point to the service and account. Typical ML culprits are GPU instances or endpoints left running, a training job stuck in a retry loop, an autoscaling group that scaled up and never down, NAT gateway data processing from dataset reads, cross-AZ transfer in distributed jobs, a large CloudWatch Logs ingest from verbose inference logging, or a burst of foundation model tokens. Use the Cost and Usage Report in Athena to drill down to resource IDs, then CloudTrail to see who or what created them. Stop the bleeding first (scale down, delete, or apply a deny via SCP), then fix the root cause. Prevention means mandatory tags, Budgets with alerts per team and account, anomaly detection, idle-resource cleanup automation, and default lifecycle and log retention policies.</p>
+<h4 id="how-would-you-prevent-data-exfiltration-from-an-ml-training-environment">How would you prevent data exfiltration from an ML training environment?</h4>
+<p>Build a data perimeter with several independent layers. Run training and notebooks in private subnets with no internet egress (or egress only through an inspected proxy), and give them VPC endpoints for the AWS services they need. Attach endpoint policies that allow only your organization's buckets, and bucket policies that deny access unless requests come from your VPC endpoints and your organization's principals (<code>aws:SourceVpce</code>, <code>aws:PrincipalOrgID</code>, <code>aws:ResourceOrgID</code>). Use SCPs (and resource control policies where appropriate) so no role in the ML accounts can disable these controls or write to buckets outside the organization. Encrypt with customer managed KMS keys whose key policies limit use to approved roles, enable SageMaker network isolation for jobs that do not need network access, and turn on CloudTrail data events, GuardDuty and Macie for detection. The tradeoff is friction: data scientists lose easy pip installs and public dataset downloads, so provide a private package mirror and an approved ingestion path.</p>
+<h4 id="how-do-you-run-large-training-jobs-on-spot-without-losing-days-of-progress">How do you run large training jobs on Spot without losing days of progress?</h4>
+<p>Make the job resumable: checkpoint model weights, optimizer state, scheduler, data loader position and RNG state to S3 at an interval chosen from how much recomputation you can tolerate versus checkpoint write time. On startup the script should find the latest valid checkpoint and resume, and checkpoints should be written atomically (write then rename, or write a manifest last) so a half-written file is never loaded. Listen for the two-minute interruption notice from instance metadata or EventBridge and trigger a final checkpoint. Diversify instance types and AZs and use a capacity-aware allocation strategy, because GPU Spot capacity for a single instance type can disappear for hours. For multi-node distributed training, an interruption of one node usually stops the whole job, so elastic training frameworks or falling back to On-Demand or Capacity Blocks for the critical final phase can be worthwhile. SageMaker Managed Spot Training handles restarts and checkpoint syncing; you still have to write resume logic.</p>
+<h4 id="how-would-you-design-a-multi-account-aws-setup-for-an-ml-organization">How would you design a multi-account AWS setup for an ML organization?</h4>
+<p>Use AWS Organizations with AWS Control Tower to create a landing zone: a management account used only for billing and organization policy, a log archive account for CloudTrail and Config, and a security tooling account. Put ML workloads in separate accounts per environment (dev, staging, prod) and often per team or product, grouped into organizational units that receive different SCPs and Control Tower controls. A shared services account can host the model registry, ECR images and CI/CD tooling, and a data lake account can own curated data shared via Lake Formation. Humans access accounts through IAM Identity Center with permission sets, and pipelines assume deployment roles across accounts. Accounts give strong blast-radius isolation, clean cost attribution and separate service quotas, at the cost of more cross-account plumbing for KMS keys, bucket policies, ECR repository policies and networking. Account vending through Control Tower Account Factory and infrastructure as code keeps that overhead manageable.</p>
+<h4 id="how-do-you-deploy-a-model-trained-in-a-dev-account-into-a-production-account">How do you deploy a model trained in a dev account into a production account?</h4>
+<p>Do not copy credentials or let production read from dev freely; promote an immutable, approved artifact. One common pattern: the training account writes the model artifact to S3 encrypted with a customer managed KMS key and registers it in a model registry, then grants the production deployment role read access through the bucket policy and KMS key policy. The container image lives in ECR with a repository policy that lets the production account pull it, or it is replicated into the production account's registry. SageMaker model package groups support resource policies (and sharing via AWS RAM; check current docs), so production can reference the approved model package directly. A pipeline in a deployment or production account then assumes a role, creates the model and endpoint in production, runs smoke tests and shifts traffic gradually. An alternative is to copy the artifact and image into the production account at approval time, which decouples prod from dev availability at the cost of duplicate storage.</p>
+<h4 id="how-do-you-choose-between-ebs-efs-fsx-for-lustre-and-streaming-from-s3-for-training-data">How do you choose between EBS, EFS, FSx for Lustre and streaming from S3 for training data?</h4>
+<p>The deciding factors are dataset size, number of nodes reading concurrently, how many epochs re-read the data, and whether profiling shows GPUs waiting on I/O. For a single-node job with a dataset that fits on local disk, copying from S3 to local NVMe or EBS once is simple and fast. For multi-node jobs over large datasets, streaming sharded files from S3 (SageMaker FastFile or Pipe mode, Mountpoint for Amazon S3, or the S3 connector for PyTorch) avoids provisioning anything and scales well if files are large and spread across prefixes. FSx for Lustre adds a high-throughput parallel file system, linked to S3, that helps when many GPU nodes repeatedly read the same data or need POSIX semantics, but it costs provisioned capacity and must be cleaned up. EFS is good for shared code, configs and notebooks but generally not for feeding a large GPU cluster. Many teams also fix &quot;slow storage&quot; by repacking millions of small files into large shards, which helps every option.</p>
+<h4 id="when-would-you-serve-a-model-with-lambda-ecs-on-fargate-eks-or-a-sagemaker-endpoint">When would you serve a model with Lambda, ECS on Fargate, EKS, or a SageMaker endpoint?</h4>
+<p>Lambda suits light CPU models, pre and post processing, or calls to Bedrock and SageMaker endpoints, especially with spiky low traffic; its limits are the 15-minute timeout, no GPUs, package size constraints and cold starts. ECS on Fargate works well for CPU inference services where you want containers without managing instances. EKS fits when you need GPUs with custom serving stacks (vLLM, Triton, Ray Serve), want to bin-pack many models onto shared GPU nodes, or already have a platform team on Kubernetes; it has the highest operational burden. SageMaker endpoints give managed GPU or CPU hosting with autoscaling, variants for canary testing, async and serverless options, and integration with Model Monitor, with less control over the runtime. The choice is mostly about traffic shape, hardware needs and team skills, not model accuracy. Many organizations use more than one: SageMaker for classic models and EKS for LLM serving, for example.</p>
+<h4 id="kinesis-data-streams-data-firehose-or-msk-which-would-you-use-for-a-real-time-feature-pipeline">Kinesis Data Streams, Data Firehose or MSK: which would you use for a real-time feature pipeline?</h4>
+<p>If you only need to land events in S3 or a warehouse for later training, Data Firehose is the simplest: no consumers, managed buffering, optional format conversion to Parquet. If you need to compute features in near real time with replay ability and multiple independent consumers, Kinesis Data Streams with Lambda or Managed Service for Apache Flink is the AWS-native choice, and on-demand capacity mode removes shard planning. MSK makes sense when the company already standardizes on Kafka, needs Kafka Connect or the Kafka client ecosystem, or wants portability across environments, accepting more tuning and operational work. Ordering is guaranteed per shard or partition, so choose partition keys (such as user ID) that keep related events together without creating hot partitions. A common pattern combines them: stream processing writes fresh features to an online store, and Firehose archives raw events to S3 for training and backfills.</p>
+<h4 id="when-would-you-use-bedrock-instead-of-hosting-an-open-weights-model-yourself-on-sagemaker-or-eks">When would you use Bedrock instead of hosting an open-weights model yourself on SageMaker or EKS?</h4>
+<p>Bedrock is the default when you want strong models quickly, have variable traffic, and do not want to manage GPU capacity, model servers, scaling or patching; you pay per token and get Guardrails, Knowledge Bases and logging built in. Self-hosting fits when you need a model or architecture Bedrock does not offer, deep control over inference (custom decoding, specific quantization, LoRA adapters swapped per tenant), strict latency control, or when steady high volume makes dedicated GPUs cheaper per token than on-demand pricing. Self-hosting brings GPU capacity planning, autoscaling with slow cold starts, observability and security patching onto your team. Data residency and privacy can be satisfied by either, so check the specific requirements rather than assuming self-hosting is required. A practical approach is to prototype on Bedrock, measure quality and cost per request, and only move a workload to self-hosting when the numbers or a hard requirement justify it.</p>
+<h4 id="what-is-the-difference-between-on-demand-and-provisioned-throughput-in-bedrock-and-how-do-you-decide">What is the difference between on-demand and Provisioned Throughput in Bedrock, and how do you decide?</h4>
+<p>On-demand bills per token (or other unit) on shared capacity and is subject to account quotas on requests and tokens per minute, so heavy traffic can be throttled. Provisioned Throughput reserves dedicated capacity for a specific model, billed per model unit per hour with optional commitment terms, so you pay whether or not you use it. Historically it was required to serve many customized models; check current docs, since some custom models now support on-demand inference. Decide by measuring steady-state token throughput and peak requirements: if traffic is variable or modest, stay on-demand and request quota increases or use cross-region inference profiles. If traffic is large, steady and latency-critical, or a custom model requires it, compare the cost of provisioned units against projected on-demand spend. Batch inference and prompt caching are often cheaper ways to reduce cost before committing.</p>
+<h4 id="how-would-you-secure-a-multi-tenant-rag-application-built-on-bedrock">How would you secure a multi-tenant RAG application built on Bedrock?</h4>
+<p>Authentication happens in the application, and the user's identity must drive retrieval: tag each document chunk with tenant and group metadata at ingestion and apply a metadata filter on every retrieve call, or use separate indexes or Knowledge Bases per tenant when isolation requirements are strict. Never rely on the prompt to tell the model to ignore other tenants' data, since prompt injection inside documents or user input can override instructions. Attach a guardrail for PII masking, denied topics and grounding checks, and validate outputs before they reach downstream tools. Keep the app, Knowledge Base and vector store in private networking with VPC endpoints, encrypt the source bucket and vector store with customer managed keys, and give the app role only the specific <code>bedrock:</code> actions and resources it needs. Turn on invocation logging, but treat logs as sensitive data with restricted access and retention. Finally, test with adversarial documents and cross-tenant queries as part of the evaluation suite.</p>
+<h4 id="how-does-s3s-consistency-model-and-prefix-layout-affect-ml-pipelines">How does S3's consistency model and prefix layout affect ML pipelines?</h4>
+<p>Since late 2020, S3 provides strong read-after-write consistency for writes, overwrites, deletes and listings, so a pipeline step can list and read objects that a previous step just wrote without sleep-and-retry workarounds. That does not make concurrent writers to the same key safe; the last writer wins, so pipelines should write to unique, versioned paths (for example including a run ID) and publish a manifest or commit marker when a dataset is complete. Open table formats like Apache Iceberg add atomic commits and snapshots on top of S3 for tables that are updated. Request throughput scales per prefix, so spreading heavy reads across prefixes and using fewer, larger files helps data loaders at scale. Millions of tiny files also inflate request costs and listing time, so compaction into shards is usually worth it.</p>
+<h4 id="how-should-an-inference-container-get-a-database-password-or-third-party-api-key">How should an inference container get a database password or third-party API key?</h4>
+<p>Store the secret in Secrets Manager (or SSM Parameter Store for simple cases), encrypted with a KMS key, and grant the container's task role, pod role or SageMaker execution role permission to read only that secret ARN. The application fetches the value at startup or on demand and caches it with a short TTL so rotation is picked up; ECS can also inject secrets as environment variables at container start, at the cost of not seeing rotations until restart. Never bake secrets into images, model artifacts, notebooks or plain environment configuration checked into Git. Enable automatic rotation where supported, and prefer IAM authentication over passwords when the target supports it, such as IAM database authentication for RDS. CloudTrail records <code>GetSecretValue</code> calls, which helps investigate misuse.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Access keys in notebooks, code or Docker images</td>
+<td>Keys leak through Git, logs and shared images and stay valid until revoked</td>
+<td>Use roles everywhere, OIDC for CI, IAM Identity Center for humans; scan repos for secrets</td>
+</tr>
+<tr>
+<td>One shared &quot;ML admin&quot; role with <code>s3:*</code> and <code>sagemaker:*</code> on <code>*</code></td>
+<td>Any compromised job can read or delete everything</td>
+<td>One role per workload, scoped to bucket prefixes and specific actions; control <code>iam:PassRole</code></td>
+</tr>
+<tr>
+<td>Training data read through a NAT gateway</td>
+<td>Large per-GB processing charges and unnecessary internet path</td>
+<td>Add an S3 gateway endpoint and route tables for private subnets</td>
+</tr>
+<tr>
+<td>Missing interface endpoints in a private VPC</td>
+<td>Jobs hang or time out with unclear errors</td>
+<td>Inventory every AWS API the job calls and add endpoints (ECR, STS, Logs, SageMaker, Bedrock, Secrets Manager)</td>
+</tr>
+<tr>
+<td>SSE-KMS bucket with no <code>kms:Decrypt</code> grant</td>
+<td><code>AccessDenied</code> that looks like an S3 permission problem</td>
+<td>Grant <code>kms:Decrypt</code> in the role policy and key policy; enable S3 Bucket Keys</td>
+</tr>
+<tr>
+<td>Millions of tiny training files in one prefix</td>
+<td>Slow data loading, idle GPUs, high request costs</td>
+<td>Shard into large files, spread across prefixes, or cache on FSx for Lustre</td>
+</tr>
+<tr>
+<td>Spot training without checkpoints</td>
+<td>Interruptions throw away hours of GPU time</td>
+<td>Checkpoint to S3, auto-resume, diversify instance types and AZs</td>
+</tr>
+<tr>
+<td>Idle endpoints, notebooks, GPU nodes and vector store collections</td>
+<td>Steady cost for zero value</td>
+<td>Idle shutdown, scale-to-zero or serverless for dev, scheduled cleanup, Budgets alerts</td>
+</tr>
+<tr>
+<td>No lifecycle rules on scratch and checkpoint prefixes</td>
+<td>Storage and incomplete multipart uploads grow forever</td>
+<td>Expiration and transition rules, abort incomplete multipart uploads, limit noncurrent versions</td>
+</tr>
+<tr>
+<td>CloudWatch Logs with default retention</td>
+<td>Logs never expire and costs accumulate; PII retained indefinitely</td>
+<td>Set retention per log group; avoid logging full payloads</td>
+</tr>
+<tr>
+<td>Untagged resources</td>
+<td>Cannot attribute cost per model or team</td>
+<td>Enforce tags with tag policies or SCPs; activate cost allocation tags</td>
+</tr>
+<tr>
+<td>RAG access control done in the prompt</td>
+<td>Prompt injection or bugs leak other users' documents</td>
+<td>Filter retrieval by identity using metadata or separate indexes; guardrails as an extra layer</td>
+</tr>
+<tr>
+<td>Quoting prices or limits from memory</td>
+<td>Numbers change and undermine credibility</td>
+<td>Say &quot;check current pricing and quotas&quot; and explain how you would model cost</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why it's related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_sagemaker.html">AWS SageMaker Interview Guide</a></td>
+<td>Training, hosting, pipelines, registry and Model Monitor in depth</td>
+</tr>
+<tr>
+<td><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></td>
+<td>SageMaker vs Vertex AI vs Azure ML</td>
+</tr>
+<tr>
+<td><a href="gcp_for_ml_engineers.html">GCP for ML Engineers</a></td>
+<td>The equivalent core services on Google Cloud</td>
+</tr>
+<tr>
+<td><a href="azure_for_ml_engineers.html">Azure for ML Engineers</a></td>
+<td>The equivalent core services on Azure</td>
+</tr>
+<tr>
+<td><a href="cloud_service_mapping.html">Cloud Service Mapping</a></td>
+<td>Side-by-side mapping of AWS, GCP and Azure services</td>
+</tr>
+<tr>
+<td><a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a></td>
+<td>Managed ML platform on GCP</td>
+</tr>
+<tr>
+<td><a href="intro_azure_ml.html">Azure Machine Learning Interview Guide</a></td>
+<td>Managed ML platform on Azure</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_serving.html">Model Serving</a></td>
+<td>Serving patterns behind the real-time architecture</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+<td>Drift and quality monitoring beyond infrastructure metrics</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_cicd_for_ml.html">CI/CD for ML</a></td>
+<td>Promotion pipelines across accounts</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_feature_stores.html">Feature Stores</a></td>
+<td>Online and offline features for training and inference</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_terraform.html">Terraform</a></td>
+<td>Managing IAM, VPCs and endpoints as code</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>Background for EKS-based training and serving</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_docker.html">Docker</a></td>
+<td>Containers for SageMaker, ECS, EKS and Lambda</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_observability.html">Observability</a></td>
+<td>Metrics, logs and traces fundamentals</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_airflow.html">Apache Airflow</a></td>
+<td>Background for MWAA</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_spark.html">Apache Spark</a></td>
+<td>Background for Glue and EMR jobs</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></td>
+<td>Background for MSK</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_iceberg.html">Apache Iceberg</a></td>
+<td>Table format for S3 data lakes</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_rag.html">RAG</a></td>
+<td>Retrieval-augmented generation design</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_vector_databases.html">Vector Databases</a></td>
+<td>Vector stores behind Knowledge Bases</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_llm_security.html">LLM Security</a></td>
+<td>Prompt injection and data leakage risks for Bedrock apps</td>
+</tr>
+<tr>
+<td><a href="../system_design/enterprise_rag_search.html">Enterprise RAG Search</a></td>
+<td>System design walkthrough for a RAG platform</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_azure_ml.html"><small>Previous</small>Azure Machine Learning</a><a rel="next" class="next" href="gcp_for_ml_engineers.html"><small>Next</small>GCP for ML Engineers</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/aws_for_ml_engineers.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

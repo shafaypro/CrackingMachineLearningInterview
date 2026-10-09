@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python for AI Engineering Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="The foundation under every LLM app and agent. Before RAG, tools, or multi-agent orchestration, you need fluent, idiomatic, production Python. This guide…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_python_for_ai.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Python for AI Engineering Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="The foundation under every LLM app and agent. Before RAG, tools, or multi-agent orchestration, you need fluent, idiomatic, production Python. This guide…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_python_for_ai.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python for AI Engineering Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="The foundation under every LLM app and agent. Before RAG, tools, or multi-agent orchestration, you need fluent, idiomatic, production Python. This guide…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Python for AI Engineering",
+   "description": "The foundation under every LLM app and agent. Before RAG, tools, or multi-agent orchestration, you need fluent, idiomatic, production Python. This guide…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_python_for_ai.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Python for AI Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_python_for_ai.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">Python for AI Engineering</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_python_for_ai.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="python-for-ai-engineering">Python for AI Engineering</h1>
+<p>The foundation under every LLM app and agent. Before RAG, tools, or multi-agent
+orchestration, you need fluent, idiomatic, <em>production</em> Python. This guide covers
+the slice of Python that AI engineers use daily, and that interviewers expect you
+to write without thinking.</p>
+<blockquote>
+<p><strong>Why it's listed first in the roadmap:</strong> agent code is concurrent, schema-driven,
+API-heavy, and failure-prone. Weak Python here shows up immediately as flaky,
+slow, unobservable agents.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-core-python-you-actually-use">Core Python You Actually Use</a></li>
+<li><a href="#2-type-hints">Type Hints</a></li>
+<li><a href="#3-async--await--concurrency">async / await &amp; Concurrency</a></li>
+<li><a href="#4-pydantic-models">Pydantic Models</a></li>
+<li><a href="#5-environment--dependency-management">Environment &amp; Dependency Management</a></li>
+<li><a href="#6-working-with-apis">Working with APIs</a></li>
+<li><a href="#7-error-handling--retries">Error Handling &amp; Retries</a></li>
+<li><a href="#8-logging--observability">Logging &amp; Observability</a></li>
+<li><a href="#9-project-hygiene">Project Hygiene</a></li>
+<li><a href="#10-interview-questions">Interview Questions</a></li>
+</ol>
+<hr />
+<h2 id="1-core-python-you-actually-use">1. Core Python You Actually Use</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Why it matters in AI code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Comprehensions / generators</strong></td>
+<td>Stream large datasets/embeddings without loading everything into memory</td>
+</tr>
+<tr>
+<td><strong>Context managers (<code>with</code>)</strong></td>
+<td>Manage clients, files, DB sessions, spans cleanly</td>
+</tr>
+<tr>
+<td><strong>Decorators</strong></td>
+<td>Wrap functions with retries, caching, tracing, timing</td>
+</tr>
+<tr>
+<td><strong><code>dataclasses</code> / <code>Enum</code></strong></td>
+<td>Lightweight typed records and fixed choice sets</td>
+</tr>
+<tr>
+<td><strong><code>functools</code> (<code>lru_cache</code>, <code>partial</code>)</strong></td>
+<td>Cache deterministic calls; pre-bind config</td>
+</tr>
+<tr>
+<td><strong><code>pathlib</code></strong></td>
+<td>Safe, cross-platform path handling (and traversal checks)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from functools import lru_cache
+
+@lru_cache(maxsize=1024)
+def embed_cached(text: str) -&gt; tuple[float, ...]:
+    &quot;&quot;&quot;Cache deterministic embeddings so repeated text isn't re-embedded.&quot;&quot;&quot;
+    return tuple(embed(text))
+</code></pre>
+<hr />
+<h2 id="2-type-hints">2. Type Hints</h2>
+<p>Type hints make agent code maintainable <em>and</em> power schema generation (Pydantic,
+tool definitions) and editor/static checks.</p>
+<pre><code class="language-python">from typing import Literal, Optional, Any
+
+def call_model(
+    prompt: str,
+    model: str = &quot;claude-sonnet-5&quot;,
+    temperature: Optional[float] = None,  # None = omit; current Claude models reject non-default values
+    tools: Optional[list[dict[str, Any]]] = None,
+    role: Literal[&quot;system&quot;, &quot;user&quot;, &quot;assistant&quot;] = &quot;user&quot;,
+) -&gt; str:
+    ...
+</code></pre>
+<ul>
+<li>Prefer built-in generics (<code>list[str]</code>, <code>dict[str, int]</code>) on modern Python.</li>
+<li><code>Literal</code> for fixed string choices; <code>Optional[X]</code> = <code>X | None</code>.</li>
+<li>Run a static checker (<code>mypy</code> / <code>pyright</code>) in CI: it catches a class of bugs
+before they reach a flaky agent run.</li>
+</ul>
+<hr />
+<h2 id="3-async--await--concurrency">3. async / await &amp; Concurrency</h2>
+<p>Agents make <strong>many</strong> network calls. Doing them sequentially is the #1 latency sink.
+<code>asyncio</code> lets independent calls run concurrently.</p>
+<pre><code class="language-python">import asyncio
+
+async def fetch_tool(call):
+    return await run_tool_async(call)
+
+async def run_parallel_tools(tool_calls):
+    # Execute independent tool calls concurrently, gather all results
+    return await asyncio.gather(*(fetch_tool(c) for c in tool_calls))
+</code></pre>
+<ul>
+<li><strong>When to use async</strong>: I/O-bound work (API/tool/DB calls). Not CPU-bound work
+(use processes for that).</li>
+<li><strong><code>asyncio.gather</code></strong>: fan out parallel calls; <strong><code>asyncio.as_completed</code></strong>: handle
+results as they finish; <strong><code>asyncio.Semaphore</code></strong>: cap concurrency to respect rate limits.</li>
+<li><strong>Don't block the event loop</strong>: never call a synchronous, blocking SDK inside an
+async handler; use the async client or <code>run_in_executor</code>.</li>
+<li>Most LLM SDKs ship both sync and async clients: match the one to your app.</li>
+</ul>
+<pre><code class="language-python">sem = asyncio.Semaphore(10)  # respect provider rate limits
+async def guarded_call(req):
+    async with sem:
+        return await client_async.call(req)
+</code></pre>
+<hr />
+<h2 id="4-pydantic-models">4. Pydantic Models</h2>
+<p>Pydantic is the backbone of <strong>structured outputs</strong>, <strong>tool schemas</strong>, and <strong>config</strong>.
+It validates and coerces data at the boundary so the rest of your code trusts its types.</p>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+
+class SearchArgs(BaseModel):
+    query: str = Field(description=&quot;Search query&quot;)
+    top_k: int = Field(default=5, ge=1, le=50)
+
+class Settings(BaseModel):
+    model: str = &quot;claude-opus-5-5&quot;
+    temperature: float | None = None  # leave unset: Claude Opus 4.7+ and Sonnet 5 reject non-default sampling params
+    max_tokens: int = 4096
+</code></pre>
+<ul>
+<li><strong>Tool schemas</strong>: <code>SearchArgs.model_json_schema()</code> produces the JSON schema you
+hand to an LLM's function-calling API.</li>
+<li><strong>Structured outputs</strong>: parse model JSON into a validated object; on failure,
+re-ask with the validation error (see the <code>instructor</code> library).</li>
+<li><strong>Config</strong>: <code>pydantic-settings</code> reads typed config from env vars / <code>.env</code>.</li>
+<li><strong>v2 essentials</strong>: <code>model_validate()</code>, <code>model_dump()</code>, <code>Field(...)</code>, validators.</li>
+</ul>
+<p>→ Deeper: <a href="intro_pydantic.html">Pydantic for AI Systems</a> · <a href="../ai_genai/intro_structured_outputs.html">Structured Outputs</a></p>
+<hr />
+<h2 id="5-environment--dependency-management">5. Environment &amp; Dependency Management</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>venv</code></strong></td>
+<td>Built-in isolated environments</td>
+</tr>
+<tr>
+<td><strong><code>uv</code></strong></td>
+<td>Fast installer + resolver + lockfile (modern default)</td>
+</tr>
+<tr>
+<td><strong><code>poetry</code> / <code>pip-tools</code></strong></td>
+<td>Dependency management + locking</td>
+</tr>
+<tr>
+<td><strong><code>.env</code> + <code>python-dotenv</code> / <code>pydantic-settings</code></strong></td>
+<td>Load secrets/config from env</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># config.py: never hardcode keys
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class AppConfig(BaseSettings):
+    # v2 style; the inner `class Config:` form is deprecated
+    model_config = SettingsConfigDict(env_file=&quot;.env&quot;)
+
+    anthropic_api_key: str
+    vector_db_url: str = &quot;http://localhost:6333&quot;
+
+config = AppConfig()  # reads from environment / .env
+</code></pre>
+<ul>
+<li><strong>Pin dependencies</strong> with a lockfile for reproducibility.</li>
+<li><strong>Never commit <code>.env</code></strong>: commit <code>.env.example</code>; load real secrets from env / a
+secrets manager. See <a href="../project_setup/intro_github_project_setup.html">GitHub Project Setup</a>.</li>
+</ul>
+<hr />
+<h2 id="6-working-with-apis">6. Working with APIs</h2>
+<pre><code class="language-python">import httpx
+
+async def post_json(url: str, payload: dict, timeout: float = 30.0) -&gt; dict:
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(url, json=payload)
+        resp.raise_for_status()
+        return resp.json()
+</code></pre>
+<ul>
+<li><strong><code>httpx</code></strong> (async-capable) or <code>requests</code> (sync) for raw HTTP; prefer the
+provider's official SDK when one exists.</li>
+<li><strong>Always set timeouts</strong>: a hung request stalls the whole agent.</li>
+<li><strong>Streaming</strong>: consume Server-Sent Events incrementally for token-by-token UX.</li>
+<li><strong>Pagination</strong>: loop until the cursor/<code>has_next</code> is exhausted.</li>
+<li><strong>Token counting</strong>: use the provider's counter (not <code>tiktoken</code> for Claude).</li>
+</ul>
+<p>→ Production HTTP/API patterns: <a href="intro_fastapi.html">FastAPI for AI Backends</a></p>
+<hr />
+<h2 id="7-error-handling--retries">7. Error Handling &amp; Retries</h2>
+<p>Networks fail, providers rate-limit, and models occasionally return junk. Handle it.</p>
+<pre><code class="language-python">import time, random
+
+def with_retry(fn, *, retries=5, base=1.0, max_delay=30.0):
+    for attempt in range(retries):
+        try:
+            return fn()
+        except RateLimitError:          # 429: retryable
+            pass
+        except ServerError:             # 5xx: retryable
+            pass
+        except BadRequestError:         # 4xx: do NOT retry
+            raise
+        delay = min(base * 2 ** attempt + random.uniform(0, 1), max_delay)
+        time.sleep(delay)
+    raise RuntimeError(&quot;exhausted retries&quot;)
+</code></pre>
+<ul>
+<li><strong>Catch a chain, most-specific first</strong>: distinguish retryable (429, 5xx, network)
+from non-retryable (4xx).</li>
+<li><strong>Exponential backoff + jitter</strong>: avoid thundering-herd retries. (Most SDKs do
+this automatically: configure <code>max_retries</code>.)</li>
+<li><strong>Validate model output</strong>: wrap structured parsing in try/except and retry with
+the error message so the model self-corrects.</li>
+<li><strong>Fail gracefully</strong>: return a useful error to the agent (e.g. tool <code>is_error</code>),
+don't crash the whole run.</li>
+</ul>
+<hr />
+<h2 id="8-logging--observability">8. Logging &amp; Observability</h2>
+<p>Agents are non-deterministic: <strong>logs are how you debug them</strong>.</p>
+<pre><code class="language-python">import logging, json, uuid
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(levelname)s %(message)s&quot;)
+log = logging.getLogger(&quot;agent&quot;)
+
+def log_event(event: str, **fields):
+    &quot;&quot;&quot;Structured log line with a correlation id for tracing a run.&quot;&quot;&quot;
+    log.info(json.dumps({&quot;event&quot;: event, **fields}))
+
+run_id = str(uuid.uuid4())
+log_event(&quot;tool_call&quot;, run_id=run_id, tool=&quot;search&quot;, args={&quot;query&quot;: &quot;...&quot;})
+</code></pre>
+<ul>
+<li><strong>Structured (JSON) logs</strong>: machine-parseable; filter by <code>run_id</code>, tool, latency.</li>
+<li><strong>Correlation IDs</strong>: tag every log/span in one agent run with the same id.</li>
+<li><strong>Log the right things</strong>: each model call (model, tokens, cost, latency), each
+tool call (name, args, result, error), and decisions.</li>
+<li><strong>Levels</strong>: <code>DEBUG</code> for traces, <code>INFO</code> for events, <code>WARNING</code>/<code>ERROR</code> for failures.</li>
+<li><strong>Graduate to tracing</strong>: OpenTelemetry / LangSmith / Langfuse for end-to-end spans.</li>
+</ul>
+<p>→ Deeper: <a href="../ai_genai/intro_langsmith.html">Observability &amp; Tracing</a> · <a href="../ai_genai/intro_llmops.html">LLMOps</a></p>
+<hr />
+<h2 id="9-project-hygiene">9. Project Hygiene</h2>
+<ul>
+<li><strong><code>src/</code> layout</strong>, tests, configs separated from code → see
+<a href="../project_setup/intro_project_structure.html">ML/AI Project Folder Structures</a>.</li>
+<li><strong>Lint/format</strong> with <code>ruff</code>; <strong>type-check</strong> with <code>mypy</code>/<code>pyright</code>; <strong>test</strong> with
+<code>pytest</code>: all in CI.</li>
+<li><strong>Pre-commit hooks</strong> to catch issues before they hit CI.</li>
+</ul>
+<hr />
+<h2 id="10-interview-questions">10. Interview Questions</h2>
+<ol>
+<li><strong>When do you reach for <code>async</code> in an AI app?</strong> → I/O-bound concurrency:
+parallel model/tool/DB calls. Use <code>asyncio.gather</code>, cap with a semaphore for
+rate limits; don't use it for CPU-bound work.</li>
+<li><strong>Why Pydantic in an LLM pipeline?</strong> → Validate/coerce model output and tool
+args at the boundary, auto-generate JSON schemas, and load typed config.</li>
+<li><strong>How do you handle a 429 vs a 400?</strong> → Retry 429 (and 5xx) with exponential
+backoff + jitter; never retry 400: it's a client error, fix the request.</li>
+<li><strong>How do you make a non-deterministic agent debuggable?</strong> → Structured logs with
+a per-run correlation id, log every model/tool call with tokens/latency, and
+end-to-end tracing.</li>
+<li><strong>How do you keep secrets out of code?</strong> → <code>.env</code> (git-ignored) + a settings
+loader locally, secrets manager / CI secrets in production; never hardcode.</li>
+<li><strong>Sync vs async SDK client: does it matter?</strong> → Yes: calling a blocking sync
+client inside an async handler stalls the event loop; use the async client or
+offload to an executor.</li>
+</ol>
+<hr />
+<h3 id="related-guides">Related Guides</h3>
+<ul>
+<li><a href="intro_pydantic.html">Pydantic</a> · <a href="intro_fastapi.html">FastAPI</a></li>
+<li><a href="../ai_genai/intro_agentic_ai_engineering_roadmap.html">The Agentic AI Engineer Roadmap</a></li>
+<li><a href="../project_setup/">Project Setup &amp; Engineering</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_pytorch.html"><small>Next</small>PyTorch</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_python_for_ai.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

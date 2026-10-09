@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure Machine Learning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Azure Machine Learning is a common platform choice in enterprise environments, especially where identity, security, and surrounding business systems…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_azure_ml.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Azure Machine Learning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Azure Machine Learning is a common platform choice in enterprise environments, especially where identity, security, and surrounding business systems…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_azure_ml.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Azure Machine Learning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Azure Machine Learning is a common platform choice in enterprise environments, especially where identity, security, and surrounding business systems…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Azure Machine Learning Interview Guide",
+   "description": "Azure Machine Learning is a common platform choice in enterprise environments, especially where identity, security, and surrounding business systems…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_azure_ml.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Azure Machine Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/intro_azure_ml.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">Azure Machine Learning</span></nav>
+<p class="meta"><a href="../../#cloud_ml/intro_azure_ml.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 5 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="azure-machine-learning-interview-guide">Azure Machine Learning Interview Guide</h1>
+<p>Azure Machine Learning is a common platform choice in enterprise environments, especially where identity, security, and surrounding business systems already live in Microsoft Azure. It also appears in modern interviews alongside Azure OpenAI, responsible AI, and governed model deployment.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#when-azure-ml-is-a-strong-fit">When Azure ML is a strong fit</a></li>
+<li><a href="#core-concepts-and-services">Core concepts and services</a></li>
+<li><a href="#reference-architecture">Reference architecture</a></li>
+<li><a href="#training-and-deployment-workflow">Training and deployment workflow</a></li>
+<li><a href="#mlops-and-governance">MLOps and governance</a></li>
+<li><a href="#cost-and-platform-tradeoffs">Cost and platform tradeoffs</a></li>
+<li><a href="#interview-q-and-a">Interview Q and A</a></li>
+<li><a href="#common-mistakes">Common mistakes</a></li>
+<li><a href="#related-topics">Related topics</a></li>
+</ol>
+<hr />
+<h2 id="when-azure-ml-is-a-strong-fit">When Azure ML is a strong fit</h2>
+<p>Azure ML is a strong platform choice when:</p>
+<ul>
+<li>the organization already uses Azure for identity, networking, and compliance</li>
+<li>data science and business teams operate in a Microsoft-heavy enterprise stack</li>
+<li>Azure OpenAI or other Azure AI services are already part of the roadmap</li>
+<li>governance and approval workflows are first-class requirements</li>
+</ul>
+<p>It is especially common in sectors like finance, healthcare, and large enterprise IT where platform standardization matters as much as raw feature breadth.</p>
+<hr />
+<h2 id="core-concepts-and-services">Core concepts and services</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Azure ML concept</th>
+<th>What it does</th>
+<th>Interview interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Workspace</td>
+<td>Top-level ML control plane</td>
+<td>Environment boundary</td>
+</tr>
+<tr>
+<td>Compute Instance</td>
+<td>Interactive development machine</td>
+<td>Notebook and exploration</td>
+</tr>
+<tr>
+<td>Compute Cluster</td>
+<td>Scalable training compute</td>
+<td>Training and batch jobs</td>
+</tr>
+<tr>
+<td>Job</td>
+<td>Unit of execution</td>
+<td>Reproducible run</td>
+</tr>
+<tr>
+<td>Model Registry</td>
+<td>Versioned model storage</td>
+<td>Promotion and governance</td>
+</tr>
+<tr>
+<td>Managed Online Endpoint</td>
+<td>Real-time serving</td>
+<td>Production inference</td>
+</tr>
+<tr>
+<td>Batch Endpoint</td>
+<td>Offline scoring</td>
+<td>Scheduled and large-volume inference</td>
+</tr>
+<tr>
+<td>Pipelines</td>
+<td>Multi-step ML workflow</td>
+<td>MLOps workflow backbone</td>
+</tr>
+<tr>
+<td>Feature Store</td>
+<td>Shared feature definitions</td>
+<td>Consistency and reuse</td>
+</tr>
+<tr>
+<td>MLflow integration</td>
+<td>Tracking runs and models</td>
+<td>Standardized experiment tracking</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="reference-architecture">Reference architecture</h2>
+<pre><code class="language-text">Enterprise data sources -&gt; curated storage / warehouse
+                        -&gt; feature preparation jobs
+                        -&gt; Azure ML pipeline
+                        -&gt; training on compute cluster
+                        -&gt; model registry
+                        -&gt; approval and deployment
+                        -&gt; managed online endpoint or batch endpoint
+                        -&gt; monitoring, drift detection, alerts
+</code></pre>
+<p>In interviews, make sure your answer includes:</p>
+<ul>
+<li>where data is curated before training</li>
+<li>who approves a production model</li>
+<li>how the serving endpoint is isolated and secured</li>
+<li>how drift or performance regressions are detected</li>
+</ul>
+<hr />
+<h2 id="training-and-deployment-workflow">Training and deployment workflow</h2>
+<pre><code class="language-python">from azure.ai.ml import Input, MLClient, command
+from azure.identity import DefaultAzureCredential
+
+ml_client = MLClient(
+    credential=DefaultAzureCredential(),
+    subscription_id=&quot;00000000-0000-0000-0000-000000000000&quot;,
+    resource_group_name=&quot;ml-platform-rg&quot;,
+    workspace_name=&quot;prod-ml-workspace&quot;,
+)
+
+job = command(
+    code=&quot;./src&quot;,
+    command=&quot;python train.py --data_path ${{inputs.data_path}}&quot;,
+    inputs={
+        &quot;data_path&quot;: Input(
+            type=&quot;uri_file&quot;,
+            path=&quot;azureml://datastores/workspaceblobstore/paths/train.csv&quot;,
+        )
+    },
+    environment=&quot;AzureML-sklearn-1.5@latest&quot;,  # curated env; check current names
+    compute=&quot;cpu-training-cluster&quot;,
+    experiment_name=&quot;churn-training&quot;,
+    display_name=&quot;train-churn-model&quot;,
+)
+
+returned_job = ml_client.jobs.create_or_update(job)
+print(returned_job.name)
+</code></pre>
+<p>Key ideas to explain:</p>
+<ul>
+<li>this is SDK v2 (<code>azure-ai-ml</code> with <code>MLClient</code>); the v1 <code>azureml-core</code> SDK is deprecated and past its announced end of support, so new code should use v2</li>
+<li>the job should run from versioned code, not ad hoc notebook state</li>
+<li>compute should be separate from interactive exploration</li>
+<li>artifacts and metrics should feed model registration and approval</li>
+</ul>
+<p>For deployment, the conceptual flow is:</p>
+<ol>
+<li>register the model</li>
+<li>package environment and scoring code</li>
+<li>deploy to managed online endpoint</li>
+<li>route test traffic</li>
+<li>validate metrics</li>
+<li>promote gradually</li>
+</ol>
+<hr />
+<h2 id="mlops-and-governance">MLOps and governance</h2>
+<p>Azure ML is often chosen because governance is not an afterthought.</p>
+<p>Common enterprise patterns:</p>
+<ul>
+<li>separate workspaces or environments for dev, test, and prod</li>
+<li>Microsoft Entra ID (formerly Azure AD) identity and RBAC for access control</li>
+<li>approval gates before production deployment</li>
+<li>private networking for regulated workloads</li>
+<li>MLflow-backed experiment and model lineage</li>
+<li>monitored deployment with alerting tied to operational and business metrics</li>
+</ul>
+<p>If the interview involves GenAI, connect Azure ML to:</p>
+<ul>
+<li>Azure OpenAI for model access</li>
+<li>evaluation workflows for prompt and response quality</li>
+<li>policy, logging, and data handling requirements</li>
+</ul>
+<hr />
+<h2 id="cost-and-platform-tradeoffs">Cost and platform tradeoffs</h2>
+<p>Benefits:</p>
+<ul>
+<li>strong enterprise integration</li>
+<li>good governance and operational controls</li>
+<li>easier adoption for Microsoft-centered organizations</li>
+</ul>
+<p>Tradeoffs:</p>
+<ul>
+<li>some teams find the platform model heavier than lightweight custom tooling</li>
+<li>cost can rise quickly if clusters and endpoints are left running</li>
+<li>strong governance can slow iteration if environments and approvals are overdesigned</li>
+</ul>
+<p>Cost controls:</p>
+<ul>
+<li>autoscale clusters down aggressively</li>
+<li>use batch endpoints for offline scoring</li>
+<li>reserve GPU endpoints only for real low-latency use cases</li>
+<li>expire idle dev compute</li>
+<li>keep deployment environments minimal</li>
+</ul>
+<hr />
+<h2 id="interview-q-and-a">Interview Q and A</h2>
+<h3 id="q1-when-would-you-choose-azure-ml-over-vertex-ai-or-sagemaker">Q1. When would you choose Azure ML over Vertex AI or SageMaker?</h3>
+<p>I would choose Azure ML when the broader enterprise platform already runs on Azure and strong identity, governance, and compliance integration are priorities. The best platform is usually the one that aligns with the organization's operational model, not the one with the most impressive feature list in isolation.</p>
+<h3 id="q2-how-would-you-productionize-a-model-on-azure-ml">Q2. How would you productionize a model on Azure ML?</h3>
+<p>I would package training as a reproducible job or pipeline, register the resulting model with metrics and lineage, require validation and approval, deploy to a managed endpoint, and monitor both technical and business metrics. I would also separate environments so experimentation cannot directly mutate production.</p>
+<h3 id="q3-what-is-the-difference-between-a-compute-instance-and-a-compute-cluster">Q3. What is the difference between a compute instance and a compute cluster?</h3>
+<p>A compute instance is mainly for interactive development such as notebooks. A compute cluster is elastic shared infrastructure used for training or batch jobs. In production, the cluster is the important primitive because it supports repeatable execution without relying on a person's notebook machine.</p>
+<h3 id="q4-how-do-you-handle-rollback-for-a-bad-model-deployment">Q4. How do you handle rollback for a bad model deployment?</h3>
+<p>Keep the previous production model version available, deploy the new version behind controlled traffic, compare metrics, and shift traffic back immediately if latency, error rate, or business KPIs degrade. Rollback should be operationally simple and practiced, not theoretical.</p>
+<h3 id="q5-how-would-you-answer-concerns-about-platform-lock-in">Q5. How would you answer concerns about platform lock-in?</h3>
+<p>I would acknowledge the risk, then separate concerns. Managed control planes can be platform-specific, but model code, feature logic, and evaluation workflows should stay as portable as practical. The right balance depends on how much engineering capacity the team has for self-managed infrastructure.</p>
+<hr />
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul>
+<li>using shared interactive environments as production execution paths</li>
+<li>skipping approval and audit requirements in regulated settings</li>
+<li>leaving clusters or endpoints running with no traffic</li>
+<li>failing to define business success metrics for deployed models</li>
+<li>confusing Azure ML governance features with end-to-end production readiness</li>
+</ul>
+<hr />
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></li>
+<li><a href="intro_sagemaker.html">AWS SageMaker Interview Guide</a></li>
+<li><a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a></li>
+<li><a href="../ai_genai/intro_llmops.html">LLMOps</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_vertex_ai.html"><small>Previous</small>Google Vertex AI</a><a rel="next" class="next" href="aws_for_ml_engineers.html"><small>Next</small>AWS for ML Engineers</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/intro_azure_ml.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

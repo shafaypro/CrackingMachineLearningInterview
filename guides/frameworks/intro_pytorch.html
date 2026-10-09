@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PyTorch Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to PyTorch: the leading deep learning framework for research and production.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pytorch.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="PyTorch Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to PyTorch: the leading deep learning framework for research and production.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pytorch.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PyTorch Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to PyTorch: the leading deep learning framework for research and production.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "PyTorch Guide",
+   "description": "A guide to PyTorch: the leading deep learning framework for research and production.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pytorch.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "PyTorch",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_pytorch.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">PyTorch</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_pytorch.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="pytorch-guide">PyTorch Guide</h1>
+<p>A guide to PyTorch: the leading deep learning framework for research and production.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#tensor-operations">Tensor Operations</a></li>
+<li><a href="#nnmodule-and-building-models">nn.Module and Building Models</a></li>
+<li><a href="#training-loop">Training Loop</a></li>
+<li><a href="#dataloader-and-dataset">DataLoader and Dataset</a></li>
+<li><a href="#gpu-usage">GPU Usage</a></li>
+<li><a href="#model-saving-and-loading">Model Saving and Loading</a></li>
+<li><a href="#torchcompile-pytorch-20">torch.compile: PyTorch 2.0</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="tensor-operations">Tensor Operations</h2>
+<pre><code class="language-python">import torch
+import numpy as np
+
+# Create tensors
+x = torch.tensor([1.0, 2.0, 3.0])
+x = torch.zeros(3, 4)           # 3x4 zero tensor
+x = torch.ones(3, 4)            # 3x4 ones tensor
+x = torch.rand(3, 4)            # Uniform [0, 1)
+x = torch.randn(3, 4)           # Normal distribution
+x = torch.arange(0, 10, step=2) # [0, 2, 4, 6, 8]
+x = torch.linspace(0, 1, 5)     # [0.0, 0.25, 0.5, 0.75, 1.0]
+
+# Data types
+x = torch.tensor([1, 2, 3], dtype=torch.float32)
+x = x.float()   # Convert to float32
+x = x.double()  # Convert to float64
+x = x.long()    # Convert to int64
+
+# Shape operations
+x = torch.randn(2, 3, 4)
+print(x.shape)          # torch.Size([2, 3, 4])
+print(x.size(0))        # 2
+
+x = x.view(2, 12)       # Reshape (shares memory)
+x = x.reshape(6, 4)     # Reshape (may copy)
+x = x.transpose(0, 1)   # Swap dims
+x = x.permute(1, 0, 2)  # Reorder dims
+x = x.squeeze()         # Remove size-1 dims
+x = x.unsqueeze(0)      # Add size-1 dim at position 0
+x = x.flatten()         # Flatten to 1D
+
+# Basic math
+a = torch.randn(3, 4)
+b = torch.randn(3, 4)
+
+c = a + b               # Element-wise add
+c = a * b               # Element-wise multiply
+c = torch.mm(a, b.T)    # Matrix multiply
+c = a @ b.T             # Matrix multiply (operator)
+c = torch.matmul(a, b.T)
+
+c = torch.sum(a)             # Sum all
+c = torch.sum(a, dim=0)      # Sum along dim
+c = torch.mean(a)
+c = torch.std(a)
+c = torch.max(a)
+c = torch.argmax(a, dim=1)   # Index of max along dim
+
+# NumPy interop
+arr = np.array([1.0, 2.0, 3.0])
+x = torch.from_numpy(arr)    # Share memory!
+x = torch.tensor(arr)        # Copy
+arr = x.numpy()              # Back to numpy (CPU only)
+arr = x.detach().cpu().numpy()  # Safe conversion
+</code></pre>
+<hr />
+<h2 id="nnmodule-and-building-models">nn.Module and Building Models</h2>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+# Simple feedforward network
+class MLP(nn.Module):
+    def __init__(self, input_dim: int, hidden_dim: int, output_dim: int, dropout: float = 0.1):
+        super().__init__()
+
+        self.layers = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.ReLU(),
+            nn.Linear(hidden_dim // 2, output_dim)
+        )
+
+    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+        return self.layers(x)
+
+# CNN for image classification
+class ConvNet(nn.Module):
+    def __init__(self, num_classes: int = 10):
+        super().__init__()
+
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2),                          # 28x28 → 14x14
+
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2),                          # 14x14 → 7x7
+
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU()
+        )
+
+        self.classifier = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),     # Global average pooling → 1x1
+            nn.Flatten(),
+            nn.Linear(128, num_classes)
+        )
+
+    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+        x = self.features(x)
+        return self.classifier(x)
+
+# Inspect model
+model = MLP(input_dim=784, hidden_dim=256, output_dim=10)
+print(model)
+print(f&quot;Parameters: {sum(p.numel() for p in model.parameters()):,}&quot;)
+print(f&quot;Trainable parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad):,}&quot;)
+
+# Named parameters
+for name, param in model.named_parameters():
+    print(f&quot;{name}: {param.shape}&quot;)
+</code></pre>
+<hr />
+<h2 id="training-loop">Training Loop</h2>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+
+def train_epoch(model, loader, optimizer, criterion, device):
+    model.train()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    for batch_idx, (data, targets) in enumerate(loader):
+        data, targets = data.to(device), targets.to(device)
+
+        # 1. Zero gradients
+        optimizer.zero_grad()
+
+        # 2. Forward pass
+        outputs = model(data)
+
+        # 3. Compute loss
+        loss = criterion(outputs, targets)
+
+        # 4. Backward pass
+        loss.backward()
+
+        # 5. Gradient clipping (optional but recommended)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+
+        # 6. Update weights
+        optimizer.step()
+
+        total_loss += loss.item()
+        _, predicted = outputs.max(1)
+        correct += predicted.eq(targets).sum().item()
+        total += targets.size(0)
+
+    return total_loss / len(loader), 100.0 * correct / total
+
+
+def evaluate(model, loader, criterion, device):
+    model.eval()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for data, targets in loader:
+            data, targets = data.to(device), targets.to(device)
+            outputs = model(data)
+            loss = criterion(outputs, targets)
+            total_loss += loss.item()
+            _, predicted = outputs.max(1)
+            correct += predicted.eq(targets).sum().item()
+            total += targets.size(0)
+
+    return total_loss / len(loader), 100.0 * correct / total
+
+
+# Full training script
+device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+model = ConvNet(num_classes=10).to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+
+# Learning rate scheduler
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
+
+best_acc = 0.0
+
+for epoch in range(50):
+    train_loss, train_acc = train_epoch(model, train_loader, optimizer, criterion, device)
+    val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+    scheduler.step()
+
+    print(f&quot;Epoch {epoch+1:3d} | &quot;
+          f&quot;Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.2f}% | &quot;
+          f&quot;Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.2f}%&quot;)
+
+    if val_acc &gt; best_acc:
+        best_acc = val_acc
+        torch.save(model.state_dict(), &quot;best_model.pth&quot;)
+
+print(f&quot;Best Validation Accuracy: {best_acc:.2f}%&quot;)
+</code></pre>
+<hr />
+<h2 id="dataloader-and-dataset">DataLoader and Dataset</h2>
+<pre><code class="language-python">import torch
+from torch.utils.data import Dataset, DataLoader, random_split
+from torchvision import transforms, datasets
+import numpy as np
+
+# Custom Dataset
+class TabularDataset(Dataset):
+    def __init__(self, X: np.ndarray, y: np.ndarray):
+        self.X = torch.FloatTensor(X)
+        self.y = torch.LongTensor(y)
+
+    def __len__(self) -&gt; int:
+        return len(self.X)
+
+    def __getitem__(self, idx: int):
+        return self.X[idx], self.y[idx]
+
+
+# Create dataset and splits
+X = np.random.randn(1000, 20)
+y = np.random.randint(0, 2, 1000)
+
+dataset = TabularDataset(X, y)
+
+# Split 80/10/10
+train_size = int(0.8 * len(dataset))
+val_size = int(0.1 * len(dataset))
+test_size = len(dataset) - train_size - val_size
+
+train_ds, val_ds, test_ds = random_split(
+    dataset,
+    [train_size, val_size, test_size],
+    generator=torch.Generator().manual_seed(42)
+)
+
+# DataLoaders
+train_loader = DataLoader(
+    train_ds,
+    batch_size=32,
+    shuffle=True,
+    num_workers=4,
+    pin_memory=True   # Faster GPU transfer
+)
+
+val_loader = DataLoader(val_ds, batch_size=64, shuffle=False, num_workers=4)
+test_loader = DataLoader(test_ds, batch_size=64, shuffle=False, num_workers=4)
+
+# Torchvision datasets
+transform = transforms.Compose([
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomCrop(32, padding=4),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+])
+
+cifar10_train = datasets.CIFAR10(
+    root=&quot;./data&quot;, train=True, download=True, transform=transform
+)
+</code></pre>
+<hr />
+<h2 id="gpu-usage">GPU Usage</h2>
+<pre><code class="language-python">import torch
+
+# Check GPU availability
+print(torch.cuda.is_available())
+print(torch.cuda.device_count())
+print(torch.cuda.get_device_name(0))
+print(torch.cuda.memory_allocated() / 1024**3, &quot;GB&quot;)
+print(torch.cuda.memory_reserved() / 1024**3, &quot;GB&quot;)
+
+# Move tensors and models to GPU
+device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+model = model.to(device)
+x = x.to(device)
+x = x.cuda()  # Shorthand
+
+# Move back to CPU
+x = x.cpu()
+
+# Apple Silicon (MPS)
+if torch.backends.mps.is_available():
+    device = torch.device(&quot;mps&quot;)
+
+# Mixed Precision Training (FP16/BF16)
+# torch.cuda.amp.* is deprecated; use the device-agnostic torch.amp API
+from torch.amp import autocast, GradScaler
+
+scaler = GradScaler(&quot;cuda&quot;)  # Needed for FP16; BF16 usually does not need a scaler
+
+for data, targets in train_loader:
+    data, targets = data.to(device), targets.to(device)
+    optimizer.zero_grad()
+
+    with autocast(device_type=&quot;cuda&quot;, dtype=torch.float16):  # Casts to FP16 where safe
+        outputs = model(data)
+        loss = criterion(outputs, targets)
+
+    scaler.scale(loss).backward()
+    scaler.step(optimizer)
+    scaler.update()
+
+# Multi-GPU with DataParallel (simple)
+model = nn.DataParallel(model)
+
+# Multi-GPU with DistributedDataParallel (recommended)
+import torch.distributed as dist
+
+dist.init_process_group(backend=&quot;nccl&quot;)
+model = nn.parallel.DistributedDataParallel(
+    model,
+    device_ids=[local_rank]
+)
+</code></pre>
+<hr />
+<h2 id="model-saving-and-loading">Model Saving and Loading</h2>
+<pre><code class="language-python">import torch
+
+# Save only model weights (recommended)
+torch.save(model.state_dict(), &quot;model_weights.pth&quot;)
+
+# Load weights
+model = ConvNet(num_classes=10)
+# weights_only=True is the default since PyTorch 2.6 (safe: no arbitrary unpickling)
+model.load_state_dict(torch.load(&quot;model_weights.pth&quot;, map_location=device, weights_only=True))
+model.eval()
+
+# Save full model (not recommended: fragile)
+torch.save(model, &quot;full_model.pth&quot;)
+# Full pickled models need weights_only=False; only do this for files you trust
+model = torch.load(&quot;full_model.pth&quot;, weights_only=False)
+
+# Save training checkpoint (full state for resuming)
+checkpoint = {
+    &quot;epoch&quot;: epoch,
+    &quot;model_state_dict&quot;: model.state_dict(),
+    &quot;optimizer_state_dict&quot;: optimizer.state_dict(),
+    &quot;scheduler_state_dict&quot;: scheduler.state_dict(),
+    &quot;best_accuracy&quot;: best_acc,
+    &quot;train_loss&quot;: train_loss,
+}
+torch.save(checkpoint, &quot;checkpoint.pth&quot;)
+
+# Load checkpoint and resume training
+checkpoint = torch.load(&quot;checkpoint.pth&quot;, map_location=device)
+model.load_state_dict(checkpoint[&quot;model_state_dict&quot;])
+optimizer.load_state_dict(checkpoint[&quot;optimizer_state_dict&quot;])
+scheduler.load_state_dict(checkpoint[&quot;scheduler_state_dict&quot;])
+start_epoch = checkpoint[&quot;epoch&quot;] + 1
+best_acc = checkpoint[&quot;best_accuracy&quot;]
+
+# Export to ONNX
+dummy_input = torch.randn(1, 1, 28, 28).to(device)
+torch.onnx.export(
+    model,
+    dummy_input,
+    &quot;model.onnx&quot;,
+    export_params=True,
+    opset_version=11,
+    input_names=[&quot;input&quot;],
+    output_names=[&quot;output&quot;],
+    dynamic_axes={&quot;input&quot;: {0: &quot;batch_size&quot;}}
+)
+</code></pre>
+<hr />
+<h2 id="torchcompile-pytorch-20">torch.compile: PyTorch 2.0</h2>
+<p><code>torch.compile</code> compiles the model using TorchInductor (on top of OpenAI Triton) for significant speedups.</p>
+<pre><code class="language-python">import torch
+
+model = ConvNet(num_classes=10).to(&quot;cuda&quot;)
+
+# Compile the model: one line!
+model = torch.compile(model)
+
+# Different modes
+model = torch.compile(model, mode=&quot;default&quot;)        # Balanced speed/compile time
+model = torch.compile(model, mode=&quot;reduce-overhead&quot;) # Reduce Python overhead
+model = torch.compile(model, mode=&quot;max-autotune&quot;)   # Maximum optimization (slow to compile)
+
+# Training works the same
+for data, targets in train_loader:
+    data, targets = data.cuda(), targets.cuda()
+    optimizer.zero_grad()
+    outputs = model(data)      # Uses compiled graph
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+
+# Typical speedup: 10-30% on training, up to 2x on inference
+# First few iterations are slower (compilation overhead)
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between <code>tensor.view()</code> and <code>tensor.reshape()</code>?</strong> 🟡 Intermediate</p>
+<p><code>view()</code> requires the tensor to be contiguous in memory and returns a view (shared memory: no copy). <code>reshape()</code> returns a tensor with the desired shape, creating a new memory layout if necessary (copy if non-contiguous). Use <code>view()</code> for efficiency when you know the tensor is contiguous; use <code>reshape()</code> when you're unsure.</p>
+<hr />
+<p><strong>Q2: Why do we call <code>optimizer.zero_grad()</code> before each backward pass?</strong> 🟢 Beginner</p>
+<p>PyTorch accumulates gradients by default: each <code>backward()</code> call adds to existing gradients. If you don't zero them, gradients from previous batches are included in the current update, leading to incorrect weight updates. You zero them at the start of each batch (or iteration) to ensure clean gradient computation.</p>
+<hr />
+<p><strong>Q3: What is the difference between <code>model.train()</code> and <code>model.eval()</code>?</strong> 🟢 Beginner</p>
+<p><code>model.train()</code> sets the model to training mode: BatchNorm uses batch statistics, Dropout randomly drops neurons. <code>model.eval()</code> sets the model to evaluation mode: BatchNorm uses running mean/variance statistics, Dropout is disabled. Always switch modes correctly, using <code>model.train()</code> during evaluation gives incorrect results with Dropout and BatchNorm.</p>
+<hr />
+<p><strong>Q4: What is <code>torch.no_grad()</code> and when should you use it?</strong> 🟢 Beginner</p>
+<p><code>torch.no_grad()</code> is a context manager that disables gradient computation. Use it during inference/evaluation to: (1) save memory (no gradient tensors stored), (2) speed up computation (~30% faster). Never use it during training (gradients needed for backprop). Use with <code>model.eval()</code> during validation/testing.</p>
+<hr />
+<p><strong>Q5: Explain the gradient flow during backpropagation in PyTorch.</strong> 🔴 Advanced</p>
+<p>PyTorch builds a computational graph during the forward pass: each operation creates a node with references to its inputs. During <code>loss.backward()</code>, PyTorch traverses this graph in reverse using the chain rule, computing <code>dL/dw</code> for each parameter w. Gradients are accumulated in <code>param.grad</code>. The optimizer then uses these gradients to update parameters via <code>optimizer.step()</code>. <code>retain_graph=True</code> keeps the graph for multiple backward passes.</p>
+<hr />
+<p><strong>Q6: What is Mixed Precision Training and what are its benefits?</strong> 🔴 Advanced</p>
+<p>Mixed Precision Training uses FP16 (half-precision) for most computations and FP32 for numerically sensitive operations (loss, normalization). Benefits: ~2x memory reduction (enabling larger batches), ~2-3x faster on Tensor Core GPUs (A100, V100, RTX 3090+). PyTorch's <code>torch.amp.autocast(&quot;cuda&quot;)</code> (formerly <code>torch.cuda.amp.autocast()</code>, now deprecated) handles this automatically, and <code>GradScaler</code> prevents gradient underflow (values too small to represent in FP16).</p>
+<hr />
+<p><strong>Q7: What is <code>torch.compile</code> and how does it improve performance?</strong> 🟡 Intermediate</p>
+<p><code>torch.compile</code> (PyTorch 2.0+) applies just-in-time graph compilation (TorchDynamo captures the graph, TorchInductor compiles it), which generates optimized Triton kernels for GPU operations. It fuses operations (eliminating intermediate tensors), uses better memory access patterns, and uses hardware-specific optimizations. Speedups vary widely by model, batch size, and hardware (the code comment above gives rough ranges). The first iteration has compilation overhead; subsequent iterations use the cached compiled graph.</p>
+<hr />
+<p><strong>Q8: How would you implement gradient accumulation for training with large effective batch sizes?</strong> 🔴 Advanced</p>
+<pre><code class="language-python">accumulation_steps = 4  # Effective batch = 4 × mini-batch size
+
+for step, (data, targets) in enumerate(loader):
+    outputs = model(data.to(device))
+    loss = criterion(outputs, targets.to(device))
+    loss = loss / accumulation_steps  # Scale loss
+
+    loss.backward()  # Accumulate gradients
+
+    if (step + 1) % accumulation_steps == 0:
+        optimizer.step()   # Update after N steps
+        optimizer.zero_grad()  # Clear gradients
+</code></pre>
+<p>This achieves an effective batch size of <code>accumulation_steps × batch_size</code> without increased memory usage.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://pytorch.org/docs/">PyTorch Documentation</a></li>
+<li><a href="https://pytorch.org/tutorials/">PyTorch Tutorials</a></li>
+<li><a href="https://pytorch.org/blog/pytorch-2.0-release/">PyTorch 2.0 Release Notes (torch.compile)</a></li>
+<li><a href="https://developer.nvidia.com/automatic-mixed-precision">Mixed Precision Training: NVIDIA</a></li>
+<li><a href="https://www.manning.com/books/deep-learning-with-pytorch">Deep Learning with PyTorch: Eli Stevens, Luca Antiga (Manning)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_python_for_ai.html"><small>Previous</small>Python for AI Engineering</a><a rel="next" class="next" href="intro_langchain.html"><small>Next</small>LangChain (LCEL &amp; Advanced)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_pytorch.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

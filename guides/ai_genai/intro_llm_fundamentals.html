@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM and Generative AI Fundamentals Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide covers the foundations needed to build modern LLM applications and explain design decisions in interviews.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_fundamentals.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LLM and Generative AI Fundamentals Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide covers the foundations needed to build modern LLM applications and explain design decisions in interviews.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_fundamentals.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLM and Generative AI Fundamentals Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide covers the foundations needed to build modern LLM applications and explain design decisions in interviews.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LLM and Generative AI Fundamentals",
+   "description": "This guide covers the foundations needed to build modern LLM applications and explain design decisions in interviews.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_fundamentals.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LLM Fundamentals",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_fundamentals.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LLM Fundamentals</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_llm_fundamentals.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="llm-and-generative-ai-fundamentals">LLM and Generative AI Fundamentals</h1>
+<p>This guide covers the foundations needed to build modern LLM applications and explain design decisions in interviews.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Large language models are neural networks trained to predict the next token over massive text corpora. Generative AI systems use those models to produce text, code, structured outputs, and increasingly images, audio, and multimodal responses.</p>
+<p>This matters because modern AI products depend on:</p>
+<ul>
+<li>prompt design</li>
+<li>model selection</li>
+<li>context management</li>
+<li>embeddings and retrieval</li>
+<li>evaluation and safety layers</li>
+</ul>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="tokenization">Tokenization</h3>
+<p>Tokenization converts text into model-readable pieces. In practice, tokenization determines:</p>
+<ul>
+<li>context window usage</li>
+<li>cost</li>
+<li>truncation behavior</li>
+<li>downstream chunking strategies</li>
+</ul>
+<h3 id="prompt-engineering">Prompt engineering</h3>
+<p>Prompt engineering is not just phrasing. It includes:</p>
+<ul>
+<li>task framing</li>
+<li>output constraints</li>
+<li>few-shot examples</li>
+<li>tool-use instructions</li>
+<li>failure-handling instructions</li>
+</ul>
+<h3 id="embeddings">Embeddings</h3>
+<p>Embeddings map text or other inputs into dense vectors so semantically similar items land near each other. They power semantic search, clustering, retrieval, deduplication, and recommendation.</p>
+<h3 id="context-windows">Context windows</h3>
+<p>The context window is the total amount of input and output tokens the model can process in one interaction. Good engineers plan for limited context instead of assuming everything can be stuffed into one prompt.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="designing-effective-prompts">Designing effective prompts</h3>
+<p>In practice, this means writing prompts that are explicit about goal, constrained in format, robust to ambiguity, and testable across example cases.</p>
+<h3 id="understanding-context-windows">Understanding context windows</h3>
+<p>This shows up as trimming noisy history, summarizing earlier turns, chunking documents correctly, and reserving output tokens.</p>
+<h3 id="using-embeddings-for-similarity">Using embeddings for similarity</h3>
+<p>A strong engineer knows when embedding search is better than keyword match, and when hybrid search is better than either one alone.</p>
+<h3 id="choosing-models-for-tasks">Choosing models for tasks</h3>
+<p>This is a tradeoff problem across quality, cost, latency, context length, tool-use reliability, and multimodal support.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI API</td>
+<td>Hosted models for text, reasoning, embeddings, and multimodal tasks</td>
+<td>Fastest path to production LLM features</td>
+</tr>
+<tr>
+<td>Anthropic Claude</td>
+<td>Strong reasoning and long-context model family</td>
+<td>Complex task decomposition and agent workflows</td>
+</tr>
+<tr>
+<td>Hugging Face Transformers</td>
+<td>Open-source model and tokenizer ecosystem</td>
+<td>Fine-tuning, self-hosting, and experimentation</td>
+</tr>
+<tr>
+<td>tiktoken / tokenizers</td>
+<td>Token counting and tokenization utilities</td>
+<td>Prompt budgeting and chunking</td>
+</tr>
+<tr>
+<td>LiteLLM</td>
+<td>Unified interface across model providers</td>
+<td>Multi-provider abstractions and routing</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="chatbot">Chatbot</h3>
+<ul>
+<li>Goal: Build a domain-specific conversational assistant with streaming responses.</li>
+<li>Key components: session memory, prompt templates, conversation summarization, evaluation prompts.</li>
+<li>Suggested tech stack: OpenAI or Anthropic API, FastAPI, Redis, React.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="text-summarizer">Text summarizer</h3>
+<ul>
+<li>Goal: Summarize long reports while preserving key facts and action items.</li>
+<li>Key components: chunking, map-reduce summarization, citation or section references, quality rubric.</li>
+<li>Suggested tech stack: Python, LangChain or plain SDK, Pydantic.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="semantic-search-system">Semantic search system</h3>
+<ul>
+<li>Goal: Retrieve relevant documents using embeddings and vector search.</li>
+<li>Key components: embedding pipeline, vector index, query rewriting, reranking, relevance evaluation.</li>
+<li>Suggested tech stack: OpenAI embeddings, FAISS or Chroma, FastAPI.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="prompt-experimentation-repo">Prompt experimentation repo</h3>
+<ul>
+<li>Goal: Track prompts, outputs, and evaluations as a reproducible engineering asset.</li>
+<li>Key components: prompt versioning, fixtures, regression tests, side-by-side output comparison.</li>
+<li>Suggested tech stack: LangSmith or custom test harness, pytest, JSON fixtures.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI()
+
+response = client.responses.create(
+    model=&quot;gpt-5.4-mini&quot;,
+    input=[
+        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Answer as a concise ML interview coach.&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain precision vs recall with an example.&quot;},
+    ],
+)
+
+print(response.output_text)
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">prompt-experiments/
+├── prompts/
+├── datasets/
+├── evals/
+├── scripts/
+│   ├── run_eval.py
+│   ├── compare_outputs.py
+│   └── embed_corpus.py
+├── results/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="llm-engineering-in-practice-2026">LLM Engineering in Practice (2026)</h2>
+<p>Knowing the theory isn't enough: interviews and real work test whether you can
+<em>choose a model, budget tokens, control cost, and tune generation</em>. This section
+is the practical layer.</p>
+<h3 id="choosing-a-model">Choosing a Model</h3>
+<p>Pick the smallest model that clears your quality bar, then scale up only where you
+must. A useful mental model across providers:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Use for</th>
+<th>Example: Claude family (2026)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontier / reasoning</strong></td>
+<td>Hardest reasoning, long-horizon agentic work, deep research</td>
+<td><code>claude-fable-5-1</code> (most capable), <code>claude-opus-5-5</code></td>
+</tr>
+<tr>
+<td><strong>Balanced workhorse</strong></td>
+<td>Most production traffic: strong quality at lower cost/latency</td>
+<td><code>claude-sonnet-5</code></td>
+</tr>
+<tr>
+<td><strong>Fast / cheap</strong></td>
+<td>High-volume, latency-sensitive, simple tasks (classification, routing, extraction)</td>
+<td><code>claude-haiku-4-5</code></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Other providers offer the same tiering (a frontier model, a balanced model, a
+small fast model). Always pull current model IDs, context windows, and pricing
+from the provider's own docs: they change often. For Claude specifics see the
+<a href="intro_anthropic.html">Anthropic &amp; Claude guide</a>.</p>
+</blockquote>
+<p><strong>Approximate Claude pricing (per 1M tokens, late 2026; check Anthropic's pricing page before quoting):</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align:right">Input</th>
+<th style="text-align:right">Output</th>
+<th>Context</th>
+<th style="text-align:right">Max output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Fable 5.1 (<code>claude-fable-5-1</code>)</td>
+<td style="text-align:right">$10</td>
+<td style="text-align:right">$50</td>
+<td>1M</td>
+<td style="text-align:right">128K</td>
+</tr>
+<tr>
+<td>Claude Opus 5.5 (<code>claude-opus-5-5</code>)</td>
+<td style="text-align:right">$4</td>
+<td style="text-align:right">$20</td>
+<td>1M</td>
+<td style="text-align:right">128K</td>
+</tr>
+<tr>
+<td>Claude Sonnet 5 (<code>claude-sonnet-5</code>)</td>
+<td style="text-align:right">$2</td>
+<td style="text-align:right">$10</td>
+<td>1M</td>
+<td style="text-align:right">128K</td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5 (<code>claude-haiku-4-5</code>)</td>
+<td style="text-align:right">$1</td>
+<td style="text-align:right">$5</td>
+<td>200K</td>
+<td style="text-align:right">64K</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="context-windows--token-budgeting">Context Windows &amp; Token Budgeting</h3>
+<ul>
+<li><strong>Context window</strong> = the max tokens (input + output) the model can attend to in
+one request. Modern frontier models reach <strong>1M tokens</strong>.</li>
+<li><strong>Rough heuristic:</strong> ~1 token ≈ 4 characters ≈ 0.75 English words. Code and
+non-English text tokenize <em>less</em> efficiently.</li>
+<li><strong>Don't estimate with the wrong tokenizer.</strong> OpenAI's <code>tiktoken</code> does not match
+Claude's tokenizer (and tokenizers change between model generations), so counts can
+be noticeably off. Use the provider's own token-counting endpoint.</li>
+<li><strong>Budget the whole request:</strong> <code>prompt + few-shot + retrieved context + reasoning + output ≤ window</code>.
+Reserve headroom for the output (<code>max_tokens</code>) and for reasoning/thinking tokens.</li>
+</ul>
+<h3 id="prompt-caching-the-biggest-cost-lever">Prompt Caching (the biggest cost lever)</h3>
+<p>If many requests share a large, stable prefix (system prompt, tool definitions,
+few-shot examples, a long document), <strong>cache it</strong>:</p>
+<ul>
+<li>Cache <strong>reads</strong> cost ~10% of normal input price; cache <strong>writes</strong> cost ~1.25×.</li>
+<li>It's a <strong>prefix match</strong>: any byte change anywhere in the prefix invalidates
+everything after it. So keep stable content first and put volatile content
+(the user's varying question, timestamps) <em>last</em>.</li>
+<li>Silent cache-killers: <code>datetime.now()</code> or a UUID in the system prompt,
+non-deterministic JSON key order, a tool set that varies per request.</li>
+</ul>
+<h3 id="generation--decoding-parameters">Generation / Decoding Parameters</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Effect</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>temperature</code></td>
+<td>Randomness (0 = near-deterministic, higher = more varied)</td>
+<td>Low for extraction/code, higher for brainstorming</td>
+</tr>
+<tr>
+<td><code>top_p</code> (nucleus)</td>
+<td>Sample from the smallest set of tokens covering probability <code>p</code></td>
+<td>Alternative to temperature: don't aggressively tune both</td>
+</tr>
+<tr>
+<td><code>top_k</code></td>
+<td>Sample from the top-k tokens</td>
+<td>Rarely needed</td>
+</tr>
+<tr>
+<td><code>max_tokens</code></td>
+<td>Hard cap on output length</td>
+<td>Set generously for generation; small for classification</td>
+</tr>
+<tr>
+<td><code>stop</code> sequences</td>
+<td>Halt generation on a string</td>
+<td>Structured/templated output</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Note (2026):</strong> the newest reasoning models drop manual sampling params in favor
+of <strong>adaptive thinking</strong> + an <strong>effort</strong> control (<code>low</code>→<code>max</code>). On current Claude
+models such as Sonnet 5 and Opus 4.7 and later, a request that sets <code>temperature</code>,
+<code>top_p</code> or <code>top_k</code> is rejected with a 400; older models and most open-weight models
+still accept them. The model decides how much to reason and you set how hard it
+should try. Steer behavior with prompting and effort, not <code>temperature=0</code>.</p>
+</blockquote>
+<h3 id="estimating-cost">Estimating Cost</h3>
+<pre><code class="language-text">cost ≈ (input_tokens  / 1e6) × input_price
+     + (output_tokens / 1e6) × output_price
+# with caching:
+     + (cached_tokens / 1e6) × (≈0.1 × input_price)   # cache reads
+</code></pre>
+<p>Example: a 50K-token cached system prompt + 2K question → 4K answer on Sonnet 4.6,
+warm cache ≈ (50K×0.1 + 2K)/1e6 × $3 + 4K/1e6 × $15 ≈ $0.021 + $0.060 ≈ <strong>$0.08/request</strong>.
+Without caching the input alone would cost 52K/1e6 × $3 ≈ $0.156.</p>
+<h3 id="reducing-hallucination">Reducing Hallucination</h3>
+<ul>
+<li><strong>Ground the model</strong> with retrieval (RAG) and instruct it to answer only from
+provided context, citing sources.</li>
+<li><strong>Constrain the output</strong> with structured outputs / strict tool schemas.</li>
+<li><strong>Lower temperature</strong> for factual tasks, on models that still accept sampling
+params. Current reasoning models reject them, so rely on grounding and prompting.</li>
+<li><strong>Add an eval + guardrail layer</strong>: LLM-as-judge, schema validation, and refusal
+handling. See <a href="../mlops/intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a>.</li>
+</ul>
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-you-pick-a-model-for-a-new-feature">How do you pick a model for a new feature?</h4>
+<p>Start with the cheapest tier that meets the quality bar (measured on an eval set), scale up only where needed, and route easy traffic to a small model.</p>
+<h4 id="whats-the-single-biggest-lever-for-llm-cost-at-scale">What's the single biggest lever for LLM cost at scale?</h4>
+<p>Prompt caching of a stable prefix, plus right-sizing the model per task.</p>
+<h4 id="why-not-use-tiktoken-to-count-claude-tokens">Why not use <code>tiktoken</code> to count Claude tokens?</h4>
+<p>Wrong tokenizer: its counts differ from Claude's; use the provider's token-counting API.</p>
+<h4 id="temperature-vs-top_p"><code>temperature</code> vs <code>top_p</code>?</h4>
+<p>Both control randomness; temperature scales the distribution, top_p truncates it to a probability mass. Tune one, not both hard.</p>
+<h4 id="what-is-a-context-window-and-how-do-you-stay-within-it">What is a context window and how do you stay within it?</h4>
+<p>Max tokens per request; budget prompt + context + output, trim/retrieve selectively, and use compaction/summarization for long sessions.</p>
+<h4 id="how-do-you-reduce-hallucinations">How do you reduce hallucinations?</h4>
+<p>Ground with RAG + citations, constrain output structure, add evals/guardrails, and (on models that still accept it) lower the temperature.</p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_rag.html">RAG</a></li>
+<li><a href="intro_agent_tool_use.html">Agent Systems</a></li>
+<li><a href="../mlops/intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a></li>
+<li><a href="intro_multimodal_ai.html">Multimodal AI</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_agentic_ai_engineering_roadmap.html"><small>Previous</small>Agentic AI Engineer Roadmap</a><a rel="next" class="next" href="intro_prompt_engineering.html"><small>Next</small>Prompt Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_llm_fundamentals.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>
