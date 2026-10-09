@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kubernetes Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Kubernetes (K8s) is the de-facto standard for container orchestration, automating deployment, scaling, self-healing, and management of containerized…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_kubernetes.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Kubernetes Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Kubernetes (K8s) is the de-facto standard for container orchestration, automating deployment, scaling, self-healing, and management of containerized…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_kubernetes.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kubernetes Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Kubernetes (K8s) is the de-facto standard for container orchestration, automating deployment, scaling, self-healing, and management of containerized…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Kubernetes",
+   "description": "Kubernetes (K8s) is the de-facto standard for container orchestration, automating deployment, scaling, self-healing, and management of containerized…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_kubernetes.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Kubernetes",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_kubernetes.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Kubernetes</span></nav>
+<p class="meta"><a href="../../#devops/intro_kubernetes.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="kubernetes">Kubernetes</h1>
+<p>Kubernetes (K8s) is the de-facto standard for <strong>container orchestration</strong>, automating deployment, scaling, self-healing, and management of containerized applications at scale.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-kubernetes">What is Kubernetes?</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#core-objects">Core Objects</a></li>
+<li><a href="#kubectl-basics">kubectl Basics</a></li>
+<li><a href="#workloads">Workloads</a></li>
+<li><a href="#services--networking">Services &amp; Networking</a></li>
+<li><a href="#storage">Storage</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#namespaces--rbac">Namespaces &amp; RBAC</a></li>
+<li><a href="#ingress">Ingress</a></li>
+<li><a href="intro_helm.html">Helm</a>: covered in its own guide</li>
+<li><a href="#scaling--auto-scaling">Scaling &amp; Auto-scaling</a></li>
+<li><a href="#observability">Observability</a></li>
+<li><a href="#kubernetes-in-2026">Kubernetes in 2026</a></li>
+<li><a href="#cheat-sheet">Cheat Sheet</a></li>
+</ol>
+<hr />
+<h2 id="what-is-kubernetes">What is Kubernetes?</h2>
+<p>Kubernetes solves the problem of running containers in production:</p>
+<ul>
+<li><strong>Where</strong> should each container run?</li>
+<li><strong>How many</strong> replicas should run?</li>
+<li>What happens when a container <strong>crashes</strong>?</li>
+<li>How do containers <strong>find each other</strong>?</li>
+<li>How do you <strong>roll out</strong> a new version without downtime?</li>
+</ul>
+<p>Kubernetes answers all of these automatically.</p>
+<pre><code>You declare desired state  →  Kubernetes makes it real  →  Kubernetes keeps it that way
+</code></pre>
+<h3 id="when-to-use-kubernetes-vs-docker-compose">When to Use Kubernetes (vs Docker Compose)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local dev, small team, single host</td>
+<td>Docker Compose</td>
+</tr>
+<tr>
+<td>Production, multi-host, scale, HA</td>
+<td>Kubernetes</td>
+</tr>
+<tr>
+<td>Managed cloud service</td>
+<td>EKS (AWS), GKE (GCP), AKS (Azure)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<h3 id="control-plane-master">Control Plane (Master)</h3>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│                     Control Plane                        │
+│  ┌──────────────┐  ┌──────────┐  ┌────────────────────┐ │
+│  │  API Server  │  │   etcd   │  │  Controller Manager│ │
+│  │  (kube-api)  │  │(key-val  │  │ (reconciliation    │ │
+│  │              │  │  store)  │  │  loops)            │ │
+│  └──────────────┘  └──────────┘  └────────────────────┘ │
+│  ┌──────────────┐                                        │
+│  │  Scheduler   │  (decides which node runs each pod)    │
+│  └──────────────┘                                        │
+└─────────────────────────────────────────────────────────┘
+
+┌───────────────┐  ┌───────────────┐  ┌───────────────┐
+│   Worker Node  │  │   Worker Node  │  │   Worker Node  │
+│  ┌──────────┐ │  │  ┌──────────┐ │  │  ┌──────────┐ │
+│  │ kubelet  │ │  │  │ kubelet  │ │  │  │ kubelet  │ │
+│  │ kube-    │ │  │  │ kube-    │ │  │  │ kube-    │ │
+│  │ proxy    │ │  │  │ proxy    │ │  │  │ proxy    │ │
+│  │ Pods...  │ │  │  │ Pods...  │ │  │  │ Pods...  │ │
+│  └──────────┘ │  │  └──────────┘ │  │  └──────────┘ │
+└───────────────┘  └───────────────┘  └───────────────┘
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API Server</strong></td>
+<td>Front door of K8s. All communication goes through it.</td>
+</tr>
+<tr>
+<td><strong>etcd</strong></td>
+<td>Distributed key-value store. Stores all cluster state.</td>
+</tr>
+<tr>
+<td><strong>Controller Manager</strong></td>
+<td>Runs control loops (ensure desired state == actual state)</td>
+</tr>
+<tr>
+<td><strong>Scheduler</strong></td>
+<td>Assigns pods to nodes based on resources, affinity rules</td>
+</tr>
+<tr>
+<td><strong>kubelet</strong></td>
+<td>Agent on each node. Ensures containers run as specified.</td>
+</tr>
+<tr>
+<td><strong>kube-proxy</strong></td>
+<td>Manages network rules on each node (Service routing)</td>
+</tr>
+<tr>
+<td><strong>Container Runtime</strong></td>
+<td>Runs containers (containerd, CRI-O)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-objects">Core Objects</h2>
+<p>Everything in Kubernetes is an <strong>object</strong> with a <code>kind</code>, <code>apiVersion</code>, <code>metadata</code>, and <code>spec</code>.</p>
+<pre><code class="language-yaml">apiVersion: apps/v1       # API group and version
+kind: Deployment          # Object type
+metadata:
+  name: my-app            # Name of this object
+  namespace: production   # Namespace (logical isolation)
+  labels:                 # Key-value tags
+    app: my-app
+    version: &quot;1.0&quot;
+spec:                     # Desired state
+  ...
+</code></pre>
+<h3 id="the-core-objects">The Core Objects</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pod</strong></td>
+<td>Smallest deployable unit. One or more containers.</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>Manages Pods: rolling updates, rollback, replicas</td>
+</tr>
+<tr>
+<td><strong>Service</strong></td>
+<td>Stable network endpoint for a group of Pods</td>
+</tr>
+<tr>
+<td><strong>ConfigMap</strong></td>
+<td>Store non-secret config data</td>
+</tr>
+<tr>
+<td><strong>Secret</strong></td>
+<td>Store sensitive data (passwords, tokens, keys)</td>
+</tr>
+<tr>
+<td><strong>PersistentVolume</strong></td>
+<td>Storage resource in the cluster</td>
+</tr>
+<tr>
+<td><strong>Namespace</strong></td>
+<td>Virtual cluster for isolation</td>
+</tr>
+<tr>
+<td><strong>Ingress</strong></td>
+<td>HTTP/HTTPS routing rules into the cluster</td>
+</tr>
+<tr>
+<td><strong>ServiceAccount</strong></td>
+<td>Identity for processes running in Pods</td>
+</tr>
+<tr>
+<td><strong>HorizontalPodAutoscaler</strong></td>
+<td>Auto-scale Pods based on CPU/memory</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="kubectl-basics">kubectl Basics</h2>
+<p><code>kubectl</code> is the CLI for interacting with Kubernetes.</p>
+<pre><code class="language-bash"># Cluster info
+kubectl cluster-info
+kubectl get nodes
+kubectl get nodes -o wide
+
+# Context management
+kubectl config get-contexts
+kubectl config use-context my-cluster
+kubectl config current-context
+
+# Get resources
+kubectl get pods                        # in current namespace
+kubectl get pods -n kube-system        # specific namespace
+kubectl get pods -A                    # all namespaces
+kubectl get pods -l app=my-app         # by label
+kubectl get all                        # everything in namespace
+
+# Describe resource (events, details)
+kubectl describe pod my-pod
+kubectl describe deployment my-app
+
+# Logs
+kubectl logs my-pod
+kubectl logs -f my-pod                 # follow
+kubectl logs my-pod -c container-name  # specific container
+kubectl logs -l app=my-app --tail=100  # by label
+
+# Execute command
+kubectl exec -it my-pod -- bash
+kubectl exec my-pod -- env
+
+# Apply/delete manifests
+kubectl apply -f deployment.yaml
+kubectl apply -f ./manifests/          # all files in dir
+kubectl delete -f deployment.yaml
+kubectl delete pod my-pod
+
+# Edit live resource
+kubectl edit deployment my-app
+
+# Port forward to local machine
+kubectl port-forward pod/my-pod 8080:80
+kubectl port-forward svc/my-service 8080:80
+
+# Copy files
+kubectl cp my-pod:/app/logs/app.log ./app.log
+</code></pre>
+<hr />
+<h2 id="workloads">Workloads</h2>
+<h3 id="pod">Pod</h3>
+<p>The smallest unit. Almost never created directly: use Deployments instead.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          memory: &quot;64Mi&quot;
+          cpu: &quot;250m&quot;
+        limits:
+          memory: &quot;128Mi&quot;
+          cpu: &quot;500m&quot;
+</code></pre>
+<h3 id="deployment">Deployment</h3>
+<p>Manages a <strong>ReplicaSet</strong> of Pods. Handles rolling updates and rollbacks.</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1         # extra pods during update
+      maxUnavailable: 0   # zero downtime
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: app
+          image: myrepo/my-app:1.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: url
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: &quot;256Mi&quot;
+              cpu: &quot;100m&quot;
+            limits:
+              memory: &quot;512Mi&quot;
+              cpu: &quot;500m&quot;
+</code></pre>
+<h3 id="deployment-commands">Deployment Commands</h3>
+<pre><code class="language-bash"># Rollout status
+kubectl rollout status deployment/my-app
+
+# Rollout history
+kubectl rollout history deployment/my-app
+
+# Rollback to previous version
+kubectl rollout undo deployment/my-app
+
+# Rollback to specific revision
+kubectl rollout undo deployment/my-app --to-revision=2
+
+# Update image
+kubectl set image deployment/my-app app=myrepo/my-app:2.0
+
+# Scale
+kubectl scale deployment my-app --replicas=5
+</code></pre>
+<h3 id="statefulset">StatefulSet</h3>
+<p>For <strong>stateful applications</strong> (databases, Kafka, Zookeeper) that need stable network identities and persistent storage.</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: &quot;postgres&quot;
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:               # Each pod gets its own PVC
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: [&quot;ReadWriteOnce&quot;]
+        resources:
+          requests:
+            storage: 10Gi
+</code></pre>
+<p>StatefulSet pods get stable names: <code>postgres-0</code>, <code>postgres-1</code>, <code>postgres-2</code>.</p>
+<h3 id="daemonset">DaemonSet</h3>
+<p>Runs <strong>one pod per node</strong>. Used for logging agents, monitoring, network plugins.</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      name: fluentd
+  template:
+    metadata:
+      labels:
+        name: fluentd
+    spec:
+      containers:
+        - name: fluentd
+          image: fluentd:v1.16
+</code></pre>
+<h3 id="job--cronjob">Job &amp; CronJob</h3>
+<pre><code class="language-yaml"># One-off Job
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+spec:
+  template:
+    spec:
+      containers:
+        - name: migration
+          image: myapp:latest
+          command: [&quot;python&quot;, &quot;manage.py&quot;, &quot;migrate&quot;]
+      restartPolicy: OnFailure
+
+---
+# Scheduled CronJob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-job
+spec:
+  schedule: &quot;0 2 * * *&quot;   # 2am daily (cron syntax)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: myapp:latest
+              command: [&quot;python&quot;, &quot;cleanup.py&quot;]
+          restartPolicy: OnFailure
+</code></pre>
+<hr />
+<h2 id="services--networking">Services &amp; Networking</h2>
+<p>A <strong>Service</strong> provides a stable IP and DNS name for a set of Pods (which come and go).</p>
+<h3 id="service-types">Service Types</h3>
+<pre><code class="language-yaml"># ClusterIP (default): internal only
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-svc
+spec:
+  selector:
+    app: my-app
+  ports:
+    - port: 80          # Service port
+      targetPort: 8000  # Pod port
+  type: ClusterIP
+
+---
+# NodePort: accessible on each node's IP
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8000
+      nodePort: 30080   # 30000-32767
+
+---
+# LoadBalancer: provisions cloud load balancer
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8000
+</code></pre>
+<h3 id="dns-in-kubernetes">DNS in Kubernetes</h3>
+<p>Every Service gets a DNS name: <code>&lt;service&gt;.&lt;namespace&gt;.svc.cluster.local</code></p>
+<pre><code class="language-bash"># From within the cluster:
+curl http://my-app-svc                              # same namespace
+curl http://my-app-svc.production                  # cross-namespace
+curl http://my-app-svc.production.svc.cluster.local
+</code></pre>
+<hr />
+<h2 id="storage">Storage</h2>
+<h3 id="persistentvolume-pv--persistentvolumeclaim-pvc">PersistentVolume (PV) &amp; PersistentVolumeClaim (PVC)</h3>
+<pre><code class="language-yaml"># StorageClass (dynamic provisioning)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+reclaimPolicy: Retain
+
+---
+# PersistentVolumeClaim: request storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+# Use PVC in a Pod
+spec:
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: my-data
+  containers:
+    - name: app
+      volumeMounts:
+        - mountPath: /data
+          name: data
+</code></pre>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<h3 id="configmap">ConfigMap</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  LOG_LEVEL: &quot;info&quot;
+  MAX_CONNECTIONS: &quot;100&quot;
+  config.yaml: |
+    database:
+      host: postgres
+      port: 5432
+</code></pre>
+<pre><code class="language-yaml"># Use ConfigMap as environment variables
+envFrom:
+  - configMapRef:
+      name: app-config
+
+# Use specific key
+env:
+  - name: LOG_LEVEL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: LOG_LEVEL
+
+# Mount as file
+volumes:
+  - name: config
+    configMap:
+      name: app-config
+containers:
+  - volumeMounts:
+      - name: config
+        mountPath: /etc/config
+</code></pre>
+<h3 id="secret">Secret</h3>
+<pre><code class="language-bash"># Create secret from command line
+kubectl create secret generic db-secret \
+  --from-literal=password=mysecret \
+  --from-literal=username=admin
+
+# Create from file
+kubectl create secret generic tls-secret \
+  --from-file=tls.crt=./cert.crt \
+  --from-file=tls.key=./cert.key
+</code></pre>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  password: bXlzZWNyZXQ=   # base64 encoded
+  username: YWRtaW4=
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Kubernetes Secrets are base64-encoded, not encrypted by default. Use <strong>Sealed Secrets</strong>, <strong>External Secrets Operator</strong>, or <strong>Vault</strong> for production.</p>
+</blockquote>
+<hr />
+<h2 id="namespaces--rbac">Namespaces &amp; RBAC</h2>
+<h3 id="namespaces">Namespaces</h3>
+<pre><code class="language-bash"># Create namespace
+kubectl create namespace staging
+
+# Set default namespace
+kubectl config set-context --current --namespace=staging
+
+# Resource quotas per namespace
+kubectl apply -f - &lt;&lt;EOF
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: staging-quota
+  namespace: staging
+spec:
+  hard:
+    requests.cpu: &quot;4&quot;
+    requests.memory: 8Gi
+    limits.cpu: &quot;8&quot;
+    limits.memory: 16Gi
+    pods: &quot;20&quot;
+EOF
+</code></pre>
+<h3 id="rbac">RBAC</h3>
+<pre><code class="language-yaml"># Role (namespace-scoped)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: staging
+rules:
+  - apiGroups: [&quot;&quot;]
+    resources: [&quot;pods&quot;, &quot;pods/log&quot;]
+    verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;]
+
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-reader-binding
+  namespace: staging
+subjects:
+  - kind: ServiceAccount
+    name: ci-runner
+    namespace: staging
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<hr />
+<h2 id="ingress">Ingress</h2>
+<p>Ingress routes external HTTP(S) traffic to internal Services.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.myapp.com
+      secretName: api-tls
+  rules:
+    - host: api.myapp.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-svc
+                port:
+                  number: 80
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> the community <code>ingress-nginx</code> controller was retired in 2026 (no further releases or security fixes). Existing clusters should plan a migration to a Gateway API implementation or another maintained Ingress controller; the Ingress API itself is not deprecated.</p>
+</blockquote>
+<pre><code class="language-bash"># Install NGINX Ingress Controller (legacy clusters only, see note above)
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+</code></pre>
+<hr />
+<h2 id="scaling--auto-scaling">Scaling &amp; Auto-scaling</h2>
+<h3 id="horizontal-pod-autoscaler-hpa">Horizontal Pod Autoscaler (HPA)</h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 400Mi
+</code></pre>
+<h3 id="vertical-pod-autoscaler-vpa">Vertical Pod Autoscaler (VPA)</h3>
+<p>Automatically adjusts CPU/memory requests based on actual usage.</p>
+<pre><code class="language-yaml">apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  updatePolicy:
+    updateMode: &quot;Auto&quot;
+</code></pre>
+<h3 id="cluster-autoscaler">Cluster Autoscaler</h3>
+<p>Scales the <strong>number of nodes</strong> in the cluster based on pending pods.</p>
+<hr />
+<h2 id="observability">Observability</h2>
+<h3 id="health-probes">Health Probes</h3>
+<pre><code class="language-yaml">containers:
+  - name: app
+    livenessProbe:       # Is the container alive? (restart if fails)
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 10
+      periodSeconds: 15
+      failureThreshold: 3
+    readinessProbe:      # Is the container ready to receive traffic?
+      httpGet:
+        path: /ready
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    startupProbe:        # Is the app done starting up?
+      httpGet:
+        path: /healthz
+        port: 8080
+      failureThreshold: 30
+      periodSeconds: 10
+</code></pre>
+<h3 id="metrics-stack-prometheus--grafana">Metrics Stack (Prometheus + Grafana)</h3>
+<pre><code class="language-bash"># Install kube-prometheus-stack via Helm
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
+  --namespace monitoring --create-namespace
+</code></pre>
+<h3 id="logging-stack-efk--loki">Logging Stack (EFK / Loki)</h3>
+<pre><code class="language-bash"># Loki + Grafana (lightweight)
+# The old all-in-one grafana/loki-stack chart is deprecated: install the
+# grafana/loki chart (configure its deployment mode in values), a collector
+# such as Grafana Alloy, and Grafana separately.
+helm repo add grafana https://grafana.github.io/helm-charts
+helm upgrade --install loki grafana/loki \
+  --namespace monitoring --create-namespace -f loki-values.yaml
+</code></pre>
+<hr />
+<h2 id="kubernetes-in-2026">Kubernetes in 2026</h2>
+<h3 id="key-trends">Key Trends</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trend</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gateway API</strong></td>
+<td>Successor to Ingress (GA since v1.0). More expressive routing; the migration target after the ingress-nginx retirement.</td>
+</tr>
+<tr>
+<td><strong>WebAssembly (Wasm)</strong></td>
+<td>Wasm workloads running alongside containers via <code>runwasi</code></td>
+</tr>
+<tr>
+<td><strong>Karpenter</strong></td>
+<td>Node auto-provisioner, a common alternative to Cluster Autoscaler on AWS (also used by AKS node auto-provisioning)</td>
+</tr>
+<tr>
+<td><strong>Cilium</strong></td>
+<td>eBPF-powered networking, replacing kube-proxy in many clusters</td>
+</tr>
+<tr>
+<td><strong>ArgoCD / Flux</strong></td>
+<td>GitOps: declarative continuous delivery for K8s</td>
+</tr>
+<tr>
+<td><strong>Crossplane</strong></td>
+<td>Kubernetes-native infrastructure provisioning (K8s for cloud resources)</td>
+</tr>
+<tr>
+<td><strong>KEDA</strong></td>
+<td>Event-driven autoscaling (scale on Kafka lag, queue depth, etc.)</td>
+</tr>
+<tr>
+<td><strong>OpenTelemetry</strong></td>
+<td>Standard for traces, metrics, logs across the cluster</td>
+</tr>
+<tr>
+<td><strong>vCluster</strong></td>
+<td>Virtual Kubernetes clusters inside a real cluster</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="managed-kubernetes-in-2026">Managed Kubernetes in 2026</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Cloud</th>
+<th>Service</th>
+<th>Notable Feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS</td>
+<td>EKS</td>
+<td>EKS Auto Mode (fully managed node groups)</td>
+</tr>
+<tr>
+<td>GCP</td>
+<td>GKE</td>
+<td>Autopilot mode (serverless K8s)</td>
+</tr>
+<tr>
+<td>Azure</td>
+<td>AKS</td>
+<td>Node auto-provisioner GA</td>
+</tr>
+<tr>
+<td>All</td>
+<td>Fargate/Cloud Run</td>
+<td>Serverless containers (no node management)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># === CLUSTER ===
+kubectl cluster-info
+kubectl get nodes -o wide
+kubectl top nodes / kubectl top pods
+
+# === PODS ===
+kubectl get pods [-n ns] [-A] [-l label=val]
+kubectl describe pod &lt;name&gt;
+kubectl logs -f &lt;pod&gt; [-c container]
+kubectl exec -it &lt;pod&gt; -- bash
+kubectl port-forward pod/&lt;pod&gt; local:remote
+
+# === DEPLOYMENTS ===
+kubectl get deploy
+kubectl rollout status deploy/&lt;name&gt;
+kubectl rollout history deploy/&lt;name&gt;
+kubectl rollout undo deploy/&lt;name&gt;
+kubectl set image deploy/&lt;name&gt; container=image:tag
+kubectl scale deploy/&lt;name&gt; --replicas=N
+
+# === SERVICES ===
+kubectl get svc
+kubectl expose deploy &lt;name&gt; --port=80 --target-port=8000 --type=LoadBalancer
+
+# === APPLY/DELETE ===
+kubectl apply -f file.yaml
+kubectl apply -f directory/
+kubectl delete -f file.yaml
+kubectl delete pod &lt;name&gt; --grace-period=0 --force
+
+# === DEBUGGING ===
+kubectl get events --sort-by=.lastTimestamp
+kubectl describe node &lt;node&gt;
+kubectl run debug --image=busybox --rm -it -- sh
+kubectl debug pod/&lt;pod&gt; -it --image=busybox
+
+# === SECRETS/CONFIGS ===
+kubectl create secret generic name --from-literal=key=val
+kubectl create configmap name --from-file=./config
+kubectl get secret name -o jsonpath='{.data.key}' | base64 -d
+
+# === NAMESPACES ===
+kubectl get ns
+kubectl create ns &lt;name&gt;
+kubectl config set-context --current --namespace=&lt;name&gt;
+
+# === CLEANUP ===
+kubectl delete pods --field-selector=status.phase=Failed -A   # includes evicted pods
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_docker.html"><small>Previous</small>Docker</a><a rel="next" class="next" href="intro_helm.html"><small>Next</small>Helm</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_kubernetes.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

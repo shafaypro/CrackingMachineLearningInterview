@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Context Protocol (MCP) Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Model Context Protocol (MCP) is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_mcp.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Context Protocol (MCP) Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Model Context Protocol (MCP) is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_mcp.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Context Protocol (MCP) Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Model Context Protocol (MCP) is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Context Protocol (MCP)",
+   "description": "Model Context Protocol (MCP) is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_mcp.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "MCP Protocol",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_mcp.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">MCP Protocol</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_mcp.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="model-context-protocol-mcp">Model Context Protocol (MCP)</h1>
+<p><strong>Model Context Protocol (MCP)</strong> is an open standard created by Anthropic that defines how LLMs connect to external tools, data sources, and services. Launched in November 2024, MCP has become the <strong>USB-C of AI integrations</strong>: one protocol to connect any LLM to any tool.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-mcp">What is MCP?</a></li>
+<li><a href="#why-mcp-matters">Why MCP Matters</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#core-primitives">Core Primitives</a></li>
+<li><a href="#mcp-in-claude-code">MCP in Claude Code</a></li>
+<li><a href="#popular-mcp-servers">Popular MCP Servers</a></li>
+<li><a href="#building-an-mcp-server-python">Building an MCP Server (Python)</a></li>
+<li><a href="#building-an-mcp-server-typescript">Building an MCP Server (TypeScript)</a></li>
+<li><a href="#mcp-client-using-a-server">MCP Client (Using a Server)</a></li>
+<li><a href="#mcp-in-2026-ecosystem">MCP in 2026: Ecosystem</a></li>
+</ol>
+<hr />
+<h2 id="what-is-mcp">What is MCP?</h2>
+<p>Before MCP, connecting an LLM to external tools was bespoke:</p>
+<ul>
+<li>Every LLM had its own tool-use format</li>
+<li>Every integration had to be written from scratch per-LLM</li>
+<li>Context/memory was per-conversation</li>
+</ul>
+<p>MCP standardizes this with a <strong>client-server protocol</strong>:</p>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                   MCP Client (LLM Host)              │
+│  Claude Desktop / Claude Code / Cursor / Zed / etc. │
+└─────────────────────────┬───────────────────────────┘
+                          │ MCP Protocol (JSON-RPC 2.0)
+          ┌───────────────┼──────────────────┐
+          ▼               ▼                  ▼
+   ┌─────────────┐ ┌─────────────┐ ┌──────────────┐
+   │ GitHub MCP  │ │Postgres MCP │ │ Slack MCP    │
+   │   Server   │ │   Server   │ │   Server    │
+   └─────────────┘ └─────────────┘ └──────────────┘
+</code></pre>
+<p><strong>One MCP server</strong> can be used by <strong>any MCP-compatible client</strong> (Claude, GPT, Gemini, local LLMs, etc.).</p>
+<hr />
+<h2 id="why-mcp-matters">Why MCP Matters</h2>
+<h3 id="before-mcp">Before MCP</h3>
+<pre><code class="language-python"># Every integration was custom per LLM
+# OpenAI format:
+{&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {&quot;name&quot;: &quot;get_data&quot;, ...}}
+
+# Anthropic format:
+{&quot;name&quot;: &quot;get_data&quot;, &quot;input_schema&quot;: {...}}
+
+# Every developer had to rewrite integrations
+</code></pre>
+<h3 id="after-mcp">After MCP</h3>
+<pre><code>One server definition → Works with any MCP client
+</code></pre>
+<p>Benefits:</p>
+<ul>
+<li><strong>Standardized</strong>: build once, use everywhere</li>
+<li><strong>Secure</strong>: servers run locally or in controlled environments</li>
+<li><strong>Composable</strong>: mix and match servers</li>
+<li><strong>Discoverable</strong>: clients can query server capabilities at runtime</li>
+<li><strong>Stateful</strong>: maintain context across a session</li>
+</ul>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<h3 id="transport-layers">Transport Layers</h3>
+<p>MCP defines two standard transports:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Transport</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>stdio</strong></td>
+<td>Local servers. Client spawns server as subprocess. Most common.</td>
+</tr>
+<tr>
+<td><strong>Streamable HTTP</strong></td>
+<td>Remote servers. Client connects over network (single HTTP endpoint, optional SSE streaming for responses). Replaced the older HTTP + SSE transport, which is deprecated but still seen in older servers.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="protocol-flow">Protocol Flow</h3>
+<pre><code>Client                          Server
+  │                               │
+  │──── initialize ──────────────&gt;│  (announce capabilities)
+  │&lt;─── initialized ──────────────│
+  │                               │
+  │──── tools/list ──────────────&gt;│  (discover available tools)
+  │&lt;─── tools list ───────────────│
+  │                               │
+  │──── tools/call ──────────────&gt;│  (invoke tool)
+  │&lt;─── tool result ──────────────│
+  │                               │
+  │──── resources/list ──────────&gt;│  (discover resources)
+  │&lt;─── resources list ───────────│
+  │                               │
+  │──── resources/read ──────────&gt;│  (read resource)
+  │&lt;─── resource content ─────────│
+</code></pre>
+<hr />
+<h2 id="core-primitives">Core Primitives</h2>
+<p>MCP servers expose three types of capabilities:</p>
+<h3 id="1-tools-llm-calls-these">1. Tools (LLM calls these)</h3>
+<p>Functions the LLM can invoke to take actions or retrieve data.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;execute_sql&quot;,
+  &quot;description&quot;: &quot;Run a SQL query against the data warehouse&quot;,
+  &quot;inputSchema&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;query&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;SQL query&quot;},
+      &quot;database&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;prod&quot;, &quot;staging&quot;]}
+    },
+    &quot;required&quot;: [&quot;query&quot;]
+  }
+}
+</code></pre>
+<h3 id="2-resources-llm-reads-these">2. Resources (LLM reads these)</h3>
+<p>Read-only data that can be embedded in the LLM's context. Like files or database views.</p>
+<pre><code class="language-json">{
+  &quot;uri&quot;: &quot;postgres://localhost/mydb/users&quot;,
+  &quot;name&quot;: &quot;Users table schema&quot;,
+  &quot;mimeType&quot;: &quot;application/json&quot;
+}
+</code></pre>
+<h3 id="3-prompts-pre-built-prompt-templates">3. Prompts (pre-built prompt templates)</h3>
+<p>Reusable prompt templates with arguments.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;analyze_dataset&quot;,
+  &quot;description&quot;: &quot;Analyze a dataset for quality issues&quot;,
+  &quot;arguments&quot;: [
+    {&quot;name&quot;: &quot;table_name&quot;, &quot;required&quot;: true},
+    {&quot;name&quot;: &quot;focus_area&quot;, &quot;required&quot;: false}
+  ]
+}
+</code></pre>
+<hr />
+<h2 id="mcp-in-claude-code">MCP in Claude Code</h2>
+<p>Claude Code has first-class MCP support.</p>
+<pre><code class="language-bash"># Add a local (stdio) MCP server: everything after -- is the command to run
+claude mcp add server-name -- command [args]
+
+# Add a remote MCP server over HTTP
+claude mcp add --transport http server-name https://example.com/mcp
+
+# Examples:
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /path/to/dir
+claude mcp add memory -- npx -y @modelcontextprotocol/server-memory
+
+# List configured servers
+claude mcp list
+
+# Remove a server
+claude mcp remove server-name
+
+# Test server connectivity
+claude mcp get server-name
+</code></pre>
+<h3 id="claude-desktop-configuration">Claude Desktop Configuration</h3>
+<pre><code class="language-json">// ~/Library/Application Support/Claude/claude_desktop_config.json (macOS)
+{
+  &quot;mcpServers&quot;: {
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;],
+      &quot;env&quot;: {
+        &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;ghp_...&quot;
+      }
+    },
+    &quot;postgres&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;@modelcontextprotocol/server-postgres&quot;,
+        &quot;postgresql://localhost/mydb&quot;
+      ]
+    },
+    &quot;my-custom-server&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;/path/to/my_mcp_server.py&quot;]
+    }
+  }
+}
+</code></pre>
+<hr />
+<h2 id="popular-mcp-servers">Popular MCP Servers</h2>
+<h3 id="reference-servers-mcp-project">Reference Servers (MCP project)</h3>
+<p>The <code>modelcontextprotocol/servers</code> repo keeps a small set of reference servers meant as examples:</p>
+<pre><code class="language-bash"># Filesystem: read/write local files
+npx -y @modelcontextprotocol/server-filesystem /allowed/path
+
+# Memory: knowledge-graph style persistent memory
+npx -y @modelcontextprotocol/server-memory
+
+# Sequential Thinking: structured reasoning tool
+npx -y @modelcontextprotocol/server-sequential-thinking
+</code></pre>
+<p>Several early reference servers (GitHub, PostgreSQL, Slack, Brave Search, Google Drive, Puppeteer) were moved to an archive and are no longer maintained there. For those services, prefer the server published by the vendor itself (for example GitHub's own GitHub MCP server) or a maintained community server, and check it before trusting it with credentials.</p>
+<h3 id="community-servers-2026-ecosystem">Community Servers (2026 Ecosystem)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mcp-server-snowflake</code></td>
+<td>Query Snowflake DWH</td>
+</tr>
+<tr>
+<td><code>mcp-server-dbt</code></td>
+<td>Run dbt models, tests, docs</td>
+</tr>
+<tr>
+<td><code>mcp-server-kubernetes</code></td>
+<td>Manage K8s clusters</td>
+</tr>
+<tr>
+<td><code>mcp-server-terraform</code></td>
+<td>Plan/apply Terraform</td>
+</tr>
+<tr>
+<td><code>mcp-server-jira</code></td>
+<td>Create/update Jira tickets</td>
+</tr>
+<tr>
+<td><code>mcp-server-linear</code></td>
+<td>Linear issue tracking</td>
+</tr>
+<tr>
+<td><code>mcp-server-notion</code></td>
+<td>Read/write Notion pages</td>
+</tr>
+<tr>
+<td><code>mcp-server-playwright</code></td>
+<td>Browser automation</td>
+</tr>
+<tr>
+<td><code>mcp-server-puppeteer</code></td>
+<td>Browser automation (Node)</td>
+</tr>
+<tr>
+<td><code>mcp-server-sentry</code></td>
+<td>Query Sentry errors</td>
+</tr>
+<tr>
+<td><code>mcp-server-datadog</code></td>
+<td>Query Datadog metrics</td>
+</tr>
+<tr>
+<td><code>mcp-server-aws</code></td>
+<td>AWS operations</td>
+</tr>
+<tr>
+<td><code>mcp-server-gcp</code></td>
+<td>GCP operations</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="building-an-mcp-server-python">Building an MCP Server (Python)</h2>
+<pre><code class="language-bash">pip install mcp
+</code></pre>
+<h3 id="simple-data-engineering-mcp-server">Simple Data Engineering MCP Server</h3>
+<pre><code class="language-python"># my_data_mcp_server.py
+import asyncio
+import json
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp import types
+
+# Initialize the MCP server
+app = Server(&quot;data-engineering-tools&quot;)
+
+# ─── Tools ────────────────────────────────────────────
+
+@app.list_tools()
+async def list_tools() -&gt; list[types.Tool]:
+    return [
+        types.Tool(
+            name=&quot;run_sql&quot;,
+            description=&quot;Execute a SQL query and return results as JSON&quot;,
+            inputSchema={
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;query&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;description&quot;: &quot;SQL query to execute&quot;
+                    },
+                    &quot;limit&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;description&quot;: &quot;Max rows to return (default 100)&quot;,
+                        &quot;default&quot;: 100
+                    }
+                },
+                &quot;required&quot;: [&quot;query&quot;]
+            }
+        ),
+        types.Tool(
+            name=&quot;list_tables&quot;,
+            description=&quot;List all available tables and their schemas&quot;,
+            inputSchema={
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;schema&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;description&quot;: &quot;Database schema to inspect (default: public)&quot;
+                    }
+                }
+            }
+        ),
+        types.Tool(
+            name=&quot;get_table_stats&quot;,
+            description=&quot;Get row count, size, and last updated time for a table&quot;,
+            inputSchema={
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;table_name&quot;: {&quot;type&quot;: &quot;string&quot;}
+                },
+                &quot;required&quot;: [&quot;table_name&quot;]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -&gt; list[types.TextContent]:
+    if name == &quot;run_sql&quot;:
+        result = await execute_sql(
+            arguments[&quot;query&quot;],
+            limit=arguments.get(&quot;limit&quot;, 100)
+        )
+        return [types.TextContent(
+            type=&quot;text&quot;,
+            text=json.dumps(result, indent=2, default=str)
+        )]
+
+    elif name == &quot;list_tables&quot;:
+        schema = arguments.get(&quot;schema&quot;, &quot;public&quot;)
+        tables = await get_tables(schema)
+        return [types.TextContent(type=&quot;text&quot;, text=json.dumps(tables, indent=2))]
+
+    elif name == &quot;get_table_stats&quot;:
+        stats = await get_stats(arguments[&quot;table_name&quot;])
+        return [types.TextContent(type=&quot;text&quot;, text=json.dumps(stats, indent=2))]
+
+    raise ValueError(f&quot;Unknown tool: {name}&quot;)
+
+# ─── Resources ────────────────────────────────────────
+
+@app.list_resources()
+async def list_resources() -&gt; list[types.Resource]:
+    return [
+        types.Resource(
+            uri=&quot;data://schemas/all&quot;,
+            name=&quot;All Database Schemas&quot;,
+            description=&quot;Complete schema documentation for all tables&quot;,
+            mimeType=&quot;application/json&quot;
+        )
+    ]
+
+@app.read_resource()
+async def read_resource(uri) -&gt; str:  # uri arrives as a pydantic AnyUrl, not a str
+    if str(uri) == &quot;data://schemas/all&quot;:
+        schemas = await get_all_schemas()
+        return json.dumps(schemas, indent=2)
+    raise ValueError(f&quot;Unknown resource: {uri}&quot;)
+
+# ─── Actual Implementation ────────────────────────────
+
+import asyncpg
+
+DB_URL = &quot;postgresql://localhost/mydb&quot;
+
+async def execute_sql(query: str, limit: int = 100) -&gt; list[dict]:
+    conn = await asyncpg.connect(DB_URL)
+    try:
+        # Add LIMIT to SELECT queries for safety
+        if query.strip().upper().startswith(&quot;SELECT&quot;) and &quot;LIMIT&quot; not in query.upper():
+            query = f&quot;{query} LIMIT {limit}&quot;
+        rows = await conn.fetch(query)
+        return [dict(row) for row in rows]
+    finally:
+        await conn.close()
+
+async def get_tables(schema: str = &quot;public&quot;) -&gt; list[dict]:
+    conn = await asyncpg.connect(DB_URL)
+    try:
+        rows = await conn.fetch(&quot;&quot;&quot;
+            SELECT table_name, column_name, data_type
+            FROM information_schema.columns
+            WHERE table_schema = $1
+            ORDER BY table_name, ordinal_position
+        &quot;&quot;&quot;, schema)
+        # Group by table
+        tables = {}
+        for row in rows:
+            t = row[&quot;table_name&quot;]
+            if t not in tables:
+                tables[t] = []
+            tables[t].append({&quot;column&quot;: row[&quot;column_name&quot;], &quot;type&quot;: row[&quot;data_type&quot;]})
+        return [{&quot;table&quot;: k, &quot;columns&quot;: v} for k, v in tables.items()]
+    finally:
+        await conn.close()
+
+async def get_stats(table_name: str) -&gt; dict:
+    conn = await asyncpg.connect(DB_URL)
+    try:
+        # table_name comes from the model, so never interpolate it directly:
+        # confirm it is a real table, then quote it as an identifier.
+        exists = await conn.fetchval(
+            &quot;SELECT 1 FROM information_schema.tables &quot;
+            &quot;WHERE table_schema = 'public' AND table_name = $1&quot;,
+            table_name,
+        )
+        if not exists:
+            raise ValueError(f&quot;Unknown table: {table_name!r}&quot;)
+        quoted = '&quot;' + table_name.replace('&quot;', '&quot;&quot;') + '&quot;'
+        count = await conn.fetchval(f&quot;SELECT COUNT(*) FROM {quoted}&quot;)
+        return {&quot;table&quot;: table_name, &quot;row_count&quot;: count}
+    finally:
+        await conn.close()
+
+async def get_all_schemas():
+    return await get_tables()
+
+# ─── Entry Point ──────────────────────────────────────
+
+async def main():
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+if __name__ == &quot;__main__&quot;:
+    asyncio.run(main())
+</code></pre>
+<h3 id="register-in-claude-desktop">Register in Claude Desktop</h3>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;my-data-server&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;/path/to/my_data_mcp_server.py&quot;],
+      &quot;env&quot;: {
+        &quot;DATABASE_URL&quot;: &quot;postgresql://localhost/mydb&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h2 id="building-an-mcp-server-typescript">Building an MCP Server (TypeScript)</h2>
+<pre><code class="language-bash">npm init -y
+npm install @modelcontextprotocol/sdk zod
+npm install -D typescript ts-node @types/node
+</code></pre>
+<pre><code class="language-typescript">// src/server.ts
+import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+import { z } from &quot;zod&quot;;
+
+const server = new Server(
+  { name: &quot;my-tools-server&quot;, version: &quot;1.0.0&quot; },
+  { capabilities: { tools: {} } }
+);
+
+// Define tool schemas with Zod
+const SearchSchema = z.object({
+  query: z.string().describe(&quot;Search query&quot;),
+  limit: z.number().optional().default(10),
+});
+
+// List available tools
+server.setRequestHandler(ListToolsRequestSchema, async () =&gt; ({
+  tools: [
+    {
+      name: &quot;search&quot;,
+      description: &quot;Search for information&quot;,
+      inputSchema: {
+        type: &quot;object&quot;,
+        properties: {
+          query: { type: &quot;string&quot;, description: &quot;Search query&quot; },
+          limit: { type: &quot;number&quot;, description: &quot;Max results&quot;, default: 10 },
+        },
+        required: [&quot;query&quot;],
+      },
+    },
+  ],
+}));
+
+// Handle tool calls
+server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+  if (request.params.name === &quot;search&quot;) {
+    const { query, limit } = SearchSchema.parse(request.params.arguments);
+
+    // Perform actual search...
+    const results = await performSearch(query, limit);
+
+    return {
+      content: [
+        {
+          type: &quot;text&quot;,
+          text: JSON.stringify(results, null, 2),
+        },
+      ],
+    };
+  }
+
+  throw new Error(`Unknown tool: ${request.params.name}`);
+});
+
+async function performSearch(query: string, limit: number) {
+  // Your implementation here
+  return [{ title: &quot;Result 1&quot;, url: &quot;https://example.com&quot; }];
+}
+
+// Start server
+const transport = new StdioServerTransport();
+await server.connect(transport);
+</code></pre>
+<hr />
+<h2 id="mcp-client-using-a-server">MCP Client (Using a Server)</h2>
+<pre><code class="language-python">from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+async def use_mcp_server():
+    server_params = StdioServerParameters(
+        command=&quot;python&quot;,
+        args=[&quot;my_mcp_server.py&quot;]
+    )
+
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            # Initialize
+            await session.initialize()
+
+            # List available tools
+            tools = await session.list_tools()
+            print(&quot;Available tools:&quot;, [t.name for t in tools.tools])
+
+            # Call a tool
+            result = await session.call_tool(
+                &quot;run_sql&quot;,
+                {&quot;query&quot;: &quot;SELECT COUNT(*) FROM orders&quot;}
+            )
+            print(&quot;Result:&quot;, result.content[0].text)
+
+            # List resources
+            resources = await session.list_resources()
+
+            # Read a resource
+            content = await session.read_resource(&quot;data://schemas/all&quot;)
+            print(&quot;Schema:&quot;, content.contents[0].text)
+
+import asyncio
+asyncio.run(use_mcp_server())
+</code></pre>
+<hr />
+<h2 id="mcp-in-2026-ecosystem">MCP in 2026: Ecosystem</h2>
+<h3 id="adoption">Adoption</h3>
+<p>MCP has been adopted by:</p>
+<ul>
+<li><strong>Anthropic</strong>: Claude Desktop, Claude Code, Claude API</li>
+<li><strong>OpenAI</strong>: ChatGPT supports MCP servers</li>
+<li><strong>Google</strong>: Gemini MCP support</li>
+<li><strong>Microsoft</strong>: GitHub Copilot, VS Code</li>
+<li><strong>Cursor, Windsurf, Zed</strong>: AI code editors</li>
+<li><strong>LangChain, LlamaIndex</strong>: frameworks integrate MCP</li>
+</ul>
+<h3 id="mcp-registry">MCP Registry</h3>
+<p>The MCP project runs an official registry (registry.modelcontextprotocol.io) where server publishers list their servers. Community directories such as <a href="https://mcp.so">mcp.so</a> also index thousands of servers, but they are unvetted, so review a server before installing it.</p>
+<h3 id="key-patterns-in-2026">Key Patterns in 2026</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCP + RAG</strong></td>
+<td>MCP server exposes search tools backed by vector DB</td>
+</tr>
+<tr>
+<td><strong>MCP + Data Catalog</strong></td>
+<td>LLMs discover and query datasets via MCP</td>
+</tr>
+<tr>
+<td><strong>MCP for Agents</strong></td>
+<td>Multi-agent systems coordinate via shared MCP servers</td>
+</tr>
+<tr>
+<td><strong>Secure MCP</strong></td>
+<td>OAuth 2.0 authentication for remote MCP servers</td>
+</tr>
+<tr>
+<td><strong>MCP Proxies</strong></td>
+<td>Aggregate multiple MCP servers behind a single endpoint</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="remote-mcp-http-transport">Remote MCP (HTTP Transport)</h3>
+<pre><code class="language-python"># Remote MCP server with authentication
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP(&quot;Remote Data Server&quot;, port=8080)  # host/port are server settings
+
+@mcp.tool()
+async def query_warehouse(sql: str) -&gt; str:
+    &quot;&quot;&quot;Execute SQL against the data warehouse&quot;&quot;&quot;
+    results = await run_query(sql)
+    return json.dumps(results)
+
+# Run as HTTP server
+if __name__ == &quot;__main__&quot;:
+    mcp.run(transport=&quot;streamable-http&quot;)  # serves at http://localhost:8080/mcp
+</code></pre>
+<pre><code class="language-bash"># Client connects to remote server
+claude mcp add --transport http remote-warehouse https://data-server.mycompany.com/mcp
+</code></pre>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># Claude Code MCP commands
+claude mcp add &lt;name&gt; -- &lt;command&gt; [args]
+claude mcp add --transport http &lt;name&gt; &lt;url&gt;
+claude mcp list
+claude mcp remove &lt;name&gt;
+claude mcp get &lt;name&gt;
+
+# Common servers
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /path
+claude mcp add memory -- npx -y @modelcontextprotocol/server-memory
+claude mcp add seq-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+
+# Python MCP server template
+pip install mcp
+# → implement list_tools() + call_tool() + main()
+
+# TypeScript MCP server template
+npm install @modelcontextprotocol/sdk
+# → implement ListToolsRequestSchema + CallToolRequestSchema handlers
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_n8n_advanced.html"><small>Previous</small>n8n (Advanced)</a><a rel="next" class="next" href="intro_langchain.html"><small>Next</small>LangChain</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_mcp.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

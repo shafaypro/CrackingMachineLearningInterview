@@ -23,3 +23,7 @@ jobs:
         run: python3 tools/build_question_bank.py --check
       - name: Check writing style (no em or en dashes)
         run: python3 tools/check_style.py
+      - name: Check static guide pages and sitemap are up to date
+        run: |
+          pip install markdown-it-py==4.0.0
+          python3 tools/build_site.py --check

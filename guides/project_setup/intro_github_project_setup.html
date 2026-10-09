@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Set Up a Project on GitHub Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A practical, end-to-end walkthrough for taking an ML/AI project from an empty folder to a clean, collaborative, CI-backed GitHub repository. This is the…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/project_setup/intro_github_project_setup.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="How to Set Up a Project on GitHub Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A practical, end-to-end walkthrough for taking an ML/AI project from an empty folder to a clean, collaborative, CI-backed GitHub repository. This is the…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/project_setup/intro_github_project_setup.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to Set Up a Project on GitHub Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A practical, end-to-end walkthrough for taking an ML/AI project from an empty folder to a clean, collaborative, CI-backed GitHub repository. This is the…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "How to Set Up a Project on GitHub",
+   "description": "A practical, end-to-end walkthrough for taking an ML/AI project from an empty folder to a clean, collaborative, CI-backed GitHub repository. This is the…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/project_setup/intro_github_project_setup.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Project Setup & Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#project-setup--engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "GitHub Project Setup",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/project_setup/intro_github_project_setup.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#project-setup--engineering">Project Setup &amp; Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">GitHub Project Setup</span></nav>
+<p class="meta"><a href="../../#project_setup/intro_github_project_setup.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="how-to-set-up-a-project-on-github">How to Set Up a Project on GitHub</h1>
+<p>A practical, end-to-end walkthrough for taking an ML/AI project from an empty
+folder to a clean, collaborative, CI-backed GitHub repository. This is the guide
+interviewers expect you to <em>already know</em> version control hygiene, branching,
+pull requests, and CI/CD are table stakes for ML Engineer, AI Engineer, and
+MLOps roles.</p>
+<blockquote>
+<p><strong>Why this matters in interviews:</strong> &quot;Walk me through how you'd structure and
+ship a new ML project&quot; is a common system/behavioral question. Being fluent
+with git, GitHub Actions, and a sane repo layout signals you can ship, not
+just prototype in notebooks.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#step-1-install-and-configure-git">Step 1: Install and Configure Git</a></li>
+<li><a href="#step-2-create-the-repository">Step 2: Create the Repository</a></li>
+<li><a href="#step-3-initialize-the-project-locally">Step 3: Initialize the Project Locally</a></li>
+<li><a href="#step-4-the-essential-files">Step 4: The Essential Files</a></li>
+<li><a href="#step-5-connect-local-to-remote">Step 5: Connect Local to Remote</a></li>
+<li><a href="#step-6-branching-strategy">Step 6: Branching Strategy</a></li>
+<li><a href="#step-7-pull-requests--code-review">Step 7: Pull Requests &amp; Code Review</a></li>
+<li><a href="#step-8-protect-the-main-branch">Step 8: Protect the Main Branch</a></li>
+<li><a href="#step-9-continuous-integration-github-actions">Step 9: Continuous Integration (GitHub Actions)</a></li>
+<li><a href="#step-10-releases-tags--versioning">Step 10: Releases, Tags &amp; Versioning</a></li>
+<li><a href="#step-11-github-pages-project-docs-site">Step 11: GitHub Pages (Project Docs Site)</a></li>
+<li><a href="#secrets--security">Secrets &amp; Security</a></li>
+<li><a href="#authentication-ssh-vs-https-vs-gh-cli">Authentication: SSH vs HTTPS vs gh CLI</a></li>
+<li><a href="#common-mistakes">Common Mistakes</a></li>
+<li><a href="#interview-questions">Interview Questions</a></li>
+</ol>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Why</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Git</strong></td>
+<td>Version control</td>
+<td><code>git --version</code></td>
+</tr>
+<tr>
+<td><strong>A GitHub account</strong></td>
+<td>Remote hosting</td>
+<td>github.com</td>
+</tr>
+<tr>
+<td><strong>GitHub CLI (<code>gh</code>)</strong> <em>(optional, recommended)</em></td>
+<td>Create repos/PRs from the terminal</td>
+<td><code>gh --version</code></td>
+</tr>
+<tr>
+<td><strong>An editor</strong></td>
+<td>VS Code, JetBrains, etc.</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="step-1-install-and-configure-git">Step 1: Install and Configure Git</h2>
+<pre><code class="language-bash"># macOS
+brew install git
+# Debian/Ubuntu
+sudo apt-get install git
+# Windows: download from git-scm.com
+
+# One-time identity setup (shows up in your commits)
+git config --global user.name  &quot;Your Name&quot;
+git config --global user.email &quot;you@example.com&quot;
+
+# Sensible defaults
+git config --global init.defaultBranch main      # default branch name
+git config --global pull.rebase true             # cleaner history on pull
+git config --global core.autocrlf input          # line-ending sanity (mac/linux)
+</code></pre>
+<blockquote>
+<p>Verify with <code>git config --list</code>.</p>
+</blockquote>
+<hr />
+<h2 id="step-2-create-the-repository">Step 2: Create the Repository</h2>
+<h3 id="option-a-on-githubcom-gui">Option A: On github.com (GUI)</h3>
+<ol>
+<li>Click <strong>New repository</strong>.</li>
+<li>Name it (<code>my-ml-project</code>), add a one-line description.</li>
+<li>Choose <strong>Public</strong> or <strong>Private</strong>.</li>
+<li>Tick <strong>Add a README</strong>, <strong>Add .gitignore → Python</strong>, and <strong>Choose a license</strong> (MIT/Apache-2.0 are common).</li>
+<li><strong>Create repository</strong>, then clone:</li>
+</ol>
+<pre><code class="language-bash">git clone https://github.com/&lt;you&gt;/my-ml-project.git
+cd my-ml-project
+</code></pre>
+<h3 id="option-b-from-the-terminal-with-gh">Option B: From the terminal with <code>gh</code></h3>
+<pre><code class="language-bash">gh repo create my-ml-project --public --clone --gitignore Python --license mit
+cd my-ml-project
+</code></pre>
+<h3 id="option-c-push-an-existing-local-folder">Option C: Push an existing local folder</h3>
+<p>See <a href="#step-5-connect-local-to-remote">Step 5</a>.</p>
+<hr />
+<h2 id="step-3-initialize-the-project-locally">Step 3: Initialize the Project Locally</h2>
+<pre><code class="language-bash">mkdir my-ml-project &amp;&amp; cd my-ml-project
+git init                      # creates the .git/ directory
+python -m venv .venv          # isolated environment
+source .venv/bin/activate     # Windows: .venv\Scripts\activate
+</code></pre>
+<blockquote>
+<p>See the companion guide <strong><a href="intro_project_structure.html">ML/AI Project Folder Structures</a></strong>
+for the recommended directory layout to create here.</p>
+</blockquote>
+<hr />
+<h2 id="step-4-the-essential-files">Step 4: The Essential Files</h2>
+<p>Every healthy repo has these. Skipping them is the #1 sign of an unmaintained project.</p>
+<h3 id="gitignore"><code>.gitignore</code></h3>
+<p>Stop committing junk, secrets, and large artifacts. A minimal Python/ML version:</p>
+<pre><code class="language-gitignore"># Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+
+# ML artifacts (use DVC / model registry instead of git)
+*.ckpt
+*.pt
+*.pth
+*.onnx
+data/raw/
+data/processed/
+models/
+mlruns/
+wandb/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+</code></pre>
+<h3 id="readmemd"><code>README.md</code></h3>
+<p>The front door. Include: what it does, how to install, how to run, an example,
+and a project structure overview. (See <a href="#step-11-github-pages-project-docs-site">Step 11</a> to turn docs into a site.)</p>
+<h3 id="license"><code>LICENSE</code></h3>
+<p>No license = &quot;all rights reserved&quot; by default, meaning others legally cannot use
+it. MIT (permissive) and Apache-2.0 (permissive + patent grant) are the usual
+picks for open work.</p>
+<h3 id="requirementstxt--pyprojecttoml"><code>requirements.txt</code> / <code>pyproject.toml</code></h3>
+<p>Pin dependencies so the project is reproducible.</p>
+<pre><code class="language-bash">pip freeze &gt; requirements.txt          # quick &amp; dirty
+# or, preferred for libraries/apps:
+# define dependencies in pyproject.toml and use uv/poetry/pip-tools to lock
+</code></pre>
+<h3 id="envexample"><code>.env.example</code></h3>
+<p>Commit a template of required env vars (<strong>never the real <code>.env</code></strong>):</p>
+<pre><code class="language-bash"># .env.example: copy to .env and fill in
+ANTHROPIC_API_KEY=
+DATABASE_URL=
+</code></pre>
+<h3 id="contributingmd-and-code_of_conductmd"><code>CONTRIBUTING.md</code> and <code>CODE_OF_CONDUCT.md</code></h3>
+<p>For collaborative/open-source repos: set expectations for contributors.</p>
+<hr />
+<h2 id="step-5-connect-local-to-remote">Step 5: Connect Local to Remote</h2>
+<pre><code class="language-bash">git add .
+git commit -m &quot;Initial project scaffold&quot;
+
+# Link to the GitHub remote you created in Step 2
+git remote add origin https://github.com/&lt;you&gt;/my-ml-project.git
+
+git branch -M main           # rename current branch to main
+git push -u origin main      # -u sets the upstream so future pushes are just `git push`
+</code></pre>
+<blockquote>
+<p><code>git remote -v</code> confirms the remote URL.</p>
+</blockquote>
+<hr />
+<h2 id="step-6-branching-strategy">Step 6: Branching Strategy</h2>
+<p><strong>Never commit straight to <code>main</code>.</strong> Work on a branch, open a PR, merge after review.</p>
+<h3 id="github-flow-simplest-recommended-for-most-ml-projects">GitHub Flow (simplest: recommended for most ML projects)</h3>
+<pre><code>main ──●──────────────●────────────● (always deployable)
+        \            / \           /
+         ●──●──●────●   ●──●──●────●
+        feature/x      fix/y
+</code></pre>
+<pre><code class="language-bash">git switch -c feature/add-training-pipeline   # create + switch (modern syntax)
+# ...work, then...
+git add .
+git commit -m &quot;feat: add training pipeline with early stopping&quot;
+git push -u origin feature/add-training-pipeline
+</code></pre>
+<h3 id="branch-naming-conventions">Branch naming conventions</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feature/</code></td>
+<td>New functionality</td>
+</tr>
+<tr>
+<td><code>fix/</code></td>
+<td>Bug fixes</td>
+</tr>
+<tr>
+<td><code>experiment/</code></td>
+<td>ML experiments (<code>experiment/lr-sweep</code>)</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td>Documentation only</td>
+</tr>
+<tr>
+<td><code>chore/</code></td>
+<td>Tooling, deps, CI</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="conventional-commits">Conventional Commits</h3>
+<p>A widely-used commit message format that enables auto-changelogs and semantic versioning:</p>
+<pre><code>feat: add SHAP-based feature attribution
+fix: correct off-by-one in sequence padding
+docs: expand README quickstart
+chore: bump torch to 2.4
+refactor: extract dataloader into module
+</code></pre>
+<p>Format: <code>&lt;type&gt;(&lt;optional scope&gt;): &lt;description&gt;</code>.</p>
+<hr />
+<h2 id="step-7-pull-requests--code-review">Step 7: Pull Requests &amp; Code Review</h2>
+<p>A <strong>Pull Request (PR)</strong> proposes merging your branch into <code>main</code> and is where
+review, CI, and discussion happen.</p>
+<pre><code class="language-bash"># With the gh CLI
+gh pr create --title &quot;Add training pipeline&quot; --body &quot;Implements early stopping and checkpointing.&quot;
+
+# Or push and click the link GitHub prints / open a PR in the web UI.
+</code></pre>
+<p><strong>A good PR:</strong></p>
+<ul>
+<li>Is <strong>small and focused</strong> (one logical change: easier to review, faster to merge).</li>
+<li>Has a clear title + description (what, why, how to test).</li>
+<li>Links the issue it closes: <code>Closes #42</code> in the body auto-closes the issue on merge.</li>
+<li>Passes CI (tests, lint) before requesting review.</li>
+</ul>
+<p><strong>PR templates</strong>: add <code>.github/pull_request_template.md</code> to standardize:</p>
+<pre><code class="language-markdown">## What
+&lt;!-- What does this PR do? --&gt;
+
+## Why
+&lt;!-- Why is it needed? --&gt;
+
+## How to test
+&lt;!-- Steps / commands --&gt;
+
+## Checklist
+- [ ] Tests added/updated
+- [ ] Docs updated
+- [ ] CI passing
+</code></pre>
+<hr />
+<h2 id="step-8-protect-the-main-branch">Step 8: Protect the Main Branch</h2>
+<p>In <strong>Settings → Branches → Add branch protection rule</strong> for <code>main</code>:</p>
+<ul>
+<li>Require a pull request before merging</li>
+<li>Require approvals (1+)</li>
+<li>Require status checks to pass (your CI)</li>
+<li>Require branches to be up to date before merging</li>
+<li>(Optional) Require signed commits / linear history</li>
+</ul>
+<p>This guarantees nothing untested or unreviewed reaches <code>main</code>.</p>
+<hr />
+<h2 id="step-9-continuous-integration-github-actions">Step 9: Continuous Integration (GitHub Actions)</h2>
+<p>CI runs automatically on every push/PR. Create <code>.github/workflows/ci.yml</code>:</p>
+<pre><code class="language-yaml">name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [&quot;3.10&quot;, &quot;3.11&quot;, &quot;3.12&quot;]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest ruff
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest -q
+</code></pre>
+<blockquote>
+<p>For a deeper treatment (matrices, caching, Docker builds, deployment), see
+the <strong><a href="../devops/intro_github_actions.html">GitHub Actions guide</a></strong>.</p>
+</blockquote>
+<p><strong>Pre-commit hooks</strong> catch issues <em>before</em> they hit CI. Add <code>.pre-commit-config.yaml</code>:</p>
+<pre><code class="language-yaml">repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.0
+    hooks:
+      - id: ruff
+      - id: ruff-format
+</code></pre>
+<pre><code class="language-bash">pip install pre-commit &amp;&amp; pre-commit install
+</code></pre>
+<hr />
+<h2 id="step-10-releases-tags--versioning">Step 10: Releases, Tags &amp; Versioning</h2>
+<p>Use <strong>Semantic Versioning</strong> (<code>MAJOR.MINOR.PATCH</code>):</p>
+<ul>
+<li><strong>MAJOR</strong>: breaking changes</li>
+<li><strong>MINOR</strong>: new, backward-compatible features</li>
+<li><strong>PATCH</strong>: backward-compatible bug fixes</li>
+</ul>
+<pre><code class="language-bash">git tag -a v1.0.0 -m &quot;First stable release&quot;
+git push origin v1.0.0
+</code></pre>
+<p>Then <strong>Releases → Draft a new release</strong> on GitHub (or <code>gh release create v1.0.0 --generate-notes</code>)
+to attach changelogs and artifacts.</p>
+<hr />
+<h2 id="step-11-github-pages-project-docs-site">Step 11: GitHub Pages (Project Docs Site)</h2>
+<p>Turn <code>README.md</code>/<code>docs/</code> into a hosted website for free.</p>
+<ol>
+<li><strong>Settings → Pages</strong>.</li>
+<li><strong>Source</strong>: Deploy from a branch → <code>main</code> → <code>/ (root)</code> or <code>/docs</code>.</li>
+<li>Save. Your site appears at <code>https://&lt;you&gt;.github.io/&lt;repo&gt;/</code>.</li>
+</ol>
+<blockquote>
+<p>This very repository is published with GitHub Pages: <code>index.html</code> at the root
+renders the markdown guides into a browsable site. A <code>.nojekyll</code> file disables
+Jekyll processing so files are served as-is.</p>
+</blockquote>
+<p>For richer docs, use <strong>MkDocs</strong> (<code>mkdocs-material</code>) or <strong>Sphinx</strong> with a Pages
+deploy workflow.</p>
+<hr />
+<h2 id="secrets--security">Secrets &amp; Security</h2>
+<ul>
+<li><strong>Never commit secrets</strong> (API keys, tokens, passwords). Use <code>.env</code> (git-ignored)
+locally and <strong>GitHub Actions Secrets</strong> (<code>Settings → Secrets and variables → Actions</code>)
+in CI: reference as <code>${{ secrets.ANTHROPIC_API_KEY }}</code>.</li>
+<li><strong>If you leak a secret</strong>, rotate it immediately: git history is permanent.
+Removing it from the latest commit is not enough; revoke and reissue the key.</li>
+<li>Enable <strong>Dependabot</strong> (<code>Settings → Code security</code>) for automated dependency
+vulnerability alerts and PRs.</li>
+<li>Enable <strong>secret scanning</strong> and <strong>push protection</strong> to block accidental commits
+of credentials.</li>
+</ul>
+<hr />
+<h2 id="authentication-ssh-vs-https-vs-gh-cli">Authentication: SSH vs HTTPS vs gh CLI</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Setup</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTPS + token</strong></td>
+<td>Generate a Personal Access Token (PAT), use as password</td>
+<td>Simple, works everywhere</td>
+</tr>
+<tr>
+<td><strong>SSH keys</strong></td>
+<td><code>ssh-keygen</code> → add public key to GitHub</td>
+<td>No password prompts, dev machines</td>
+</tr>
+<tr>
+<td><strong><code>gh auth login</code></strong></td>
+<td>One command, browser flow</td>
+<td>Easiest; manages credentials for you</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-bash"># SSH key (one-time)
+ssh-keygen -t ed25519 -C &quot;you@example.com&quot;
+cat ~/.ssh/id_ed25519.pub        # paste into GitHub → Settings → SSH keys
+git remote set-url origin git@github.com:&lt;you&gt;/my-ml-project.git
+</code></pre>
+<hr />
+<h2 id="common-mistakes">Common Mistakes</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Committing <code>data/</code>, <code>models/</code>, <code>.venv/</code></td>
+<td>Add to <code>.gitignore</code>; use DVC / a model registry for large artifacts</td>
+</tr>
+<tr>
+<td>Committing secrets</td>
+<td><code>.env</code> git-ignored + Actions Secrets; rotate if leaked</td>
+</tr>
+<tr>
+<td>One giant PR</td>
+<td>Split into small, focused PRs</td>
+</tr>
+<tr>
+<td>Working directly on <code>main</code></td>
+<td>Use feature branches + branch protection</td>
+</tr>
+<tr>
+<td>No README/LICENSE</td>
+<td>Add both: they signal a real, usable project</td>
+</tr>
+<tr>
+<td>Vague commit messages (<code>&quot;fixed stuff&quot;</code>)</td>
+<td>Use Conventional Commits</td>
+</tr>
+<tr>
+<td>No CI</td>
+<td>Add a GitHub Actions workflow (Step 9)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<ol>
+<li><strong>Walk me through how you'd set up a new ML project repo.</strong> → Init, venv,
+<code>.gitignore</code>, README/LICENSE, dependency pinning, branch protection, CI.</li>
+<li><strong><code>git merge</code> vs <code>git rebase</code>?</strong> → Merge preserves history with a merge commit;
+rebase replays commits for a linear history. Don't rebase shared/public branches.</li>
+<li><strong>How do you keep large model files / datasets out of git?</strong> → <code>.gitignore</code> +
+DVC / Git LFS / a model registry (MLflow, S3): git is for code, not binaries.</li>
+<li><strong>What goes in CI for an ML repo?</strong> → Lint, unit tests, data/schema validation,
+maybe a tiny training smoke test and model-eval gate.</li>
+<li><strong>How do you handle secrets across local dev and CI?</strong> → <code>.env</code> (git-ignored)
+locally, GitHub Actions Secrets in CI, never hardcoded.</li>
+<li><strong>What is a protected branch and why use it?</strong> → A branch that requires PRs,
+reviews, and passing checks before merge: prevents unreviewed/broken code on <code>main</code>.</li>
+<li><strong>Explain trunk-based vs GitHub Flow vs Git Flow.</strong> → Trunk-based: short-lived
+branches off <code>main</code>, frequent integration. GitHub Flow: branch → PR → merge.
+Git Flow: long-lived <code>develop</code>/<code>release</code> branches (heavier; less common for ML).</li>
+</ol>
+<hr />
+<h3 id="related-guides">Related Guides</h3>
+<ul>
+<li><a href="intro_project_structure.html">ML/AI Project Folder Structures</a></li>
+<li><a href="../devops/intro_github_actions.html">GitHub Actions (CI/CD)</a></li>
+<li><a href="../devops/intro_docker.html">Docker</a> · <a href="../mlops/intro_mlflow.html">MLflow</a> · <a href="../mlops/intro_llmops_mlops_engineering.html">LLMOps / MLOps Engineering</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_project_structure.html"><small>Next</small>ML/AI Folder Structures</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/project_setup/intro_github_project_setup.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

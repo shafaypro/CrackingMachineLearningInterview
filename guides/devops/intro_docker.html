@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docker Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Docker is the standard for packaging applications into portable, reproducible containers. It is used for deploying microservices, running local dev…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_docker.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Docker Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Docker is the standard for packaging applications into portable, reproducible containers. It is used for deploying microservices, running local dev…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_docker.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Docker is the standard for packaging applications into portable, reproducible containers. It is used for deploying microservices, running local dev…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Docker",
+   "description": "Docker is the standard for packaging applications into portable, reproducible containers. It is used for deploying microservices, running local dev…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_docker.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Docker",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_docker.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Docker</span></nav>
+<p class="meta"><a href="../../#devops/intro_docker.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="docker">Docker</h1>
+<p>Docker is the standard for packaging applications into portable, reproducible <strong>containers</strong>. It is used for deploying microservices, running local dev environments, and building CI/CD pipelines, and ML model serving is almost always shipped as a container image.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-docker">What is Docker?</a></li>
+<li><a href="#core-concepts">Core Concepts</a></li>
+<li><a href="#installation--setup">Installation &amp; Setup</a></li>
+<li><a href="#dockerfile">Dockerfile</a></li>
+<li><a href="#images--containers">Images &amp; Containers</a></li>
+<li><a href="#volumes--networking">Volumes &amp; Networking</a></li>
+<li><a href="#docker-compose">Docker Compose</a></li>
+<li><a href="#multi-stage-builds">Multi-Stage Builds</a></li>
+<li><a href="#docker-in-cicd">Docker in CI/CD</a></li>
+<li><a href="#security-best-practices">Security Best Practices</a></li>
+<li><a href="#docker-in-2026">Docker in 2026</a></li>
+<li><a href="#cheat-sheet">Cheat Sheet</a></li>
+</ol>
+<hr />
+<h2 id="what-is-docker">What is Docker?</h2>
+<p>Docker packages an application and <strong>all its dependencies</strong> (libraries, runtime, config) into a <strong>container</strong>: a lightweight, isolated process that runs identically on any machine.</p>
+<pre><code>Without Docker:                    With Docker:
+&quot;It works on my machine!&quot;   →     &quot;It works everywhere.&quot;
+</code></pre>
+<h3 id="docker-vs-vms">Docker vs VMs</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Virtual Machine</th>
+<th>Docker Container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Isolation</td>
+<td>Full OS</td>
+<td>Process-level</td>
+</tr>
+<tr>
+<td>Startup time</td>
+<td>Minutes</td>
+<td>Milliseconds</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>GBs</td>
+<td>MBs</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>High (hypervisor)</td>
+<td>Minimal</td>
+</tr>
+<tr>
+<td>Portability</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+</tbody>
+</table></div>
+<p>Containers share the <strong>host OS kernel</strong>: they're not VMs. They use Linux namespaces and cgroups for isolation.</p>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="the-big-picture">The Big Picture</h3>
+<pre><code>Dockerfile  →  docker build  →  Image  →  docker run  →  Container
+                                  ↕
+                           Docker Registry
+                         (Docker Hub, ECR, GCR)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dockerfile</strong></td>
+<td>Blueprint for building an image (text file with instructions)</td>
+</tr>
+<tr>
+<td><strong>Image</strong></td>
+<td>Read-only snapshot of a filesystem + metadata. Immutable.</td>
+</tr>
+<tr>
+<td><strong>Container</strong></td>
+<td>A running instance of an image. Ephemeral by default.</td>
+</tr>
+<tr>
+<td><strong>Registry</strong></td>
+<td>Remote store for images (Docker Hub, AWS ECR, GitHub GHCR)</td>
+</tr>
+<tr>
+<td><strong>Layer</strong></td>
+<td>Each Dockerfile instruction creates a cached, reusable layer</td>
+</tr>
+<tr>
+<td><strong>Volume</strong></td>
+<td>Persistent storage that survives container restarts</td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>Virtual network allowing containers to communicate</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="installation--setup">Installation &amp; Setup</h2>
+<h3 id="linux">Linux</h3>
+<pre><code class="language-bash">curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER   # run Docker without sudo
+newgrp docker
+</code></pre>
+<h3 id="verify">Verify</h3>
+<pre><code class="language-bash">docker version
+docker run hello-world
+</code></pre>
+<h3 id="docker-desktop-macwindows">Docker Desktop (Mac/Windows)</h3>
+<p>Download from <a href="https://docker.com/products/docker-desktop">docker.com/products/docker-desktop</a>. Includes Docker Engine + Compose + Kubernetes.</p>
+<hr />
+<h2 id="dockerfile">Dockerfile</h2>
+<p>A <code>Dockerfile</code> is a script of instructions that Docker executes layer by layer to build an image.</p>
+<h3 id="basic-structure">Basic Structure</h3>
+<pre><code class="language-dockerfile"># Base image
+FROM python:3.12-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files first (cache optimization)
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Expose port (documentation only, doesn't publish)
+EXPOSE 8000
+
+# Default command to run
+CMD [&quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]
+</code></pre>
+<h3 id="key-instructions">Key Instructions</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FROM</code></td>
+<td>Base image</td>
+<td><code>FROM python:3.12-slim</code></td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>Set working directory</td>
+<td><code>WORKDIR /app</code></td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td>Copy files from host</td>
+<td><code>COPY src/ /app/src/</code></td>
+</tr>
+<tr>
+<td><code>ADD</code></td>
+<td>Like COPY + supports URLs/tar</td>
+<td><code>ADD archive.tar.gz /app/</code></td>
+</tr>
+<tr>
+<td><code>RUN</code></td>
+<td>Execute command in new layer</td>
+<td><code>RUN apt-get install -y curl</code></td>
+</tr>
+<tr>
+<td><code>ENV</code></td>
+<td>Set environment variable</td>
+<td><code>ENV PORT=8080</code></td>
+</tr>
+<tr>
+<td><code>ARG</code></td>
+<td>Build-time variable</td>
+<td><code>ARG VERSION=1.0</code></td>
+</tr>
+<tr>
+<td><code>EXPOSE</code></td>
+<td>Document port</td>
+<td><code>EXPOSE 5432</code></td>
+</tr>
+<tr>
+<td><code>CMD</code></td>
+<td>Default run command</td>
+<td><code>CMD [&quot;python&quot;, &quot;app.py&quot;]</code></td>
+</tr>
+<tr>
+<td><code>ENTRYPOINT</code></td>
+<td>Fixed command (CMD appended)</td>
+<td><code>ENTRYPOINT [&quot;gunicorn&quot;]</code></td>
+</tr>
+<tr>
+<td><code>USER</code></td>
+<td>Switch to non-root user</td>
+<td><code>USER appuser</code></td>
+</tr>
+<tr>
+<td><code>HEALTHCHECK</code></td>
+<td>Container health check</td>
+<td>See below</td>
+</tr>
+<tr>
+<td><code>LABEL</code></td>
+<td>Metadata</td>
+<td><code>LABEL version=&quot;1.0&quot;</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="cmd-vs-entrypoint">CMD vs ENTRYPOINT</h3>
+<pre><code class="language-dockerfile"># CMD: overridable default command
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+# docker run myimage python other.py   ← overrides CMD
+
+# ENTRYPOINT: fixed executable, CMD becomes default args
+ENTRYPOINT [&quot;python&quot;]
+CMD [&quot;app.py&quot;]
+# docker run myimage other.py   ← runs &quot;python other.py&quot;
+</code></pre>
+<h3 id="dockerignore">.dockerignore</h3>
+<p>Like <code>.gitignore</code>: prevents unnecessary files from being sent to the Docker build context:</p>
+<pre><code class="language-dockerignore">.git
+__pycache__
+*.pyc
+.env
+node_modules
+*.log
+.DS_Store
+</code></pre>
+<hr />
+<h2 id="images--containers">Images &amp; Containers</h2>
+<h3 id="building-images">Building Images</h3>
+<pre><code class="language-bash"># Build from Dockerfile in current directory
+docker build -t myapp:1.0 .
+
+# Build with specific Dockerfile
+docker build -f Dockerfile.prod -t myapp:prod .
+
+# Build with build args
+docker build --build-arg VERSION=2.0 -t myapp:2.0 .
+
+# Build for specific platform (cross-compile)
+docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest .
+</code></pre>
+<h3 id="image-management">Image Management</h3>
+<pre><code class="language-bash"># List local images
+docker images
+docker image ls
+
+# Pull from registry
+docker pull python:3.12-slim
+docker pull ghcr.io/myorg/myapp:latest
+
+# Push to registry
+docker tag myapp:1.0 myrepo/myapp:1.0
+docker push myrepo/myapp:1.0
+
+# Inspect image layers
+docker history myapp:1.0
+docker inspect myapp:1.0
+
+# Remove image
+docker rmi myapp:1.0
+docker image prune -a   # remove all unused images
+</code></pre>
+<h3 id="running-containers">Running Containers</h3>
+<pre><code class="language-bash"># Run interactively
+docker run -it ubuntu bash
+
+# Run in background (detached)
+docker run -d --name my-postgres postgres:16
+
+# Run with environment variables
+docker run -d \
+  -e POSTGRES_PASSWORD=secret \
+  -e POSTGRES_DB=mydb \
+  --name postgres \
+  postgres:16
+
+# Run with port mapping (host:container)
+docker run -d -p 8080:80 nginx
+
+# Run with volume mount
+docker run -d \
+  -v /host/data:/container/data \
+  myapp:1.0
+
+# Run with resource limits
+docker run -d \
+  --memory=&quot;512m&quot; \
+  --cpus=&quot;1.5&quot; \
+  myapp:1.0
+
+# Auto-remove when stopped
+docker run --rm -it myapp:1.0 bash
+</code></pre>
+<h3 id="container-management">Container Management</h3>
+<pre><code class="language-bash"># List running containers
+docker ps
+
+# List all containers (including stopped)
+docker ps -a
+
+# Stop / start / restart
+docker stop my-app
+docker start my-app
+docker restart my-app
+
+# Remove container
+docker rm my-app
+docker rm -f my-app  # force remove running container
+
+# View logs
+docker logs my-app
+docker logs -f my-app   # follow (tail -f)
+docker logs --tail 100 my-app
+
+# Execute command in running container
+docker exec -it my-app bash
+docker exec my-app cat /etc/hosts
+
+# Copy files to/from container
+docker cp ./config.yaml my-app:/app/config.yaml
+docker cp my-app:/app/logs/app.log ./logs/
+
+# Inspect container
+docker inspect my-app
+
+# Stats (CPU, memory, network)
+docker stats
+
+# Clean up everything stopped
+docker container prune
+</code></pre>
+<hr />
+<h2 id="volumes--networking">Volumes &amp; Networking</h2>
+<h3 id="volumes">Volumes</h3>
+<p>Volumes are the <strong>preferred way</strong> to persist data. They're managed by Docker and survive container restarts/removal.</p>
+<pre><code class="language-bash"># Create volume
+docker volume create pgdata
+
+# Use volume in container
+docker run -d \
+  -v pgdata:/var/lib/postgresql/data \
+  postgres:16
+
+# Bind mount (maps host directory)
+docker run -v $(pwd)/data:/app/data myapp
+
+# List volumes
+docker volume ls
+
+# Inspect volume
+docker volume inspect pgdata
+
+# Remove volume
+docker volume rm pgdata
+docker volume prune   # remove all unused
+</code></pre>
+<p><strong>Volumes vs Bind Mounts vs tmpfs:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Use Case</th>
+<th>Managed By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Volume</td>
+<td>Production data persistence</td>
+<td>Docker</td>
+</tr>
+<tr>
+<td>Bind mount</td>
+<td>Dev: sync host code into container</td>
+<td>Host OS</td>
+</tr>
+<tr>
+<td>tmpfs</td>
+<td>Sensitive temp data (in memory only)</td>
+<td>Memory</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="networking">Networking</h3>
+<pre><code class="language-bash"># List networks
+docker network ls
+
+# Create network
+docker network create my-network
+
+# Connect containers on same network
+docker run -d --name db --network my-network postgres:16
+docker run -d --name app --network my-network myapp:1.0
+# app can reach db via hostname &quot;db&quot;
+
+# Inspect network
+docker network inspect my-network
+
+# Connect/disconnect running container
+docker network connect my-network my-app
+docker network disconnect my-network my-app
+</code></pre>
+<p><strong>Built-in Networks:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Network</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bridge</code></td>
+<td>Default. Containers communicate via IP.</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td>Container shares host network stack.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>No networking.</td>
+</tr>
+<tr>
+<td>Custom bridge</td>
+<td>User-defined. Containers reach each other by name.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="docker-compose">Docker Compose</h2>
+<p>Docker Compose defines and runs <strong>multi-container applications</strong> from a single <code>compose.yaml</code> file (the older <code>docker-compose.yml</code> name is still read). Use the Compose v2 plugin, <code>docker compose</code> (space); the standalone Python <code>docker-compose</code> v1 binary is end-of-life.</p>
+<h3 id="example-full-stack-app">Example: Full-Stack App</h3>
+<pre><code class="language-yaml"># compose.yaml
+# No top-level &quot;version:&quot; key: it is obsolete in the Compose Specification
+# and current Compose prints a warning and ignores it.
+
+services:
+  # PostgreSQL database
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: appdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U appuser&quot;]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # Backend API
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - &quot;8000:8000&quot;
+    environment:
+      DATABASE_URL: postgresql://appuser:secret@db:5432/appdb
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./backend:/app   # dev hot-reload
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - &quot;3000:3000&quot;
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+</code></pre>
+<h3 id="compose-commands">Compose Commands</h3>
+<pre><code class="language-bash"># Start all services (detached)
+docker compose up -d
+
+# Start and rebuild images
+docker compose up -d --build
+
+# Stop all services
+docker compose down
+
+# Stop and remove volumes
+docker compose down -v
+
+# View logs
+docker compose logs -f
+docker compose logs -f api
+
+# Scale a service
+docker compose up -d --scale api=3
+
+# Run one-off command
+docker compose run --rm api python manage.py migrate
+
+# Exec into service
+docker compose exec api bash
+
+# Status
+docker compose ps
+
+# Restart single service
+docker compose restart api
+
+# Pull latest images
+docker compose pull
+</code></pre>
+<hr />
+<h2 id="multi-stage-builds">Multi-Stage Builds</h2>
+<p>Multi-stage builds keep production images <strong>small</strong> by separating build-time dependencies from runtime.</p>
+<h3 id="python-example">Python Example</h3>
+<pre><code class="language-dockerfile"># Stage 1: Build
+FROM python:3.12 AS builder
+
+# Install dependencies into a virtualenv that is easy to copy as one directory
+RUN python -m venv /opt/venv
+ENV PATH=&quot;/opt/venv/bin:$PATH&quot;
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Stage 2: Production (lean)
+FROM python:3.12-slim AS production
+
+# Copy only the installed packages from builder (no compilers, no build cache)
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH=&quot;/opt/venv/bin:$PATH&quot;
+
+WORKDIR /app
+COPY . .
+
+# Create non-root user
+RUN useradd -r -s /bin/false appuser
+USER appuser
+
+EXPOSE 8000
+CMD [&quot;python&quot;, &quot;-m&quot;, &quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]
+</code></pre>
+<h3 id="nodejs-example">Node.js Example</h3>
+<pre><code class="language-dockerfile"># Stage 1: Dependencies
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# Stage 2: Build
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 3: Production
+FROM node:22-alpine AS production
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY package.json .
+
+EXPOSE 3000
+CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
+</code></pre>
+<hr />
+<h2 id="docker-in-cicd">Docker in CI/CD</h2>
+<h3 id="github-actions-example">GitHub Actions Example</h3>
+<pre><code class="language-yaml">name: Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+</code></pre>
+<hr />
+<h2 id="security-best-practices">Security Best Practices</h2>
+<pre><code class="language-dockerfile"># 1. Use specific image tags, not :latest
+FROM python:3.12.3-slim-bookworm   # not FROM python:latest
+
+# 2. Run as non-root user
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+# 3. Minimize layers and clean up in same RUN step
+RUN apt-get update &amp;&amp; \
+    apt-get install -y --no-install-recommends curl &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+
+# 4. Don't copy secrets into images
+# Use --secret or runtime environment variables
+
+# 5. Use COPY over ADD (more explicit)
+COPY requirements.txt .
+
+# 6. Set read-only filesystem
+# docker run --read-only myapp (with tmpfs for /tmp)
+
+# 7. Scan images for vulnerabilities
+# docker scout cves myapp:latest
+# trivy image myapp:latest
+</code></pre>
+<h3 id="secrets-management">Secrets Management</h3>
+<pre><code class="language-bash"># Build-time secret (never stored in image layer)
+docker build --secret id=mysecret,src=./secret.txt .
+</code></pre>
+<pre><code class="language-dockerfile"># In Dockerfile - use secret without storing it
+RUN --mount=type=secret,id=mysecret \
+    cat /run/secrets/mysecret | pip install --extra-index-url ...
+</code></pre>
+<hr />
+<h2 id="docker-in-2026">Docker in 2026</h2>
+<h3 id="whats-changed">What's Changed</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status in 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Docker Scout</strong></td>
+<td>Built-in vulnerability scanning in Docker Desktop</td>
+</tr>
+<tr>
+<td><strong>Buildx / BuildKit</strong></td>
+<td>Default build backend; multi-platform builds standard</td>
+</tr>
+<tr>
+<td><strong>Docker Init</strong></td>
+<td><code>docker init</code> generates Dockerfile + Compose automatically</td>
+</tr>
+<tr>
+<td><strong>Testcontainers</strong></td>
+<td>Standard for integration testing with real containers</td>
+</tr>
+<tr>
+<td><strong>Wasm support</strong></td>
+<td>Docker Desktop shipped Wasm workloads as a beta feature, since announced for deprecation; treat it as experimental</td>
+</tr>
+<tr>
+<td><strong>OCI standard</strong></td>
+<td>All major runtimes (containerd, podman) are OCI-compliant</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="alternatives-to-know">Alternatives to Know</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Podman</strong></td>
+<td>Daemonless, rootless Docker alternative (Red Hat)</td>
+</tr>
+<tr>
+<td><strong>nerdctl</strong></td>
+<td>Docker-compatible CLI for containerd</td>
+</tr>
+<tr>
+<td><strong>Finch</strong></td>
+<td>AWS's open-source container CLI for macOS</td>
+</tr>
+<tr>
+<td><strong>Buildpacks</strong></td>
+<td>Build images from source without Dockerfiles (Cloud Native Buildpacks)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># === IMAGES ===
+docker build -t name:tag .              # Build image
+docker pull image:tag                   # Pull image
+docker push repo/image:tag             # Push image
+docker images                          # List images
+docker rmi image:tag                   # Remove image
+docker image prune -a                  # Remove all unused images
+
+# === CONTAINERS ===
+docker run -d -p host:container name    # Run detached with port
+docker run -it image bash              # Interactive shell
+docker run --rm image command          # Auto-remove on exit
+docker ps                              # Running containers
+docker ps -a                           # All containers
+docker stop/start/restart name         # Lifecycle
+docker rm name                         # Remove container
+docker logs -f name                    # Tail logs
+docker exec -it name bash              # Shell into running container
+docker stats                           # Resource usage
+
+# === VOLUMES ===
+docker volume create vol               # Create volume
+docker volume ls                       # List volumes
+docker run -v vol:/path image          # Attach volume
+docker run -v $(pwd):/path image       # Bind mount
+
+# === NETWORKING ===
+docker network create net              # Create network
+docker network ls                      # List networks
+docker run --network net image         # Use network
+
+# === COMPOSE ===
+docker compose up -d                   # Start all services
+docker compose up -d --build          # Start and rebuild
+docker compose down                    # Stop all
+docker compose down -v                 # Stop + remove volumes
+docker compose logs -f [service]       # Logs
+docker compose exec service bash       # Shell into service
+docker compose ps                      # Status
+
+# === CLEANUP ===
+docker system prune                    # Remove all unused
+docker system prune -a --volumes       # Nuclear cleanup
+docker container prune                 # Remove stopped containers
+docker volume prune                    # Remove unused volumes
+docker image prune -a                  # Remove unused images
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_kubernetes.html"><small>Next</small>Kubernetes</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_docker.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

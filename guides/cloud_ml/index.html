@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud ML Platforms Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Cloud ML Platforms Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cloud ML Platforms Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Cloud ML Platforms",
+   "description": "It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Overview",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">Overview</span></nav>
+<p class="meta"><a href="../../#cloud_ml/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="cloud-ml-platforms">Cloud ML Platforms</h1>
+<p>This track covers the managed machine learning platforms most commonly discussed in ML engineer, MLOps, and applied AI interviews:</p>
+<ul>
+<li>AWS SageMaker</li>
+<li>Google Vertex AI</li>
+<li>Azure Machine Learning</li>
+</ul>
+<p>It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and cost), plus a service map for translating between the three clouds.</p>
+<p>Use this section when you need to explain how a team trains, deploys, monitors, and governs models without building the full platform stack from scratch.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-cloud-ml-platforms-matter">Why cloud ML platforms matter</a></li>
+<li><a href="#shared-building-blocks">Shared building blocks</a></li>
+<li><a href="#platform-selection-framework">Platform selection framework</a></li>
+<li><a href="#common-interview-themes">Common interview themes</a></li>
+<li><a href="#learning-path">Learning path</a></li>
+<li><a href="#track-links">Track links</a></li>
+</ol>
+<hr />
+<h2 id="why-cloud-ml-platforms-matter">Why cloud ML platforms matter</h2>
+<p>Most real-world ML teams do not start from bare Kubernetes clusters and custom deployment tooling. They use a managed platform because it reduces:</p>
+<ul>
+<li>time to first production deployment</li>
+<li>infrastructure ownership burden</li>
+<li>operational risk around training jobs and model hosting</li>
+<li>friction around IAM, networking, registries, and auditability</li>
+</ul>
+<p>In interviews, cloud ML questions often test whether you understand:</p>
+<ul>
+<li>the full model lifecycle, not just notebook experimentation</li>
+<li>the tradeoff between managed convenience and platform lock-in</li>
+<li>how platform features map to business requirements like latency, compliance, and cost</li>
+</ul>
+<hr />
+<h2 id="shared-building-blocks">Shared building blocks</h2>
+<p>Across SageMaker, Vertex AI, and Azure ML, you will see the same core concepts:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>What it does</th>
+<th>Why interviewers care</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notebook / workbench</td>
+<td>Interactive development environment</td>
+<td>How experimentation starts</td>
+</tr>
+<tr>
+<td>Training jobs</td>
+<td>Managed compute for model training</td>
+<td>Reproducibility and scale</td>
+</tr>
+<tr>
+<td>Pipelines</td>
+<td>Orchestrates multi-step ML workflows</td>
+<td>CI/CD for ML</td>
+</tr>
+<tr>
+<td>Model registry</td>
+<td>Stores and versions approved models</td>
+<td>Governance and rollback</td>
+</tr>
+<tr>
+<td>Online endpoints</td>
+<td>Real-time prediction serving</td>
+<td>Low-latency production use</td>
+</tr>
+<tr>
+<td>Batch inference</td>
+<td>Large-scale asynchronous scoring</td>
+<td>Offline scoring patterns</td>
+</tr>
+<tr>
+<td>Feature store</td>
+<td>Reusable online and offline features</td>
+<td>Training-serving consistency</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>Drift, skew, performance, data quality</td>
+<td>Reliability after launch</td>
+</tr>
+<tr>
+<td>Security controls</td>
+<td>IAM, network isolation, secrets, audit</td>
+<td>Enterprise readiness</td>
+</tr>
+</tbody>
+</table></div>
+<p>The interview skill is not memorizing product names. It is being able to say:</p>
+<ol>
+<li>where data enters</li>
+<li>how training is triggered</li>
+<li>where artifacts are stored</li>
+<li>how models are promoted</li>
+<li>how inference runs</li>
+<li>how failures and regressions are detected</li>
+</ol>
+<hr />
+<h2 id="platform-selection-framework">Platform selection framework</h2>
+<p>When asked &quot;Which platform would you choose?&quot;, structure the answer around constraints:</p>
+<h3 id="1-existing-cloud-footprint">1. Existing cloud footprint</h3>
+<ul>
+<li>Choose SageMaker if the company is already heavily invested in AWS data and infra services.</li>
+<li>Choose Vertex AI if BigQuery, GCS, and GCP analytics are already the core stack.</li>
+<li>Choose Azure ML if the org is Microsoft-centric with Azure security, Microsoft Entra ID (formerly Azure AD), and Azure OpenAI adoption.</li>
+</ul>
+<h3 id="2-team-maturity">2. Team maturity</h3>
+<ul>
+<li>Smaller teams benefit more from managed training, deployment, and registry workflows.</li>
+<li>Advanced platform teams may prefer more custom control, but still use managed primitives selectively.</li>
+</ul>
+<h3 id="3-workload-type">3. Workload type</h3>
+<ul>
+<li>Tabular AutoML-heavy teams may prefer Vertex AI or Azure Automated ML.</li>
+<li>Broad enterprise ML with many service integrations often fits SageMaker well.</li>
+<li>GenAI teams using Azure OpenAI may prefer Azure ML plus Azure-native governance.</li>
+</ul>
+<h3 id="4-governance-and-compliance">4. Governance and compliance</h3>
+<ul>
+<li>Regulated environments care about network isolation, audit trails, approval gates, and identity integration.</li>
+<li>The &quot;best&quot; platform is often the one that best aligns with the organization's security model.</li>
+</ul>
+<h3 id="5-cost-model">5. Cost model</h3>
+<ul>
+<li>Managed services reduce engineering cost but can increase infrastructure cost.</li>
+<li>The right comparison is total cost of ownership, not raw GPU hourly price alone.</li>
+</ul>
+<hr />
+<h2 id="common-interview-themes">Common interview themes</h2>
+<p>You should be ready to answer:</p>
+<ul>
+<li>How would you design a training-to-deployment pipeline on a managed cloud platform?</li>
+<li>How do you prevent training-serving skew?</li>
+<li>When would you use real-time endpoints vs batch prediction?</li>
+<li>How do you implement canary rollout for a new model version?</li>
+<li>How would you monitor data drift and model degradation?</li>
+<li>How do you control cost for GPU training workloads?</li>
+<li>How do you keep secrets, PII, and regulated data isolated?</li>
+</ul>
+<p>Strong answers usually include:</p>
+<ul>
+<li>explicit storage layers</li>
+<li>model versioning</li>
+<li>approval workflow</li>
+<li>observability</li>
+<li>rollback strategy</li>
+<li>cost controls</li>
+</ul>
+<hr />
+<h2 id="learning-path">Learning path</h2>
+<p>Recommended order:</p>
+<ol>
+<li>Read the comparison guide first.</li>
+<li>Read the provider-specific guide for the cloud you use most, then its &quot;for ML engineers&quot; guide for the surrounding services.</li>
+<li>Compare how each platform handles training, pipelines, and endpoints.</li>
+<li>Practice answering system design questions using one concrete platform.</li>
+<li>Use the service mapping guide to translate your answers to the other two clouds.</li>
+</ol>
+<hr />
+<h2 id="track-links">Track links</h2>
+<ul>
+<li><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></li>
+<li><a href="intro_sagemaker.html">AWS SageMaker Interview Guide</a></li>
+<li><a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a></li>
+<li><a href="intro_azure_ml.html">Azure Machine Learning Interview Guide</a></li>
+<li><a href="aws_for_ml_engineers.html">AWS for ML Engineers</a></li>
+<li><a href="gcp_for_ml_engineers.html">Google Cloud (GCP) for ML Engineers</a></li>
+<li><a href="azure_for_ml_engineers.html">Microsoft Azure for ML Engineers</a></li>
+<li><a href="cloud_service_mapping.html">AWS vs GCP vs Azure: Service Mapping</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_cloud_ml_platforms.html"><small>Next</small>Cloud ML Platforms</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

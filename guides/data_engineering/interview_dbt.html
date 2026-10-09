@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dbt Interview Q&amp;A: Mid-level · Senior · Lead | Cracking ML Interviews</title>
+<meta name="description" content="dbt Interview Q&amp;A: Mid-level · Senior · Lead: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/interview_dbt.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="dbt Interview Q&amp;A: Mid-level · Senior · Lead | Cracking ML Interviews">
+<meta property="og:description" content="dbt Interview Q&amp;A: Mid-level · Senior · Lead: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/interview_dbt.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dbt Interview Q&amp;A: Mid-level · Senior · Lead | Cracking ML Interviews">
+<meta name="twitter:description" content="dbt Interview Q&amp;A: Mid-level · Senior · Lead: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "dbt Interview Q&A: Mid-level · Senior · Lead",
+   "description": "dbt Interview Q&A: Mid-level · Senior · Lead: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/interview_dbt.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "dbt Interview Q&A",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/interview_dbt.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">dbt Interview Q&amp;A</span></nav>
+<p class="meta"><a href="../../#data_engineering/interview_dbt.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 23 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="dbt-interview-qa-mid-level--senior--lead">dbt Interview Q&amp;A: Mid-level · Senior · Lead</h1>
+<blockquote>
+<p>Complete questions and answers for Mid-Senior and Lead-level dbt interviews.
+Covers design, Jinja/macros, performance, testing, CI/CD, and scenario questions.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#interview-qa">Interview Q&amp;A</a>
+<ul>
+<li><a href="#mid-level--engineer-design--modelling">Mid-level / Engineer: Design &amp; Modelling</a></li>
+<li><a href="#mid-senior-jinja-macros--packages">Mid-Senior: Jinja, Macros &amp; Packages</a></li>
+<li><a href="#senior--lead-performance-testing--cicd">Senior / Lead: Performance, Testing &amp; CI/CD</a></li>
+<li><a href="#scenario--situational-questions">Scenario / Situational Questions</a></li>
+</ul>
+</li>
+<li><a href="#related-guides">Related Guides</a></li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h3 id="mid-level--engineer-design--modelling">Mid-level / Engineer: Design &amp; Modelling</h3>
+<hr />
+<h4 id="q1-how-do-incremental-models-work-what-strategies-exist-and-how-do-you-choose">Q1. How do incremental models work? What strategies exist and how do you choose?</h4>
+<p><strong>Answer:</strong></p>
+<p>An incremental model tells dbt: &quot;on the first run, build the full table; on every subsequent run, only process new or changed rows and merge them in.&quot; This avoids a full table rebuild every time, which is critical for large datasets.</p>
+<p>The model uses the <code>is_incremental()</code> macro to apply a filter during incremental runs:</p>
+<pre><code class="language-sql">{{ config(
+    materialized = 'incremental',
+    unique_key   = 'event_id'
+) }}
+
+select
+    event_id,
+    user_id,
+    event_type,
+    cast(occurred_at as timestamp) as occurred_at
+from {{ source('raw', 'events') }}
+
+{% if is_incremental() %}
+    where occurred_at &gt; (select max(occurred_at) from {{ this }})
+{% endif %}
+</code></pre>
+<p><strong>The four incremental strategies:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>What it does</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>append</code></td>
+<td>Insert new rows only: no deduplication</td>
+<td>Immutable event logs where duplicates are impossible</td>
+</tr>
+<tr>
+<td><code>merge</code></td>
+<td>Upsert: update existing rows, insert new ones using <code>unique_key</code></td>
+<td>Most use cases: orders, users, any mutable entity</td>
+</tr>
+<tr>
+<td><code>delete+insert</code></td>
+<td>Delete all rows matching <code>unique_key</code>, re-insert them</td>
+<td>Adapters without <code>MERGE</code> support, or when bulk delete+insert is cheaper</td>
+</tr>
+<tr>
+<td><code>insert_overwrite</code></td>
+<td>Replace entire partitions</td>
+<td>BigQuery/Spark partitioned tables</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>How to choose:</strong></p>
+<ul>
+<li>Data never changes after insert → <code>append</code></li>
+<li>Rows can be updated → <code>merge</code></li>
+<li>Adapter lacks MERGE support (e.g. older Redshift setups) → <code>delete+insert</code></li>
+<li>BigQuery with date partitions → <code>insert_overwrite</code></li>
+</ul>
+<p><strong>Force a full rebuild:</strong></p>
+<pre><code class="language-bash">dbt run -s my_model --full-refresh
+</code></pre>
+<hr />
+<h4 id="q2-append-vs-merge-vs-deleteinsert-what-are-the-trade-offs">Q2. Append vs merge vs delete+insert: what are the trade-offs?</h4>
+<p><strong>Answer:</strong></p>
+<p><strong><code>append</code></strong></p>
+<ul>
+<li>Fastest: just inserts new rows, no lookups</li>
+<li>No deduplication: if the source resends a row, you get a duplicate</li>
+<li>Only safe when data is truly immutable (e.g., raw click events that never change)</li>
+</ul>
+<p><strong><code>merge</code></strong></p>
+<ul>
+<li>The most common strategy. Uses a <code>unique_key</code> to match existing rows</li>
+<li>Updates changed rows, inserts new ones in a single atomic operation</li>
+<li>Slightly slower than append due to the match step</li>
+<li>Requires adapter support for <code>MERGE</code> (Snowflake, BigQuery, Databricks; Redshift added <code>MERGE</code> in 2023, so check your dbt-redshift version)</li>
+</ul>
+<pre><code class="language-sql">{{ config(
+    materialized         = 'incremental',
+    unique_key           = 'order_id',
+    incremental_strategy = 'merge'
+) }}
+</code></pre>
+<p><strong><code>delete+insert</code></strong></p>
+<ul>
+<li>Deletes all rows where <code>unique_key</code> matches, then re-inserts</li>
+<li>Semantically equivalent to merge but works on warehouses without <code>MERGE</code></li>
+<li>Slightly less efficient than merge because delete + insert = 2 operations</li>
+<li>Good fallback where <code>merge</code> is unavailable or slow (historically the Redshift default)</li>
+</ul>
+<p><strong>Key trade-off:</strong> append is fastest but dangerous if source data is mutable. Merge is the right default unless you have a specific reason not to use it.</p>
+<hr />
+<h4 id="q3-how-do-you-handle-late-arriving-data-in-an-incremental-model">Q3. How do you handle late-arriving data in an incremental model?</h4>
+<p><strong>Answer:</strong></p>
+<p>Late-arriving data is the most common production problem with incremental models. It happens when events are recorded in the source <em>after</em> they actually occurred: e.g., a mobile event buffered offline, a Kafka consumer catching up, or a source DB replication lag.</p>
+<p><strong>The problem:</strong></p>
+<pre><code class="language-sql">-- This filter misses events that arrived late:
+where occurred_at &gt; (select max(occurred_at) from {{ this }})
+</code></pre>
+<p>If an event from yesterday arrives today, <code>occurred_at</code> is yesterday (the filter excludes it), and it never gets loaded.</p>
+<p><strong>The fix: lookback window:</strong></p>
+<pre><code class="language-sql">{% if is_incremental() %}
+    where occurred_at &gt; (
+        select dateadd(day, -3, max(occurred_at))   -- look back 3 days
+        from {{ this }}
+    )
+{% endif %}
+</code></pre>
+<p>This reprocesses the last 3 days on every run, catching anything that arrived late. The <code>merge</code> strategy with <code>unique_key</code> ensures rows are upserted rather than duplicated.</p>
+<p><strong>How to choose the window size:</strong></p>
+<ul>
+<li>Look at your source system's SLA: how late can data arrive?</li>
+<li>Check your historical data for the maximum observed lag</li>
+<li>Balance reprocessing cost vs. risk of missing rows</li>
+</ul>
+<p><strong>For extreme cases</strong>, run a periodic <code>--full-refresh</code> (weekly/monthly) as a safety net to catch anything the lookback window missed.</p>
+<hr />
+<h4 id="q4-what-are-snapshots-how-do-they-implement-scd-type-2">Q4. What are snapshots? How do they implement SCD Type 2?</h4>
+<p><strong>Answer:</strong></p>
+<p>A snapshot captures the state of a row at a point in time and tracks how it changes. This is the standard implementation of <strong>Slowly Changing Dimension Type 2 (SCD2)</strong>: instead of overwriting a row when it changes, you keep all historical versions with validity timestamps.</p>
+<p>dbt adds four columns automatically:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dbt_scd_id</code></td>
+<td>Unique key for each snapshot record</td>
+</tr>
+<tr>
+<td><code>dbt_updated_at</code></td>
+<td>When this snapshot record was created</td>
+</tr>
+<tr>
+<td><code>dbt_valid_from</code></td>
+<td>When this version of the row became active</td>
+</tr>
+<tr>
+<td><code>dbt_valid_to</code></td>
+<td>When this version expired (<code>null</code> = currently active)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Timestamp strategy</strong> (use when source has a reliable <code>updated_at</code>):</p>
+<pre><code class="language-sql">{% snapshot orders_snapshot %}
+{{
+  config(
+    target_schema = 'snapshots',
+    unique_key    = 'order_id',
+    strategy      = 'timestamp',
+    updated_at    = 'updated_at'
+  )
+}}
+select * from {{ source('raw', 'orders') }}
+{% endsnapshot %}
+</code></pre>
+<p><strong>Check strategy</strong> (use when there's no <code>updated_at</code>: dbt hashes the columns you specify):</p>
+<pre><code class="language-sql">{% snapshot customers_snapshot %}
+{{
+  config(
+    target_schema = 'snapshots',
+    unique_key    = 'customer_id',
+    strategy      = 'check',
+    check_cols    = ['email', 'plan_type', 'country']
+  )
+}}
+select * from {{ source('raw', 'customers') }}
+{% endsnapshot %}
+</code></pre>
+<p><strong>Resulting data:</strong></p>
+<pre><code>customer_id | plan    | dbt_valid_from      | dbt_valid_to
+1           | free    | 2024-01-01 00:00:00 | 2024-06-01 00:00:00
+1           | pro     | 2024-06-01 00:00:00 | null              ← current
+</code></pre>
+<p>Run with:</p>
+<pre><code class="language-bash">dbt snapshot
+</code></pre>
+<hr />
+<h4 id="q5-how-would-you-structure-a-dbt-project-for-a-team-of-10-engineers">Q5. How would you structure a dbt project for a team of 10+ engineers?</h4>
+<p><strong>Answer:</strong></p>
+<p>At scale, the biggest problems are naming collisions, unclear ownership, slow CI runs, and models no one knows the purpose of. Structure solves all of these.</p>
+<p><strong>Folder structure:</strong></p>
+<pre><code>models/
+├── staging/          # 1:1 with source, owned by data engineers
+│   ├── shopify/
+│   │   ├── _sources.yml
+│   │   ├── _stg_shopify.yml
+│   │   ├── stg_shopify__orders.sql
+│   │   └── stg_shopify__customers.sql
+│   └── stripe/
+│       ├── _sources.yml
+│       └── stg_stripe__payments.sql
+├── intermediate/     # joins, business logic, not exposed to BI
+│   └── int_orders_with_payments.sql
+└── marts/            # owned by domain teams
+    ├── finance/
+    │   ├── _finance.yml
+    │   └── fct_revenue.sql
+    └── product/
+        ├── _product.yml
+        └── fct_events.sql
+</code></pre>
+<p><strong>Key conventions at scale:</strong></p>
+<ul>
+<li><strong>Naming:</strong> <code>stg_[source]__[table]</code>, <code>int_[entity]_[verb]</code>, <code>fct_[event]</code>, <code>dim_[entity]</code></li>
+<li><strong>One owner per folder</strong>: declare in <code>schema.yml</code> using <code>owner.team</code></li>
+<li><strong>Tags per domain</strong>: <code>+tags: ['finance']</code> lets CI run only the affected domain</li>
+<li><strong>No raw source references in marts</strong>: marts must go through staging</li>
+<li><strong>Required tests on every primary key</strong>: enforce with <code>dbt_project_evaluator</code> package</li>
+<li><strong>Descriptions mandatory</strong>: fail CI if models/columns have no description</li>
+</ul>
+<p><strong>dbt_project.yml defaults:</strong></p>
+<pre><code class="language-yaml">models:
+  my_project:
+    staging:
+      +materialized: view
+      +tags: ['staging']
+    intermediate:
+      +materialized: view
+      +tags: ['intermediate']
+    marts:
+      +materialized: table
+      finance:
+        +tags: ['finance']
+        +meta:
+          owner: finance-team
+</code></pre>
+<hr />
+<h4 id="q6-how-do-custom-schemas-work-what-does-generate_schema_name-do">Q6. How do custom schemas work? What does <code>generate_schema_name</code> do?</h4>
+<p><strong>Answer:</strong></p>
+<p>By default, all models land in the schema defined in <code>profiles.yml</code>. You override this with <code>schema</code> in a config block:</p>
+<pre><code class="language-sql">{{ config(schema='finance') }}
+</code></pre>
+<p>But dbt doesn't just use <code>'finance'</code> directly. It calls the <code>generate_schema_name</code> macro which, by default, <strong>concatenates</strong> your target schema and the custom schema:</p>
+<ul>
+<li>In dev: <code>dbt_yourname_finance</code></li>
+<li>In prod: <code>prod_finance</code></li>
+</ul>
+<p>This is intentional: it prevents dev models from colliding with prod schemas.</p>
+<p><strong>Overriding the macro</strong> (common in real projects: you usually want clean schema names in prod):</p>
+<pre><code class="language-sql">-- macros/generate_schema_name.sql
+{% macro generate_schema_name(custom_schema_name, node) -%}
+    {%- set default_schema = target.schema -%}
+    {%- if custom_schema_name is none -%}
+        {{ default_schema }}
+    {%- else -%}
+        {%- if target.name == 'prod' -%}
+            {{ custom_schema_name | trim }}
+        {%- else -%}
+            {{ default_schema }}_{{ custom_schema_name | trim }}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro %}
+</code></pre>
+<p>Result:</p>
+<ul>
+<li>Dev: <code>dbt_alice_finance</code> (isolated, no collision)</li>
+<li>Prod: <code>finance</code> (clean, predictable)</li>
+</ul>
+<hr />
+<h4 id="q7-what-is-the-difference-between-dbt-run-dbt-build-and-dbt-compile">Q7. What is the difference between <code>dbt run</code>, <code>dbt build</code>, and <code>dbt compile</code>?</h4>
+<p><strong>Answer:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dbt compile</code></td>
+<td>Resolves all Jinja (<code>ref()</code>, macros, vars) and writes plain SQL to <code>target/compiled/</code>. Nothing runs in the warehouse. Use this to inspect generated SQL or debug macros.</td>
+</tr>
+<tr>
+<td><code>dbt run</code></td>
+<td>Executes compiled SQL in the warehouse to create/update tables and views. Does not run tests or seeds.</td>
+</tr>
+<tr>
+<td><code>dbt test</code></td>
+<td>Runs all tests (generic + singular). Does not build models.</td>
+</tr>
+<tr>
+<td><code>dbt build</code></td>
+<td>Runs everything in DAG order: seeds → snapshots → run → test. If a test fails, downstream models are skipped. This is the recommended command for CI.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>When to use each:</strong></p>
+<ul>
+<li><code>dbt compile -s my_model</code> → debug Jinja output</li>
+<li><code>dbt run -s +my_model</code> → rebuild a model and its upstream</li>
+<li><code>dbt test -s my_model --store-failures</code> → investigate a test failure</li>
+<li><code>dbt build</code> → full pipeline in CI</li>
+</ul>
+<hr />
+<h4 id="q8-explain-node-selectors---tag-state">Q8. Explain node selectors: <code>+</code>, <code>@</code>, <code>tag:</code>, <code>state:</code>.</h4>
+<p><strong>Answer:</strong></p>
+<p>Node selectors let you run a subset of your DAG rather than everything.</p>
+<pre><code class="language-bash"># basics
+dbt run -s stg_orders              # exact model
+dbt run -s staging.*               # all models in staging/ folder
+dbt run -s tag:finance             # all models tagged 'finance'
+dbt run -s path:models/marts       # all models in the marts/ path
+
+# graph operators
+dbt run -s +orders                 # orders + ALL upstream dependencies
+dbt run -s orders+                 # orders + ALL downstream dependents
+dbt run -s +orders+                # orders + upstream + downstream
+dbt run -s 1+orders                # orders + 1 level upstream only
+dbt run -s orders+1                # orders + 1 level downstream only
+
+# @ operator: upstream + all downstream of upstream
+dbt run -s @orders                 # useful for testing: build everything orders touches
+
+# state selector: only changed models (requires saved manifest)
+dbt run -s state:modified          # models whose SQL changed vs saved manifest
+dbt run -s state:modified+         # changed models + their downstream
+</code></pre>
+<p>The <code>state:modified+</code> selector is the foundation of <strong>slim CI</strong>: you only build and test models affected by a PR, not the entire project.</p>
+<hr />
+<h3 id="mid-senior-jinja-macros--packages">Mid-Senior: Jinja, Macros &amp; Packages</h3>
+<hr />
+<h4 id="q9-what-is-jinja-and-why-does-dbt-use-it">Q9. What is Jinja and why does dbt use it?</h4>
+<p><strong>Answer:</strong></p>
+<p>Jinja is a Python templating language. dbt uses it to make SQL dynamic: you can write conditionals, loops, variables, and reusable functions (macros) inside <code>.sql</code> files.</p>
+<p>When you run any dbt command, Jinja is compiled first. The warehouse only ever receives plain SQL: it never sees <code>{{ }}</code> or <code>{% %}</code>.</p>
+<p><strong>Three Jinja delimiters:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ }}</code></td>
+<td>Expression: outputs a value</td>
+<td><code>{{ ref('orders') }}</code>, <code>{{ var('date') }}</code></td>
+</tr>
+<tr>
+<td><code>{% %}</code></td>
+<td>Statement: control flow</td>
+<td><code>{% if %}</code>, <code>{% for %}</code>, <code>{% set %}</code></td>
+</tr>
+<tr>
+<td><code>{# #}</code></td>
+<td>Comment: stripped before SQL</td>
+<td><code>{# TODO: remove this #}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why SQL alone isn't enough:</strong></p>
+<ul>
+<li>You can't parameterise environment (<code>dev</code> vs <code>prod</code>) in plain SQL</li>
+<li>You'd copy-paste the same <code>CASE WHEN</code> across 20 models</li>
+<li>You can't loop to generate columns dynamically</li>
+<li>You can't reference other models without hardcoding schema names</li>
+</ul>
+<p>Jinja solves all of these.</p>
+<hr />
+<h4 id="q10-write-a-macro-from-scratch-what-can-a-macro-return">Q10. Write a macro from scratch. What can a macro return?</h4>
+<p><strong>Answer:</strong></p>
+<p>A macro is a Jinja function stored in <code>macros/*.sql</code>. It can return a <strong>string</strong> (which gets rendered into SQL), a <strong>list</strong>, a <strong>dict</strong>, or any Python-compatible value via <code>return()</code>.</p>
+<p><strong>Example: a safe division macro:</strong></p>
+<pre><code class="language-sql">-- macros/safe_divide.sql
+{% macro safe_divide(numerator, denominator) %}
+    case
+        when {{ denominator }} is null or {{ denominator }} = 0 then null
+        else {{ numerator }} / cast({{ denominator }} as float)
+    end
+{% endmacro %}
+</code></pre>
+<p>Usage:</p>
+<pre><code class="language-sql">select
+    order_id,
+    {{ safe_divide('revenue', 'num_items') }}   as revenue_per_item
+from {{ ref('orders') }}
+</code></pre>
+<p>Compiled output:</p>
+<pre><code class="language-sql">select
+    order_id,
+    case
+        when num_items is null or num_items = 0 then null
+        else revenue / cast(num_items as float)
+    end   as revenue_per_item
+from prod.orders
+</code></pre>
+<p><strong>A macro that returns a list:</strong></p>
+<pre><code class="language-sql">{% macro get_payment_methods() %}
+    {% set query %}
+        select distinct payment_method from {{ source('raw', 'payments') }} order by 1
+    {% endset %}
+    {% if execute %}
+        {% set results = run_query(query) %}
+        {{ return(results.columns[0].values()) }}
+    {% else %}
+        {{ return([]) }}
+    {% endif %}
+{% endmacro %}
+</code></pre>
+<p><strong>What macros can return:</strong></p>
+<ul>
+<li>A rendered SQL string (default: just write the SQL in the macro body)</li>
+<li>An explicit value via <code>{{ return(value) }}</code>: list, dict, string, number</li>
+</ul>
+<hr />
+<h4 id="q11-what-is-run_query-and-why-do-you-need-to-guard-it-with--if-execute-">Q11. What is <code>run_query</code> and why do you need to guard it with <code>{% if execute %}</code>?</h4>
+<p><strong>Answer:</strong></p>
+<p><code>run_query</code> executes a SQL statement <strong>at compile time</strong> and returns the result as an Agate table you can loop over in Jinja. It's used to generate dynamic SQL based on data that exists in the warehouse.</p>
+<pre><code class="language-sql">{% macro get_active_countries() %}
+    {% set query %}
+        select distinct country_code
+        from {{ ref('stg_customers') }}
+        where is_active = true
+        order by 1
+    {% endset %}
+
+    {% if execute %}
+        {% set results = run_query(query) %}
+        {{ return(results.columns[0].values()) }}
+    {% else %}
+        {{ return([]) }}
+    {% endif %}
+{% endmacro %}
+</code></pre>
+<p><strong>Why <code>{% if execute %}</code> is mandatory:</strong></p>
+<p>dbt processes your Jinja in two phases:</p>
+<ol>
+<li><strong>Parse phase</strong> (<code>dbt parse</code>, <code>dbt ls</code>, dependency resolution): Jinja is evaluated but <code>execute = False</code>. No SQL runs.</li>
+<li><strong>Execute phase</strong> (<code>dbt run</code>, <code>dbt build</code>): <code>execute = True</code>. SQL actually runs.</li>
+</ol>
+<p>During the parse phase, <code>run_query</code> returns <code>None</code>. If you call <code>.columns[0].values()</code> on <code>None</code>, you get a crash. The <code>{% if execute %}</code> guard returns an empty list during parse and the real result during execution.</p>
+<p><strong>Without the guard:</strong></p>
+<pre><code>AttributeError: 'NoneType' object has no attribute 'columns'
+</code></pre>
+<hr />
+<h4 id="q12-what-is-dbt_utils-name-five-macros-youve-used-from-it">Q12. What is <code>dbt_utils</code>? Name five macros you've used from it.</h4>
+<p><strong>Answer:</strong></p>
+<p><code>dbt_utils</code> is the official dbt Labs package of utility macros. Install via <code>packages.yml</code>:</p>
+<pre><code class="language-yaml">packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.1.1
+</code></pre>
+<p><strong>Five essential macros:</strong></p>
+<p><strong>1. <code>generate_surrogate_key</code>: stable primary key from multiple columns:</strong></p>
+<pre><code class="language-sql">select
+    {{ dbt_utils.generate_surrogate_key(['order_id', 'line_item_id']) }} as sk,
+    order_id,
+    line_item_id
+from {{ ref('stg_order_items') }}
+</code></pre>
+<p><strong>2. <code>pivot</code>: turn row values into columns:</strong></p>
+<pre><code class="language-sql">select
+    order_id,
+    {{ dbt_utils.pivot('payment_method', dbt_utils.get_column_values(ref('payments'), 'payment_method')) }}
+from {{ ref('payments') }}
+group by 1
+</code></pre>
+<p><strong>3. <code>union_relations</code>: union multiple tables with schema reconciliation:</strong></p>
+<pre><code class="language-sql">{{ dbt_utils.union_relations(
+    relations=[ref('orders_2022'), ref('orders_2023'), ref('orders_2024')]
+) }}
+</code></pre>
+<p><strong>4. <code>date_spine</code>: generate one row per date (great for gap-filling):</strong></p>
+<pre><code class="language-sql">{{ dbt_utils.date_spine(
+    datepart   = 'day',
+    start_date = &quot;cast('2024-01-01' as date)&quot;,
+    end_date   = &quot;cast('2024-12-31' as date)&quot;
+) }}
+</code></pre>
+<p><strong>5. <code>get_column_values</code>: get distinct values from a column at compile time:</strong></p>
+<pre><code class="language-sql">{% set statuses = dbt_utils.get_column_values(ref('stg_orders'), 'status') %}
+{% for status in statuses %}
+    sum(case when status = '{{ status }}' then 1 else 0 end) as {{ status }}_count,
+{% endfor %}
+</code></pre>
+<hr />
+<h4 id="q13-what-are-pre-hook-and-post-hook-give-a-real-use-case">Q13. What are <code>pre-hook</code> and <code>post-hook</code>? Give a real use case.</h4>
+<p><strong>Answer:</strong></p>
+<p>Hooks are SQL statements (or macro calls) that dbt runs before (<code>pre-hook</code>) or after (<code>post-hook</code>) a model executes. They're declared in <code>dbt_project.yml</code> or in a model's <code>config()</code> block.</p>
+<p><strong>Common use cases:</strong></p>
+<p><strong>1. Grant permissions after a model builds (post-hook):</strong></p>
+<pre><code class="language-sql">-- macros/grant_access.sql
+{% macro grant_access(table, role='reporter') %}
+    grant select on {{ table }} to role {{ role }};
+{% endmacro %}
+</code></pre>
+<pre><code class="language-yaml"># dbt_project.yml
+models:
+  my_project:
+    marts:
+      +post-hook: &quot;{{ grant_access(this) }}&quot;
+</code></pre>
+<p><strong>2. Drop a temp table before building (pre-hook):</strong></p>
+<pre><code class="language-sql">{{ config(
+    pre_hook  = &quot;drop table if exists {{ this }}_staging&quot;,
+    post_hook = &quot;analyze {{ this }}&quot;
+) }}
+</code></pre>
+<p><strong>3. Log model run metadata to an audit table:</strong></p>
+<pre><code class="language-yaml">+post-hook: &gt;
+  insert into audit.model_runs (model_name, run_at)
+  values ('{{ this.name }}', current_timestamp)
+</code></pre>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>{{ this }}</code> refers to the model's own fully-qualified table name</li>
+<li>Multiple hooks can be passed as a list: <code>+post-hook: [&quot;grant ...&quot;, &quot;analyze ...&quot;]</code></li>
+<li>Hooks run inside the same transaction as the model where supported</li>
+</ul>
+<hr />
+<h4 id="q14-when-is-execute-false-in-dbt-why-does-it-matter">Q14. When is <code>execute</code> false in dbt? Why does it matter?</h4>
+<p><strong>Answer:</strong></p>
+<p><code>execute</code> is a global Jinja variable that is <code>True</code> only during the <strong>execution phase</strong> of a dbt command (i.e., when SQL is actually being sent to the warehouse).</p>
+<p>It is <code>False</code> during:</p>
+<ul>
+<li><code>dbt parse</code>: dbt reads all models to build the DAG</li>
+<li><code>dbt ls</code>: dbt lists models without running them</li>
+<li>The <strong>dependency resolution phase</strong> at the start of <code>dbt run</code> / <code>dbt build</code></li>
+<li>Any macro call that happens during graph compilation</li>
+</ul>
+<p><strong>Why it matters:</strong></p>
+<p>Any macro that calls <code>run_query</code>, reads from the warehouse, or manipulates query results must be guarded:</p>
+<pre><code class="language-sql">{% set results = run_query(&quot;select distinct status from raw.orders&quot;) %}
+
+{% if execute %}
+    {# results is a real Agate table here #}
+    {% for row in results.rows %}
+        '{{ row[0] }}'{% if not loop.last %},{% endif %}
+    {% endfor %}
+{% else %}
+    {# results is None here: don't touch it #}
+    'placeholder'
+{% endif %}
+</code></pre>
+<p>Without the guard, <code>dbt parse</code> and <code>dbt ls</code> will crash with a <code>NoneType</code> error, making your entire project unusable for listing or compiling.</p>
+<hr />
+<h3 id="senior--lead-performance-testing--cicd">Senior / Lead: Performance, Testing &amp; CI/CD</h3>
+<hr />
+<h4 id="q15-a-dbt-model-is-running-slowly-walk-me-through-how-youd-optimise-it">Q15. A dbt model is running slowly. Walk me through how you'd optimise it.</h4>
+<p><strong>Answer:</strong></p>
+<p>Diagnose before optimising. The answer depends entirely on <em>why</em> it's slow.</p>
+<p><strong>Step 1: Identify where the time is spent:</strong></p>
+<pre><code class="language-bash">dbt run -s slow_model --debug    # see exact SQL and timing
+</code></pre>
+<p>Check your warehouse's query history/profiler (Snowflake Query Profile, BigQuery Execution Details, Redshift SVL_QUERY_REPORT).</p>
+<p><strong>Step 2: Common causes and fixes:</strong></p>
+<p><strong>Materialization wrong:</strong>
+The model is a <code>view</code> and BI tools query it directly: every query re-runs all the SQL.</p>
+<pre><code class="language-sql">{{ config(materialized='table') }}  -- or incremental for large tables
+</code></pre>
+<p><strong>Full table scan on a large table:</strong>
+No partition pruning, no cluster key. The warehouse reads every row.</p>
+<pre><code class="language-sql">{{ config(
+    materialized  = 'incremental',
+    unique_key    = 'event_id',
+    cluster_by    = ['occurred_date']   -- Snowflake
+    -- partition_by = {'field': 'occurred_date', 'data_type': 'date'}  -- BigQuery
+) }}
+</code></pre>
+<p><strong>Incremental model reprocessing too much:</strong>
+The lookback window is too wide, or <code>unique_key</code> forces an expensive merge across billions of rows.
+Fix: tighten the filter, reduce lookback window, consider <code>insert_overwrite</code> on partitions.</p>
+<p><strong>View chain: views stacked on views:</strong>
+Each downstream query re-executes the entire chain from the raw table.
+Fix: materialize the base of the chain as a table.</p>
+<p><strong>Inefficient SQL: <code>select *</code>, non-sargable filters, cartesian joins:</strong>
+Review the compiled SQL (<code>target/compiled/</code>). Look for:</p>
+<ul>
+<li><code>select *</code> pulling 200 columns when you need 5</li>
+<li><code>where cast(id as varchar) = '123'</code> (prevents index use)</li>
+<li>Implicit cross joins from missing join conditions</li>
+</ul>
+<p><strong>Step 3: Measure the improvement:</strong>
+Run before/after, record bytes scanned and execution time. A good optimisation reduces bytes scanned by 10x+, not just seconds.</p>
+<hr />
+<h4 id="q16-how-do-you-set-up-cicd-for-dbt-what-is-slim-ci">Q16. How do you set up CI/CD for dbt? What is slim CI?</h4>
+<p><strong>Answer:</strong></p>
+<p><strong>Basic CI pipeline (GitHub Actions):</strong></p>
+<pre><code class="language-yaml"># .github/workflows/dbt_ci.yml
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dbt
+        run: pip install dbt-snowflake   # pin the version your project uses
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt build
+        run: dbt build --target ci
+        env:
+          DBT_USER:     ${{ secrets.DBT_USER }}
+          DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+</code></pre>
+<p><strong>The problem with <code>dbt build</code> in CI:</strong>
+On a large project with 500+ models, <code>dbt build</code> rebuilds everything on every PR: wasteful and slow (can take hours).</p>
+<p><strong>Slim CI: only build what changed:</strong></p>
+<p>Slim CI uses the <code>state:modified+</code> selector with a saved production manifest to build only the models changed in the PR and their downstream dependents.</p>
+<pre><code class="language-yaml">- name: Download prod manifest
+  run: |
+    # fetch the latest production manifest.json
+    aws s3 cp s3://my-dbt-artifacts/manifest.json ./prod-manifest/manifest.json
+
+- name: dbt build: changed models only
+  run: |
+    dbt build \
+      --select state:modified+ \
+      --defer \
+      --state ./prod-manifest
+</code></pre>
+<p><strong>Key flags:</strong></p>
+<ul>
+<li><code>--select state:modified+</code>: only models whose SQL/config changed vs the prod manifest, plus their downstream</li>
+<li><code>--defer</code>: for models that haven't changed, use the prod version instead of rebuilding from scratch</li>
+<li><code>--state ./prod-manifest</code>: path to the saved <code>manifest.json</code> from the last prod run</li>
+</ul>
+<p><strong>Result:</strong> A PR that changes 3 models only builds those 3 models + their children, not all 500. CI drops from 60 minutes to 5.</p>
+<hr />
+<h4 id="q17-what-is-test-severity-how-do-you-use-warn-vs-error">Q17. What is test severity? How do you use <code>warn</code> vs <code>error</code>?</h4>
+<p><strong>Answer:</strong></p>
+<p>By default, a failing dbt test exits with a non-zero code: it fails the CI run and blocks downstream models in <code>dbt build</code>. Severity lets you make some failures <strong>warnings</strong> (logged but non-blocking) rather than hard errors.</p>
+<p><strong>Setting severity in YAML:</strong></p>
+<pre><code class="language-yaml">models:
+  - name: orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique:
+              severity: error       # blocks CI: primary key must be unique
+          - not_null:
+              severity: error
+
+      - name: amount
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100000
+              severity: warn        # logs a warning but doesn't block the pipeline
+</code></pre>
+<p><strong>Thresholds: fail only if more than N rows fail:</strong></p>
+<pre><code class="language-yaml">- not_null:
+    severity: warn
+    warn_if: &quot;&gt;10&quot;      # warn only if more than 10 rows fail
+    error_if: &quot;&gt;100&quot;    # error only if more than 100 rows fail
+</code></pre>
+<p>This is valuable for:</p>
+<ul>
+<li><strong>New tests on existing models</strong>: you suspect there are existing data quality issues but don't want to block prod immediately. Start with <code>warn</code>, investigate, fix data, then promote to <code>error</code>.</li>
+<li><strong>Non-critical fields</strong>: a missing <code>phone_number</code> is worth logging but shouldn't stop the pipeline.</li>
+<li><strong>Gradual rollout</strong>: set a threshold (<code>error_if: &quot;&gt;0&quot;</code>) that tightens over time.</li>
+</ul>
+<hr />
+<h4 id="q18-what-are-exposures-and-how-do-you-use-them-for-impact-analysis">Q18. What are exposures and how do you use them for impact analysis?</h4>
+<p><strong>Answer:</strong></p>
+<p>Exposures document what <em>uses</em> your dbt models outside of dbt: dashboards, ML models, reverse ETL pipelines, APIs. They appear as nodes in the lineage graph, letting you see the full blast radius of a model change.</p>
+<pre><code class="language-yaml"># models/marts/exposures.yml
+version: 2
+
+exposures:
+  - name: executive_orders_dashboard
+    type: dashboard
+    maturity: high
+    url: https://looker.company.com/dashboards/42
+    description: &gt;
+      Executive-facing daily orders summary. Refreshed every morning at 6am.
+      Breaking this will affect C-suite reporting.
+    depends_on:
+      - ref('orders')
+      - ref('customers')
+    owner:
+      name: Analytics Team
+      email: analytics@company.com
+
+  - name: churn_prediction_model
+    type: ml
+    maturity: medium
+    description: &quot;Weekly propensity-to-churn model. Reads customer feature table.&quot;
+    depends_on:
+      - ref('customers')
+      - ref('fct_events')
+    owner:
+      name: ML Team
+      email: ml@company.com
+</code></pre>
+<p><strong>Impact analysis workflow:</strong></p>
+<p>Before changing <code>orders.sql</code>, run:</p>
+<pre><code class="language-bash">dbt ls -s orders+    # see everything downstream, including exposures
+</code></pre>
+<p>The output includes <code>exposure:executive_orders_dashboard</code>: you immediately know that breaking <code>orders</code> will affect the executive dashboard and you need to notify the owner before deploying.</p>
+<p><strong>Types:</strong> <code>dashboard</code>, <code>notebook</code>, <code>analysis</code>, <code>ml</code>, <code>application</code>
+<strong>Maturity:</strong> <code>low</code>, <code>medium</code>, <code>high</code>, signals how critical the downstream consumer is</p>
+<hr />
+<h4 id="q19-what-is-the-dbt-semantic-layer-what-problem-does-metricflow-solve">Q19. What is the dbt semantic layer? What problem does MetricFlow solve?</h4>
+<p><strong>Answer:</strong></p>
+<p>The semantic layer solves the <strong>metric consistency problem</strong>: when five different teams define &quot;monthly revenue&quot; five different ways in five different dashboards, the business loses trust in its data.</p>
+<p>MetricFlow (dbt's semantic layer engine) lets you define metrics <strong>once</strong> in dbt and have any BI tool query them consistently.</p>
+<p><strong>Define a semantic model:</strong></p>
+<pre><code class="language-yaml"># models/marts/semantic/orders.yml
+semantic_models:
+  - name: orders
+    model: ref('orders')
+    defaults:
+      agg_time_dimension: ordered_at
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: ordered_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_tier
+        type: categorical
+    measures:
+      - name: order_count
+        agg: count
+        expr: order_id
+      - name: total_revenue
+        agg: sum
+        expr: amount
+
+metrics:
+  - name: total_revenue
+    type: simple
+    label: &quot;Total Revenue&quot;
+    type_params:
+      measure: total_revenue
+
+  - name: average_order_value
+    type: ratio
+    label: &quot;Average Order Value&quot;
+    type_params:
+      numerator: total_revenue
+      denominator: order_count
+</code></pre>
+<p><strong>Query via dbt Cloud or the CLI:</strong></p>
+<pre><code class="language-bash">dbt sl query --metrics total_revenue --group-by ordered_at__month
+</code></pre>
+<p><strong>What problem it solves:</strong></p>
+<ul>
+<li>One definition of <code>total_revenue</code>: no more &quot;which revenue is correct?&quot;</li>
+<li>BI tools query the semantic layer, not raw SQL: consistent results everywhere</li>
+<li>Business logic lives in dbt, not scattered across Looker LookML, Tableau calcs, and Jupyter notebooks</li>
+</ul>
+<hr />
+<h4 id="q20-how-do-you-manage-dev--staging--prod-environments-in-dbt">Q20. How do you manage dev / staging / prod environments in dbt?</h4>
+<p><strong>Answer:</strong></p>
+<p>Environments are controlled by <strong>targets</strong> in <code>profiles.yml</code>. Each target points to a different schema (and optionally warehouse, database, or role).</p>
+<pre><code class="language-yaml"># ~/.dbt/profiles.yml
+my_project:
+  target: dev
+  outputs:
+
+    dev:
+      type: snowflake
+      schema: dbt_{{ env_var('DBT_USERNAME') }}   # personal schema per developer
+      warehouse: dev_wh
+      role: transformer_dev
+      threads: 4
+      # ... connection details
+
+    ci:
+      type: snowflake
+      schema: dbt_ci_{{ env_var('PR_NUMBER') }}   # isolated schema per PR
+      warehouse: ci_wh
+      role: transformer_ci
+      threads: 8
+
+    prod:
+      type: snowflake
+      schema: prod
+      warehouse: prod_wh
+      role: transformer_prod
+      threads: 16
+</code></pre>
+<p><strong>Key isolation patterns:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Schema naming</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dev</td>
+<td><code>dbt_alice</code>, <code>dbt_bob</code></td>
+<td>Each engineer has a personal sandbox: changes don't affect others</td>
+</tr>
+<tr>
+<td>CI</td>
+<td><code>dbt_ci_pr123</code></td>
+<td>Each PR gets an isolated schema: torn down after the PR closes</td>
+</tr>
+<tr>
+<td>Staging</td>
+<td><code>staging</code></td>
+<td>Mirror of prod: used for integration tests and stakeholder review</td>
+</tr>
+<tr>
+<td>Prod</td>
+<td><code>prod</code> (or domain name)</td>
+<td>What BI tools read: only merged, tested code runs here</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Environment-aware SQL using <code>target</code>:</strong></p>
+<pre><code class="language-sql">{% if target.name != 'prod' %}
+limit 10000   -- fast dev iterations
+{% endif %}
+</code></pre>
+<p><strong>dbt Cloud</strong> manages this more explicitly with Environment → Job → Run scoping, where each environment has its own connection credentials and deployment triggers.</p>
+<hr />
+<h4 id="q21-what-are-dbt-contracts-and-how-do-they-enforce-data-quality-at-the-model-level">Q21. What are dbt contracts and how do they enforce data quality at the model level?</h4>
+<p><strong>Answer:</strong></p>
+<p>dbt contracts (introduced in dbt 1.5) let you declare the <strong>expected schema</strong> of a model (column names, data types, and constraints), and have dbt enforce them at build time. If the model's output doesn't match the contract, the run fails before the table is swapped in.</p>
+<pre><code class="language-yaml"># models/marts/_marts.yml
+models:
+  - name: orders
+    config:
+      contract:
+        enforced: true    # schema must exactly match what's declared below
+    columns:
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: primary_key
+      - name: ordered_at
+        data_type: timestamp
+        constraints:
+          - type: not_null
+      - name: amount
+        data_type: float
+      - name: customer_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            expression: &quot;prod.customers (customer_id)&quot;
+</code></pre>
+<p><strong>What contracts enforce:</strong></p>
+<ul>
+<li>Column names must match exactly (extra or missing columns = failure)</li>
+<li>Data types must match (dbt casts and validates)</li>
+<li>Constraints like <code>not_null</code>, <code>primary_key</code>, <code>foreign_key</code> are applied at the DB level where supported</li>
+</ul>
+<p><strong>Why they matter at senior/lead level:</strong>
+Contracts are the foundation of <strong>data contracts</strong> between producer and consumer teams. The team owning <code>orders</code> promises its schema to the 5 teams consuming it. Any breaking change (dropping a column, changing a type) fails CI before it reaches prod: the producer can't silently break downstream consumers.</p>
+<hr />
+<h4 id="q22-how-do-you-version-dbt-models-and-handle-breaking-changes-safely">Q22. How do you version dbt models and handle breaking changes safely?</h4>
+<p><strong>Answer:</strong></p>
+<p>dbt 1.5+ introduced <strong>model versioning</strong> to handle breaking changes without breaking downstream consumers immediately.</p>
+<p><strong>Defining versions:</strong></p>
+<pre><code class="language-yaml"># models/marts/_marts.yml
+models:
+  - name: orders
+    latest_version: 2
+    versions:
+      - v: 1
+        defined_in: orders_v1    # → models/marts/orders_v1.sql
+      - v: 2
+        defined_in: orders       # → models/marts/orders.sql (current)
+</code></pre>
+<p><strong>Downstream consumers pin to a version:</strong></p>
+<pre><code class="language-sql">-- still using v1, not broken by the v2 changes
+select * from {{ ref('orders', v=1) }}
+
+-- opted in to v2
+select * from {{ ref('orders', v=2) }}
+-- or just:
+select * from {{ ref('orders') }}    -- always resolves to latest_version
+</code></pre>
+<p><strong>Safe breaking change workflow:</strong></p>
+<ol>
+<li>Create <code>v2</code> with the breaking change (renamed column, dropped column, new type)</li>
+<li>Deploy both <code>v1</code> and <code>v2</code> to prod: consumers still use <code>v1</code></li>
+<li>Communicate the migration window to downstream teams</li>
+<li>Consumers migrate their models to <code>ref('orders', v=2)</code> one by one</li>
+<li>Once no models reference <code>v1</code>, deprecate and delete it</li>
+</ol>
+<p><strong>For non-breaking additive changes</strong> (new columns, new rows), no versioning needed: just add the column and document it.</p>
+<hr />
+<h3 id="scenario--situational-questions">Scenario / Situational Questions</h3>
+<hr />
+<h4 id="q23-a-not_null-test-fails-in-prod-on-your-orders-model-what-do-you-do">Q23. A <code>not_null</code> test fails in prod on your orders model. What do you do?</h4>
+<p><strong>Answer:</strong></p>
+<p><strong>Step 1: Don't panic, assess scope:</strong></p>
+<pre><code class="language-bash">dbt test -s orders --store-failures
+</code></pre>
+<p><code>--store-failures</code> writes the failing rows to a table in your warehouse (<code>dbt_test__audit.not_null_orders_order_id</code>). Query it:</p>
+<pre><code class="language-sql">select * from dbt_test__audit.not_null_orders_order_id limit 100;
+</code></pre>
+<p>How many rows? Is this 5 rows or 500,000? That determines urgency.</p>
+<p><strong>Step 2: Trace the null back to its source:</strong></p>
+<pre><code class="language-sql">-- is the null coming from the source, or introduced in transformation?
+select count(*) from raw.orders where id is null;
+select count(*) from dev.stg_orders where order_id is null;
+select count(*) from prod.orders where order_id is null;
+</code></pre>
+<p>Walk back through the layers until you find where the null originates.</p>
+<p><strong>Step 3: Determine the cause:</strong></p>
+<ul>
+<li><strong>Source sent nulls</strong> → data quality issue upstream. Fix the source or add a <code>where id is not null</code> filter in staging</li>
+<li><strong>Join introduced nulls</strong> → a <code>LEFT JOIN</code> in the mart is producing unmatched rows that become null</li>
+<li><strong>Logic error in a CASE/COALESCE</strong> → review the SQL</li>
+</ul>
+<p><strong>Step 4: Fix and validate:</strong>
+Fix the SQL, run <code>dbt build -s +orders</code> locally, confirm the test passes.</p>
+<p><strong>Step 5: Prevent recurrence:</strong></p>
+<ul>
+<li>If it was a source issue, add a source freshness test and a <code>not_null</code> test on the source itself</li>
+<li>Consider setting <code>severity: warn</code> with a threshold on non-critical columns so you're alerted before it becomes a hard failure</li>
+</ul>
+<hr />
+<h4 id="q24-you-need-to-add-a-column-to-a-mart-used-by-5-dashboards-whats-your-process">Q24. You need to add a column to a mart used by 5 dashboards. What's your process?</h4>
+<p><strong>Answer:</strong></p>
+<p><strong>Additive change (new column)</strong>: low risk, straightforward:</p>
+<ol>
+<li>Add the column to the model SQL</li>
+<li>Add it to <code>schema.yml</code> with a description and tests</li>
+<li>Run <code>dbt build -s orders</code> in dev and confirm tests pass</li>
+<li>Open a PR, CI runs <code>state:modified+</code>: only <code>orders</code> and anything downstream in dbt gets rebuilt</li>
+<li>Communicate to dashboard owners that a new column is available</li>
+<li>Merge and deploy</li>
+</ol>
+<p>The dashboards are unaffected: they select specific columns and a new one doesn't break anything.</p>
+<p><strong>Breaking change (rename/drop column)</strong>: high risk, needs a plan:</p>
+<ol>
+<li>
+<p><strong>Audit exposure</strong> first:</p>
+<pre><code class="language-bash">dbt ls -s orders+
+</code></pre>
+<p>This shows all dbt models and exposures downstream of <code>orders</code>.</p>
+</li>
+<li>
+<p><strong>Use model versioning</strong> if the column is referenced by many consumers. Create <code>orders_v2</code> with the new schema; let consumers migrate gradually.</p>
+</li>
+<li>
+<p><strong>If versioning is overkill</strong> (small team, fast migration):</p>
+<ul>
+<li>Add the new column name <em>alongside</em> the old one temporarily</li>
+<li>Communicate the deprecation window</li>
+<li>Update all downstream dbt models to use the new column name</li>
+<li>Update dashboards</li>
+<li>Remove the old column once all references are gone</li>
+</ul>
+</li>
+<li>
+<p><strong>Never rename a column in prod on a Friday.</strong></p>
+</li>
+</ol>
+<hr />
+<h4 id="q25-how-would-you-migrate-a-500-line-stored-procedure-into-dbt">Q25. How would you migrate a 500-line stored procedure into dbt?</h4>
+<p><strong>Answer:</strong></p>
+<p>A stored procedure is usually a monolith: one giant block doing ten things. The goal is to decompose it into a graph of small, testable, named models.</p>
+<p><strong>Step 1: Read and map the procedure:</strong>
+Annotate every logical step: &quot;lines 1-50 join customers and orders, lines 51-100 calculate revenue tiers, lines 101-200 pivot by region…&quot;</p>
+<p><strong>Step 2: Identify layers:</strong></p>
+<ul>
+<li>Steps that clean/rename raw tables → <code>staging</code> models</li>
+<li>Steps that join or enrich → <code>intermediate</code> models</li>
+<li>The final output → a <code>mart</code> model</li>
+</ul>
+<p><strong>Step 3: Build bottom-up:</strong>
+Start with staging models (simplest), then intermediate, then the mart. Each step should be independently runnable and testable.</p>
+<p><strong>Step 4: Validate against the existing procedure:</strong></p>
+<pre><code class="language-sql">-- compare row counts and key metrics between old and new
+select 'old' as src, count(*), sum(revenue) from old_proc_output
+union all
+select 'new' as src, count(*), sum(revenue) from {{ ref('new_mart') }}
+</code></pre>
+<p>Numbers should match. If they don't, the procedure had bugs: document whether you're fixing them or replicating them.</p>
+<p><strong>Step 5: Add tests:</strong>
+Every primary key gets <code>unique</code> + <code>not_null</code>. Key metrics get range tests. This gives you a regression harness before you decommission the procedure.</p>
+<p><strong>Step 6: Decommission the procedure:</strong>
+Once the new models are in prod and consumers are validated, remove the procedure. Don't keep both running in parallel indefinitely.</p>
+<hr />
+<h4 id="q26-your-incremental-model-is-producing-duplicate-rows-what-are-the-causes">Q26. Your incremental model is producing duplicate rows. What are the causes?</h4>
+<p><strong>Answer:</strong></p>
+<p>Duplicates in an incremental model are one of the most common production bugs. Here are the causes in order of likelihood:</p>
+<p><strong>Cause 1: No <code>unique_key</code> set, using <code>append</code> strategy:</strong>
+Without a <code>unique_key</code>, dbt just appends rows. If the same row is processed twice (e.g., a rerun after failure), it gets inserted twice.</p>
+<p>Fix: set a <code>unique_key</code> and use <code>merge</code> strategy:</p>
+<pre><code class="language-sql">{{ config(materialized='incremental', unique_key='order_id') }}
+</code></pre>
+<p><strong>Cause 2: <code>unique_key</code> is not actually unique in the source:</strong>
+If the source table has duplicate <code>order_id</code> values, dbt's merge will try to update a single target row but finds multiple source matches: result depends on warehouse behaviour, often inserts all of them.</p>
+<p>Fix: deduplicate before the merge:</p>
+<pre><code class="language-sql">with deduped as (
+    select *,
+        row_number() over (partition by order_id order by updated_at desc) as rn
+    from {{ source('raw', 'orders') }}
+)
+select * from deduped where rn = 1
+</code></pre>
+<p><strong>Cause 3: Lookback window overlaps with already-processed rows:</strong>
+A 3-day lookback reprocesses rows that were already correctly in the table, and <code>append</code> adds them again.</p>
+<p>Fix: ensure <code>unique_key</code> is set so <code>merge</code> upserts rather than appends.</p>
+<p><strong>Cause 4: <code>--full-refresh</code> was run without truncating downstream:</strong>
+A full-refresh rebuilds the incremental model from scratch, but if a downstream model already had data derived from the old version, a partial rerun can produce inconsistency.</p>
+<p>Fix: run <code>--full-refresh</code> on the full lineage: <code>dbt build -s +my_model+ --full-refresh</code></p>
+<p><strong>Cause 5: Composite <code>unique_key</code> not granular enough:</strong></p>
+<pre><code class="language-sql">{{ config(unique_key=['order_id', 'event_date']) }}
+</code></pre>
+<p>If the actual grain is <code>order_id + event_date + event_type</code>, the composite key is too broad and multiple rows survive.</p>
+<hr />
+<h4 id="q27-how-would-you-test-a-macro-youve-written">Q27. How would you test a macro you've written?</h4>
+<p><strong>Answer:</strong></p>
+<p>dbt Core has no unit test framework for macros directly (native unit tests, added in dbt 1.8, test models), so the standard approaches are:</p>
+<p><strong>1. <code>dbt compile</code>: inspect the rendered SQL:</strong></p>
+<pre><code class="language-bash">dbt compile -s model_that_uses_my_macro
+</code></pre>
+<p>Open <code>target/compiled/.../model_that_uses_my_macro.sql</code> and verify the output is what you expect. This is the fastest feedback loop.</p>
+<p><strong>2. Write a model that exercises the macro:</strong></p>
+<pre><code class="language-sql">-- models/tests/test_safe_divide.sql (materialized as view, not exposed to BI)
+{{ config(materialized='view', tags=['macro_tests']) }}
+select
+    {{ safe_divide('10', '2') }}    as normal_case,       -- expect 5.0
+    {{ safe_divide('10', '0') }}    as zero_denominator,  -- expect null
+    {{ safe_divide('10', 'null') }} as null_denominator   -- expect null
+</code></pre>
+<p>Then run a singular test that asserts the values:</p>
+<pre><code class="language-sql">-- tests/assert_safe_divide_returns_null_on_zero.sql
+select 1
+from {{ ref('test_safe_divide') }}
+where zero_denominator is not null    -- fails if null wasn't returned
+   or null_denominator is not null
+</code></pre>
+<p><strong>3. Use native unit tests (dbt 1.8+) on a model that calls the macro:</strong></p>
+<pre><code class="language-yaml"># models/_unit_tests.yml (unit tests are defined in YAML under your model paths)
+unit_tests:
+  - name: test_safe_divide_zero
+    model: model_that_uses_my_macro
+    given:
+      - input: ref('orders')
+        rows:
+          - {order_id: 1, revenue: 10, num_items: 0}
+    expect:
+      rows:
+        - {order_id: 1, revenue_per_item: null}
+</code></pre>
+<p><strong>4. Test edge cases deliberately:</strong></p>
+<ul>
+<li>Null inputs</li>
+<li>Zero denominators</li>
+<li>Empty lists in loop macros</li>
+<li>Both <code>execute=True</code> and <code>execute=False</code> paths for <code>run_query</code> macros</li>
+</ul>
+<hr />
+<h2 id="related-guides">Related Guides</h2>
+<p><em>This document covers Mid-level through Lead-level dbt interview questions and answers.</em>
+<em>For fundamentals (Junior/Analyst level), see the main <a href="intro_dbt.html">dbt reference guide</a>.</em></p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_dbt.html"><small>Previous</small>dbt</a><a rel="next" class="next" href="intro_apache_iceberg.html"><small>Next</small>Apache Iceberg</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/interview_dbt.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

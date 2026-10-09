@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq | Cracking ML Interviews</title>
+<meta name="description" content="Transformers replaced recurrent networks for most language tasks, but sequence models remain standard interview material: they are where the…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_sequence_models.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq | Cracking ML Interviews">
+<meta property="og:description" content="Transformers replaced recurrent networks for most language tasks, but sequence models remain standard interview material: they are where the…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_sequence_models.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq | Cracking ML Interviews">
+<meta name="twitter:description" content="Transformers replaced recurrent networks for most language tasks, but sequence models remain standard interview material: they are where the…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq",
+   "description": "Transformers replaced recurrent networks for most language tasks, but sequence models remain standard interview material: they are where the…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_sequence_models.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Sequence Models (RNN/LSTM/GRU)",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_sequence_models.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Sequence Models (RNN/LSTM/GRU)</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_sequence_models.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="sequence-models-rnns-lstms-grus-and-seq2seq">Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq</h1>
+<p>Transformers replaced recurrent networks for most language tasks, but sequence models remain standard interview material: they are where the vanishing-gradient problem becomes concrete, where the attention mechanism was invented to fix a real bottleneck, and where the &quot;why transformers won&quot; story actually starts. They are also still the right tool for streaming, low-latency, and small-data sequence problems.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-sequences-need-different-architectures">Why Sequences Need Different Architectures</a></li>
+<li><a href="#the-vanilla-rnn">The Vanilla RNN</a></li>
+<li><a href="#vanishing-and-exploding-gradients">Vanishing and Exploding Gradients</a></li>
+<li><a href="#lstm">LSTM</a></li>
+<li><a href="#gru">GRU</a></li>
+<li><a href="#bidirectional-and-stacked-rnns">Bidirectional and Stacked RNNs</a></li>
+<li><a href="#seq2seq-and-the-bottleneck">Seq2Seq and the Bottleneck</a></li>
+<li><a href="#attention-the-fix-that-became-the-architecture">Attention: The Fix That Became the Architecture</a></li>
+<li><a href="#rnns-vs-transformers-in-practice">RNNs vs Transformers in Practice</a></li>
+<li><a href="#practical-training-notes">Practical Training Notes</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-sequences-need-different-architectures">Why Sequences Need Different Architectures</h2>
+<p>A feed-forward network on sequence data has three problems: it needs a fixed input size, it has no notion of order, and it learns a separate weight for every position, so a pattern learned at position 3 does not transfer to position 40.</p>
+<p>Recurrent networks solve all three with <strong>weight sharing across time</strong>. One set of parameters is applied at every step, carrying a hidden state forward:</p>
+<pre><code>h_t = f(h_{t-1}, x_t)
+</code></pre>
+<p>This is the sequence analogue of what convolution does for images: the same feature detector applies everywhere, so the parameter count is independent of sequence length and patterns generalize across positions.</p>
+<hr />
+<h2 id="the-vanilla-rnn">The Vanilla RNN</h2>
+<pre><code>h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b_h)
+y_t = W_hy · h_t + b_y
+</code></pre>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class VanillaRNNCell(nn.Module):
+    &quot;&quot;&quot;One recurrent step, written out: this is the whiteboard version.&quot;&quot;&quot;
+
+    def __init__(self, input_size, hidden_size):
+        super().__init__()
+        self.W_xh = nn.Linear(input_size, hidden_size, bias=False)
+        self.W_hh = nn.Linear(hidden_size, hidden_size, bias=True)
+
+    def forward(self, x_t, h_prev):
+        # x_t: (batch, input_size)   h_prev: (batch, hidden_size)
+        return torch.tanh(self.W_xh(x_t) + self.W_hh(h_prev))
+
+
+# Unrolling over a sequence
+def run_sequence(cell, xs, hidden_size):
+    # xs: (batch, seq_len, input_size)
+    batch = xs.size(0)
+    h = torch.zeros(batch, hidden_size, device=xs.device)
+    outputs = []
+    for t in range(xs.size(1)):
+        h = cell(xs[:, t, :], h)      # same weights reused at every step
+        outputs.append(h)
+    return torch.stack(outputs, dim=1), h   # (batch, seq_len, hidden), (batch, hidden)
+</code></pre>
+<p><strong>Backpropagation Through Time (BPTT)</strong> is ordinary backprop on this unrolled graph. Its cost is what motivates everything that follows: the gradient at step 1 must pass through <code>T</code> multiplications by <code>W_hh</code>.</p>
+<p><strong>Truncated BPTT</strong> caps that by backpropagating only <code>k</code> steps (commonly 32-256) instead of the full sequence. It bounds memory and compute at the price of never learning dependencies longer than <code>k</code>.</p>
+<hr />
+<h2 id="vanishing-and-exploding-gradients">Vanishing and Exploding Gradients</h2>
+<p>Differentiating the loss at step <code>T</code> with respect to <code>h_1</code> produces a product of Jacobians:</p>
+<pre><code>∂h_T/∂h_1 = Π_{t=2..T} diag(tanh'(z_t)) · W_hh
+</code></pre>
+<p>Two things go wrong, both exponential in sequence length:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Condition</th>
+<th>Symptom</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vanishing</strong></td>
+<td>Largest singular value of <code>W_hh</code> &lt; 1, or <code>tanh'</code> saturated</td>
+<td>Early steps get no gradient; model learns only recent context</td>
+<td>Gated units (LSTM/GRU), orthogonal init, skip connections</td>
+</tr>
+<tr>
+<td><strong>Exploding</strong></td>
+<td>Largest singular value &gt; 1 (necessary, not sufficient)</td>
+<td>Loss spikes to NaN; weights blow up</td>
+<td><strong>Gradient clipping</strong>, lower LR</td>
+</tr>
+</tbody>
+</table></div>
+<p>Note <code>tanh'(z) = 1 - tanh²(z) ≤ 1</code>, and it approaches 0 as the unit saturates, so the activation derivative alone shrinks the signal at every step. This is why vanishing is the <em>typical</em> case and exploding is the dramatic one.</p>
+<p>Exploding gradients are easy to fix: clip the global norm and move on:</p>
+<pre><code class="language-python">torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+</code></pre>
+<p>Vanishing gradients are not fixable by clipping; they need an architectural change. That change is gating.</p>
+<hr />
+<h2 id="lstm">LSTM</h2>
+<p>The LSTM adds a <strong>cell state</strong> <code>C_t</code> that flows through time with only elementwise operations: no repeated matrix multiplication. Gates decide what to erase, what to write, and what to expose.</p>
+<pre><code>f_t = σ(W_f · [h_{t-1}, x_t] + b_f)        forget gate: what to keep from C_{t-1}
+i_t = σ(W_i · [h_{t-1}, x_t] + b_i)        input gate: how much new info to write
+C̃_t = tanh(W_C · [h_{t-1}, x_t] + b_C)     candidate: the new content
+C_t = f_t ⊙ C_{t-1} + i_t ⊙ C̃_t            cell update: the additive path
+o_t = σ(W_o · [h_{t-1}, x_t] + b_o)        output gate: what to expose
+h_t = o_t ⊙ tanh(C_t)                      hidden state
+</code></pre>
+<p><strong>Why this fixes vanishing gradients.</strong> The cell update is <em>additive</em>: <code>∂C_t/∂C_{t-1} = f_t</code>. If the forget gate stays near 1, the gradient flows back through many steps essentially unattenuated: there is no repeated matrix multiplication on the cell path. This is the same trick as a residual connection, discovered for sequences two decades earlier.</p>
+<pre><code class="language-python">lstm = nn.LSTM(
+    input_size=300,
+    hidden_size=512,
+    num_layers=2,
+    batch_first=True,
+    dropout=0.3,          # applied BETWEEN layers only, not across time steps
+    bidirectional=False,
+)
+# output: (batch, seq_len, hidden)   h_n, c_n: (num_layers, batch, hidden)
+output, (h_n, c_n) = lstm(embedded)
+</code></pre>
+<p><strong>Initialize the forget-gate bias to 1.</strong> At initialization the gates sit near 0.5, so the cell state halves at every step and long-range gradient still decays. Biasing the forget gate positive makes the network default to <em>remembering</em>, and it learns to forget where useful. This is a small change with a large effect on convergence, and naming it is a strong interview signal.</p>
+<pre><code class="language-python">for name, param in lstm.named_parameters():
+    if 'bias_ih' in name or 'bias_hh' in name:
+        n = param.size(0)
+        param.data[n // 4 : n // 2].fill_(0.5)   # PyTorch gate order: i, f, g, o
+# bias_ih and bias_hh are summed, so 0.5 in each gives an effective forget bias of 1
+</code></pre>
+<hr />
+<h2 id="gru">GRU</h2>
+<p>The GRU merges the forget and input gates into a single <strong>update gate</strong> and drops the separate cell state.</p>
+<pre><code>z_t = σ(W_z · [h_{t-1}, x_t])                update gate: interpolation weight
+r_t = σ(W_r · [h_{t-1}, x_t])                reset gate: how much past to use
+h̃_t = tanh(W · [r_t ⊙ h_{t-1}, x_t])         candidate
+h_t = (1 - z_t) ⊙ h_{t-1} + z_t ⊙ h̃_t        convex blend of old and new
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>LSTM</th>
+<th>GRU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gates</td>
+<td>3 (forget, input, output)</td>
+<td>2 (update, reset)</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Separate cell + hidden</td>
+<td>Hidden only</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>~4 × (d_in + d_h) × d_h</td>
+<td>~3 × (d_in + d_h) × d_h (<strong>25% fewer</strong>)</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Slower</td>
+<td>~20-30% faster</td>
+</tr>
+<tr>
+<td>Typical edge</td>
+<td>Long sequences, large data</td>
+<td>Small data, tight compute</td>
+</tr>
+</tbody>
+</table></div>
+<p>Empirically the two are close, and which wins is task-dependent rather than principled. The defensible interview answer: try GRU first because it is cheaper and trains faster; move to LSTM if the task has long dependencies and you have the data to support the extra parameters.</p>
+<hr />
+<h2 id="bidirectional-and-stacked-rnns">Bidirectional and Stacked RNNs</h2>
+<p><strong>Bidirectional</strong> runs one RNN forward and another backward, concatenating the states, so every position sees both left and right context. It typically gives a solid accuracy gain on classification and tagging, but it requires the <strong>entire sequence up front</strong>, so it is unusable for streaming, real-time transcription, or autoregressive generation. That constraint is the interview point, not the accuracy number.</p>
+<p><strong>Stacking</strong> layers lets lower layers capture local patterns and higher layers capture longer-range structure. Two to four layers is the practical range; beyond that, returns diminish and optimization gets harder without residual connections.</p>
+<pre><code class="language-python">nn.LSTM(input_size=300, hidden_size=256, num_layers=3,
+        bidirectional=True, batch_first=True, dropout=0.3)
+# output width is 2 × hidden_size = 512 because directions are concatenated
+</code></pre>
+<hr />
+<h2 id="seq2seq-and-the-bottleneck">Seq2Seq and the Bottleneck</h2>
+<p>The encoder-decoder architecture maps an input sequence to an output sequence of a different length: translation, summarization, speech recognition.</p>
+<pre><code>Encoder RNN  →  final hidden state (the &quot;context vector&quot;)  →  Decoder RNN
+</code></pre>
+<p>The problem is stated in one sentence: <strong>the entire input must be compressed into one fixed-size vector.</strong> For a 5-word sentence that is fine; for a 50-word one, information is lost, and translation quality measurably degrades as source length grows. This bottleneck is the direct motivation for attention.</p>
+<p><strong>Teacher forcing</strong> trains the decoder on ground-truth previous tokens rather than its own predictions. It speeds convergence dramatically, but creates <strong>exposure bias</strong>: at inference the model consumes its own outputs, a distribution it never trained on, so one early mistake compounds. Scheduled sampling (mixing in the model's own predictions with increasing probability) is the classic partial mitigation.</p>
+<p><strong>Decoding</strong> is a separate decision from training. Greedy decoding takes the argmax at each step and is fast but myopic. <strong>Beam search</strong> keeps the <code>k</code> highest-probability partial sequences and usually improves quality on translation; it needs length normalization, since raw sequence probability decreases monotonically with length and would otherwise favor short outputs.</p>
+<hr />
+<h2 id="attention-the-fix-that-became-the-architecture">Attention: The Fix That Became the Architecture</h2>
+<p>Attention removed the bottleneck by letting the decoder look back at <em>every</em> encoder state, weighted by relevance to the current decoding step.</p>
+<pre><code>score(s_t, h_i)  →  α_ti = softmax_i(score)  →  context_t = Σ_i α_ti · h_i
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Score function</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Additive</strong> (Bahdanau, 2014)</td>
+<td><code>vᵀ tanh(W₁s + W₂h)</code></td>
+<td>A small MLP; works when dimensions differ</td>
+</tr>
+<tr>
+<td><strong>Multiplicative</strong> (Luong, 2015)</td>
+<td><code>sᵀ W h</code> or <code>sᵀh</code></td>
+<td>Cheaper; one matmul</td>
+</tr>
+<tr>
+<td><strong>Scaled dot-product</strong> (2017)</td>
+<td><code>sᵀh / √d_k</code></td>
+<td>The transformer's; scaling keeps softmax out of saturation</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two things followed. First, quality on long sequences improved sharply, because there is no longer a fixed-size summary. Second (and this is the historically important part) the attention weights turned out to carry most of the useful signal, which raised the question the transformer answered: <strong>if attention does the work, is the recurrence needed at all?</strong> Removing it made the whole sequence parallelizable during training, which is what made training at scale possible.</p>
+<hr />
+<h2 id="rnns-vs-transformers-in-practice">RNNs vs Transformers in Practice</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>RNN / LSTM</th>
+<th>Transformer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training parallelism</td>
+<td>Sequential in <code>T</code>: cannot parallelize across time</td>
+<td>Fully parallel across positions</td>
+</tr>
+<tr>
+<td>Complexity per layer</td>
+<td><code>O(T · d²)</code></td>
+<td><code>O(T² · d)</code>: quadratic in length</td>
+</tr>
+<tr>
+<td>Path length between distant tokens</td>
+<td><code>O(T)</code></td>
+<td><code>O(1)</code></td>
+</tr>
+<tr>
+<td>Memory at inference</td>
+<td><code>O(1)</code>: fixed state</td>
+<td><code>O(T)</code>: KV cache grows</td>
+</tr>
+<tr>
+<td>Long sequences (T ≫ d)</td>
+<td>Cheaper</td>
+<td>Expensive without sparse/linear attention</td>
+</tr>
+<tr>
+<td>Small datasets</td>
+<td>Often competitive</td>
+<td>Data-hungry</td>
+</tr>
+<tr>
+<td>Streaming / real-time</td>
+<td>Natural fit</td>
+<td>Needs windowing or a cache</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>When an RNN is still the right choice</strong>: strict streaming with unbounded input and constant memory (real-time speech, sensor telemetry, anomaly detection on event streams); very long sequences where <code>T² </code> attention is prohibitive; small labeled datasets where a transformer overfits; and tight edge deployments where an <code>O(1)</code>-state model beats a growing KV cache. State-space models (S4, Mamba) are the modern revival of exactly this argument: recurrent-style linear scaling with much better long-range modeling.</p>
+<hr />
+<h2 id="practical-training-notes">Practical Training Notes</h2>
+<p><strong>Padding and masking.</strong> Batches contain variable-length sequences, so shorter ones are padded. Feeding padding through the RNN corrupts the final hidden state and pollutes the loss. Use packed sequences, and mask the loss:</p>
+<pre><code class="language-python">from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+packed = pack_padded_sequence(embedded, lengths.cpu(), batch_first=True, enforce_sorted=False)
+packed_out, (h_n, c_n) = lstm(packed)          # h_n now reflects each sequence's TRUE last step
+output, _ = pad_packed_sequence(packed_out, batch_first=True)
+
+loss_fn = nn.CrossEntropyLoss(ignore_index=PAD_IDX)   # exclude padding from the loss
+</code></pre>
+<p>Without packing, <code>h_n</code> is the state after consuming trailing <code>&lt;pad&gt;</code> tokens: a common and hard-to-spot bug that quietly caps accuracy.</p>
+<p><strong>Dropout across time.</strong> PyTorch's <code>dropout</code> argument applies <em>between layers</em>, not between time steps, and it is silently ignored when <code>num_layers=1</code>. Applying independent dropout at each time step is harmful: it resamples the mask every step and destroys the memory the recurrence is meant to carry. Variational dropout (the same mask at every step) is the correct form when you want recurrent regularization.</p>
+<p><strong>Gradient clipping is not optional.</strong> Unlike transformers, where it is good hygiene, RNNs explode without it. Clip global norm at 1.0-5.0.</p>
+<p><strong>Sort or bucket by length.</strong> Batching sequences of wildly different lengths wastes compute on padding. Length-bucketed batching often gives a 2-3x throughput win for free.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-do-vanilla-rnns-fail-on-long-sequences-and-how-does-an-lstm-fix-it">Why do vanilla RNNs fail on long sequences, and how does an LSTM fix it?</h4>
+<p>The gradient from step <code>T</code> back to step <code>1</code> is a product of <code>T</code> Jacobians, each containing <code>W_hh</code> and the <code>tanh</code> derivative. Since <code>tanh' ≤ 1</code> and typically well below it, and <code>W_hh</code>'s singular values are rarely exactly 1, that product shrinks or grows exponentially in sequence length. Shrinking is the common case: early steps receive effectively no learning signal, so the model only learns short-range dependencies.</p>
+<p>The LSTM adds a cell state updated <strong>additively</strong>: <code>C_t = f_t ⊙ C_{t-1} + i_t ⊙ C̃_t</code>. The gradient along that path is <code>∂C_t/∂C_{t-1} = f_t</code>, an elementwise multiply by a learned gate rather than a repeated matrix multiplication. With the forget gate near 1, gradients flow back over hundreds of steps largely intact. It is the same mechanism as a residual connection: give the gradient an uninterrupted highway.</p>
+<h4 id="lstm-or-gru-how-do-you-choose">LSTM or GRU: how do you choose?</h4>
+<p>GRU has two gates instead of three and no separate cell state, so roughly 25% fewer parameters and 20-30% faster training. LSTM's extra output gate gives finer control over what is exposed versus stored, which tends to help on long sequences with lots of data.</p>
+<p>In practice the accuracy difference is small and task-dependent, so I'd start with GRU for the cheaper iteration loop and switch to LSTM if I have long dependencies and enough data to support the extra capacity. What I would not do is claim one is universally better: the literature does not support that, and the honest answer is that it is an empirical choice.</p>
+<h4 id="what-is-the-seq2seq-bottleneck-and-how-did-attention-solve-it">What is the seq2seq bottleneck, and how did attention solve it?</h4>
+<p>In a basic encoder-decoder, the encoder compresses the whole input into one fixed-size context vector. Capacity is constant while input length grows, so information is lost and translation quality degrades measurably with source length.</p>
+<p>Attention removes the constraint: the decoder computes a relevance score between its current state and <em>every</em> encoder hidden state, softmaxes those into weights, and takes a weighted sum. Each decoding step gets a context vector tailored to what it currently needs, so nothing has to be compressed away. The follow-on insight (that attention was doing the heavy lifting and recurrence could be dropped entirely) is what produced the transformer, and with it full training parallelism.</p>
+<h4 id="what-is-teacher-forcing-and-what-problem-does-it-create">What is teacher forcing and what problem does it create?</h4>
+<p>During training, the decoder is fed the ground-truth previous token rather than its own prediction. This makes training much faster and more stable, since the decoder never has to recover from its own early mistakes while the model is still random.</p>
+<p>The problem is <strong>exposure bias</strong>: at inference there is no ground truth, so the model consumes its own outputs, a distribution it never saw in training. One wrong token puts it in an unfamiliar state, and errors compound over the sequence. Scheduled sampling (gradually mixing in the model's own predictions during training) and sequence-level objectives are the standard mitigations, though modern practice largely sidesteps it by training at scale on next-token prediction.</p>
+<h4 id="when-would-you-use-a-bidirectional-rnn-and-when-cant-you">When would you use a bidirectional RNN, and when can't you?</h4>
+<p>Use it whenever the full sequence is available before you need an output and both directions carry signal: text classification, named entity recognition, POS tagging, offline speech transcription. Knowing that a word appears before &quot;Inc.&quot; helps classify it, and only the backward pass sees that.</p>
+<p>You cannot use it for anything causal or streaming: real-time transcription, autoregressive generation, or online anomaly detection, because the backward pass requires future tokens that do not exist yet. That constraint (not the accuracy difference) is what determines the choice.</p>
+<h4 id="why-do-transformers-beat-rnns-and-when-do-rnns-still-win">Why do transformers beat RNNs, and when do RNNs still win?</h4>
+<p>Two reasons. <strong>Parallelism</strong>: an RNN's step <code>t</code> depends on <code>t-1</code>, so training cannot be parallelized across time; a transformer processes all positions simultaneously, which is what made training on internet-scale data feasible. <strong>Path length</strong>: information between two distant tokens traverses <code>O(T)</code> steps in an RNN, with degradation at each, versus <code>O(1)</code> through attention.</p>
+<p>RNNs still win when <code>T</code> is very large, because attention is <code>O(T²)</code> while recurrence is linear; when inference memory must be constant, since the KV cache grows with context; in true streaming settings with unbounded input; and on small datasets where transformers overfit. State-space models like Mamba are a direct modern attempt to keep the linear scaling and constant state while fixing the long-range weakness.</p>
+<h4 id="your-lstms-validation-accuracy-plateaus-well-below-expectations-how-do-you-debug-it">Your LSTM's validation accuracy plateaus well below expectations. How do you debug it?</h4>
+<p>I'd check the mechanical bugs before touching the architecture, because they're common and silent:</p>
+<ol>
+<li><strong>Padding handling</strong>: is the model consuming <code>&lt;pad&gt;</code> tokens into its final hidden state? Without <code>pack_padded_sequence</code>, <code>h_n</code> reflects padding, not the real last token. Is the loss masked with <code>ignore_index</code>?</li>
+<li><strong>Gradient clipping</strong>: missing clipping shows up as loss spikes; check whether the run is silently diverging and recovering.</li>
+<li><strong>Can it overfit a single batch?</strong> If not, the bug is in the code, not the hyperparameters.</li>
+<li><strong>Sequence truncation</strong>: is the max length cutting off the part of the input that carries the label?</li>
+<li><strong>Forget-gate bias</strong>: initialized to 0 means the cell state halves each step and long-range memory never forms.</li>
+</ol>
+<p>Then the modeling questions: are the embeddings pretrained or learned from scratch on too little data, is the sequence long enough to need attention, and is a bidirectional or stacked variant warranted.</p>
+<h4 id="what-is-truncated-bptt-and-what-does-it-cost-you">What is truncated BPTT and what does it cost you?</h4>
+<p>Full BPTT unrolls the entire sequence and backpropagates through all of it, so memory scales with sequence length and long sequences become infeasible. Truncated BPTT backpropagates only <code>k</code> steps back, carrying the hidden state forward across chunks but detaching the gradient at chunk boundaries.</p>
+<p>The cost is that the model can never learn a dependency longer than <code>k</code> steps, because no gradient signal crosses the boundary. So <code>k</code> is a direct cap on the range of learnable dependencies, and choosing it means estimating how far back the relevant context actually sits: a modeling decision, not just a memory knob.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not packing padded sequences</td>
+<td>Final hidden state reflects <code>&lt;pad&gt;</code> tokens, silently capping accuracy</td>
+<td><code>pack_padded_sequence</code> / <code>pad_packed_sequence</code></td>
+</tr>
+<tr>
+<td>Unmasked loss over padding</td>
+<td>Model is rewarded for predicting padding</td>
+<td><code>CrossEntropyLoss(ignore_index=PAD_IDX)</code></td>
+</tr>
+<tr>
+<td>No gradient clipping</td>
+<td>RNNs explode; loss goes NaN</td>
+<td><code>clip_grad_norm_(..., 1.0)</code></td>
+</tr>
+<tr>
+<td>Forget-gate bias left at 0</td>
+<td>Cell state decays by half each step; long memory never forms</td>
+<td>Initialize forget-gate bias to 1</td>
+</tr>
+<tr>
+<td><code>dropout=</code> with <code>num_layers=1</code></td>
+<td>Silently does nothing: PyTorch applies it between layers</td>
+<td>Stack layers, or apply dropout explicitly</td>
+</tr>
+<tr>
+<td>Independent dropout per time step</td>
+<td>Destroys the recurrent memory being learned</td>
+<td>Variational dropout (same mask across time)</td>
+</tr>
+<tr>
+<td>Bidirectional model for a streaming task</td>
+<td>Requires future tokens that do not exist at inference</td>
+<td>Unidirectional, or windowed lookahead</td>
+</tr>
+<tr>
+<td>Beam search without length normalization</td>
+<td>Sequence probability shrinks with length, so short outputs win</td>
+<td>Divide by length, or use a length penalty</td>
+</tr>
+<tr>
+<td>Batching wildly different lengths</td>
+<td>Most compute spent on padding</td>
+<td>Length-bucketed batching</td>
+</tr>
+<tr>
+<td>Reaching for an RNN on a modern NLP task</td>
+<td>Transformers dominate where data and parallelism exist</td>
+<td>Use a pretrained transformer unless streaming or tiny data argues otherwise</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="intro_applied_deep_learning.html">Applied Deep Learning Roadmap</a></li>
+<li><a href="../classical_ml/intro_time_series.html">Time Series &amp; Forecasting</a></li>
+<li><a href="../ai_genai/intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="../frameworks/intro_pytorch.html">PyTorch</a></li>
+<li><a href="./">Deep Learning Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_applied_deep_learning.html"><small>Previous</small>Applied Deep Learning</a><a rel="next" class="next" href="intro_transformers.html"><small>Next</small>Transformers</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_sequence_models.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

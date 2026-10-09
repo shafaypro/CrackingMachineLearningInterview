@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microsoft Azure for ML Engineers Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Azure Machine Learning is only one piece of an ML system on Azure. Around it sit identity, networking, storage, compute, data platforms, generative AI…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/azure_for_ml_engineers.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Microsoft Azure for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Azure Machine Learning is only one piece of an ML system on Azure. Around it sit identity, networking, storage, compute, data platforms, generative AI…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/azure_for_ml_engineers.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Microsoft Azure for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Azure Machine Learning is only one piece of an ML system on Azure. Around it sit identity, networking, storage, compute, data platforms, generative AI…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Microsoft Azure for ML Engineers",
+   "description": "Azure Machine Learning is only one piece of an ML system on Azure. Around it sit identity, networking, storage, compute, data platforms, generative AI…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/azure_for_ml_engineers.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Azure for ML Engineers",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/azure_for_ml_engineers.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">Azure for ML Engineers</span></nav>
+<p class="meta"><a href="../../#cloud_ml/azure_for_ml_engineers.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 16 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="microsoft-azure-for-ml-engineers">Microsoft Azure for ML Engineers</h1>
+<p>Azure Machine Learning is only one piece of an ML system on Azure. Around it sit identity, networking, storage, compute, data platforms, generative AI services, monitoring and billing, and most production incidents and interview follow-ups happen in those surrounding layers rather than inside the ML workspace. This guide covers the core Azure services an ML or AI engineer touches outside Azure ML itself and how they fit together.</p>
+<p>For the Azure ML workspace, jobs, registries and endpoints in depth, see the <a href="intro_azure_ml.html">Azure Machine Learning Interview Guide</a>. For a cross-cloud comparison of SageMaker, Vertex AI and Azure ML, see <a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a>.</p>
+<blockquote>
+<p>Azure renames services often. Where a service has a recent former name, it is noted in parentheses. Check the current Microsoft documentation before quoting a name, SKU or feature status in a design review.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-the-pieces-fit-together">How the pieces fit together</a></li>
+<li><a href="#resource-hierarchy-and-identity">Resource hierarchy and identity</a></li>
+<li><a href="#networking-basics">Networking basics</a></li>
+<li><a href="#storage">Storage</a></li>
+<li><a href="#compute">Compute</a></li>
+<li><a href="#data-and-analytics">Data and analytics</a></li>
+<li><a href="#generative-ai">Generative AI</a></li>
+<li><a href="#observability">Observability</a></li>
+<li><a href="#cost-control">Cost control</a></li>
+<li><a href="#reference-architectures">Reference architectures</a></li>
+<li><a href="#code-examples">Code examples</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+<pre><code class="language-text">                    Microsoft Entra ID (identities, groups, managed identities)
+                                         |
+          Management groups -&gt; Subscriptions -&gt; Resource groups -&gt; Resources
+                                         |
+   +-----------------+-------------------+-------------------+------------------+
+   |                 |                   |                   |                  |
+ Storage          Data / analytics     ML platform         GenAI              Serving
+ (Blob, ADLS)     (Data Factory,       (Azure ML           (Azure OpenAI in   (managed online
+                  Fabric, Databricks,   workspace,          Microsoft Foundry, endpoints, AKS,
+                  Event Hubs)           registries)         AI Search)         Container Apps)
+   |                 |                   |                   |                  |
+   +-----------------+---------+---------+-------------------+------------------+
+                               |
+            VNets, private endpoints, Private DNS, NAT gateway
+                               |
+            Azure Monitor / Log Analytics / Application Insights
+                               |
+            Cost Management (tags, budgets, alerts)
+</code></pre>
+<p>A useful mental model for interviews: <strong>identity decides who can call what, networking decides from where, storage and data services hold the bytes, compute does the work, and monitoring plus cost management tell you whether it is healthy and affordable.</strong></p>
+<hr />
+<h2 id="resource-hierarchy-and-identity">Resource hierarchy and identity</h2>
+<h3 id="hierarchy">Hierarchy</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>What it is</th>
+<th>ML platform use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Entra tenant</td>
+<td>The directory of users, groups, apps and identities</td>
+<td>One per organization, usually</td>
+</tr>
+<tr>
+<td>Management group</td>
+<td>A container of subscriptions for policy and RBAC inheritance</td>
+<td>&quot;Platform&quot;, &quot;Landing zones/Corp&quot;, &quot;Sandbox&quot; groups</td>
+</tr>
+<tr>
+<td>Subscription</td>
+<td>Billing, quota and scale boundary</td>
+<td>Separate dev, test and prod; separate shared ML platform services</td>
+</tr>
+<tr>
+<td>Resource group</td>
+<td>Lifecycle container for related resources</td>
+<td>One per workload per environment (e.g. <code>rg-churn-prod</code>)</td>
+</tr>
+<tr>
+<td>Resource</td>
+<td>An individual service instance</td>
+<td>Storage account, Key Vault, Azure ML workspace, AKS cluster</td>
+</tr>
+</tbody>
+</table></div>
+<p>Policies and role assignments applied at a higher level inherit downward. GPU quota is granted per subscription, per region and per VM family, which is one practical reason ML teams care about subscription layout.</p>
+<h3 id="identity-and-access">Identity and access</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it does</th>
+<th>Notes for ML engineers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Entra ID (formerly Azure AD)</td>
+<td>Identity provider for users, groups, apps and Azure resources</td>
+<td>All modern Azure data-plane auth (Storage, Key Vault, Azure OpenAI, AI Search) can use Entra tokens instead of keys</td>
+</tr>
+<tr>
+<td>Azure RBAC</td>
+<td>Role assignment = principal + role definition + scope</td>
+<td>Scope is a management group, subscription, resource group or resource. Assign at the narrowest scope that works</td>
+</tr>
+<tr>
+<td>Control plane vs data plane roles</td>
+<td><code>Owner</code>, <code>Contributor</code>, <code>Reader</code> manage resources; data roles grant access to the data inside</td>
+<td>Reading blobs with Entra auth needs a data role such as <code>Storage Blob Data Reader</code>; calling Azure OpenAI needs a role such as <code>Cognitive Services OpenAI User</code></td>
+</tr>
+<tr>
+<td>Service principal</td>
+<td>The identity of an application in a tenant</td>
+<td>Created from an app registration; can authenticate with a secret, a certificate, or a federated credential</td>
+</tr>
+<tr>
+<td>Managed identity</td>
+<td>A service principal whose credentials Azure creates and rotates</td>
+<td>No secret in your code or config. <strong>System-assigned</strong> lives and dies with one resource; <strong>user-assigned</strong> is its own resource and can be shared</td>
+</tr>
+<tr>
+<td>Workload identity federation</td>
+<td>Trust an external OIDC token instead of a secret</td>
+<td>GitHub Actions (OIDC token from the workflow) and AKS pods (Microsoft Entra Workload ID, which replaced the deprecated pod-managed identity) exchange their token for an Entra token</td>
+</tr>
+<tr>
+<td>Key Vault</td>
+<td>Stores secrets, keys and certificates</td>
+<td>Use the Azure RBAC permission model (roles such as <code>Key Vault Secrets User</code>) rather than legacy access policies for new vaults</td>
+</tr>
+<tr>
+<td>Azure Policy</td>
+<td>Evaluates resources against rules; effects include audit, deny, modify and deploy-if-not-exists</td>
+<td>Deny public network access, require tags, restrict regions or allowed VM sizes</td>
+</tr>
+<tr>
+<td>Activity log</td>
+<td>Subscription-level log of control-plane operations (who created, changed or deleted what)</td>
+<td>Retained for 90 days by default; export it with diagnostic settings to Log Analytics for longer retention and querying</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Rule of thumb:</strong> humans get access through Entra groups, workloads get access through managed identities, CI/CD gets access through workload identity federation, and the few remaining third-party secrets live in Key Vault and are read with a managed identity.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You separate control-plane permissions (create a resource) from data-plane permissions (read the data in it).</li>
+<li>You default to managed identities and federated credentials and can explain why long-lived client secrets are a liability.</li>
+<li>You know when to choose system-assigned vs user-assigned identity (lifecycle vs reuse and pre-provisioned role assignments).</li>
+<li>You use Azure Policy for guardrails and the activity log for audit, instead of relying on people following a wiki.</li>
+</ul>
+<hr />
+<h2 id="networking-basics">Networking basics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it does</th>
+<th>ML relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual network (VNet)</td>
+<td>Private address space in one region</td>
+<td>Hosts AKS nodes, VMs, private endpoints, integrated app services</td>
+</tr>
+<tr>
+<td>Subnet</td>
+<td>A range inside a VNet; some services need a dedicated or delegated subnet</td>
+<td>Plan address space early: AKS and private endpoints consume IPs quickly</td>
+</tr>
+<tr>
+<td>Network security group (NSG)</td>
+<td>Stateful allow/deny rules on a subnet or NIC</td>
+<td>Restrict which subnets can reach inference services</td>
+</tr>
+<tr>
+<td>Service endpoint</td>
+<td>Lets a subnet reach a PaaS service over the Azure backbone; the service still has a public endpoint, and its firewall allows your subnet</td>
+<td>Simpler, but the resource keeps a public IP and the scope is the whole service type, not one instance</td>
+</tr>
+<tr>
+<td>Private endpoint (Private Link)</td>
+<td>A NIC with a private IP in your VNet mapped to one specific resource instance</td>
+<td>Lets you disable public network access entirely on Storage, Key Vault, Azure OpenAI, AI Search, ACR, Azure ML</td>
+</tr>
+<tr>
+<td>Private DNS zone</td>
+<td>Resolves the service hostname to the private endpoint IP inside your network</td>
+<td>e.g. <code>privatelink.blob.core.windows.net</code>, <code>privatelink.vaultcore.azure.net</code>, <code>privatelink.openai.azure.com</code>; missing or unlinked zones are the most common private endpoint bug</td>
+</tr>
+<tr>
+<td>NAT gateway</td>
+<td>Provides predictable, scalable outbound internet access for a subnet</td>
+<td>Needed for pulling packages or calling external APIs from private subnets; gives a stable egress IP for allow-lists</td>
+</tr>
+<tr>
+<td>Hub-and-spoke or Virtual WAN</td>
+<td>Shared connectivity (firewall, VPN, ExpressRoute) in a hub, workloads in spokes</td>
+<td>Typical enterprise landing zone layout</td>
+</tr>
+</tbody>
+</table></div>
+<p>Azure ML also offers a <strong>workspace managed virtual network</strong> that Microsoft manages for compute and endpoints, with outbound modes such as &quot;allow internet outbound&quot; and &quot;allow only approved outbound&quot;. See the <a href="intro_azure_ml.html">Azure ML guide</a> for the workspace side; this guide focuses on the network around it.</p>
+<p>Azure has been retiring implicit &quot;default outbound access&quot; for new virtual networks, so plan explicit egress (NAT gateway, Azure Firewall or load balancer outbound rules) rather than relying on it. Check the current status for your region and deployment date.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>A crisp distinction: a private endpoint gives one resource a private IP; a service endpoint keeps the public endpoint but restricts it to your subnet.</li>
+<li>DNS is part of the design: private endpoints without the right Private DNS zone linked to the VNet will resolve to the public IP and fail when public access is disabled.</li>
+<li>You think about egress as well as ingress (package mirrors, model downloads, external APIs, data exfiltration risk).</li>
+</ul>
+<hr />
+<h2 id="storage">Storage</h2>
+<h3 id="blob-storage-access-tiers">Blob Storage access tiers</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Best for</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hot</td>
+<td>Active training data, feature snapshots read often</td>
+<td>Highest storage cost, lowest access cost</td>
+</tr>
+<tr>
+<td>Cool</td>
+<td>Data read occasionally, recent checkpoints</td>
+<td>Lower storage cost, higher access cost, minimum retention period (30 days) with early deletion charges</td>
+</tr>
+<tr>
+<td>Cold</td>
+<td>Rarely read data that must stay online</td>
+<td>Lower again, longer minimum retention (90 days)</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td>Compliance copies, raw data you may never read again</td>
+<td>Offline: must be rehydrated (taking hours) before reading; longest minimum retention (180 days)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Lifecycle management</strong> policies move or delete blobs automatically based on age (since creation, last modification or, if access tracking is enabled, last access). A typical ML policy: keep the current training snapshot hot, move checkpoints older than a few weeks to cool, archive raw extracts after their retention review, delete temporary scoring outputs.</p>
+<h3 id="other-storage-options">Other storage options</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>When ML engineers use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADLS Gen2</td>
+<td>A storage account with <strong>hierarchical namespace</strong> enabled</td>
+<td>Data lakes for Spark, Databricks, Fabric shortcuts and Azure ML datastores. Real directories give atomic renames (important for Spark and Delta commits) and POSIX-like ACLs per directory. Accessed via <code>abfss://</code></td>
+</tr>
+<tr>
+<td>Azure Files</td>
+<td>Managed SMB and NFS file shares</td>
+<td>Shared home directories, legacy tools that expect a file system</td>
+</tr>
+<tr>
+<td>Azure Managed Lustre</td>
+<td>Managed Lustre parallel file system that can import from and export to Blob</td>
+<td>High-throughput reads for large distributed training jobs where Blob streaming becomes the bottleneck. Check region availability and current Blob integration features before committing</td>
+</tr>
+<tr>
+<td>Premium block blob</td>
+<td>SSD-backed blob storage</td>
+<td>Lower-latency small-object reads, e.g. many small image files</td>
+</tr>
+</tbody>
+</table></div>
+<p>Good hygiene for ML storage accounts: disable shared key access where possible (forcing Entra auth), disable public network access and use private endpoints, enable soft delete and versioning for datasets that matter, and keep training data and model artifacts in separate containers with separate role assignments.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You know archive is offline and that cool, cold and archive have minimum retention periods, so tiering short-lived data can cost more, not less.</li>
+<li>You can explain why hierarchical namespace matters for analytics engines (directory operations, ACLs) rather than just saying &quot;it is a data lake&quot;.</li>
+<li>You match storage to the access pattern: Blob for durable data, a parallel file system or local NVMe caching for throughput-bound training.</li>
+</ul>
+<hr />
+<h2 id="compute">Compute</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>Use it for</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPU virtual machines (N-series)</td>
+<td>VM families with NVIDIA or AMD GPUs. Broadly: <strong>NC</strong> for compute (training and inference), <strong>ND</strong> for large-scale deep learning (multi-GPU, high-bandwidth interconnect such as InfiniBand), <strong>NV</strong> for visualization and virtual desktops</td>
+<td>Custom training, research boxes, self-managed inference</td>
+<td>Quota is per family per region and often must be requested; availability varies by region; pick sizes from current docs rather than memory</td>
+</tr>
+<tr>
+<td>Spot VMs</td>
+<td>Unused capacity at a discount that Azure can evict with short notice (delivered through Scheduled Events)</td>
+<td>Fault-tolerant training with checkpointing, batch scoring, hyperparameter sweeps</td>
+<td>Eviction policy (deallocate or delete), no SLA, must checkpoint frequently</td>
+</tr>
+<tr>
+<td>Reservations and Azure savings plan for compute</td>
+<td>One- or three-year commitments in exchange for lower rates (reservations are tied to a VM family and region; savings plans to an hourly spend amount)</td>
+<td>Steady, predictable baseload such as always-on inference</td>
+<td>Commit only to what you will use; forecast from real utilization</td>
+</tr>
+<tr>
+<td>Azure Kubernetes Service (AKS)</td>
+<td>Managed Kubernetes</td>
+<td>Multi-model serving, custom inference stacks (e.g. vLLM, Triton), shared platforms</td>
+<td>You own upgrades, node images, scaling configs and security hardening</td>
+</tr>
+<tr>
+<td>Azure Container Apps</td>
+<td>Serverless containers on a managed Kubernetes-based platform, scaling with KEDA rules, including to zero</td>
+<td>APIs, workers, lightweight model services without cluster management</td>
+<td>Less control than AKS. Serverless GPU support exists in selected regions; check GPU types, regions and quotas before designing around it</td>
+</tr>
+<tr>
+<td>Azure Functions</td>
+<td>Event-driven serverless functions</td>
+<td>Glue: react to a blob landing, trigger a pipeline, small preprocessing</td>
+<td>Not a fit for heavy model serving or long GPU work</td>
+</tr>
+<tr>
+<td>Azure Batch</td>
+<td>Managed pools of VMs for large-scale parallel and HPC jobs</td>
+<td>Embarrassingly parallel scoring, simulations, preprocessing at scale</td>
+<td>You manage task scheduling semantics and pool images; Azure ML jobs are often simpler for ML-specific work</td>
+</tr>
+<tr>
+<td>Azure Container Registry (ACR)</td>
+<td>Private container registry</td>
+<td>Training and inference images</td>
+<td>Pull with a managed identity (<code>AcrPull</code>); private endpoints require the Premium tier</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="aks-for-ml">AKS for ML</h3>
+<ul>
+<li><strong>Node pools:</strong> a system node pool runs cluster add-ons; user node pools run workloads. Separate CPU and GPU user pools so CPU workloads never land on expensive GPU nodes, using taints and tolerations plus node selectors.</li>
+<li><strong>GPU node pools:</strong> GPU nodes need drivers plus the NVIDIA device plugin (or NVIDIA GPU Operator) so pods can request <code>nvidia.com/gpu</code>. User pools can scale down to zero nodes with the cluster autoscaler; the system pool cannot.</li>
+<li><strong>Autoscaling:</strong> the cluster autoscaler adds and removes nodes; the Horizontal Pod Autoscaler scales pods on metrics; the <strong>KEDA add-on</strong> scales on event sources such as queue length, Event Hubs lag or Prometheus queries, which suits batch and async inference workers.</li>
+<li><strong>Identity:</strong> use Microsoft Entra Workload ID so pods get Entra tokens via a federated credential on a user-assigned managed identity.</li>
+<li><strong>Azure ML integration:</strong> an AKS cluster (or Azure Arc-enabled cluster) can be attached to an Azure ML workspace as Kubernetes compute, giving Azure ML-managed deployments on infrastructure you control.</li>
+</ul>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You can describe GPU families at the level of &quot;compute vs large-scale training vs visualization&quot; and say you would check current sizes and quota rather than reciting specs.</li>
+<li>Spot answers include checkpointing and eviction handling, not just &quot;it is cheaper&quot;.</li>
+<li>You can argue managed endpoints vs AKS in terms of team skills, control, multi-model density and operational burden.</li>
+</ul>
+<hr />
+<h2 id="data-and-analytics">Data and analytics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Data Factory</td>
+<td>Managed orchestration and data movement: pipelines, copy activities, mapping data flows, integration runtimes (Azure, self-hosted for on-premises, Azure-SSIS)</td>
+<td>Land data from SaaS, databases and on-premises into ADLS; schedule preprocessing; trigger Azure ML pipelines</td>
+</tr>
+<tr>
+<td>Microsoft Fabric</td>
+<td>SaaS analytics platform built around <strong>OneLake</strong> (one logical lake per tenant, Delta Parquet as the table format), with lakehouses, warehouses, Data Factory pipelines, notebooks, real-time analytics and Power BI on shared capacity</td>
+<td>Analytics-heavy organizations, Power BI users, teams wanting one governed SaaS data platform. Shortcuts reference data in ADLS Gen2 or other clouds without copying</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics</td>
+<td>Earlier integrated analytics service (dedicated and serverless SQL pools, Spark pools, pipelines)</td>
+<td>Existing estates. Microsoft positions Fabric as the strategic direction for new analytics investment; Synapse remains supported, but check current guidance before starting new work on it</td>
+</tr>
+<tr>
+<td>Azure Databricks</td>
+<td>First-party Azure service running the Databricks platform: Spark, Delta Lake, Unity Catalog, MLflow, model serving</td>
+<td>Large-scale feature engineering, Spark-native ML teams, multi-cloud consistency</td>
+</tr>
+<tr>
+<td>Event Hubs</td>
+<td>Managed event ingestion with partitions and consumer groups; exposes an <strong>Apache Kafka-compatible endpoint</strong> (Standard tier and above)</td>
+<td>Streaming features, clickstream, telemetry; existing Kafka clients can connect by changing configuration. Capture writes raw events to Blob or ADLS</td>
+</tr>
+<tr>
+<td>Azure Stream Analytics</td>
+<td>Managed stream processing with a SQL-like query language</td>
+<td>Windowed aggregates for real-time features, anomaly flags, routing events</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB</td>
+<td>Globally distributed NoSQL database with several APIs, throughput in request units (provisioned, autoscale or serverless)</td>
+<td>Low-latency online feature or session lookups, chat history, app state. The NoSQL API supports vector indexing and search</td>
+</tr>
+<tr>
+<td>Azure AI Search (formerly Azure Cognitive Search)</td>
+<td>Search service with full-text, vector and <strong>hybrid</strong> search (results fused with Reciprocal Rank Fusion), an optional semantic ranker, indexers and skillsets, and integrated vectorization</td>
+<td>The retrieval layer for most enterprise RAG on Azure</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="fabric-vs-databricks-vs-synapse-at-a-glance">Fabric vs Databricks vs Synapse at a glance</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Leans Fabric</th>
+<th>Leans Databricks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who are the main users?</td>
+<td>Analysts, BI developers, mixed-skill teams</td>
+<td>Data engineers and ML engineers comfortable with Spark and code</td>
+</tr>
+<tr>
+<td>Billing model</td>
+<td>Capacity (F SKU) shared by all workloads; can be paused</td>
+<td>Usage-based compute (DBUs) plus the underlying cloud resources, or serverless</td>
+</tr>
+<tr>
+<td>Multi-cloud</td>
+<td>Azure-centric SaaS</td>
+<td>Same platform on Azure, AWS and GCP</td>
+</tr>
+<tr>
+<td>ML depth</td>
+<td>Notebooks, MLflow experiments and models, good for lighter ML</td>
+<td>Mature ML and serving features, Unity Catalog governance for features and models</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both use Delta Lake tables, and Fabric can read data in ADLS through shortcuts, so many organizations use both: Databricks for heavy engineering and ML, Fabric for BI and self-service analytics.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You can name where data lands (ADLS or OneLake), what moves it (Data Factory, Event Hubs), what transforms it (Spark in Databricks or Fabric, Stream Analytics) and what serves it (Cosmos DB, AI Search).</li>
+<li>You hedge appropriately on Fabric vs Synapse: Fabric is the strategic direction, but existing Synapse estates are real and migrations take planning.</li>
+<li>You know AI Search hybrid retrieval (keyword plus vector plus optional semantic reranking) usually beats pure vector search on enterprise documents.</li>
+</ul>
+<hr />
+<h2 id="generative-ai">Generative AI</h2>
+<h3 id="azure-openai-in-microsoft-foundry">Azure OpenAI in Microsoft Foundry</h3>
+<p>Azure OpenAI provides OpenAI models hosted in Azure. It is documented as part of <strong>Foundry Models</strong> and managed through <strong>Azure AI Foundry (now Microsoft Foundry)</strong>, which also hosts models from other providers, evaluation, tracing and agents. Newer Foundry projects sit on a Foundry resource; older hub-based projects build on Azure ML hubs. Check which model your organization uses, because networking and RBAC setup differ.</p>
+<p>Core concepts:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resource</td>
+<td>The Azure resource with an endpoint such as <code>https://&lt;resource&gt;.openai.azure.com/</code>, its own networking, keys and RBAC</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>A named instance of a specific model and version inside the resource. Your code calls the <strong>deployment name</strong>, not the model name, so you can swap versions behind a stable name</td>
+</tr>
+<tr>
+<td>Quota</td>
+<td>Granted per subscription, per region, per model, measured in tokens per minute (TPM) for standard deployments; requests per minute limits derive from it</td>
+</tr>
+<tr>
+<td>Rate limiting</td>
+<td>Exceeding a deployment's limits returns HTTP 429 with retry hints in the response headers</td>
+</tr>
+<tr>
+<td>Content filtering</td>
+<td>Default filters classify prompts and completions for categories such as hate, sexual, violence and self-harm at configurable severity levels, plus features such as prompt shields for jailbreak and indirect prompt injection attacks. Filter configurations are attached to deployments</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="deployment-types-in-general-terms">Deployment types (in general terms)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Billing and capacity</th>
+<th>Data processing location</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard (regional)</td>
+<td>Pay per token, shared capacity in one region</td>
+<td>That region</td>
+<td>Workloads with strict regional processing requirements</td>
+</tr>
+<tr>
+<td>Global Standard</td>
+<td>Pay per token, traffic routed across Azure's global capacity</td>
+<td>Any region where the model is deployed (data at rest stays in your chosen geography)</td>
+<td>Default for many apps: higher available quota, better resilience</td>
+</tr>
+<tr>
+<td>Data Zone Standard</td>
+<td>Pay per token, routed within a data zone (for example US or EU)</td>
+<td>Within that data zone</td>
+<td>A middle ground for data residency</td>
+</tr>
+<tr>
+<td>Provisioned (regional, data zone or global)</td>
+<td>Reserved throughput units (PTUs), billed for the reservation whether used or not</td>
+<td>Depends on the variant</td>
+<td>Predictable latency for steady, high-volume traffic</td>
+</tr>
+<tr>
+<td>Batch (global or data zone)</td>
+<td>Asynchronous jobs at a lower price than standard, longer turnaround</td>
+<td>Depends on the variant</td>
+<td>Offline enrichment, bulk classification, evaluations</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exact names, discounts and model availability change; check the current deployment types page before quoting specifics.</p>
+<h3 id="other-genai-building-blocks">Other GenAI building blocks</h3>
+<ul>
+<li><strong>Foundry Agent Service:</strong> a managed runtime for agents that handles conversation state, tool calling and grounding (for example with Azure AI Search, files or OpenAPI tools) with enterprise networking and identity. Use it when you want a managed agent backend instead of hosting your own orchestration loop.</li>
+<li><strong>Prompt flow:</strong> an orchestration, evaluation and deployment tool for LLM flows in Azure ML and Foundry. Treat it as a pointer only: Microsoft's newer investment is in Foundry agents, evaluations and its agent frameworks, so check its current support status before building on it.</li>
+<li><strong>Azure AI Content Safety:</strong> the standalone moderation service behind much of the content filtering, also callable directly for user-generated content.</li>
+<li><strong>Azure API Management as an AI gateway:</strong> policies for per-consumer token limits, load balancing across several Azure OpenAI backends with circuit breaking, token usage metrics and semantic caching. Useful when many teams share model capacity.</li>
+</ul>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You call deployments by a configurable name and keep code model-agnostic.</li>
+<li>You use Entra ID auth with a managed identity and disable key-based (local) auth where possible.</li>
+<li>You explain the latency, cost and residency tradeoffs between global, data zone, regional and provisioned deployments.</li>
+<li>You treat content filters as a layer, not a complete safety story: you still need input validation, output checks and evaluation (see <a href="../ai_genai/intro_llm_security.html">LLM Security</a>).</li>
+</ul>
+<hr />
+<h2 id="observability">Observability</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it does</th>
+<th>ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Monitor</td>
+<td>The umbrella platform for metrics, logs, alerts and action groups</td>
+<td>Alert on endpoint latency, error rates, GPU node health, quota usage</td>
+</tr>
+<tr>
+<td>Log Analytics workspace</td>
+<td>Log store queried with <strong>KQL</strong> (Kusto Query Language)</td>
+<td>Central place for resource logs (via diagnostic settings), activity logs and app telemetry</td>
+</tr>
+<tr>
+<td>Application Insights</td>
+<td>Application performance monitoring (requests, dependencies, exceptions, traces), workspace-based and OpenTelemetry-friendly</td>
+<td>Instrument inference APIs and LLM apps; Foundry tracing can send traces here</td>
+</tr>
+<tr>
+<td>Container insights, Managed Prometheus and Managed Grafana</td>
+<td>Kubernetes and Prometheus-style metrics</td>
+<td>AKS inference clusters, GPU utilization exporters</td>
+</tr>
+<tr>
+<td>Azure ML model monitoring</td>
+<td>Data drift, prediction drift and data quality checks on deployed models</td>
+<td>See <a href="intro_azure_ml.html">Azure ML guide</a> and <a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Resource logs are not collected by default for most services: you create <strong>diagnostic settings</strong> to send them to Log Analytics, Storage or Event Hubs. A small KQL example for an inference API instrumented with Application Insights:</p>
+<pre><code class="language-kusto">requests
+| where timestamp &gt; ago(1h)
+| summarize p95_ms = percentile(duration, 95), failures = countif(success == false), total = count()
+    by bin(timestamp, 5m), name
+| order by timestamp asc
+</code></pre>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You monitor three layers: infrastructure (nodes, GPUs, quota), service (latency, errors, 429s, token usage) and model quality (drift, evaluation scores, user feedback).</li>
+<li>You know diagnostic settings must be configured explicitly and that log ingestion and retention cost money.</li>
+<li>You can write or at least read a basic KQL query.</li>
+</ul>
+<hr />
+<h2 id="cost-control">Cost control</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tags</td>
+<td>Tag every resource with owner, cost center, environment and project; enforce required tags with Azure Policy so cost reports can be grouped and chargebacks work</td>
+</tr>
+<tr>
+<td>Cost Management budgets and alerts</td>
+<td>Create budgets at subscription or resource group scope with alerts on actual and forecasted spend, routed to action groups (email, Teams, automation); enable cost anomaly alerts</td>
+</tr>
+<tr>
+<td>Spot VMs</td>
+<td>Use for interruptible training and batch scoring with checkpointing</td>
+</tr>
+<tr>
+<td>Autoscale to zero</td>
+<td>Azure ML compute clusters with minimum nodes of zero, AKS user node pools that scale to zero, Container Apps scaling to zero</td>
+</tr>
+<tr>
+<td>Deallocate, do not just stop</td>
+<td>A VM shut down from inside the OS is still allocated and still billed for compute; &quot;Stopped (deallocated)&quot; releases the hardware and stops compute charges (disks and some IPs are still billed)</td>
+</tr>
+<tr>
+<td>Idle shutdown for compute instances</td>
+<td>Configure idle shutdown and schedules on Azure ML compute instances so notebooks do not run all weekend</td>
+</tr>
+<tr>
+<td>Commitments</td>
+<td>Reservations or savings plans only for measured, steady baseload</td>
+</tr>
+<tr>
+<td>Provisioned AI capacity</td>
+<td>PTUs are billed whether used or not; size from measured traffic and keep bursty traffic on pay-per-token deployments</td>
+</tr>
+<tr>
+<td>Network costs</td>
+<td>Data transfer between regions and to the internet is charged; private endpoints and NAT gateways have hourly and per-GB processing charges. Keep training compute in the same region as its data</td>
+</tr>
+<tr>
+<td>Log costs</td>
+<td>Set retention per table, avoid sending verbose debug logs to Log Analytics in production, use cheaper log tiers for high-volume, rarely queried data</td>
+</tr>
+<tr>
+<td>Restrict expensive SKUs</td>
+<td>Use Azure Policy &quot;allowed VM sizes&quot; and per-subscription quota to stop accidental large GPU deployments</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>You attach cost controls to ownership (tags, budgets per team) instead of a monthly surprise for the platform team.</li>
+<li>You mention the stop vs deallocate trap and idle compute instances, which are classic real-world waste.</li>
+<li>You can reason about network and logging costs, not only VM costs.</li>
+</ul>
+<hr />
+<h2 id="reference-architectures">Reference architectures</h2>
+<h3 id="a-batch-training-and-batch-scoring">(a) Batch training and batch scoring</h3>
+<pre><code class="language-text"> Source systems (DBs, SaaS, files)
+          |
+          v
+ Azure Data Factory (copy, schedule)  ----&gt;  ADLS Gen2 (raw -&gt; curated, Delta tables)
+                                                   |
+                                                   v
+                                     Azure Databricks / Fabric Spark
+                                     (feature engineering, data checks)
+                                                   |
+                                                   v
+                              Azure ML pipeline (train -&gt; evaluate -&gt; register)
+                              on compute cluster (Spot where tolerable, scale to 0)
+                                                   |
+                                                   v
+                              Azure ML registry (versioned model, approval gate)
+                                                   |
+                                                   v
+                              Azure ML batch endpoint (scheduled scoring)
+                                                   |
+                                                   v
+                              ADLS Gen2 / Cosmos DB / warehouse (predictions)
+</code></pre>
+<p><strong>Walkthrough:</strong> Data Factory lands raw data in ADLS Gen2. Spark in Databricks or Fabric builds curated feature tables in Delta format with data quality checks. An Azure ML pipeline, triggered on a schedule or by CI/CD, trains on a compute cluster that scales to zero, evaluates against the current production model and registers the candidate in an Azure ML registry shared across workspaces. After approval, a batch endpoint scores the latest data and writes predictions back to storage or a serving database. Every step runs as a managed identity with data roles on only the containers it needs, and storage, the workspace and the registry are reachable only through private endpoints.</p>
+<h3 id="b-real-time-inference">(b) Real-time inference</h3>
+<pre><code class="language-text"> Clients (internal apps, partners)
+          |
+          v
+ Azure API Management (auth with Entra, rate limits, versioning)   &lt;- public or internal
+          |  (private networking from here on)
+          v
+ +-------------------------------+        +-------------------------------+
+ | Option 1: Azure ML managed    |   or   | Option 2: AKS                 |
+ | online endpoint               |        | (GPU and CPU user node pools, |
+ | (blue/green traffic split,    |        |  KEDA/HPA, Workload ID,       |
+ |  autoscale, managed VNet)     |        |  internal load balancer)      |
+ +-------------------------------+        +-------------------------------+
+          |                                         |
+          v                                         v
+ Feature lookups: Cosmos DB / Redis      Model artifacts: registry, ACR images
+          |
+          v
+ Application Insights + Azure Monitor alerts + model monitoring
+</code></pre>
+<p><strong>Walkthrough:</strong> API Management is the single front door: it validates Entra tokens, applies per-client quotas and lets you version the API independently of the model. Behind it, either a managed online endpoint (less to operate, built-in traffic splitting for safe rollouts) or AKS (more control, better for many models per GPU or custom serving stacks) runs the model with no public endpoint. Online features come from a low-latency store reached via private endpoints, containers come from ACR with <code>AcrPull</code> via managed identity, and telemetry flows to Application Insights and Log Analytics with alerts on latency, errors and drift.</p>
+<h3 id="c-enterprise-rag">(c) Enterprise RAG</h3>
+<pre><code class="language-text"> Documents: Blob Storage / ADLS / SharePoint
+          |
+          v
+ Azure AI Search indexer + skillset
+ (crack documents, chunk, embed with an embedding deployment)
+          |
+          v
+ Azure AI Search index
+ (text fields + vector fields + permission metadata, hybrid search, semantic ranker)
+          ^
+          | query (hybrid retrieve, filtered by user's groups)
+          |
+ App (Container Apps / App Service / AKS)  &lt;---- user signs in with Microsoft Entra ID
+          |
+          | grounded prompt (managed identity, Entra token auth)
+          v
+ Azure OpenAI deployment in Microsoft Foundry (private endpoint, content filtering)
+          |
+          v
+ Answer with citations -&gt; Application Insights traces, evaluation and feedback store
+</code></pre>
+<p><strong>Walkthrough:</strong> An AI Search indexer pulls documents from Blob or ADLS (SharePoint ingestion options exist but have changed over time, so check current support), chunks them and calls an embedding deployment to populate vector fields. The app authenticates the user with Entra ID, runs a hybrid query (keyword plus vector, optionally semantic reranking) filtered by the user's group memberships so people only retrieve documents they are allowed to see, and sends the grounded prompt to a chat deployment using its managed identity. Search, Azure OpenAI and storage all sit behind private endpoints with key auth disabled; traces, token usage, retrieval quality and user feedback feed evaluation. For RAG design details see <a href="../ai_genai/intro_rag_engineering.html">RAG Engineering</a>.</p>
+<hr />
+<h2 id="code-examples">Code examples</h2>
+<p>All examples use <code>DefaultAzureCredential</code>, which tries several credential sources in order (environment variables, workload identity, managed identity, Azure CLI login and others). The same code works on a laptop after <code>az login</code> and in Azure with a managed identity. In production, consider a specific credential such as <code>ManagedIdentityCredential</code> to avoid slow or surprising fallbacks through the chain.</p>
+<h3 id="upload-a-file-to-blob-storage-with-entra-auth">Upload a file to Blob Storage with Entra auth</h3>
+<pre><code class="language-python"># pip install azure-identity azure-storage-blob
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient
+
+ACCOUNT_URL = &quot;https://&lt;storage-account&gt;.blob.core.windows.net&quot;
+
+# The identity needs a data-plane role such as &quot;Storage Blob Data Contributor&quot;
+# on the container or account. &quot;Contributor&quot; alone is not enough.
+credential = DefaultAzureCredential()
+service = BlobServiceClient(account_url=ACCOUNT_URL, credential=credential)
+container = service.get_container_client(&quot;training-data&quot;)
+
+with open(&quot;train.parquet&quot;, &quot;rb&quot;) as data:
+    container.upload_blob(
+        name=&quot;churn/2026-10-01/train.parquet&quot;,
+        data=data,
+        overwrite=True,
+    )
+</code></pre>
+<h3 id="read-a-secret-from-key-vault">Read a secret from Key Vault</h3>
+<pre><code class="language-python"># pip install azure-identity azure-keyvault-secrets
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+VAULT_URL = &quot;https://&lt;vault-name&gt;.vault.azure.net&quot;
+
+# The identity needs a role such as &quot;Key Vault Secrets User&quot; (RBAC permission model).
+client = SecretClient(vault_url=VAULT_URL, credential=DefaultAzureCredential())
+partner_api_key = client.get_secret(&quot;partner-api-key&quot;).value
+
+# Use the value in memory; never log it or write it to disk.
+</code></pre>
+<p>Only use Key Vault for secrets you cannot eliminate (for example a third-party API key). For Azure services, use managed identity directly, as in the other examples.</p>
+<h3 id="call-an-azure-openai-deployment-with-entra-token-auth">Call an Azure OpenAI deployment with Entra token auth</h3>
+<pre><code class="language-python"># pip install openai azure-identity
+import os
+
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import AzureOpenAI
+
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    &quot;https://cognitiveservices.azure.com/.default&quot;,
+)
+
+client = AzureOpenAI(
+    azure_endpoint=os.environ[&quot;AZURE_OPENAI_ENDPOINT&quot;],  # https://&lt;resource&gt;.openai.azure.com/
+    azure_ad_token_provider=token_provider,  # no API key; needs &quot;Cognitive Services OpenAI User&quot;
+    # PLACEHOLDER: check the current supported api_version in the Azure OpenAI docs.
+    api_version=os.environ.get(&quot;AZURE_OPENAI_API_VERSION&quot;, &quot;&lt;check-current-api-version&gt;&quot;),
+    max_retries=5,  # the SDK retries 429 and 5xx with backoff
+)
+
+DEPLOYMENT_NAME = os.environ[&quot;AZURE_OPENAI_DEPLOYMENT&quot;]  # your deployment name, not a model name
+
+response = client.chat.completions.create(
+    model=DEPLOYMENT_NAME,
+    messages=[
+        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You answer questions about internal ML runbooks.&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;How do I roll back a managed online endpoint?&quot;},
+    ],
+)
+print(response.choices[0].message.content)
+</code></pre>
+<p>Azure OpenAI also offers a newer versioned <code>/openai/v1/</code> API path that works with the standard <code>OpenAI</code> client and does not need an <code>api_version</code> parameter; check the current docs for which path your organization standardizes on.</p>
+<h3 id="fall-back-across-deployments-on-rate-limits">Fall back across deployments on rate limits</h3>
+<pre><code class="language-python">from openai import RateLimitError
+
+
+def chat_with_fallback(targets, messages):
+    &quot;&quot;&quot;targets: list of (client, deployment_name) pairs, e.g. in different regions.&quot;&quot;&quot;
+    last_error = None
+    for client, deployment_name in targets:
+        try:
+            return client.chat.completions.create(model=deployment_name, messages=messages)
+        except RateLimitError as err:  # HTTP 429 after the client's own retries
+            last_error = err
+    raise last_error
+</code></pre>
+<p>In larger systems this logic usually lives in a gateway (API Management backend pools with circuit breakers) rather than in every application.</p>
+<h3 id="github-actions-login-with-workload-identity-federation">GitHub Actions login with workload identity federation</h3>
+<pre><code class="language-yaml"># The app registration or user-assigned managed identity has a federated credential
+# trusting this repository (for example subject &quot;repo:my-org/my-repo:environment:prod&quot;).
+permissions:
+  id-token: write   # allow the workflow to request an OIDC token
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      # Later steps run as that identity; no client secret is stored in GitHub.
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-is-the-difference-between-a-management-group-a-subscription-and-a-resource-group">What is the difference between a management group, a subscription and a resource group?</h4>
+<p>A resource group is a lifecycle container: resources that are deployed, updated and deleted together, such as everything for one model service in one environment. A subscription is a billing, quota and scale boundary, and it is where GPU quota and many service limits are granted. Management groups sit above subscriptions and exist so you can apply Azure Policy and role assignments once and have them inherit to many subscriptions. For ML, the practical consequences are that production and development should not share a subscription (so quota and blast radius are separate) and that guardrails such as &quot;no public endpoints&quot; belong at the management group level. The tradeoff is overhead: too many subscriptions create networking and identity sprawl, so most organizations standardize on a small set per workload and environment.</p>
+<h4 id="how-would-you-remove-secrets-from-an-ml-services-code-using-managed-identities">How would you remove secrets from an ML service's code using managed identities?</h4>
+<p>First, inventory every secret: storage keys, Azure OpenAI keys, database passwords and third-party tokens. For every Azure service that supports Entra auth (Storage, Key Vault, Azure OpenAI, AI Search, Cosmos DB, Azure SQL), assign the service's managed identity a narrow data-plane role and switch the code to <code>DefaultAzureCredential</code> or <code>ManagedIdentityCredential</code>. Then disable key-based or local auth on those resources so nobody can fall back to keys. For the secrets that genuinely cannot go away, such as a partner API key, store them in Key Vault and let the managed identity read them with <code>Key Vault Secrets User</code>. Finally, rotate the old keys, because anything that was in code or CI variables must be considered leaked. The main tradeoff is migration effort and the need for local developer access, which <code>az login</code> plus personal role assignments in dev handles cleanly.</p>
+<h4 id="when-would-you-choose-a-system-assigned-managed-identity-over-a-user-assigned-one">When would you choose a system-assigned managed identity over a user-assigned one?</h4>
+<p>A system-assigned identity is created with a resource and deleted with it, so it is ideal when one resource needs its own identity and you want cleanup to be automatic. A user-assigned identity is a standalone resource that can be attached to several resources and created before them. That makes it better when several replicas or services need the same permissions, when you want role assignments to exist before the compute is deployed (avoiding a race in infrastructure-as-code), or for AKS workload identity and federated credentials. The downside of user-assigned identities is that they outlive their consumers and can accumulate stale permissions if nobody owns their lifecycle. A reasonable default is user-assigned for platform components and workloads managed by IaC, system-assigned for simple one-off resources.</p>
+<h4 id="why-can-a-user-with-contributor-on-a-storage-account-get-a-403-when-reading-blobs">Why can a user with Contributor on a storage account get a 403 when reading blobs?</h4>
+<p><code>Contributor</code> is a control-plane role: it lets you manage the storage account resource, but reading blob data with Entra authentication requires a data-plane role such as <code>Storage Blob Data Reader</code> or <code>Storage Blob Data Contributor</code>. Contributor can often still list the account keys and read data that way, which is exactly why many organizations disable shared key access. Once shared keys are disabled, only data-plane role assignments work, which is the intended secure state. The same split exists elsewhere: managing an Azure OpenAI resource is different from calling its deployments, which needs a role such as <code>Cognitive Services OpenAI User</code>. Role assignments can also take a few minutes to propagate, so a brand-new assignment may briefly still return 403.</p>
+<h4 id="how-does-a-github-actions-workflow-deploy-to-azure-without-storing-a-client-secret">How does a GitHub Actions workflow deploy to Azure without storing a client secret?</h4>
+<p>It uses workload identity federation. You create a federated credential on an app registration or a user-assigned managed identity that trusts GitHub's OIDC issuer and a specific subject, such as a repository plus an environment or branch. The workflow requests an OIDC token (<code>id-token: write</code>), and the <code>azure/login</code> action exchanges it for a short-lived Entra token. Nothing long-lived is stored in GitHub, and the trust is scoped to that repository and environment. The tradeoff is that subjects must be precise: an overly broad subject (any branch, any pull request) could let untrusted code deploy, so production credentials should be tied to a protected environment with required reviewers. The same pattern powers AKS workload identity, where the trusted issuer is the cluster's OIDC issuer and the subject is a Kubernetes service account.</p>
+<h4 id="what-is-the-difference-between-a-private-endpoint-and-a-service-endpoint">What is the difference between a private endpoint and a service endpoint?</h4>
+<p>A service endpoint lets traffic from a subnet reach a PaaS service over the Azure backbone and lets the service firewall allow that subnet, but the service keeps its public endpoint and the setting applies to the service type rather than one resource instance. A private endpoint creates a network interface with a private IP in your VNet that maps to one specific resource, so you can turn off public network access entirely and reach it from on-premises over VPN or ExpressRoute. Private endpoints are the standard for regulated ML workloads and for data exfiltration concerns because access is bound to a specific resource. They cost more and require Private DNS zones to be linked correctly, which is where most implementation bugs happen. Service endpoints are simpler and free but are rarely enough when the requirement is &quot;no public endpoint&quot;.</p>
+<h4 id="how-would-you-lock-down-an-azure-openai-resource-with-private-endpoints">How would you lock down an Azure OpenAI resource with private endpoints?</h4>
+<p>Create a private endpoint for the resource in a dedicated subnet and link the matching Private DNS zone (for example <code>privatelink.openai.azure.com</code>) to every VNet that must resolve it, including the hub if DNS is centralized. Then disable public network access on the resource and disable local (key) auth so only Entra-authenticated callers on the private network can reach it. Grant the calling app's managed identity <code>Cognitive Services OpenAI User</code> on that resource only. If other services call it on your behalf, such as AI Search using integrated vectorization or Foundry agents, check how they connect (trusted service access, shared private links or managed networks), because they will fail once public access is off. Verify from inside the VNet that the hostname resolves to a private IP, and add Azure Policy to deny public network access on new AI resources. The tradeoff is operational complexity: developer access needs VPN, a jump box or a dev environment that still permits it.</p>
+<h4 id="when-would-you-serve-a-model-on-aks-instead-of-an-azure-ml-managed-online-endpoint">When would you serve a model on AKS instead of an Azure ML managed online endpoint?</h4>
+<p>Managed online endpoints are the default when you want Azure to run the infrastructure: you get autoscaling, blue/green traffic splitting, authentication and monitoring without owning a cluster. AKS makes sense when you need control the managed service does not give you: custom serving stacks such as vLLM or Triton with specific tuning, packing many models onto shared GPUs, sidecars, service mesh, or a platform team that already runs Kubernetes well. AKS also helps when inference is one part of a larger microservice system that already lives on the cluster. The cost is operational: upgrades, node images, GPU drivers, autoscaling, security policies and on-call all become yours. A middle path is attaching AKS to Azure ML as Kubernetes compute, keeping Azure ML's deployment workflow on infrastructure you control. I would choose based on team skills and model count, not on raw performance, since both can run the same container.</p>
+<h4 id="how-would-you-choose-between-microsoft-fabric-and-azure-databricks-for-an-ml-teams-data-platform">How would you choose between Microsoft Fabric and Azure Databricks for an ML team's data platform?</h4>
+<p>I would start from the users and existing estate. If most consumers are analysts and Power BI developers, and the organization wants one SaaS platform with capacity-based billing and minimal infrastructure, Fabric is a strong fit, and its data science features handle lighter ML. If the team is engineering-heavy, runs large Spark workloads, needs mature feature engineering, model serving and Unity Catalog governance, or must stay consistent across clouds, Databricks is usually the better center of gravity. They are not mutually exclusive: both use Delta tables, and Fabric shortcuts can read data that Databricks writes to ADLS, so a common pattern is Databricks for engineering and ML with Fabric for BI. I would also weigh cost models (shared capacity vs usage-based compute), existing skills and governance tooling. If the organization is on Synapse today, I would note that Fabric is Microsoft's strategic direction and plan migration deliberately rather than rushing it.</p>
+<h4 id="how-do-you-handle-429-rate-limit-errors-from-azure-openai-in-production">How do you handle 429 rate-limit errors from Azure OpenAI in production?</h4>
+<p>A 429 means the deployment exceeded its tokens-per-minute or requests-per-minute limits (or provisioned capacity is saturated), so the first fix is client-side: retry with exponential backoff and jitter, honoring the retry hints in the response headers, which the <code>openai</code> SDK does with <code>max_retries</code>. Next, reduce demand: set sensible <code>max_tokens</code>, trim prompts, cache repeated answers, and move non-interactive work to batch deployments. For capacity, request more quota, use Global Standard or Data Zone deployments that draw from larger pools, and spread traffic across multiple deployments or regions with failover, ideally in a gateway such as API Management with backend pools and circuit breakers. For steady high-volume traffic with strict latency needs, provisioned throughput gives predictable capacity, with pay-per-token deployments absorbing spillover. Finally, monitor 429 rates and token usage per consumer so one noisy client cannot starve others, using per-consumer token limits at the gateway. The tradeoff is complexity: multi-region fallback can change data residency and latency, so check that against compliance requirements.</p>
+<h4 id="how-would-you-choose-between-global-data-zone-regional-and-provisioned-azure-openai-deployments">How would you choose between global, data zone, regional and provisioned Azure OpenAI deployments?</h4>
+<p>Start with data residency: global deployments may process prompts in any region where the model is deployed, data zone deployments keep processing within a zone such as the US or EU, and regional deployments keep it in one region. If residency allows it, global standard is usually the best default because it offers larger quota and better availability. Provisioned deployments reserve throughput and give more predictable latency, but you pay for the reservation whether you use it or not, so they suit steady, high-volume production traffic measured over time. Batch deployments suit offline jobs where turnaround in hours is fine at a lower price. Many production systems combine them: provisioned for baseload, standard for bursts, batch for offline enrichment. I would confirm current names, model availability per region and pricing in the docs before committing.</p>
+<h4 id="how-would-you-design-a-multi-subscription-landing-zone-for-ml">How would you design a multi-subscription landing zone for ML?</h4>
+<p>I would follow the Azure landing zone pattern: a platform management group with subscriptions for identity, connectivity (hub VNet, firewall, DNS) and management (Log Analytics, monitoring), and a landing zones management group holding workload subscriptions. ML workloads get separate subscriptions per environment, for example <code>ml-dev</code>, <code>ml-test</code> and <code>ml-prod</code>, so GPU quota, budgets and blast radius are isolated, plus possibly a shared subscription for cross-environment assets like an Azure ML registry and container registry. Spokes peer to the hub, private endpoints use centrally managed Private DNS zones, and egress goes through the hub firewall or NAT gateways. Azure Policy at the management group level enforces tags, allowed regions, denial of public network access and allowed VM sizes, and diagnostic settings are deployed automatically. Access is through Entra groups with environment-specific roles, and CI/CD uses federated identities scoped per environment. The tradeoff is upfront effort and some friction for experimentation, which a loosely governed sandbox subscription with tight budgets can relieve.</p>
+<h4 id="how-would-you-build-a-rag-system-on-azure-that-respects-document-permissions">How would you build a RAG system on Azure that respects document permissions?</h4>
+<p>Index documents into Azure AI Search with vector and text fields, and store permission metadata on each chunk, typically the Entra group IDs allowed to read the source document. At query time the app authenticates the user with Entra ID, resolves their group memberships and applies them as a security filter on the search query so that only permitted chunks are retrieved; check whether newer built-in permission-aware indexing features fit your sources. Permissions must be kept in sync as they change in the source system, which is the hardest operational part, so the indexer schedule or an event-driven update path needs monitoring. The model should never see unfiltered results, and the app should cite sources so users can verify answers. The tradeoff is freshness vs cost: frequent reindexing of permissions costs compute, while stale ACLs can leak information, so I would prioritize correctness for sensitive collections.</p>
+<h4 id="how-do-you-keep-gpu-spend-under-control-on-azure">How do you keep GPU spend under control on Azure?</h4>
+<p>Make idle cost visible first: tags per team and project, budgets with forecast alerts, and a dashboard of GPU utilization by owner. Then remove idle capacity: Azure ML clusters with a minimum of zero nodes, AKS GPU node pools that scale to zero, compute instance idle shutdown, and deallocating (not just stopping inside the OS) any standalone VMs. Use Spot VMs for training and batch work with regular checkpointing, and keep on-demand capacity for serving and deadlines. Right-size: smaller GPUs for inference, quantized or distilled models where quality allows, and batch endpoints instead of always-on endpoints for offline scoring. Commitments such as reservations or savings plans only make sense once utilization data shows a stable baseload. Finally, enforce guardrails with Azure Policy on allowed VM sizes and subscription quota so one experiment cannot launch a large cluster unnoticed.</p>
+<h4 id="how-would-you-monitor-an-llm-application-on-azure-end-to-end">How would you monitor an LLM application on Azure end to end?</h4>
+<p>I would instrument the app with OpenTelemetry and send traces to Application Insights, capturing each request's retrieval step, model call, token usage, latency and errors, including 429s. Resource logs and metrics from Azure OpenAI, AI Search and the hosting platform go to a Log Analytics workspace through diagnostic settings, with KQL-based alerts on latency percentiles, error rates and throttling. On top of operational metrics, I would track quality: offline evaluation suites on every prompt or model change, online sampling with groundedness or relevance evaluators, and user feedback tied to trace IDs. Logging full prompts and responses has privacy implications, so I would redact or sample and set retention deliberately. Cost is part of monitoring too: tokens per request and per tenant, trended over time. The tradeoff is log volume vs insight, so I would keep detailed traces sampled and aggregate metrics complete.</p>
+<h4 id="how-would-you-ingest-streaming-events-from-existing-kafka-producers-into-azure">How would you ingest streaming events from existing Kafka producers into Azure?</h4>
+<p>Event Hubs exposes a Kafka-compatible endpoint on Standard tier and above, so existing producers can often switch by changing the bootstrap server and authentication configuration rather than rewriting code. Event Hubs Capture can persist raw events to Blob or ADLS for replay and training data, while Stream Analytics, Spark Structured Streaming in Databricks or Fabric real-time features compute windowed aggregates for online features. Partitions determine parallelism, so the partition count and keys need planning up front. The tradeoff is that Event Hubs is not a full Kafka distribution: some Kafka features and ecosystem tools may differ, so teams that rely heavily on Kafka-specific features may prefer a managed Kafka offering. For authentication, I would use Entra ID with managed identities rather than connection strings.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keys and connection strings in code, notebooks or CI variables</td>
+<td>Leaks are hard to detect and rotate; anyone with the key has full data access</td>
+<td>Managed identities with data-plane roles, workload identity federation for CI, Key Vault for unavoidable secrets, disable local auth</td>
+</tr>
+<tr>
+<td>Granting <code>Owner</code> or <code>Contributor</code> at subscription scope &quot;to make it work&quot;</td>
+<td>Massive blast radius, and it still may not grant data access</td>
+<td>Narrow scope and data-plane roles; Entra groups; just-in-time elevation for admins</td>
+</tr>
+<tr>
+<td>Private endpoint created but Private DNS zone not linked to the VNet</td>
+<td>Names resolve to the public IP, calls fail once public access is disabled</td>
+<td>Centrally managed Private DNS zones linked to all VNets that need them; test resolution from inside the network</td>
+</tr>
+<tr>
+<td>Disabling public access without checking dependent services</td>
+<td>Indexers, agents or pipelines that reach the resource break silently</td>
+<td>Map every caller first; use trusted service access, shared private links or managed networks as appropriate</td>
+</tr>
+<tr>
+<td>Stopping VMs from inside the OS</td>
+<td>VM remains allocated and compute keeps billing</td>
+<td>Stop and deallocate from the portal, CLI or automation; auto-shutdown schedules</td>
+</tr>
+<tr>
+<td>Compute instances and GPU clusters left running</td>
+<td>Large idle spend</td>
+<td>Idle shutdown, minimum nodes of zero, budgets with alerts</td>
+</tr>
+<tr>
+<td>Tiering short-lived data to cool, cold or archive</td>
+<td>Early deletion charges and archive rehydration delays</td>
+<td>Tier by real access patterns; lifecycle policies based on age and last access</td>
+</tr>
+<tr>
+<td>Training compute in a different region from the data</td>
+<td>Egress charges and slower throughput</td>
+<td>Co-locate data and compute; replicate data deliberately if needed</td>
+</tr>
+<tr>
+<td>One Azure OpenAI deployment shared by every team with no limits</td>
+<td>One client causes 429s for everyone</td>
+<td>Per-consumer token limits at a gateway, multiple deployments, quota planning</td>
+</tr>
+<tr>
+<td>Hard-coding model names or API versions everywhere</td>
+<td>Painful upgrades and inconsistent behavior</td>
+<td>Deployment names and API version in configuration; test upgrades in a non-prod deployment</td>
+</tr>
+<tr>
+<td>No diagnostic settings</td>
+<td>No resource logs when an incident happens</td>
+<td>Deploy diagnostic settings with Azure Policy or IaC to a central Log Analytics workspace</td>
+</tr>
+<tr>
+<td>Single subscription for dev and prod ML</td>
+<td>Shared quota, shared blast radius, unclear costs</td>
+<td>Separate subscriptions per environment under a management group with shared policy</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_azure_ml.html">Azure Machine Learning Interview Guide</a></td>
+<td>Workspace, jobs, registries and endpoints in depth</td>
+</tr>
+<tr>
+<td><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></td>
+<td>Azure ML vs SageMaker vs Vertex AI</td>
+</tr>
+<tr>
+<td><a href="aws_for_ml_engineers.html">AWS for ML Engineers</a></td>
+<td>The equivalent surrounding services on AWS</td>
+</tr>
+<tr>
+<td><a href="gcp_for_ml_engineers.html">GCP for ML Engineers</a></td>
+<td>The equivalent surrounding services on Google Cloud</td>
+</tr>
+<tr>
+<td><a href="cloud_service_mapping.html">Cloud Service Mapping</a></td>
+<td>Azure, AWS and GCP services side by side</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_serving.html">Model Serving</a></td>
+<td>Serving patterns behind managed endpoints and AKS</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+<td>Drift and performance monitoring concepts</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_cicd_for_ml.html">CI/CD for Machine Learning</a></td>
+<td>Pipelines that use workload identity federation</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_mlflow.html">MLflow</a></td>
+<td>Tracking and model registry used by Azure ML and Databricks</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>Foundations for AKS</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_terraform.html">Terraform</a></td>
+<td>Infrastructure as code for landing zones and ML resources</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_github_actions.html">GitHub Actions for CI/CD</a></td>
+<td>OIDC-based deployments to Azure</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_observability.html">Observability</a></td>
+<td>Metrics, logs and traces concepts behind Azure Monitor</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></td>
+<td>Kafka concepts used with the Event Hubs Kafka endpoint</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_delta_lake.html">Delta Lake</a></td>
+<td>Table format used by Databricks and Fabric</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_data_engineering_for_ai.html">Data Engineering for AI</a></td>
+<td>Data pipelines feeding training and RAG</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_rag_engineering.html">RAG Engineering</a></td>
+<td>Retrieval design behind the enterprise RAG architecture</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_vector_databases.html">Vector Databases</a></td>
+<td>Vector search concepts used in AI Search and Cosmos DB</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_llmops.html">LLMOps</a></td>
+<td>Operating Azure OpenAI-based applications</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_llm_security.html">LLM Security</a></td>
+<td>Prompt injection and defenses beyond content filtering</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="gcp_for_ml_engineers.html"><small>Previous</small>GCP for ML Engineers</a><a rel="next" class="next" href="cloud_service_mapping.html"><small>Next</small>AWS vs GCP vs Azure Mapping</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/azure_for_ml_engineers.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

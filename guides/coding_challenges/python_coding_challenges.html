@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Coding Challenges for Interviews | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on the Python coding rounds that appear in ML engineer, AI engineer, data engineer, and backend-leaning interviews.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/python_coding_challenges.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Python Coding Challenges for Interviews | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on the Python coding rounds that appear in ML engineer, AI engineer, data engineer, and backend-leaning interviews.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/python_coding_challenges.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python Coding Challenges for Interviews | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on the Python coding rounds that appear in ML engineer, AI engineer, data engineer, and backend-leaning interviews.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Python Coding Challenges for Interviews",
+   "description": "This guide focuses on the Python coding rounds that appear in ML engineer, AI engineer, data engineer, and backend-leaning interviews.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/python_coding_challenges.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#coding-challenges"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Python Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/python_coding_challenges.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#coding-challenges">Coding Challenges</a> <span aria-hidden="true">/</span> <span aria-current="page">Python Coding Challenges</span></nav>
+<p class="meta"><a href="../../#coding_challenges/python_coding_challenges.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="python-coding-challenges-for-interviews">Python Coding Challenges for Interviews</h1>
+<p>This guide focuses on the Python coding rounds that appear in ML engineer, AI engineer, data engineer, and backend-leaning interviews.</p>
+<p>The goal is not competitive programming for its own sake. The goal is to get fast and reliable at the patterns that show up in real interview loops.</p>
+<hr />
+<h2 id="what-interviewers-usually-test">What Interviewers Usually Test</h2>
+<ul>
+<li>choosing the right data structure quickly</li>
+<li>writing correct code without overengineering</li>
+<li>handling edge cases</li>
+<li>explaining time and space complexity</li>
+<li>improving a naive solution into a better one</li>
+</ul>
+<hr />
+<h2 id="1-arrays-strings-and-hash-maps">1. Arrays, Strings, and Hash Maps</h2>
+<h3 id="concepts-to-know">Concepts to know</h3>
+<ul>
+<li>arrays and list traversal</li>
+<li>dictionaries and frequency counting</li>
+<li>sets for fast membership checks</li>
+<li>prefix sums for repeated range questions</li>
+</ul>
+<h3 id="typical-prompts">Typical prompts</h3>
+<ul>
+<li>find duplicates</li>
+<li>group anagrams</li>
+<li>top-k frequent elements</li>
+<li>longest substring without repeats</li>
+<li>count items by category</li>
+</ul>
+<h3 id="example-top-k-frequent-elements">Example: top-k frequent elements</h3>
+<pre><code class="language-python">from collections import Counter
+import heapq
+
+def top_k_frequent(nums: list[int], k: int) -&gt; list[int]:
+    counts = Counter(nums)
+    return [value for value, _ in heapq.nlargest(k, counts.items(), key=lambda x: x[1])]
+</code></pre>
+<h3 id="why-it-matters">Why it matters</h3>
+<p>This pattern appears in:</p>
+<ul>
+<li>token frequency analysis</li>
+<li>event counting</li>
+<li>label distribution checks</li>
+<li>feature summarization</li>
+</ul>
+<hr />
+<h2 id="2-two-pointers-and-sliding-window">2. Two Pointers and Sliding Window</h2>
+<h3 id="concepts-to-know-1">Concepts to know</h3>
+<ul>
+<li>left and right pointers</li>
+<li>fixed-size windows</li>
+<li>variable-size windows</li>
+<li>shrinking windows when constraints break</li>
+</ul>
+<h3 id="typical-prompts-1">Typical prompts</h3>
+<ul>
+<li>longest substring with at most <code>k</code> distinct values</li>
+<li>maximum sum subarray</li>
+<li>minimum window meeting a condition</li>
+<li>deduplicating sorted arrays in place</li>
+</ul>
+<h3 id="example-longest-substring-without-repeating-characters">Example: longest substring without repeating characters</h3>
+<pre><code class="language-python">def longest_unique_substring(s: str) -&gt; int:
+    seen = {}
+    left = 0
+    best = 0
+
+    for right, ch in enumerate(s):
+        if ch in seen and seen[ch] &gt;= left:
+            left = seen[ch] + 1
+        seen[ch] = right
+        best = max(best, right - left + 1)
+
+    return best
+</code></pre>
+<h3 id="why-it-matters-1">Why it matters</h3>
+<p>This is useful for:</p>
+<ul>
+<li>stream processing</li>
+<li>log analysis</li>
+<li>sequence feature extraction</li>
+<li>windowed anomaly logic</li>
+</ul>
+<hr />
+<h2 id="3-sorting-intervals-and-heaps">3. Sorting, Intervals, and Heaps</h2>
+<h3 id="concepts-to-know-2">Concepts to know</h3>
+<ul>
+<li>sorting by a key</li>
+<li>greedy interval merging</li>
+<li>min-heaps and max-heaps</li>
+<li>top-k maintenance</li>
+</ul>
+<h3 id="typical-prompts-2">Typical prompts</h3>
+<ul>
+<li>merge overlapping intervals</li>
+<li>meeting rooms</li>
+<li>kth largest element</li>
+<li>schedule optimization</li>
+</ul>
+<h3 id="example-merge-intervals">Example: merge intervals</h3>
+<pre><code class="language-python">def merge_intervals(intervals: list[list[int]]) -&gt; list[list[int]]:
+    if not intervals:
+        return []
+
+    intervals = sorted(intervals, key=lambda x: x[0])   # don't reorder the caller's list
+    merged = [list(intervals[0])]                        # copy, so merging never mutates the input
+
+    for start, end in intervals[1:]:
+        last = merged[-1]
+        if start &lt;= last[1]:
+            last[1] = max(last[1], end)
+        else:
+            merged.append([start, end])
+
+    return merged
+</code></pre>
+<h3 id="why-it-matters-2">Why it matters</h3>
+<p>The same reasoning appears in:</p>
+<ul>
+<li>sessionization</li>
+<li>batching jobs into windows</li>
+<li>merging date ranges</li>
+<li>summarizing overlapping events</li>
+</ul>
+<hr />
+<h2 id="4-stack-and-queue-patterns">4. Stack and Queue Patterns</h2>
+<h3 id="concepts-to-know-3">Concepts to know</h3>
+<ul>
+<li>stack for nested structure and monotonic behavior</li>
+<li>queue and deque for breadth-first or rolling problems</li>
+<li>monotonic stack for next greater and histogram patterns</li>
+</ul>
+<h3 id="typical-prompts-3">Typical prompts</h3>
+<ul>
+<li>valid parentheses</li>
+<li>minimum stack</li>
+<li>sliding window maximum</li>
+<li>process tasks in FIFO order</li>
+</ul>
+<h3 id="example-valid-parentheses">Example: valid parentheses</h3>
+<pre><code class="language-python">def is_valid_parentheses(s: str) -&gt; bool:
+    pairs = {&quot;)&quot;: &quot;(&quot;, &quot;]&quot;: &quot;[&quot;, &quot;}&quot;: &quot;{&quot;}
+    stack = []
+
+    for ch in s:
+        if ch in pairs.values():
+            stack.append(ch)
+        elif ch in pairs:
+            if not stack or stack.pop() != pairs[ch]:
+                return False
+
+    return not stack
+</code></pre>
+<h3 id="why-it-matters-3">Why it matters</h3>
+<p>These patterns show up in:</p>
+<ul>
+<li>parser logic</li>
+<li>expression validation</li>
+<li>workflow state handling</li>
+<li>streaming windows with deques</li>
+</ul>
+<hr />
+<h2 id="5-trees-and-graphs">5. Trees and Graphs</h2>
+<h3 id="concepts-to-know-4">Concepts to know</h3>
+<ul>
+<li>DFS and BFS</li>
+<li>recursion versus explicit stack</li>
+<li>adjacency lists</li>
+<li>cycle detection</li>
+<li>topological ordering</li>
+</ul>
+<h3 id="typical-prompts-4">Typical prompts</h3>
+<ul>
+<li>number of islands</li>
+<li>clone graph</li>
+<li>detect cycle in prerequisites</li>
+<li>shortest path in an unweighted graph</li>
+</ul>
+<h3 id="example-topological-sort-for-dependencies">Example: topological sort for dependencies</h3>
+<pre><code class="language-python">from collections import defaultdict, deque
+
+def topo_sort(edges: list[tuple[str, str]]) -&gt; list[str]:
+    graph = defaultdict(list)
+    indegree = defaultdict(int)
+    nodes = set()
+
+    for src, dst in edges:
+        graph[src].append(dst)
+        indegree[dst] += 1
+        nodes.add(src)
+        nodes.add(dst)
+
+    q = deque([node for node in nodes if indegree[node] == 0])
+    order = []
+
+    while q:
+        node = q.popleft()
+        order.append(node)
+        for nxt in graph[node]:
+            indegree[nxt] -= 1
+            if indegree[nxt] == 0:
+                q.append(nxt)
+
+    return order if len(order) == len(nodes) else []
+</code></pre>
+<h3 id="why-it-matters-4">Why it matters</h3>
+<p>Graph problems map directly to:</p>
+<ul>
+<li>pipeline dependencies</li>
+<li>task orchestration</li>
+<li>lineage traversal</li>
+<li>service dependency analysis</li>
+</ul>
+<p>Related repo reading:</p>
+<ul>
+<li><a href="../data_engineering/intro_apache_airflow.html">Apache Airflow</a></li>
+<li><a href="../system_design/backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+</ul>
+<hr />
+<h2 id="6-binary-search">6. Binary Search</h2>
+<h3 id="concepts-to-know-5">Concepts to know</h3>
+<ul>
+<li>searching sorted arrays</li>
+<li>first true / last false template</li>
+<li>binary search on answer space</li>
+</ul>
+<h3 id="typical-prompts-5">Typical prompts</h3>
+<ul>
+<li>first bad version</li>
+<li>search insert position</li>
+<li>minimum feasible capacity</li>
+<li>threshold tuning</li>
+</ul>
+<h3 id="example-first-index-greater-than-or-equal-to-target">Example: first index greater than or equal to target</h3>
+<pre><code class="language-python">def lower_bound(nums: list[int], target: int) -&gt; int:
+    left, right = 0, len(nums)
+
+    while left &lt; right:
+        mid = (left + right) // 2
+        if nums[mid] &lt; target:
+            left = mid + 1
+        else:
+            right = mid
+
+    return left
+</code></pre>
+<h3 id="why-it-matters-5">Why it matters</h3>
+<p>This pattern appears in:</p>
+<ul>
+<li>threshold search</li>
+<li>hyperparameter search intuition</li>
+<li>lookup tables</li>
+<li>ranking cutoffs</li>
+</ul>
+<hr />
+<h2 id="7-dynamic-programming-basics">7. Dynamic Programming Basics</h2>
+<h3 id="concepts-to-know-6">Concepts to know</h3>
+<ul>
+<li>overlapping subproblems</li>
+<li>memoization</li>
+<li>bottom-up table building</li>
+<li>state definition and transitions</li>
+</ul>
+<h3 id="typical-prompts-6">Typical prompts</h3>
+<ul>
+<li>climbing stairs</li>
+<li>coin change</li>
+<li>longest common subsequence</li>
+<li>house robber</li>
+</ul>
+<h3 id="example-coin-change">Example: coin change</h3>
+<pre><code class="language-python">def coin_change(coins: list[int], amount: int) -&gt; int:
+    dp = [amount + 1] * (amount + 1)
+    dp[0] = 0
+
+    for value in range(1, amount + 1):
+        for coin in coins:
+            if coin &lt;= value:
+                dp[value] = min(dp[value], dp[value - coin] + 1)
+
+    return dp[amount] if dp[amount] &lt;= amount else -1
+</code></pre>
+<h3 id="why-it-matters-6">Why it matters</h3>
+<p>Even if the exact DP problem never appears in production code, it tests whether you can define state cleanly and reason about optimization.</p>
+<hr />
+<h2 id="8-matrix-and-tabular-operations">8. Matrix and Tabular Operations</h2>
+<h3 id="concepts-to-know-7">Concepts to know</h3>
+<ul>
+<li>row and column traversal</li>
+<li>prefix sums in 2D</li>
+<li>grid BFS and DFS</li>
+<li>batching and chunking records</li>
+</ul>
+<h3 id="typical-prompts-7">Typical prompts</h3>
+<ul>
+<li>count islands in a matrix</li>
+<li>rotate a matrix</li>
+<li>find connected components</li>
+<li>compute rolling or grouped summaries</li>
+</ul>
+<h3 id="example-chunk-records-for-batch-inference">Example: chunk records for batch inference</h3>
+<pre><code class="language-python">def batch_items(items: list[dict], batch_size: int) -&gt; list[list[dict]]:
+    return [items[i:i + batch_size] for i in range(0, len(items), batch_size)]
+</code></pre>
+<h3 id="why-it-matters-7">Why it matters</h3>
+<p>This appears constantly in:</p>
+<ul>
+<li>feature pipelines</li>
+<li>inference batching</li>
+<li>ETL jobs</li>
+<li>evaluation runs</li>
+</ul>
+<p>Related repo reading:</p>
+<ul>
+<li><a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+</ul>
+<hr />
+<h2 id="practice-checklist">Practice Checklist</h2>
+<h3 id="easy">Easy</h3>
+<ul>
+<li>frequency maps</li>
+<li>set membership</li>
+<li>two-sum variants</li>
+<li>basic stack validation</li>
+<li>simple binary search</li>
+</ul>
+<h3 id="medium">Medium</h3>
+<ul>
+<li>sliding window</li>
+<li>interval merge</li>
+<li>heap-based top-k</li>
+<li>BFS and DFS</li>
+<li>prefix sums</li>
+</ul>
+<h3 id="harder-but-high-value">Harder but high value</h3>
+<ul>
+<li>topological sort</li>
+<li>DP with 1D or 2D state</li>
+<li>graph cycle detection</li>
+<li>matrix traversal with state</li>
+</ul>
+<hr />
+<h2 id="what-to-say-in-the-interview">What to Say in the Interview</h2>
+<p>For each Python problem:</p>
+<ol>
+<li>State the brute-force idea first if it helps anchor the problem.</li>
+<li>State the target complexity.</li>
+<li>Choose the core structure: hash map, heap, deque, recursion, or graph.</li>
+<li>Walk through one sample input.</li>
+<li>Call out edge cases:
+<ul>
+<li>empty input</li>
+<li>duplicates</li>
+<li>negative values</li>
+<li>single element</li>
+<li>disconnected graph</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="common-mistakes">Common Mistakes</h2>
+<ul>
+<li>using lists when a set or dictionary is the right tool</li>
+<li>forgetting to update the left pointer in sliding-window problems</li>
+<li>mutating interval references incorrectly</li>
+<li>missing visited-state tracking in graph traversal</li>
+<li>writing recursive code without clear base cases</li>
+<li>giving complexity only for the best case and not the real case</li>
+</ul>
+<hr />
+<h2 id="repo-concepts-to-pair-with-practice">Repo Concepts to Pair With Practice</h2>
+<ul>
+<li><a href="../classical_ml/intro_statistics_probability.html">Statistics &amp; Probability Guide</a></li>
+<li><a href="../classical_ml/">Classical ML Overview</a></li>
+<li><a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../classical_ml/intro_time_series.html">Time Series</a></li>
+<li><a href="../system_design/backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+</ul>
+<p>If you can solve medium Python problems and explain the linked concepts cleanly, you will cover a large share of ML and AI coding rounds.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="ml_coding_challenges.html"><small>Next</small>ML Coding Challenges</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/coding_challenges/python_coding_challenges.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

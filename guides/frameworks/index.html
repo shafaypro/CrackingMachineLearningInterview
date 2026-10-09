@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frameworks &amp; Tools Overview Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Frameworks &amp; Tools Overview Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Frameworks &amp; Tools Overview Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Frameworks & Tools Overview",
+   "description": "A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Overview",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">Overview</span></nav>
+<p class="meta"><a href="../../#frameworks/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="frameworks--tools-overview">Frameworks &amp; Tools Overview</h1>
+<p>A reference for all major ML/AI frameworks, local LLM runners, fine-tuning tools, and infrastructure platforms.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#quick-comparison-table">Quick Comparison Table</a></li>
+<li><a href="#local-llm-tools">Local LLM Tools</a></li>
+<li><a href="#fine-tuning-tools">Fine-Tuning Tools</a></li>
+<li><a href="#training-frameworks">Training Frameworks</a></li>
+<li><a href="#experiment-tracking">Experiment Tracking</a></li>
+<li><a href="#orchestration-frameworks">Orchestration Frameworks</a></li>
+<li><a href="#vector-databases">Vector Databases</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="quick-comparison-table">Quick Comparison Table</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Category</th>
+<th>Primary Use Case</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_ollama.html">Ollama</a></td>
+<td>Local LLM</td>
+<td>Run LLMs locally</td>
+<td>Dev/testing, privacy-first, offline</td>
+</tr>
+<tr>
+<td><a href="intro_vllm.html">vLLM</a></td>
+<td>LLM Serving</td>
+<td>High-throughput inference</td>
+<td>Production serving at scale</td>
+</tr>
+<tr>
+<td><a href="intro_huggingface.html">Hugging Face</a></td>
+<td>Model Hub + Library</td>
+<td>Load, fine-tune, deploy any model</td>
+<td>Research, fine-tuning, prototyping</td>
+</tr>
+<tr>
+<td><a href="intro_pytorch.html">PyTorch</a></td>
+<td>Training Framework</td>
+<td>Build and train neural networks</td>
+<td>Custom model development</td>
+</tr>
+<tr>
+<td>TensorFlow/Keras</td>
+<td>Training Framework</td>
+<td>Build and train neural networks</td>
+<td>Production deployment, mobile</td>
+</tr>
+<tr>
+<td>JAX</td>
+<td>Training Framework</td>
+<td>High-performance ML research</td>
+<td>Google infra, research labs</td>
+</tr>
+<tr>
+<td><a href="intro_langchain.html">LangChain</a></td>
+<td>LLM Orchestration</td>
+<td>Chain LLM calls, agents, RAG</td>
+<td>LLM application development</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_n8n.html">n8n</a></td>
+<td>Workflow Automation</td>
+<td>Connect apps, webhooks, approvals, and AI steps</td>
+<td>Operational AI automation and business workflows</td>
+</tr>
+<tr>
+<td>LlamaIndex</td>
+<td>RAG Framework</td>
+<td>Document indexing and retrieval</td>
+<td>Document Q&amp;A, knowledge bases</td>
+</tr>
+<tr>
+<td>Haystack</td>
+<td>NLP Pipeline</td>
+<td>Search and NLP pipelines</td>
+<td>Enterprise search, NLP products</td>
+</tr>
+<tr>
+<td><a href="intro_unsloth.html">Unsloth</a></td>
+<td>Fine-tuning</td>
+<td>Fast LoRA/QLoRA fine-tuning</td>
+<td>Efficient custom model training</td>
+</tr>
+<tr>
+<td>Axolotl</td>
+<td>Fine-tuning</td>
+<td>Configurable fine-tuning</td>
+<td>Multi-GPU training, YAML configs</td>
+</tr>
+<tr>
+<td>TRL</td>
+<td>Fine-tuning</td>
+<td>RLHF, DPO, SFT training</td>
+<td>Alignment and instruction tuning</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="local-llm-tools">Local LLM Tools</h2>
+<p>Run large language models locally on your own hardware without sending data to external APIs.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="intro_ollama.html">Ollama</a></strong></td>
+<td>Simplified local LLM runner</td>
+<td>Easiest to use, great CLI/API</td>
+<td>Single-GPU, no batch inference</td>
+<td>Developers, local chat, prototyping</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>PagedAttention-based server</td>
+<td>Highest throughput, OpenAI API compatible</td>
+<td>More setup required</td>
+<td>Production serving, multi-user</td>
+</tr>
+<tr>
+<td><strong>llama.cpp</strong></td>
+<td>C++ inference engine</td>
+<td>Runs on CPU, very lightweight</td>
+<td>Manual model management</td>
+<td>Edge devices, CPU-only environments</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong></td>
+<td>Desktop GUI for local LLMs</td>
+<td>No-code, drag-and-drop models</td>
+<td>GUI only, less automatable</td>
+<td>Non-technical users</td>
+</tr>
+<tr>
+<td><strong>Jan</strong></td>
+<td>Open source alternative to LM Studio</td>
+<td>Privacy-focused, offline first</td>
+<td>Smaller community</td>
+<td>Privacy-conscious users</td>
+</tr>
+<tr>
+<td><strong>GPT4All</strong></td>
+<td>Local chat application</td>
+<td>Easy installation, many models</td>
+<td>Limited API</td>
+<td>Beginners, desktop chat</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="fine-tuning-tools">Fine-Tuning Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="intro_unsloth.html">Unsloth</a></strong></td>
+<td>Fast LoRA/QLoRA fine-tuning</td>
+<td>2-5x faster than HF, memory efficient</td>
+<td>Fewer model architectures supported</td>
+<td>Quick LoRA fine-tuning</td>
+</tr>
+<tr>
+<td><strong>Axolotl</strong></td>
+<td>Configurable fine-tuning framework</td>
+<td>YAML-based config, multi-GPU, many methods</td>
+<td>Steeper config learning curve</td>
+<td>Production fine-tuning pipelines</td>
+</tr>
+<tr>
+<td><strong>TRL (Hugging Face)</strong></td>
+<td>RLHF, DPO, SFT</td>
+<td>Official HF library, well-documented</td>
+<td>Slower than Unsloth</td>
+<td>Alignment, instruction tuning</td>
+</tr>
+<tr>
+<td><strong>LLaMA-Factory</strong></td>
+<td>Web UI + CLI for fine-tuning</td>
+<td>Beginner-friendly, many models</td>
+<td>Less flexible than code-based</td>
+<td>Quick experiments</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="training-frameworks">Training Frameworks</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Language</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="intro_pytorch.html">PyTorch</a></strong></td>
+<td>Python</td>
+<td>Dynamic graphs, research-friendly, huge community</td>
+<td>Slower deployment tools historically</td>
+<td>Research, custom models</td>
+</tr>
+<tr>
+<td><strong>TensorFlow / Keras</strong></td>
+<td>Python</td>
+<td>Production tooling (TFServing, TFLite), mobile</td>
+<td>More verbose, eager/graph confusion</td>
+<td>Production, mobile deployment</td>
+</tr>
+<tr>
+<td><strong>JAX</strong></td>
+<td>Python</td>
+<td>XLA compilation, auto-differentiation, functional</td>
+<td>Steep learning curve, less tooling</td>
+<td>Google research, TPU training</td>
+</tr>
+<tr>
+<td><strong>MXNet</strong></td>
+<td>Python / Scala</td>
+<td>AWS native, distributed</td>
+<td>Declining community</td>
+<td>AWS-specific workloads</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="pytorch-vs-tensorflow-quick-comparison">PyTorch vs TensorFlow Quick Comparison</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>PyTorch</th>
+<th>TensorFlow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graph type</td>
+<td>Dynamic (eager by default)</td>
+<td>Static (graph) + eager mode</td>
+</tr>
+<tr>
+<td>Research popularity</td>
+<td>Dominant in research</td>
+<td>Declining in research</td>
+</tr>
+<tr>
+<td>Production tooling</td>
+<td>ONNX, torch.export, ExecuTorch (TorchServe now in limited maintenance)</td>
+<td>TFServing, TFLite, TF.js</td>
+</tr>
+<tr>
+<td>Debugging</td>
+<td>Easy: standard Python debugging</td>
+<td>Harder with graph mode</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>Very large</td>
+<td>Large</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="experiment-tracking">Experiment Tracking</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Hosting</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Self-hosted / Databricks</td>
+<td>Open source, model registry, simple API</td>
+<td>Basic UI</td>
+<td>Teams wanting self-hosted</td>
+</tr>
+<tr>
+<td><strong>Weights &amp; Biases (W&amp;B)</strong></td>
+<td>SaaS (free tier)</td>
+<td>Rich UI, collaboration, sweeps, reports</td>
+<td>Paid at scale</td>
+<td>Research teams</td>
+</tr>
+<tr>
+<td><strong>Neptune.ai</strong></td>
+<td>SaaS</td>
+<td>Enterprise features, metadata store</td>
+<td>Less known than W&amp;B</td>
+<td>Enterprise ML teams</td>
+</tr>
+<tr>
+<td><strong>Comet ML</strong></td>
+<td>SaaS</td>
+<td>Experiment comparison, dashboards</td>
+<td>Paid at scale</td>
+<td>Enterprise</td>
+</tr>
+<tr>
+<td><strong>DVC</strong></td>
+<td>Self-hosted</td>
+<td>Git-native, data versioning</td>
+<td>Pipeline complexity</td>
+<td>Data versioning focus</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="orchestration-frameworks">Orchestration Frameworks</h2>
+<p>For building LLM applications, RAG pipelines, and AI agents.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Description</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="intro_langchain.html">LangChain</a></strong></td>
+<td>LLM application framework</td>
+<td>Huge community, many integrations</td>
+<td>Abstraction overhead, breaking changes</td>
+<td>Rapid LLM app prototyping</td>
+</tr>
+<tr>
+<td><strong><a href="../ai_genai/intro_n8n.html">n8n</a></strong></td>
+<td>Visual workflow automation</td>
+<td>Fast integrations, approvals, business workflow visibility</td>
+<td>Less suited for deep agent state management</td>
+<td>AI-enabled operations and internal tooling</td>
+</tr>
+<tr>
+<td><strong>LlamaIndex</strong></td>
+<td>Data indexing + RAG</td>
+<td>Strong RAG and document handling</td>
+<td>More limited for general agents</td>
+<td>Document Q&amp;A, knowledge bases</td>
+</tr>
+<tr>
+<td><strong>Haystack</strong></td>
+<td>NLP pipeline framework</td>
+<td>Enterprise-ready, production-focused</td>
+<td>Smaller community</td>
+<td>Enterprise search pipelines</td>
+</tr>
+<tr>
+<td><strong>DSPy</strong></td>
+<td>LLM programming</td>
+<td>Automatic prompt optimization</td>
+<td>New, smaller community</td>
+<td>Research, optimized pipelines</td>
+</tr>
+<tr>
+<td><strong>Instructor</strong></td>
+<td>Structured LLM output</td>
+<td>Simple, reliable structured output</td>
+<td>Single-purpose</td>
+<td>Structured data extraction</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="vector-databases">Vector Databases</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Database</th>
+<th>Type</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chroma</strong></td>
+<td>Open source, embedded</td>
+<td>Easy setup, local dev</td>
+<td>Not for very large scale</td>
+<td>Prototyping, local RAG</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td>Managed SaaS</td>
+<td>Scalable, managed, fast</td>
+<td>Cost, vendor lock-in</td>
+<td>Production RAG at scale</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>Open source / managed</td>
+<td>High performance, rich filtering</td>
+<td>Newer community</td>
+<td>Production self-hosted</td>
+</tr>
+<tr>
+<td><strong>Weaviate</strong></td>
+<td>Open source / managed</td>
+<td>Multimodal, GraphQL API</td>
+<td>Complex setup</td>
+<td>Enterprise, multimodal search</td>
+</tr>
+<tr>
+<td><strong>pgvector</strong></td>
+<td>PostgreSQL extension</td>
+<td>No new infra, SQL interface</td>
+<td>Slower for large scale</td>
+<td>Teams already using PostgreSQL</td>
+</tr>
+<tr>
+<td><strong>Milvus</strong></td>
+<td>Open source</td>
+<td>Massive scale, distributed</td>
+<td>Complex infrastructure</td>
+<td>Billion-scale vector search</td>
+</tr>
+<tr>
+<td><strong>FAISS</strong></td>
+<td>Library (Meta)</td>
+<td>Extremely fast, CPU/GPU</td>
+<td>Not a server, no persistence</td>
+<td>Research, batch similarity search</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: When would you choose Ollama over vLLM?</strong> 🟢 Beginner</p>
+<p><strong>Ollama</strong> is best for local development, experimentation, and privacy-sensitive use cases where you need simplicity. It's a single command to run models, has an OpenAI-compatible API, and works on a single GPU or CPU.</p>
+<p><strong>vLLM</strong> is for production serving where you need high throughput, low latency, and multi-user concurrency. vLLM's PagedAttention enables efficient KV cache management and batching of requests.</p>
+<p>Rule of thumb: Ollama for development, vLLM for production.</p>
+<hr />
+<p><strong>Q2: What is PagedAttention in vLLM?</strong> 🔴 Advanced</p>
+<p>PagedAttention is vLLM's key innovation. The KV (key-value) cache (which stores attention states for each token) is typically pre-allocated as a contiguous block. This leads to memory fragmentation and waste when requests have different lengths.</p>
+<p>PagedAttention manages the KV cache in fixed-size pages (like OS virtual memory paging). Pages are allocated dynamically and can be shared across requests (e.g., for system prompts). This dramatically reduces memory waste, enables larger batch sizes, and increases throughput by 2-4x compared to standard implementations.</p>
+<hr />
+<p><strong>Q3: What is the difference between LangChain and LlamaIndex?</strong> 🟡 Intermediate</p>
+<p><strong>LangChain</strong> is a general-purpose LLM application framework with support for chains, agents, tools, memory, and many LLM/API integrations. Good for building complex LLM workflows and agents.</p>
+<p><strong>LlamaIndex</strong> is specialized for data indexing, retrieval, and RAG (Retrieval-Augmented Generation). It has superior document loaders, node parsers, index types, and retrieval strategies. Better at handling large document collections for Q&amp;A.</p>
+<p>In practice, many teams use LlamaIndex for the RAG layer and LangChain for agent orchestration.</p>
+<hr />
+<p><strong>Q4: When would you choose n8n over LangChain or LangGraph?</strong> 🟡 Intermediate</p>
+<p>Choose <strong>n8n</strong> when the problem is mostly workflow automation: webhooks, SaaS integrations, approvals, routing, and AI calls embedded inside business processes.</p>
+<p>Choose <strong>LangChain</strong> for general LLM application development and <strong>LangGraph</strong> when you need deeper control over state, loops, and agent execution.</p>
+<p>In many production systems, n8n handles the outer operational workflow while LangChain or LangGraph powers the reasoning-heavy backend.</p>
+<hr />
+<p><strong>Q5: Compare PyTorch and TensorFlow for production ML.</strong> 🟡 Intermediate</p>
+<p><strong>PyTorch</strong> is dominant in research and has strong production paths (ONNX export, <code>torch.export</code> with AOTInductor, ExecuTorch for edge, or serving through vLLM/Triton). TorchScript is deprecated in favor of <code>torch.export</code>, and TorchServe is in limited maintenance. <code>torch.compile</code> (PyTorch 2.0+) makes it competitive on performance.</p>
+<p><strong>TensorFlow</strong> has mature production tooling: TF Serving (high-performance model serving), TFLite (mobile/edge), TF.js (browser), and tight integration with Google Cloud (Vertex AI).</p>
+<p>For new projects: choose PyTorch: it has the largest research community, best framework support (Hugging Face, Lightning), and strong enough production tooling.</p>
+<hr />
+<p><strong>Q6: What is the difference between Chroma and Pinecone for vector search?</strong> 🟡 Intermediate</p>
+<p><strong>Chroma</strong> is an open-source, embedded vector database ideal for local development and prototyping. Zero infrastructure setup: runs in-process or as a local server.</p>
+<p><strong>Pinecone</strong> is a fully managed vector database SaaS. Handles indexing, scaling, and serving automatically. Better for production use cases with millions of vectors and high query throughput. Has costs and vendor dependency.</p>
+<p>For development/prototyping: Chroma. For production at scale: Pinecone, Qdrant (self-hosted), or pgvector (if already using PostgreSQL).</p>
+<hr />
+<p><strong>Q7: What is Unsloth and how is it different from standard LoRA training?</strong> 🟡 Intermediate</p>
+<p>Unsloth is a Python library that provides optimized LoRA/QLoRA fine-tuning for LLMs. It achieves 2-5x speed improvements and 50-60% memory reduction compared to standard Hugging Face PEFT+Transformers training.</p>
+<p>Key optimizations:</p>
+<ul>
+<li>Rewritten CUDA kernels for attention and matrix operations</li>
+<li>Optimized gradient checkpointing</li>
+<li>Memory-efficient 4-bit quantization integration</li>
+<li>Unified API for Llama, Mistral, Gemma, and other popular models</li>
+</ul>
+<p>Standard LoRA uses the Hugging Face PEFT library which works well but is not optimized at the kernel level.</p>
+<hr />
+<p><strong>Q8: What is the difference between pgvector and dedicated vector databases?</strong> 🔴 Advanced</p>
+<p><strong>pgvector</strong> adds vector similarity search to PostgreSQL using an extension. Strengths: no new infrastructure, SQL interface, ACID transactions, join with relational data, familiar tooling. Weaknesses: slower for large-scale (100M+ vectors), limited indexing options (IVFFlat, HNSW).</p>
+<p><strong>Dedicated vector databases</strong> (Pinecone, Qdrant, Weaviate) are purpose-built for vector search: advanced indexing (HNSW, IVF, etc.), horizontal scaling, filtering, and high-throughput queries. They outperform pgvector at large scale.</p>
+<p>Choose pgvector if you already use PostgreSQL and have &lt; 10M vectors. Choose a dedicated database for larger scale or advanced filtering needs.</p>
+<hr />
+<h2 id="guides-in-this-track">Guides in This Track</h2>
+<p>Every guide in <code>frameworks/</code>. Start with the overview above, then work through these.</p>
+<ul>
+<li><a href="intro_fastapi.html">FastAPI: Production-Grade AI Backend Engineering</a></li>
+<li><a href="intro_huggingface.html">Hugging Face Guide</a></li>
+<li><a href="intro_langchain.html">LangChain Guide</a></li>
+<li><a href="intro_ollama.html">Ollama: Run LLMs Locally</a></li>
+<li><a href="intro_pydantic.html">Pydantic: Data Validation for AI Systems</a></li>
+<li><a href="intro_python_for_ai.html">Python for AI Engineering (2026 Edition)</a></li>
+<li><a href="intro_pytorch.html">PyTorch Guide</a></li>
+<li><a href="intro_unsloth.html">Unsloth: Fast LoRA Fine-Tuning</a></li>
+<li><a href="intro_vllm.html">vLLM: High-Throughput LLM Serving</a></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://ollama.com/docs">Ollama Documentation</a></li>
+<li><a href="https://docs.vllm.ai/">vLLM Documentation</a></li>
+<li><a href="https://huggingface.co/docs">Hugging Face Documentation</a></li>
+<li><a href="https://pytorch.org/docs/">PyTorch Documentation</a></li>
+<li><a href="https://python.langchain.com/docs/">LangChain Documentation</a></li>
+<li><a href="https://docs.n8n.io/">n8n Documentation</a></li>
+<li><a href="https://docs.llamaindex.ai/">LlamaIndex Documentation</a></li>
+<li><a href="https://github.com/unslothai/unsloth">Unsloth GitHub</a></li>
+<li><a href="https://docs.trychroma.com/">Chroma Documentation</a></li>
+<li><a href="https://docs.pinecone.io/">Pinecone Documentation</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_python_for_ai.html"><small>Next</small>Python for AI Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

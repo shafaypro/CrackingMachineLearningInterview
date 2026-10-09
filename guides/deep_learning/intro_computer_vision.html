@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Computer Vision for ML Interviews | Cracking ML Interviews</title>
+<meta name="description" content="Computer Vision for ML Interviews: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_computer_vision.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Computer Vision for ML Interviews | Cracking ML Interviews">
+<meta property="og:description" content="Computer Vision for ML Interviews: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_computer_vision.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Computer Vision for ML Interviews | Cracking ML Interviews">
+<meta name="twitter:description" content="Computer Vision for ML Interviews: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Computer Vision for ML Interviews",
+   "description": "Computer Vision for ML Interviews: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_computer_vision.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Computer Vision",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_computer_vision.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Computer Vision</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_computer_vision.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="computer-vision-for-ml-interviews">Computer Vision for ML Interviews</h1>
+<h2 id="convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</h2>
+<h3 id="why-convolutions">Why Convolutions?</h3>
+<p>Fully connected layers applied to images have two problems:</p>
+<ol>
+<li><strong>Parameter explosion</strong>: a 224×224×3 image with a 1000-unit FC layer = 150M parameters</li>
+<li><strong>Spatial invariance</strong>: FC layers don't exploit local structure or translation invariance</li>
+</ol>
+<p>Convolutions solve this via:</p>
+<ul>
+<li><strong>Local connectivity</strong>: each neuron sees a small spatial region (kernel)</li>
+<li><strong>Weight sharing</strong>: the same kernel slides over all positions (reduces parameters drastically)</li>
+<li><strong>Equivariance</strong>: if a feature shifts in the image, its activation map shifts by the same amount</li>
+</ul>
+<h3 id="convolution-operation">Convolution Operation</h3>
+<pre><code>Output[i,j] = Σ_m Σ_n Input[i+m, j+n] × Kernel[m,n] + bias
+</code></pre>
+<p><strong>Output spatial size:</strong></p>
+<pre><code>H_out = floor((H_in + 2×padding - kernel_size) / stride) + 1
+</code></pre>
+<p><strong>Parameter count per conv layer:</strong></p>
+<pre><code>params = (kernel_h × kernel_w × C_in + 1) × C_out
+# +1 for bias; 1 bias per output channel
+</code></pre>
+<p>Example: 3×3 conv, 64→128 channels = (3×3×64 + 1) × 128 = 73,856 params</p>
+<h3 id="receptive-field">Receptive Field</h3>
+<p>The receptive field of a neuron is the region of the input that can influence it.</p>
+<pre><code>RF_L = RF_{L-1} + (kernel_size - 1) × stride_product_{1..L-1}
+</code></pre>
+<p>Deeper layers have larger receptive fields. This is why deep networks learn hierarchical features:</p>
+<ul>
+<li>Layer 1: edges, colors</li>
+<li>Layer 3-5: textures, patterns</li>
+<li>Layer 7+: object parts</li>
+<li>Final layers: full objects</li>
+</ul>
+<hr />
+<h2 id="landmark-cnn-architectures">Landmark CNN Architectures</h2>
+<h3 id="alexnet-2012-the-deep-learning-revolution">AlexNet (2012): The Deep Learning Revolution</h3>
+<ul>
+<li>5 conv layers + 3 FC, ~60M params</li>
+<li>First to use ReLU activations, dropout, data augmentation at scale</li>
+<li>Won ImageNet 2012 by 10% margin (top-5 error: 15.3% vs 26.2%)</li>
+</ul>
+<h3 id="vggnet-2014-depth-via-small-kernels">VGGNet (2014): Depth via Small Kernels</h3>
+<ul>
+<li>Key insight: Stack 3×3 convolutions instead of large kernels</li>
+<li>Two 3×3 convs have same receptive field as one 5×5 but 28% fewer params and more non-linearity</li>
+<li>VGG-16: 16 weight layers, 138M params (heavy FC layers)</li>
+</ul>
+<h3 id="resnet-2015-residual-connections">ResNet (2015): Residual Connections</h3>
+<p>The problem with very deep networks: <strong>vanishing/exploding gradients</strong> make training degrade.</p>
+<p><strong>Residual block:</strong></p>
+<pre><code class="language-python">class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.conv1 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn1   = nn.BatchNorm2d(channels)
+        self.conv2 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn2   = nn.BatchNorm2d(channels)
+        self.relu  = nn.ReLU(inplace=True)
+
+    def forward(self, x):
+        identity = x
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += identity   # skip connection
+        return self.relu(out)
+</code></pre>
+<p>Skip connections let gradients flow directly through identity mappings, enabling training of 50, 101, 152+ layer networks. ResNet-50 reaches roughly 76% top-1 accuracy (about 24% error) on ImageNet with standard single-crop evaluation.</p>
+<p><strong>Why skip connections help:</strong></p>
+<ul>
+<li>Gradient highway: for y = F(x) + x, ∂L/∂x = ∂L/∂y · (∂F/∂x + I) (the identity term prevents vanishing)</li>
+<li>Each block learns a <em>residual</em> F(x) rather than a full transformation H(x)</li>
+<li>If F starts near zero (e.g. the last BN scale in each block initialized to 0), blocks begin close to identity → training starts like a shallower network</li>
+</ul>
+<h3 id="efficientnet-2019-compound-scaling">EfficientNet (2019): Compound Scaling</h3>
+<p>Rather than scaling only depth, width, or resolution independently, EfficientNet scales all three jointly using a compound coefficient φ:</p>
+<pre><code>depth:      d = α^φ
+width:      w = β^φ
+resolution: r = γ^φ
+subject to: α × β² × γ² ≈ 2 (FLOP constraint)
+</code></pre>
+<p>Best values found by NAS: α=1.2, β=1.1, γ=1.15. EfficientNet-B7 achieves 84.3% top-1 with 66M params, versus roughly 78% for ResNet-152 at a similar 60M params.</p>
+<h3 id="mobilenet-efficient-inference">MobileNet: Efficient Inference</h3>
+<p><strong>Depthwise separable convolution</strong> factorizes a standard convolution into:</p>
+<ol>
+<li><strong>Depthwise conv</strong>: 1 filter per input channel (spatial filtering)</li>
+<li><strong>Pointwise conv</strong>: 1×1 conv to combine channels</li>
+</ol>
+<pre><code class="language-python"># Standard 3×3 conv: D_k × D_k × M × N operations  
+# Depthwise separable: D_k × D_k × M + M × N operations
+# Reduction factor: 1/N + 1/D_k² ≈ 8-9× for 3×3 conv
+
+class DepthwiseSeparableConv(nn.Module):
+    def __init__(self, in_ch, out_ch, stride=1):
+        super().__init__()
+        self.dw = nn.Conv2d(in_ch, in_ch, 3, stride=stride,
+                            padding=1, groups=in_ch)   # depthwise
+        self.pw = nn.Conv2d(in_ch, out_ch, 1)          # pointwise
+        self.bn1 = nn.BatchNorm2d(in_ch)
+        self.bn2 = nn.BatchNorm2d(out_ch)
+        self.relu = nn.ReLU6(inplace=True)
+
+    def forward(self, x):
+        return self.relu(self.bn2(self.pw(self.relu(self.bn1(self.dw(x))))))
+</code></pre>
+<hr />
+<h2 id="batch-normalization">Batch Normalization</h2>
+<p>BatchNorm normalizes layer activations across the batch dimension:</p>
+<pre><code>μ_B = (1/m) Σ x_i          # batch mean
+σ²_B = (1/m) Σ (x_i - μ_B)² # batch variance
+x̂_i = (x_i - μ_B) / √(σ²_B + ε)   # normalize
+y_i = γ x̂_i + β             # scale and shift (learned)
+</code></pre>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>Reduces internal covariate shift: each layer sees normalized inputs</li>
+<li>Acts as regularization (slightly noisy estimates of population stats)</li>
+<li>Allows higher learning rates</li>
+<li>Makes network less sensitive to weight initialization</li>
+</ul>
+<p><strong>At inference:</strong> uses running mean/variance accumulated during training (not batch stats).</p>
+<p><strong>Placement in ResNet:</strong> Conv → BN → ReLU (pre-activation ResNet uses BN → ReLU → Conv, shown to perform slightly better).</p>
+<hr />
+<h2 id="object-detection">Object Detection</h2>
+<h3 id="two-stage-detectors-r-cnn-family">Two-Stage Detectors (R-CNN Family)</h3>
+<p><strong>R-CNN pipeline:</strong></p>
+<ol>
+<li>Region proposals (Selective Search) ~2000 regions</li>
+<li>Warp each region, run CNN → features</li>
+<li>SVM classification + bounding box regression</li>
+</ol>
+<p><strong>Faster R-CNN</strong> replaced slow proposal generation with <strong>Region Proposal Network (RPN):</strong></p>
+<pre><code>Input Image
+    ↓
+Backbone CNN (e.g., ResNet-50) → Feature Map
+    ↓                                ↓
+  RPN                          RoI Pooling
+(proposes ~300 boxes)               ↓
+                           Classification head
+                           BBox regression head
+</code></pre>
+<p>RPN slides over the feature map, predicts objectness + box offsets at each location for k anchor boxes (different scales/aspect ratios). Anchors are the key idea: pre-defined reference boxes.</p>
+<h3 id="single-stage-detectors">Single-Stage Detectors</h3>
+<p><strong>YOLO (You Only Look Once):</strong></p>
+<ul>
+<li>Divide image into S×S grid</li>
+<li>Each cell predicts B bounding boxes + class probabilities</li>
+<li>Single forward pass → predictions at multiple scales (YOLOv3+)</li>
+<li>Faster than two-stage but historically lower accuracy on small objects</li>
+</ul>
+<p><strong>YOLOv8 in practice:</strong></p>
+<pre><code class="language-python">from ultralytics import YOLO
+
+model = YOLO(&quot;yolov8n.pt&quot;)  # nano variant
+
+# Training
+results = model.train(
+    data=&quot;coco128.yaml&quot;,
+    epochs=100,
+    imgsz=640,
+    batch=16,
+    device=&quot;cuda&quot;
+)
+
+# Inference
+results = model(&quot;image.jpg&quot;)
+for r in results:
+    boxes = r.boxes.xyxy    # bounding boxes
+    scores = r.boxes.conf   # confidence scores
+    classes = r.boxes.cls   # class indices
+</code></pre>
+<p><strong>SSD (Single Shot Detector):</strong></p>
+<ul>
+<li>Predicts at multiple feature map scales in one forward pass</li>
+<li>Default boxes (anchors) at different aspect ratios and scales</li>
+<li>Better than the original YOLO (v1) for small objects due to multi-scale predictions</li>
+</ul>
+<h3 id="key-metrics">Key Metrics</h3>
+<p><strong>IoU (Intersection over Union):</strong></p>
+<pre><code class="language-python">def iou(box_a, box_b):
+    # boxes: [x1, y1, x2, y2]
+    inter_x1 = max(box_a[0], box_b[0])
+    inter_y1 = max(box_a[1], box_b[1])
+    inter_x2 = min(box_a[2], box_b[2])
+    inter_y2 = min(box_a[3], box_b[3])
+    inter_area = max(0, inter_x2 - inter_x1) * max(0, inter_y2 - inter_y1)
+    union_area = (box_a[2]-box_a[0])*(box_a[3]-box_a[1]) + \
+                 (box_b[2]-box_b[0])*(box_b[3]-box_b[1]) - inter_area
+    return inter_area / union_area
+</code></pre>
+<p><strong>Mean Average Precision (mAP):</strong></p>
+<ul>
+<li>For each class, compute Precision-Recall curve by varying confidence threshold</li>
+<li>Average Precision (AP) = area under PR curve</li>
+<li>mAP = mean AP over all classes</li>
+<li>mAP@0.5: IoU threshold 0.5 (PASCAL VOC)</li>
+<li>mAP@[0.5:0.95]: average over IoU thresholds 0.5-0.95 (COCO standard)</li>
+</ul>
+<p><strong>Non-Maximum Suppression (NMS):</strong></p>
+<pre><code class="language-python">def nms(boxes, scores, iou_threshold=0.5):
+    # Sort by score descending
+    order = scores.argsort()[::-1]
+    keep = []
+    while order.size &gt; 0:
+        i = order[0]
+        keep.append(i)
+        # Compute IoU of best box vs rest
+        ious = [iou(boxes[i], boxes[j]) for j in order[1:]]
+        # Keep boxes with IoU &lt; threshold
+        order = order[1:][np.array(ious) &lt; iou_threshold]
+    return keep
+</code></pre>
+<hr />
+<h2 id="image-segmentation">Image Segmentation</h2>
+<h3 id="semantic-vs-instance-segmentation">Semantic vs Instance Segmentation</h3>
+<ul>
+<li><strong>Semantic segmentation</strong>: classify every pixel (no distinction between instances): person/car/road</li>
+<li><strong>Instance segmentation</strong>: detect each object instance + its pixel mask: person₁, person₂</li>
+</ul>
+<h3 id="u-net-architecture">U-Net Architecture</h3>
+<p>Originally for medical image segmentation, now widely used:</p>
+<pre><code>Encoder (downsampling):  224→112→56→28→14 (spatial size shrinks, channels grow)
+         ↓          with max pooling at each step
+Bottleneck:              14×14 feature map
+         ↓
+Decoder (upsampling):    14→28→56→112→224
+         ↑           with transposed conv / bilinear upsampling
+Skip connections: encoder features concatenated to decoder at each scale
+</code></pre>
+<p><strong>Key insight:</strong> Skip connections preserve fine-grained spatial details that the encoder compresses away, enabling precise pixel-level predictions.</p>
+<pre><code class="language-python">class UNetBlock(nn.Module):
+    def __init__(self, in_ch, out_ch):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_ch, out_ch, 3, padding=1),
+            nn.BatchNorm2d(out_ch), nn.ReLU(inplace=True),
+            nn.Conv2d(out_ch, out_ch, 3, padding=1),
+            nn.BatchNorm2d(out_ch), nn.ReLU(inplace=True),
+        )
+
+    def forward(self, x):
+        return self.conv(x)
+
+class UNet(nn.Module):
+    def __init__(self, n_classes):
+        super().__init__()
+        self.enc1 = UNetBlock(3, 64)
+        self.enc2 = UNetBlock(64, 128)
+        self.pool = nn.MaxPool2d(2)
+        self.up   = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+        self.dec1 = UNetBlock(128 + 64, 64)  # +64 from skip
+        self.out  = nn.Conv2d(64, n_classes, 1)
+
+    def forward(self, x):
+        e1 = self.enc1(x)
+        e2 = self.enc2(self.pool(e1))
+        d1 = self.dec1(torch.cat([self.up(e2), e1], dim=1))
+        return self.out(d1)
+</code></pre>
+<hr />
+<h2 id="vision-transformers-vit">Vision Transformers (ViT)</h2>
+<p>ViT applies the standard Transformer architecture to images:</p>
+<ol>
+<li>Split image into fixed-size patches (16×16)</li>
+<li>Linearly embed each patch → sequence of tokens</li>
+<li>Add positional embeddings + [CLS] token</li>
+<li>Feed through standard Transformer encoder</li>
+<li>Classify from [CLS] token</li>
+</ol>
+<pre><code class="language-python"># Key: an image becomes a sequence of patch tokens
+# 224×224 image, 16×16 patches → (224/16)² = 196 tokens
+# Each token is a 16×16×3 = 768-dim vector
+
+class PatchEmbedding(nn.Module):
+    def __init__(self, img_size=224, patch_size=16, embed_dim=768):
+        super().__init__()
+        self.proj = nn.Conv2d(3, embed_dim,
+                              kernel_size=patch_size, stride=patch_size)
+        self.cls_token = nn.Parameter(torch.randn(1, 1, embed_dim))
+        n_patches = (img_size // patch_size) ** 2
+        self.pos_embed = nn.Parameter(torch.randn(1, n_patches + 1, embed_dim))
+
+    def forward(self, x):
+        B = x.shape[0]
+        x = self.proj(x).flatten(2).transpose(1, 2)  # (B, n_patches, embed_dim)
+        cls = self.cls_token.expand(B, -1, -1)
+        x = torch.cat([cls, x], dim=1)
+        return x + self.pos_embed
+</code></pre>
+<p><strong>ViT vs CNN trade-offs:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>CNN</th>
+<th>ViT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data efficiency</td>
+<td>Better (inductive biases)</td>
+<td>Needs large datasets</td>
+</tr>
+<tr>
+<td>Scalability</td>
+<td>Limited</td>
+<td>Scales with data/compute</td>
+</tr>
+<tr>
+<td>Global context</td>
+<td>Via deep layers</td>
+<td>From layer 1</td>
+</tr>
+<tr>
+<td>Transfer learning</td>
+<td>Strong</td>
+<td>Even stronger at scale</td>
+</tr>
+<tr>
+<td>Computation</td>
+<td>Linear in image size</td>
+<td>Quadratic in patches</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="data-augmentation">Data Augmentation</h2>
+<p>Augmentation is critical for CV: prevents overfitting and improves robustness.</p>
+<pre><code class="language-python">import torch
+from torchvision.transforms import v2  # torchvision v2 API
+
+train_transform = v2.Compose([
+    v2.RandomResizedCrop(224, scale=(0.8, 1.0)),
+    v2.RandomHorizontalFlip(p=0.5),
+    v2.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
+    v2.RandomGrayscale(p=0.2),
+    v2.ToImage(),                              # v2.ToTensor is deprecated
+    v2.ToDtype(torch.float32, scale=True),
+    v2.Normalize(mean=[0.485, 0.456, 0.406],   # ImageNet stats
+                 std=[0.229, 0.224, 0.225]),
+])
+
+# Advanced: CutMix and MixUp (standard in modern training)
+cutmix = v2.CutMix(num_classes=1000)
+mixup  = v2.MixUp(num_classes=1000)
+cutmix_or_mixup = v2.RandomChoice([cutmix, mixup])
+</code></pre>
+<p><strong>Advanced augmentations:</strong></p>
+<ul>
+<li><strong>Cutout/Random Erasing</strong>: mask out random patches</li>
+<li><strong>RandAugment</strong>: randomly apply N augmentations from a fixed policy</li>
+<li><strong>MixUp</strong>: linearly interpolate two images and their labels</li>
+<li><strong>CutMix</strong>: cut a patch from one image, paste into another, mix labels by area</li>
+</ul>
+<hr />
+<h2 id="transfer-learning-in-practice">Transfer Learning in Practice</h2>
+<pre><code class="language-python">import torchvision.models as models
+
+# Load pretrained ResNet-50
+model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
+
+# Option 1: Feature extraction, freeze backbone
+for param in model.parameters():
+    param.requires_grad = False
+
+# Replace classifier for new task
+model.fc = nn.Linear(model.fc.in_features, n_classes)  # only this trains
+
+# Option 2: Fine-tuning, use differential learning rates
+optimizer = torch.optim.AdamW([
+    {'params': model.layer4.parameters(), 'lr': 1e-4},  # backbone: low lr
+    {'params': model.fc.parameters(),     'lr': 1e-3},  # head: high lr
+])
+</code></pre>
+<p><strong>Transfer learning tips:</strong></p>
+<ul>
+<li>If dataset is small + similar to ImageNet: freeze backbone, train head only</li>
+<li>If dataset is large + different: unfreeze all, use low learning rate throughout</li>
+<li>Always normalize inputs with the pretrained model's statistics (ImageNet mean/std)</li>
+</ul>
+<hr />
+<h2 id="common-interview-questions">Common Interview Questions</h2>
+<p><strong>Q: Why do we use 3×3 kernels so often in modern CNNs?</strong>
+Two 3×3 convolutions have the same receptive field as one 5×5 but use fewer parameters (2×3×3 = 18 vs 25 weights) and more non-linearity. Three 3×3s match a 7×7. This was the key insight from VGGNet and became universal.</p>
+<p><strong>Q: Explain the vanishing gradient problem and how ResNet solves it.</strong>
+In deep networks, gradients are multiplied through many layers via chain rule. If those values are &lt; 1, gradients shrink exponentially. ResNet's skip connections create gradient highways: for y = F(x) + x, ∂L/∂x = ∂L/∂y · (∂F/∂x + I) includes an identity term, ensuring gradients don't vanish even in 100+ layer networks.</p>
+<p><strong>Q: What is the difference between detection, segmentation, and classification?</strong>
+Classification: whole image → one label. Detection: image → multiple bounding boxes + labels. Semantic segmentation: each pixel → label (no instance distinction). Instance segmentation: each pixel → label + instance ID. Panoptic = semantic + instance combined.</p>
+<p><strong>Q: How would you handle a highly imbalanced class dataset in CV?</strong></p>
+<ul>
+<li>Oversample minority class (SMOTE-like augmentation, duplicate with augmentation)</li>
+<li>Class-weighted loss: weight minority class higher</li>
+<li>Focal loss: down-weight easy negatives, focus on hard examples</li>
+<li>Use mAP or F1 per class rather than accuracy for evaluation</li>
+<li>Consider two-stage approach: detect all objects first, then classify</li>
+</ul>
+<p><strong>Q: When would you choose a CNN over a ViT?</strong>
+CNNs are better for small datasets (strong inductive biases) and when you need computational efficiency on edge devices. ViTs excel with large datasets, benefit more from scaling, and are better at capturing global context. For most production tasks with sufficient data, a ViT, or a modernized CNN such as ConvNeXt (which borrows transformer design choices), tends to outperform classic CNNs like ResNet.</p>
+<p><strong>Q: What is Focal Loss and when would you use it?</strong>
+Focal Loss = -(1-p_t)^γ × log(p_t). The modulating factor (1-p_t)^γ down-weights easy examples (high p_t) and focuses training on hard, misclassified examples. Used in object detection (RetinaNet) where the background class massively outnumbers foreground, making cross-entropy training dominated by easy negatives.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_transformers.html"><small>Previous</small>Transformers</a><a rel="next" class="next" href="intro_fine_tuning.html"><small>Next</small>Fine-Tuning</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_computer_vision.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

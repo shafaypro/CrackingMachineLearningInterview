@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-Agent Systems: Architecture, Patterns &amp; Production | Cracking ML Interviews</title>
+<meta name="description" content="Multi-Agent Systems: Architecture, Patterns &amp; Production: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multi_agent_systems.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Multi-Agent Systems: Architecture, Patterns &amp; Production | Cracking ML Interviews">
+<meta property="og:description" content="Multi-Agent Systems: Architecture, Patterns &amp; Production: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multi_agent_systems.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Multi-Agent Systems: Architecture, Patterns &amp; Production | Cracking ML Interviews">
+<meta name="twitter:description" content="Multi-Agent Systems: Architecture, Patterns &amp; Production: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Multi-Agent Systems: Architecture, Patterns & Production",
+   "description": "Multi-Agent Systems: Architecture, Patterns & Production: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multi_agent_systems.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Multi-Agent Systems",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multi_agent_systems.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Multi-Agent Systems</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_multi_agent_systems.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="multi-agent-systems-architecture-patterns--production">Multi-Agent Systems: Architecture, Patterns &amp; Production</h1>
+<h2 id="single-agent-vs-multi-agent-systems">Single-Agent vs Multi-Agent Systems</h2>
+<h3 id="single-agent-system">Single-Agent System</h3>
+<p>One LLM handles all reasoning, tool use, and output generation.</p>
+<pre><code>User Query → [Agent] → Response
+                ↕
+             [Tools]
+</code></pre>
+<p><strong>Pros</strong>: Simple, low latency, low cost, easy to debug
+<strong>Cons</strong>: Context window limits, poor at diverse skill sets, single point of failure</p>
+<h3 id="multi-agent-system">Multi-Agent System</h3>
+<p>Multiple specialized agents collaborate, with coordination overhead managed by orchestration.</p>
+<pre><code>                    ┌─────────────────────────────┐
+User Query →  [Orchestrator/Supervisor]           │
+                    │         │         │          │
+                [Researcher] [Coder] [Critic]     │
+                    │         │         │          │
+                 [Tools]   [Exec]   [Verify]      │
+                    └─────────┴─────────┘          │
+                            │                      │
+                        [Aggregator] → Response    │
+                    └─────────────────────────────┘
+</code></pre>
+<p><strong>Pros</strong>: Specialized expertise per agent, parallel execution, scalable complexity
+<strong>Cons</strong>: Higher latency, token cost multiplied, harder to debug, coordination failures</p>
+<hr />
+<h2 id="when-to-use-multi-agent">When to Use Multi-Agent</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple Q&amp;A or lookup</td>
+<td>Single agent</td>
+</tr>
+<tr>
+<td>Linear multi-step task (research → write → edit)</td>
+<td>Single agent with tools OR CrewAI</td>
+</tr>
+<tr>
+<td>Parallel subtasks (analyze 10 docs simultaneously)</td>
+<td>Multi-agent (parallel)</td>
+</tr>
+<tr>
+<td>Tasks requiring different expertise (legal + technical)</td>
+<td>Multi-agent (specialized)</td>
+</tr>
+<tr>
+<td>Very long context that exceeds single window</td>
+<td>Multi-agent (divide and conquer)</td>
+</tr>
+<tr>
+<td>Adversarial validation (agent A writes, B critiques)</td>
+<td>Multi-agent (critic pattern)</td>
+</tr>
+<tr>
+<td>Production system with SLA requirements</td>
+<td>Single agent (simpler, faster, cheaper)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="multi-agent-patterns">Multi-Agent Patterns</h2>
+<h3 id="1-supervisor-pattern">1. Supervisor Pattern</h3>
+<p>A manager agent routes tasks to specialist workers:</p>
+<pre><code class="language-python">from langgraph_supervisor import create_supervisor
+from langchain_anthropic import ChatAnthropic
+
+# data_analyst, ml_engineer, writer: compiled agents created with a unique name,
+# e.g. create_react_agent(llm, tools=[...], name=&quot;data_analyst&quot;)
+supervisor = create_supervisor(
+    agents=[data_analyst, ml_engineer, writer],   # agent objects, not name strings
+    model=ChatAnthropic(model=&quot;claude-opus-4-6&quot;),
+    prompt=&quot;&quot;&quot;You are a project manager. Route each task to the right specialist:
+    - data_analyst: data queries, statistics, EDA
+    - ml_engineer: model design, training, evaluation
+    - writer: documentation, summaries, reports
+    When all tasks are done, synthesize the final answer.&quot;&quot;&quot;
+).compile()
+</code></pre>
+<h3 id="2-critic-generator-pattern">2. Critic-Generator Pattern</h3>
+<p>One agent generates, another critiques and improves:</p>
+<pre><code class="language-python"># Generator → Critic → Refined Output
+def generator_node(state):
+    draft = llm.invoke(f&quot;Write a solution for: {state['task']}&quot;)
+    return {&quot;draft&quot;: draft}
+
+def critic_node(state):
+    feedback = critic_llm.invoke(
+        f&quot;Review this solution and identify issues:\n{state['draft']}\n&quot;
+        f&quot;Return: issues found and specific improvements needed&quot;
+    )
+    return {&quot;feedback&quot;: feedback}
+
+def refiner_node(state):
+    final = llm.invoke(
+        f&quot;Original solution: {state['draft']}\n&quot;
+        f&quot;Critic feedback: {state['feedback']}\n&quot;
+        f&quot;Improve the solution based on feedback.&quot;
+    )
+    return {&quot;final&quot;: final}
+</code></pre>
+<h3 id="3-parallel-fan-out--fan-in">3. Parallel Fan-Out / Fan-In</h3>
+<p>Execute subtasks concurrently, then aggregate:</p>
+<pre><code class="language-python">from langgraph.graph import StateGraph
+from langgraph.types import Send
+
+def route_to_workers(state):
+    &quot;&quot;&quot;Fan-out: send each document to a worker&quot;&quot;&quot;
+    return [
+        Send(&quot;analyze_doc&quot;, {&quot;doc&quot;: doc, &quot;doc_id&quot;: i})
+        for i, doc in enumerate(state[&quot;documents&quot;])
+    ]
+
+def aggregate_results(state):
+    &quot;&quot;&quot;Fan-in: combine all worker outputs&quot;&quot;&quot;
+    return {&quot;summary&quot;: combine(state[&quot;results&quot;])}
+
+graph.add_conditional_edges(&quot;splitter&quot;, route_to_workers)
+graph.add_edge(&quot;analyze_doc&quot;, &quot;aggregator&quot;)
+</code></pre>
+<h3 id="4-handoff-pattern">4. Handoff Pattern</h3>
+<p>Agents explicitly hand off to each other:</p>
+<pre><code class="language-python">from langgraph.prebuilt import create_react_agent
+from langchain_core.tools import tool
+
+# Agent A can call Agent B as a tool
+@tool
+def transfer_to_coder(task: str) -&gt; str:
+    &quot;&quot;&quot;Transfer this task to the coding specialist agent.&quot;&quot;&quot;
+    return coder_agent.invoke({&quot;messages&quot;: [(&quot;human&quot;, task)]})
+
+researcher_agent = create_react_agent(
+    llm,
+    tools=[search_tool, transfer_to_coder]
+)
+</code></pre>
+<hr />
+<h2 id="tool-calling--function-routing">Tool Calling &amp; Function Routing</h2>
+<h3 id="how-tool-calling-works">How Tool Calling Works</h3>
+<ol>
+<li>LLM receives a list of tool schemas (JSON Schema)</li>
+<li>LLM outputs structured tool call JSON instead of text</li>
+<li>Runtime executes the tool and feeds result back to LLM</li>
+<li>LLM generates final response incorporating tool output</li>
+</ol>
+<pre><code class="language-python">from langchain_core.tools import tool
+from langchain_anthropic import ChatAnthropic
+import json
+
+@tool
+def get_model_accuracy(model_name: str, dataset: str) -&gt; dict:
+    &quot;&quot;&quot;Get the test accuracy of a trained model on a dataset.
+
+    Args:
+        model_name: Name of the model (e.g., 'resnet50', 'bert-base')
+        dataset: Dataset name (e.g., 'imagenet', 'glue-sst2')
+    &quot;&quot;&quot;
+    # Call your model registry API
+    return {&quot;model&quot;: model_name, &quot;dataset&quot;: dataset, &quot;accuracy&quot;: 0.934}
+
+@tool
+def list_available_models() -&gt; list[str]:
+    &quot;&quot;&quot;List all models available in the model registry.&quot;&quot;&quot;
+    return [&quot;resnet50&quot;, &quot;bert-base&quot;, &quot;gpt2-medium&quot;, &quot;llama-3.1-8b&quot;]
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+llm_with_tools = llm.bind_tools([get_model_accuracy, list_available_models])
+
+# LLM decides which tools to call and with what arguments
+response = llm_with_tools.invoke(
+    &quot;Which of our models performs best on ImageNet?&quot;
+)
+
+# Handle tool calls
+if response.tool_calls:
+    for tool_call in response.tool_calls:
+        tool_name = tool_call[&quot;name&quot;]
+        tool_args = tool_call[&quot;args&quot;]
+
+        if tool_name == &quot;get_model_accuracy&quot;:
+            result = get_model_accuracy.invoke(tool_args)
+        elif tool_name == &quot;list_available_models&quot;:
+            result = list_available_models.invoke(tool_args)
+</code></pre>
+<h3 id="parallel-tool-calling">Parallel Tool Calling</h3>
+<p>Modern LLMs can call multiple tools in a single response:</p>
+<pre><code class="language-python"># LLM may return:
+# tool_calls = [
+#   {&quot;name&quot;: &quot;get_model_accuracy&quot;, &quot;args&quot;: {&quot;model&quot;: &quot;resnet50&quot;, &quot;dataset&quot;: &quot;imagenet&quot;}},
+#   {&quot;name&quot;: &quot;get_model_accuracy&quot;, &quot;args&quot;: {&quot;model&quot;: &quot;bert-base&quot;, &quot;dataset&quot;: &quot;imagenet&quot;}},
+# ]
+# Execute in parallel
+import asyncio
+
+async def execute_tools_parallel(tool_calls):
+    tasks = [execute_tool(tc) for tc in tool_calls]
+    return await asyncio.gather(*tasks)
+</code></pre>
+<hr />
+<h2 id="memory-architectures">Memory Architectures</h2>
+<h3 id="short-term-memory-in-context">Short-Term Memory (In-Context)</h3>
+<p>The LLM's context window is the memory:</p>
+<pre><code class="language-python">from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
+
+history_store = {}  # session_id → message history
+
+def get_session_history(session_id: str) -&gt; InMemoryChatMessageHistory:
+    if session_id not in history_store:
+        history_store[session_id] = InMemoryChatMessageHistory()
+    return history_store[session_id]
+
+chain_with_history = RunnableWithMessageHistory(
+    llm_chain,
+    get_session_history,
+    input_messages_key=&quot;input&quot;,
+    history_messages_key=&quot;history&quot;
+)
+
+# Session persists within server lifetime only
+chain_with_history.invoke(
+    {&quot;input&quot;: &quot;My name is Alice&quot;},
+    config={&quot;configurable&quot;: {&quot;session_id&quot;: &quot;alice-session-1&quot;}}
+)
+</code></pre>
+<p><strong>Limitations</strong>: Lost on restart, grows unbounded, expensive at scale</p>
+<h3 id="long-term-memory-external-store">Long-Term Memory (External Store)</h3>
+<p>Persist memories outside the context window:</p>
+<pre><code class="language-python">from langchain_community.vectorstores import Chroma
+from langchain_core.documents import Document
+
+class LongTermMemory:
+    def __init__(self, embeddings):
+        self.store = Chroma(embedding_function=embeddings)
+
+    def save(self, text: str, metadata: dict = {}):
+        &quot;&quot;&quot;Store a memory&quot;&quot;&quot;
+        self.store.add_documents([Document(page_content=text, metadata=metadata)])
+
+    def recall(self, query: str, k: int = 5) -&gt; list[str]:
+        &quot;&quot;&quot;Retrieve relevant memories&quot;&quot;&quot;
+        docs = self.store.similarity_search(query, k=k)
+        return [doc.page_content for doc in docs]
+
+memory = LongTermMemory(embeddings)
+
+# Save important facts
+memory.save(&quot;User prefers Python over R for ML tasks&quot;, {&quot;user&quot;: &quot;alice&quot;})
+memory.save(&quot;User is working on a fraud detection project&quot;, {&quot;user&quot;: &quot;alice&quot;})
+
+# Recall relevant memories at conversation start
+relevant = memory.recall(&quot;What programming language should I use?&quot;)
+# Inject into prompt: &quot;Based on what I know about you: {relevant}&quot;
+</code></pre>
+<h3 id="summary-memory">Summary Memory</h3>
+<p>Compress old messages to stay within context:</p>
+<pre><code class="language-python">from langchain_classic.memory import ConversationSummaryBufferMemory  # legacy API (pre-1.0: langchain.memory)
+
+memory = ConversationSummaryBufferMemory(
+    llm=ChatAnthropic(model=&quot;claude-haiku-4-5&quot;),
+    max_token_limit=1000,  # Summarize when history exceeds this
+    return_messages=True
+)
+
+# Automatically summarizes old messages when limit is reached
+# Recent messages kept verbatim, older ones compressed
+</code></pre>
+<hr />
+<h2 id="failure-handling--retries-in-agent-systems">Failure Handling &amp; Retries in Agent Systems</h2>
+<h3 id="retry-patterns">Retry Patterns</h3>
+<pre><code class="language-python">import time
+from functools import wraps
+
+def with_retry(max_attempts=3, backoff_factor=2, exceptions=(Exception,)):
+    &quot;&quot;&quot;Decorator for retrying tool calls with exponential backoff&quot;&quot;&quot;
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt == max_attempts - 1:
+                        raise
+                    wait = backoff_factor ** attempt
+                    print(f&quot;Attempt {attempt+1} failed: {e}. Retrying in {wait}s...&quot;)
+                    time.sleep(wait)
+        return wrapper
+    return decorator
+
+@with_retry(max_attempts=3, exceptions=(RateLimitError, TimeoutError))
+def call_llm(messages):
+    return llm.invoke(messages)
+</code></pre>
+<h3 id="fallback-patterns">Fallback Patterns</h3>
+<pre><code class="language-python">from langchain_core.runnables import RunnableWithFallbacks
+from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
+
+# Primary: Claude Opus, Fallback: Claude Sonnet, Final fallback: GPT-4o
+primary = ChatAnthropic(model=&quot;claude-opus-5-5&quot;)
+fallback1 = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+fallback2 = ChatOpenAI(model=&quot;gpt-4o&quot;)
+
+llm_with_fallbacks = primary.with_fallbacks(
+    fallbacks=[fallback1, fallback2],
+    exceptions_to_handle=(Exception,)
+)
+
+# Automatically tries fallbacks on failure
+result = llm_with_fallbacks.invoke(&quot;What is RAG?&quot;)
+</code></pre>
+<h3 id="circuit-breaker-for-agent-tools">Circuit Breaker for Agent Tools</h3>
+<pre><code class="language-python">class CircuitBreaker:
+    def __init__(self, failure_threshold=5, recovery_timeout=60):
+        self.failure_count = 0
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.last_failure_time = None
+        self.state = &quot;CLOSED&quot;  # CLOSED, OPEN, HALF-OPEN
+
+    def call(self, func, *args, **kwargs):
+        if self.state == &quot;OPEN&quot;:
+            if time.time() - self.last_failure_time &gt; self.recovery_timeout:
+                self.state = &quot;HALF-OPEN&quot;
+            else:
+                raise Exception(&quot;Circuit breaker OPEN: service unavailable&quot;)
+
+        try:
+            result = func(*args, **kwargs)
+            if self.state == &quot;HALF-OPEN&quot;:
+                self.state = &quot;CLOSED&quot;
+                self.failure_count = 0
+            return result
+        except Exception as e:
+            self.failure_count += 1
+            self.last_failure_time = time.time()
+            if self.failure_count &gt;= self.failure_threshold:
+                self.state = &quot;OPEN&quot;
+            raise
+</code></pre>
+<hr />
+<h2 id="deterministic-vs-non-deterministic-agent-flows">Deterministic vs Non-Deterministic Agent Flows</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Deterministic</th>
+<th>Non-Deterministic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Routing</strong></td>
+<td>Code-defined (if/else, graph edges)</td>
+<td>LLM decides next step</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>Same input → same output</td>
+<td>Same input → variable output</td>
+</tr>
+<tr>
+<td><strong>Debugging</strong></td>
+<td>Easy (trace code path)</td>
+<td>Hard (trace LLM reasoning)</td>
+</tr>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>High</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td><strong>Flexibility</strong></td>
+<td>Limited</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td>LangGraph with fixed edges</td>
+<td>ReAct agent with open-ended tools</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Best practice</strong>: Use deterministic routing for critical production paths, allow non-determinism only within well-bounded nodes.</p>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: When would you use multi-agent over single-agent?</strong></p>
+<blockquote>
+<p>Multi-agent when: (1) tasks are parallelizable and time matters, (2) you need specialized expertise that doesn't fit one context window, (3) adversarial validation improves quality (generator + critic). Single-agent for most production use cases: it's simpler, cheaper, faster.</p>
+</blockquote>
+<p><strong>Q: Explain the supervisor pattern in multi-agent systems.</strong></p>
+<blockquote>
+<p>A supervisor (orchestrator) agent receives the user request, decomposes it, routes subtasks to specialist agents, collects results, and synthesizes the final output. It's the &quot;manager&quot; that never does domain work itself, only coordinates.</p>
+</blockquote>
+<p><strong>Q: What's the difference between short-term and long-term memory in agents?</strong></p>
+<blockquote>
+<p>Short-term: the context window, what the agent can &quot;see&quot; right now. Fast, free, but ephemeral and size-limited. Long-term: external storage (vector DB, database): retrieved via semantic search and injected into context when relevant. Enables cross-session learning.</p>
+</blockquote>
+<p><strong>Q: How do you handle tool failures in agent systems?</strong></p>
+<blockquote>
+<p>Retry with exponential backoff for transient failures. Circuit breakers to stop hammering a failing service. Fallback tools (e.g., if Google Search fails, use Bing). Graceful degradation: agent continues without the tool output and informs user. Always set timeouts.</p>
+</blockquote>
+<p><strong>Q: What makes an agent flow deterministic vs non-deterministic, and which is better?</strong></p>
+<blockquote>
+<p>Deterministic: control flow is defined in code (graph edges, if/else routing). Non-deterministic: LLM decides what to do next. Neither is universally better: use deterministic for predictability and reliability in production, non-deterministic for flexibility in exploratory tasks. Hybrid is best: deterministic macro-flow with non-deterministic micro-decisions within nodes.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_agent_tool_use.html"><small>Previous</small>Agent Tool Use</a><a rel="next" class="next" href="intro_multi_model_orchestration.html"><small>Next</small>Multi-Model Orchestration</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_multi_agent_systems.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

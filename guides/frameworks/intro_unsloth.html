@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unsloth: Fast LoRA Fine-Tuning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_unsloth.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Unsloth: Fast LoRA Fine-Tuning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_unsloth.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unsloth: Fast LoRA Fine-Tuning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Unsloth: Fast LoRA Fine-Tuning",
+   "description": "A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_unsloth.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Unsloth",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_unsloth.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">Unsloth</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_unsloth.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="unsloth-fast-lora-fine-tuning">Unsloth: Fast LoRA Fine-Tuning</h1>
+<p>A guide to Unsloth: the fastest library for fine-tuning LLMs with LoRA and QLoRA.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-unsloth">What is Unsloth</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#fine-tuning-llama-3-mistral-gemma">Fine-Tuning Llama 3, Mistral, Gemma</a></li>
+<li><a href="#full-fine-tuning-example">Full Fine-Tuning Example</a></li>
+<li><a href="#speed-comparison">Speed Comparison</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="what-is-unsloth">What is Unsloth</h2>
+<p>Unsloth is an open-source Python library that significantly accelerates LoRA and QLoRA fine-tuning of large language models. It achieves 2-5x faster training and 50-80% less memory usage compared to standard Hugging Face PEFT + Transformers.</p>
+<p><strong>Key features:</strong></p>
+<ul>
+<li>2-5x faster training than standard HF approach</li>
+<li>50-80% memory reduction enabling larger batch sizes</li>
+<li>Supports Llama, Mistral, Gemma, Phi, Qwen, DeepSeek, and more</li>
+<li>Compatible with standard Hugging Face ecosystem (PEFT, TRL, Trainer)</li>
+<li>Manual CUDA kernel implementations for attention and matrix ops</li>
+<li>Free open-source version for single-GPU training</li>
+</ul>
+<p><strong>How it achieves speedups:</strong></p>
+<ul>
+<li>Rewritten CUDA kernels using OpenAI Triton (avoiding PyTorch overhead)</li>
+<li>Optimized gradient checkpointing</li>
+<li>Memory-efficient QLoRA with NF4 quantization</li>
+<li>Kernel fusion: fewer memory reads/writes</li>
+</ul>
+<hr />
+<h2 id="installation">Installation</h2>
+<pre><code class="language-bash"># Recommended: stable release from PyPI (pulls in compatible torch/trl/peft)
+pip install unsloth
+
+# Or the latest from GitHub
+pip install --upgrade --no-deps &quot;unsloth @ git+https://github.com/unslothai/unsloth.git&quot;
+
+# Verify installation
+python -c &quot;import unsloth; print(unsloth.__version__)&quot;
+
+# Install with all dependencies
+pip install unsloth trl peft accelerate bitsandbytes datasets transformers
+</code></pre>
+<h3 id="supported-environments">Supported Environments</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NVIDIA GPU (CUDA 12.1+)</td>
+<td>Full support</td>
+</tr>
+<tr>
+<td>Google Colab (free tier T4)</td>
+<td>Full support</td>
+</tr>
+<tr>
+<td>Kaggle (P100, T4)</td>
+<td>Full support</td>
+</tr>
+<tr>
+<td>Apple Silicon (MPS)</td>
+<td>Limited or none; check current docs</td>
+</tr>
+<tr>
+<td>AMD GPU (ROCm)</td>
+<td>Partial support</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="fine-tuning-llama-3-mistral-gemma">Fine-Tuning Llama 3, Mistral, Gemma</h2>
+<h3 id="supported-models">Supported Models</h3>
+<pre><code class="language-python">from unsloth import FastLanguageModel
+
+# Llama 3 family
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Meta-Llama-3.1-8B-Instruct&quot;)
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Llama-3.2-3B-Instruct&quot;)
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Llama-3.3-70B-Instruct&quot;)
+
+# Mistral family
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/mistral-7b-instruct-v0.3&quot;)
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Mistral-Nemo-Instruct-2407&quot;)
+
+# Gemma family
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/gemma-2-9b-it&quot;)
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/gemma-2-27b-it&quot;)
+
+# Phi family
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Phi-3.5-mini-instruct&quot;)
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/phi-4&quot;)
+
+# Qwen family
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/Qwen2.5-7B-Instruct&quot;)
+
+# DeepSeek
+model, tokenizer = FastLanguageModel.from_pretrained(&quot;unsloth/DeepSeek-R1-Distill-Llama-8B&quot;)
+</code></pre>
+<hr />
+<h2 id="full-fine-tuning-example">Full Fine-Tuning Example</h2>
+<p>A complete working example: load a model, add LoRA, train, save, and push to the Hugging Face Hub.</p>
+<h3 id="step-1-load-model">Step 1: Load Model</h3>
+<pre><code class="language-python">from unsloth import FastLanguageModel
+import torch
+
+# Configuration
+MODEL_NAME = &quot;unsloth/Llama-3.2-3B-Instruct&quot;
+MAX_SEQ_LENGTH = 2048      # Context window
+DTYPE = None               # Auto-detect (float16 or bfloat16)
+LOAD_IN_4BIT = True        # Use QLoRA (4-bit quantization)
+
+# Load model and tokenizer
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name=MODEL_NAME,
+    max_seq_length=MAX_SEQ_LENGTH,
+    dtype=DTYPE,
+    load_in_4bit=LOAD_IN_4BIT,
+    # token=&quot;hf_your_token&quot;  # Only needed for gated models
+)
+
+print(f&quot;Model loaded: {MODEL_NAME}&quot;)
+print(f&quot;Parameters: {sum(p.numel() for p in model.parameters()):,}&quot;)
+</code></pre>
+<h3 id="step-2-add-lora-adapters">Step 2: Add LoRA Adapters</h3>
+<pre><code class="language-python"># Add LoRA adapters to the model
+model = FastLanguageModel.get_peft_model(
+    model,
+    r=16,                          # LoRA rank (higher = more parameters, more quality)
+    target_modules=[               # Which modules to apply LoRA to
+        &quot;q_proj&quot;, &quot;k_proj&quot;, &quot;v_proj&quot;, &quot;o_proj&quot;,
+        &quot;gate_proj&quot;, &quot;up_proj&quot;, &quot;down_proj&quot;,
+    ],
+    lora_alpha=16,                 # Scaling factor (usually = r)
+    lora_dropout=0,                # 0 is optimized by Unsloth
+    bias=&quot;none&quot;,                   # No bias (optimized)
+    use_gradient_checkpointing=&quot;unsloth&quot;,  # Unsloth's optimized checkpointing
+    random_state=42,
+    use_rslora=False,              # Rank-stabilized LoRA (optional)
+    loftq_config=None,             # LoftQ initialization (optional)
+)
+
+model.print_trainable_parameters()
+# trainable params: 20,971,520 || all params: 3,233,435,648 || trainable%: 0.6486
+</code></pre>
+<h3 id="step-3-prepare-dataset">Step 3: Prepare Dataset</h3>
+<pre><code class="language-python">from datasets import load_dataset
+from unsloth.chat_templates import get_chat_template, standardize_sharegpt
+
+# Apply the correct chat template for the model
+tokenizer = get_chat_template(
+    tokenizer,
+    chat_template=&quot;llama-3&quot;,  # or &quot;mistral&quot;, &quot;gemma&quot;, &quot;phi-3&quot;, etc.
+)
+
+def format_conversations(examples):
+    &quot;&quot;&quot;Format conversations into the model's chat template.&quot;&quot;&quot;
+    conversations = examples[&quot;conversations&quot;]
+    texts = [
+        tokenizer.apply_chat_template(
+            convo,
+            tokenize=False,
+            add_generation_prompt=False
+        )
+        for convo in conversations
+    ]
+    return {&quot;text&quot;: texts}
+
+# Load a dataset
+dataset = load_dataset(&quot;mlabonne/FineTome-100k&quot;, split=&quot;train&quot;)
+
+# FineTome uses ShareGPT keys (&quot;from&quot;/&quot;value&quot;); convert to &quot;role&quot;/&quot;content&quot;
+dataset = standardize_sharegpt(dataset)
+
+# Format the dataset
+dataset = dataset.map(format_conversations, batched=True)
+
+# Split into train/val
+split = dataset.train_test_split(test_size=0.05, seed=42)
+train_dataset = split[&quot;train&quot;]
+eval_dataset = split[&quot;test&quot;]
+
+print(f&quot;Training examples: {len(train_dataset)}&quot;)
+print(f&quot;Sample:\n{train_dataset[0]['text'][:500]}&quot;)
+</code></pre>
+<h3 id="step-4-train-with-trl-sfttrainer">Step 4: Train with TRL SFTTrainer</h3>
+<pre><code class="language-python">from trl import SFTConfig, SFTTrainer
+from unsloth import is_bfloat16_supported
+
+# SFTConfig extends TrainingArguments; dataset options now live here
+# instead of being passed to SFTTrainer directly
+training_args = SFTConfig(
+    output_dir=&quot;./llama3-finetuned&quot;,
+    num_train_epochs=3,
+
+    # Batch size and gradient accumulation
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=4,  # Effective batch = 2 * 4 = 8
+
+    # Optimizer
+    learning_rate=2e-4,
+    optim=&quot;adamw_8bit&quot;,            # Memory-efficient optimizer
+    weight_decay=0.01,
+    lr_scheduler_type=&quot;cosine&quot;,
+    warmup_ratio=0.05,
+
+    # Mixed precision
+    fp16=not is_bfloat16_supported(),
+    bf16=is_bfloat16_supported(),
+
+    # Logging and saving
+    logging_steps=10,
+    eval_strategy=&quot;epoch&quot;,          # formerly evaluation_strategy (removed)
+    save_strategy=&quot;epoch&quot;,
+    load_best_model_at_end=True,
+    metric_for_best_model=&quot;eval_loss&quot;,
+
+    # Seeds for reproducibility
+    seed=42,
+
+    # Push to Hub
+    push_to_hub=False,  # Set True to auto-push
+    report_to=&quot;none&quot;,   # or &quot;wandb&quot;, &quot;mlflow&quot;
+
+    # Dataset options (SFT-specific)
+    dataset_text_field=&quot;text&quot;,
+    max_length=MAX_SEQ_LENGTH,     # formerly max_seq_length
+    dataset_num_proc=2,
+    packing=True,                  # Pack short sequences together for efficiency
+)
+
+trainer = SFTTrainer(
+    model=model,
+    processing_class=tokenizer,    # formerly tokenizer=
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    args=training_args,
+)
+
+# Show current memory
+gpu_stats = torch.cuda.get_device_properties(0)
+start_gpu_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 3)
+max_memory = round(gpu_stats.total_memory / 1024 / 1024 / 1024, 3)
+print(f&quot;GPU = {gpu_stats.name}. Max memory = {max_memory} GB&quot;)
+print(f&quot;Memory reserved = {start_gpu_memory} GB&quot;)
+
+# Train
+trainer_stats = trainer.train()
+
+# Print stats
+used_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 3)
+print(f&quot;Peak memory: {used_memory} GB&quot;)
+print(f&quot;Training time: {trainer_stats.metrics['train_runtime']:.2f} seconds&quot;)
+</code></pre>
+<h3 id="step-5-test-the-fine-tuned-model">Step 5: Test the Fine-Tuned Model</h3>
+<pre><code class="language-python">from unsloth import FastLanguageModel
+
+# Switch to inference mode (2x faster)
+FastLanguageModel.for_inference(model)
+
+messages = [
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful ML expert.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain dropout regularization.&quot;}
+]
+
+inputs = tokenizer.apply_chat_template(
+    messages,
+    tokenize=True,
+    add_generation_prompt=True,
+    return_tensors=&quot;pt&quot;
+).to(&quot;cuda&quot;)
+
+outputs = model.generate(
+    input_ids=inputs,
+    max_new_tokens=256,
+    temperature=0.7,
+    do_sample=True,
+    top_p=0.9,
+    use_cache=True,
+)
+
+response = tokenizer.decode(outputs[0][inputs.shape[1]:], skip_special_tokens=True)
+print(response)
+</code></pre>
+<h3 id="step-6-save-and-push-to-hub">Step 6: Save and Push to Hub</h3>
+<pre><code class="language-python"># Save LoRA adapter only (small, ~100MB)
+model.save_pretrained(&quot;./lora-adapter&quot;)
+tokenizer.save_pretrained(&quot;./lora-adapter&quot;)
+
+# Save merged model (full model with LoRA baked in)
+model.save_pretrained_merged(
+    &quot;./merged-model&quot;,
+    tokenizer,
+    save_method=&quot;merged_16bit&quot;,  # or &quot;merged_4bit&quot;, &quot;lora&quot;
+)
+
+# Push LoRA adapter to Hub
+model.push_to_hub(
+    &quot;username/llama3-finetuned-adapter&quot;,
+    tokenizer,
+    save_method=&quot;lora&quot;,
+    token=&quot;hf_your_token&quot;
+)
+
+# Push merged model to Hub
+model.push_to_hub_merged(
+    &quot;username/llama3-finetuned-merged&quot;,
+    tokenizer,
+    save_method=&quot;merged_16bit&quot;,
+    token=&quot;hf_your_token&quot;
+)
+
+# Save as GGUF for Ollama / llama.cpp
+model.save_pretrained_gguf(
+    &quot;./gguf-model&quot;,
+    tokenizer,
+    quantization_method=&quot;q4_k_m&quot;  # Q4_K_M quantization
+)
+
+# Push GGUF to Hub
+model.push_to_hub_gguf(
+    &quot;username/llama3-finetuned-gguf&quot;,
+    tokenizer,
+    quantization_method=&quot;q4_k_m&quot;,
+    token=&quot;hf_your_token&quot;
+)
+</code></pre>
+<h3 id="load-the-saved-gguf-in-ollama">Load the Saved GGUF in Ollama</h3>
+<pre><code class="language-bash"># Create an Ollama Modelfile
+cat &gt; Modelfile &lt;&lt; 'EOF'
+FROM ./gguf-model/unsloth.Q4_K_M.gguf
+
+SYSTEM &quot;You are a helpful ML expert.&quot;
+PARAMETER temperature 0.7
+PARAMETER num_ctx 4096
+EOF
+
+# Create and run the model
+ollama create my-finetuned-llama -f Modelfile
+ollama run my-finetuned-llama
+</code></pre>
+<hr />
+<h2 id="speed-comparison">Speed Comparison</h2>
+<p>Benchmarks comparing Unsloth vs standard HuggingFace (HF) training on Llama 3.2 3B with QLoRA:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Standard HF</th>
+<th>Unsloth Free</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training speed</td>
+<td>1x</td>
+<td>2.0x</td>
+<td>+100%</td>
+</tr>
+<tr>
+<td>GPU memory</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>-50%</td>
+</tr>
+<tr>
+<td>Batch size (16GB GPU)</td>
+<td>2</td>
+<td>4</td>
+<td>2x</td>
+</tr>
+<tr>
+<td>Time for 1000 steps</td>
+<td>120 min</td>
+<td>55 min</td>
+<td>2.2x</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Illustrative figures only: real speedups depend on model, sequence length, batch size, and GPU. Check Unsloth's published benchmarks for current numbers.</em></p>
+<p>Unsloth's paid tiers advertise larger speedups and memory savings than the free version.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is Unsloth and what makes it faster than standard HuggingFace training?</strong> 🟡 Intermediate</p>
+<p>Unsloth is a library for fast LoRA/QLoRA fine-tuning. It achieves 2-5x speedup through: (1) manually written CUDA kernels using OpenAI Triton that replace PyTorch's generic implementations, (2) kernel fusion, combining multiple operations into one kernel pass to reduce memory bandwidth, (3) optimized gradient checkpointing that is smarter about which activations to recompute, and (4) memory-efficient attention implementations.</p>
+<hr />
+<p><strong>Q2: What is the difference between saving a LoRA adapter vs a merged model?</strong> 🟡 Intermediate</p>
+<p>A <strong>LoRA adapter</strong> contains only the small additional matrices (r &lt;&lt; d). It's compact (~50-200MB) but requires loading the base model + adapter at inference time. A <strong>merged model</strong> combines the LoRA weights back into the base model weights: it's a complete standalone model but at full size. Use adapter format for flexibility (swap adapters), use merged format for production deployment where simplicity matters.</p>
+<hr />
+<p><strong>Q3: What is <code>use_gradient_checkpointing=&quot;unsloth&quot;</code> and when should you use it?</strong> 🔴 Advanced</p>
+<p>Gradient checkpointing reduces memory by not storing all intermediate activations during the forward pass: instead it recomputes them during backpropagation. Standard gradient checkpointing has a fixed recomputation strategy. Unsloth's implementation is smarter: it selectively checkpoints the most memory-intensive activations while minimizing recomputation overhead, achieving a better memory-speed tradeoff than the standard approach. Use it whenever training on limited VRAM (&lt; 24GB).</p>
+<hr />
+<p><strong>Q4: How would you use a model fine-tuned with Unsloth in Ollama?</strong> 🟡 Intermediate</p>
+<p>Unsloth supports exporting to GGUF format via <code>model.save_pretrained_gguf()</code>. After export, create an Ollama Modelfile that references the GGUF file, then run <code>ollama create model-name -f Modelfile</code>. The model can then be used with <code>ollama run</code> or via Ollama's API, making it accessible locally without any Python dependencies.</p>
+<hr />
+<p><strong>Q5: What LoRA rank should you choose and how does it affect training?</strong> 🟡 Intermediate</p>
+<p>LoRA rank <code>r</code> controls the number of trainable parameters. Common values: r=4-8 for small datasets or quick experiments, r=16-32 for general fine-tuning (good quality-efficiency balance), r=64+ for complex task adaptation. Higher <code>r</code> = more trainable parameters = better expressiveness but slower training and more memory. Start with r=16, evaluate quality, then adjust. The ratio of trainable to total parameters is roughly <code>2 * r * L / P</code> where L is number of target layers and P is total parameters.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/unslothai/unsloth">Unsloth GitHub Repository</a></li>
+<li><a href="https://docs.unsloth.ai/">Unsloth Documentation</a></li>
+<li><a href="https://github.com/unslothai/unsloth#-finetune-for-free">Unsloth Notebooks (Google Colab)</a></li>
+<li><a href="https://huggingface.co/docs/trl/sft_trainer">TRL Documentation (SFTTrainer)</a></li>
+<li><a href="https://arxiv.org/abs/2106.09685">LoRA Paper: Hu et al. (2021)</a></li>
+<li><a href="https://arxiv.org/abs/2305.14314">QLoRA Paper: Dettmers et al. (2023)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_vllm.html"><small>Previous</small>vLLM</a><a rel="next" class="next" href="intro_fastapi.html"><small>Next</small>FastAPI</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_unsloth.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

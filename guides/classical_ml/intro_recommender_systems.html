@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recommender Systems Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Recommender systems predict what a user might like based on past behavior or item attributes. They power Netflix, Spotify, Amazon, YouTube, and LinkedIn…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_recommender_systems.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Recommender Systems Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Recommender systems predict what a user might like based on past behavior or item attributes. They power Netflix, Spotify, Amazon, YouTube, and LinkedIn…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_recommender_systems.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Recommender Systems Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Recommender systems predict what a user might like based on past behavior or item attributes. They power Netflix, Spotify, Amazon, YouTube, and LinkedIn…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Recommender Systems",
+   "description": "Recommender systems predict what a user might like based on past behavior or item attributes. They power Netflix, Spotify, Amazon, YouTube, and LinkedIn…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_recommender_systems.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Recommender Systems",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_recommender_systems.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Recommender Systems</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_recommender_systems.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="recommender-systems">Recommender Systems</h1>
+<p>Recommender systems predict what a user might like based on past behavior or item attributes. They power Netflix, Spotify, Amazon, YouTube, and LinkedIn. They're a key topic for ML Engineer and Applied Scientist roles.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#types-of-recommender-systems">Types of Recommender Systems</a></li>
+<li><a href="#collaborative-filtering">Collaborative Filtering</a></li>
+<li><a href="#matrix-factorization">Matrix Factorization</a></li>
+<li><a href="#content-based-filtering">Content-Based Filtering</a></li>
+<li><a href="#two-tower-models-modern-approach">Two-Tower Models (Modern Approach)</a></li>
+<li><a href="#hybrid-systems">Hybrid Systems</a></li>
+<li><a href="#cold-start-problem">Cold Start Problem</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#production-architecture">Production Architecture</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="types-of-recommender-systems">Types of Recommender Systems</h2>
+<pre><code>                    Recommender Systems
+                    ─────────────────────
+          ┌─────────────┼──────────────┐
+          │             │              │
+   Collaborative    Content-Based    Hybrid
+    Filtering         Filtering      Systems
+    ─────────         ─────────
+  User-Based       Item features    CF + CB
+  Item-Based       User profiles    Two-Tower
+  Matrix Factor.
+  Neural CF
+</code></pre>
+<hr />
+<h2 id="collaborative-filtering">Collaborative Filtering</h2>
+<p>Collaborative filtering assumes that users who agreed in the past will agree in the future. It only uses the user-item interaction matrix (ratings, clicks, purchases).</p>
+<h3 id="user-based-cf">User-Based CF</h3>
+<p>&quot;Find users similar to you; recommend what they liked.&quot;</p>
+<pre><code class="language-python">import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+# User-item rating matrix (rows=users, cols=items)
+ratings = np.array([
+    [5, 4, 0, 1, 0],  # User 0
+    [4, 0, 0, 1, 2],  # User 1
+    [0, 0, 5, 4, 3],  # User 2
+    [0, 3, 4, 0, 0],  # User 3
+    [1, 0, 0, 5, 4],  # User 4
+])
+
+# Compute user-user cosine similarity
+user_sim = cosine_similarity(ratings)
+np.fill_diagonal(user_sim, 0)  # Exclude self-similarity
+
+def user_based_predict(ratings, user_id, item_id, k=2):
+    &quot;&quot;&quot;Predict rating for user_id on item_id using top-k similar users.&quot;&quot;&quot;
+    sim_scores = user_sim[user_id]
+    # Get users who rated the item
+    rated_mask = ratings[:, item_id] &gt; 0
+    rated_mask[user_id] = False
+
+    if not any(rated_mask):
+        return 0.0
+
+    sims = sim_scores[rated_mask]
+    item_ratings = ratings[rated_mask, item_id]
+
+    # Top-k similar users
+    top_k_idx = np.argsort(sims)[-k:]
+    top_sims = sims[top_k_idx]
+    top_ratings = item_ratings[top_k_idx]
+
+    if top_sims.sum() == 0:
+        return 0.0
+    return np.dot(top_sims, top_ratings) / top_sims.sum()
+
+# Predict User 0's rating for Item 2
+pred = user_based_predict(ratings, user_id=0, item_id=2)
+print(f&quot;Predicted rating: {pred:.2f}&quot;)
+</code></pre>
+<h3 id="item-based-cf">Item-Based CF</h3>
+<p>&quot;Find items similar to what you liked; recommend those.&quot;</p>
+<pre><code class="language-python"># Compute item-item cosine similarity
+item_sim = cosine_similarity(ratings.T)  # Transpose: items as rows
+np.fill_diagonal(item_sim, 0)
+
+def item_based_predict(ratings, user_id, item_id, k=2):
+    &quot;&quot;&quot;Predict rating using top-k similar items the user already rated.&quot;&quot;&quot;
+    sim_scores = item_sim[item_id]
+    user_ratings = ratings[user_id]
+    rated_mask = user_ratings &gt; 0
+
+    if not any(rated_mask):
+        return 0.0
+
+    sims = sim_scores[rated_mask]
+    user_item_ratings = user_ratings[rated_mask]
+
+    top_k_idx = np.argsort(sims)[-k:]
+    top_sims = sims[top_k_idx]
+    top_ratings = user_item_ratings[top_k_idx]
+
+    return np.dot(top_sims, top_ratings) / (top_sims.sum() + 1e-10)
+</code></pre>
+<hr />
+<h2 id="matrix-factorization">Matrix Factorization</h2>
+<p>Matrix factorization decomposes the user-item matrix R (m×n) into two lower-rank matrices: R ≈ U × V^T, where U (m×k) represents users and V (n×k) represents items in a latent factor space.</p>
+<h3 id="alternating-least-squares-als">Alternating Least Squares (ALS)</h3>
+<p>ALS is commonly used for implicit feedback (clicks, purchases, views): popular in Spark ML. It alternates: fix the item factors and solve each user's factors by least squares, then swap.</p>
+<p>scikit-learn has no ALS recommender. The sketch below uses <code>NMF</code> only to show the shape of a factorization; note that it treats the zeros (unobserved entries) as real ratings of 0, which a production recommender must not do.</p>
+<pre><code class="language-python">from sklearn.decomposition import NMF
+
+# Non-negative Matrix Factorization (illustration only; zeros are treated as observed)
+nmf = NMF(n_components=2, init='random', random_state=42, max_iter=500)
+W = nmf.fit_transform(ratings)  # User latent factors (m x k)
+H = nmf.components_             # Item latent factors (k x n)
+
+# Reconstruct full ratings matrix
+ratings_pred = W @ H
+</code></pre>
+<h3 id="svd-based-matrix-factorization-surprise-library">SVD-based Matrix Factorization (Surprise library)</h3>
+<pre><code class="language-python">from surprise import SVD, Dataset, Reader, accuracy
+from surprise.model_selection import cross_validate, train_test_split
+import pandas as pd
+
+# Prepare data in Surprise format
+data_df = pd.DataFrame({
+    'user_id': [0, 0, 1, 1, 2, 3],
+    'item_id': [0, 1, 0, 3, 2, 2],
+    'rating': [5, 4, 4, 1, 5, 4]
+})
+
+reader = Reader(rating_scale=(1, 5))
+data = Dataset.load_from_df(data_df, reader)
+
+# SVD (Simon Funk SVD / FunkSVD)
+algo = SVD(n_factors=50, n_epochs=20, lr_all=0.005, reg_all=0.02)
+cv_results = cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5)
+print(f&quot;RMSE: {cv_results['test_rmse'].mean():.3f}&quot;)
+
+# Predict
+trainset, testset = train_test_split(data, test_size=0.25)
+algo.fit(trainset)
+predictions = algo.test(testset)
+print(f&quot;Test RMSE: {accuracy.rmse(predictions):.3f}&quot;)
+</code></pre>
+<hr />
+<h2 id="content-based-filtering">Content-Based Filtering</h2>
+<p>Content-based filtering recommends items similar to what a user has liked, based on item features (genre, keywords, attributes).</p>
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Movie content-based filtering example
+movies = pd.DataFrame({
+    'title': ['Inception', 'Interstellar', 'The Dark Knight', 'Avengers', 'Iron Man'],
+    'description': [
+        'dream heist sci-fi thriller complex',
+        'space time wormhole sci-fi exploration',
+        'batman joker dark crime superhero',
+        'marvel superhero team avengers action',
+        'iron man tony stark superhero action'
+    ]
+})
+
+# Build TF-IDF matrix
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(movies['description'])
+
+# Cosine similarity between all movies
+item_cosine_sim = cosine_similarity(tfidf_matrix)
+
+def get_content_recommendations(title, n=3):
+    idx = movies[movies['title'] == title].index[0]
+    sim_scores = list(enumerate(item_cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:n+1]
+    movie_indices = [i[0] for i in sim_scores]
+    return movies['title'].iloc[movie_indices].tolist()
+
+print(get_content_recommendations('Inception'))
+</code></pre>
+<hr />
+<h2 id="two-tower-models-modern-approach">Two-Tower Models (Modern Approach)</h2>
+<p>Two-tower (dual encoder) models are the industry standard for large-scale recommendations (YouTube, Pinterest, Spotify). They separately encode users and items into a shared embedding space, then score by dot product.</p>
+<pre><code>                    User Tower          Item Tower
+                    ──────────          ──────────
+User features    →  [Dense]         Item features → [Dense]
+(age, history,      [Dense]    ←→    (title, genre,  [Dense]
+ context)           [Dense]           description)   [Dense]
+                        ↓                               ↓
+                  User Embedding    ·    Item Embedding
+                  (128-dim)              (128-dim)
+                              ↓
+                        Dot Product = Relevance Score
+</code></pre>
+<pre><code class="language-python">import tensorflow as tf
+
+class TwoTowerModel(tf.keras.Model):
+    def __init__(self, user_vocab_size, item_vocab_size, embedding_dim=64):
+        super().__init__()
+        # User tower
+        self.user_embedding = tf.keras.layers.Embedding(user_vocab_size, embedding_dim)
+        self.user_dense = tf.keras.layers.Dense(embedding_dim, activation='relu')
+
+        # Item tower
+        self.item_embedding = tf.keras.layers.Embedding(item_vocab_size, embedding_dim)
+        self.item_dense = tf.keras.layers.Dense(embedding_dim, activation='relu')
+
+    def encode_user(self, user_ids):
+        x = self.user_embedding(user_ids)
+        return tf.nn.l2_normalize(self.user_dense(x), axis=-1)
+
+    def encode_item(self, item_ids):
+        x = self.item_embedding(item_ids)
+        return tf.nn.l2_normalize(self.item_dense(x), axis=-1)
+
+    def call(self, inputs):
+        user_ids, item_ids = inputs
+        user_emb = self.encode_user(user_ids)
+        item_emb = self.encode_item(item_ids)
+        return tf.reduce_sum(user_emb * item_emb, axis=-1)  # Dot product
+
+model = TwoTowerModel(user_vocab_size=10000, item_vocab_size=50000)
+
+# At inference: pre-compute all item embeddings, store in vector DB
+# Retrieve top-k candidates using ANN (HNSW, FAISS)
+</code></pre>
+<hr />
+<h2 id="hybrid-systems">Hybrid Systems</h2>
+<p>Combine collaborative filtering and content-based filtering:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Weighted</strong></td>
+<td>Average CF and CB scores</td>
+<td>Score = 0.7<em>CF + 0.3</em>CB</td>
+</tr>
+<tr>
+<td><strong>Switching</strong></td>
+<td>Use CB for cold start, CF once enough data</td>
+<td>New users get CB; returning users get CF</td>
+</tr>
+<tr>
+<td><strong>Feature augmentation</strong></td>
+<td>Use CB features as input to CF</td>
+<td>Add item genre embedding to MF model</td>
+</tr>
+<tr>
+<td><strong>Cascade</strong></td>
+<td>One model generates candidates, a second re-ranks them</td>
+<td>CF retrieval → feature-rich ranking model (YouTube's two-stage design)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cold-start-problem">Cold Start Problem</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Problem</th>
+<th>Solutions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>New user</strong></td>
+<td>No interaction history</td>
+<td>Ask onboarding preferences, use demographics, default to popularity</td>
+</tr>
+<tr>
+<td><strong>New item</strong></td>
+<td>No ratings yet</td>
+<td>Use content features (CB), promote in exploration slots</td>
+</tr>
+<tr>
+<td><strong>New system</strong></td>
+<td>No data at all</td>
+<td>Start with content-based; gather data gradually</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">def get_recommendations(user_id, interaction_count, cf_model, cb_model, threshold=10):
+    &quot;&quot;&quot;Switch between CB and CF based on interaction count.&quot;&quot;&quot;
+    if interaction_count &lt; threshold:
+        # Cold start: use content-based
+        return cb_model.recommend(user_id)
+    else:
+        # Warm user: use collaborative filtering
+        return cf_model.recommend(user_id)
+</code></pre>
+<hr />
+<h2 id="evaluation-metrics">Evaluation Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>What It Measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precision@k</strong></td>
+<td>Relevant in top-k / k</td>
+<td>Fraction of recommended items that are relevant</td>
+</tr>
+<tr>
+<td><strong>Recall@k</strong></td>
+<td>Relevant in top-k / Total relevant</td>
+<td>Fraction of relevant items that were recommended</td>
+</tr>
+<tr>
+<td><strong>NDCG@k</strong></td>
+<td>Normalized Discounted Cumulative Gain</td>
+<td>Ranking quality: rewards placing relevant items higher</td>
+</tr>
+<tr>
+<td><strong>MAP@k</strong></td>
+<td>Mean Average Precision</td>
+<td>Average precision across users</td>
+</tr>
+<tr>
+<td><strong>Hit Rate@k</strong></td>
+<td>% of users with ≥1 relevant item in top-k</td>
+<td>Broad coverage metric</td>
+</tr>
+<tr>
+<td><strong>MRR</strong></td>
+<td>Mean Reciprocal Rank</td>
+<td>Rank of first relevant result</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">def ndcg_at_k(recommended, relevant, k):
+    &quot;&quot;&quot;NDCG@k: higher is better, max=1.0&quot;&quot;&quot;
+    dcg = 0
+    for i, item in enumerate(recommended[:k]):
+        if item in relevant:
+            dcg += 1 / np.log2(i + 2)  # +2: log2(1)=0, so shift by 1
+
+    # Ideal DCG: all relevant items at top
+    ideal_dcg = sum(1 / np.log2(i + 2) for i in range(min(len(relevant), k)))
+    return dcg / ideal_dcg if ideal_dcg &gt; 0 else 0
+
+# Example
+recommended = ['item1', 'item3', 'item5', 'item2', 'item8']
+relevant = {'item1', 'item2', 'item4'}
+print(f&quot;NDCG@5: {ndcg_at_k(recommended, relevant, k=5):.3f}&quot;)
+</code></pre>
+<hr />
+<h2 id="production-architecture">Production Architecture</h2>
+<pre><code>User Request
+     │
+     ▼
+┌──────────────┐
+│  Retrieval   │  ← Two-tower ANN (FAISS/HNSW): ~100ms, 100-1000 candidates
+│   Stage      │    Pre-computed item embeddings in vector DB
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Ranking     │  ← Gradient boosting or deep ranking model
+│   Stage      │    Uses rich features (user context, item stats, recency)
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Re-ranking  │  ← Business rules (diversity, freshness, sponsored items)
+│   Stage      │    Deduplication, safety filters
+└──────┬───────┘
+       │
+       ▼
+Final Top-N Recommendations
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between collaborative filtering and content-based filtering?</strong>
+CF uses the user-item interaction matrix only: it uses collective user behavior. It can recommend items that are hard to describe but popular with similar users. CB uses item/user features: it can explain recommendations (&quot;because you liked sci-fi&quot;) and handles new items well. CF suffers from cold start; CB doesn't generalize beyond item similarity.</p>
+<p><strong>Q2: How do you handle the cold start problem in collaborative filtering?</strong>
+New users: collect onboarding preferences (ask them to rate a few items), use demographic-based CF, or fall back to content-based until enough interactions. New items: use content features in a hybrid model, or give new items exploration slots (epsilon-greedy).</p>
+<p><strong>Q3: What are the advantages of two-tower models over traditional matrix factorization?</strong>
+Two-tower models: (1) can incorporate rich features beyond IDs (text, images, context); (2) scale to billions of users/items via ANN retrieval; (3) support real-time user context; (4) naturally handle cold start via feature encoding. MF is simpler but limited to ID-based embeddings and doesn't generalize to unseen users/items.</p>
+<p><strong>Q4: How do you evaluate a recommender system offline vs online?</strong>
+Offline: precision@k, recall@k, NDCG@k on held-out interactions (use time-based split, not random). Online: A/B test CTR, conversion rate, watch time, user retention. Offline metrics don't always correlate with online performance: the bandit feedback problem means you can only evaluate on items that were actually shown.</p>
+<p><strong>Q5: What is matrix factorization and how does it work?</strong>
+MF decomposes the sparse user-item rating matrix R (m×n) into two dense matrices U (m×k) and V (n×k), where k &lt;&lt; min(m,n). The k dimensions represent latent factors (like genre preference, price sensitivity). We optimize U and V to minimize squared error over the observed entries only, plus L2 regularization: Σ_(i,j observed) (r_ij - u_i·v_j)² + λ(||U||² + ||V||²). Solve it with SGD over observed entries, or with ALS, which alternates: hold one matrix fixed and solve for the other in closed form.</p>
+<p><strong>Q6: How would you add diversity to recommendations?</strong>
+Maximum Marginal Relevance (MMR): re-rank to balance relevance and diversity. At each step, select the item that maximizes: λ * relevance_score - (1-λ) * max_similarity_to_already_selected. Or use DPP (Determinantal Point Processes) for principled diversity. Alternatively, apply business rules (no more than 2 items from same category).</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random train/test split</td>
+<td>Simulates future leaking into past</td>
+<td>Use time-based split</td>
+</tr>
+<tr>
+<td>Only evaluating accuracy</td>
+<td>Ignores novelty, diversity, coverage</td>
+<td>Add NDCG, diversity, coverage metrics</td>
+</tr>
+<tr>
+<td>Ignoring cold start</td>
+<td>New users/items get poor recommendations</td>
+<td>Hybrid model or fallback strategy</td>
+</tr>
+<tr>
+<td>Popularity bias</td>
+<td>Always recommend popular items</td>
+<td>Add exploration (epsilon-greedy, UCB)</td>
+</tr>
+<tr>
+<td>Feedback loop / filter bubble</td>
+<td>Model trains on its own predictions</td>
+<td>Inject exploration; measure diversity over time</td>
+</tr>
+<tr>
+<td>Evaluating offline only</td>
+<td>Offline metrics ≠ online metrics</td>
+<td>Always A/B test before full rollout</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_clustering.html">Clustering</a></td>
+<td>User/item clustering for neighborhood CF</td>
+</tr>
+<tr>
+<td><a href="intro_dimensionality_reduction.html">Dimensionality Reduction</a></td>
+<td>Latent factor models are a form of DR</td>
+</tr>
+<tr>
+<td><a href="intro_feature_engineering.html">Feature Engineering</a></td>
+<td>Feature prep for content-based and hybrid models</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_vector_databases.html">Vector Databases</a></td>
+<td>ANN retrieval for two-tower models</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>Recommender Systems is an Advanced (🔴) topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_feature_engineering.html"><small>Previous</small>Feature Engineering</a><a rel="next" class="next" href="intro_time_series.html"><small>Next</small>Time Series</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_recommender_systems.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

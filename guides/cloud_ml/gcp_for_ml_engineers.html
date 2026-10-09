@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Cloud (GCP) for ML Engineers Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Vertex AI gets most of the attention in GCP interviews, but the questions that separate candidates usually sit around it: who is allowed to read the…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/gcp_for_ml_engineers.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Google Cloud (GCP) for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Vertex AI gets most of the attention in GCP interviews, but the questions that separate candidates usually sit around it: who is allowed to read the…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/gcp_for_ml_engineers.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Google Cloud (GCP) for ML Engineers Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Vertex AI gets most of the attention in GCP interviews, but the questions that separate candidates usually sit around it: who is allowed to read the…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Google Cloud (GCP) for ML Engineers",
+   "description": "Vertex AI gets most of the attention in GCP interviews, but the questions that separate candidates usually sit around it: who is allowed to read the…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/gcp_for_ml_engineers.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cloud ML Platforms",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#cloud-ml-platforms"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "GCP for ML Engineers",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/cloud_ml/gcp_for_ml_engineers.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#cloud-ml-platforms">Cloud ML Platforms</a> <span aria-hidden="true">/</span> <span aria-current="page">GCP for ML Engineers</span></nav>
+<p class="meta"><a href="../../#cloud_ml/gcp_for_ml_engineers.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 16 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="google-cloud-gcp-for-ml-engineers">Google Cloud (GCP) for ML Engineers</h1>
+<p>Vertex AI gets most of the attention in GCP interviews, but the questions that separate candidates usually sit around it: who is allowed to read the training data, how a private training job reaches Cloud Storage without a public IP, why the BigQuery bill spiked, and whether a model belongs on Cloud Run, GKE or a Vertex AI endpoint. This guide covers the core GCP services an ML or AI engineer touches outside Vertex AI itself and how they fit together.</p>
+<p>For Vertex AI components (Pipelines, Custom Training, Model Registry, Endpoints, Feature Store) see <a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a>. For a SageMaker vs Vertex AI vs Azure ML comparison see <a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a>.</p>
+<blockquote>
+<p>GCP product names change often, especially in data governance and generative AI. Where a name is known to have changed recently, this guide says so. Always check the current Google Cloud documentation and pricing pages before quoting limits or prices in a design.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-the-pieces-fit-together">How the pieces fit together</a></li>
+<li><a href="#resource-hierarchy-and-identity">Resource hierarchy and identity</a></li>
+<li><a href="#networking-basics">Networking basics</a></li>
+<li><a href="#storage">Storage</a></li>
+<li><a href="#compute">Compute</a></li>
+<li><a href="#data-and-analytics">Data and analytics</a></li>
+<li><a href="#generative-ai-on-gcp">Generative AI on GCP</a></li>
+<li><a href="#observability">Observability</a></li>
+<li><a href="#cost-control">Cost control</a></li>
+<li><a href="#reference-architectures">Reference architectures</a></li>
+<li><a href="#code-examples">Code examples</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Main GCP services</th>
+<th>What an ML engineer uses it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity and security</td>
+<td>IAM, service accounts, Workload Identity Federation, Cloud KMS, Secret Manager, VPC Service Controls, Cloud Audit Logs</td>
+<td>Least-privilege access to data and models, keyless auth, exfiltration control</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>VPC, firewall rules, Private Google Access, Cloud NAT, Private Service Connect</td>
+<td>Private training and serving, controlled egress</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Cloud Storage, Persistent Disk / Hyperdisk, Filestore, Parallelstore, Cloud Storage FUSE</td>
+<td>Datasets, checkpoints, model artifacts</td>
+</tr>
+<tr>
+<td>Compute</td>
+<td>Compute Engine (GPUs), Cloud TPU, GKE, Cloud Run, Cloud Run functions, Batch</td>
+<td>Training, serving, glue code, batch jobs</td>
+</tr>
+<tr>
+<td>Data and analytics</td>
+<td>BigQuery, BigQuery ML, Dataflow, Dataproc, Pub/Sub, Cloud Composer, Workflows, Dataplex</td>
+<td>Feature engineering, streaming, orchestration, governance</td>
+</tr>
+<tr>
+<td>ML platform</td>
+<td>Vertex AI (see <a href="intro_vertex_ai.html">intro_vertex_ai.md</a>)</td>
+<td>Pipelines, training, registry, endpoints, monitoring</td>
+</tr>
+<tr>
+<td>Generative AI</td>
+<td>Gemini and partner models on Vertex AI, Model Garden, grounding, Vertex AI Search / RAG Engine, embeddings</td>
+<td>LLM apps, RAG, semantic search</td>
+</tr>
+<tr>
+<td>Operations</td>
+<td>Cloud Monitoring, Cloud Logging, Cloud Trace, Billing budgets</td>
+<td>Health, debugging, cost</td>
+</tr>
+<tr>
+<td>Build and deploy</td>
+<td>Artifact Registry, Cloud Build</td>
+<td>Container images for training and serving</td>
+</tr>
+</tbody>
+</table></div>
+<p>A useful mental model: <strong>BigQuery and Cloud Storage are the data plane, Vertex AI is the ML control plane, and IAM plus VPC Service Controls decide who and what can cross the boundary.</strong></p>
+<hr />
+<h2 id="resource-hierarchy-and-identity">Resource hierarchy and identity</h2>
+<h3 id="resource-hierarchy">Resource hierarchy</h3>
+<pre><code class="language-text">Organization (example.com)
+ |-- Folder: ml-platform
+ |    |-- Project: ml-dev
+ |    |-- Project: ml-staging
+ |    `-- Project: ml-prod
+ `-- Folder: data
+      `-- Project: data-lake-prod
+</code></pre>
+<ul>
+<li><strong>Organization</strong>: the root node, tied to a Google Workspace or Cloud Identity domain. Organization policies (for example &quot;disable service account key creation&quot; or &quot;restrict resource locations&quot;) are set here or on folders.</li>
+<li><strong>Folders</strong>: group projects by team or environment. Policies and IAM bindings inherit downward.</li>
+<li><strong>Projects</strong>: the unit of billing, API enablement, quotas and most IAM. Separate projects per environment is the standard way to isolate dev from prod.</li>
+</ul>
+<p>IAM allow policies are <strong>additive down the tree</strong>: a role granted on a folder applies to every project beneath it, and a child cannot remove what a parent grants. IAM deny policies exist for explicit guardrails, but most day-to-day access is modeled with allow policies.</p>
+<h3 id="iam-roles">IAM roles</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Role type</th>
+<th>Examples</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic</td>
+<td>Owner, Editor, Viewer</td>
+<td>Avoid in production. Far too broad (Editor can modify most resources in the project).</td>
+</tr>
+<tr>
+<td>Predefined</td>
+<td><code>roles/bigquery.dataViewer</code>, <code>roles/storage.objectViewer</code>, <code>roles/aiplatform.user</code></td>
+<td>Default choice. Maintained by Google as new permissions are added.</td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>Your own list of permissions</td>
+<td>When predefined roles are too broad. You own the maintenance.</td>
+</tr>
+</tbody>
+</table></div>
+<p>IAM Conditions let you scope a binding further (for example to a bucket prefix by resource name, or to a time window).</p>
+<h3 id="service-accounts-and-keys">Service accounts and keys</h3>
+<p>A <strong>service account</strong> is the identity for workloads: a training job, a Cloud Run service, a Dataflow worker. Good practice:</p>
+<ul>
+<li>One service account per workload, with only the roles it needs (training reads <code>gs://features/*</code>, does not write to prod endpoints).</li>
+<li><strong>Attach</strong> the service account to the resource (VM, Cloud Run service, Vertex AI custom job) so code gets short-lived tokens through Application Default Credentials.</li>
+<li><strong>Avoid service account keys.</strong> A JSON key is a long-lived credential that leaks through laptops, CI logs and git history. Many organizations enforce the <code>iam.disableServiceAccountKeyCreation</code> organization policy (Google has been enabling secure-by-default policies like this on new organizations; check yours).</li>
+<li>Use <strong>service account impersonation</strong> for humans who need to act as a workload identity temporarily.</li>
+</ul>
+<h3 id="keyless-identity-outside-and-inside-gcp">Keyless identity outside and inside GCP</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Problem it solves</th>
+<th>How it works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Workload Identity Federation</strong></td>
+<td>CI/CD (GitHub Actions, GitLab), AWS or Azure workloads, on-prem jobs need GCP access</td>
+<td>An external OIDC/SAML token (or AWS/Azure credential) is exchanged through Google's Security Token Service for a short-lived GCP token. Either grant roles directly to the federated principal or let it impersonate a service account.</td>
+</tr>
+<tr>
+<td><strong>Workload Identity Federation for GKE</strong> (previously &quot;GKE Workload Identity&quot;)</td>
+<td>Pods need GCP access without node-level credentials</td>
+<td>A Kubernetes service account maps to an IAM principal, so each pod gets only its own permissions instead of inheriting the node's service account.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Always restrict a federation provider with an <strong>attribute condition</strong> (for example a specific GitHub repository and branch), otherwise any token from that issuer could be accepted.</p>
+<h3 id="encryption-secrets-and-perimeter-controls">Encryption, secrets and perimeter controls</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it does</th>
+<th>ML relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cloud KMS</strong></td>
+<td>Manages encryption keys. Data is encrypted at rest by default with Google-managed keys; KMS adds customer-managed encryption keys (CMEK), with Cloud HSM and external key options.</td>
+<td>Regulated datasets, model artifacts, and Vertex AI resources that must use CMEK. Revoking the key makes the data unreadable.</td>
+</tr>
+<tr>
+<td><strong>Secret Manager</strong></td>
+<td>Versioned storage for API keys, DB passwords, third-party tokens, with IAM per secret.</td>
+<td>Third-party API keys for LLM providers, feature store credentials. Pin versions in prod, reference <code>latest</code> only where rotation is automatic.</td>
+</tr>
+<tr>
+<td><strong>VPC Service Controls (VPC-SC)</strong></td>
+<td>A service perimeter around projects that blocks Google API calls (Cloud Storage, BigQuery, Vertex AI, and others) crossing the perimeter, even with valid credentials.</td>
+<td>Prevents copying training data to a personal bucket or a project outside the perimeter. Supports access levels, ingress/egress rules and a dry-run mode.</td>
+</tr>
+<tr>
+<td><strong>Cloud Audit Logs</strong></td>
+<td>Admin Activity logs (always on), Data Access logs (mostly off by default and must be enabled; BigQuery is an exception), System Event and Policy Denied logs.</td>
+<td>Who read the PII table, who deployed a model, which calls VPC-SC blocked.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Projects per environment, IAM granted to groups and service accounts, not to individual users.</li>
+<li>Predefined roles over basic roles; least privilege per workload.</li>
+<li>&quot;No service account keys&quot;: attached service accounts inside GCP, Workload Identity Federation outside it.</li>
+<li>Understanding that IAM answers &quot;who can call this API&quot; while VPC-SC answers &quot;from where, and to where can data move&quot;.</li>
+<li>Data Access audit logs must be explicitly enabled for most services, and they can be voluminous.</li>
+</ul>
+<hr />
+<h2 id="networking-basics">Networking basics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Key fact</th>
+<th>Why ML engineers care</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VPC network</strong></td>
+<td>Global resource; one VPC spans all regions.</td>
+<td>Training in one region and serving in another can share one network.</td>
+</tr>
+<tr>
+<td><strong>Subnets</strong></td>
+<td>Regional, each with its own IP range.</td>
+<td>GKE node and pod ranges must be planned up front; running out of IPs blocks scale-up.</td>
+</tr>
+<tr>
+<td><strong>Firewall rules</strong></td>
+<td>Stateful; apply by network tags or service accounts. Implied rules deny ingress and allow egress unless you add rules. Hierarchical and network firewall policies add org-wide control.</td>
+<td>Restrict who can reach notebooks, inference servers and multi-node training ports.</td>
+</tr>
+<tr>
+<td><strong>Private Google Access</strong></td>
+<td>Lets VMs with only internal IPs reach Google APIs (Cloud Storage, BigQuery, Artifact Registry). Enabled per subnet.</td>
+<td>Training VMs without external IPs can still read data and pull images.</td>
+</tr>
+<tr>
+<td><strong>Cloud NAT</strong></td>
+<td>Managed outbound NAT for resources without external IPs. Outbound only.</td>
+<td>Pulling pip packages or Hugging Face weights from a private VM or GKE cluster.</td>
+</tr>
+<tr>
+<td><strong>Private Service Connect (PSC)</strong></td>
+<td>Private endpoints inside your VPC for Google APIs or for producer services in other VPCs.</td>
+<td>Private Vertex AI endpoints, private access to managed services, consumer/producer separation.</td>
+</tr>
+<tr>
+<td><strong>Shared VPC</strong></td>
+<td>A host project owns the network; service projects attach to it.</td>
+<td>Central network team, many ML projects.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Serverless products (Cloud Run, Cloud Run functions) reach a VPC through Direct VPC egress or Serverless VPC Access connectors.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>&quot;No public IPs on training or serving nodes&quot; combined with Private Google Access for Google APIs and Cloud NAT for the public internet.</li>
+<li>Knowing that Private Google Access is about Google APIs, while Cloud NAT is about everything else on the internet.</li>
+<li>PSC as the way to consume managed services privately, and VPC-SC as a separate, API-level control (network privacy is not exfiltration protection).</li>
+</ul>
+<hr />
+<h2 id="storage">Storage</h2>
+<h3 id="cloud-storage">Cloud Storage</h3>
+<p>Cloud Storage (GCS) is the default home for raw data, training shards, checkpoints and model artifacts.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Storage class</th>
+<th>Minimum storage duration</th>
+<th>Typical ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard</td>
+<td>None</td>
+<td>Active training data, checkpoints, serving artifacts</td>
+</tr>
+<tr>
+<td>Nearline</td>
+<td>30 days</td>
+<td>Data accessed roughly monthly</td>
+</tr>
+<tr>
+<td>Coldline</td>
+<td>90 days</td>
+<td>Old experiment outputs, quarterly audits</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td>365 days</td>
+<td>Regulatory retention of raw data and model lineage</td>
+</tr>
+</tbody>
+</table></div>
+<p>Colder classes have lower storage cost but retrieval charges and minimum durations (early deletion is billed as if stored for the minimum). <strong>Autoclass</strong> can move objects between classes automatically based on access. Check current pricing for exact numbers.</p>
+<p>Key behaviors:</p>
+<ul>
+<li><strong>Strong global consistency</strong>: read-after-write, read-after-metadata-update, read-after-delete and object listing are strongly consistent. A training job that lists a prefix right after a writer finishes will see the new objects.</li>
+<li><strong>Location types</strong>: regional, dual-region, multi-region. Keep training data in the same region as the compute that reads it to avoid egress cost and latency.</li>
+<li><strong>Lifecycle rules</strong>: delete or change class by age, version count or other conditions (for example delete intermediate checkpoints after 14 days, keep the final model).</li>
+<li><strong>Object versioning</strong>: keeps noncurrent versions on overwrite or delete. Pair it with lifecycle rules, otherwise old versions accumulate cost silently. Soft delete adds a retention window for deleted objects (enabled by default on newer buckets; check the current default).</li>
+<li><strong>Uniform bucket-level access</strong>: use IAM only (no per-object ACLs). Recommended.</li>
+<li><strong>Signed URLs</strong>: time-limited access for a client without GCP credentials (see <a href="#cloud-storage-v4-signed-url">code example</a>).</li>
+</ul>
+<h3 id="file-and-block-storage-for-training-data">File and block storage for training data</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>What it is</th>
+<th>Good for</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Persistent Disk / Hyperdisk</strong></td>
+<td>Network block storage attached to VMs. Hyperdisk is the newer family with independently provisioned performance; a Hyperdisk ML variant targets read-heavy model and data loading across many VMs.</td>
+<td>Boot disks, local datasets on a single node, fast scratch</td>
+<td>Mostly single-writer; sharing across many nodes is limited</td>
+</tr>
+<tr>
+<td><strong>Local SSD</strong></td>
+<td>Physically attached, very fast, ephemeral</td>
+<td>Data caching and scratch during training</td>
+<td>Data is lost when the VM stops</td>
+</tr>
+<tr>
+<td><strong>Filestore</strong></td>
+<td>Managed NFS</td>
+<td>Shared home directories, small to medium shared datasets, legacy code expecting POSIX</td>
+<td>Throughput scales with tier and capacity; cost</td>
+</tr>
+<tr>
+<td><strong>Parallelstore / Managed Lustre</strong></td>
+<td>Managed parallel file systems for HPC and AI</td>
+<td>Very high throughput, many small files, frequent checkpointing at large scale</td>
+<td>Newer products; check regional availability, tiers and naming</td>
+</tr>
+<tr>
+<td><strong>Cloud Storage FUSE</strong></td>
+<td>Mounts a GCS bucket as a file system (Vertex AI training exposes buckets under <code>/gcs/</code>; GKE has a CSI driver)</td>
+<td>Reusing file-based data loaders on GCS without copying</td>
+<td>Not fully POSIX; enable its caching options for repeated epochs; many tiny files hurt throughput</td>
+</tr>
+</tbody>
+</table></div>
+<p>A common pattern is to <strong>shard data into large files</strong> (TFRecord, WebDataset tar shards, Parquet) in GCS and stream them, which usually beats both FUSE on millions of tiny files and copying everything to disk.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Co-locating data and compute in the same region.</li>
+<li>Lifecycle rules for checkpoints, versioning paired with cleanup.</li>
+<li>Matching storage to the access pattern: object storage for durable data, parallel or cached file systems when the loader is I/O bound.</li>
+<li>Awareness that GCS is strongly consistent (an older S3-style eventual consistency assumption is a red flag).</li>
+</ul>
+<hr />
+<h2 id="compute">Compute</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>Use it for</th>
+<th>Avoid when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compute Engine + GPUs</strong></td>
+<td>VMs with attached NVIDIA GPUs (accelerator-optimized machine families)</td>
+<td>Custom training clusters, full control over drivers and OS</td>
+<td>You want managed scheduling and do not want to run VMs</td>
+</tr>
+<tr>
+<td><strong>Cloud TPU</strong></td>
+<td>Google-designed accelerators accessed as TPU VMs or slices</td>
+<td>Large dense training and inference with JAX or PyTorch/XLA</td>
+<td>Your model relies on custom CUDA kernels or GPU-only libraries</td>
+</tr>
+<tr>
+<td><strong>GKE Standard</strong></td>
+<td>Managed Kubernetes, you manage node pools</td>
+<td>Multi-tenant platforms, custom serving stacks (vLLM, Triton, KServe), GPU and TPU node pools</td>
+<td>Small team with no Kubernetes expertise</td>
+</tr>
+<tr>
+<td><strong>GKE Autopilot</strong></td>
+<td>Google manages nodes, you pay per pod resource requests</td>
+<td>Kubernetes without node operations; supports GPU and TPU workloads through compute classes</td>
+<td>You need node-level customization or privileged daemons</td>
+</tr>
+<tr>
+<td><strong>Cloud Run</strong></td>
+<td>Serverless containers, request-based autoscaling including scale to zero; also Cloud Run jobs for run-to-completion tasks</td>
+<td>Stateless APIs, lightweight model servers, LLM gateways</td>
+<td>Long-lived stateful workloads, complex multi-container topologies</td>
+</tr>
+<tr>
+<td><strong>Cloud Run functions</strong> (formerly Cloud Functions)</td>
+<td>Event-driven functions on Cloud Run infrastructure</td>
+<td>Glue: GCS upload triggers, Pub/Sub handlers</td>
+<td>Heavy compute or large models</td>
+</tr>
+<tr>
+<td><strong>Batch</strong></td>
+<td>Managed batch job scheduler on Compute Engine VMs (supports GPUs and Spot VMs)</td>
+<td>Embarrassingly parallel preprocessing, offline inference, simulations</td>
+<td>You already run a cluster scheduler such as GKE or Slurm</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="gpus">GPUs</h3>
+<p>GPU-backed VMs come from accelerator-optimized machine families, and the available NVIDIA models, counts per VM and regions change frequently. Check current docs and quotas before committing to a design; GPU quota is per region and often the real blocker. For multi-node training, care about high-bandwidth networking between nodes, placement, and whether your framework uses NCCL efficiently. Obtaining large GPU or TPU capacity can require reservations or Google's scheduling options for capacity (for example Dynamic Workload Scheduler; check current offerings).</p>
+<h3 id="tpus">TPUs</h3>
+<p>TPUs are Google-designed accelerators built around large matrix multiply units and compiled through XLA.</p>
+<ul>
+<li><strong>Good at</strong>: large, dense, regular tensor workloads (transformers, large embedding and recommendation models) at scale, especially with JAX; PyTorch is supported through PyTorch/XLA.</li>
+<li><strong>TPU VMs</strong>: you SSH into the host VM attached to the TPU chips and run your code there directly.</li>
+<li><strong>Slices</strong>: groups of TPU chips connected by a high-speed interconnect, used as one training unit. Multiple slices can be combined for larger jobs.</li>
+<li><strong>Tradeoffs</strong>: static shapes and XLA compilation matter (dynamic shapes trigger recompiles), custom CUDA kernels do not port, and debugging tooling differs from the GPU world. Generation-specific specs differ; look them up rather than quoting from memory.</li>
+</ul>
+<h3 id="pricing-levers-no-numbers-here-check-current-pricing">Pricing levers (no numbers here, check current pricing)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>What it is</th>
+<th>Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spot VMs</strong></td>
+<td>Spare capacity at a large discount; can be preempted at any time with a short notice</td>
+<td>Checkpointed training, batch inference, preprocessing. Not for latency-critical serving without fallback.</td>
+</tr>
+<tr>
+<td><strong>Committed use discounts (CUDs)</strong></td>
+<td>Discount for committing to a level of usage or spend for one or three years</td>
+<td>Steady baseline: always-on serving, recurring training</td>
+</tr>
+<tr>
+<td><strong>Sustained use discounts</strong></td>
+<td>Automatic discount for some machine types that run much of the month</td>
+<td>Long-running VMs on eligible families</td>
+</tr>
+<tr>
+<td><strong>Reservations</strong></td>
+<td>Guaranteed capacity in a zone</td>
+<td>Scarce accelerators for a planned training run</td>
+</tr>
+</tbody>
+</table></div>
+<p>Spot VMs replaced legacy preemptible VMs and, unlike preemptible VMs, do not have a fixed maximum runtime.</p>
+<h3 id="cloud-run-with-gpus">Cloud Run with GPUs</h3>
+<p>Cloud Run supports attaching NVIDIA GPUs to services (NVIDIA L4 was the first supported type). This makes it a reasonable option for small to medium open models and embedding servers that benefit from scale to zero. Check current GPU types, regions, quotas and cold-start behavior; loading multi-gigabyte weights on each cold start is the main practical constraint.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Choosing the least operationally expensive option that meets the requirements (Cloud Run before GKE before raw VMs, unless there is a reason).</li>
+<li>Spot VMs paired with checkpointing; CUDs only for proven steady-state usage.</li>
+<li>A clear TPU vs GPU rationale tied to framework, model shape and kernel dependencies, not brand preference.</li>
+<li>Mentioning GPU quotas and regional capacity as a real constraint.</li>
+</ul>
+<hr />
+<h2 id="data-and-analytics">Data and analytics</h2>
+<h3 id="bigquery">BigQuery</h3>
+<p>BigQuery is a serverless data warehouse that <strong>separates storage from compute</strong>: data sits in columnar managed storage, queries run on a shared pool of compute units called <strong>slots</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Key points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pricing models (general terms)</td>
+<td><strong>On-demand</strong>: billed by bytes processed per query. <strong>Capacity-based (editions)</strong>: you pay for slot capacity (reservations, optionally autoscaling) and query bytes are not billed individually. Storage is billed separately (logical or physical bytes). Check current pricing and edition features.</td>
+</tr>
+<tr>
+<td>Partitioning</td>
+<td>Splits a table by a time-unit column, ingestion time, or an integer range. Queries that filter on the partition column scan only matching partitions (<strong>partition pruning</strong>). <code>require_partition_filter</code> forces callers to include that filter.</td>
+</tr>
+<tr>
+<td>Clustering</td>
+<td>Sorts data within partitions by up to four columns. Filters and aggregations on clustered columns read fewer blocks. Works well on high-cardinality columns such as <code>user_id</code>.</td>
+</tr>
+<tr>
+<td>Columnar scans</td>
+<td>Cost and speed depend on columns read. <code>SELECT *</code> reads every column; <code>LIMIT</code> does not reduce bytes scanned on a non-clustered table.</td>
+</tr>
+<tr>
+<td>Cost guardrails</td>
+<td><code>maximum_bytes_billed</code> per query, dry runs to estimate bytes, custom quotas per project or user, <code>INFORMATION_SCHEMA.JOBS</code> to find expensive queries.</td>
+</tr>
+<tr>
+<td>ML integration</td>
+<td>BigQuery ML, remote models backed by Vertex AI, vector search over embeddings, and direct reads from Vertex AI training through the BigQuery Storage Read API.</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">-- Partitioned and clustered table for event features
+CREATE TABLE analytics.events (
+  event_ts   TIMESTAMP,
+  user_id    STRING,
+  event_name STRING,
+  amount     NUMERIC
+)
+PARTITION BY DATE(event_ts)
+CLUSTER BY user_id, event_name
+OPTIONS (require_partition_filter = TRUE);
+</code></pre>
+<h3 id="bigquery-ml">BigQuery ML</h3>
+<p>BigQuery ML trains and runs models with SQL: linear and logistic regression, boosted trees, k-means, matrix factorization, time series forecasting, imported models (for example TensorFlow or ONNX), and remote models that call Vertex AI or Gemini. Function names for the generative AI integration have changed over time, so check current docs.</p>
+<pre><code class="language-sql">CREATE OR REPLACE MODEL analytics.churn_model
+OPTIONS (model_type = 'LOGISTIC_REG', input_label_cols = ['churned']) AS
+SELECT tenure_days, sessions_30d, support_tickets_30d, churned
+FROM analytics.churn_training
+WHERE snapshot_date &lt; '2026-01-01';
+
+SELECT user_id, predicted_churned, predicted_churned_probs
+FROM ML.PREDICT(
+  MODEL analytics.churn_model,
+  (SELECT user_id, tenure_days, sessions_30d, support_tickets_30d
+   FROM analytics.churn_scoring)
+);
+</code></pre>
+<p>Use it for fast baselines and analyst-owned models where the data is already in BigQuery. Move to Vertex AI custom training when you need custom architectures, GPUs, or a richer serving story.</p>
+<h3 id="pipelines-streaming-and-orchestration">Pipelines, streaming and orchestration</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it is</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dataflow</strong></td>
+<td>Managed runner for Apache Beam (batch and streaming, Python and Java), with autoscaling</td>
+<td>Feature pipelines, streaming aggregations with windows and late data, one codebase for batch and streaming</td>
+</tr>
+<tr>
+<td><strong>Dataproc</strong></td>
+<td>Managed Spark and Hadoop clusters, plus a serverless Spark option (product naming has changed; check docs)</td>
+<td>Lift-and-shift Spark jobs, PySpark feature engineering, teams already invested in Spark</td>
+</tr>
+<tr>
+<td><strong>Pub/Sub</strong></td>
+<td>Global, managed messaging with push and pull subscriptions</td>
+<td>Event ingestion, decoupling producers and consumers, fan-out. At-least-once by default; ordering keys, dead-letter topics, an exactly-once delivery option for pull subscriptions, and subscriptions that write straight to BigQuery or Cloud Storage.</td>
+</tr>
+<tr>
+<td><strong>Cloud Composer</strong></td>
+<td>Managed Apache Airflow</td>
+<td>Cross-system DAGs with many operators, existing Airflow skills, data plus ML orchestration</td>
+</tr>
+<tr>
+<td><strong>Workflows</strong></td>
+<td>Serverless orchestration of HTTP and Google API calls, defined in YAML or JSON</td>
+<td>Lightweight sequences: call an API, start a Vertex AI pipeline, wait, notify. No cluster to run.</td>
+</tr>
+<tr>
+<td><strong>Dataplex</strong></td>
+<td>Data governance: catalog, data quality, lineage, discovery across lakes and warehouses (Data Catalog functionality has moved into Dataplex)</td>
+<td>Finding datasets, documenting owners, data quality checks, lineage for audits</td>
+</tr>
+</tbody>
+</table></div>
+<p>Orchestrator choice in one line: <strong>Vertex AI Pipelines</strong> for ML DAGs with artifact lineage, <strong>Cloud Composer</strong> for broad cross-system data DAGs, <strong>Workflows</strong> for cheap, simple API sequencing.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Partition plus cluster design and knowing that <code>LIMIT</code> does not save money.</li>
+<li>Explaining on-demand vs capacity pricing in terms of predictability and utilization, not exact prices.</li>
+<li>Dataflow for streaming with event-time windows and late data; Dataproc when Spark code already exists.</li>
+<li>Pub/Sub delivery semantics and idempotent consumers.</li>
+<li>Picking an orchestrator based on what is being orchestrated.</li>
+</ul>
+<hr />
+<h2 id="generative-ai-on-gcp">Generative AI on GCP</h2>
+<blockquote>
+<p>This area changes fastest. Product names (Vertex AI Search, Agent Builder, AI Applications, RAG Engine, Gemini Enterprise) have shifted repeatedly. Describe capabilities in interviews and treat names as secondary.</p>
+</blockquote>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>What it is</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gemini models on Vertex AI</strong></td>
+<td>Google's first-party multimodal models via the Vertex AI API</td>
+<td>Use the Google Gen AI SDK (<code>google-genai</code>) with <code>vertexai=True</code>; the older <code>vertexai.generative_models</code> module has been deprecated. Pay-as-you-go or provisioned throughput.</td>
+</tr>
+<tr>
+<td><strong>Model Garden</strong></td>
+<td>Catalog of first-party, partner and open models</td>
+<td>Partner models (for example Anthropic Claude, Mistral, and others) are offered as managed APIs; open models (for example Llama or Gemma families) can be deployed to your own Vertex AI endpoints or GKE.</td>
+</tr>
+<tr>
+<td><strong>Grounding</strong></td>
+<td>Connect model responses to a source of truth</td>
+<td>Grounding with Google Search for public facts; grounding on your own data through Vertex AI Search or a retrieval layer you build.</td>
+</tr>
+<tr>
+<td><strong>Vertex AI Search / RAG Engine</strong></td>
+<td>Managed retrieval: ingestion, chunking, embedding, indexing, ranking</td>
+<td>Fastest path to RAG over documents. Less control over chunking and ranking than a custom pipeline.</td>
+</tr>
+<tr>
+<td><strong>Embeddings</strong></td>
+<td>Text and multimodal embedding models</td>
+<td>Store vectors in Vertex AI Vector Search, BigQuery (vector search), AlloyDB or Cloud SQL with pgvector, or a third-party vector database.</td>
+</tr>
+<tr>
+<td><strong>Evaluation and safety</strong></td>
+<td>Gen AI evaluation service, safety filters, Model Armor (prompt and response screening)</td>
+<td>Check availability and naming; see <a href="../mlops/intro_llm_evaluation.html">LLM evaluation</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Architecture notes:</p>
+<ul>
+<li>Keep the model ID in configuration, not code; models are retired on published schedules.</li>
+<li>Data residency: choose regional endpoints where required, and know whether a global endpoint is acceptable for your data.</li>
+<li>Quotas and throughput: pay-as-you-go endpoints have quotas; provisioned throughput buys reserved capacity for predictable, high-volume traffic.</li>
+<li>VPC-SC and CMEK support for generative AI features vary; verify per feature for regulated workloads.</li>
+</ul>
+<p>See <a href="#vertex-ai-gemini-with-google-search-grounding-and-embeddings">code examples</a> for a model-agnostic Gen AI SDK call, and <a href="../ai_genai/intro_rag.html">RAG</a> and <a href="../ai_genai/intro_embeddings.html">Embeddings</a> for the retrieval side.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Managed RAG vs custom RAG as a control vs speed tradeoff.</li>
+<li>Grounding and citations as the answer to hallucination concerns, plus evaluation.</li>
+<li>Quotas, provisioned throughput, region and data residency, and model version pinning.</li>
+<li>Choosing a vector store based on where the data and queries already live.</li>
+</ul>
+<hr />
+<h2 id="observability">Observability</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it covers</th>
+<th>ML example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cloud Monitoring</strong></td>
+<td>Metrics, dashboards, alerting policies, uptime checks, SLOs; Managed Service for Prometheus for Prometheus-style metrics</td>
+<td>Endpoint p95 latency, GPU utilization, Pub/Sub backlog age, Dataflow system lag</td>
+</tr>
+<tr>
+<td><strong>Cloud Logging</strong></td>
+<td>Central logs, Log Router, sinks to BigQuery, Cloud Storage or Pub/Sub, retention buckets, exclusion filters</td>
+<td>Structured prediction logs exported to BigQuery for offline analysis and drift checks</td>
+</tr>
+<tr>
+<td><strong>Cloud Trace</strong></td>
+<td>Distributed tracing (OpenTelemetry compatible)</td>
+<td>Where time goes in a RAG request: retrieval vs reranking vs LLM call</td>
+</tr>
+<tr>
+<td><strong>Vertex AI Model Monitoring</strong></td>
+<td>Skew and drift detection for Vertex AI models</td>
+<td>See <a href="intro_vertex_ai.html#monitoring-and-operations">intro_vertex_ai.md</a> and <a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>These are grouped under the Google Cloud Observability umbrella. Logging ingestion and retention are billed, so high-volume debug logs or full request payloads can become a cost problem; use exclusion filters and sampling.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>System metrics (latency, errors, saturation) and model metrics (drift, prediction distribution) and business KPIs, all alerting.</li>
+<li>Structured logs routed to BigQuery for analysis, with PII handling.</li>
+<li>Alerting on symptoms (SLO burn) rather than every metric.</li>
+</ul>
+<hr />
+<h2 id="cost-control">Cost control</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>How</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Labels</strong></td>
+<td>Label every resource with <code>team</code>, <code>env</code>, <code>cost-center</code>, <code>model</code></td>
+<td>Labels flow into the billing export, enabling per-model cost reporting</td>
+</tr>
+<tr>
+<td><strong>Budgets and alerts</strong></td>
+<td>Cloud Billing budgets with threshold alerts, optionally publishing to Pub/Sub</td>
+<td>Budgets alert; they do not cap spend by themselves. Automated actions (for example disabling a dev project's billing) must be built on the Pub/Sub notification.</td>
+</tr>
+<tr>
+<td><strong>Billing export to BigQuery</strong></td>
+<td>Detailed cost data queryable with SQL</td>
+<td>Foundation for dashboards and anomaly detection</td>
+</tr>
+<tr>
+<td><strong>BigQuery controls</strong></td>
+<td><code>maximum_bytes_billed</code>, dry runs, partition pruning, clustering, avoid <code>SELECT *</code>, custom quotas, consider capacity pricing for heavy steady usage</td>
+<td>Most BigQuery surprises come from full scans by scheduled queries or dashboards</td>
+</tr>
+<tr>
+<td><strong>Spot VMs</strong></td>
+<td>Training, preprocessing, batch inference with checkpointing</td>
+<td>Check current pricing</td>
+</tr>
+<tr>
+<td><strong>Autoscaling to zero</strong></td>
+<td>Cloud Run, GKE autoscaling (node pools to zero where possible), Batch</td>
+<td>Vertex AI online endpoints keep at least one replica for most model types; check current scale-to-zero support</td>
+</tr>
+<tr>
+<td><strong>Idle cleanup</strong></td>
+<td>Undeploy unused Vertex AI endpoint models, stop idle Workbench instances, delete orphaned disks and old snapshots, lifecycle rules on buckets</td>
+<td>Recommender surfaces idle VMs and disks</td>
+</tr>
+<tr>
+<td><strong>Commitments</strong></td>
+<td>CUDs for steady baseline usage</td>
+<td>Only after usage is stable</td>
+</tr>
+</tbody>
+</table></div>
+<p>No prices or discount percentages are given here on purpose: they change, and vary by region and resource. Check current pricing pages.</p>
+<p><strong>What interviewers listen for</strong></p>
+<ul>
+<li>Cost visibility first (labels, billing export), then guardrails (budgets, quotas, <code>maximum_bytes_billed</code>), then optimization.</li>
+<li>Architectural cost decisions: batch prediction instead of an always-on endpoint, scale to zero for spiky traffic, Spot for fault-tolerant jobs.</li>
+<li>Knowing that a budget alert does not stop spending.</li>
+</ul>
+<hr />
+<h2 id="reference-architectures">Reference architectures</h2>
+<h3 id="a-batch-training-pipeline">(a) Batch training pipeline</h3>
+<pre><code class="language-text">  Sources                 Prep                      Train and register                    Score
++--------------+     +----------------+     +---------------------------------+     +------------------+
+| Cloud Storage|----&gt;|                |     | Vertex AI Pipelines             |     | Vertex AI        |
+| (raw files)  |     |   Dataflow     |----&gt;|  validate -&gt; train (GPU/TPU,    |----&gt;| Batch Prediction |
++--------------+     |   (Beam batch) |     |  Spot) -&gt; evaluate -&gt; gate      |     |  input: BigQuery |
++--------------+     |                |     +----------------+----------------+     |  output: BigQuery|
+| BigQuery     |----&gt;|                |                      |                      +---------+--------+
+| (curated)    |     +-------+--------+                      v                                |
++--------------+             |                     +------------------+                       v
+                             v                     | Model Registry   |             downstream apps,
+                    GCS shards / BigQuery          | (versioned,      |             dashboards
+                    training tables                |  aliases)        |
+                                                   +------------------+
+  Orchestration: Cloud Composer or a Vertex AI pipeline schedule
+  Identity: one service account per stage; VPC-SC perimeter around data and ML projects
+</code></pre>
+<p>Walkthrough:</p>
+<ol>
+<li>Raw files land in Cloud Storage and curated tables live in BigQuery.</li>
+<li>A Dataflow batch job cleans, joins and computes features, writing sharded files to GCS or a BigQuery training table. Simple feature logic can stay in BigQuery SQL instead.</li>
+<li>A Vertex AI pipeline validates data, trains (custom container, GPUs or TPUs, Spot where checkpointed), evaluates against the current production model, and only registers the model if it passes the gate.</li>
+<li>The Model Registry stores the version with lineage back to the pipeline run.</li>
+<li>Batch prediction reads from BigQuery and writes scores back to BigQuery, so no always-on endpoint is needed.</li>
+</ol>
+<h3 id="b-real-time-inference">(b) Real-time inference</h3>
+<pre><code class="language-text">  Client
+    |
+    v
++---------------------------+       +------------------------------------+
+| API layer                 |       | Online features                    |
+| Cloud Run service         |------&gt;| Vertex AI Feature Store online     |
+| (auth, validation,        |&lt;------| serving, Bigtable or Memorystore   |
+|  feature lookup)          |       +------------------------------------+
++-------------+-------------+
+              |
+              v
++---------------------------+       +------------------------------------+
+| Model server              |       | Cloud Logging -&gt; BigQuery          |
+| Vertex AI endpoint        |------&gt;| (request/prediction logs)          |
+| (traffic split, min/max   |       | Cloud Monitoring alerts            |
+|  replicas) or the model   |       | Vertex AI Model Monitoring         |
+|  inside Cloud Run / GKE   |       +------------------------------------+
++---------------------------+
+</code></pre>
+<p>Walkthrough:</p>
+<ol>
+<li>A Cloud Run service is the entry point: authentication, input validation and feature lookup. It scales with requests and can scale to zero in non-prod.</li>
+<li>Features computed offline are synced to a low-latency online store; request-time features are computed in the API layer using the same logic as training (shared library) to avoid skew.</li>
+<li>The model runs on a Vertex AI endpoint (traffic splits for canaries, autoscaling between min and max replicas), or directly inside Cloud Run or GKE for small models or custom stacks.</li>
+<li>Requests and predictions are logged in structured form to BigQuery for monitoring, drift checks and future training labels.</li>
+<li>Private networking: Cloud Run reaches private resources through Direct VPC egress; the endpoint can be exposed privately through Private Service Connect.</li>
+</ol>
+<h3 id="c-streaming-features">(c) Streaming features</h3>
+<pre><code class="language-text">+-------------+     +-------------+     +-------------------------------+
+| Producers   |----&gt;|  Pub/Sub    |----&gt;| Dataflow (streaming Beam)     |
+| apps, IoT,  |     |  topic      |     |  parse -&gt; dedupe by event id  |
+| CDC         |     +------+------+     |  -&gt; event-time windows        |
++-------------+            |            |  -&gt; aggregate (e.g. 5m count) |
+                    dead-letter topic   +-------+---------------+-------+
+                                                |               |
+                                                v               v
+                                     +-----------------+ +--------------------+
+                                     | BigQuery        | | Online store       |
+                                     | (offline store, | | (Bigtable, Feature |
+                                     |  history for    | |  Store online      |
+                                     |  training)      | |  serving, Redis)   |
+                                     +-----------------+ +---------+----------+
+                                                                   |
+                                                                   v
+                                                          real-time inference (b)
+</code></pre>
+<p>Walkthrough:</p>
+<ol>
+<li>Producers publish events to Pub/Sub; failed messages go to a dead-letter topic.</li>
+<li>A streaming Dataflow job deduplicates by event ID (Pub/Sub is at-least-once by default), assigns event-time windows with watermarks and allowed lateness, and computes aggregates.</li>
+<li>The same aggregates go to two sinks: BigQuery as the historical offline store for training with point-in-time joins, and a low-latency online store for serving.</li>
+<li>Writing both from one pipeline is what keeps training and serving features consistent. See <a href="../mlops/intro_feature_stores.html">Feature Stores</a>.</li>
+</ol>
+<hr />
+<h2 id="code-examples">Code examples</h2>
+<p>All examples use official Google Cloud Python client libraries and Application Default Credentials (ADC). On GCP, ADC picks up the attached service account; locally, <code>gcloud auth application-default login</code>. No key files.</p>
+<h3 id="cloud-storage-v4-signed-url">Cloud Storage V4 signed URL</h3>
+<pre><code class="language-python">import datetime
+
+import google.auth
+from google.auth.transport import requests
+from google.cloud import storage
+
+BUCKET = &quot;my-ml-artifacts&quot;
+OBJECT = &quot;reports/eval_2026_10.html&quot;
+
+# On Cloud Run, GKE or Compute Engine the default credentials have no private key,
+# so signing is delegated to the IAM signBlob API using an access token.
+# The service account needs roles/iam.serviceAccountTokenCreator on itself.
+credentials, project = google.auth.default()
+credentials.refresh(requests.Request())
+
+client = storage.Client(credentials=credentials, project=project)
+blob = client.bucket(BUCKET).blob(OBJECT)
+
+url = blob.generate_signed_url(
+    version=&quot;v4&quot;,
+    expiration=datetime.timedelta(minutes=15),  # V4 maximum is 7 days
+    method=&quot;GET&quot;,
+    service_account_email=credentials.service_account_email,
+    access_token=credentials.token,
+)
+print(url)
+</code></pre>
+<h3 id="bigquery-query-with-a-cost-guardrail">BigQuery query with a cost guardrail</h3>
+<pre><code class="language-python">import datetime
+
+from google.cloud import bigquery
+
+client = bigquery.Client()
+
+sql = &quot;&quot;&quot;
+SELECT user_id, COUNT(*) AS purchases_7d
+FROM `my-project.analytics.events`
+WHERE DATE(event_ts) BETWEEN @start AND @end   -- partition pruning
+  AND event_name = 'purchase'                  -- clustered column
+GROUP BY user_id
+&quot;&quot;&quot;
+params = [
+    bigquery.ScalarQueryParameter(&quot;start&quot;, &quot;DATE&quot;, datetime.date(2026, 10, 1)),
+    bigquery.ScalarQueryParameter(&quot;end&quot;, &quot;DATE&quot;, datetime.date(2026, 10, 7)),
+]
+
+# 1) Dry run: estimate bytes without running or billing the query
+dry_cfg = bigquery.QueryJobConfig(
+    dry_run=True, use_query_cache=False, query_parameters=params
+)
+dry_job = client.query(sql, job_config=dry_cfg)
+print(f&quot;Estimated bytes processed: {dry_job.total_bytes_processed:,}&quot;)
+
+# 2) Real run: the job fails instead of billing more than the cap
+cfg = bigquery.QueryJobConfig(
+    maximum_bytes_billed=10 * 1024**3,  # 10 GiB cap
+    query_parameters=params,
+    labels={&quot;team&quot;: &quot;ml&quot;, &quot;pipeline&quot;: &quot;features&quot;},  # shows up in billing data
+)
+rows = client.query(sql, job_config=cfg).result()
+for row in rows:
+    print(row.user_id, row.purchases_7d)
+</code></pre>
+<h3 id="pubsub-publish">Pub/Sub publish</h3>
+<pre><code class="language-python">import json
+
+from google.cloud import pubsub_v1
+
+PROJECT_ID = &quot;my-project&quot;
+TOPIC_ID = &quot;click-events&quot;
+
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path(PROJECT_ID, TOPIC_ID)
+
+event = {&quot;event_id&quot;: &quot;e-123&quot;, &quot;user_id&quot;: &quot;u-42&quot;, &quot;action&quot;: &quot;click&quot;}
+
+# data must be bytes; attributes are string key/value pairs.
+future = publisher.publish(
+    topic_path,
+    data=json.dumps(event).encode(&quot;utf-8&quot;),
+    event_id=event[&quot;event_id&quot;],  # lets consumers deduplicate
+)
+print(&quot;Published message id:&quot;, future.result())
+</code></pre>
+<h3 id="secret-manager-access">Secret Manager access</h3>
+<pre><code class="language-python">from google.cloud import secretmanager
+
+PROJECT_ID = &quot;my-project&quot;
+SECRET_ID = &quot;third-party-api-key&quot;
+VERSION = &quot;3&quot;  # pin in production; &quot;latest&quot; is fine with automated rotation
+
+client = secretmanager.SecretManagerServiceClient()
+name = f&quot;projects/{PROJECT_ID}/secrets/{SECRET_ID}/versions/{VERSION}&quot;
+
+response = client.access_secret_version(request={&quot;name&quot;: name})
+api_key = response.payload.data.decode(&quot;utf-8&quot;)
+# Do not log the value; pass it straight to the client that needs it.
+</code></pre>
+<h3 id="vertex-ai-gemini-with-google-search-grounding-and-embeddings">Vertex AI: Gemini with Google Search grounding, and embeddings</h3>
+<p>Model IDs are deliberately placeholders; read them from configuration and check the current model list in Model Garden.</p>
+<pre><code class="language-python">import os
+
+from google import genai
+from google.genai import types
+
+PROJECT_ID = os.environ[&quot;GOOGLE_CLOUD_PROJECT&quot;]
+LOCATION = os.environ.get(&quot;GOOGLE_CLOUD_LOCATION&quot;, &quot;us-central1&quot;)
+GENERATION_MODEL = os.environ[&quot;GENERATION_MODEL_ID&quot;]  # from config, not hardcoded
+EMBEDDING_MODEL = os.environ[&quot;EMBEDDING_MODEL_ID&quot;]
+
+client = genai.Client(vertexai=True, project=PROJECT_ID, location=LOCATION)
+
+# Grounded generation: the model can use Google Search results and return sources
+response = client.models.generate_content(
+    model=GENERATION_MODEL,
+    contents=&quot;Summarize recent changes to our cloud provider's GPU offerings.&quot;,
+    config=types.GenerateContentConfig(
+        tools=[types.Tool(google_search=types.GoogleSearch())],
+        temperature=0.2,
+    ),
+)
+print(response.text)
+
+# Embeddings for retrieval
+emb = client.models.embed_content(
+    model=EMBEDDING_MODEL,
+    contents=[&quot;How do I rotate a secret?&quot;, &quot;Spot VM preemption handling&quot;],
+)
+vectors = [e.values for e in emb.embeddings]
+print(len(vectors), len(vectors[0]))
+</code></pre>
+<h3 id="keyless-github-actions-auth-workload-identity-federation">Keyless GitHub Actions auth (Workload Identity Federation)</h3>
+<pre><code class="language-yaml"># .github/workflows/deploy.yml (excerpt)
+permissions:
+  contents: read
+  id-token: write   # required to mint the GitHub OIDC token
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2   # check for the current major version
+        with:
+          workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/github/providers/my-repo
+          service_account: deployer@my-project.iam.gserviceaccount.com
+      # Later steps (gcloud, client libraries) use the short-lived credentials
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-is-the-gcp-resource-hierarchy-structured-and-why-does-it-matter-for-an-ml-platform">How is the GCP resource hierarchy structured, and why does it matter for an ML platform?</h4>
+<p>GCP resources sit in an organization, optional folders, and projects. Projects are the unit of billing, API enablement, quotas and most IAM bindings, and IAM allow policies inherit downward, so a role granted on a folder applies to every project in it. For ML this usually means separate dev, staging and prod projects, often with data in its own project that ML projects read from. The benefit is blast-radius control: a broken experiment or an overly broad role in dev cannot touch prod data or endpoints. The cost is cross-project wiring: service accounts need explicit grants on the data project, and networking may need Shared VPC. Organization policies at the org or folder level (restrict locations, disable service account keys, require CMEK) give guardrails that individual projects cannot override.</p>
+<h4 id="what-is-the-difference-between-basic-predefined-and-custom-iam-roles-and-which-should-a-training-pipeline-use">What is the difference between basic, predefined and custom IAM roles, and which should a training pipeline use?</h4>
+<p>Basic roles (Owner, Editor, Viewer) predate fine-grained IAM and are very broad; Editor alone can change most resources in a project, so they should not be used for workloads. Predefined roles are service-specific bundles maintained by Google, such as <code>roles/bigquery.dataViewer</code> or <code>roles/aiplatform.user</code>. Custom roles let you list exact permissions when no predefined role is narrow enough, but you must maintain them as services add permissions. A training pipeline should run as a dedicated service account with predefined roles scoped to the specific resources it needs: read on the feature dataset, write to the artifact bucket, and permission to create Vertex AI jobs. Use IAM Conditions or resource-level grants (bucket, dataset) rather than project-wide roles where possible. Review grants with IAM Recommender, which flags unused permissions.</p>
+<h4 id="why-should-you-avoid-service-account-keys-and-what-do-you-use-instead">Why should you avoid service account keys, and what do you use instead?</h4>
+<p>A service account key is a long-lived credential that works from anywhere until someone deletes it, so a leak through a laptop, CI log or git commit is a durable breach. Inside GCP, attach the service account to the resource (VM, Cloud Run, GKE through Workload Identity Federation for GKE, Vertex AI jobs) and let Application Default Credentials fetch short-lived tokens automatically. Outside GCP, use Workload Identity Federation to exchange an external identity token (GitHub OIDC, AWS, Azure, an on-prem IdP) for short-lived GCP credentials. For humans, use their own identity plus service account impersonation when they need a workload's permissions. Enforce this with the organization policy that disables key creation. The tradeoff is setup effort and some tools that still assume key files, but those can usually be fed ADC or federation configuration files instead.</p>
+<h4 id="how-would-you-let-github-actions-deploy-to-gcp-without-storing-any-keys">How would you let GitHub Actions deploy to GCP without storing any keys?</h4>
+<p>Create a Workload Identity Pool and an OIDC provider for GitHub's token issuer, with attribute mappings from the token claims (repository, ref, workflow) and an attribute condition that only accepts your repository, ideally only the main branch or a protected environment. Grant the federated principal permission to impersonate a narrowly scoped deployer service account, or grant roles directly to the principal set where the target services support it. In the workflow, request <code>id-token: write</code> permission and use the <code>google-github-actions/auth</code> action with the provider resource name and service account. The job receives short-lived credentials that expire on their own, and nothing secret is stored in GitHub. The main risk is a loose attribute condition: without it, tokens from other repositories could be accepted. Audit logs show the federated identity, so deployments remain attributable.</p>
+<h4 id="how-do-vpc-service-controls-help-prevent-data-exfiltration-and-what-do-they-not-cover">How do VPC Service Controls help prevent data exfiltration, and what do they not cover?</h4>
+<p>VPC-SC draws a service perimeter around a set of projects and blocks Google API calls that would move data across that boundary, for example copying a BigQuery table or GCS object to a project outside the perimeter, even if the caller has valid IAM permissions. That covers the classic insider or stolen-credential scenario that IAM alone cannot stop. Access levels (for example corporate device or IP ranges) and ingress/egress rules allow specific, audited exceptions such as a vendor project that needs read access. Roll it out in dry-run mode first, because it breaks legitimate flows (CI, BI tools, cross-project pipelines) that you did not know existed. It does not stop someone from exfiltrating data through an application you expose, through screenshots, or through outbound internet from a VM (that is handled by firewall rules and no NAT), and not every product or feature is supported, so check the supported services list. Pair it with Data Access audit logs and CMEK for regulated ML data.</p>
+<h4 id="your-teams-bigquery-bill-doubled-this-month-how-do-you-investigate-and-fix-it">Your team's BigQuery bill doubled this month. How do you investigate and fix it?</h4>
+<p>Start with data, not guesses: query <code>INFORMATION_SCHEMA.JOBS</code> (by project or organization) for the most expensive queries by bytes billed or slot time, grouped by user, service account and labels, and look at the billing export in BigQuery to confirm whether it is query compute or storage. Common culprits are a scheduled query or dashboard doing full scans, a new pipeline doing <code>SELECT *</code> on a wide table, a missing partition filter, or a join that explodes. Fixes include adding partition filters and <code>require_partition_filter</code>, clustering on common filter columns, selecting only needed columns, materializing intermediate results, and caching dashboard queries. Add guardrails: <code>maximum_bytes_billed</code> on pipeline queries, custom daily quotas per user or project, and budget alerts. If usage is heavy and steady, evaluate capacity-based pricing, which trades per-query billing for predictable slot cost but can slow queries if under-provisioned. Finally, add job labels so the next spike can be attributed in minutes.</p>
+<h4 id="how-do-partitioning-and-clustering-differ-in-bigquery-and-when-do-you-use-each">How do partitioning and clustering differ in BigQuery, and when do you use each?</h4>
+<p>Partitioning splits a table into segments by a date or timestamp column, ingestion time, or an integer range, and the query planner skips whole partitions that a filter excludes, so the bytes estimate before the query already reflects the savings. Clustering sorts data within each partition by up to four columns, so filters on those columns read fewer storage blocks, but the exact savings are only known after the query runs. Partition on the column almost every query filters by, usually event date, and cluster on high-cardinality columns used in filters or joins, such as <code>user_id</code>. Too many tiny partitions hurt performance and there are partition count limits, so do not partition on a high-cardinality key. For ML feature tables, date partitioning also makes point-in-time training snapshots and retention easy. Both are cheap to set up at table creation and painful to retrofit on large tables.</p>
+<h4 id="when-would-you-choose-tpus-over-gpus-for-training">When would you choose TPUs over GPUs for training?</h4>
+<p>TPUs are a strong fit for large, dense, regular workloads such as transformer training or large embedding models, especially when the team uses JAX or is comfortable with XLA, and when the job is big enough to use a slice of many chips. They can offer good price-performance at scale and are well integrated with GCP. GPUs are the safer default when the code depends on custom CUDA kernels, GPU-specific libraries (some attention and quantization kernels, certain inference servers), dynamic shapes, or a broad PyTorch ecosystem without XLA work. Portability matters too: GPU code moves between clouds and on-prem more easily. In practice, I would benchmark a representative step on both with the real model and input pipeline, compare cost per training step and engineering effort, and check capacity availability in the target region. The worst outcome is choosing TPUs and then spending weeks fighting recompilation from dynamic shapes.</p>
+<h4 id="how-do-you-choose-between-cloud-run-gke-and-vertex-ai-endpoints-for-serving-a-model">How do you choose between Cloud Run, GKE and Vertex AI endpoints for serving a model?</h4>
+<p>Vertex AI endpoints are the default when the model lives in the Vertex AI Model Registry and you want managed traffic splitting, autoscaling, model monitoring and private endpoints with little ops work; the tradeoff is less control over the serving stack and a minimum replica count for most model types. Cloud Run fits stateless HTTP model servers that are small to medium, spiky traffic that benefits from scale to zero, and API layers around models; GPU support makes it viable for smaller open models, with cold starts and model load time as the main constraint. GKE fits when you need a custom serving stack (vLLM, Triton, KServe), multi-model packing on shared GPUs, fine-grained autoscaling, or a platform team that already runs Kubernetes; it brings the most control and the most operational burden. I would decide using traffic pattern, model size and hardware, latency SLO, team skills and the monitoring and rollout features needed. A common hybrid is Cloud Run for the API and feature lookup with the model on a Vertex AI endpoint.</p>
+<h4 id="how-would-you-feed-a-large-image-dataset-from-cloud-storage-to-multi-node-gpu-training-without-starving-the-gpus">How would you feed a large image dataset from Cloud Storage to multi-node GPU training without starving the GPUs?</h4>
+<p>First check whether the job is actually I/O bound by watching GPU utilization and data loader wait time. Store data in the same region as the training cluster and pack millions of small images into large shards (WebDataset tar files or TFRecords) so reads are large and sequential. Stream shards with parallel reads and prefetching in the data loader, and use Cloud Storage FUSE with its file caching enabled if the code expects file paths, or a parallel file system such as Parallelstore or Managed Lustre (check availability) when you need very high throughput or POSIX semantics. Local SSD can cache the dataset per node for multi-epoch training. Filestore is an option for moderate scale but can become a bottleneck or expensive at very high throughput. Write checkpoints asynchronously so they do not stall training steps.</p>
+<h4 id="when-would-you-use-dataflow-dataproc-or-plain-bigquery-sql-for-feature-engineering">When would you use Dataflow, Dataproc or plain BigQuery SQL for feature engineering?</h4>
+<p>If the data already lives in BigQuery and the transformations are relational (joins, aggregations, window functions), BigQuery SQL is usually the simplest and cheapest to maintain, possibly managed with dbt. Dataflow is the choice for streaming features with event-time windows, late data and exactly-once processing, or when you want a single Apache Beam codebase for both batch backfills and streaming. Dataproc is the choice when the team already has Spark jobs or needs Spark libraries, and the serverless Spark option avoids managing clusters. The tradeoffs are skills and operations: Beam has a learning curve, Spark clusters need tuning, and SQL becomes hard to test when logic gets complex. Whatever you pick, the same feature logic must serve training and serving to avoid skew.</p>
+<h4 id="what-delivery-guarantees-does-pubsub-give-and-how-do-you-build-a-correct-consumer">What delivery guarantees does Pub/Sub give, and how do you build a correct consumer?</h4>
+<p>Pub/Sub delivers at least once by default, so a message can arrive more than once, for example after an acknowledgment deadline expires. Ordering is only guaranteed per ordering key when ordering is enabled, and there is an exactly-once delivery option for pull subscriptions that has its own constraints. A correct consumer is idempotent: include a unique event ID, deduplicate (Dataflow can deduplicate by ID, or use upserts keyed by event ID in the sink), and make side effects safe to repeat. Configure a dead-letter topic with a max delivery attempts setting so poison messages do not block processing, and alert on backlog age. Acknowledge only after the work is durably done. Retaining acknowledged messages and using seek lets you replay after a bad deploy.</p>
+<h4 id="cloud-composer-workflows-or-vertex-ai-pipelines-how-do-you-pick-an-orchestrator">Cloud Composer, Workflows or Vertex AI Pipelines: how do you pick an orchestrator?</h4>
+<p>Vertex AI Pipelines orchestrates ML steps with tracked artifacts, lineage and caching, so it is the natural choice for the train, evaluate and register DAG itself. Cloud Composer is managed Airflow, good for broad data orchestration across many systems with existing operators, schedules and backfills, but it runs an always-on environment with a baseline cost and Airflow operational habits. Workflows is serverless and cheap for simple sequences of API calls, such as &quot;wait for a BigQuery load, start a Vertex AI pipeline, notify Slack,&quot; but it is not a data processing engine and has limited reuse compared with Airflow. A common combination is Composer or Workflows triggering a Vertex AI pipeline when upstream data is ready. Choosing Composer only to run one nightly pipeline is often overkill.</p>
+<h4 id="how-would-you-build-a-gemini-based-assistant-grounded-on-internal-documents-and-what-are-the-tradeoffs-of-managed-vs-custom-retrieval">How would you build a Gemini-based assistant grounded on internal documents, and what are the tradeoffs of managed vs custom retrieval?</h4>
+<p>The managed path uses Vertex AI Search or the Vertex AI RAG Engine (names change, so check current docs) to ingest documents from Cloud Storage or other connectors, handle chunking, embeddings and ranking, and then ground Gemini responses with citations. That is fast to deliver and includes access control features, but you get less control over chunking, hybrid retrieval and reranking, and debugging retrieval quality is harder. The custom path chunks documents yourself, embeds them with a Vertex AI embedding model, stores vectors in Vector Search, BigQuery or AlloyDB with pgvector, and builds retrieval and reranking in your own service. That gives full control and portability at the cost of more engineering and evaluation work. In both cases, enforce document-level permissions at retrieval time, evaluate with a labeled question set, keep model IDs in config, and log prompts and retrieved sources (with PII handling) for debugging.</p>
+<h4 id="how-do-you-run-training-on-spot-vms-without-losing-progress">How do you run training on Spot VMs without losing progress?</h4>
+<p>Spot VMs can be preempted at any time with a short notice, so the job must be restartable. Save checkpoints (model, optimizer state, data loader position, RNG state) to Cloud Storage at a frequency that bounds lost work, and on start always resume from the latest checkpoint. Use a scheduler that restarts the job automatically: Vertex AI custom training with Spot and restart settings, a GKE Job with Spot node pools, or Batch with retries. Handle the preemption signal to flush a final checkpoint if possible, but do not rely on it. For multi-node jobs, preempting one node kills the step for everyone, so elastic training or smaller node counts can help. The savings are significant (check current pricing) but are offset by lost compute if checkpoints are too infrequent, so measure the preemption rate in your region.</p>
+<h4 id="how-do-you-let-private-training-and-serving-workloads-reach-google-apis-and-the-internet-without-public-ips">How do you let private training and serving workloads reach Google APIs and the internet without public IPs?</h4>
+<p>Create VMs, GKE nodes and Vertex AI workloads without external IP addresses, and enable Private Google Access on their subnets so they can reach Cloud Storage, BigQuery and Artifact Registry over Google's network. For specific internet destinations such as package mirrors or model hubs, add Cloud NAT, which allows outbound connections only, and restrict egress with firewall rules or a proxy. Prefer mirroring dependencies into Artifact Registry so production workloads do not need internet access at all. Use Private Service Connect for private endpoints to managed services, including private Vertex AI endpoints, and Direct VPC egress for Cloud Run to reach private resources. Remember that this is network privacy; it does not stop API-level data copying, which is what VPC Service Controls address.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Using basic roles (Editor) for workloads</td>
+<td>Any compromise or bug can modify most of the project</td>
+<td>Dedicated service accounts with predefined or custom roles, scoped to resources</td>
+</tr>
+<tr>
+<td>Service account JSON keys in CI or notebooks</td>
+<td>Long-lived credentials leak and stay valid</td>
+<td>Attached service accounts, Workload Identity Federation, org policy disabling key creation</td>
+</tr>
+<tr>
+<td>Federation provider without an attribute condition</td>
+<td>Tokens from other repositories or tenants may be accepted</td>
+<td>Restrict by repository, branch or environment claims</td>
+</tr>
+<tr>
+<td>Assuming IAM prevents exfiltration</td>
+<td>Valid credentials can still copy data out</td>
+<td>VPC Service Controls perimeters, Data Access audit logs</td>
+</tr>
+<tr>
+<td><code>SELECT *</code> and no partition filter in BigQuery</td>
+<td>Full table scans on every run, bill spikes</td>
+<td>Select columns, partition and cluster, <code>require_partition_filter</code>, <code>maximum_bytes_billed</code></td>
+</tr>
+<tr>
+<td>Relying on <code>LIMIT</code> to cut BigQuery cost</td>
+<td>Bytes scanned are usually unchanged</td>
+<td>Filter on partition and cluster columns, use table preview for exploration</td>
+</tr>
+<tr>
+<td>Training data in a different region from compute</td>
+<td>Egress cost and slower input pipeline</td>
+<td>Co-locate buckets, datasets and training regions</td>
+</tr>
+<tr>
+<td>Millions of tiny files read through FUSE</td>
+<td>GPUs idle waiting on I/O</td>
+<td>Shard into large files, enable caching, or use a parallel file system</td>
+</tr>
+<tr>
+<td>Object versioning without lifecycle rules</td>
+<td>Noncurrent versions accumulate cost silently</td>
+<td>Lifecycle rules for noncurrent versions and old checkpoints</td>
+</tr>
+<tr>
+<td>Spot VMs without checkpointing</td>
+<td>Preemption throws away hours of training</td>
+<td>Frequent checkpoints to GCS, automatic restart and resume</td>
+</tr>
+<tr>
+<td>Endpoints and Workbench instances left running</td>
+<td>Steady spend for zero value</td>
+<td>Undeploy idle models, idle shutdown, budget alerts, labels to find owners</td>
+</tr>
+<tr>
+<td>Treating budgets as spending caps</td>
+<td>Alerts fire, spend continues</td>
+<td>Pub/Sub budget notifications with automated actions for non-prod</td>
+</tr>
+<tr>
+<td>Hardcoding generative model IDs</td>
+<td>Breaks when models are retired</td>
+<td>Model IDs in configuration, scheduled upgrade and evaluation</td>
+</tr>
+<tr>
+<td>Not enabling Data Access audit logs for sensitive data</td>
+<td>Cannot answer &quot;who read this table&quot; during an incident</td>
+<td>Enable for sensitive services and route to a retained log bucket</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_vertex_ai.html">Google Vertex AI Interview Guide</a></td>
+<td>The ML platform this guide surrounds: pipelines, training, registry, endpoints</td>
+</tr>
+<tr>
+<td><a href="intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison</a></td>
+<td>Vertex AI vs SageMaker vs Azure ML</td>
+</tr>
+<tr>
+<td><a href="aws_for_ml_engineers.html">AWS for ML Engineers</a></td>
+<td>The same building blocks on AWS</td>
+</tr>
+<tr>
+<td><a href="azure_for_ml_engineers.html">Azure for ML Engineers</a></td>
+<td>The same building blocks on Azure</td>
+</tr>
+<tr>
+<td><a href="cloud_service_mapping.html">Cloud Service Mapping</a></td>
+<td>GCP, AWS and Azure equivalents side by side</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_cicd_for_ml.html">CI/CD for ML</a></td>
+<td>Pipelines that use keyless auth and promotion gates</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_serving.html">Model Serving</a></td>
+<td>Serving patterns behind Cloud Run, GKE and Vertex AI endpoints</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></td>
+<td>Drift and performance monitoring beyond infrastructure metrics</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_feature_stores.html">Feature Stores</a></td>
+<td>Offline and online stores in the streaming architecture</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>Foundation for GKE</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_terraform.html">Terraform</a></td>
+<td>Managing projects, IAM and networks as code</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_github_actions.html">GitHub Actions</a></td>
+<td>CI/CD with Workload Identity Federation</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_observability.html">Observability</a></td>
+<td>Metrics, logs, traces and SLOs in general</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_sql_optimization.html">SQL Optimization</a></td>
+<td>Query patterns that reduce BigQuery scans</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_airflow.html">Apache Airflow</a></td>
+<td>The engine behind Cloud Composer</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_data_processing_pipelines.html">Data Processing Pipelines</a></td>
+<td>Batch and streaming design behind Dataflow and Dataproc</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_rag.html">RAG</a></td>
+<td>Retrieval design for grounded generative AI</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_embeddings.html">Embeddings</a></td>
+<td>Embedding models and vector search</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="aws_for_ml_engineers.html"><small>Previous</small>AWS for ML Engineers</a><a rel="next" class="next" href="azure_for_ml_engineers.html"><small>Next</small>Azure for ML Engineers</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/cloud_ml/gcp_for_ml_engineers.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

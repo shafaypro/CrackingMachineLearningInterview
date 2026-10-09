@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helm: The Kubernetes Package Manager Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Helm is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called charts.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_helm.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Helm: The Kubernetes Package Manager Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Helm is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called charts.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_helm.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Helm: The Kubernetes Package Manager Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Helm is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called charts.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Helm: The Kubernetes Package Manager",
+   "description": "Helm is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called charts.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_helm.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Helm",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_helm.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Helm</span></nav>
+<p class="meta"><a href="../../#devops/intro_helm.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="helm-the-kubernetes-package-manager">Helm: The Kubernetes Package Manager</h1>
+<p><strong>Helm</strong> is the package manager for Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using reusable packages called <strong>charts</strong>.</p>
+<hr />
+<h2 id="what-is-helm">What is Helm?</h2>
+<p>Without Helm, deploying an application on Kubernetes means managing dozens of YAML files (Deployments, Services, ConfigMaps, Secrets, Ingress, HPAs...). Helm bundles all of these into a single <strong>chart</strong> with templating and versioning.</p>
+<pre><code>Helm Chart  →  helm install  →  Release (running app in K8s)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Helm Concept</th>
+<th>Kubernetes Analogy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chart</td>
+<td>Package (like a Homebrew formula)</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>Installed instance of a chart</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>Package registry (like npm/PyPI)</td>
+</tr>
+<tr>
+<td>Values</td>
+<td>Configuration for a release</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="installation">Installation</h2>
+<pre><code class="language-bash"># macOS
+brew install helm
+
+# Linux
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Verify
+helm version
+</code></pre>
+<p>All commands in this guide are Helm 3 or later. Helm 2 (with the in-cluster Tiller server and <code>helm init</code>) is long unsupported. Helm 4 was released in late 2025; the everyday commands below carry over, but read its migration notes before upgrading CI or plugins.</p>
+<hr />
+<h2 id="core-workflow">Core Workflow</h2>
+<pre><code class="language-bash"># Add a chart repository
+# (The old &quot;stable&quot; repo at charts.helm.sh/stable is archived: find charts on Artifact Hub instead.)
+# Bitnami moved its charts to OCI and restricted its free catalog in 2025: check current terms first.
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update   # refresh repo index
+
+# Search for charts
+helm search repo postgres
+helm search hub redis    # search Artifact Hub
+
+# Install a chart (creates a release)
+helm install my-postgres bitnami/postgresql \
+  --namespace db \
+  --create-namespace \
+  --set auth.postgresPassword=secret
+
+# Install with custom values file
+helm install my-app ./my-chart -f values-production.yaml
+
+# List releases
+helm list
+helm list -A   # all namespaces
+
+# Upgrade a release
+helm upgrade my-postgres bitnami/postgresql \
+  --set auth.postgresPassword=newsecret
+
+# Upgrade or install (idempotent)
+helm upgrade --install my-app ./my-chart -f values.yaml
+
+# Rollback to previous release
+helm rollback my-postgres 1
+
+# Uninstall
+helm uninstall my-postgres
+
+# Release history
+helm history my-postgres
+</code></pre>
+<hr />
+<h2 id="chart-structure">Chart Structure</h2>
+<pre><code>my-chart/
+├── Chart.yaml              # Chart metadata
+├── values.yaml             # Default values
+├── charts/                 # Chart dependencies
+├── templates/              # Kubernetes manifests (templated)
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── ingress.yaml
+│   ├── configmap.yaml
+│   ├── _helpers.tpl        # Named template helpers
+│   └── NOTES.txt           # Post-install instructions
+└── .helmignore
+</code></pre>
+<h3 id="chartyaml">Chart.yaml</h3>
+<pre><code class="language-yaml">apiVersion: v2
+name: my-app
+description: My application Helm chart
+type: application
+version: 1.2.0         # Chart version
+appVersion: &quot;2.5.1&quot;   # App version (Docker image tag)
+
+dependencies:
+  - name: postgresql
+    version: &quot;~12.0&quot;
+    repository: &quot;https://charts.bitnami.com/bitnami&quot;
+    condition: postgresql.enabled
+</code></pre>
+<h3 id="valuesyaml">values.yaml</h3>
+<pre><code class="language-yaml"># Default configuration
+replicaCount: 2
+
+image:
+  repository: myrepo/my-app
+  tag: &quot;&quot;   # defaults to Chart.appVersion
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: &quot;nginx&quot;
+  hosts:
+    - host: app.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: &quot;&quot;   # override in production
+
+env: {}
+  # KEY: value
+</code></pre>
+<hr />
+<h2 id="templates">Templates</h2>
+<p>Templates are Kubernetes YAML + <strong>Go templating</strong>.</p>
+<h3 id="deployment-template">Deployment Template</h3>
+<pre><code class="language-yaml"># templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include &quot;my-app.fullname&quot; . }}
+  labels:
+    {{- include &quot;my-app.labels&quot; . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include &quot;my-app.selectorLabels&quot; . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include &quot;my-app.selectorLabels&quot; . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: &quot;{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}&quot;
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+          {{- if .Values.env }}
+          env:
+            {{- range $key, $val := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+</code></pre>
+<h3 id="_helperstpl-named-templates">_helpers.tpl (Named Templates)</h3>
+<pre><code class="language-yaml"># templates/_helpers.tpl
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define &quot;my-app.name&quot; -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix &quot;-&quot; }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+*/}}
+{{- define &quot;my-app.fullname&quot; -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix &quot;-&quot; }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- printf &quot;%s-%s&quot; .Release.Name $name | trunc 63 | trimSuffix &quot;-&quot; }}
+{{- end }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define &quot;my-app.labels&quot; -}}
+helm.sh/chart: {{ include &quot;my-app.chart&quot; . }}
+{{ include &quot;my-app.selectorLabels&quot; . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+</code></pre>
+<h3 id="template-syntax-reference">Template Syntax Reference</h3>
+<pre><code class="language-yaml"># Value access
+{{ .Values.image.repository }}
+{{ .Chart.Name }}
+{{ .Release.Name }}
+{{ .Release.Namespace }}
+
+# Conditionals
+{{- if .Values.ingress.enabled }}
+...
+{{- end }}
+
+{{- if eq .Values.environment &quot;production&quot; }}
+  replicas: 5
+{{- else }}
+  replicas: 1
+{{- end }}
+
+# Loops
+{{- range .Values.ingress.hosts }}
+- host: {{ .host }}
+{{- end }}
+
+{{- range $key, $value := .Values.env }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
+{{- end }}
+
+# String functions
+{{ &quot;hello&quot; | upper }}           → HELLO
+{{ .Values.name | trunc 63 }}   → truncate
+{{ .Values.name | trimSuffix &quot;-&quot; }}
+{{ .Values.name | replace &quot;-&quot; &quot;_&quot; }}
+{{ .Values.config | toYaml | nindent 4 }}
+{{ .Values.password | b64enc }}
+{{ .Values.password | quote }}
+{{ printf &quot;%s-%s&quot; .Release.Name .Chart.Name }}
+
+# Default values
+{{ .Values.image.tag | default &quot;latest&quot; }}
+{{ .Values.replicas | default 1 }}
+
+# Whitespace control (- trims whitespace)
+{{- /* trim leading whitespace */ -}}
+</code></pre>
+<hr />
+<h2 id="values-override-strategies">Values Override Strategies</h2>
+<pre><code class="language-bash"># Override individual values
+helm install my-app ./chart --set replicaCount=3
+helm install my-app ./chart --set image.tag=2.0 --set ingress.enabled=true
+
+# Override with values file
+helm install my-app ./chart -f values-production.yaml
+
+# Multiple values files (merged in order, last wins)
+helm install my-app ./chart \
+  -f values.yaml \
+  -f values-production.yaml \
+  -f secrets.yaml
+
+# View effective values
+helm get values my-app
+helm get values my-app --all   # including defaults
+</code></pre>
+<h3 id="environment-specific-values">Environment-specific Values</h3>
+<pre><code class="language-yaml"># values-production.yaml
+replicaCount: 5
+
+image:
+  tag: &quot;1.5.2&quot;
+
+ingress:
+  enabled: true
+  hosts:
+    - host: api.myapp.com
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: 2
+    memory: 2Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+</code></pre>
+<hr />
+<h2 id="debugging--testing">Debugging &amp; Testing</h2>
+<pre><code class="language-bash"># Render templates without installing (dry run)
+helm template my-app ./chart -f values.yaml
+
+# Dry run with server validation (plain --dry-run is client-only since Helm 3.13)
+helm install my-app ./chart --dry-run=server
+
+# Debug rendered templates
+helm template my-app ./chart --debug
+
+# Validate chart
+helm lint ./chart
+helm lint ./chart -f values-production.yaml
+
+# Inspect installed release
+helm get all my-app
+helm get manifest my-app
+helm get notes my-app
+
+# Test release
+helm test my-app
+</code></pre>
+<hr />
+<h2 id="oci-registries-2026-standard">OCI Registries (2026 Standard)</h2>
+<p>Helm 3.8+ supports storing charts in <strong>OCI registries</strong> (like Docker Hub, GHCR, ECR).</p>
+<pre><code class="language-bash"># Push chart to OCI registry
+helm package ./my-chart
+helm push my-chart-1.0.0.tgz oci://ghcr.io/myorg/charts
+
+# Pull and install from OCI
+helm install my-app oci://ghcr.io/myorg/charts/my-chart --version 1.0.0
+
+# Login to OCI registry
+echo &quot;$GITHUB_TOKEN&quot; | helm registry login ghcr.io -u &quot;$GITHUB_USER&quot; --password-stdin
+</code></pre>
+<hr />
+<h2 id="popular-charts-in-2026">Popular Charts in 2026</h2>
+<pre><code class="language-bash"># Ingress NGINX (the community controller was retired in 2026; prefer a
+# Gateway API implementation or another maintained controller for new clusters)
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+
+# cert-manager (TLS automation)
+helm upgrade --install cert-manager jetstack/cert-manager \
+  --namespace cert-manager --create-namespace \
+  --set crds.enabled=true   # replaces the deprecated installCRDs flag
+
+# Prometheus + Grafana
+helm upgrade --install kube-prometheus-stack \
+  prometheus-community/kube-prometheus-stack \
+  --namespace monitoring --create-namespace
+
+# ArgoCD
+helm upgrade --install argocd argo/argo-cd \
+  --namespace argocd --create-namespace
+
+# External Secrets Operator
+helm upgrade --install external-secrets \
+  external-secrets/external-secrets \
+  --namespace external-secrets --create-namespace
+
+# KEDA (event-driven autoscaling)
+helm upgrade --install keda kedacore/keda \
+  --namespace keda --create-namespace
+</code></pre>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># Repository
+helm repo add name url
+helm repo update
+helm repo list
+helm search repo term
+
+# Install / Upgrade
+helm install release chart [-f vals] [--set k=v]
+helm upgrade release chart
+helm upgrade --install release chart   # upsert
+helm uninstall release [-n namespace]
+
+# Inspect
+helm list [-A]
+helm status release
+helm get values release [--all]
+helm get manifest release
+helm history release
+
+# Rollback
+helm rollback release [revision]
+
+# Templates
+helm template release chart [-f vals]
+helm lint chart [-f vals]
+
+# Package &amp; Push (OCI)
+helm package ./chart
+helm push chart.tgz oci://registry/path
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_kubernetes.html"><small>Previous</small>Kubernetes</a><a rel="next" class="next" href="intro_terraform.html"><small>Next</small>Terraform</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_helm.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

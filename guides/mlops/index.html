@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLOps Overview Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="MLOps Overview Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MLOps Overview Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "MLOps Overview",
+   "description": "A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Overview",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Overview</span></nav>
+<p class="meta"><a href="../../#mlops/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="mlops-overview">MLOps Overview</h1>
+<p>A guide to Machine Learning Operations (MLOps): the practices, tools, and workflows for deploying and maintaining ML models in production.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-mlops-and-why-it-matters">What is MLOps and Why It Matters</a></li>
+<li><a href="#mlops-lifecycle">MLOps Lifecycle</a></li>
+<li><a href="#tool-comparison">Tool Comparison</a></li>
+<li><a href="#model-drift">Model Drift</a></li>
+<li><a href="#ab-testing-and-deployment-strategies">A/B Testing and Deployment Strategies</a></li>
+<li><a href="#feature-stores">Feature Stores</a></li>
+<li><a href="#cicd-for-ml">CI/CD for ML</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="what-is-mlops-and-why-it-matters">What is MLOps and Why It Matters</h2>
+<p>MLOps (Machine Learning Operations) is a set of practices that combines Machine Learning, DevOps, and Data Engineering to deploy and maintain ML systems in production reliably and efficiently.</p>
+<p><strong>Why it matters:</strong></p>
+<ul>
+<li>87% of ML projects never make it to production (VentureBeat, 2019)</li>
+<li>Models degrade over time due to data and concept drift</li>
+<li>Reproducibility and auditability are required in regulated industries</li>
+<li>Manual deployment and monitoring doesn't scale</li>
+</ul>
+<p><strong>Core principles:</strong></p>
+<ul>
+<li>Automation of the ML pipeline</li>
+<li>Continuous training (CT), integration (CI), and delivery (CD)</li>
+<li>Monitoring and observability</li>
+<li>Reproducibility and versioning</li>
+<li>Collaboration between data scientists and engineers</li>
+</ul>
+<hr />
+<h2 id="mlops-lifecycle">MLOps Lifecycle</h2>
+<pre><code>Data Collection → Data Validation → Feature Engineering → Model Training
+       ↑                                                         ↓
+  Retraining ←── Monitoring ←── Production Serving ←── Evaluation &amp; Registry
+</code></pre>
+<h3 id="stages">Stages</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Description</th>
+<th>Key Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data</strong></td>
+<td>Ingestion, validation, versioning</td>
+<td>DVC, Delta Lake, Great Expectations</td>
+</tr>
+<tr>
+<td><strong>Feature Engineering</strong></td>
+<td>Transform raw data into model features</td>
+<td>Feast, Tecton, Hopsworks</td>
+</tr>
+<tr>
+<td><strong>Training</strong></td>
+<td>Experiment tracking, hyperparameter tuning</td>
+<td>MLflow, W&amp;B, Optuna</td>
+</tr>
+<tr>
+<td><strong>Evaluation</strong></td>
+<td>Model validation, bias/fairness checks</td>
+<td>Evidently AI, Deepchecks</td>
+</tr>
+<tr>
+<td><strong>Registry</strong></td>
+<td>Versioned model storage and staging</td>
+<td>MLflow Registry, W&amp;B Artifacts</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>Serving, canary, blue-green, shadow mode</td>
+<td>BentoML, Seldon, KServe, FastAPI</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>Drift detection, alerting, dashboards</td>
+<td>Evidently AI, Grafana, Arize</td>
+</tr>
+<tr>
+<td><strong>Retraining</strong></td>
+<td>Trigger-based or scheduled retraining</td>
+<td>Airflow, Kubeflow Pipelines, ZenML</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="tool-comparison">Tool Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Primary Use</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Experiment tracking + registry</td>
+<td>Open source, simple API, wide adoption</td>
+<td>UI is basic, no native orchestration</td>
+<td>Teams wanting self-hosted tracking</td>
+</tr>
+<tr>
+<td><strong>Weights &amp; Biases (W&amp;B)</strong></td>
+<td>Experiment tracking + collaboration</td>
+<td>Rich UI, sweeps, artifacts, reports</td>
+<td>Paid for enterprise</td>
+<td>Research teams, collaborations</td>
+</tr>
+<tr>
+<td><strong>DVC</strong></td>
+<td>Data + model versioning</td>
+<td>Git-native, storage-agnostic</td>
+<td>Learning curve for pipelines</td>
+<td>Data versioning alongside Git</td>
+</tr>
+<tr>
+<td><strong>ZenML</strong></td>
+<td>ML pipeline orchestration</td>
+<td>Framework-agnostic, stack concept</td>
+<td>Newer, smaller community</td>
+<td>Portable ML pipelines</td>
+</tr>
+<tr>
+<td><strong>Kubeflow</strong></td>
+<td>Kubernetes-native ML platform</td>
+<td>Scalable, full lifecycle</td>
+<td>Complex setup and maintenance</td>
+<td>Large teams with K8s infra</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="model-drift">Model Drift</h2>
+<h3 id="types-of-drift">Types of Drift</h3>
+<p><strong>Data Drift (Covariate Shift):</strong> The distribution of input features changes, but the relationship between inputs and outputs remains the same.</p>
+<pre><code>P_train(X) ≠ P_prod(X)
+</code></pre>
+<p>Example: A model trained on summer traffic patterns sees winter patterns in production.</p>
+<p><strong>Concept Drift:</strong> The relationship between inputs and outputs changes.</p>
+<pre><code>P_train(Y|X) ≠ P_prod(Y|X)
+</code></pre>
+<p>Example: Customer behavior changes after an economic event; click-through rate patterns shift.</p>
+<p><strong>Model Drift / Performance Drift:</strong> The model's accuracy metrics degrade over time due to data or concept drift.</p>
+<h3 id="detecting-drift">Detecting Drift</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Use Case</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kolmogorov-Smirnov (KS) test</td>
+<td>Continuous features</td>
+<td>Statistical</td>
+</tr>
+<tr>
+<td>Population Stability Index (PSI)</td>
+<td>Feature and score distributions</td>
+<td>Statistical</td>
+</tr>
+<tr>
+<td>Chi-squared test</td>
+<td>Categorical features</td>
+<td>Statistical</td>
+</tr>
+<tr>
+<td>Jensen-Shannon Divergence</td>
+<td>Probability distributions</td>
+<td>Information theory</td>
+</tr>
+<tr>
+<td>CUSUM</td>
+<td>Sequential drift detection</td>
+<td>Time-series</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>PSI Formula:</strong></p>
+<pre><code>PSI = Σ (Actual% - Expected%) × ln(Actual% / Expected%)
+PSI &lt; 0.1: No significant change
+0.1 ≤ PSI &lt; 0.25: Moderate change
+PSI ≥ 0.25: Significant change, retrain required
+</code></pre>
+<hr />
+<h2 id="ab-testing-and-deployment-strategies">A/B Testing and Deployment Strategies</h2>
+<p>See <a href="intro_ab_testing.html">A/B Testing Guide</a> for full coverage, including:</p>
+<ul>
+<li>Sample size calculation, statistical tests (z-test, t-test), and CUPED variance reduction</li>
+<li>Common pitfalls: peeking problem, multiple testing, Simpson's paradox, SRM</li>
+<li>Multi-armed bandits vs fixed A/B testing trade-offs</li>
+<li>Interleaving for ranking systems and shadow mode testing</li>
+</ul>
+<h3 id="ab-testing-overview">A/B Testing Overview</h3>
+<p>Split traffic between two model versions to compare performance using real user interactions.</p>
+<pre><code>Users → Load Balancer → Model A (50%) → Metrics
+                     → Model B (50%) → Metrics
+Compare: conversion rate, CTR, revenue, latency
+</code></pre>
+<p><strong>Requirements:</strong> Statistical significance, enough traffic, consistent user assignment, guard rails.</p>
+<h3 id="canary-deployment">Canary Deployment</h3>
+<p>Gradually roll out a new model version to a small percentage of traffic before full deployment.</p>
+<pre><code>Phase 1: 5% traffic → new model
+Phase 2: 20% traffic → new model  (if metrics OK)
+Phase 3: 50% traffic → new model  (if metrics OK)
+Phase 4: 100% traffic → new model
+</code></pre>
+<h3 id="shadow-mode">Shadow Mode</h3>
+<p>The new model runs in parallel with the production model but its predictions are not served to users. Used to validate behavior before switching.</p>
+<pre><code>Request → Production Model → User sees response
+        → Shadow Model    → Logs only (not served)
+Compare predictions offline
+</code></pre>
+<h3 id="blue-green-deployment">Blue-Green Deployment</h3>
+<p>Two identical production environments. &quot;Blue&quot; is live; &quot;Green&quot; is the new version. Switch traffic instantly.</p>
+<pre><code>Current state: All traffic → Blue (v1)
+Deploy to:     Green (v2): fully tested
+Switch:        All traffic → Green (v2)
+Rollback:      All traffic → Blue (v1): instant
+</code></pre>
+<hr />
+<h2 id="feature-stores">Feature Stores</h2>
+<p>A feature store is a centralized repository for storing, versioning, and serving ML features. See <a href="intro_feature_stores.html">Feature Stores</a> and the <a href="intro_feature_store.html">Feature Store Guide</a> for details: the two guides cover the topic from complementary angles.</p>
+<p><strong>Key concepts:</strong></p>
+<ul>
+<li><strong>Online store:</strong> Low-latency feature retrieval for real-time inference (Redis, DynamoDB)</li>
+<li><strong>Offline store:</strong> High-throughput feature retrieval for training (S3, BigQuery, Hive)</li>
+<li><strong>Feature pipeline:</strong> Transforms raw data into features with consistent logic</li>
+</ul>
+<hr />
+<h2 id="cicd-for-ml">CI/CD for ML</h2>
+<h3 id="traditional-cicd-vs-ml-cicd">Traditional CI/CD vs ML CI/CD</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Traditional CI/CD</th>
+<th>ML CI/CD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build</td>
+<td>Compile code</td>
+<td>Train model, run feature pipeline</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Unit/integration tests</td>
+<td>Model validation, data validation</td>
+</tr>
+<tr>
+<td>Deploy</td>
+<td>Push artifact to server</td>
+<td>Register model, deploy endpoint</td>
+</tr>
+<tr>
+<td>Monitor</td>
+<td>Application logs</td>
+<td>Model metrics, data drift</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ml-pipeline-stages">ML Pipeline Stages</h3>
+<pre><code class="language-yaml"># Example GitHub Actions pipeline
+stages:
+  - data_validation      # Great Expectations / Pandera
+  - feature_engineering  # Run feature pipeline
+  - model_training       # Train with tracked parameters
+  - model_evaluation     # Compare against baseline
+  - model_registry       # Push to MLflow/W&amp;B if better
+  - deployment           # Deploy to staging/prod
+  - smoke_test           # Hit endpoint with test requests
+  - monitoring_setup     # Configure drift alerts
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between MLOps and DevOps?</strong> 🟢 Beginner</p>
+<p>DevOps focuses on software deployment and CI/CD for traditional applications. MLOps extends these practices to handle ML-specific challenges: data versioning, experiment tracking, model training pipelines, model drift monitoring, and retraining triggers. MLOps adds a continuous training (CT) component to the traditional CI/CD loop.</p>
+<hr />
+<p><strong>Q2: What are the main challenges in deploying ML models to production?</strong> 🟢 Beginner</p>
+<ul>
+<li>Data pipeline failures (schema drift, missing data)</li>
+<li>Model performance degradation over time (drift)</li>
+<li>Reproducibility (environment, data, code)</li>
+<li>Latency requirements for real-time serving</li>
+<li>Version management of data, code, and models</li>
+<li>Monitoring and alerting</li>
+<li>Regulatory compliance and explainability</li>
+</ul>
+<hr />
+<p><strong>Q3: Explain the difference between data drift and concept drift.</strong> 🟡 Intermediate</p>
+<p>Data drift (covariate shift) occurs when the distribution of input features changes: <code>P(X)</code> changes but <code>P(Y|X)</code> stays the same. For example, a model trained on users from one region sees users from a different region.</p>
+<p>Concept drift occurs when the relationship between inputs and outputs changes: <code>P(Y|X)</code> changes. For example, fraud patterns evolve and what used to be flagged as fraudulent is no longer fraudulent.</p>
+<p>Both lead to model degradation but require different responses.</p>
+<hr />
+<p><strong>Q4: How would you detect that a model needs to be retrained?</strong> 🟡 Intermediate</p>
+<ol>
+<li><strong>Statistical drift tests:</strong> Monitor PSI or KS test on feature distributions</li>
+<li><strong>Performance monitoring:</strong> Track accuracy, F1, or business metrics if labels are available</li>
+<li><strong>Prediction distribution shift:</strong> Watch for changes in the model's output score distribution</li>
+<li><strong>Business metric degradation:</strong> Conversion rate drops, revenue anomalies</li>
+<li><strong>Scheduled retraining:</strong> Retrain on a fixed schedule (daily, weekly) as a safeguard</li>
+<li><strong>Reference window comparison:</strong> Compare current distribution to training distribution</li>
+</ol>
+<hr />
+<p><strong>Q5: What is the difference between online and batch inference?</strong> 🟢 Beginner</p>
+<ul>
+<li><strong>Batch inference:</strong> Process a large dataset at a scheduled time. Predictions are stored and used later. Lower latency requirements. Example: generating personalized recommendations nightly.</li>
+<li><strong>Online (real-time) inference:</strong> Serve predictions in response to individual requests with low latency. Example: fraud detection at transaction time, search ranking.</li>
+</ul>
+<hr />
+<p><strong>Q6: What is a model registry and why is it important?</strong> 🟡 Intermediate</p>
+<p>A model registry is a centralized store for versioned model artifacts, metadata, and lifecycle state (aliases such as <code>champion</code>/<code>challenger</code> in current MLflow; older tools and MLflow versions use fixed stages such as Staging, Production, Archived). It enables:</p>
+<ul>
+<li>Versioned model storage with metadata (metrics, parameters, data version)</li>
+<li>Controlled promotion workflows (candidate → production)</li>
+<li>Rollback capability</li>
+<li>Audit trails for compliance</li>
+<li>Team collaboration on model lifecycle management</li>
+</ul>
+<p>MLflow Model Registry and W&amp;B Model Registry are common implementations.</p>
+<hr />
+<p><strong>Q7: Explain the canary deployment strategy for ML models.</strong> 🟡 Intermediate</p>
+<p>Canary deployment gradually routes a small percentage of traffic (e.g., 5%) to the new model while the remaining traffic uses the old model. Metrics are monitored closely. If the new model performs well, traffic is incrementally increased (5% → 20% → 50% → 100%). If metrics degrade, traffic is instantly rolled back. This reduces risk compared to a hard cutover while allowing real-traffic validation.</p>
+<hr />
+<p><strong>Q8: What is shadow mode testing and when would you use it?</strong> 🟡 Intermediate</p>
+<p>In shadow mode, the new model receives the same requests as the production model but its responses are not served to users. Both models run in parallel, and the shadow model's predictions are logged for offline comparison.</p>
+<p>Use shadow mode when:</p>
+<ul>
+<li>You need to validate a new model's behavior on real production traffic</li>
+<li>The model makes decisions in a high-stakes domain (fraud, medical)</li>
+<li>You want to compare predictions without any user impact risk</li>
+</ul>
+<hr />
+<p><strong>Q9: What statistical tests would you use to detect feature drift?</strong> 🔴 Advanced</p>
+<ul>
+<li><strong>KS Test (Kolmogorov-Smirnov):</strong> For continuous features; tests whether two distributions are the same. Returns p-value and D-statistic.</li>
+<li><strong>PSI (Population Stability Index):</strong> Measures how much a distribution has shifted. PSI ≥ 0.25 signals significant shift.</li>
+<li><strong>Chi-squared test:</strong> For categorical features; tests independence of distributions.</li>
+<li><strong>Jensen-Shannon Divergence:</strong> Symmetric version of KL divergence; measures similarity between two probability distributions.</li>
+<li><strong>Wasserstein distance (Earth Mover's Distance):</strong> Measures the distance between distributions; robust to outliers.</li>
+</ul>
+<p>Choice depends on feature type (continuous vs categorical) and interpretability requirements.</p>
+<hr />
+<p><strong>Q10: How do you handle model rollbacks in production?</strong> 🟡 Intermediate</p>
+<ol>
+<li><strong>Model Registry versioning:</strong> Keep previous model versions in the registry with their artifacts</li>
+<li><strong>Blue-Green deployment:</strong> Instantly redirect traffic back to the previous environment</li>
+<li><strong>Feature flags:</strong> Toggle model versions at the application layer</li>
+<li><strong>Traffic routing rules:</strong> Update load balancer weights to redirect to the previous model endpoint</li>
+<li><strong>Automated rollback triggers:</strong> Set thresholds (e.g., error rate &gt; 5%) that automatically rollback</li>
+</ol>
+<hr />
+<p><strong>Q11: What is the difference between model retraining and model rebuilding?</strong> 🟡 Intermediate</p>
+<ul>
+<li><strong>Retraining:</strong> Use the same model architecture, features, and hyperparameters, but train on newer data. Fast and safe; addresses data drift.</li>
+<li><strong>Rebuilding:</strong> Start from scratch, re-evaluate the problem, explore new features, test different architectures. Necessary for significant concept drift or when the existing model architecture is fundamentally limited.</li>
+</ul>
+<hr />
+<p><strong>Q12: What metrics would you monitor for an ML model in production?</strong> 🟡 Intermediate</p>
+<p><strong>Technical metrics:</strong></p>
+<ul>
+<li>Latency (p50, p95, p99)</li>
+<li>Throughput (requests per second)</li>
+<li>Error rate (5xx errors)</li>
+<li>Model prediction distribution</li>
+</ul>
+<p><strong>Data quality metrics:</strong></p>
+<ul>
+<li>Feature missing rates</li>
+<li>Feature drift (PSI, KS)</li>
+<li>Schema violations</li>
+</ul>
+<p><strong>Model performance metrics:</strong></p>
+<ul>
+<li>Accuracy/F1/AUC (if labels available)</li>
+<li>Business KPIs (conversion rate, revenue)</li>
+<li>Prediction confidence distribution</li>
+</ul>
+<hr />
+<p><strong>Q13: Explain the concept of a feature store and its role in MLOps.</strong> 🔴 Advanced</p>
+<p>A feature store solves the problem of consistent feature computation between training and serving. Without it, data scientists compute features differently during experimentation vs production, leading to training-serving skew.</p>
+<p>A feature store provides:</p>
+<ul>
+<li><strong>Unified feature definitions:</strong> Compute once, use everywhere</li>
+<li><strong>Offline store:</strong> Point-in-time correct feature retrieval for training (prevents data leakage)</li>
+<li><strong>Online store:</strong> Low-latency feature retrieval for real-time serving</li>
+<li><strong>Feature versioning:</strong> Track changes to feature logic over time</li>
+<li><strong>Reusability:</strong> Multiple models share the same features</li>
+</ul>
+<hr />
+<p><strong>Q14: What is training-serving skew and how do you prevent it?</strong> 🔴 Advanced</p>
+<p>Training-serving skew occurs when the features used during training are computed differently from how they are computed at serving time. This causes the model to see a different data distribution in production than it was trained on.</p>
+<p><strong>Causes:</strong></p>
+<ul>
+<li>Different preprocessing code paths for training and serving</li>
+<li>Data leakage in training (using future data)</li>
+<li>Different feature computation timing</li>
+</ul>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Use a feature store with unified feature definitions</li>
+<li>Share preprocessing code between training and serving pipelines</li>
+<li>Validate feature distributions at serving time against training distribution</li>
+<li>Use point-in-time correct joins in offline feature retrieval</li>
+</ul>
+<hr />
+<p><strong>Q15: How would you design a CI/CD pipeline for an ML model?</strong> 🔴 Advanced</p>
+<pre><code>1. Code commit → GitHub Actions triggered
+2. Data validation: Run Great Expectations on new training data
+3. Feature pipeline: Rebuild feature set with updated data
+4. Model training: Train with tracked parameters in MLflow
+5. Model evaluation: Compare metrics against registered baseline
+6. Automated gate: If metrics improve → proceed; else → fail pipeline
+7. Model registration: Push to MLflow Registry with metadata
+8. Integration tests: Deploy to staging, run smoke tests
+9. Canary deployment: Route 5% prod traffic to new model
+10. Monitor: Watch metrics for 24-48 hours
+11. Full rollout: 100% traffic if metrics are stable
+12. Alerting: PagerDuty alerts for degradation
+</code></pre>
+<hr />
+<h2 id="guides-in-this-track">Guides in This Track</h2>
+<p>Every guide in <code>mlops/</code>. Start with the overview above, then work through these.</p>
+<ul>
+<li><a href="intro_ab_testing.html">A/B Testing &amp; Experimentation for ML Systems</a></li>
+<li><a href="intro_cicd_for_ml.html">CI/CD for Machine Learning</a></li>
+<li><a href="intro_data_labeling_active_learning.html">Data Labeling, Active Learning, and Weak Supervision</a></li>
+<li><a href="intro_data_quality.html">Data Quality &amp; Validation</a></li>
+<li><a href="intro_evaluation_guardrails.html">Evaluation and Guardrails for AI Systems</a></li>
+<li><a href="intro_feature_store.html">Feature Store Guide</a></li>
+<li><a href="intro_feature_stores.html">Feature Stores</a></li>
+<li><a href="intro_llm_evaluation.html">LLM Evaluation: Testing, Benchmarks &amp; Production Evals</a></li>
+<li><a href="intro_llmops_mlops_engineering.html">LLMOps and MLOps Engineering</a></li>
+<li><a href="intro_mlflow.html">MLflow: Experiment Tracking, Model Registry, and Deployment</a></li>
+<li><a href="intro_model_explainability.html">Model Explainability: SHAP, LIME, and Interpretability Techniques</a></li>
+<li><a href="intro_model_monitoring.html">Model Monitoring Guide</a></li>
+<li><a href="intro_model_serving.html">Model Serving</a></li>
+<li><a href="intro_responsible_ai_fairness.html">Responsible AI: Fairness, Bias, Privacy, and Governance</a></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning">Google MLOps: Continuous delivery and automation in ML</a></li>
+<li><a href="https://papers.nips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf">Sculley et al., &quot;Hidden Technical Debt in Machine Learning Systems&quot; (NIPS 2015)</a></li>
+<li><a href="https://mlflow.org/docs/latest/index.html">MLflow Documentation</a></li>
+<li><a href="https://docs.evidentlyai.com/">Evidently AI Documentation</a></li>
+<li><a href="https://www.featurestore.org/">Feature Store Comparison: Feast, Tecton, Hopsworks</a></li>
+<li><a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/">Chip Huyen: Designing Machine Learning Systems (O'Reilly)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_llmops_mlops_engineering.html"><small>Next</small>LLMOps / MLOps Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

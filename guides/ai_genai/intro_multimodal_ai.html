@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multimodal AI Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide covers systems that reason across multiple data types such as text, images, audio, and documents.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multimodal_ai.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Multimodal AI Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide covers systems that reason across multiple data types such as text, images, audio, and documents.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multimodal_ai.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Multimodal AI Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide covers systems that reason across multiple data types such as text, images, audio, and documents.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Multimodal AI",
+   "description": "This guide covers systems that reason across multiple data types such as text, images, audio, and documents.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multimodal_ai.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Multimodal AI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_multimodal_ai.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Multimodal AI</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_multimodal_ai.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="multimodal-ai">Multimodal AI</h1>
+<p>This guide covers systems that reason across multiple data types such as text, images, audio, and documents.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Multimodal AI combines inputs and outputs across different modalities. It matters because many real-world products are not text-only:</p>
+<ul>
+<li>document understanding needs vision plus OCR plus reasoning</li>
+<li>voice assistants need speech-to-text, text reasoning, and text-to-speech</li>
+<li>image assistants need visual grounding and language generation</li>
+</ul>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="vision-models">Vision models</h3>
+<p>Vision models process images or video to detect objects, read charts, classify scenes, or answer questions about visual content.</p>
+<h3 id="audio-models">Audio models</h3>
+<p>Audio pipelines usually involve automatic speech recognition, speaker segmentation, text reasoning over transcripts, and text-to-speech output when needed.</p>
+<h3 id="multimodal-reasoning">Multimodal reasoning</h3>
+<p>This is the ability to combine evidence across modalities. For example, a document assistant may read a chart, inspect surrounding text, and answer a question that depends on both.</p>
+<h3 id="cross-modal-representations">Cross-modal representations</h3>
+<p>Many systems project text, image, and audio signals into learned shared spaces so related content can be matched or reasoned over together.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="image-understanding">Image understanding</h3>
+<p>In practice, this means framing the task correctly: classification, detection, OCR, chart understanding, or visual Q&amp;A.</p>
+<h3 id="speech-to-text-and-text-to-speech">Speech-to-text and text-to-speech</h3>
+<p>You should know how latency, transcription quality, chunking, and streaming affect user experience in voice systems.</p>
+<h3 id="cross-modal-reasoning">Cross-modal reasoning</h3>
+<p>A strong engineer can design systems where one modality grounds or validates another instead of treating each independently.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT multimodal models</td>
+<td>Unified text-image reasoning</td>
+<td>Rapid prototyping for image and document Q&amp;A</td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td>Strong multimodal reasoning APIs</td>
+<td>Multimodal product prototyping and evaluation</td>
+</tr>
+<tr>
+<td>Whisper</td>
+<td>Open-source speech-to-text</td>
+<td>Transcript generation and voice pipelines</td>
+</tr>
+<tr>
+<td>Open-source vision models</td>
+<td>Detection, OCR, and image feature extraction</td>
+<td>Self-hosted or specialized vision tasks</td>
+</tr>
+<tr>
+<td>TTS engines</td>
+<td>Convert text output into speech</td>
+<td>Voice assistants and accessibility products</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="image-qa-system">Image Q&amp;A system</h3>
+<ul>
+<li>Goal: Let users ask questions about uploaded images.</li>
+<li>Key components: image upload, prompt design, structured answer formatting, optional OCR.</li>
+<li>Suggested tech stack: multimodal LLM API, FastAPI, object storage.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="voice-assistant">Voice assistant</h3>
+<ul>
+<li>Goal: Accept voice input, transcribe it, reason over it, and speak a response.</li>
+<li>Key components: streaming audio ingestion, speech-to-text, LLM reasoning, text-to-speech, conversation state.</li>
+<li>Suggested tech stack: Whisper, OpenAI or Gemini API, FastAPI, WebSocket frontend.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="document-understanding-system">Document understanding system</h3>
+<ul>
+<li>Goal: Extract and answer questions from complex PDFs with images, tables, and text.</li>
+<li>Key components: OCR, layout parsing, chunking, retrieval, citation mapping.</li>
+<li>Suggested tech stack: OCR library, multimodal model, vector store, FastAPI.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="multimodal-chatbot">Multimodal chatbot</h3>
+<ul>
+<li>Goal: Support conversations over text, screenshots, and documents in one interface.</li>
+<li>Key components: multimodal input adapter, session memory, model routing, safety filters.</li>
+<li>Suggested tech stack: multimodal API, LiteLLM, Redis, React.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">def build_image_qa_prompt(question: str) -&gt; str:
+    return (
+        &quot;You are an assistant answering questions about an uploaded image. &quot;
+        &quot;Use only visible evidence. If the answer is uncertain, say so. &quot;
+        f&quot;Question: {question}&quot;
+    )
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">document-understanding/
+├── src/
+│   ├── ocr.py
+│   ├── parser.py
+│   ├── retriever.py
+│   ├── qa.py
+│   └── api.py
+├── sample_docs/
+├── evals/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-vision-language-models-actually-connect-the-two-modalities">How do vision-language models actually connect the two modalities?</h4>
+<p>Most follow the same pattern: a vision encoder (usually a ViT) turns the image into a grid of patch embeddings, a projection module maps those into the language model's token embedding space, and the LLM then attends over image tokens and text tokens together in one sequence. The projector is small (a linear layer in LLaVA, a resampler with learned queries in Flamingo and BLIP-2), and is often the only part trained initially, with both encoders frozen.</p>
+<p>CLIP is the other core idea and works differently: it trains an image encoder and a text encoder contrastively so that matching image-text pairs land close in a <em>shared</em> space. That gives zero-shot classification and image-text retrieval, but not generation.</p>
+<h4 id="how-many-tokens-does-an-image-cost-and-why-does-it-matter">How many tokens does an image cost, and why does it matter?</h4>
+<p>A great deal, typically hundreds to a couple of thousand tokens per image depending on resolution and the model's tiling scheme. High-resolution handling usually splits the image into tiles, each costing a full grid of patch tokens, so a single detailed screenshot can cost more than a page of text.</p>
+<p>This drives real design decisions: downscale images to the smallest resolution that preserves the detail the task needs, crop to the region of interest rather than sending full pages, cache image analysis results rather than re-sending the same image across turns, and batch questions about one image into a single call instead of one call per question.</p>
+<h4 id="how-would-you-build-a-document-understanding-system">How would you build a document understanding system?</h4>
+<p>I'd resist making it a single VLM call. The pipeline that actually works: classify the document type, then route: native-text PDFs go through a text extractor (cheap, exact), scanned pages go through OCR, and pages with complex layout, charts, or handwriting go to a VLM. Extract to a strict schema with structured outputs so downstream code can rely on it, and attach a confidence signal per field.</p>
+<p>Then the parts candidates forget: validation rules on the extracted fields (dates parse, totals sum, IDs match a format), a human review queue for low-confidence extractions, and an eval set of real documents with ground-truth fields so you can measure field-level accuracy rather than eyeballing outputs.</p>
+<h4 id="how-do-you-evaluate-a-multimodal-system">How do you evaluate a multimodal system?</h4>
+<p>Per task, and never by looking at a few examples. For extraction, field-level precision and recall against labeled documents. For captioning or VQA, task-specific accuracy on a held-out set plus an LLM judge validated against human labels. For retrieval, recall@k on image-text pairs.</p>
+<p>The multimodal-specific failure to test for is <strong>hallucinated visual detail</strong>: the model describing objects, text, or values that aren't in the image. Build an adversarial slice: images that are blurry, blank, rotated, or contain text the model would expect but that isn't there, and measure how often it invents content.</p>
+<h4 id="when-is-a-multimodal-model-the-wrong-choice">When is a multimodal model the wrong choice?</h4>
+<p>When a deterministic extractor exists: a native-text PDF should be parsed, not described by a VLM that may paraphrase or hallucinate. When the task is high-volume, narrow, and stable: a fine-tuned small classifier is far cheaper than a VLM per image. When exactness is required and errors are costly, unless you add validation and a human review path. And when latency matters, since image prefill is expensive and dominates time-to-first-token.</p>
+<h4 id="how-do-you-handle-audio-in-a-production-pipeline">How do you handle audio in a production pipeline?</h4>
+<p>Decide between cascaded and end-to-end. <strong>Cascaded</strong> (STT → LLM → TTS) is the default: each stage is separately testable, replaceable, and cheap, and you get a text transcript for logging, evaluation, and compliance. <strong>End-to-end speech models</strong> cut latency substantially and preserve tone and interruption handling, which matters for natural conversation, but are harder to debug and evaluate.</p>
+<p>For cascaded pipelines the practical issues are streaming (start transcribing before the speaker stops), endpointing (deciding when a turn ended), and domain vocabulary: proper nouns and jargon are where word error rate concentrates, so a custom vocabulary or biasing list is usually the most effective fix.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sending full-resolution images by default</td>
+<td>Token cost and latency explode for no accuracy gain</td>
+<td>Downscale to the minimum useful resolution; crop to the region of interest</td>
+</tr>
+<tr>
+<td>One API call per question about the same image</td>
+<td>Re-pays the image token cost every time</td>
+<td>Batch all questions into one call</td>
+</tr>
+<tr>
+<td>Using a VLM on native-text PDFs</td>
+<td>Slower, costlier, and can paraphrase exact values</td>
+<td>Route by document type; extract text directly when possible</td>
+</tr>
+<tr>
+<td>Free-text output for extraction tasks</td>
+<td>Downstream parsing is brittle</td>
+<td>Structured outputs with a strict schema</td>
+</tr>
+<tr>
+<td>No validation of extracted fields</td>
+<td>Hallucinated values flow silently into systems</td>
+<td>Format and consistency checks + low-confidence review queue</td>
+</tr>
+<tr>
+<td>Evaluating on clean examples only</td>
+<td>Real inputs are blurry, rotated, and partially blank</td>
+<td>Adversarial eval slice for visual hallucination</td>
+</tr>
+<tr>
+<td>Ignoring image preprocessing consistency</td>
+<td>Different resize/orientation between eval and production shifts results</td>
+<td>Pin one preprocessing path used by both</td>
+</tr>
+<tr>
+<td>Assuming OCR accuracy transfers across domains</td>
+<td>Handwriting, tables, and jargon are where WER concentrates</td>
+<td>Measure on your own documents; add a vocabulary bias list</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="intro_rag.html">RAG</a></li>
+<li><a href="../mlops/intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_multi_model_orchestration.html"><small>Previous</small>Multi-Model Orchestration</a><a rel="next" class="next" href="intro_n8n.html"><small>Next</small>n8n</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_multimodal_ai.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apache Kafka Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Apache Kafka is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_kafka.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Apache Kafka Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Apache Kafka is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_kafka.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache Kafka Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Apache Kafka is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Apache Kafka",
+   "description": "Apache Kafka is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_kafka.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Apache Kafka",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_kafka.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Apache Kafka</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_apache_kafka.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="apache-kafka">Apache Kafka</h1>
+<p><strong>Apache Kafka</strong> is the leading distributed event streaming platform. It handles trillions of events per day at companies like LinkedIn, Uber, and Netflix, powering real-time data pipelines, event-driven architectures, and streaming analytics.</p>
+<hr />
+<h2 id="what-is-kafka">What is Kafka?</h2>
+<p>Kafka is a <strong>distributed commit log</strong> that allows producers to publish events and consumers to read them, at any scale, in real-time.</p>
+<pre><code>Microservice A  →
+                  → Kafka (durable log) → Analytics Pipeline
+Microservice B  →                       → Another Microservice
+                                        → Data Warehouse (Snowflake/Redshift)
+</code></pre>
+<h3 id="kafka-vs-message-queues-rabbitmq-sqs">Kafka vs Message Queues (RabbitMQ, SQS)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Kafka</th>
+<th>Traditional MQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Message retention</strong></td>
+<td>Days/weeks (configurable)</td>
+<td>Deleted after consumption</td>
+</tr>
+<tr>
+<td><strong>Consumer model</strong></td>
+<td>Multiple consumers read independently</td>
+<td>Typically point-to-point</td>
+</tr>
+<tr>
+<td><strong>Throughput</strong></td>
+<td>Millions of msgs/sec</td>
+<td>Thousands</td>
+</tr>
+<tr>
+<td><strong>Ordering</strong></td>
+<td>Guaranteed per partition</td>
+<td>Varies</td>
+</tr>
+<tr>
+<td><strong>Replay</strong></td>
+<td>Yes: rewind consumer offset</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Use case</strong></td>
+<td>Streaming, event sourcing, large scale</td>
+<td>Task queues, RPC</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<pre><code>Producer → Topic → Partition → Consumer Group
+
+┌──────────────── Topic: &quot;orders&quot; ───────────────────┐
+│  Partition 0:  [msg0] [msg3] [msg6] ...            │
+│  Partition 1:  [msg1] [msg4] [msg7] ...            │
+│  Partition 2:  [msg2] [msg5] [msg8] ...            │
+└────────────────────────────────────────────────────┘
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Event/Message</strong></td>
+<td>A record with key, value, timestamp, headers</td>
+</tr>
+<tr>
+<td><strong>Topic</strong></td>
+<td>Named stream of events. Like a table or folder.</td>
+</tr>
+<tr>
+<td><strong>Partition</strong></td>
+<td>Ordered, immutable log. Topics are split into partitions for parallelism.</td>
+</tr>
+<tr>
+<td><strong>Offset</strong></td>
+<td>Position of a message within a partition (monotonically increasing integer)</td>
+</tr>
+<tr>
+<td><strong>Producer</strong></td>
+<td>Writes events to topics</td>
+</tr>
+<tr>
+<td><strong>Consumer</strong></td>
+<td>Reads events from topics</td>
+</tr>
+<tr>
+<td><strong>Consumer Group</strong></td>
+<td>Group of consumers sharing load. Each partition → one consumer per group.</td>
+</tr>
+<tr>
+<td><strong>Broker</strong></td>
+<td>A Kafka server. Cluster = multiple brokers.</td>
+</tr>
+<tr>
+<td><strong>KRaft (formerly ZooKeeper)</strong></td>
+<td>Cluster metadata management. Kafka 4.0+ runs only in KRaft mode; ZooKeeper support was removed.</td>
+</tr>
+<tr>
+<td><strong>Replication Factor</strong></td>
+<td>How many copies of each partition (for fault tolerance)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="consumer-groups">Consumer Groups</h3>
+<pre><code>Topic: &quot;orders&quot; (3 partitions)
+
+Consumer Group &quot;analytics&quot;:
+  Consumer A → Partition 0
+  Consumer B → Partition 1
+  Consumer C → Partition 2
+
+Consumer Group &quot;warehouse&quot;:
+  Consumer X → Partition 0, 1
+  Consumer Y → Partition 2
+
+Both groups read independently: no coordination.
+</code></pre>
+<hr />
+<h2 id="running-kafka">Running Kafka</h2>
+<h3 id="docker-local-development">Docker (local development)</h3>
+<pre><code class="language-yaml"># docker-compose.yml  (single-node KRaft: no ZooKeeper container needed)
+services:
+  kafka:
+    image: apache/kafka:4.0.0
+    ports:
+      - &quot;9092:9092&quot;
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: &quot;true&quot;
+</code></pre>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+<h3 id="managed-kafka-in-2026">Managed Kafka in 2026</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Provider</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Confluent Cloud</strong></td>
+<td>Confluent</td>
+<td>Feature-rich, expensive</td>
+</tr>
+<tr>
+<td><strong>Amazon MSK</strong></td>
+<td>AWS</td>
+<td>Managed Kafka on AWS</td>
+</tr>
+<tr>
+<td><strong>Aiven for Kafka</strong></td>
+<td>Aiven</td>
+<td>Multi-cloud managed</td>
+</tr>
+<tr>
+<td><strong>Redpanda Cloud</strong></td>
+<td>Redpanda</td>
+<td>Kafka-compatible, lower latency</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="kafka-cli">Kafka CLI</h2>
+<pre><code class="language-bash"># Topic management
+kafka-topics.sh --bootstrap-server localhost:9092 \
+  --create --topic orders --partitions 3 --replication-factor 1
+
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+kafka-topics.sh --bootstrap-server localhost:9092 \
+  --describe --topic orders
+
+kafka-topics.sh --bootstrap-server localhost:9092 \
+  --delete --topic orders
+
+# Produce messages (console producer)
+kafka-console-producer.sh --bootstrap-server localhost:9092 \
+  --topic orders
+&gt; {&quot;order_id&quot;: &quot;1&quot;, &quot;amount&quot;: 99.99}
+&gt; {&quot;order_id&quot;: &quot;2&quot;, &quot;amount&quot;: 149.00}
+
+# Consume messages
+kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+  --topic orders --from-beginning
+
+# Consumer group inspection
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
+  --group my-group --describe
+
+# Reset offsets
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
+  --group my-group --topic orders --reset-offsets --to-earliest --execute
+</code></pre>
+<hr />
+<h2 id="python-producer">Python Producer</h2>
+<pre><code class="language-python">from confluent_kafka import Producer
+import json
+
+producer = Producer({
+    &quot;bootstrap.servers&quot;: &quot;localhost:9092&quot;,
+    &quot;acks&quot;: &quot;all&quot;,                    # wait for all replicas to confirm
+    &quot;enable.idempotence&quot;: True,       # no duplicates from retries (full exactly-once needs transactions)
+    &quot;compression.type&quot;: &quot;snappy&quot;,     # compress messages
+    &quot;linger.ms&quot;: 5,                   # batch messages for 5ms
+    &quot;batch.size&quot;: 65536,              # 64KB batch size
+})
+
+def delivery_callback(err, msg):
+    if err:
+        print(f&quot;Delivery failed: {err}&quot;)
+    else:
+        print(f&quot;Delivered to {msg.topic()} partition {msg.partition()} offset {msg.offset()}&quot;)
+
+# Produce with key (key determines partition)
+order = {&quot;order_id&quot;: &quot;ORD-001&quot;, &quot;customer_id&quot;: &quot;C-123&quot;, &quot;amount&quot;: 99.99}
+
+producer.produce(
+    topic=&quot;orders&quot;,
+    key=&quot;C-123&quot;,              # same key → same partition (ordering per customer)
+    value=json.dumps(order),
+    callback=delivery_callback
+)
+
+# Flush (wait for all messages to be delivered)
+producer.flush()
+
+# Context manager pattern
+from contextlib import contextmanager
+
+@contextmanager
+def kafka_producer(config):
+    p = Producer(config)
+    try:
+        yield p
+    finally:
+        p.flush(timeout=30)
+
+with kafka_producer({&quot;bootstrap.servers&quot;: &quot;localhost:9092&quot;}) as p:
+    for i in range(1000):
+        p.produce(&quot;events&quot;, value=json.dumps({&quot;id&quot;: i}))
+        p.poll(0)  # serve delivery callbacks
+</code></pre>
+<hr />
+<h2 id="python-consumer">Python Consumer</h2>
+<pre><code class="language-python">from confluent_kafka import Consumer, KafkaError
+import json
+
+consumer = Consumer({
+    &quot;bootstrap.servers&quot;: &quot;localhost:9092&quot;,
+    &quot;group.id&quot;: &quot;order-processor&quot;,
+    &quot;auto.offset.reset&quot;: &quot;earliest&quot;,         # start from beginning if no committed offset
+    &quot;enable.auto.commit&quot;: False,             # manual commit for at-least-once
+    &quot;max.poll.interval.ms&quot;: 300000,          # 5 min processing time before rebalance
+})
+
+consumer.subscribe([&quot;orders&quot;, &quot;returns&quot;])
+
+def process_order(order: dict):
+    # Your business logic here
+    pass
+
+try:
+    while True:
+        msg = consumer.poll(timeout=1.0)
+
+        if msg is None:
+            continue
+
+        if msg.error():
+            if msg.error().code() == KafkaError._PARTITION_EOF:
+                print(f&quot;Reached end of partition {msg.partition()}&quot;)
+            else:
+                raise Exception(msg.error())
+            continue
+
+        # Process message
+        order = json.loads(msg.value().decode(&quot;utf-8&quot;))
+        print(f&quot;Processing order {order['order_id']} from partition {msg.partition()} offset {msg.offset()}&quot;)
+
+        try:
+            process_order(order)
+            # Manual commit after successful processing
+            consumer.commit(asynchronous=False)
+        except Exception as e:
+            print(f&quot;Processing failed: {e}&quot;)
+            # Don't commit: message will be re-delivered
+
+finally:
+    consumer.close()
+</code></pre>
+<h3 id="batch-consumer">Batch Consumer</h3>
+<pre><code class="language-python"># Process in batches for efficiency
+import json
+from confluent_kafka import Consumer
+
+consumer = Consumer({
+    &quot;bootstrap.servers&quot;: &quot;localhost:9092&quot;,
+    &quot;group.id&quot;: &quot;batch-processor&quot;,
+    &quot;auto.offset.reset&quot;: &quot;earliest&quot;,
+    &quot;enable.auto.commit&quot;: False,
+})
+consumer.subscribe([&quot;events&quot;])
+
+BATCH_SIZE = 1000
+BATCH_TIMEOUT = 5.0  # seconds
+
+def process_batch(batch: list[dict]):
+    ...  # your bulk write / transformation
+
+while True:
+    # consume() returns up to BATCH_SIZE messages, or fewer once the timeout expires
+    msgs = consumer.consume(num_messages=BATCH_SIZE, timeout=BATCH_TIMEOUT)
+    batch = [json.loads(m.value()) for m in msgs if not m.error()]
+
+    if batch:
+        process_batch(batch)
+        consumer.commit(asynchronous=False)   # commit only after the batch succeeded
+</code></pre>
+<hr />
+<h2 id="kafka-schemas-with-schema-registry">Kafka Schemas with Schema Registry</h2>
+<p>In production, always use a <strong>Schema Registry</strong> to enforce message schemas.</p>
+<pre><code class="language-python">from confluent_kafka import Producer
+from confluent_kafka.schema_registry import SchemaRegistryClient
+from confluent_kafka.schema_registry.avro import AvroSerializer
+from confluent_kafka.serialization import SerializationContext, MessageField
+
+# Define Avro schema
+order_schema = &quot;&quot;&quot;
+{
+  &quot;type&quot;: &quot;record&quot;,
+  &quot;name&quot;: &quot;Order&quot;,
+  &quot;fields&quot;: [
+    {&quot;name&quot;: &quot;order_id&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;customer_id&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;amount&quot;, &quot;type&quot;: &quot;double&quot;},
+    {&quot;name&quot;: &quot;created_at&quot;, &quot;type&quot;: {&quot;type&quot;: &quot;long&quot;, &quot;logicalType&quot;: &quot;timestamp-millis&quot;}}
+  ]
+}
+&quot;&quot;&quot;
+
+schema_registry_client = SchemaRegistryClient({&quot;url&quot;: &quot;http://localhost:8081&quot;})
+avro_serializer = AvroSerializer(schema_registry_client, order_schema)
+
+producer = Producer({&quot;bootstrap.servers&quot;: &quot;localhost:9092&quot;})
+
+order = {&quot;order_id&quot;: &quot;ORD-001&quot;, &quot;customer_id&quot;: &quot;C-123&quot;, &quot;amount&quot;: 99.99, &quot;created_at&quot;: 1700000000000}
+
+producer.produce(
+    topic=&quot;orders&quot;,
+    value=avro_serializer(order, SerializationContext(&quot;orders&quot;, MessageField.VALUE))
+)
+</code></pre>
+<hr />
+<h2 id="kafka-streams--kafka-connect">Kafka Streams &amp; Kafka Connect</h2>
+<h3 id="kafka-connect-no-code-integrations">Kafka Connect (no-code integrations)</h3>
+<pre><code class="language-json">// Source connector: PostgreSQL → Kafka
+{
+  &quot;name&quot;: &quot;postgres-source&quot;,
+  &quot;config&quot;: {
+    &quot;connector.class&quot;: &quot;io.debezium.connector.postgresql.PostgresConnector&quot;,
+    &quot;database.hostname&quot;: &quot;localhost&quot;,
+    &quot;database.port&quot;: &quot;5432&quot;,
+    &quot;database.user&quot;: &quot;postgres&quot;,
+    &quot;database.password&quot;: &quot;secret&quot;,
+    &quot;database.dbname&quot;: &quot;mydb&quot;,
+    &quot;table.include.list&quot;: &quot;public.orders,public.customers&quot;,
+    &quot;plugin.name&quot;: &quot;pgoutput&quot;
+  }
+}
+
+// Sink connector: Kafka → Snowflake
+{
+  &quot;name&quot;: &quot;snowflake-sink&quot;,
+  &quot;config&quot;: {
+    &quot;connector.class&quot;: &quot;com.snowflake.kafka.connector.SnowflakeSinkConnector&quot;,
+    &quot;topics&quot;: &quot;orders&quot;,
+    &quot;snowflake.url.name&quot;: &quot;myaccount.snowflakecomputing.com&quot;,
+    &quot;snowflake.database.name&quot;: &quot;MYDB&quot;,
+    &quot;snowflake.schema.name&quot;: &quot;PUBLIC&quot;,
+    &quot;key.converter&quot;: &quot;org.apache.kafka.connect.json.JsonConverter&quot;,
+    &quot;value.converter&quot;: &quot;com.snowflake.kafka.connector.records.SnowflakeAvroConverter&quot;
+  }
+}
+</code></pre>
+<h3 id="debezium-cdc-change-data-capture">Debezium (CDC: Change Data Capture)</h3>
+<p>Debezium captures every database change and publishes it to Kafka:</p>
+<pre><code>PostgreSQL WAL → Debezium Connector → Kafka Topic → Consumers
+                                      ┌─────────────────────────────┐
+                                      │ Event: {                    │
+                                      │   &quot;op&quot;: &quot;u&quot;,  // update     │
+                                      │   &quot;before&quot;: {&quot;amount&quot;: 100},│
+                                      │   &quot;after&quot;:  {&quot;amount&quot;: 150} │
+                                      │ }                           │
+                                      └─────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="kafka-in-data-engineering-pipelines">Kafka in Data Engineering Pipelines</h2>
+<pre><code>PostgreSQL (OLTP)
+      ↓ Debezium (CDC)
+Kafka Topics
+      ↓ Kafka Connect Sink / Spark Streaming / Flink
+Snowflake / Delta Lake / S3
+      ↓ dbt
+Analytics / BI
+</code></pre>
+<pre><code class="language-python"># Spark Structured Streaming reading from Kafka
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+
+# Match the connector to your Spark and Scala versions (Spark 4.x builds use Scala 2.13)
+spark = SparkSession.builder \
+    .appName(&quot;KafkaStreaming&quot;) \
+    .config(&quot;spark.jars.packages&quot;, &quot;org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0&quot;) \
+    .getOrCreate()
+
+df = spark.readStream \
+    .format(&quot;kafka&quot;) \
+    .option(&quot;kafka.bootstrap.servers&quot;, &quot;localhost:9092&quot;) \
+    .option(&quot;subscribe&quot;, &quot;orders&quot;) \
+    .option(&quot;startingOffsets&quot;, &quot;latest&quot;) \
+    .load()
+
+# Parse JSON
+orders = df.select(
+    F.from_json(
+        F.col(&quot;value&quot;).cast(&quot;string&quot;),
+        &quot;order_id STRING, amount DOUBLE, customer_id STRING&quot;
+    ).alias(&quot;data&quot;)
+).select(&quot;data.*&quot;)
+
+# Write to Delta Lake
+query = orders.writeStream \
+    .format(&quot;delta&quot;) \
+    .outputMode(&quot;append&quot;) \
+    .option(&quot;checkpointLocation&quot;, &quot;/checkpoints/orders&quot;) \
+    .table(&quot;orders_streaming&quot;)
+</code></pre>
+<hr />
+<h2 id="key-configuration-reference">Key Configuration Reference</h2>
+<h3 id="producer">Producer</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Recommended</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acks=all</code></td>
+<td>Production</td>
+<td>Wait for all replicas</td>
+</tr>
+<tr>
+<td><code>enable.idempotence=true</code></td>
+<td>Production</td>
+<td>No duplicates from producer retries</td>
+</tr>
+<tr>
+<td><code>compression.type=snappy</code></td>
+<td>Production</td>
+<td>Compress messages</td>
+</tr>
+<tr>
+<td><code>linger.ms=5-50</code></td>
+<td>Production</td>
+<td>Batch messages</td>
+</tr>
+<tr>
+<td><code>retries=INT_MAX</code></td>
+<td>Production</td>
+<td>Retry on transient errors</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="consumer">Consumer</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto.offset.reset</code></td>
+<td><code>earliest</code>/<code>latest</code></td>
+<td>Where to start reading</td>
+</tr>
+<tr>
+<td><code>enable.auto.commit</code></td>
+<td><code>false</code></td>
+<td>Manual commit for reliability</td>
+</tr>
+<tr>
+<td><code>group.id</code></td>
+<td>Your app name</td>
+<td>Consumer group identity</td>
+</tr>
+<tr>
+<td><code>max.poll.records</code></td>
+<td><code>500</code></td>
+<td>Records per poll</td>
+</tr>
+<tr>
+<td><code>session.timeout.ms</code></td>
+<td><code>30000</code></td>
+<td>Heartbeat timeout</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="topic">Topic</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>retention.ms</code></td>
+<td><code>604800000</code> (7 days)</td>
+<td>How long to keep messages</td>
+</tr>
+<tr>
+<td><code>replication.factor</code></td>
+<td><code>3</code> (production)</td>
+<td>Fault tolerance</td>
+</tr>
+<tr>
+<td><code>num.partitions</code></td>
+<td><code>throughput / single_partition_throughput</code></td>
+<td>Parallelism</td>
+</tr>
+<tr>
+<td><code>min.insync.replicas</code></td>
+<td><code>2</code></td>
+<td>Required replicas for acks=all</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="kafka-in-2026">Kafka in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trend</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>KRaft mode</strong></td>
+<td>ZooKeeper fully removed in Kafka 4.0</td>
+</tr>
+<tr>
+<td><strong>Kafka 4.0</strong></td>
+<td>KRaft-only, new consumer rebalance protocol (KIP-848) GA, early-access queues / share groups (KIP-932)</td>
+</tr>
+<tr>
+<td><strong>Tiered Storage</strong></td>
+<td>Offload old segments to S3/GCS: cheaper long retention</td>
+</tr>
+<tr>
+<td><strong>Redpanda</strong></td>
+<td>Kafka-compatible alternative in C++: no JVM, vendor claims lower tail latency</td>
+</tr>
+<tr>
+<td><strong>WarpStream</strong></td>
+<td>Kafka-compatible, disaggregated architecture, zero inter-zone costs</td>
+</tr>
+<tr>
+<td><strong>Apache Flink</strong></td>
+<td>Common stream processor alongside Kafka, often chosen over Kafka Streams for large stateful jobs</td>
+</tr>
+<tr>
+<td><strong>Confluent Tableflow</strong></td>
+<td>Auto-sync Kafka topics to Iceberg tables</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_apache_spark.html"><small>Previous</small>Apache Spark</a><a rel="next" class="next" href="intro_apache_airflow.html"><small>Next</small>Apache Airflow</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_apache_kafka.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

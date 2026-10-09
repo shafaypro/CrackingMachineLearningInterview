@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Quality &amp; Validation Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Data quality issues are responsible for the majority of ML model failures in production. This guide covers how to detect, validate, and monitor data…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_quality.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Data Quality &amp; Validation Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Data quality issues are responsible for the majority of ML model failures in production. This guide covers how to detect, validate, and monitor data…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_quality.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Quality &amp; Validation Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Data quality issues are responsible for the majority of ML model failures in production. This guide covers how to detect, validate, and monitor data…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Data Quality & Validation",
+   "description": "Data quality issues are responsible for the majority of ML model failures in production. This guide covers how to detect, validate, and monitor data…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_quality.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Data Quality",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_quality.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Data Quality</span></nav>
+<p class="meta"><a href="../../#mlops/intro_data_quality.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="data-quality--validation">Data Quality &amp; Validation</h1>
+<p>Data quality issues are responsible for the majority of ML model failures in production. This guide covers how to detect, validate, and monitor data quality using Great Expectations, data contracts, and drift detection frameworks.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#types-of-data-quality-issues">Types of Data Quality Issues</a></li>
+<li><a href="#great-expectations">Great Expectations</a></li>
+<li><a href="#data-contracts">Data Contracts</a></li>
+<li><a href="#pandera-for-dataframe-validation">Pandera for DataFrame Validation</a></li>
+<li><a href="#data-drift-vs-concept-drift">Data Drift vs Concept Drift</a></li>
+<li><a href="#drift-detection-with-evidently-ai">Drift Detection with Evidently AI</a></li>
+<li><a href="#dbt-tests-for-data-quality">dbt Tests for Data Quality</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="types-of-data-quality-issues">Types of Data Quality Issues</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Description</th>
+<th>Detection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Missing values</strong></td>
+<td>Nulls/NaNs in required fields</td>
+<td>Null rate monitoring</td>
+</tr>
+<tr>
+<td><strong>Schema drift</strong></td>
+<td>Column added/removed/renamed/type changed</td>
+<td>Schema validation</td>
+</tr>
+<tr>
+<td><strong>Distribution drift</strong></td>
+<td>Feature distribution shifts over time</td>
+<td>Statistical tests (KS, PSI)</td>
+</tr>
+<tr>
+<td><strong>Concept drift</strong></td>
+<td>Relationship between features and target changes</td>
+<td>Model performance monitoring</td>
+</tr>
+<tr>
+<td><strong>Outliers</strong></td>
+<td>Values outside expected range</td>
+<td>Z-score, IQR</td>
+</tr>
+<tr>
+<td><strong>Duplicates</strong></td>
+<td>Duplicate rows or keys</td>
+<td>Uniqueness checks</td>
+</tr>
+<tr>
+<td><strong>Referential integrity</strong></td>
+<td>Foreign key values don't exist in parent table</td>
+<td>Relationship tests</td>
+</tr>
+<tr>
+<td><strong>Business rule violations</strong></td>
+<td>Values violate domain rules (e.g., age &lt; 0)</td>
+<td>Custom constraints</td>
+</tr>
+<tr>
+<td><strong>Data freshness</strong></td>
+<td>Data not updated within expected window</td>
+<td>Timestamp checks</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="great-expectations">Great Expectations</h2>
+<p>Great Expectations (GX) is the most popular open-source data quality framework. Define &quot;expectations&quot; (assertions about your data), run validations, and generate Data Docs reports.</p>
+<h3 id="core-concepts">Core Concepts</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Expectation</strong></td>
+<td>A declarative assertion about data (e.g., column not null, values in range)</td>
+</tr>
+<tr>
+<td><strong>Expectation Suite</strong></td>
+<td>A collection of expectations for a dataset</td>
+</tr>
+<tr>
+<td><strong>Validation Definition</strong></td>
+<td>Pairs an expectation suite with a batch definition (the data to check)</td>
+</tr>
+<tr>
+<td><strong>Checkpoint</strong></td>
+<td>Runs one or more validation definitions and triggers actions (alerts, Data Docs)</td>
+</tr>
+<tr>
+<td><strong>Data Docs</strong></td>
+<td>Auto-generated HTML report of validation results</td>
+</tr>
+<tr>
+<td><strong>Data Context</strong></td>
+<td>The entry point: manages expectations, stores, and checkpoints</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="installation--setup">Installation &amp; Setup</h3>
+<pre><code class="language-bash">pip install great_expectations
+</code></pre>
+<p>The examples use GX Core 1.x. The <code>great_expectations init</code> CLI, <code>context.sources</code>, validators and <code>add_or_update_*</code> methods belong to the 0.x API and were removed in 1.0; the project context is now created from Python with <code>gx.get_context()</code>.</p>
+<h3 id="defining-expectations">Defining Expectations</h3>
+<pre><code class="language-python">import great_expectations as gx
+import pandas as pd
+
+# Load data
+df = pd.read_csv(&quot;users.csv&quot;)
+
+# Create a data context
+context = gx.get_context()
+
+# Connect data: data source -&gt; data asset -&gt; batch definition
+data_source = context.data_sources.add_pandas(&quot;users_datasource&quot;)
+data_asset = data_source.add_dataframe_asset(name=&quot;users_asset&quot;)
+batch_definition = data_asset.add_batch_definition_whole_dataframe(&quot;users_batch&quot;)
+
+# Create an expectation suite (expectations are classes in GX 1.x)
+suite = context.suites.add(gx.ExpectationSuite(name=&quot;users_suite&quot;))
+E = gx.expectations
+
+# Define expectations
+suite.add_expectation(E.ExpectColumnToExist(column=&quot;user_id&quot;))
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column=&quot;user_id&quot;))
+suite.add_expectation(E.ExpectColumnValuesToBeUnique(column=&quot;user_id&quot;))
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column=&quot;email&quot;))
+suite.add_expectation(E.ExpectColumnValuesToMatchRegex(
+    column=&quot;email&quot;, regex=r&quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$&quot;))
+
+# Numeric expectations
+suite.add_expectation(E.ExpectColumnValuesToBeBetween(column=&quot;age&quot;, min_value=0, max_value=120))
+suite.add_expectation(E.ExpectColumnValuesToBeBetween(column=&quot;salary&quot;, min_value=0, max_value=10_000_000))
+
+# Distribution expectations
+suite.add_expectation(E.ExpectColumnMeanToBeBetween(column=&quot;age&quot;, min_value=20, max_value=60))
+suite.add_expectation(E.ExpectColumnStdevToBeBetween(column=&quot;salary&quot;, min_value=1000, max_value=100000))
+
+# Categorical expectations
+suite.add_expectation(E.ExpectColumnValuesToBeInSet(column=&quot;status&quot;, value_set=[&quot;active&quot;, &quot;inactive&quot;, &quot;pending&quot;]))
+suite.add_expectation(E.ExpectColumnProportionOfUniqueValuesToBeBetween(column=&quot;country&quot;, min_value=0.01, max_value=1.0))
+
+# Null rate expectations
+suite.add_expectation(E.ExpectColumnValuesToNotBeNull(column=&quot;age&quot;, mostly=0.95))  # Allow 5% nulls
+
+# Quick interactive check against one batch
+batch = batch_definition.get_batch(batch_parameters={&quot;dataframe&quot;: df})
+print(batch.validate(suite).success)
+</code></pre>
+<h3 id="running-validations-in-a-pipeline">Running Validations in a Pipeline</h3>
+<pre><code class="language-python">import great_expectations as gx
+
+context = gx.get_context()
+
+# Pair the suite with the data it should validate
+validation_definition = context.validation_definitions.add(
+    gx.ValidationDefinition(name=&quot;users_validation&quot;, data=batch_definition, suite=suite)
+)
+
+# Create a checkpoint that runs the validation and updates Data Docs
+checkpoint = context.checkpoints.add(gx.Checkpoint(
+    name=&quot;users_checkpoint&quot;,
+    validation_definitions=[validation_definition],
+    actions=[gx.checkpoint.UpdateDataDocsAction(name=&quot;update_data_docs&quot;)],
+))
+
+# Run the checkpoint on today's dataframe
+result = checkpoint.run(batch_parameters={&quot;dataframe&quot;: df})
+
+# Check if all expectations passed
+if result.success:
+    print(&quot;All data quality checks passed&quot;)
+else:
+    # Get failed expectations
+    for validation_result in result.run_results.values():
+        failed = [r for r in validation_result.results if not r.success]
+        for f in failed:
+            print(f&quot;FAILED: {f.expectation_config.type} on {f.expectation_config.kwargs}&quot;)
+
+# Build and open Data Docs (HTML report)
+context.build_data_docs()
+</code></pre>
+<hr />
+<h2 id="data-contracts">Data Contracts</h2>
+<p>A data contract is a formal agreement between data producers and consumers about the schema, quality, and SLAs of a dataset. It prevents &quot;silent breaking changes&quot; that cause downstream pipeline failures.</p>
+<pre><code class="language-yaml"># data_contract_users.yaml
+name: users
+version: &quot;2.1.0&quot;
+owner: &quot;data-platform-team&quot;
+description: &quot;User profile data from the authentication service&quot;
+updated_at: &quot;2026-01-15&quot;
+
+schema:
+  fields:
+    - name: user_id
+      type: bigint
+      nullable: false
+      unique: true
+      description: &quot;Primary key&quot;
+
+    - name: email
+      type: string
+      nullable: false
+      pattern: &quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$&quot;
+
+    - name: age
+      type: integer
+      nullable: true
+      minimum: 0
+      maximum: 120
+
+    - name: signup_date
+      type: date
+      nullable: false
+
+quality:
+  null_rate_threshold: 0.02        # Max 2% nulls in any required column
+  duplicate_rate_threshold: 0.001   # Max 0.1% duplicates
+  freshness_threshold_hours: 24     # Data must be updated within 24 hours
+
+sla:
+  availability: &quot;99.9%&quot;
+  latency_p99_ms: 500
+</code></pre>
+<pre><code class="language-python">import yaml
+import pandas as pd
+from datetime import datetime, timedelta
+
+def validate_contract(df: pd.DataFrame, contract_path: str) -&gt; dict:
+    &quot;&quot;&quot;Validate a DataFrame against a data contract.&quot;&quot;&quot;
+    with open(contract_path) as f:
+        contract = yaml.safe_load(f)
+
+    violations = []
+
+    for field in contract['schema']['fields']:
+        col = field['name']
+
+        # Check column exists
+        if col not in df.columns:
+            violations.append(f&quot;Missing column: {col}&quot;)
+            continue
+
+        # Null check
+        if not field.get('nullable', True):
+            null_rate = df[col].isnull().mean()
+            threshold = contract['quality']['null_rate_threshold']
+            if null_rate &gt; threshold:
+                violations.append(f&quot;{col}: null rate {null_rate:.3f} exceeds threshold {threshold}&quot;)
+
+        # Range check
+        if 'minimum' in field and pd.api.types.is_numeric_dtype(df[col]):
+            if (df[col] &lt; field['minimum']).any():
+                violations.append(f&quot;{col}: values below minimum {field['minimum']}&quot;)
+
+    return {&quot;success&quot;: len(violations) == 0, &quot;violations&quot;: violations}
+</code></pre>
+<hr />
+<h2 id="pandera-for-dataframe-validation">Pandera for DataFrame Validation</h2>
+<p>Pandera provides a lightweight, Pythonic way to validate DataFrames inline in code.</p>
+<pre><code class="language-python">import pandera as pa
+from pandera.typing import DataFrame, Series
+import pandas as pd
+
+# Schema definition
+class UserSchema(pa.DataFrameModel):
+    user_id: Series[int] = pa.Field(gt=0, unique=True)
+    email: Series[str] = pa.Field(str_matches=r'^[\w.-]+@[\w.-]+\.\w+$')
+    age: Series[float] = pa.Field(ge=0, le=120, nullable=True)
+    salary: Series[float] = pa.Field(ge=0, nullable=True)
+    status: Series[str] = pa.Field(isin=['active', 'inactive', 'pending'])
+
+    class Config:
+        coerce = True  # Auto-convert types if possible
+
+# Validate
+df = pd.read_csv(&quot;users.csv&quot;)
+
+try:
+    UserSchema.validate(df, lazy=True)  # lazy=True: collect all errors
+    print(&quot;Validation passed&quot;)
+except pa.errors.SchemaErrors as e:
+    print(f&quot;Validation failed:\n{e.failure_cases}&quot;)
+
+# Use as decorator in pipeline functions
+@pa.check_types
+def process_users(df: DataFrame[UserSchema]) -&gt; DataFrame[UserSchema]:
+    df['age_group'] = pd.cut(df['age'], bins=[0, 25, 40, 60, 120],
+                              labels=['young', 'adult', 'senior', 'elderly'])
+    return df
+</code></pre>
+<hr />
+<h2 id="data-drift-vs-concept-drift">Data Drift vs Concept Drift</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+<th>Detection</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data/Covariate drift</strong></td>
+<td>Input feature distribution P(X) changes</td>
+<td>Statistical tests on features</td>
+<td>Model predictions shift</td>
+</tr>
+<tr>
+<td><strong>Label drift</strong></td>
+<td>Target distribution P(Y) changes</td>
+<td>Monitor prediction distribution</td>
+<td>Class imbalance changes</td>
+</tr>
+<tr>
+<td><strong>Concept drift</strong></td>
+<td>Relationship P(Y|X) changes</td>
+<td>Monitor model accuracy over time</td>
+<td>Model becomes stale</td>
+</tr>
+<tr>
+<td><strong>Upstream data drift</strong></td>
+<td>Source data schema or business logic changes</td>
+<td>Schema monitoring</td>
+<td>Pipeline breaks</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>Data drift:  P_train(age) ≠ P_serve(age)   → features shifted
+Concept drift: P_train(churn|features) ≠ P_serve(churn|features) → model is wrong
+</code></pre>
+<hr />
+<h2 id="drift-detection-with-evidently-ai">Drift Detection with Evidently AI</h2>
+<pre><code class="language-python">import pandas as pd
+from evidently import Report  # Evidently 0.7+ API; the old one lives in evidently.legacy
+from evidently.presets import DataDriftPreset, DataSummaryPreset
+from evidently.metrics import DriftedColumnsCount, ValueDrift
+
+# Reference data (training distribution) vs current data (production)
+reference_df = pd.read_parquet(&quot;reference_data.parquet&quot;)
+current_df = pd.read_parquet(&quot;current_data.parquet&quot;)
+
+# Full data drift report
+report = Report([
+    DataDriftPreset(),         # Drift for all features
+    DataSummaryPreset(),       # Null rates, distribution stats
+])
+
+snapshot = report.run(current_data=current_df, reference_data=reference_df)
+snapshot.save_html(&quot;drift_report.html&quot;)
+
+# Check results programmatically (first metric of the preset is DriftedColumnsCount)
+result = snapshot.dict()
+drift_share = result['metrics'][0]['value']['share']
+print(f&quot;Fraction of drifted columns: {drift_share:.2%}&quot;)
+
+# Per-column drift
+col_report = Report([
+    ValueDrift(column=&quot;age&quot;),
+    ValueDrift(column=&quot;salary&quot;),
+    DriftedColumnsCount(drift_share=0.3),  # Dataset counts as drifted if &gt;30% columns drift
+])
+col_snapshot = col_report.run(current_data=current_df, reference_data=reference_df)
+</code></pre>
+<h3 id="statistical-tests-for-drift">Statistical Tests for Drift</h3>
+<pre><code class="language-python">from scipy import stats
+import numpy as np
+
+def detect_drift(reference: np.ndarray, current: np.ndarray) -&gt; dict:
+    &quot;&quot;&quot;Run multiple drift detection tests.&quot;&quot;&quot;
+    results = {}
+
+    # Kolmogorov-Smirnov test (continuous features)
+    ks_stat, ks_pval = stats.ks_2samp(reference, current)
+    results['ks_test'] = {'statistic': ks_stat, 'p_value': ks_pval, 'drifted': ks_pval &lt; 0.05}
+
+    # Population Stability Index (PSI)
+    def psi(expected, actual, buckets=10):
+        breakpoints = np.percentile(expected, np.linspace(0, 100, buckets + 1))
+        expected_pct = np.histogram(expected, bins=breakpoints)[0] / len(expected) + 1e-10
+        actual_pct = np.histogram(actual, bins=breakpoints)[0] / len(actual) + 1e-10
+        return np.sum((actual_pct - expected_pct) * np.log(actual_pct / expected_pct))
+
+    psi_score = psi(reference, current)
+    results['psi'] = {
+        'score': psi_score,
+        'drifted': psi_score &gt; 0.2,  # PSI: &lt; 0.1 no change, 0.1-0.2 slight, &gt; 0.2 significant
+        'severity': 'none' if psi_score &lt; 0.1 else 'slight' if psi_score &lt; 0.2 else 'significant'
+    }
+
+    return results
+</code></pre>
+<hr />
+<h2 id="dbt-tests-for-data-quality">dbt Tests for Data Quality</h2>
+<p>dbt (data build tool) includes built-in and custom data tests that run after transformations:</p>
+<pre><code class="language-yaml"># models/schema.yml
+models:
+  - name: users
+    description: &quot;Cleaned user data&quot;
+    columns:
+      - name: user_id
+        description: &quot;Primary key&quot;
+        tests:
+          - not_null
+          - unique
+
+      - name: email
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: &quot;email LIKE '%@%.%'&quot;
+
+      - name: age
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 120
+
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['active', 'inactive', 'pending']
+
+    tests:
+      # Table-level tests
+      - dbt_utils.recency:
+          datepart: hour
+          field: updated_at
+          interval: 24   # Alert if no data in last 24 hours
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between data drift and concept drift?</strong>
+Data drift (covariate shift) is when the input feature distribution P(X) changes: e.g., users skew older, average transaction amounts increase. Concept drift is when the relationship between features and target P(Y|X) changes: the model's learned patterns no longer hold. Data drift can be detected by comparing feature distributions to a reference. Concept drift requires monitoring model accuracy and prediction distributions over time.</p>
+<p><strong>Q2: How would you monitor data quality in a production ML pipeline?</strong></p>
+<ol>
+<li>Schema validation at pipeline ingestion (Pandera, Great Expectations)</li>
+<li>Statistical drift monitoring on features (KS test, PSI, Evidently)</li>
+<li>Model performance monitoring (accuracy, F1 against labeled holdout)</li>
+<li>Prediction distribution monitoring (alert if prediction mean shifts significantly)</li>
+<li>Data freshness checks (alert if no data in expected window)</li>
+<li>Automated alerts to Slack/PagerDuty with severity levels</li>
+</ol>
+<p><strong>Q3: What is PSI (Population Stability Index) and how do you interpret it?</strong>
+PSI measures how much a distribution has shifted relative to a reference. Compute by bucketing both distributions, then PSI = Σ (actual% - reference%) × ln(actual% / reference%). Interpretation: &lt; 0.1 no significant change; 0.1-0.2 slight change, monitor; &gt; 0.2 significant drift, investigate and likely retrain.</p>
+<p><strong>Q4: What are data contracts and why are they important?</strong>
+A data contract is a formal SLA between data producers (e.g., an engineering team) and data consumers (e.g., ML team or analytics). It specifies schema, quality expectations (null rates, uniqueness), freshness SLAs, and versioning. Without contracts, producers change schemas silently, breaking downstream ML pipelines, often discovered only when models produce wrong predictions.</p>
+<p><strong>Q5: How do you handle schema drift in an ML pipeline?</strong></p>
+<ol>
+<li>Schema validation at ingestion (fail fast, alert immediately)</li>
+<li>Backward-compatible changes (adding nullable columns): handle in feature engineering with defaults</li>
+<li>Breaking changes (column removal, type change): trigger pipeline pause + alert</li>
+<li>Use Avro/Protobuf schemas with registries (Confluent Schema Registry for Kafka) to enforce compatibility</li>
+<li>Version your feature engineering code alongside schema versions</li>
+</ol>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No schema validation at ingestion</td>
+<td>Silent data corruption propagates</td>
+<td>Add schema validation as first pipeline step</td>
+</tr>
+<tr>
+<td>Comparing to wrong reference data</td>
+<td>False drift alerts or missed drift</td>
+<td>Use stable reference period (30-day rolling baseline)</td>
+</tr>
+<tr>
+<td>Alert fatigue from too many tests</td>
+<td>Team ignores alerts</td>
+<td>Prioritize critical expectations; use severity levels</td>
+</tr>
+<tr>
+<td>No freshness monitoring</td>
+<td>Stale data used for predictions</td>
+<td>Add timestamp checks on all critical datasets</td>
+</tr>
+<tr>
+<td>Testing only at training time</td>
+<td>Production data quality not monitored</td>
+<td>Run GX or Pandera in the serving pipeline too</td>
+</tr>
+<tr>
+<td>No data lineage</td>
+<td>Can't trace quality issues to source</td>
+<td>Use tools like DataHub, Amundsen, or dbt lineage</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_mlflow.html">MLflow</a></td>
+<td>Log data quality metrics alongside model metrics</td>
+</tr>
+<tr>
+<td><a href="intro_feature_stores.html">Feature Stores</a></td>
+<td>Feature stores need quality validation before materialization</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_dbt.html">dbt Introduction</a></td>
+<td>dbt tests are a primary tool for data quality in warehouses</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_llmops.html">LLMOps</a></td>
+<td>LLM input/output quality monitoring</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>Data Quality is an Intermediate (🟡) MLOps topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_model_explainability.html"><small>Previous</small>Explainability</a><a rel="next" class="next" href="intro_model_monitoring.html"><small>Next</small>Model Monitoring</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_data_quality.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

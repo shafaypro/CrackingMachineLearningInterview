@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Context Engineering Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Prompt engineering is about wording. Context engineering is about what goes into the window at all, which facts, in what order, at what cost, and what…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_context_engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Context Engineering Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Prompt engineering is about wording. Context engineering is about what goes into the window at all, which facts, in what order, at what cost, and what…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_context_engineering.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Context Engineering Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Prompt engineering is about wording. Context engineering is about what goes into the window at all, which facts, in what order, at what cost, and what…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Context Engineering",
+   "description": "Prompt engineering is about wording. Context engineering is about what goes into the window at all, which facts, in what order, at what cost, and what…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_context_engineering.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Context Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_context_engineering.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Context Engineering</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_context_engineering.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="context-engineering">Context Engineering</h1>
+<p>Prompt engineering is about wording. <strong>Context engineering is about what goes into the window at all</strong>, which facts, in what order, at what cost, and what gets dropped when the conversation outgrows the budget. It is now the dominant design activity in LLM applications, because in a RAG or agent system the model is rarely the bottleneck; what you chose to show it is.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#prompt-engineering-vs-context-engineering">Prompt Engineering vs Context Engineering</a></li>
+<li><a href="#the-context-budget">The Context Budget</a></li>
+<li><a href="#context-ordering-and-the-lost-in-the-middle-effect">Context Ordering and the Lost-in-the-Middle Effect</a></li>
+<li><a href="#prompt-caching-and-prefix-stability">Prompt Caching and Prefix Stability</a></li>
+<li><a href="#conversation-memory">Conversation Memory</a></li>
+<li><a href="#compaction-strategies">Compaction Strategies</a></li>
+<li><a href="#context-for-agents">Context for Agents</a></li>
+<li><a href="#context-rot-and-failure-modes">Context Rot and Failure Modes</a></li>
+<li><a href="#measuring-context-quality">Measuring Context Quality</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="prompt-engineering-vs-context-engineering">Prompt Engineering vs Context Engineering</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Prompt engineering</th>
+<th>Context engineering</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit of work</td>
+<td>Wording of an instruction</td>
+<td>Composition of the whole window</td>
+</tr>
+<tr>
+<td>Typical question</td>
+<td>&quot;How do I phrase this?&quot;</td>
+<td>&quot;What does the model need to see, and what must I leave out?&quot;</td>
+</tr>
+<tr>
+<td>Failure it fixes</td>
+<td>Model misunderstands the task</td>
+<td>Model lacks the fact, or drowns in irrelevant text</td>
+</tr>
+<tr>
+<td>Cost impact</td>
+<td>Marginal</td>
+<td>Dominant: input tokens are most of the bill</td>
+</tr>
+<tr>
+<td>Scales with</td>
+<td>Task complexity</td>
+<td>Corpus size, conversation length, tool count</td>
+</tr>
+</tbody>
+</table></div>
+<p>The shift happened because context windows grew. When the window was 4k tokens, the constraint was obvious and everyone economized. At 200k+, it became possible to stuff everything in, and teams discovered that <strong>more context often makes answers worse</strong>, not just more expensive. Deciding what to exclude turned into the real skill.</p>
+<hr />
+<h2 id="the-context-budget">The Context Budget</h2>
+<p>Treat the window as a budget with named line items, not as a bucket.</p>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│ System prompt + tool definitions      stable, cached │
+│ Few-shot examples                     stable, cached │
+├─────────────────────────────────────────────────────┤
+│ Long-term memory / user profile       semi-stable    │
+│ Conversation history                  growing        │
+│ Retrieved documents                   per-request    │
+│ Current user message                  per-request    │
+├─────────────────────────────────────────────────────┤
+│ Reserved headroom for the response    never fill     │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+<p>Two rules follow directly:</p>
+<ol>
+<li><strong>Never plan to fill the window.</strong> Reserve room for the output plus a safety margin. A request that fits at turn 10 and overflows at turn 11 is a production incident, and truncation errors surface as user-visible failures.</li>
+<li><strong>Order by stability, not by importance.</strong> Everything that rarely changes goes first so the cached prefix stays valid; volatile content goes last.</li>
+</ol>
+<pre><code class="language-python">def assemble_context(system, tools, examples, memory, history, docs, question, budget=100_000):
+    &quot;&quot;&quot;Fill from a fixed skeleton, trimming the elastic sections to fit.&quot;&quot;&quot;
+    fixed = count_tokens(system) + count_tokens(tools) + count_tokens(examples)
+    reserved_for_output = 4_000
+    elastic = budget - fixed - reserved_for_output - count_tokens(question)
+
+    # Priority order when space is tight: memory &gt; recent history &gt; documents
+    memory_part  = truncate(memory, min(count_tokens(memory), int(elastic * 0.15)))
+    docs_part    = truncate(docs,   int(elastic * 0.50))
+    history_part = truncate(history, elastic - count_tokens(memory_part) - count_tokens(docs_part))
+
+    return [system, tools, examples, memory_part, history_part, docs_part, question]
+</code></pre>
+<p><strong>Count tokens, never characters.</strong> A 4-chars-per-token rule of thumb is fine for a rough estimate and wrong at the boundary: code, JSON, non-English text, and long identifiers tokenize far denser. Use the provider's tokenizer for any check that gates a request.</p>
+<hr />
+<h2 id="context-ordering-and-the-lost-in-the-middle-effect">Context Ordering and the Lost-in-the-Middle Effect</h2>
+<p>Models attend unevenly across a long context. Accuracy on retrieving a fact is highest when it sits near the <strong>beginning or end</strong> of the window and measurably lower in the middle: the &quot;lost in the middle&quot; finding. It has been reproduced across model families, and it holds even for models advertising very long windows.</p>
+<p>Practical consequences:</p>
+<ul>
+<li><strong>Put the most relevant retrieved chunk last</strong>, immediately before the question. Rerankers output a relevance order; placing rank 1 nearest the query beats placing it first in a long list.</li>
+<li><strong>Repeat the instruction at the end</strong> for very long contexts. A task instruction given 80k tokens earlier competes with everything since.</li>
+<li><strong>Fewer, better chunks beat more chunks.</strong> Passing 20 documents when 4 suffice both costs more and dilutes attention across irrelevant text.</li>
+<li><strong>Structure the context.</strong> Delimiters, headers, and per-source labels help the model locate what it needs and make citation possible.</li>
+</ul>
+<pre><code class="language-python"># Reranked descending by relevance: reverse so the strongest sits closest to the question
+context = &quot;\n\n&quot;.join(
+    f&quot;&lt;document id=\&quot;{d.id}\&quot; source=\&quot;{d.source}\&quot; date=\&quot;{d.date}\&quot;&gt;\n{d.text}\n&lt;/document&gt;&quot;
+    for d in reversed(reranked[:4])
+)
+prompt = f&quot;{context}\n\nAnswer using only the documents above, citing document ids.\n\nQuestion: {question}&quot;
+</code></pre>
+<hr />
+<h2 id="prompt-caching-and-prefix-stability">Prompt Caching and Prefix Stability</h2>
+<p>Providers cache a request's prefix and charge a fraction of the normal input price for the cached portion; self-hosted servers skip the prefill compute entirely. The cache matches on an <strong>exact prefix</strong>, so a single changed byte early in the prompt invalidates everything after it.</p>
+<p>This makes prompt <em>ordering</em> an economic decision:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layout</th>
+<th>Cache behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>system → tools → examples → history → docs → question</code></td>
+<td>Prefix stable across turns; large cache hit</td>
+</tr>
+<tr>
+<td><code>timestamp → system → docs → question</code></td>
+<td>A leading timestamp busts the cache on <strong>every</strong> request</td>
+</tr>
+<tr>
+<td><code>user profile → system → ...</code></td>
+<td>Cache is per-user at best; no sharing across users</td>
+</tr>
+</tbody>
+</table></div>
+<p>Concrete anti-patterns that silently destroy cache hit rate: injecting the current time or a request ID at the top; putting the user's name or tenant into the system prompt when it could go later; reordering tool definitions non-deterministically (a <code>set</code> or dict iteration that isn't stable); and re-summarizing conversation history every turn, which rewrites the middle of the prefix.</p>
+<p>For agents this matters enormously: an agent loop re-sends the whole conversation on each step, so a stable prefix can cut cost by an order of magnitude over a long run.</p>
+<hr />
+<h2 id="conversation-memory">Conversation Memory</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Mechanism</th>
+<th>Best for</th>
+<th>Weakness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Full history</strong></td>
+<td>Send everything</td>
+<td>Short sessions</td>
+<td>Grows without bound</td>
+</tr>
+<tr>
+<td><strong>Sliding window</strong></td>
+<td>Keep last N turns</td>
+<td>Chat with local context</td>
+<td>Silently forgets early commitments</td>
+</tr>
+<tr>
+<td><strong>Summary buffer</strong></td>
+<td>Summarize old turns, keep recent verbatim</td>
+<td>Long conversations</td>
+<td>Summarization loses detail and costs a call</td>
+</tr>
+<tr>
+<td><strong>Retrieval over history</strong></td>
+<td>Embed turns, retrieve relevant ones</td>
+<td>Very long or resumed sessions</td>
+<td>Needs an index; can miss context</td>
+</tr>
+<tr>
+<td><strong>Structured memory</strong></td>
+<td>Extract facts to a store (key-value or graph)</td>
+<td>Assistants with persistent users</td>
+<td>Extraction errors persist and compound</td>
+</tr>
+</tbody>
+</table></div>
+<p>The strategy that works in practice is layered rather than singular: keep a small structured profile of durable facts, keep the last few turns verbatim, and summarize or retrieve the rest.</p>
+<pre><code class="language-python">class LayeredMemory:
+    &quot;&quot;&quot;Durable facts + verbatim recent turns + summarized older turns.&quot;&quot;&quot;
+
+    def __init__(self, keep_recent=6, summarize_after=20):
+        self.facts = {}            # durable, extracted: {&quot;timezone&quot;: &quot;CET&quot;, &quot;role&quot;: &quot;MLE&quot;}
+        self.turns = []            # verbatim
+        self.summary = &quot;&quot;          # compacted older history
+        self.keep_recent = keep_recent
+        self.summarize_after = summarize_after
+
+    def add(self, role, content):
+        self.turns.append({&quot;role&quot;: role, &quot;content&quot;: content})
+        if len(self.turns) &gt; self.summarize_after:
+            older, self.turns = self.turns[:-self.keep_recent], self.turns[-self.keep_recent:]
+            # Summarize into the EXISTING summary so it stays append-only and cache-friendly
+            self.summary = summarize(self.summary, older)
+
+    def render(self):
+        parts = []
+        if self.facts:
+            parts.append(&quot;Known facts:\n&quot; + &quot;\n&quot;.join(f&quot;- {k}: {v}&quot; for k, v in self.facts.items()))
+        if self.summary:
+            parts.append(f&quot;Earlier conversation summary:\n{self.summary}&quot;)
+        return parts + self.turns
+</code></pre>
+<p><strong>What must survive compaction</strong>: decisions and commitments made, constraints the user stated, corrections the user issued (an assistant that re-makes a corrected mistake destroys trust faster than any other failure), identifiers and names, and open questions. What can be dropped: pleasantries, superseded intermediate reasoning, and tool output already reflected in a conclusion.</p>
+<hr />
+<h2 id="compaction-strategies">Compaction Strategies</h2>
+<p>When a conversation approaches the budget, something must go. Options, roughly in order of fidelity:</p>
+<ol>
+<li><strong>Drop tool call bodies, keep conclusions.</strong> Tool outputs are usually the largest and most disposable content: a 3,000-token API response reduces to &quot;the query returned 14 rows; the top account is X.&quot;</li>
+<li><strong>Summarize the oldest span</strong> into the existing summary, leaving recent turns verbatim.</li>
+<li><strong>Deduplicate.</strong> Retrieved documents repeat across turns in RAG chats; keep one copy.</li>
+<li><strong>Externalize.</strong> Write long artifacts to a file or store and keep a reference the model can re-read on demand, rather than carrying them inline.</li>
+<li><strong>Hard-truncate the middle</strong>, keeping the head (system, task) and tail (recent turns). Crude but predictable, and better than an overflow error.</li>
+</ol>
+<p>Compaction should be <strong>idempotent and append-only</strong> where possible. Re-summarizing the whole history each turn produces a different prefix every time, which both busts the cache and lets facts drift as summaries of summaries degrade.</p>
+<hr />
+<h2 id="context-for-agents">Context for Agents</h2>
+<p>Agent loops re-send accumulated context at every step, so context growth is the main driver of both cost and failure over a long run.</p>
+<ul>
+<li><strong>Tool definitions are permanent context.</strong> Twenty tools with verbose schemas can consume several thousand tokens on every single step. Trim descriptions, and load tools by task phase rather than exposing all of them always.</li>
+<li><strong>Tool results are the fastest-growing segment.</strong> Truncate large outputs at the boundary, with an explicit marker, and give the agent a way to request more.</li>
+<li><strong>Subagents isolate context.</strong> Delegating a research subtask to a subagent that returns only its conclusion keeps the parent's window clean: this is the main practical argument for multi-agent designs, more than any notion of specialization.</li>
+<li><strong>Externalize state.</strong> A scratchpad file or task list the agent reads and writes beats carrying all intermediate reasoning inline.</li>
+</ul>
+<pre><code class="language-python">MAX_TOOL_RESULT_TOKENS = 2_000
+
+def add_tool_result(messages, tool_name, result):
+    text = str(result)
+    if count_tokens(text) &gt; MAX_TOOL_RESULT_TOKENS:
+        text = (truncate(text, MAX_TOOL_RESULT_TOKENS)
+                + f&quot;\n\n[truncated: {count_tokens(str(result))} tokens total. &quot;
+                  f&quot;Call {tool_name} with a narrower filter for specifics.]&quot;)
+    messages.append({&quot;role&quot;: &quot;tool&quot;, &quot;name&quot;: tool_name, &quot;content&quot;: text})
+</code></pre>
+<hr />
+<h2 id="context-rot-and-failure-modes">Context Rot and Failure Modes</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>What it looks like</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Distraction</strong></td>
+<td>Answer drifts to an irrelevant retrieved document</td>
+<td>Too many low-relevance chunks</td>
+<td>Rerank; pass fewer</td>
+</tr>
+<tr>
+<td><strong>Lost in the middle</strong></td>
+<td>A fact that <em>is</em> in context is ignored</td>
+<td>Poor position</td>
+<td>Put key content at the end</td>
+</tr>
+<tr>
+<td><strong>Context poisoning</strong></td>
+<td>A hallucination early on is treated as fact later</td>
+<td>Model's own error persists in history</td>
+<td>Validate before appending; drop bad turns</td>
+</tr>
+<tr>
+<td><strong>Instruction dilution</strong></td>
+<td>Model stops following the format after many turns</td>
+<td>Instruction is far away and outnumbered</td>
+<td>Restate constraints near the end</td>
+</tr>
+<tr>
+<td><strong>Stale context</strong></td>
+<td>Answers from an outdated retrieved doc</td>
+<td>No recency signal</td>
+<td>Timestamp metadata; prefer recent sources</td>
+</tr>
+<tr>
+<td><strong>Conflicting sources</strong></td>
+<td>Confidently picks one of two contradictory docs</td>
+<td>No precedence rule</td>
+<td>Rank by authority and recency; ask the model to flag conflicts</td>
+</tr>
+<tr>
+<td><strong>Silent truncation</strong></td>
+<td>Answer omits something that was &quot;in&quot; the prompt</td>
+<td>Middle-out truncation by the client or provider</td>
+<td>Count tokens yourself; fail loudly</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Context poisoning</strong> deserves emphasis because it is specific to multi-turn systems and easy to miss: once a model states something false and that turn stays in history, the falsehood is now &quot;established context&quot; the model will defend and build on. Validating tool results and model claims <em>before</em> they enter durable history is far cheaper than detecting the downstream damage.</p>
+<hr />
+<h2 id="measuring-context-quality">Measuring Context Quality</h2>
+<p>Do not evaluate the prompt; evaluate what the context enables.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Retrieval recall@k</strong></td>
+<td>Is the needed fact even in the window?</td>
+</tr>
+<tr>
+<td><strong>Context precision</strong></td>
+<td>What fraction of included tokens are relevant?</td>
+</tr>
+<tr>
+<td><strong>Faithfulness / groundedness</strong></td>
+<td>Are claims supported by what was provided?</td>
+</tr>
+<tr>
+<td><strong>Citation accuracy</strong></td>
+<td>Do cited spans exist and support the claim?</td>
+</tr>
+<tr>
+<td><strong>Cache hit rate</strong></td>
+<td>Is the prefix actually stable?</td>
+</tr>
+<tr>
+<td><strong>Tokens per resolved request</strong></td>
+<td>The real cost metric</td>
+</tr>
+<tr>
+<td><strong>Truncation rate</strong></td>
+<td>How often is content silently dropped?</td>
+</tr>
+</tbody>
+</table></div>
+<p>The highest-signal diagnostic is a <strong>needle test on your own corpus</strong>: place a known fact at varying depths in a realistic context and measure retrieval accuracy by position. Published long-context benchmarks use synthetic haystacks and consistently overstate performance relative to real, semantically dense documents.</p>
+<p>The ablation worth running before shipping: hold the question set fixed and vary only the number of retrieved chunks (2, 4, 8, 16). Accuracy usually peaks well before the maximum, and the peak is your <code>top_k</code>.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-is-context-engineering-and-how-does-it-differ-from-prompt-engineering">What is context engineering and how does it differ from prompt engineering?</h4>
+<p>Prompt engineering optimizes the <em>wording</em> of instructions: phrasing, examples, output format. Context engineering optimizes <em>what information enters the window at all</em>: which documents, how much history, in what order, within what token and cost budget, and what gets evicted when it overflows.</p>
+<p>The distinction became important once windows got large enough that &quot;include everything&quot; was possible. It turns out that including everything degrades quality: irrelevant context distracts the model, and content in the middle of a long window is attended to less reliably. So the job shifted from writing better instructions to curating a smaller, better-ordered context. In a RAG or agent system it is also where nearly all the cost lives, since input tokens dominate.</p>
+<h4 id="the-context-window-is-200k-tokens-should-you-just-put-everything-in">The context window is 200k tokens. Should you just put everything in?</h4>
+<p>No, for three separate reasons.</p>
+<p><strong>Quality</strong>: accuracy degrades with irrelevant content. The lost-in-the-middle effect means a fact buried at 50% depth is retrieved less reliably than one at the edges, and distraction from low-relevance chunks measurably worsens answers.</p>
+<p><strong>Cost</strong>: input tokens dominate a RAG bill. Sending 100k tokens to answer a question that needed 3k is a ~30x cost multiplier on every request, and it recurs on every agent step.</p>
+<p><strong>Latency</strong>: prefill is compute-bound and scales with prompt length, so a huge prompt directly inflates time-to-first-token.</p>
+<p>The right approach is retrieve broadly, rerank, and pass the smallest context that reliably contains the answer, usually far fewer chunks than people expect, and worth determining empirically with a <code>top_k</code> ablation.</p>
+<h4 id="how-does-prompt-caching-change-how-you-structure-a-prompt">How does prompt caching change how you structure a prompt?</h4>
+<p>The cache keys on an exact prefix, so anything that varies must go <strong>after</strong> everything that doesn't. The layout becomes: system prompt, tool definitions, few-shot examples, then long-term memory, then conversation history, then retrieved documents, then the user's question.</p>
+<p>The consequences are concrete. A timestamp or request ID at the top of the system prompt invalidates the cache on every request: one of the most expensive one-line bugs in LLM applications. Non-deterministic tool ordering (iterating a set) does the same. Re-summarizing the whole history each turn rewrites the middle of the prefix and destroys the hit rate.</p>
+<p>Done right, cached input is typically around 10% of normal price, and for an agent loop that re-sends context every step it is often the single largest cost reduction available.</p>
+<h4 id="what-is-the-lost-in-the-middle-effect-and-how-do-you-design-around-it">What is the lost-in-the-middle effect and how do you design around it?</h4>
+<p>Models retrieve facts from the start and end of a long context substantially more reliably than from the middle: a U-shaped accuracy curve by position, reproduced across model families and present even in long-context models.</p>
+<p>Design responses: put the highest-relevance retrieved chunk immediately before the question rather than first in the list; restate critical instructions at the end of a long context; reduce the number of chunks so there is less middle to get lost in; and add structural markers so content is locatable rather than uniform prose. Then verify on your own data with a needle test at varying depths, because synthetic benchmarks overstate real performance on semantically dense documents.</p>
+<h4 id="how-would-you-manage-memory-for-an-assistant-used-daily-over-months">How would you manage memory for an assistant used daily over months?</h4>
+<p>Layered, because no single strategy covers it. A <strong>structured profile</strong> for durable facts (preferences, constraints, role, timezone) extracted deliberately and stored outside the conversation. <strong>Recent turns verbatim</strong>, since immediate context needs full fidelity. <strong>A rolling summary</strong> of older turns, updated append-only so the prefix stays cache-stable. <strong>Retrieval over an archive</strong> of past sessions for anything older, so a question about a conversation from March pulls in just that.</p>
+<p>The critical design detail is what survives compaction: decisions, commitments, stated constraints, and especially <strong>user corrections</strong>. An assistant that repeats a mistake the user already corrected loses trust faster than one that simply forgets. I'd also make memory writes auditable and user-editable, because extraction errors otherwise persist indefinitely and compound.</p>
+<h4 id="what-is-context-poisoning">What is context poisoning?</h4>
+<p>When a model states something false and that turn remains in the conversation history, the falsehood becomes established context. On subsequent turns the model treats its own prior claim as a given, builds on it, and will often defend it against correction: a single hallucination compounds across a long session. The same happens with an erroneous tool result that is never validated.</p>
+<p>Mitigations are all about the write path: validate tool outputs before appending them, check claims against retrieved sources before they enter durable history, allow removing or correcting a poisoned turn rather than only appending, and keep durable memory extraction separate from raw conversation so a bad turn does not become a permanent &quot;fact.&quot;</p>
+<h4 id="an-agents-cost-grows-superlinearly-over-a-long-run-why-and-what-do-you-do">An agent's cost grows superlinearly over a long run. Why, and what do you do?</h4>
+<p>Because each step re-sends the entire accumulated context. If the conversation grows by roughly a constant amount per step, total tokens across <code>N</code> steps grow as <code>O(N²)</code>. Tool results are usually the fastest-growing segment, and verbose tool schemas are re-sent every single step.</p>
+<p>Fixes, in order of impact: <strong>prompt caching</strong> with a strictly stable prefix, so re-sent context costs a fraction; <strong>truncate tool results</strong> at a boundary with a marker and a way to request more; <strong>compact</strong> older steps into a summary once past a threshold; <strong>externalize</strong> long artifacts to files the agent reads on demand; <strong>delegate to subagents</strong> that return only conclusions, keeping the parent window small; and <strong>trim tool definitions</strong> or load them by phase. Plus a hard step limit and a per-request cost ceiling, because an agent stuck in a loop is the failure mode that produces the surprising invoice.</p>
+<h4 id="how-do-you-decide-how-many-retrieved-chunks-to-include">How do you decide how many retrieved chunks to include?</h4>
+<p>Empirically, with an ablation. Fix a labeled question set, vary only <code>top_k</code> (2, 4, 8, 16, 32), and measure end-to-end answer accuracy along with cost and latency. Accuracy almost always peaks at a modest value and then declines as irrelevant context dilutes attention: the peak is the answer, and it is usually lower than intuition suggests.</p>
+<p>Two refinements matter. Retrieve broadly (say 30) and <strong>rerank</strong> down to the final few, so the candidate set is wide but the context is tight. And measure retrieval recall separately: if recall@30 is poor, no amount of <code>top_k</code> tuning helps, and the problem is chunking or the embedding model rather than context assembly.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timestamp or request ID at the top of the prompt</td>
+<td>Busts the prefix cache on every request</td>
+<td>Move all volatile content to the end</td>
+</tr>
+<tr>
+<td>Filling the window to its limit</td>
+<td>Overflow at turn N+1 becomes a user-visible failure</td>
+<td>Reserve explicit output headroom</td>
+</tr>
+<tr>
+<td>Estimating tokens from character count</td>
+<td>Code, JSON, and non-English tokenize far denser</td>
+<td>Use the provider's tokenizer for any gating check</td>
+</tr>
+<tr>
+<td>Passing every retrieved chunk &quot;just in case&quot;</td>
+<td>Higher cost <em>and</em> measurably worse answers</td>
+<td>Rerank; ablate <code>top_k</code>; pass fewer</td>
+</tr>
+<tr>
+<td>Highest-relevance chunk placed first</td>
+<td>Lands in the weakly-attended middle of a long list</td>
+<td>Put it last, adjacent to the question</td>
+</tr>
+<tr>
+<td>Re-summarizing the entire history each turn</td>
+<td>Rewrites the prefix, destroys caching, drifts facts</td>
+<td>Append-only summary of the oldest span</td>
+</tr>
+<tr>
+<td>Appending unvalidated tool output to history</td>
+<td>Errors become established context and compound</td>
+<td>Validate before it enters durable history</td>
+</tr>
+<tr>
+<td>Non-deterministic tool definition order</td>
+<td>Silent cache misses</td>
+<td>Sort tool definitions deterministically</td>
+</tr>
+<tr>
+<td>Dropping user corrections during compaction</td>
+<td>Assistant repeats a corrected mistake</td>
+<td>Pin corrections and commitments as durable facts</td>
+</tr>
+<tr>
+<td>Trusting published long-context benchmarks</td>
+<td>Synthetic haystacks overstate real performance</td>
+<td>Needle test on your own corpus at varying depths</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_prompt_engineering.html">Prompt Engineering</a></li>
+<li><a href="intro_rag.html">Intro to RAG</a></li>
+<li><a href="intro_rag_engineering.html">RAG Engineering</a></li>
+<li><a href="intro_embeddings.html">Embeddings</a></li>
+<li><a href="intro_agentic_ai.html">Agentic AI</a></li>
+<li><a href="intro_multi_agent_systems.html">Multi-Agent Systems</a></li>
+<li><a href="intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../mlops/intro_llm_evaluation.html">LLM Evaluation</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_prompt_engineering.html"><small>Previous</small>Prompt Engineering</a><a rel="next" class="next" href="intro_structured_outputs.html"><small>Next</small>Structured Outputs</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_context_engineering.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

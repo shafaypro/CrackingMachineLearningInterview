@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Debugging Scenarios: &quot;Your Model Is Broken, What Do You Do?&quot; | Cracking ML Interviews</title>
+<meta name="description" content="Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-debugging-scenarios.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ML Debugging Scenarios: &quot;Your Model Is Broken, What Do You Do?&quot; | Cracking ML Interviews">
+<meta property="og:description" content="Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-debugging-scenarios.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ML Debugging Scenarios: &quot;Your Model Is Broken, What Do You Do?&quot; | Cracking ML Interviews">
+<meta name="twitter:description" content="Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ML Debugging Scenarios: \"Your Model Is Broken, What Do You Do?\"",
+   "description": "Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-debugging-scenarios.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Roadmap & Study Guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#roadmap--study-guides"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "ML Debugging Scenarios",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-debugging-scenarios.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#roadmap--study-guides">Roadmap &amp; Study Guides</a> <span aria-hidden="true">/</span> <span aria-current="page">ML Debugging Scenarios</span></nav>
+<p class="meta"><a href="../../#docs/ml-debugging-scenarios.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ml-debugging-scenarios-your-model-is-broken-what-do-you-do">ML Debugging Scenarios: &quot;Your Model Is Broken, What Do You Do?&quot;</h1>
+<p>Most ML engineer onsites include at least one troubleshooting round. The interviewer describes a symptom (a suspicious metric, a production regression, a latency spike), and watches how you work through it. There is rarely one correct answer. What gets graded is whether your process finds the cause quickly and cheaply, and whether you protect users while you look.</p>
+<p>This guide covers a repeatable answer structure and 25 scenarios drawn from real loops, grouped by where the failure shows up.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-to-answer-scenario-questions">How to Answer Scenario Questions</a></li>
+<li><a href="#offline-training-problems">Offline Training Problems</a></li>
+<li><a href="#offline-good-online-bad-gaps">Offline-Good, Online-Bad Gaps</a></li>
+<li><a href="#production-drift-and-monitoring">Production Drift and Monitoring</a></li>
+<li><a href="#data-and-labels">Data and Labels</a></li>
+<li><a href="#llm-rag-and-agent-systems">LLM, RAG, and Agent Systems</a></li>
+<li><a href="#recommendation-and-ranking">Recommendation and Ranking</a></li>
+<li><a href="#infrastructure-and-latency">Infrastructure and Latency</a></li>
+<li><a href="#common-answer-mistakes">Common Answer Mistakes</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-to-answer-scenario-questions">How to Answer Scenario Questions</h2>
+<p>Use the same five steps every time. Say them out loud so the interviewer can follow your structure.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What you do</th>
+<th>What it sounds like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Clarify</strong></td>
+<td>Pin down the symptom: which metric, how much, since when, all traffic or a segment, anything deployed or changed</td>
+<td>&quot;Did this start suddenly or gradually? Was there a deploy, a data change, or a traffic change around then?&quot;</td>
+</tr>
+<tr>
+<td><strong>2. Hypothesise</strong></td>
+<td>List 3-5 causes, ranked by <em>likelihood × cost-to-check</em></td>
+<td>&quot;Most likely is leakage, and it's cheap to check, so that's first.&quot;</td>
+</tr>
+<tr>
+<td><strong>3. Check cheapest first</strong></td>
+<td>Run the fast, high-information checks before the slow ones</td>
+<td>&quot;Before retraining anything, I'd look at feature importances and single-feature AUCs.&quot;</td>
+</tr>
+<tr>
+<td><strong>4. Fix</strong></td>
+<td>Mitigate first if users are affected (rollback, fallback, kill switch), then fix the root cause</td>
+<td>&quot;I'd roll back to the previous model now, then debug without time pressure.&quot;</td>
+</tr>
+<tr>
+<td><strong>5. Prevent recurrence</strong></td>
+<td>Add the test, monitor, or process change that catches this class of failure next time</td>
+<td>&quot;I'd add a schema check on that upstream table and alert on null rate.&quot;</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three habits make the difference between a mid-level and a senior answer:</p>
+<ul>
+<li><strong>Rank, don't list.</strong> Reciting twelve possible causes shows memory. Saying which one you'd check first, and why, shows judgment.</li>
+<li><strong>Mitigate before you diagnose.</strong> In production, the first action is usually to stop the damage. Debugging a live regression while it keeps costing money is a red flag.</li>
+<li><strong>End with a system change.</strong> &quot;I fixed the bug&quot; is a mid-level ending. &quot;I added a check so nobody on the team can ship this bug again&quot; is a senior one.</li>
+</ul>
+<p>Aim to talk for 5-8 minutes per scenario, then let the interviewer steer. They usually have a specific root cause in mind and will give you hints if you ask good clarifying questions.</p>
+<hr />
+<h2 id="offline-training-problems">Offline Training Problems</h2>
+<h3 id="1-validation-auc-is-099-on-the-first-try">1. &quot;Validation AUC is 0.99 on the first try&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Target leakage: a feature that is computed after the outcome, or is a proxy for the label (<code>refund_issued</code> in a fraud model, <code>discharge_code</code> in a readmission model).</li>
+<li>Split leakage: random split on temporal data, or the same user/patient/session in both train and validation.</li>
+<li>Duplicate rows across splits.</li>
+<li>Preprocessing (scaler, target encoder, imputer) fit on the full dataset before splitting.</li>
+<li>The problem is easy: possible, but last on the list until proven.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Look at feature importances. One feature carrying most of the importance is the classic leakage signature.</li>
+<li>Compute single-feature AUC for every numeric feature. Anything above ~0.9 alone deserves an explanation.</li>
+<li>Check entity and row overlap between splits.</li>
+</ul>
+<pre><code class="language-python">from sklearn.metrics import roc_auc_score
+import pandas as pd
+
+for col in X_val.select_dtypes(&quot;number&quot;).columns:
+    auc = roc_auc_score(y_val, X_val[col].fillna(X_val[col].median()))
+    if max(auc, 1 - auc) &gt; 0.9:
+        print(f&quot;suspicious: {col} auc={auc:.3f}&quot;)
+
+dupes = set(pd.util.hash_pandas_object(X_train, index=False)) &amp; \
+        set(pd.util.hash_pandas_object(X_val, index=False))
+print(&quot;rows in both splits:&quot;, len(dupes))
+print(&quot;shared users:&quot;, len(set(train.user_id) &amp; set(val.user_id)))
+</code></pre>
+<ul>
+<li>For each top feature, ask: &quot;At the moment we would make this prediction in production, would this value be known?&quot;</li>
+</ul>
+<p><strong>Fix:</strong> Remove or rebuild leaky features with point-in-time (as-of) logic, switch to a time-based or group-based split, and move all fitted preprocessing inside a pipeline. Expect the metric to drop; report the lower number as the real one.</p>
+<p><strong>Prevent it next time:</strong> Write down the prediction timestamp and the feature availability rule before building features. Add a CI check that fails if train and validation share entity IDs, and a sanity check that flags any single feature with AUC above a threshold.</p>
+<p><strong>What the interviewer is listening for:</strong> That you treat a too-good result as a bug until proven otherwise, and that you know the specific mechanisms of leakage rather than just the word.</p>
+<h3 id="2-training-loss-goes-nan-after-3-hours">2. &quot;Training loss goes NaN after 3 hours&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Learning rate too high once warmup ends, causing gradients to explode.</li>
+<li>Mixed-precision overflow in fp16 (large activations, attention logits, or a loss scaler that isn't working).</li>
+<li>A bad batch: <code>inf</code> or <code>NaN</code> in the input, an empty sequence, or a label outside the valid range.</li>
+<li>Numerically unstable custom code: <code>log(0)</code>, division by a zero norm, <code>sqrt</code> of a negative number.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>The timing is a clue. If 3 hours coincides with the end of warmup, suspect the LR schedule. If it's random across runs, suspect a data batch.</li>
+<li>Plot gradient norm and loss scale over time. A rising gradient norm before the NaN points to instability; a sudden jump at one step points to one batch.</li>
+<li>Resume from the last good checkpoint and replay the same batches with anomaly detection on.</li>
+</ul>
+<pre><code class="language-python">torch.autograd.set_detect_anomaly(True)          # slow; debugging only
+grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+if not torch.isfinite(loss) or not torch.isfinite(grad_norm):
+    torch.save({&quot;step&quot;: step, &quot;batch&quot;: batch}, f&quot;bad_batch_{step}.pt&quot;)
+    raise RuntimeError(f&quot;non-finite loss/grad at step {step}&quot;)
+</code></pre>
+<p><strong>Fix:</strong> Add gradient clipping, lower the peak LR or lengthen warmup, switch from fp16 to bf16 where the hardware supports it, and replace hand-written <code>log(softmax(x))</code> with <code>log_softmax</code> or the fused loss. If it's a bad batch, fix the data and add validation.</p>
+<p><strong>Prevent it next time:</strong> Log gradient norm, loss scale, and per-layer activation stats as standard. Validate inputs in the data loader (finite values, label range). Checkpoint often enough that a NaN costs minutes, not hours.</p>
+<p><strong>What the interviewer is listening for:</strong> Using <em>when</em> it failed as evidence, and knowing that clipping, LR, precision, and data are distinct causes with distinct fixes.</p>
+<h3 id="3-the-loss-isnt-going-down-at-all">3. &quot;The loss isn't going down at all&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>A pipeline bug: labels misaligned with inputs after a shuffle or join, or all labels identical.</li>
+<li>Wrong loss wiring: softmax applied before <code>CrossEntropyLoss</code> (which expects logits), or targets in the wrong format.</li>
+<li>Optimizer problems: <code>zero_grad()</code> missing, parameters frozen, LR far too low or too high.</li>
+<li>Inputs not normalised, or the model is in eval mode.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Overfit a single small batch. A working model and pipeline should drive training loss close to zero on 8-32 examples within a few hundred steps. If it can't, the bug is in code, not data or capacity.</li>
+<li>Check the initial loss. For k-class cross-entropy with a reasonable init it should be close to <code>ln(k)</code>; far off means the output layer or loss is wired wrong.</li>
+<li>Print a few <code>(input, label)</code> pairs after the full data pipeline and check them by eye.</li>
+<li>Confirm <code>sum(p.numel() for p in model.parameters() if p.requires_grad)</code> is what you expect.</li>
+</ul>
+<p><strong>Fix:</strong> Correct the specific bug. Most commonly it's label alignment or a double softmax.</p>
+<p><strong>Prevent it next time:</strong> Keep the single-batch overfit test as a unit test in the training repo, and add assertions on label distribution after every join.</p>
+<p><strong>What the interviewer is listening for:</strong> The overfit-one-batch test. It's the single most efficient debugging step for a network that won't learn, and interviewers expect you to reach for it.</p>
+<h3 id="4-training-accuracy-is-98-validation-is-70">4. &quot;Training accuracy is 98%, validation is 70%&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Overfitting: model capacity too high for the data size, no regularisation.</li>
+<li>Train and validation come from different distributions (different time period, different source, different label process).</li>
+<li>Leakage <em>within</em> train (duplicates) inflating training accuracy.</li>
+<li>Train-time augmentation or preprocessing differs from validation preprocessing.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Plot learning curves: if validation loss falls then rises while training loss keeps falling, it's overfitting. If validation is flat and bad from the start, suspect distribution mismatch.</li>
+<li>Run adversarial validation: train a classifier to distinguish train rows from validation rows. AUC near 0.5 means same distribution; high AUC means they differ, and its top features tell you how.</li>
+<li>Plot validation performance against training set size. If it's still climbing, more data will help.</li>
+</ul>
+<p><strong>Fix:</strong> For overfitting: stronger regularisation, early stopping, fewer or simpler features, more data or augmentation. For distribution mismatch: fix the split so validation reflects production, or reweight training data.</p>
+<p><strong>Prevent it next time:</strong> Build the validation set to mirror production first, then tune. Always log train and validation metrics side by side.</p>
+<p><strong>What the interviewer is listening for:</strong> Separating &quot;overfitting&quot; from &quot;validation is a different distribution,&quot; because the fixes are opposite.</p>
+<hr />
+<h2 id="offline-good-online-bad-gaps">Offline-Good, Online-Bad Gaps</h2>
+<h3 id="5-offline-auc-improved-3-points-but-the-ab-test-shows-no-lift">5. &quot;Offline AUC improved 3 points, but the A/B test shows no lift&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The offline gain is in a region of scores that doesn't change any decision (e.g. better ranking among items that are never shown, or below the action threshold).</li>
+<li>Training-serving skew: the model in production isn't seeing the features it was evaluated on.</li>
+<li>The experiment is underpowered, or broken (sample ratio mismatch, assignment leak).</li>
+<li>The offline metric isn't aligned with the business metric.</li>
+<li>Added latency cancelled the gain.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Check the experiment first; it's cheapest. Run a sample ratio mismatch test: if you expected a 50/50 split and got 50.8/49.2 on a million users, the assignment is broken.</li>
+</ul>
+<pre><code class="language-python">from scipy.stats import chisquare
+stat, p = chisquare([n_control, n_treatment])  # expected equal by default
+print(&quot;SRM!&quot; if p &lt; 0.001 else &quot;split looks fine&quot;, p)
+</code></pre>
+<ul>
+<li>Compute the minimum detectable effect for the sample size you had. &quot;No lift&quot; may mean &quot;couldn't detect the lift we should have expected.&quot;</li>
+<li>Log the treatment model's live scores and recompute offline AUC on the live traffic with delayed labels. If it's much lower than the offline number, it's skew.</li>
+<li>Evaluate the metric at the operating point: precision at the threshold, or NDCG on the positions actually displayed.</li>
+</ul>
+<p><strong>Fix:</strong> Depends on the cause: fix skew, re-run with adequate power, or redefine the offline metric to match the decision being made.</p>
+<p><strong>Prevent it next time:</strong> Choose offline metrics that are measured at the operating point, track their historical correlation with online results, and run shadow scoring before any A/B test to catch skew.</p>
+<p><strong>What the interviewer is listening for:</strong> Checking the experiment's validity before blaming the model, and the idea that an offline gain only matters if it changes a decision.</p>
+<h3 id="6-the-model-does-much-worse-in-production-than-on-the-holdout-set-from-day-one">6. &quot;The model does much worse in production than on the holdout set from day one&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Training-serving skew: the offline feature pipeline (SQL/Spark) and the online path (service code) compute a feature differently.</li>
+<li>Point-in-time errors in training data: offline features used values from after the prediction time, so the offline number was inflated.</li>
+<li>Stale or missing online features: feature store not refreshed, defaults (0 vs NaN) differ between paths.</li>
+<li>Preprocessing version mismatch: a different tokenizer, vocabulary, or encoder at serving time.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Log the exact feature vector used for each online prediction. Recompute the same features offline for the same entity and timestamp, join, and compare feature by feature.</li>
+</ul>
+<pre><code class="language-python">merged = online_log.merge(offline_features, on=[&quot;entity_id&quot;, &quot;ts&quot;], suffixes=(&quot;_on&quot;, &quot;_off&quot;))
+for f in feature_names:
+    mismatch = (merged[f&quot;{f}_on&quot;] - merged[f&quot;{f}_off&quot;]).abs() &gt; 1e-6
+    print(f, f&quot;{mismatch.mean():.1%} mismatch&quot;)
+</code></pre>
+<ul>
+<li>Check null and default rates per feature online versus in training.</li>
+<li>Score the same logged requests with the offline model artifact and compare predictions.</li>
+</ul>
+<p><strong>Fix:</strong> Make one feature definition serve both paths (a feature store with shared transformations, or the same library called from both), and fix point-in-time joins in the training set.</p>
+<p><strong>Prevent it next time:</strong> Keep logging served features, and run an automated skew check that compares a daily sample against offline recomputation and alerts on mismatch rate.</p>
+<p><strong>What the interviewer is listening for:</strong> &quot;Log served features and diff them against offline&quot; as the concrete technique, not just naming &quot;training-serving skew.&quot;</p>
+<h3 id="7-the-model-was-great-in-the-ab-test-but-revenue-dropped-a-month-later">7. &quot;The model was great in the A/B test, but revenue dropped a month later&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Proxy metric misalignment: the test optimised clicks or conversions, while revenue per user, returns, or retention moved the other way.</li>
+<li>Novelty effect: users engaged with something new, and the effect decayed.</li>
+<li>Long-term behavioural effects: aggressive discounts or clickbait-style recommendations that trained users to wait or churn.</li>
+<li>Feedback loop: the model now trains on data generated by itself, narrowing what it learns.</li>
+<li>An unrelated cause: seasonality, a pricing change, a competitor. Correlation with launch isn't proof.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Check whether a long-term holdout exists (a small slice still on the old model). Comparing it with the treated population is the cleanest answer.</li>
+<li>Plot the daily treatment effect from the original test. A lift that shrinks over its duration suggests novelty.</li>
+<li>Break revenue down: traffic × conversion × order value × return rate. Find which term moved.</li>
+<li>Check what else changed in the same window before attributing it to the model.</li>
+</ul>
+<p><strong>Fix:</strong> If the model is the cause, roll back or re-tune its objective to include the long-term metric (e.g. margin or 30-day retention) as a target or guardrail.</p>
+<p><strong>Prevent it next time:</strong> Keep a persistent 1-5% holdout for major models, run tests long enough to see novelty decay, and include revenue and retention as guardrail metrics, not just the primary proxy.</p>
+<p><strong>What the interviewer is listening for:</strong> Knowing that A/B tests measure short-term effects on a proxy, and that long-term holdouts exist for exactly this problem.</p>
+<h3 id="8-shadow-mode-predictions-dont-match-the-offline-scores-for-the-same-inputs">8. &quot;Shadow-mode predictions don't match the offline scores for the same inputs&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Different model artifact or version loaded in the service.</li>
+<li>Different preprocessing: feature order, categorical encoding, missing-value handling, float precision.</li>
+<li>Nondeterministic inference (dropout left on, batch-dependent layers like batch norm in train mode).</li>
+<li>The &quot;same inputs&quot; aren't actually the same: features fetched at a different time.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Pick five requests. Save the raw input, the processed feature vector, and the output at each stage in both paths. Find the first stage where they diverge.</li>
+<li>Check the model hash loaded by the service against the registry.</li>
+<li>Score the same request twice in the service. Different outputs mean nondeterminism (<code>model.eval()</code> missing).</li>
+</ul>
+<p><strong>Fix:</strong> Correct the divergent stage. Feature ordering by position rather than name is a common culprit: pass features by name.</p>
+<p><strong>Prevent it next time:</strong> Add a golden-request test to CI: a set of fixed inputs with expected outputs that both paths must reproduce within tolerance before deploy.</p>
+<p><strong>What the interviewer is listening for:</strong> Bisecting the pipeline stage by stage rather than guessing.</p>
+<hr />
+<h2 id="production-drift-and-monitoring">Production Drift and Monitoring</h2>
+<h3 id="9-accuracy-has-slowly-degraded-over-the-last-three-months">9. &quot;Accuracy has slowly degraded over the last three months&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Concept drift: the relationship between features and label has changed (new fraud patterns, new user behaviour).</li>
+<li>Covariate drift: the input distribution moved into regions the model saw rarely in training.</li>
+<li>A slow upstream data problem (a feature slowly becoming null as a source is deprecated).</li>
+<li>Label drift or a change in label definition.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Compute drift per feature (PSI or KS) between the training window and each recent month. Rule of thumb: PSI under 0.1 is stable, 0.1-0.25 is moderate, above 0.25 is significant.</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+def psi(expected, actual, bins=10):
+    edges = np.unique(np.quantile(expected, np.linspace(0, 1, bins + 1)))
+    e = np.histogram(expected, edges)[0] / len(expected)
+    a = np.histogram(np.clip(actual, edges[0], edges[-1]), edges)[0] / len(actual)
+    e, a = np.clip(e, 1e-6, None), np.clip(a, 1e-6, None)
+    return float(np.sum((a - e) * np.log(a / e)))
+</code></pre>
+<ul>
+<li>Retrain the same architecture on the most recent data and evaluate on the latest month. If it recovers most of the gap, it's drift and retraining works. If not, something structural changed.</li>
+<li>Break performance down by segment to see whether the decline is broad or concentrated.</li>
+</ul>
+<p><strong>Fix:</strong> Retrain on recent data; consider a sliding or time-weighted training window. If a feature has decayed, remove or replace it.</p>
+<p><strong>Prevent it next time:</strong> Set a retraining cadence based on how fast performance decays, monitor input drift and prediction distribution (which don't need labels), and alert on performance once delayed labels arrive.</p>
+<p><strong>What the interviewer is listening for:</strong> Distinguishing covariate from concept drift, and knowing which monitors work before labels arrive.</p>
+<h3 id="10-the-prediction-distribution-shifted-overnight-and-nobody-deployed-anything">10. &quot;The prediction distribution shifted overnight and nobody deployed anything&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Upstream data change: a schema change, unit change (cents to dollars), renamed category, or a join that started returning nulls.</li>
+<li>A failed or partial pipeline run: the feature store serving yesterday's or empty values.</li>
+<li>A traffic mix change: a marketing campaign, a new market, a bot surge, a new app version logging differently.</li>
+<li>A dependency update in the serving image (a library that changed default behaviour).</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>&quot;No deploy&quot; usually means &quot;no deploy <em>by us</em>.&quot; Check upstream table change logs, pipeline run status, and feature freshness timestamps first.</li>
+<li>Compare null rate, mean, and cardinality of every input feature before and after the shift. A sudden change usually points to one or two features.</li>
+<li>Split the prediction shift by traffic source, platform, and app version. If it's all in one segment, it's traffic mix or a client change.</li>
+</ul>
+<p><strong>Fix:</strong> If a feature is broken, fall back (use the last good value, a default, or the previous model version that doesn't depend on it) while the upstream owner fixes it.</p>
+<p><strong>Prevent it next time:</strong> Schema and range checks on inputs (e.g. Great Expectations or pipeline assertions), freshness alerts on the feature store, and a data contract with upstream teams.</p>
+<p><strong>What the interviewer is listening for:</strong> Monitoring <em>inputs</em>, not just outputs, and checking the upstream dependencies before the model.</p>
+<h3 id="11-the-model-now-predicts-the-same-value-for-almost-every-input">11. &quot;The model now predicts the same value for almost every input&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>One or more critical features are all missing and being imputed with the same default.</li>
+<li>A preprocessing artifact (scaler, encoder) failed to load and a no-op or fresh one was used.</li>
+<li>A newly retrained model collapsed (bad training data, e.g. one class only).</li>
+<li>Output clipping or a threshold config changed.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Look at the input feature vectors for a sample of requests. If they're nearly identical, it's the inputs.</li>
+<li>Check the model and preprocessing artifact versions actually loaded, and the service startup logs for fallback warnings.</li>
+<li>If a retrain just happened, check the label distribution of its training set.</li>
+</ul>
+<p><strong>Fix:</strong> Roll back to the last good model and artifacts immediately; then fix the failing load or data.</p>
+<p><strong>Prevent it next time:</strong> Fail loudly on artifact load errors instead of silently falling back. Add a post-deploy check that alerts if prediction variance or entropy drops below a floor. Gate retrained models on a validation set before promotion.</p>
+<p><strong>What the interviewer is listening for:</strong> Rolling back first, and treating silent fallbacks as the real bug.</p>
+<h3 id="12-fraud-model-precision-was-fine-then-collapsed-within-a-week">12. &quot;Fraud model precision was fine, then collapsed within a week&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Adversarial adaptation: fraudsters probed the model and found a pattern it doesn't catch, or started mimicking legitimate behaviour on the top features.</li>
+<li>A legitimate population change triggering false positives (a holiday sale, a new payment method, a new region).</li>
+<li>Label delay: chargebacks arrive weeks later, so the &quot;collapse&quot; may be partly measurement artifacts.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Split false positives and false negatives by recency, merchant, device, and payment method. Adversarial attacks are usually concentrated in a narrow pattern.</li>
+<li>Compare feature distributions of recent confirmed fraud with fraud in the training data.</li>
+<li>Check whether volume in any segment spiked recently.</li>
+</ul>
+<p><strong>Fix:</strong> Short term: targeted rules for the new pattern, adjusted thresholds for the affected segment, and more manual review. Medium term: retrain with the new fraud examples and features that are harder to fake (device, network, velocity features).</p>
+<p><strong>Prevent it next time:</strong> Faster retraining loops, analyst feedback feeding labels quickly, rules and model working together, and monitoring on segment-level alert rates.</p>
+<p><strong>What the interviewer is listening for:</strong> Recognising that fraud is adversarial, so drift is intentional and fast, and that rules are a legitimate short-term tool.</p>
+<hr />
+<h2 id="data-and-labels">Data and Labels</h2>
+<h3 id="13-we-retrained-with-twice-as-much-data-and-the-model-got-worse">13. &quot;We retrained with twice as much data and the model got worse&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The evaluation set also changed, so the comparison isn't like-for-like.</li>
+<li>The new data comes from a different distribution (a new source, region, or time period) or has a different label definition.</li>
+<li>The new data is noisier: a cheaper labelling vendor, weak labels, or duplicates.</li>
+<li>Class balance shifted, changing the effective threshold.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Evaluate both the old and new model on the <em>same</em> fixed evaluation set. Many &quot;regressions&quot; disappear here.</li>
+<li>Train on old data only, new data only, and both. Evaluate each on the fixed set.</li>
+<li>Compare label rates and feature distributions between old and new data, and sample 50 new labels to check by hand.</li>
+</ul>
+<p><strong>Fix:</strong> Filter or reweight the bad slice, fix the label mapping, or train separate handling for the new population if it differs.</p>
+<p><strong>Prevent it next time:</strong> Keep a frozen, versioned evaluation set that is only changed deliberately. Version training data (DVC, Delta, Iceberg snapshots) so you can reproduce and diff any past training run.</p>
+<p><strong>What the interviewer is listening for:</strong> Checking the evaluation setup before questioning the data, and the ablation of old vs new data.</p>
+<h3 id="14-the-model-plateaus-at-80-no-matter-what-we-try">14. &quot;The model plateaus at 80% no matter what we try&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Label noise sets a ceiling: if annotators only agree 80% of the time, the model can't reliably beat that.</li>
+<li>The features don't contain enough information to predict the label.</li>
+<li>The task is ambiguous as defined (unclear guidelines, overlapping classes).</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Have multiple annotators label the same few hundred examples and measure agreement.</li>
+</ul>
+<pre><code class="language-python">from sklearn.metrics import cohen_kappa_score
+print(cohen_kappa_score(annotator_a, annotator_b))  # &lt; 0.6 means the labels themselves are unreliable
+</code></pre>
+<ul>
+<li>Look at the model's most confident errors. If many are actually mislabelled, noise is the problem. Tools like cleanlab automate finding likely label errors.</li>
+<li>Check the confusion matrix: if errors concentrate between two classes, the class boundary is probably unclear in the guidelines.</li>
+</ul>
+<p><strong>Fix:</strong> Clarify labelling guidelines, relabel the confusing slice, merge classes that can't be distinguished, or collect the missing signal as a new feature.</p>
+<p><strong>Prevent it next time:</strong> Measure inter-annotator agreement at the start of any labelling project, and use it as the realistic ceiling when setting targets.</p>
+<p><strong>What the interviewer is listening for:</strong> Knowing that model quality is capped by label quality, and how to measure that cap.</p>
+<h3 id="15-the-model-works-well-overall-but-is-terrible-for-one-customer-segment">15. &quot;The model works well overall but is terrible for one customer segment&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The segment is underrepresented in training data.</li>
+<li>Key features are missing or have different meaning for that segment (new users have no history; a region uses a different currency).</li>
+<li>The label means something different for that segment.</li>
+<li>Aggregate metrics hid the problem all along.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Break down metrics by segment with sample sizes and confidence intervals. Small segments have noisy metrics.</li>
+<li>Compare feature null rates and distributions for the segment versus everyone else.</li>
+<li>Look at 20-30 errors from the segment by hand.</li>
+</ul>
+<p><strong>Fix:</strong> Collect or upweight data for the segment, add features that work for it (content features for cold users), or use a dedicated model or fallback for it. If fairness is involved, involve the relevant stakeholders before choosing a trade-off.</p>
+<p><strong>Prevent it next time:</strong> Report sliced metrics for key segments on every evaluation, and make segment regressions a release-blocking check.</p>
+<p><strong>What the interviewer is listening for:</strong> Slicing metrics as a default habit, and noticing when a segment matters for fairness or business risk.</p>
+<hr />
+<h2 id="llm-rag-and-agent-systems">LLM, RAG, and Agent Systems</h2>
+<h3 id="16-rag-answers-got-worse-after-we-re-indexed-the-documents">16. &quot;RAG answers got worse after we re-indexed the documents&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Embedding model mismatch: documents were re-embedded with a new model or version, but queries still use the old one (or vice versa). Vectors from different models aren't comparable.</li>
+<li>Chunking changed: different chunk size, overlap, or splitter, breaking answers across chunks.</li>
+<li>Parsing regressed: a new PDF or HTML parser dropped tables, headers, or whole pages.</li>
+<li>Index configuration changed: lower <code>ef_search</code> (HNSW) or <code>nprobe</code> (IVF), a different distance metric, or missing normalisation.</li>
+<li>Metadata or filters were lost, so filtered queries return the wrong documents or nothing.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Separate retrieval from generation. Run a golden set of queries with known relevant documents and compare recall@k before and after re-indexing.</li>
+</ul>
+<pre><code class="language-python">def recall_at_k(golden, retrieve, k=5):
+    hits = [len(set(retrieve(q, k)) &amp; set(rel)) &gt; 0 for q, rel in golden]
+    return sum(hits) / len(hits)
+</code></pre>
+<ul>
+<li>Confirm the query encoder and document encoder names and versions match in config and in code.</li>
+<li>Compare chunk counts, average chunk length, and a few sample chunks from the old and new index.</li>
+<li>Search for an exact sentence from a known document. If it doesn't come back top-1, the index or embeddings are broken.</li>
+</ul>
+<p><strong>Fix:</strong> Re-embed with a consistent model, restore the chunking or parsing that worked, or restore index parameters. Keep the old index live until the new one passes evaluation.</p>
+<p><strong>Prevent it next time:</strong> Treat re-indexing as a deploy: build the new index side by side, gate the cutover on retrieval recall and answer-quality evals, and store the embedding model version as index metadata.</p>
+<p><strong>What the interviewer is listening for:</strong> Evaluating retrieval and generation separately, and knowing that mixed embedding models silently break search.</p>
+<h3 id="17-the-llm-answers-confidently-with-facts-that-arent-in-the-retrieved-documents">17. &quot;The LLM answers confidently with facts that aren't in the retrieved documents&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Retrieval is returning irrelevant context, so the model falls back on its parametric knowledge.</li>
+<li>The prompt doesn't require grounding or allow &quot;I don't know.&quot;</li>
+<li>The relevant fact is present but buried in a long context.</li>
+<li>The question is outside the corpus entirely.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>For a sample of bad answers, check whether the supporting fact was in the retrieved context. This splits the problem into a retrieval failure or a generation failure.</li>
+<li>Measure faithfulness on an eval set: an LLM judge or NLI model checks whether each claim is supported by the context. Spot-check the judge against human labels.</li>
+<li>Test the same questions with the relevant passage placed first versus in the middle.</li>
+</ul>
+<p><strong>Fix:</strong> Improve retrieval (hybrid BM25 + dense search, a reranker, fewer but better chunks), instruct the model to answer only from the context and cite passage IDs, and allow an explicit abstain response. Validate that cited IDs exist in the context.</p>
+<p><strong>Prevent it next time:</strong> A regression eval suite with faithfulness and citation accuracy metrics, run on every prompt, model, or index change.</p>
+<p><strong>What the interviewer is listening for:</strong> Splitting &quot;hallucination&quot; into retrieval failure versus generation failure, and measuring faithfulness rather than eyeballing.</p>
+<h3 id="18-our-agent-keeps-calling-the-same-tool-in-a-loop-and-costs-spiked">18. &quot;Our agent keeps calling the same tool in a loop and costs spiked&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Tool errors are returned in a form the model can't act on (a stack trace, an empty string), so it retries the same call.</li>
+<li>No step limit or budget, so a stuck agent runs until it hits the context limit.</li>
+<li>Ambiguous tool descriptions or overlapping tools.</li>
+<li>Context management dropped earlier tool results, so the agent doesn't know it already made the call.</li>
+<li>No clear completion criterion in the instructions.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Pull traces for the most expensive sessions. Look at the step where the loop starts and what the tool returned just before.</li>
+<li>Group sessions by number of steps and tool-call sequence; loops show up as repeated identical calls with identical arguments.</li>
+<li>Check whether the loop started after a tool, prompt, or model version change.</li>
+</ul>
+<p><strong>Fix:</strong> Return structured, actionable errors (&quot;invalid date format, expected YYYY-MM-DD&quot;), cap steps and tokens per task, detect repeated identical calls and stop or escalate, and tighten tool descriptions.</p>
+<p><strong>Prevent it next time:</strong> Per-session cost and step limits with alerts, tracing on every agent run, and an eval set of multi-step tasks measuring success rate, steps, and cost.</p>
+<p><strong>What the interviewer is listening for:</strong> Reading traces, hard limits as a safety net, and treating tool error messages as part of the prompt.</p>
+<h3 id="19-after-upgrading-the-llm-version-the-downstream-json-parser-started-failing">19. &quot;After upgrading the LLM version, the downstream JSON parser started failing&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The new model formats output differently: markdown code fences, extra commentary, different key names or casing.</li>
+<li>The prompt relied on quirks of the old model.</li>
+<li>Longer outputs now hit <code>max_tokens</code> and are truncated mid-JSON.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Collect failing raw outputs and categorise them: wrapped in fences, extra text, missing fields, truncated.</li>
+<li>Check the stop reason on failed responses; a length stop means truncation.</li>
+<li>Run the prompt regression suite against both model versions and diff.</li>
+</ul>
+<p><strong>Fix:</strong> Use the provider's structured output or JSON schema mode, or constrained decoding, instead of parsing free text. Validate with a schema (Pydantic) and retry once with the validation error in the prompt. Raise <code>max_tokens</code> if truncating.</p>
+<p><strong>Prevent it next time:</strong> Pin model versions explicitly, and gate every upgrade on a regression eval that includes format validity, not just answer quality.</p>
+<p><strong>What the interviewer is listening for:</strong> Pinning versions, schema-enforced outputs, and treating a model upgrade as a deploy that needs its own evals.</p>
+<hr />
+<h2 id="recommendation-and-ranking">Recommendation and Ranking</h2>
+<h3 id="20-offline-ndcg-improved-but-online-ctr-fell">20. &quot;Offline NDCG improved, but online CTR fell&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Exposure bias: offline evaluation uses logs from the old policy, so it only rewards re-ranking items the old model already showed. The new model's novel picks have no labels and count as negatives.</li>
+<li>Position bias: clicks in logs are partly caused by position, so the model learned &quot;what was ranked high&quot; rather than &quot;what's relevant.&quot;</li>
+<li>The offline metric covers positions or candidates that differ from what's displayed (NDCG@50 when users see 5 items).</li>
+<li>Reduced diversity: the new model shows near-duplicate items, which scores fine per item but performs worse as a page.</li>
+<li>Skew or latency issues, as with any model.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Compare offline NDCG at the actual display depth, not the default.</li>
+<li>Measure what share of the new model's top-k items had any exposure in the logs. A low share means the offline metric can't judge it.</li>
+<li>Check diversity on the served pages: distinct categories or sellers in the top-k, pairwise similarity.</li>
+<li>Use interleaving to compare the two rankers online with far less traffic than an A/B test.</li>
+</ul>
+<p><strong>Fix:</strong> Train with position debiasing (position as a feature set to a constant at serving, or inverse propensity weighting), evaluate with counterfactual estimators, and add a diversity re-rank (e.g. MMR) if pages became homogeneous.</p>
+<p><strong>Prevent it next time:</strong> Log propensities or randomise a small slice of traffic to get unbiased evaluation data. Track the historical correlation between offline and online metrics and don't trust an offline metric that doesn't predict online results.</p>
+<p><strong>What the interviewer is listening for:</strong> Understanding that logged data is biased by the policy that generated it, and naming position bias and counterfactual evaluation.</p>
+<h3 id="21-recommendations-became-homogeneous-everyone-sees-the-same-popular-items">21. &quot;Recommendations became homogeneous: everyone sees the same popular items&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Feedback loop: the model recommends popular items, they get more clicks, the next model learns they're even more popular.</li>
+<li>Training objective rewards clicks only, and popular items have the highest base click rate.</li>
+<li>Candidate generation narrowed (a smaller retrieval set, or a popularity-based candidate source dominating).</li>
+<li>Personalisation features broken, so everyone is scored as the average user.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Measure catalogue coverage (share of items recommended at least once) and the Gini coefficient of impressions over time.</li>
+<li>Check whether personalised features are populated: if user embeddings are all zero or default, everyone gets the same list.</li>
+<li>Measure the overlap of top-10 lists between random pairs of users.</li>
+</ul>
+<p><strong>Fix:</strong> Fix broken personalisation if that's the cause. Otherwise add exploration (a small share of slots for less-exposed items, or a bandit), apply a popularity penalty or diversity re-rank, and include longer-term engagement in the objective.</p>
+<p><strong>Prevent it next time:</strong> Monitor coverage, diversity, and novelty alongside CTR, and keep an exploration budget as a permanent part of the system.</p>
+<p><strong>What the interviewer is listening for:</strong> Recognising the feedback loop, and that recommendation health metrics go beyond CTR.</p>
+<h3 id="22-new-items-never-get-recommended">22. &quot;New items never get recommended&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Cold start: the model depends on item ID embeddings or interaction counts that new items don't have.</li>
+<li>Candidate retrieval excludes items below an interaction threshold.</li>
+<li>Training data freshness: new items only enter the model after the next retrain.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Plot impressions per item against item age. Check how long it takes a new item to reach typical exposure.</li>
+<li>Trace a new item through the pipeline: is it in the candidate index, does it get a score, where does it rank?</li>
+<li>Check what embedding a never-seen item ID maps to (often a shared &quot;unknown&quot; vector).</li>
+</ul>
+<p><strong>Fix:</strong> Add content-based features (text, image, category embeddings) so new items can be scored without interactions, reserve exploration slots for new items, and refresh the candidate index more frequently than the ranker is retrained.</p>
+<p><strong>Prevent it next time:</strong> Monitor time-to-first-impression and new-item exposure share as product metrics.</p>
+<p><strong>What the interviewer is listening for:</strong> Tracing the item through retrieval and ranking, and content features plus exploration as the standard cold-start answer.</p>
+<hr />
+<h2 id="infrastructure-and-latency">Infrastructure and Latency</h2>
+<h3 id="23-p99-latency-doubled-after-a-model-update">23. &quot;p99 latency doubled after a model update&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The new model is larger or deeper, and requests queue behind it under load.</li>
+<li>Dynamic input shapes trigger recompilation or re-optimisation (TensorRT, XLA, <code>torch.compile</code>) for unseen shapes.</li>
+<li>Dynamic batching: padding to the longest sequence in a batch, or a longer batch wait timeout.</li>
+<li>An op fell back to CPU, or a new feature requires an extra network call.</li>
+<li>Resource contention: thread oversubscription, memory pressure, garbage collection pauses.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Check whether p50 moved too. If only p99 moved, suspect tail causes: queueing, recompilation, GC, padding, a slow dependency. If p50 moved as well, the model itself is slower.</li>
+<li>Break latency down by stage using traces: feature fetch, preprocessing, queue wait, inference, postprocessing.</li>
+<li>Correlate slow requests with input length or shape.</li>
+<li>Profile the model offline with the same batch size and input distribution.</li>
+</ul>
+<p><strong>Fix:</strong> Roll back if the SLO is breached. Then: bucket input shapes and warm them up at startup, tune batching timeout and max batch size, fix CPU fallbacks, cache or parallelise feature calls, or reduce model cost (quantisation, distillation, pruning).</p>
+<p><strong>Prevent it next time:</strong> A load test with production-like traffic in CI that fails on p99 regressions, and a canary rollout with automatic rollback on latency SLOs.</p>
+<p><strong>What the interviewer is listening for:</strong> Comparing p50 against p99 to split the causes, and a per-stage latency breakdown instead of assuming it's the model.</p>
+<h3 id="24-gpu-utilisation-is-30-during-training">24. &quot;GPU utilisation is 30% during training&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>The data loader is the bottleneck: too few workers, heavy CPU augmentation, slow storage or decoding.</li>
+<li>Frequent host-device synchronisation (<code>.item()</code>, <code>.cpu()</code>, printing tensors every step).</li>
+<li>Batch size too small to fill the GPU.</li>
+<li>In distributed training: communication overhead or stragglers.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Watch utilisation over time with <code>nvidia-smi dmon -s u</code>. Saw-tooth patterns suggest the GPU is waiting for data.</li>
+<li>Time a loop that only iterates the data loader, with no model. If it's slower than a training step, data loading is the bottleneck.</li>
+<li>Run <code>torch.profiler</code> for a few steps and look for large gaps between kernels and sync points.</li>
+</ul>
+<p><strong>Fix:</strong> Increase <code>num_workers</code>, set <code>pin_memory=True</code> and <code>persistent_workers=True</code>, preprocess offline into an efficient format, move augmentation to GPU, remove per-step syncs, raise batch size, and use mixed precision.</p>
+<p><strong>Prevent it next time:</strong> Log step time split into data time and compute time on every run, so input bottlenecks are visible immediately.</p>
+<p><strong>What the interviewer is listening for:</strong> Isolating the data loader from the model, and knowing the usual PyTorch fixes.</p>
+<h3 id="25-the-nightly-batch-scoring-job-went-from-1-hour-to-6-hours">25. &quot;The nightly batch scoring job went from 1 hour to 6 hours&quot;</h3>
+<p><strong>Likely causes</strong></p>
+<ol>
+<li>Data skew: one key (a large customer, a null key) now holds a huge share of rows, so one Spark task runs far longer than the rest.</li>
+<li>Input volume grew, or a join started multiplying rows.</li>
+<li>The model is loaded per row or per small partition instead of once per executor.</li>
+<li>A row-at-a-time Python UDF replaced a vectorised one.</li>
+<li>Cluster changes: fewer executors, spot instance preemption, a different instance type.</li>
+</ol>
+<p><strong>How to investigate</strong></p>
+<ul>
+<li>Compare input row counts and output row counts to earlier runs. A row explosion points to a join.</li>
+<li>Open the Spark UI and compare task durations within the slow stage. One task at 5 hours while others take 2 minutes is skew.</li>
+<li>Check recent code changes to the scoring job and the cluster config history.</li>
+</ul>
+<p><strong>Fix:</strong> Salt or split skewed keys, fix the join, broadcast the model once per executor, use a pandas UDF (Arrow-vectorised) for inference, and repartition to match the cluster.</p>
+<p><strong>Prevent it next time:</strong> Alert on job runtime and on input and output row counts against recent history, and assert join cardinality in the pipeline.</p>
+<p><strong>What the interviewer is listening for:</strong> Checking the data volume and shape first, and reading the task-duration distribution to find skew.</p>
+<hr />
+<h2 id="common-answer-mistakes">Common Answer Mistakes</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why it hurts</th>
+<th>Better approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jumping straight to &quot;retrain the model&quot;</td>
+<td>Retraining hides the cause and often reproduces it</td>
+<td>Diagnose first; retrain only when drift is confirmed</td>
+</tr>
+<tr>
+<td>Listing every possible cause with no order</td>
+<td>Shows recall, not judgment</td>
+<td>Rank by likelihood × cost-to-check, start with the top one</td>
+</tr>
+<tr>
+<td>No clarifying questions</td>
+<td>You'll solve the wrong problem</td>
+<td>Ask what changed, when, how much, and which segments</td>
+</tr>
+<tr>
+<td>Debugging a live regression without mitigating</td>
+<td>Users keep paying for your investigation</td>
+<td>Roll back, fall back, or kill-switch first</td>
+</tr>
+<tr>
+<td>Blaming the model before checking the data</td>
+<td>Most production failures are data and pipeline failures</td>
+<td>Check inputs, freshness, and upstream changes early</td>
+</tr>
+<tr>
+<td>Trusting a surprisingly good metric</td>
+<td>Leakage is far more common than breakthroughs</td>
+<td>Treat too-good results as a bug to explain</td>
+</tr>
+<tr>
+<td>Changing the eval set and the model at once</td>
+<td>Makes the comparison meaningless</td>
+<td>Compare on a frozen, versioned evaluation set</td>
+</tr>
+<tr>
+<td>Treating an LLM system as one black box</td>
+<td>Can't tell retrieval failures from generation failures</td>
+<td>Evaluate each stage separately with its own metric</td>
+</tr>
+<tr>
+<td>Vague answers (&quot;check the data&quot;, &quot;look at the logs&quot;)</td>
+<td>Gives the interviewer nothing to assess</td>
+<td>Name the specific check, query, or metric</td>
+</tr>
+<tr>
+<td>Ending at the fix</td>
+<td>Misses the senior-level signal</td>
+<td>Add the test, monitor, or process change that prevents recurrence</td>
+</tr>
+<tr>
+<td>Assuming &quot;no deploy&quot; means &quot;nothing changed&quot;</td>
+<td>Upstream data, traffic, and dependencies change constantly</td>
+<td>Check upstream changelogs and traffic mix</td>
+</tr>
+<tr>
+<td>Refusing to commit to a hypothesis</td>
+<td>Seems indecisive</td>
+<td>State your best guess, then say how you'd confirm it</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="behavioral-interview-guide.html">Behavioral and Project Deep-Dive Guide</a></li>
+<li><a href="take-home-projects.html">ML Take-Home Projects</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_data_quality.html">Data Quality</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Stores</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_data_labeling_active_learning.html">Data Labeling and Active Learning</a></li>
+<li><a href="../mlops/intro_llm_evaluation.html">LLM Evaluation</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="../deep_learning/intro_distributed_training.html">Distributed Training</a></li>
+<li><a href="../ai_genai/intro_rag_engineering.html">RAG Engineering</a></li>
+<li><a href="../ai_genai/intro_agent_tool_use.html">Agent Tool Use</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="../system_design/recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="../devops/intro_observability.html">Observability</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="ml-cheat-sheet.html"><small>Previous</small>ML Cheat Sheet</a><a rel="next" class="next" href="2026-interview-roadmap.html"><small>Next</small>2026 Roadmap</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/docs/ml-debugging-scenarios.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

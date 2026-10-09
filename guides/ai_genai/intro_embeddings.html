@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embeddings Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Embeddings turn text, images, and other data into dense vectors where geometric closeness means semantic similarity. They are the substrate under RAG…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_embeddings.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Embeddings Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Embeddings turn text, images, and other data into dense vectors where geometric closeness means semantic similarity. They are the substrate under RAG…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_embeddings.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Embeddings Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Embeddings turn text, images, and other data into dense vectors where geometric closeness means semantic similarity. They are the substrate under RAG…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Embeddings",
+   "description": "Embeddings turn text, images, and other data into dense vectors where geometric closeness means semantic similarity. They are the substrate under RAG…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_embeddings.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Embeddings",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_embeddings.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Embeddings</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_embeddings.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 9 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="embeddings">Embeddings</h1>
+<p>Embeddings turn text, images, and other data into dense vectors where geometric closeness means semantic similarity. They are the substrate under RAG, semantic search, recommendation, clustering, and deduplication, and the layer where most retrieval quality problems actually live. Interviewers ask about them because getting embeddings wrong silently degrades everything downstream.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-an-embedding-is">What an Embedding Is</a></li>
+<li><a href="#from-word2vec-to-modern-text-embeddings">From Word2Vec to Modern Text Embeddings</a></li>
+<li><a href="#similarity-metrics">Similarity Metrics</a></li>
+<li><a href="#choosing-an-embedding-model">Choosing an Embedding Model</a></li>
+<li><a href="#chunking-for-embeddings">Chunking for Embeddings</a></li>
+<li><a href="#fine-tuning-embeddings">Fine-Tuning Embeddings</a></li>
+<li><a href="#dimensionality-quantization-and-cost">Dimensionality, Quantization, and Cost</a></li>
+<li><a href="#evaluating-embeddings">Evaluating Embeddings</a></li>
+<li><a href="#operational-concerns">Operational Concerns</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="what-an-embedding-is">What an Embedding Is</h2>
+<p>An embedding is a learned map from an object to a vector in <code>R^d</code> such that semantically related objects land close together. &quot;Learned&quot; is the operative word: the geometry comes from a training objective, and the objective determines what &quot;close&quot; means.</p>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer('BAAI/bge-base-en-v1.5')
+vecs = model.encode(
+    [&quot;How do I reset my password?&quot;,
+     &quot;I forgot my login credentials&quot;,
+     &quot;What is the refund policy?&quot;],
+    normalize_embeddings=True,     # unit vectors → dot product == cosine similarity
+)
+print(vecs.shape)                  # (3, 768)
+print(vecs[0] @ vecs[1])           # ~0.85: same intent
+print(vecs[0] @ vecs[2])           # ~0.35: unrelated
+</code></pre>
+<p>Embedding similarity is <strong>topical/semantic relatedness</strong>, not entailment or truth. &quot;The drug is effective&quot; and &quot;The drug is not effective&quot; embed very close together: they share nearly all their content words and topic. Any system that needs to distinguish those needs a reranker or an NLI model, not cosine similarity.</p>
+<hr />
+<h2 id="from-word2vec-to-modern-text-embeddings">From Word2Vec to Modern Text Embeddings</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Era</th>
+<th>Approach</th>
+<th>Key property</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2013</td>
+<td><strong>Word2Vec / GloVe</strong></td>
+<td>One static vector per word; <code>king - man + woman ≈ queen</code></td>
+<td>No context: &quot;bank&quot; has one vector</td>
+</tr>
+<tr>
+<td>2018</td>
+<td><strong>ELMo / BERT (contextual)</strong></td>
+<td>Vector depends on the sentence</td>
+<td>Raw BERT <code>[CLS]</code> is a poor sentence embedding</td>
+</tr>
+<tr>
+<td>2019</td>
+<td><strong>Sentence-BERT</strong></td>
+<td>Siamese training with a similarity objective</td>
+<td>Needs labeled pairs</td>
+</tr>
+<tr>
+<td>2021+</td>
+<td><strong>Contrastive at scale</strong> (E5, BGE, GTE)</td>
+<td>Trained on massive (query, positive, negatives) triples</td>
+<td>Task-prefix conventions vary by model</td>
+</tr>
+<tr>
+<td>2023+</td>
+<td><strong>LLM-based embedders</strong> (<code>text-embedding-3</code>, Voyage, Cohere v3)</td>
+<td>Strong multilingual, long inputs, Matryoshka dimensions</td>
+<td>API cost, vendor lock-in</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why raw BERT embeddings are bad for similarity</strong>: BERT is trained on masked-token prediction, not on making sentence vectors comparable. Mean-pooled BERT vectors occupy a narrow cone in which almost every pair scores above 0.8 cosine: the space is anisotropic, so the numbers carry little discriminative signal. Sentence-BERT fixed this by fine-tuning with a contrastive/triplet objective so distance actually corresponds to semantic difference.</p>
+<p><strong>Contrastive learning</strong>, the modern recipe: pull a query and its relevant document together while pushing apart in-batch negatives, typically with InfoNCE loss:</p>
+<pre><code>L = -log( exp(sim(q, d⁺)/τ) / Σ_j exp(sim(q, d_j)/τ) )
+</code></pre>
+<p>Large batches matter here because every other item in the batch acts as a negative: more negatives per step means a sharper decision boundary. <strong>Hard negative mining</strong> (retrieving plausible-but-wrong documents to include as negatives) is the single biggest quality lever when fine-tuning.</p>
+<hr />
+<h2 id="similarity-metrics">Similarity Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cosine</strong></td>
+<td><code>a·b / (‖a‖‖b‖)</code></td>
+<td>[-1, 1]</td>
+<td>Ignores magnitude; the default for text</td>
+</tr>
+<tr>
+<td><strong>Dot product</strong></td>
+<td><code>a·b</code></td>
+<td>Unbounded</td>
+<td>Equals cosine when vectors are normalized; magnitude can encode popularity</td>
+</tr>
+<tr>
+<td><strong>Euclidean (L2)</strong></td>
+<td><code>‖a-b‖</code></td>
+<td>[0, ∞)</td>
+<td>Monotonically equivalent to cosine <em>for normalized vectors</em></td>
+</tr>
+</tbody>
+</table></div>
+<p>For unit-normalized vectors, <code>‖a-b‖² = 2 - 2·cos(a,b)</code>, so cosine, dot product, and L2 rank identically. Once vectors are not normalized they diverge, and mismatching the metric to how the model was trained is a real and common bug: if a model was trained with cosine similarity and you query a dot-product index of unnormalized vectors, long documents win purely for being long.</p>
+<p><strong>Rule</strong>: normalize at write time and at query time, then use dot product: it's the fastest and provably equals cosine.</p>
+<hr />
+<h2 id="choosing-an-embedding-model">Choosing an Embedding Model</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Consideration</th>
+<th>Question to ask</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Quality</strong></td>
+<td>Where does it sit on MTEB <em>for my task type</em> (retrieval ≠ classification ≠ STS)?</td>
+</tr>
+<tr>
+<td><strong>Dimension</strong></td>
+<td>384 / 768 / 1024 / 3072: storage and search cost scale linearly</td>
+</tr>
+<tr>
+<td><strong>Max sequence length</strong></td>
+<td>512 tokens truncates most documents; 8k models change chunking strategy</td>
+</tr>
+<tr>
+<td><strong>Domain</strong></td>
+<td>Legal, medical, code: a domain model often beats a bigger general one</td>
+</tr>
+<tr>
+<td><strong>Multilingual</strong></td>
+<td>Does it share a space across languages, so a French query retrieves English docs?</td>
+</tr>
+<tr>
+<td><strong>Hosting</strong></td>
+<td>API (no ops, per-token cost, data leaves your network) vs self-hosted (GPU, control)</td>
+</tr>
+<tr>
+<td><strong>Asymmetric support</strong></td>
+<td>Does it need query/document prefixes, and are you applying them?</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># Many modern models are ASYMMETRIC and expect instruction prefixes.
+# Omitting them is a top-3 cause of &quot;our retrieval is mysteriously mediocre&quot;.
+query_vec = model.encode(&quot;query: how do I reset my password&quot;, normalize_embeddings=True)
+doc_vecs  = model.encode([&quot;passage: To reset your password, go to...&quot;], normalize_embeddings=True)
+</code></pre>
+<p><code>e5</code> and <code>bge</code> families use prefixes like <code>query:</code> / <code>passage:</code> (or a BGE query instruction). Check the model card: the same model can lose 5-10 points of recall@10 when prefixes are applied inconsistently between indexing and querying.</p>
+<p><strong>MTEB caveat for interviews</strong>: the leaderboard is useful for a shortlist, not a decision. Models are sometimes tuned on tasks close to the benchmark, and your corpus is not MTEB. Always run a small internal eval set (100-300 real queries with known-relevant documents) before committing: the ranking often changes.</p>
+<hr />
+<h2 id="chunking-for-embeddings">Chunking for Embeddings</h2>
+<p>A chunk is what gets embedded, retrieved, and shown to the model, so the chunking strategy is a retrieval-quality decision, not preprocessing trivia.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fixed-size + overlap</strong></td>
+<td>N tokens, 10-20% overlap</td>
+<td>Baseline; simple and surprisingly hard to beat</td>
+</tr>
+<tr>
+<td><strong>Recursive/structural</strong></td>
+<td>Split on <code>\n\n</code>, then <code>\n</code>, then sentences</td>
+<td>Prose documents with structure</td>
+</tr>
+<tr>
+<td><strong>Document-aware</strong></td>
+<td>Split on markdown headers, code functions, table rows</td>
+<td>Technical docs, code, structured content</td>
+</tr>
+<tr>
+<td><strong>Semantic</strong></td>
+<td>Split where consecutive-sentence similarity drops</td>
+<td>Long unstructured text; costs an extra embedding pass</td>
+</tr>
+<tr>
+<td><strong>Parent-document / small-to-big</strong></td>
+<td>Embed small chunks, return the enclosing parent</td>
+<td>Best of both: precise retrieval, complete context</td>
+</tr>
+<tr>
+<td><strong>Contextual retrieval</strong></td>
+<td>Prepend an LLM-generated summary of the document to each chunk</td>
+<td>Highest quality; costs one LLM call per chunk at ingest</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=800,
+    chunk_overlap=120,          # keeps sentences spanning a boundary retrievable
+    separators=[&quot;\n## &quot;, &quot;\n### &quot;, &quot;\n\n&quot;, &quot;\n&quot;, &quot;. &quot;, &quot; &quot;],  # structure first
+    length_function=len,
+)
+chunks = splitter.split_text(document)
+</code></pre>
+<p>The tradeoff, stated plainly: <strong>small chunks give precise retrieval and poor context; large chunks give rich context and diluted embeddings.</strong> A 2,000-token chunk covering five topics produces an average vector matching none of them well. Small-to-big retrieval resolves the tension: index 300-token chunks for matching, return the 1,500-token parent section for generation.</p>
+<p>Always carry metadata on the chunk (source, section, timestamp, permissions, document ID). Metadata filters are usually a bigger accuracy win than any embedding upgrade, and access control depends on them.</p>
+<hr />
+<h2 id="fine-tuning-embeddings">Fine-Tuning Embeddings</h2>
+<p>Worth doing when your domain vocabulary differs from web text (internal product names, legal citations, medical codes, ticket jargon) or when you have real query-document click data.</p>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer, InputExample, losses
+from torch.utils.data import DataLoader
+
+model = SentenceTransformer('BAAI/bge-base-en-v1.5')
+
+# (anchor, positive) pairs: MultipleNegativesRankingLoss uses the rest of the batch as negatives
+train_examples = [
+    InputExample(texts=[&quot;how to reset password&quot;, &quot;Password reset: visit Settings &gt; Security...&quot;]),
+    InputExample(texts=[&quot;refund window&quot;, &quot;Refunds are accepted within 30 days of purchase...&quot;]),
+]
+loader = DataLoader(train_examples, shuffle=True, batch_size=64)   # larger batch = more negatives
+loss = losses.MultipleNegativesRankingLoss(model)
+
+model.fit(train_objectives=[(loader, loss)], epochs=3, warmup_steps=100)
+</code></pre>
+<p>Where to get pairs without a labeling budget:</p>
+<ul>
+<li><strong>Click logs</strong>: (query, clicked document) is a positive; log them from day one.</li>
+<li><strong>Synthetic queries</strong>: have an LLM generate 3-5 questions each chunk answers, then train query → chunk.</li>
+<li><strong>Existing structure</strong>: FAQ question/answer pairs, ticket title/resolution, doc title/body.</li>
+</ul>
+<p><strong>Hard negatives</strong> are the difference between a small gain and a large one: retrieve the top-20 for each query with the current model, drop the true positive, and use the remaining plausible-but-wrong documents as explicit negatives. Random negatives are too easy: the model learns to separate &quot;unrelated topic&quot;, which it already could.</p>
+<p>Critical operational point: <strong>fine-tuning changes the vector space, so the entire index must be re-embedded.</strong> Plan for a dual-write or blue/green reindex, and never mix vectors from two model versions in one index: the geometry is incomparable and results will be silently wrong.</p>
+<hr />
+<h2 id="dimensionality-quantization-and-cost">Dimensionality, Quantization, and Cost</h2>
+<p>Storage for <code>N</code> vectors of dimension <code>d</code> in float32 is <code>N × d × 4</code> bytes, plus index overhead.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Corpus</th>
+<th>Dim</th>
+<th>float32</th>
+<th>int8</th>
+<th>binary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1M chunks</td>
+<td>768</td>
+<td>2.9 GB</td>
+<td>0.73 GB</td>
+<td>92 MB</td>
+</tr>
+<tr>
+<td>10M chunks</td>
+<td>1536</td>
+<td>59 GB</td>
+<td>15 GB</td>
+<td>1.8 GB</td>
+</tr>
+<tr>
+<td>100M chunks</td>
+<td>1024</td>
+<td>390 GB</td>
+<td>98 GB</td>
+<td>12 GB</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Matryoshka Representation Learning (MRL)</strong> trains a model so that truncating the vector still works: dimensions are ordered by importance, so the first 256 of a 1536-dim OpenAI <code>text-embedding-3</code> vector retain most of the quality. This makes a two-stage search practical: retrieve with truncated vectors, rescore the top candidates with full vectors.</p>
+<pre><code class="language-python"># Adaptive retrieval: cheap wide pass, then exact rescoring
+candidates = index_256d.search(query_256, top_k=200)     # fast, small memory footprint
+final = rescore_with_full_vectors(query_1536, candidates)[:10]
+</code></pre>
+<p><strong>Quantization</strong> trades a little recall for large savings: int8 (scalar quantization) typically loses ~1-2% recall for 4x compression; binary quantization loses more but is 32x smaller and enables Hamming-distance search, usually paired with a float rescoring pass over the top few hundred candidates.</p>
+<hr />
+<h2 id="evaluating-embeddings">Evaluating Embeddings</h2>
+<p>Never evaluate an embedding model by eyeballing similarity scores. Build a small labeled set and measure retrieval directly.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recall@k</strong></td>
+<td>Did the right document make the candidate set? The ceiling for everything downstream</td>
+</tr>
+<tr>
+<td><strong>MRR</strong></td>
+<td>How high the first correct result ranks</td>
+</tr>
+<tr>
+<td><strong>NDCG@k</strong></td>
+<td>Ranking quality with graded relevance</td>
+</tr>
+<tr>
+<td><strong>Latency p95</strong></td>
+<td>Whether it's usable</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">def recall_at_k(retriever, eval_set, k=10):
+    &quot;&quot;&quot;eval_set: list of (query, set_of_relevant_doc_ids)&quot;&quot;&quot;
+    hits = 0
+    for query, relevant in eval_set:
+        retrieved = {d.id for d in retriever.search(query, top_k=k)}
+        hits += len(retrieved &amp; relevant) &gt; 0
+    return hits / len(eval_set)
+</code></pre>
+<p>The diagnostic that matters in a RAG debugging interview: <strong>measure retrieval and generation separately.</strong> If recall@10 is 0.55, no amount of prompt engineering will fix the answers: the evidence isn't in the context. Fix retrieval first (hybrid search, reranking, better chunking, metadata filters), then look at generation.</p>
+<hr />
+<h2 id="operational-concerns">Operational Concerns</h2>
+<ul>
+<li><strong>Versioning.</strong> Store the model name and version alongside every vector. When you upgrade, reindex into a new collection and cut over atomically; mixing spaces produces plausible-looking garbage that no test catches.</li>
+<li><strong>Incremental updates.</strong> Deletes and updates must propagate to the index, or the system confidently cites documents that no longer exist. Tie index mutations to the source-of-truth change stream.</li>
+<li><strong>Caching.</strong> Embedding the same text repeatedly is pure waste: cache by content hash. Query embeddings for frequent queries are worth caching too.</li>
+<li><strong>Batching.</strong> Encoding throughput is dominated by batch size; encode in batches of 32-256 rather than one at a time. This is often a 10x+ ingest speedup.</li>
+<li><strong>Access control.</strong> Filter by permission metadata <em>inside</em> the vector search, not after: post-filtering can return an empty page when a user lacks access to the top-k, and silently leaks the existence of documents through result counts.</li>
+<li><strong>Multi-tenancy.</strong> Either separate collections per tenant (clean isolation, more overhead) or a mandatory <code>tenant_id</code> filter (cheaper, one bug away from a data leak). For regulated data, choose separation.</li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-is-an-embedding-and-why-does-semantic-search-need-one">What is an embedding and why does semantic search need one?</h4>
+<p>An embedding maps text to a dense vector such that semantically similar text lands nearby in the space. Keyword search matches surface tokens, so &quot;how do I get my money back&quot; fails to retrieve a document titled &quot;Refund Policy&quot;: no shared terms. Embeddings encode meaning, so the two land close and retrieval succeeds.</p>
+<p>The tradeoff runs the other way too: embeddings are weak at exact matching (product SKUs, error codes, function names, rare proper nouns), because those carry little distributional meaning. That's why production systems use hybrid retrieval rather than choosing one.</p>
+<h4 id="cosine-similarity-vs-dot-product-vs-euclidean-distance-which-and-why">Cosine similarity vs dot product vs Euclidean distance, which and why?</h4>
+<p>For unit-normalized vectors all three produce the same ranking, since <code>‖a-b‖² = 2 - 2cos(a,b)</code>. So the practical answer is: normalize at index and query time, then use dot product, which is the cheapest to compute and hardware-accelerated everywhere.</p>
+<p>The choice matters when vectors are <em>not</em> normalized. Then dot product rewards magnitude, which for text embeddings usually just means document length: an artifact, not relevance. The other case is recommendation systems, where magnitude is sometimes deliberately trained to encode popularity, and dot product is then the correct metric.</p>
+<h4 id="how-do-you-choose-a-chunk-size">How do you choose a chunk size?</h4>
+<p>I'd start from the retrieval unit, not a number: a chunk should be the smallest span that fully answers a typical question. Then I'd measure. Set up 100 real queries with known-good answers, sweep chunk sizes (256/512/1024 tokens) with 10-20% overlap, and compare recall@10.</p>
+<p>Structure beats size where it exists: splitting on markdown headers or function boundaries preserves coherence far better than a token count. When both context and precision are needed, I'd use small-to-big: embed small chunks for matching, return the parent section for generation. Empirically 300-800 tokens is the usual sweet spot for prose.</p>
+<h4 id="your-rag-system-gives-wrong-answers-how-do-you-tell-if-its-retrieval-or-generation">Your RAG system gives wrong answers. How do you tell if it's retrieval or generation?</h4>
+<p>Measure them separately, which requires an eval set of questions with the known-relevant chunk IDs.</p>
+<p>First, compute recall@k on the retriever. If the correct chunk isn't being retrieved, generation is irrelevant: fix retrieval: check embedding model and prefix conventions, chunk size, add hybrid search and a reranker, verify metadata filters aren't excluding documents.</p>
+<p>If recall is high, feed the <em>gold</em> chunks directly to the LLM and see whether the answer is correct. If it is, retrieval ranks poorly (right document, low position: add a reranker). If the answer is still wrong with perfect context, it's a generation problem: prompt structure, context ordering, model capability, or the model ignoring the provided evidence.</p>
+<h4 id="when-would-you-fine-tune-an-embedding-model-instead-of-using-an-off-the-shelf-one">When would you fine-tune an embedding model instead of using an off-the-shelf one?</h4>
+<p>When the domain vocabulary is far from web text (internal product codenames, legal citation formats, medical abbreviations, industrial part numbers) a general model treats those tokens as near-noise. Also when I have real query-document relevance data from click logs, which is essentially free supervision.</p>
+<p>I'd first exhaust cheaper options: a domain-specific off-the-shelf model, hybrid search with BM25 (which handles the exact-match problem fine-tuning is often chasing), and a cross-encoder reranker, which typically buys more than fine-tuning the bi-encoder for far less effort. If I do fine-tune, hard negative mining is where the gains come from, and I'd budget for a full reindex on every model version.</p>
+<h4 id="why-cant-you-mix-vectors-from-two-embedding-models-in-one-index">Why can't you mix vectors from two embedding models in one index?</h4>
+<p>Each model defines its own coordinate system; the axes have no shared meaning. Two vectors of the same dimension from different models are not comparable, so cosine similarity between them is a meaningless number, and it will still return results, ranked by nothing. There's no error, just silently wrong retrieval, which makes it a nasty production bug.</p>
+<p>The operational consequence: any embedding model change requires re-embedding the whole corpus. Standard practice is a blue/green reindex into a new collection with the model version recorded in metadata, then an atomic cutover.</p>
+<h4 id="how-do-you-handle-documents-longer-than-the-models-context-window">How do you handle documents longer than the model's context window?</h4>
+<p>Chunk them, since truncation silently discards content that then can never be retrieved. Beyond that:</p>
+<ul>
+<li><strong>Small-to-big</strong>: embed sub-chunks, return the parent for generation.</li>
+<li><strong>Hierarchical indexing</strong>: embed a document-level summary as well as chunks, retrieve at the document level first and then within it.</li>
+<li><strong>Late chunking</strong> with long-context embedders: run the whole document through the model, then pool per chunk, so each chunk vector carries document-wide context.</li>
+<li><strong>Contextual retrieval</strong>: prepend a short LLM-written description of the document to each chunk before embedding: expensive at ingest, and among the largest reported recall gains.</li>
+</ul>
+<h4 id="what-is-hybrid-search-and-why-does-it-beat-pure-vector-search">What is hybrid search and why does it beat pure vector search?</h4>
+<p>Hybrid search runs lexical retrieval (BM25) and dense vector retrieval in parallel and fuses the result lists, commonly with Reciprocal Rank Fusion: <code>score(d) = Σ 1/(k + rank_i(d))</code>, with <code>k≈60</code>.</p>
+<p>It wins because the two methods fail in complementary ways. Vectors handle paraphrase and synonymy but blur exact identifiers: error codes, SKUs, function names, rare names. BM25 nails exact terms but returns nothing for a paraphrase with no shared vocabulary. RRF needs no score calibration between the two systems, since it fuses ranks rather than raw scores, which is why it's the common default.</p>
+<h4 id="how-would-you-reduce-embedding-storage-and-search-cost-for-100m-documents">How would you reduce embedding storage and search cost for 100M documents?</h4>
+<p>Layered, from cheapest to most invasive:</p>
+<ol>
+<li><strong>Smaller dimension</strong>: a 768-dim model instead of 3072 is a 4x cut and often loses very little; with a Matryoshka model, truncation is free.</li>
+<li><strong>Scalar (int8) quantization</strong>: 4x smaller for roughly 1-2% recall loss.</li>
+<li><strong>Binary quantization + rescoring</strong>: 32x smaller, Hamming search, then rescore the top few hundred with full vectors to recover most of the accuracy.</li>
+<li><strong>ANN index tuning</strong>: HNSW's <code>M</code> and <code>ef_construction</code> trade memory and build time for recall; IVF-PQ is far more memory-efficient at large scale.</li>
+<li><strong>Tiered storage</strong>: keep hot partitions in memory and cold ones on disk, partitioned by tenant or recency.</li>
+<li><strong>Deduplicate</strong>: near-duplicate chunks are common in real corpora and waste both storage and result slots.</li>
+</ol>
+<p>I'd measure recall@10 at each step against a fixed eval set rather than assuming the published numbers transfer.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Different embedding models for indexing and querying</td>
+<td>Vectors are not comparable; results are noise</td>
+<td>Pin the model version in metadata; reindex on change</td>
+</tr>
+<tr>
+<td>Omitting <code>query:</code> / <code>passage:</code> prefixes</td>
+<td>Asymmetric models lose significant recall</td>
+<td>Follow the model card exactly on both paths</td>
+</tr>
+<tr>
+<td>Unnormalized vectors with dot-product search</td>
+<td>Long documents win on magnitude, not relevance</td>
+<td>Normalize at write and query time</td>
+</tr>
+<tr>
+<td>Chunks too large</td>
+<td>The vector averages several topics and matches none</td>
+<td>300-800 tokens, or small-to-big retrieval</td>
+</tr>
+<tr>
+<td>No overlap between chunks</td>
+<td>Answers spanning a boundary become unretrievable</td>
+<td>10-20% overlap</td>
+</tr>
+<tr>
+<td>Evaluating by eyeballing similarity scores</td>
+<td>Scores aren't comparable across models or queries</td>
+<td>Recall@k / NDCG on a labeled eval set</td>
+</tr>
+<tr>
+<td>Pure vector search for identifiers</td>
+<td>Exact codes and names get blurred</td>
+<td>Hybrid BM25 + vector with RRF</td>
+</tr>
+<tr>
+<td>Post-filtering by permissions</td>
+<td>Empty pages and leaked existence of documents</td>
+<td>Filter inside the vector search</td>
+</tr>
+<tr>
+<td>Forgetting deletes and updates</td>
+<td>The system cites documents that no longer exist</td>
+<td>Drive index mutations from the source change stream</td>
+</tr>
+<tr>
+<td>Assuming the MTEB leader is best for you</td>
+<td>Benchmarks aren't your corpus</td>
+<td>Run an internal eval set before committing</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_rag.html">Intro to RAG</a></li>
+<li><a href="intro_rag_engineering.html">RAG Engineering</a></li>
+<li><a href="intro_vector_databases.html">Vector Databases</a></li>
+<li><a href="intro_vector_databases_advanced.html">Vector Databases: Advanced</a></li>
+<li><a href="intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../classical_ml/intro_dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_vector_databases_advanced.html"><small>Previous</small>Vector Databases (Advanced)</a><a rel="next" class="next" href="intro_llm_inference_optimization.html"><small>Next</small>LLM Inference Optimization</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_embeddings.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

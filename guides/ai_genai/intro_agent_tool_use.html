@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Systems and Tool Use Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on building AI systems that can plan, call tools, manage state, and complete multi-step tasks rather than only generate one-shot text.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agent_tool_use.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Agent Systems and Tool Use Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on building AI systems that can plan, call tools, manage state, and complete multi-step tasks rather than only generate one-shot text.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agent_tool_use.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Agent Systems and Tool Use Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on building AI systems that can plan, call tools, manage state, and complete multi-step tasks rather than only generate one-shot text.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Agent Systems and Tool Use",
+   "description": "This guide focuses on building AI systems that can plan, call tools, manage state, and complete multi-step tasks rather than only generate one-shot text.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agent_tool_use.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Agent Tool Use",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agent_tool_use.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Agent Tool Use</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_agent_tool_use.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 5 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="agent-systems-and-tool-use">Agent Systems and Tool Use</h1>
+<p>This guide focuses on building AI systems that can plan, call tools, manage state, and complete multi-step tasks rather than only generate one-shot text.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Agent systems wrap LLMs with decision loops, external tools, memory, and state transitions. They matter because many useful AI applications need more than text generation:</p>
+<ul>
+<li>querying APIs</li>
+<li>reading and writing structured data</li>
+<li>planning multi-step workflows</li>
+<li>using search, code execution, or retrieval tools</li>
+</ul>
+<p>The engineering challenge is reliability, not just intelligence.</p>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="autonomous-agents">Autonomous agents</h3>
+<p>An agent is a model-driven system that decides what to do next. In practice, autonomy should be scoped carefully. Most production agents are semi-autonomous workflows with bounded actions.</p>
+<h3 id="planning-and-reasoning-loops">Planning and reasoning loops</h3>
+<p>Planning loops break a task into smaller steps. This matters for long tasks, but too much looping increases latency, cost, and failure surface area.</p>
+<h3 id="tool-calling">Tool calling</h3>
+<p>Tool calling allows an LLM to select and invoke external capabilities like search, databases, calculators, internal APIs, and code execution.</p>
+<h3 id="memory-systems">Memory systems</h3>
+<p>Memory can mean short-term conversation history, summarized long-term state, or external facts stored in a vector or relational store.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="designing-agent-workflows">Designing agent workflows</h3>
+<p>In practice, this means defining what decisions the model is allowed to make, which tools it can call, when the workflow should stop, and how failures are retried or escalated.</p>
+<h3 id="multi-step-reasoning">Multi-step reasoning</h3>
+<p>A good engineer can decide when to use a planner-executor split, keep reasoning internal vs explicit, and decompose tasks in parallel.</p>
+<h3 id="tool-integration">Tool integration</h3>
+<p>This includes building clean tool schemas, validating tool inputs, and handling timeouts and partial failures.</p>
+<h3 id="managing-agent-state">Managing agent state</h3>
+<p>Real systems need stable state transitions, audit logs, and explicit checkpoints so a task can be resumed or debugged.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LangChain</td>
+<td>Abstractions for prompts, tools, memory, and chains</td>
+<td>Rapid prototyping and simple tool workflows</td>
+</tr>
+<tr>
+<td>LangGraph</td>
+<td>Stateful graph orchestration for agents</td>
+<td>Production agent flows with branches and recovery</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td>Multi-agent conversation framework</td>
+<td>Research-style agent collaboration experiments</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>Role-based multi-agent task coordination</td>
+<td>Lightweight multi-agent business workflows</td>
+</tr>
+<tr>
+<td>n8n</td>
+<td>Visual workflow automation for triggers, approvals, and integrations</td>
+<td>Operational AI workflows and business automation</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Standardized tool and context protocol</td>
+<td>Secure tool integration across apps and agents</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="multi-agent-research-assistant">Multi-agent research assistant</h3>
+<ul>
+<li>Goal: Research a topic, gather sources, synthesize findings, and return a structured report.</li>
+<li>Key components: planner, researcher, verifier, summarizer, source tracking.</li>
+<li>Suggested tech stack: LangGraph, search API, vector store, Pydantic.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="task-automation-agent">Task automation agent</h3>
+<ul>
+<li>Goal: Automate internal repetitive workflows like ticket triage or runbook generation.</li>
+<li>Key components: workflow triggers, tool registry, approval gates, retry logic, audit logs.</li>
+<li>Suggested tech stack: n8n or FastAPI, LangGraph, Postgres, Redis.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="ai-coding-assistant">AI coding assistant</h3>
+<ul>
+<li>Goal: Analyze a codebase, propose changes, and execute safe edits.</li>
+<li>Key components: file search, diff generation, execution sandbox, test runner integration.</li>
+<li>Suggested tech stack: Python, MCP-style tools, structured outputs, sandboxed execution.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="planner-executor-system">Planner-executor system</h3>
+<ul>
+<li>Goal: Separate task decomposition from execution for better traceability.</li>
+<li>Key components: planner node, executor node, state store, validator node.</li>
+<li>Suggested tech stack: LangGraph or custom workflow engine.</li>
+<li>Difficulty: Intermediate to advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">from typing import TypedDict, List
+
+class AgentState(TypedDict):
+    task: str
+    plan: List[str]
+    completed_steps: List[str]
+
+def planner(state: AgentState) -&gt; AgentState:
+    state[&quot;plan&quot;] = [
+        &quot;search for relevant docs&quot;,
+        &quot;extract key facts&quot;,
+        &quot;draft answer&quot;,
+        &quot;validate answer&quot;,
+    ]
+    return state
+
+def executor(state: AgentState) -&gt; AgentState:
+    for step in state[&quot;plan&quot;]:
+        state[&quot;completed_steps&quot;].append(step)
+    return state
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">planner-executor-agent/
+├── src/
+│   ├── graph.py
+│   ├── tools.py
+│   ├── state.py
+│   ├── prompts.py
+│   └── validators.py
+├── tests/
+├── fixtures/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="advanced-tool-use-patterns">Advanced Tool-Use Patterns</h2>
+<p>Once the basic call → execute → feed-result loop works, these patterns make tool
+use cheaper, safer, and able to scale to large tool libraries.</p>
+<h3 id="the-agentic-loop-manual-vs-managed">The Agentic Loop (Manual vs Managed)</h3>
+<p>The core loop: call the model with <code>tools</code> → if it returns a tool-use request,
+execute the tool and append the result as a <code>tool_result</code> → repeat until the model
+stops requesting tools.</p>
+<ul>
+<li><strong>Manual loop</strong>: you write the <code>while</code> loop. Use it when you need custom
+logging, conditional execution, or <strong>human-in-the-loop approval</strong> before a tool runs.</li>
+<li><strong>SDK tool runner</strong>: the SDK drives the loop for you (define tools as typed
+functions/schemas, it handles execution and feedback). Use it for the common case.</li>
+</ul>
+<p>Always <strong>append the full assistant response</strong> (including tool-use blocks) before
+the tool results, and make sure each <code>tool_result</code> carries the matching
+<code>tool_use_id</code>. Set a <strong>max-iterations cap</strong> so a misbehaving agent can't loop forever.</p>
+<h3 id="parallel-tool-calls">Parallel Tool Calls</h3>
+<p>A single model turn can request <strong>multiple</strong> tool calls. Execute independent ones
+concurrently and return <strong>all</strong> results in <strong>one</strong> user message. Splitting results
+across messages silently teaches the model to stop calling tools in parallel. For
+a tool that failed, still return a result with an error flag: don't drop it.</p>
+<h3 id="strict-schemas--validation">Strict Schemas &amp; Validation</h3>
+<p>Use strict JSON schemas (<code>additionalProperties: false</code>, explicit <code>required</code>) so the
+model's arguments validate exactly. Always validate inputs <em>inside</em> your handler
+before acting, the arguments are model output, not trusted input. Parse tool
+inputs with a real JSON parser; never string-match the serialized arguments.</p>
+<h3 id="programmatic-tool-calling-ptc">Programmatic Tool Calling (PTC)</h3>
+<p>Instead of one round-trip per tool call, let the model write a <strong>script</strong> that calls
+tools as functions inside a code-execution sandbox. Intermediate results stay in
+the running code (not the context window); only the final output returns to the
+model. Use it when chaining many sequential calls or when intermediate results are
+large and should be filtered before reaching the context.</p>
+<h3 id="tool-search-scaling-to-many-tools">Tool Search (scaling to many tools)</h3>
+<p>With dozens or hundreds of tools, putting every schema in context is wasteful and
+hurts selection accuracy. <strong>Tool search</strong> lets the model discover and load only the
+relevant tool schemas on demand, and because schemas are <em>appended</em> rather than
+swapped, the prompt cache is preserved.</p>
+<h3 id="mcp-a-standard-tool-interface">MCP: a Standard Tool Interface</h3>
+<p>The <strong>Model Context Protocol</strong> lets agents connect to standardized tool servers
+(GitHub, databases, SaaS apps) without bespoke integrations per tool. Declare the
+server; the agent gains its tools. See <a href="intro_mcp.html">MCP</a>.</p>
+<h3 id="server-side--built-in-tools">Server-Side / Built-in Tools</h3>
+<p>Providers offer hosted tools that run on their infrastructure: <strong>web search</strong>,
+<strong>web fetch</strong>, and <strong>code execution</strong>: declared in the <code>tools</code> list with no
+client-side execution loop. Great for grounding answers in current information or
+running computation without managing a sandbox yourself.</p>
+<h3 id="security-checklist-for-tool-use">Security Checklist for Tool Use</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destructive/irreversible action</td>
+<td>Human-in-the-loop approval; reversibility check</td>
+</tr>
+<tr>
+<td>Malicious tool arguments</td>
+<td>Strict schema + handler-side validation; allowlist commands for a bash tool</td>
+</tr>
+<tr>
+<td>Path traversal (file tools)</td>
+<td>Resolve to a canonical path; confine to a project root; reject <code>..</code>/symlinks</td>
+</tr>
+<tr>
+<td>Prompt injection via tool output</td>
+<td>Treat returned content as untrusted data, not instructions</td>
+</tr>
+<tr>
+<td>Secret leakage</td>
+<td>Keep credentials host-side; never put API keys in prompts or tool args</td>
+</tr>
+<tr>
+<td>Runaway cost/loops</td>
+<td>Max-iteration and token budgets</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-must-parallel-tool-results-go-in-one-message">Why must parallel tool results go in one message?</h4>
+<p>Splitting them trains the model to stop issuing parallel calls and breaks <code>tool_use_id</code> pairing.</p>
+<h4 id="what-does-programmatic-tool-calling-save">What does programmatic tool calling save?</h4>
+<p>Round-trips and tokens: only the final result re-enters the context, not every intermediate value.</p>
+<h4 id="how-do-you-scale-an-agent-to-hundreds-of-tools">How do you scale an agent to hundreds of tools?</h4>
+<p>Tool search / dynamic discovery so only relevant schemas load, preserving the prompt cache.</p>
+<h4 id="how-do-you-make-a-bashfile-tool-safe">How do you make a <code>bash</code>/file tool safe?</h4>
+<p>Sandboxing, command allowlists, canonical-path confinement, timeouts, and logging every call.</p>
+<h4 id="what-is-mcp-and-why-does-it-matter">What is MCP and why does it matter?</h4>
+<p>A standard protocol for exposing tools to agents, so tool servers are reusable across agents instead of bespoke.</p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_multi_agent_systems.html">Multi-Agent Systems</a></li>
+<li><a href="intro_n8n.html">n8n</a></li>
+<li><a href="intro_langgraph.html">LangGraph</a></li>
+<li><a href="intro_mcp.html">MCP</a></li>
+<li><a href="../system_design/intro_backend_ai_system_design.html">Backend &amp; System Design for AI</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_agentic_ai.html"><small>Previous</small>Agentic AI</a><a rel="next" class="next" href="intro_multi_agent_systems.html"><small>Next</small>Multi-Agent Systems</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_agent_tool_use.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>
