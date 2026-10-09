@@ -117,8 +117,10 @@ CrackingMachineLearningInterview/
 │   ├── intro_mlflow.md
 │   ├── intro_model_serving.md
 │   └── ...
-├── cloud_ml/                        ← Cloud ML platforms
-│   └── intro_cloud_ml_platforms.md
+├── cloud_ml/                        ← Cloud ML platforms and AWS/GCP/Azure services
+│   ├── intro_cloud_ml_platforms.md
+│   ├── aws_for_ml_engineers.md
+│   └── ...
 ├── data_engineering/                ← Data engineering tools
 │   ├── intro_apache_spark.md
 │   └── ...

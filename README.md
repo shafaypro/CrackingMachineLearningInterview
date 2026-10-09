@@ -86,7 +86,7 @@ Feel free to share the repository link in your blog, study notes, or interview p
 * [`ai_genai/`](./ai_genai): GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG.
 * [`classical_ml/`](./classical_ml): classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering.
 * [`mlops/`](./mlops): MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation.
-* [`cloud_ml/`](./cloud_ml): cloud ML platforms, AWS SageMaker, Google Vertex AI, Azure ML.
+* [`cloud_ml/`](./cloud_ml): cloud ML platforms (AWS SageMaker, Google Vertex AI, Azure ML), the core AWS, GCP and Azure services ML engineers use, and a cross-cloud service map.
 * [`data_engineering/`](./data_engineering): data engineering interview topics, platform concepts, and geospatial AI.
 * [`devops/`](./devops): DevOps, infrastructure, deployment, and AI testing topics.
 * [`frameworks/`](./frameworks): ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving.
@@ -247,6 +247,10 @@ Core topics:
 * [AWS SageMaker Interview Guide](./cloud_ml/intro_sagemaker.md)
 * [Google Vertex AI Interview Guide](./cloud_ml/intro_vertex_ai.md)
 * [Azure Machine Learning Interview Guide](./cloud_ml/intro_azure_ml.md)
+* [AWS for ML Engineers (IAM, S3, EC2/Spot, EKS, Glue, Bedrock)](./cloud_ml/aws_for_ml_engineers.md)
+* [Google Cloud for ML Engineers (IAM, GCS, TPUs, GKE, BigQuery, Gemini)](./cloud_ml/gcp_for_ml_engineers.md)
+* [Microsoft Azure for ML Engineers (Entra ID, ADLS, AKS, Fabric, Azure OpenAI)](./cloud_ml/azure_for_ml_engineers.md)
+* [AWS vs GCP vs Azure: Service Mapping for ML Engineers](./cloud_ml/cloud_service_mapping.md)
 
 ## System Design Track
 Use this track for senior ML engineer, staff engineer, and principal engineer interviews requiring system design depth.

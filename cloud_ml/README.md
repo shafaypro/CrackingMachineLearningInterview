@@ -6,6 +6,8 @@ This track covers the managed machine learning platforms most commonly discussed
 - Google Vertex AI
 - Azure Machine Learning
 
+It also covers the core cloud services around those platforms on AWS, GCP and Azure (identity, networking, storage, compute, data, generative AI and cost), plus a service map for translating between the three clouds.
+
 Use this section when you need to explain how a team trains, deploys, monitors, and governs models without building the full platform stack from scratch.
 
 ---
@@ -126,9 +128,10 @@ Strong answers usually include:
 Recommended order:
 
 1. Read the comparison guide first.
-2. Read the provider-specific guide for the cloud you use most.
+2. Read the provider-specific guide for the cloud you use most, then its "for ML engineers" guide for the surrounding services.
 3. Compare how each platform handles training, pipelines, and endpoints.
 4. Practice answering system design questions using one concrete platform.
+5. Use the service mapping guide to translate your answers to the other two clouds.
 
 ---
 
@@ -138,3 +141,7 @@ Recommended order:
 - [AWS SageMaker Interview Guide](./intro_sagemaker.md)
 - [Google Vertex AI Interview Guide](./intro_vertex_ai.md)
 - [Azure Machine Learning Interview Guide](./intro_azure_ml.md)
+- [AWS for ML Engineers](./aws_for_ml_engineers.md)
+- [Google Cloud (GCP) for ML Engineers](./gcp_for_ml_engineers.md)
+- [Microsoft Azure for ML Engineers](./azure_for_ml_engineers.md)
+- [AWS vs GCP vs Azure: Service Mapping](./cloud_service_mapping.md)
