@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classic Question Bank | Cracking ML Interviews</title>
+<meta name="description" content="Hundreds of classic machine learning interview questions with answers: bias and variance, regularization, evaluation metrics, trees, SVMs, clustering and…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/readme.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Classic Question Bank | Cracking ML Interviews">
+<meta property="og:description" content="Hundreds of classic machine learning interview questions with answers: bias and variance, regularization, evaluation metrics, trees, SVMs, clustering and…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/readme.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Classic Question Bank | Cracking ML Interviews">
+<meta name="twitter:description" content="Hundreds of classic machine learning interview questions with answers: bias and variance, regularization, evaluation metrics, trees, SVMs, clustering and…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Classic Question Bank",
+   "description": "Hundreds of classic machine learning interview questions with answers: bias and variance, regularization, evaluation metrics, trees, SVMs, clustering and…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/readme.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Interview Q&A Bank",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#interview-qa-bank"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Main Q&A Bank",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/readme.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../">Study hub</a>
+    <a href="./">All guides</a>
+    <a href="../practice.html">Practice</a>
+    <a href="../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../">Study hub</a> <span aria-hidden="true">/</span> <a href="./">All guides</a> <span aria-hidden="true">/</span> <a href="./#interview-qa-bank">Interview Q&amp;A Bank</a> <span aria-hidden="true">/</span> <span aria-current="page">Main Q&amp;A Bank</span></nav>
+<p class="meta"><a href="../#README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h2 id="crackingmachinelearninginterview">CrackingMachineLearningInterview</h2>
+<p>A practical interview preparation repository for Machine Learning Engineer, AI Engineer, Data Scientist, Deep Learning Engineer, Data Engineer, and DevOps or platform-focused roles.</p>
+<p>Please check out <a href="https://shafaypro.github.io/CrackingMachineLearningInterview/">CrackingMachineLearningInterview</a> GitPage(for Ui/UX experience).</p>
+<h3 id="new-here-start-by-picking-a-track">New here? Start by picking a track</h3>
+<p><strong><a href="docs/choose-your-track.html">Choose Your Track</a></strong>: answer one question about what you want to build, and get an
+ordered path through this repo for your role: ML Engineer, AI/GenAI Engineer, Data Scientist, Data Engineer,
+MLOps, or Deep Learning. Each track lists prerequisites, a stage-by-stage reading order, a project to build,
+and how to tell when you're interview-ready.</p>
+<h3 id="who-this-repository-is-for">Who this repository is for</h3>
+<ul>
+<li>Machine Learning Engineer</li>
+<li>Data Scientist</li>
+<li>Deep Learning Engineer</li>
+<li>AI Engineer</li>
+<li>Software Engineer working on AI/ML products</li>
+<li>Data Engineer</li>
+<li>MLOps Engineer</li>
+<li>DevOps / Platform Engineer</li>
+</ul>
+<h2 id="how-to-use-this-repository">How to use this repository</h2>
+<ul>
+<li><strong>New to the repo, or unsure where to begin?</strong> Start with <strong><a href="docs/choose-your-track.html">Choose Your Track</a></strong>.</li>
+<li>Start with the <strong>2026 Interview Roadmap</strong> if you are preparing for current AI/ML interviews.</li>
+<li>Use <strong>2026 Additional Questions and Answers</strong> for modern interview rounds.</li>
+<li>Use the <strong>AI / GenAI</strong>, <strong>Data Engineering</strong>, and <strong>DevOps</strong> sections for specialized interview tracks.</li>
+<li>Use the <strong>Classic Question Bank</strong> for core ML, statistics, deep learning, and algorithms.</li>
+<li>Use <strong>Preparation Resources and References</strong> to build a targeted study plan.</li>
+<li>Use <strong>Suggested Learning Order</strong> if you want a clean path from fundamentals to production AI systems.</li>
+<li>The night before: skim the <strong><a href="docs/ml-cheat-sheet.html">ML Cheat Sheet</a></strong>, drill the <strong><a href="https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html">Glossary Flashcards</a></strong>, and rehearse a few <strong><a href="docs/ml-debugging-scenarios.html">Debugging Scenarios</a></strong> out loud.</li>
+</ul>
+<h2 id="quick-navigation">Quick Navigation</h2>
+<ul>
+<li><a href="docs/choose-your-track.html"><strong>Choose Your Track</strong>: start here</a></li>
+<li><a href="docs/2026-interview-roadmap.html">2026 Interview Roadmap</a></li>
+<li><a href="docs/2026-additional-questions.html">2026 Additional Questions and Answers</a></li>
+<li><a href="docs/interview_questions_2026.html">2026 Common Interview Questions</a></li>
+<li><a href="docs/behavioral-interview-guide.html">Behavioral &amp; Project Deep-Dive Guide</a></li>
+<li><a href="docs/take-home-projects.html">ML Take-Home Projects &amp; Case Studies</a></li>
+<li><a href="docs/glossary.html">ML &amp; AI Glossary</a></li>
+<li><a href="docs/ml-cheat-sheet.html">ML Cheat Sheet: formulas &amp; numbers for the night before</a></li>
+<li><a href="docs/ml-debugging-scenarios.html">ML Debugging Scenarios: &quot;your model is broken, what do you do?&quot;</a></li>
+<li><a href="https://shafaypro.github.io/CrackingMachineLearningInterview/flashcards.html">Glossary Flashcards: interactive practice</a></li>
+<li><a href="#ai--genai-track">AI / GenAI Track</a></li>
+<li><a href="#classic-ml-track">Classic ML Track</a></li>
+<li><a href="#deep-learning-track">Deep Learning Track</a></li>
+<li><a href="#mlops-track">MLOps Track</a></li>
+<li><a href="#data-engineering-track">Data Engineering Track</a></li>
+<li><a href="#devops-track">DevOps Track</a></li>
+<li><a href="#coding-challenges-track">Coding Challenges Track</a></li>
+<li><a href="#cloud-ml-platforms">Cloud ML Platforms</a></li>
+<li><a href="#system-design-track">System Design Track</a></li>
+<li><a href="#frameworks-track">Frameworks Track</a></li>
+<li><a href="#project-setup--engineering-track">Project Setup &amp; Engineering Track</a></li>
+<li><a href="#suggested-learning-order">Suggested Learning Order</a></li>
+<li><a href="#highlighted-projects">Highlighted Projects</a></li>
+<li><a href="docs/resources-and-references.html">Preparation Resources and References</a></li>
+<li><a href="docs/study-pattern.html">Study Pattern</a></li>
+<li><a href="#classic-question-bank">Classic Question Bank</a></li>
+<li><a href="#contributions">Contributions</a></li>
+</ul>
+<h2 id="about">About</h2>
+<ul>
+<li>Github Profile: <a href="https://github.com/shafaypro">Shafaypro</a> ©</li>
+<li>Repository: <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">CrackingMachineLearningInterview</a></li>
+</ul>
+<h4 id="image-references">Image References</h4>
+<ul>
+<li>Image references are included for educational purposes. Please see the repository references for attribution where applicable.</li>
+</ul>
+<h4 id="sharing">Sharing</h4>
+<p>Feel free to share the repository link in your blog, study notes, or interview preparation material.</p>
+<h2 id="repository-structure">Repository Structure</h2>
+<ul>
+<li><a href="docs/choose-your-track.html"><code>docs/choose-your-track.md</code></a>: pick a track by goal or background, then follow a staged path through the repo for that role.</li>
+<li><a href="docs/2026-interview-roadmap.html"><code>docs/2026-interview-roadmap.md</code></a>: current interview focus areas for ML Engineer and AI Engineer roles.</li>
+<li><a href="docs/2026-additional-questions.html"><code>docs/2026-additional-questions.md</code></a>: modern 2026 question bank covering LLMs, RAG, evaluation, agents, and production AI.</li>
+<li><a href="docs/interview_questions_2026.html"><code>docs/interview_questions_2026.md</code></a>: deep-dive interview Q&amp;A covering agents, RAG, LLM scaling, production AI, and system design.</li>
+<li><a href="docs/resources-and-references.html"><code>docs/resources-and-references.md</code></a>: books, references, and additional interview topics.</li>
+<li><a href="docs/study-pattern.html"><code>docs/study-pattern.md</code></a>: recommended preparation topics, difficulty levels, and study structure.</li>
+<li><a href="docs/behavioral-interview-guide.html"><code>docs/behavioral-interview-guide.md</code></a>: STAR stories, the project deep-dive round, ML-specific behavioral questions, and level expectations.</li>
+<li><a href="docs/take-home-projects.html"><code>docs/take-home-projects.md</code></a>: what reviewers score, time budgeting, repository structure, and the follow-up presentation round.</li>
+<li><a href="docs/glossary.html"><code>docs/glossary.md</code></a>: every term in the repo defined in a sentence or two, with the practical point attached.</li>
+<li><a href="docs/ml-cheat-sheet.html"><code>docs/ml-cheat-sheet.md</code></a>: metrics, losses, distributions, update rules, and the numbers worth memorising, on one page.</li>
+<li><a href="docs/ml-debugging-scenarios.html"><code>docs/ml-debugging-scenarios.md</code></a>: troubleshooting scenarios (leakage, NaN loss, offline/online gaps, drift, RAG regressions) with ranked causes and fixes.</li>
+<li><a href="../flashcards.html"><code>flashcards.html</code></a>: interactive flashcards built from the glossary, with progress saved in your browser.</li>
+<li><a href="../tools/check_links.py"><code>tools/check_links.py</code></a>: offline link and anchor checker, run in CI on every pull request.</li>
+<li><a href="../tools/build_site.py"><code>tools/build_site.py</code></a>: generates a standalone, search-engine-friendly page for every guide (<code>guides/</code>) plus <code>sitemap.xml</code>.</li>
+<li><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/tree/master/ai_genai"><code>ai_genai/</code></a>: GenAI and LLM engineering topics including n8n, CrewAI, LangGraph, LangSmith, multi-agent systems, and advanced RAG.</li>
+<li><a href="classical_ml/"><code>classical_ml/</code></a>: classical ML algorithms and the math behind them, linear algebra and optimization, time series, clustering, dimensionality reduction, recommender systems, feature engineering.</li>
+<li><a href="mlops/"><code>mlops/</code></a>: MLOps topics, MLflow, model serving, feature stores, explainability, data quality, data labeling and active learning, responsible AI, LLM evaluation.</li>
+<li><a href="cloud_ml/"><code>cloud_ml/</code></a>: cloud ML platforms (AWS SageMaker, Google Vertex AI, Azure ML), the core AWS, GCP and Azure services ML engineers use, and a cross-cloud service map.</li>
+<li><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/tree/master/data_engineering"><code>data_engineering/</code></a>: data engineering interview topics, platform concepts, and geospatial AI.</li>
+<li><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/tree/master/devops"><code>devops/</code></a>: DevOps, infrastructure, deployment, and AI testing topics.</li>
+<li><a href="frameworks/"><code>frameworks/</code></a>: ML and AI frameworks including FastAPI, Pydantic, PyTorch, HuggingFace, and LLM serving.</li>
+<li><a href="system_design/"><code>system_design/</code></a>: ML system design patterns, RAG pipelines, agent architectures, batch vs real-time systems.</li>
+<li><a href="deep_learning/"><code>deep_learning/</code></a>: deep learning fundamentals, transformers, applied training pipelines, distributed training, and reinforcement learning.</li>
+<li><a href="coding_challenges/"><code>coding_challenges/</code></a>: Python and SQL interview practice guides for coding screens and data problem solving.</li>
+<li><a href="project_setup/"><code>project_setup/</code></a>: how to set up a project on GitHub and structure real ML/AI/agent/data-engineering repositories.</li>
+<li><code>README.md</code>: repository landing page plus the original classic ML interview question bank.</li>
+</ul>
+<h2 id="suggested-learning-order">Suggested Learning Order</h2>
+<p>Use this order if you want to move from theory to production-grade AI engineering:</p>
+<ol>
+<li><a href="#classic-ml-track">Classic ML Track</a></li>
+<li><a href="#deep-learning-track">Deep Learning Track</a></li>
+<li><a href="#ai--genai-track">AI / GenAI Track</a></li>
+<li><a href="#data-engineering-track">Data Engineering Track</a></li>
+<li><a href="#mlops-track">MLOps Track</a></li>
+<li><a href="#frameworks-track">Frameworks Track</a></li>
+<li><a href="#system-design-track">System Design Track</a></li>
+<li><a href="#coding-challenges-track">Coding Challenges Track</a></li>
+<li><a href="#cloud-ml-platforms">Cloud ML Platforms</a></li>
+<li><a href="#project-setup--engineering-track">Project Setup &amp; Engineering Track</a>: ship it the right way</li>
+</ol>
+<h2 id="highlighted-projects">Highlighted Projects</h2>
+<p>Use these to turn the repo into a portfolio, not just a reading list:</p>
+<ul>
+<li><a href="deep_learning/intro_applied_deep_learning.html">Training and Inference Pipeline</a></li>
+<li><a href="ai_genai/intro_llm_fundamentals.html">Prompt Experimentation Repo</a></li>
+<li><a href="ai_genai/intro_agent_tool_use.html">Multi-Agent Research Assistant</a></li>
+<li><a href="ai_genai/intro_multi_model_orchestration.html">Multi-Model Router</a></li>
+<li><a href="ai_genai/intro_multimodal_ai.html">Document Understanding System</a></li>
+<li><a href="ai_genai/intro_n8n.html">AI Workflow Automation with n8n</a></li>
+<li><a href="mlops/intro_evaluation_guardrails.html">Eval Pipeline</a></li>
+<li><a href="mlops/intro_llmops_mlops_engineering.html">CI/CD for AI App</a></li>
+<li><a href="system_design/intro_backend_ai_system_design.html">Scalable AI API</a></li>
+<li><a href="data_engineering/intro_data_engineering_for_ai.html">Feature Store System</a></li>
+</ul>
+<h2 id="ai--genai-track">AI / GenAI Track</h2>
+<p>Use this track for AI Engineer, GenAI Engineer, LLM Engineer, Applied AI, and agent-platform interviews.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="ai_genai/intro_agentic_ai_engineering_roadmap.html">The Agentic AI Engineer Roadmap (34-topic curriculum: foundation → frontier)</a></li>
+<li><a href="ai_genai/intro_llm_fundamentals.html">LLM &amp; Generative AI Fundamentals</a></li>
+<li><a href="ai_genai/intro_rag.html">RAG</a></li>
+<li><a href="ai_genai/intro_rag_engineering.html">RAG Engineering</a></li>
+<li><a href="ai_genai/intro_context_engineering.html">Context Engineering (budgets, ordering, caching, memory, compaction)</a></li>
+<li><a href="ai_genai/intro_embeddings.html">Embeddings (models, chunking, fine-tuning, quantization)</a></li>
+<li><a href="ai_genai/intro_vector_databases.html">Vector Databases</a></li>
+<li><a href="ai_genai/intro_vector_databases_advanced.html">Vector Databases: Advanced (Pinecone, Weaviate, FAISS, pgvector, Hybrid Search, Reranking)</a></li>
+<li><a href="ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization (KV cache, batching, quantization, speculative decoding)</a></li>
+<li><a href="ai_genai/intro_llmops.html">LLMOps</a></li>
+<li><a href="ai_genai/intro_agentic_ai.html">Agentic AI</a></li>
+<li><a href="ai_genai/intro_agent_tool_use.html">Agent Systems &amp; Tool Use</a></li>
+<li><a href="ai_genai/intro_multi_agent_systems.html">Multi-Agent Systems (Patterns, Memory, Tool Calling, Failure Handling)</a></li>
+<li><a href="ai_genai/intro_multi_model_orchestration.html">Multi-Model &amp; AI Orchestration</a></li>
+<li><a href="ai_genai/intro_multimodal_ai.html">Multimodal AI</a></li>
+<li><a href="ai_genai/intro_crewai.html">CrewAI</a></li>
+<li><a href="ai_genai/intro_n8n.html">n8n - AI Workflow Automation</a></li>
+<li><a href="ai_genai/intro_n8n_advanced.html">n8n - Advanced AI Workflows</a></li>
+<li><a href="ai_genai/intro_langgraph.html">LangGraph</a></li>
+<li><a href="ai_genai/intro_langsmith.html">LangSmith: Observability &amp; Evaluation</a></li>
+<li><a href="ai_genai/intro_prompt_engineering.html">Prompt Engineering (CoT, ReAct, Few-Shot, Self-Consistency, ToT, Output Control)</a></li>
+<li><a href="ai_genai/intro_structured_outputs.html">Structured Outputs &amp; Function Calling (JSON Mode, Tool Use, Pydantic, Instructor)</a></li>
+<li><a href="ai_genai/intro_llm_security.html">LLM Security (Prompt Injection, Jailbreaks, Red-Teaming, Defenses)</a></li>
+<li><a href="ai_genai/intro_mcp.html">MCP</a></li>
+<li><a href="ai_genai/intro_langchain.html">LangChain</a></li>
+<li><a href="ai_genai/intro_anthropic.html">Anthropic Overview</a></li>
+</ul>
+<h2 id="data-engineering-track">Data Engineering Track</h2>
+<p>Use this track for pipeline, ETL, orchestration, warehouse, lakehouse, streaming, and geospatial interviews.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="data_engineering/intro_data_engineering_for_ai.html">Data Engineering for AI</a></li>
+<li><a href="data_engineering/data-modeling.html">Data Modeling</a></li>
+<li><a href="data_engineering/data-architecture.html">Data Architecture</a></li>
+<li><a href="data_engineering/intro_data_processing_pipelines.html">Types of Data Processing Pipelines (Batch → Streaming, When-to-Use-What)</a></li>
+<li><a href="data_engineering/intro_apache_spark.html">Apache Spark</a></li>
+<li><a href="data_engineering/intro_apache_kafka.html">Apache Kafka</a></li>
+<li><a href="data_engineering/intro_apache_airflow.html">Apache Airflow</a></li>
+<li><a href="data_engineering/intro_dbt.html">dbt Introduction</a></li>
+<li><a href="data_engineering/interview_dbt.html">dbt Interview Guide</a></li>
+<li><a href="data_engineering/intro_apache_iceberg.html">Apache Iceberg</a></li>
+<li><a href="data_engineering/intro_delta_lake.html">Delta Lake</a></li>
+<li><a href="data_engineering/intro_duckdb.html">DuckDB</a></li>
+<li><a href="data_engineering/intro_openclaw.html">OpenClaw (illustrative lineage example; see the note in the guide)</a></li>
+<li><a href="data_engineering/intro_geospatial.html">Geospatial AI Systems (Google Solar API, ArcGIS, PostGIS, H3)</a></li>
+</ul>
+<h2 id="deep-learning-track">Deep Learning Track</h2>
+<p>Use this track for ML engineer, deep learning engineer, and applied AI interviews requiring architecture and training depth.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="deep_learning/">Deep Learning Overview</a></li>
+<li><a href="deep_learning/intro_applied_deep_learning.html">Applied Deep Learning Roadmap</a></li>
+<li><a href="deep_learning/intro_sequence_models.html">Sequence Models (RNN, LSTM, GRU, Seq2Seq, Attention)</a></li>
+<li><a href="deep_learning/intro_transformers.html">Transformers</a></li>
+<li><a href="deep_learning/intro_neural_network_training.html">Neural Network Training (optimizers, normalization, regularization, debugging)</a></li>
+<li><a href="deep_learning/intro_generative_models.html">Generative Models (VAEs, GANs, Diffusion, Latent Diffusion)</a></li>
+<li><a href="deep_learning/intro_graph_neural_networks.html">Graph Neural Networks (message passing, GCN, GraphSAGE, GAT)</a></li>
+<li><a href="deep_learning/intro_model_compression.html">Model Compression (distillation, pruning, quantization)</a></li>
+<li><a href="deep_learning/intro_distributed_training.html">Distributed Training (DDP, FSDP/ZeRO, tensor &amp; pipeline parallelism, mixed precision)</a></li>
+<li><a href="deep_learning/intro_reinforcement_learning.html">Reinforcement Learning (MDPs, Q-learning, bandits, PPO, offline RL, RLHF)</a></li>
+<li><a href="deep_learning/intro_speech_audio.html">Speech &amp; Audio ML (log-mel, CTC, RNN-T, Whisper, TTS, voice agents)</a></li>
+<li><a href="deep_learning/intro_computer_vision.html">Computer Vision (CNNs, Detection, Segmentation, ViT)</a></li>
+<li><a href="deep_learning/intro_fine_tuning.html">Fine-Tuning (LoRA, QLoRA, PEFT, RLHF/DPO)</a></li>
+</ul>
+<h2 id="devops-track">DevOps Track</h2>
+<p>Use this track for infrastructure, CI/CD, containers, orchestration, IaC, and AI system testing interviews.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="devops/intro_docker.html">Docker</a></li>
+<li><a href="devops/intro_kubernetes.html">Kubernetes</a></li>
+<li><a href="devops/intro_helm.html">Helm</a></li>
+<li><a href="devops/intro_terraform.html">Terraform</a></li>
+<li><a href="devops/intro_github_actions.html">GitHub Actions</a></li>
+<li><a href="devops/intro_observability.html">Observability (metrics, logs, traces, SLOs, Prometheus, OpenTelemetry)</a></li>
+<li><a href="devops/intro_testing_ai.html">Testing AI Systems (Playwright, Puppeteer, LLM E2E Testing)</a></li>
+</ul>
+<h2 id="classic-ml-track">Classic ML Track</h2>
+<p>Use this track for classical ML algorithm interviews, data science roles, and as foundations for ML engineer roles.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="classical_ml/intro_math_for_ml.html">Math for ML (linear algebra, calculus, optimization, numerical stability)</a></li>
+<li><a href="classical_ml/intro_model_evaluation.html">Model Evaluation &amp; Metrics (ROC vs PR, calibration, thresholds, CV)</a></li>
+<li><a href="classical_ml/intro_ensemble_methods.html">Ensemble Methods &amp; Gradient Boosting (RF, XGBoost, LightGBM, CatBoost)</a></li>
+<li><a href="classical_ml/intro_causal_inference.html">Causal Inference &amp; Uplift Modeling (DiD, IV, RDD, CATE, Qini)</a></li>
+<li><a href="classical_ml/intro_anomaly_detection.html">Anomaly Detection (Isolation Forest, LOF, autoencoders, time series)</a></li>
+<li><a href="classical_ml/intro_nlp_fundamentals.html">NLP Fundamentals (tokenization, TF-IDF, embeddings, NER)</a></li>
+<li><a href="classical_ml/intro_statistics_probability.html">Statistics &amp; Probability</a></li>
+<li><a href="classical_ml/intro_time_series.html">Time Series &amp; Forecasting</a></li>
+<li><a href="classical_ml/intro_clustering.html">Clustering Algorithms</a></li>
+<li><a href="classical_ml/intro_dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li><a href="classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="classical_ml/intro_feature_engineering.html">Feature Engineering &amp; Selection</a></li>
+</ul>
+<h2 id="mlops-track">MLOps Track</h2>
+<p>Use this track for MLOps Engineer, Senior ML Engineer, and production ML system interviews.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="mlops/intro_llmops_mlops_engineering.html">LLMOps / MLOps Engineering</a></li>
+<li><a href="mlops/intro_cicd_for_ml.html">CI/CD for Machine Learning (registry, gates, canary, rollback)</a></li>
+<li><a href="mlops/intro_mlflow.html">MLflow</a></li>
+<li><a href="mlops/intro_model_explainability.html">Model Explainability (SHAP, LIME)</a></li>
+<li><a href="mlops/intro_feature_stores.html">Feature Stores</a></li>
+<li><a href="mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="mlops/intro_data_quality.html">Data Quality &amp; Validation</a></li>
+<li><a href="mlops/intro_llm_evaluation.html">LLM Evaluation (Evals, Benchmarks, Hallucination Detection, HITL)</a></li>
+<li><a href="mlops/intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a></li>
+<li><a href="mlops/intro_ab_testing.html">A/B Testing for ML (Experiment Design, Stats, Online Metrics)</a></li>
+<li><a href="mlops/intro_data_labeling_active_learning.html">Data Labeling, Active Learning &amp; Weak Supervision</a></li>
+<li><a href="mlops/intro_responsible_ai_fairness.html">Responsible AI: Fairness, Bias, Privacy &amp; Governance</a></li>
+</ul>
+<h2 id="cloud-ml-platforms">Cloud ML Platforms</h2>
+<p>Use this track for cloud-specific ML engineer and MLOps roles at companies using AWS, GCP, or Azure.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="cloud_ml/">Cloud ML Platforms Overview</a></li>
+<li><a href="cloud_ml/intro_cloud_ml_platforms.html">Cloud ML Platforms Comparison (SageMaker vs Vertex AI vs Azure ML)</a></li>
+<li><a href="cloud_ml/intro_sagemaker.html">AWS SageMaker Interview Guide</a></li>
+<li><a href="cloud_ml/intro_vertex_ai.html">Google Vertex AI Interview Guide</a></li>
+<li><a href="cloud_ml/intro_azure_ml.html">Azure Machine Learning Interview Guide</a></li>
+<li><a href="cloud_ml/aws_for_ml_engineers.html">AWS for ML Engineers (IAM, S3, EC2/Spot, EKS, Glue, Bedrock)</a></li>
+<li><a href="cloud_ml/gcp_for_ml_engineers.html">Google Cloud for ML Engineers (IAM, GCS, TPUs, GKE, BigQuery, Gemini)</a></li>
+<li><a href="cloud_ml/azure_for_ml_engineers.html">Microsoft Azure for ML Engineers (Entra ID, ADLS, AKS, Fabric, Azure OpenAI)</a></li>
+<li><a href="cloud_ml/cloud_service_mapping.html">AWS vs GCP vs Azure: Service Mapping for ML Engineers</a></li>
+</ul>
+<h2 id="system-design-track">System Design Track</h2>
+<p>Use this track for senior ML engineer, staff engineer, and principal engineer interviews requiring system design depth.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="system_design/">ML System Design Framework &amp; Patterns</a></li>
+<li><a href="system_design/intro_backend_ai_system_design.html">Backend &amp; System Design for AI</a></li>
+<li><a href="system_design/recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="system_design/search_ranking_system.html">Search &amp; Ranking System Design</a></li>
+<li><a href="system_design/llm_assistant_system.html">Designing a Production LLM Assistant</a></li>
+<li><a href="system_design/fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="system_design/ads_ctr_prediction.html">Ads Click-Through-Rate Prediction System Design (auctions, calibration, delayed feedback)</a></li>
+<li><a href="system_design/content_moderation_system.html">Content Moderation System Design (multimodal, human review, prevalence)</a></li>
+<li><a href="system_design/eta_prediction.html">ETA Prediction System Design (routing baseline, residual models, quantile losses)</a></li>
+<li><a href="system_design/news_feed_ranking.html">News Feed Ranking System Design (value model, multi-task ranking, fan-out)</a></li>
+<li><a href="system_design/visual_search_system.html">Visual Search System Design (metric learning, ANN indexes, re-ranking)</a></li>
+<li><a href="system_design/enterprise_rag_search.html">Enterprise RAG Search System Design (connectors, permissions, hybrid retrieval, evaluation)</a></li>
+<li><a href="system_design/notification_ranking.html">Notification Ranking System Design (send budgets, incrementality, send-time optimization)</a></li>
+<li><a href="system_design/dynamic_pricing.html">Dynamic Pricing System Design (causal elasticity, surge, switchback experiments)</a></li>
+<li><a href="system_design/people_you_may_know.html">People You May Know System Design (link prediction, graph candidates, privacy)</a></li>
+<li><a href="system_design/ml_system_design_patterns.html">ML System Design Patterns: RAG, Agents, Batch vs Real-Time (2026)</a></li>
+</ul>
+<h2 id="coding-challenges-track">Coding Challenges Track</h2>
+<p>Use this track for interview rounds that require live coding, take-home problem solving, or SQL assessments.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="coding_challenges/">Coding Challenges Overview</a></li>
+<li><a href="coding_challenges/python_coding_challenges.html">Python Coding Challenges</a></li>
+<li><a href="coding_challenges/sql_coding_challenges.html">SQL Coding Challenges</a></li>
+<li><a href="coding_challenges/ml_coding_challenges.html">ML Coding Challenges: Implement From Scratch</a></li>
+<li><a href="coding_challenges/pandas_numpy_challenges.html">Pandas &amp; NumPy Challenges</a></li>
+</ul>
+<h2 id="frameworks-track">Frameworks Track</h2>
+<p>Use this track for roles requiring hands-on Python API development and AI framework expertise.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="frameworks/intro_python_for_ai.html">Python for AI Engineering (async, type hints, Pydantic, APIs, logging)</a></li>
+<li><a href="frameworks/intro_pytorch.html">PyTorch</a></li>
+<li><a href="frameworks/intro_huggingface.html">HuggingFace</a></li>
+<li><a href="frameworks/intro_langchain.html">LangChain</a></li>
+<li><a href="frameworks/intro_ollama.html">Ollama</a></li>
+<li><a href="frameworks/intro_vllm.html">vLLM</a></li>
+<li><a href="frameworks/intro_unsloth.html">Unsloth</a></li>
+<li><a href="frameworks/intro_fastapi.html">FastAPI: Production AI Backend Engineering</a></li>
+<li><a href="frameworks/intro_pydantic.html">Pydantic: Data Validation for AI Systems</a></li>
+</ul>
+<h2 id="project-setup--engineering-track">Project Setup &amp; Engineering Track</h2>
+<p>Use this track to learn the engineering hygiene every ML/AI Engineer is expected to have: shipping projects on GitHub and structuring real repositories.</p>
+<p>Core topics:</p>
+<ul>
+<li><a href="project_setup/">Project Setup &amp; Engineering Overview</a></li>
+<li><a href="project_setup/intro_github_project_setup.html">How to Set Up a Project on GitHub (Git, Branching, PRs, CI, Pages, Secrets)</a></li>
+<li><a href="project_setup/intro_project_structure.html">ML/AI Project Folder Structures (ML, DL, LLM, Agents, Data Eng)</a></li>
+</ul>
+<h1 id="classic-question-bank">Classic Question Bank</h1>
+<h4 id="difference-between-supervised-and-unsupervised-learning">Difference between SuperVised and Unsupervised Learning?</h4>
+<pre><code>    Supervised learning is when you know the outcome and you are provided with the fully labeled outcome data while in unsupervised you are not 
+    provided with labeled outcome data. Fully labeled means that each example in the training dataset is tagged with the answer the algorithm should 
+    come up with on its own. So, a labeled dataset of flower images would tell the model which photos were of roses, daisies and daffodils. When shown 
+    a new image, the model compares it to the training examples to predict the correct label.
+</code></pre>
+<p><img src="https://miro.medium.com/max/2800/0*Uzqy-gqZg77Wun0e.jpg" alt="" loading="lazy" /></p>
+<h4 id="what-is-reinforcement-learning-and-how-would-you-define-it">What is Reinforcement Learning and how would you define it?</h4>
+<pre><code>    A learning differs from supervised learning in not needing labelled input/output pairs be presented, and in not needing sub-optimal actions to be
+    explicitly corrected. Instead the focus is on finding a balance between exploration (of uncharted territory) and exploitation (of current
+    knowledge). In reinforcement learning each learning step involves a penalty criteria whether to give the model positive points or negative points
+    and based on that penalizing the model.
+</code></pre>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reinforcement_learning_diagram.svg/250px-Reinforcement_learning_diagram.svg.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-deep-learning-">What is Deep Learning ?</h4>
+<pre><code>    Deep learning is defined as algorithms inspired by the structure and function of the brain called artificial neural networks(ANN).Deep learning 
+    most probably focuses on Non Linear Analysis and is recommend for Non Linear problems regarding Artificial Intelligence.
+</code></pre>
+<h4 id="difference-between-machine-learning-and-deep-learning">Difference between Machine Learning and Deep Learning?</h4>
+<pre><code>    Deep learning is a subset of machine learning, and both are subsets of AI. The practical difference is where the features come from.
+
+    Classical ML (linear models, trees, gradient boosting, SVMs) learns from features that people design: ratios, counts,
+    TF-IDF vectors, aggregates. Deep learning stacks many layers of learned non-linear transformations, so the network
+    learns its own features directly from raw inputs such as pixels, audio samples or tokens.
+
+    Neither one &quot;knows on its own&quot; whether a prediction is correct. Both learn by minimising a loss against labels
+    (or a self-supervised target) with an optimiser.
+
+    Rules of thumb:
+        * Tabular data, small or medium datasets, need for interpretability -&gt; gradient boosting is usually the strong baseline.
+        * Images, audio, text, video, very large datasets -&gt; deep learning wins because hand-built features plateau.
+        * Deep learning needs more data, more compute (GPUs) and more tuning, and is harder to explain.
+</code></pre>
+<p><img src="https://lawtomated.com/wp-content/uploads/2019/04/MLvsDL.png" alt="" loading="lazy" /></p>
+<h4 id="difference-between-semisupervised-and-reinforcement-learning">Difference between SemiSupervised and Reinforcement Learning?</h4>
+<pre><code>    Semi-supervised learning uses a small amount of labeled data combined with a large amount of unlabeled data during training. It sits between
+    supervised (fully labeled) and unsupervised (no labels) learning. Common techniques include self-training, label propagation, and generative
+    models. Example: training an image classifier with 100 labeled images and 10,000 unlabeled ones.
+
+    Reinforcement learning (RL) is a paradigm where an agent learns by interacting with an environment, receiving rewards or penalties based on its
+    actions. Unlike semi-supervised learning which works on a fixed dataset, RL involves sequential decision making. The agent learns a policy that
+    maximizes cumulative reward over time. Example: training a robot to walk or an agent to play chess.
+</code></pre>
+<h4 id="difference-between-bias-and-variance">Difference between Bias and Variance?</h4>
+<pre><code>    Bias is error from wrong or overly simple assumptions: the model cannot represent the true relationship, so it is
+    wrong in the same way on every training set (underfitting). Example: a straight line fitted to a curve.
+
+    Variance is error from sensitivity to the particular training sample: the model fits noise, so retraining on a
+    different sample gives a very different model (overfitting). Example: a fully grown decision tree.
+
+    For squared loss, expected test error = Bias^2 + Variance + irreducible noise.
+
+    Reduce bias: a more flexible model, better features, less regularisation, longer training.
+    Reduce variance: more data, regularisation, bagging or other ensembles, early stopping, fewer features.
+    Diagnose with learning curves: a high train error means high bias; a large gap between train and validation error
+    means high variance.
+</code></pre>
+<h4 id="what-is-linear-regressions--how-does-it-work">What is Linear Regressions ? How does it work?</h4>
+<pre><code>    Linear regression models the target as a weighted sum of the input features plus an intercept:
+
+        y = b0 + b1*x1 + b2*x2 + ... + bp*xp + e        (in vector form: y = X·w + e)
+
+    where e is the noise term the model cannot explain.
+
+    How it is fitted: choose the weights that minimise the mean squared error between predictions and targets
+    (ordinary least squares). There are two ways to do this:
+        1) Closed form (normal equations): w = (XᵀX)⁻¹ Xᵀy. This is exact, but costs O(p³) and is unstable when features are collinear.
+        2) Gradient descent: iteratively step w in the direction of -∇MSE. This scales to large data.
+
+    Classical assumptions, needed for valid confidence intervals rather than for prediction:
+    linearity, independent errors, constant error variance (homoscedasticity), normally distributed errors,
+    and no perfect multicollinearity.
+
+    Evaluate with RMSE / MAE / R². Add L2 (Ridge) or L1 (Lasso) penalties when there are many or correlated features.
+</code></pre>
+<h4 id="usecases-of-regressions">UseCases of Regressions:</h4>
+<pre><code>    Poisson regression for count data.
+    Logistic regression and probit regression for binary data.
+    Multinomial logistic regression and multinomial probit regression for categorical data.
+    Ordered logit and ordered probit regression for ordinal data.
+</code></pre>
+<h4 id="what-is-logistic-regression-how-does-it-work">What is Logistic Regression? How does it work?</h4>
+<pre><code>    Logistic regression is a statistical technique used to predict probability of binary response based on one or more independent variables. 
+    It means that, given a certain factors, logistic regression is used to predict an outcome which has two values such as 0 or 1, pass or fail,
+    yes or no etc
+    Logistic Regression is used when the dependent variable (target) is categorical.
+    For example,
+        To predict whether an email is spam (1) or (0)
+        Whether the tumor is malignant (1) or not (0)
+        Whether the transaction is fraud or not (1 or 0)
+    The prediction is based on probabilties of specified classes 
+    Works the same way as linear regression but uses logit function to scale down the values between 0 and 1 and get the probabilities.
+</code></pre>
+<h4 id="what-is-logit-function-or-sigmoid-function-where-in-ml-and-dl-you-can-use-it">What is Logit Function? or Sigmoid function/ where in ML and DL you can use it?</h4>
+<pre><code>    The sigmoid and the logit are inverses of each other.
+
+        sigmoid(z) = 1 / (1 + e^-z)        maps any real number z to (0, 1)  -&gt; turns a score into a probability
+        logit(p)   = log(p / (1 - p))      maps a probability p in (0, 1) to (-inf, +inf)  -&gt; the &quot;log-odds&quot;
+
+    Logistic regression is linear in the log-odds: logit(P(y=1|x)) = w·x + b, so P(y=1|x) = sigmoid(w·x + b).
+
+    Where they are used:
+        * Output layer for binary or multi-label classification (one sigmoid per label).
+        * Gates inside LSTMs and GRUs, which need values in (0, 1) to act as soft switches.
+        * Calibration (Platt scaling fits a sigmoid on top of model scores).
+    In deep networks, avoid sigmoid in hidden layers. It saturates at both ends and causes vanishing gradients, so ReLU-family activations are used instead.
+    For numerical stability, train on logits with BCEWithLogitsLoss instead of applying sigmoid and then log.
+</code></pre>
+<h4 id="what-is-gradient-decent-formula-to-linear-regression-equation">What is Gradient Decent Formula to Linear Regression Equation?</h4>
+<pre><code>    For a prediction y_hat = w·x + b and loss MSE = (1/n) Σ (y_hat_i - y_i)²:
+
+        dL/dw = (2/n) Σ (y_hat_i - y_i) * x_i
+        dL/db = (2/n) Σ (y_hat_i - y_i)
+
+        Update every step with learning rate α:
+        w := w - α * dL/dw
+        b := b - α * dL/db
+
+        # numpy version
+        for _ in range(epochs):
+            err = X @ w + b - y
+            w -= lr * (2 / n) * X.T @ err
+            b -= lr * (2 / n) * err.sum()
+
+    Scale the features first. Otherwise the loss surface is elongated and gradient descent zig-zags or diverges.
+</code></pre>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/gradiant_descent.jpg" alt="" loading="lazy" /></p>
+<h4 id="what-is-support-vector-machine--how-is-it-different-from--ovr-classifiers">What is Support Vector Machine ? how is it different from  OVR classifiers?</h4>
+<pre><code>    A Support Vector Machine finds the hyperplane that separates the classes with the maximum margin, meaning the largest
+    distance to the nearest training points. Those nearest points are the support vectors, and only they determine the
+    boundary. The soft-margin SVM allows some violations, traded off by C (large C gives a narrower margin and fewer
+    violations, so more variance). Equivalently, it minimises hinge loss plus an L2 penalty. With the kernel trick
+    (RBF, polynomial) it learns non-linear boundaries without computing the high-dimensional features explicitly.
+    SVR is the regression variant.
+
+    SVM vs OvR is not a like-for-like comparison. An SVM is a binary classifier. One-vs-Rest (OvR) and One-vs-One (OvO)
+    are strategies for turning any binary classifier into a multi-class one:
+        * OvR: train K classifiers (&quot;class k vs everything else&quot;) and predict the class with the highest score.
+          This needs K models, and each one sees imbalanced data.
+        * OvO: train K(K-1)/2 classifiers, one per pair of classes, and take a majority vote.
+          There are more models, but each is trained on a small subset. scikit-learn's SVC uses OvO internally.
+    Models that are natively multi-class need neither strategy: decision trees, random forests, kNN, naive Bayes,
+    multinomial logistic regression, and neural networks with a softmax output.
+</code></pre>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/300px-SVM_margin.png" alt="" loading="lazy" />
+<img src="https://i.ytimg.com/vi/OmTu0fqUsQk/maxresdefault.jpg" alt="" loading="lazy" /></p>
+<h4 id="types-of-svm-kernels">Types of SVM kernels</h4>
+<pre><code>    A kernel K(x, z) computes the dot product of x and z in some feature space without building that space explicitly.
+
+        1) Linear:      K = x·z                      high-dimensional sparse data (text); fastest; use as a baseline
+        2) Polynomial:  K = (γ x·z + r)^d            captures feature interactions up to degree d
+        3) RBF/Gaussian: K = exp(-γ ||x - z||²)       default choice for non-linear data; γ controls how local the fit is
+        4) Sigmoid:     K = tanh(γ x·z + r)          resembles a neural-network unit; rarely used and not always a valid kernel
+        5) Laplacian:   K = exp(-γ ||x - z||₁)        similar to RBF, but less smooth
+
+    Tune C and γ together (grid search on a log scale). A large γ with a large C overfits.
+    Kernel SVMs scale roughly O(n²) to O(n³) in the number of samples. Above about 100k rows, use a linear SVM or gradient boosting.
+</code></pre>
+<h4 id="what-are-the-different-types-of-evaluation-metrics-in-regression">What are the different types of Evaluation metrics in Regression?</h4>
+<pre><code>    1) MSE  - mean of squared errors. Differentiable and punishes large errors heavily. Units are squared.
+    2) RMSE - sqrt(MSE). Same units as the target, so it is easier to explain.
+    3) MAE  - mean of absolute errors. Robust to outliers. It is minimised by predicting the median.
+    4) R²   - 1 - SS_res / SS_tot: the fraction of variance explained compared with always predicting the mean. It can be negative.
+    5) MAPE - mean(|error| / |y|). Scale-free, but undefined at y = 0 and biased towards under-prediction.
+    6) sMAPE / WAPE - variants of MAPE that behave better near zero (common in forecasting).
+    7) Huber loss - quadratic for small errors and linear for large ones, which makes it a compromise between MSE and MAE.
+    8) Quantile (pinball) loss - used when you need prediction intervals or asymmetric costs.
+</code></pre>
+<p><img src="https://econbrowser.com/wp-content/uploads/2019/07/msemae.png" alt="" loading="lazy" /></p>
+<h4 id="how-would-you-define-mean-absolute-error-vs-mean-squared-error">How would you define Mean absolute error vs Mean squared error?</h4>
+<pre><code>    MAE : Use MAE when you are doing regression and don’t want outliers to play a big role. It can also be useful if you know that your distribution is multimodal, and it’s desirable to have predictions at one of the modes, rather than at the mean of them.
+    MSE : use MSE the other way around, when you want to punish the outliers.
+</code></pre>
+<h4 id="how-would-you-evaluate-your-classifier">How would you evaluate your classifier?</h4>
+<pre><code>    Start from the confusion matrix (TP, FP, TN, FN), then choose metrics that match the business cost of each error:
+        * Accuracy: only meaningful when the classes are balanced.
+        * Precision, Recall, F1 (or F-beta to weight recall more heavily).
+        * ROC-AUC: threshold-independent ranking quality. PR-AUC is better when positives are rare.
+        * Log loss / Brier score and a calibration curve, when the probabilities themselves are used.
+        * Per-class and per-segment metrics, since an overall score can hide a failing subgroup.
+    Use stratified k-fold cross-validation (or a time-based split for temporal data), and compare against a trivial baseline.
+    Choose the decision threshold on validation data, based on the cost of an FP compared with an FN.
+</code></pre>
+<h4 id="what-is-classification">What is Classification?</h4>
+<pre><code>    Classification is defined as categorizing classes or entities based on the specified categories either that category exists or not in the respectable data. The concept is quite common for Image based classification or Data Based Classification. The answer in form of Yes or No;
+    alongside answers in form of types of objects/classes.
+</code></pre>
+<h4 id="how-would-you-differentiate-between-multilabel-and-multiclass-classification">How would you differentiate between Multilabel and MultiClass classification?</h4>
+<pre><code>    Multi-class: each example belongs to exactly one of K &gt; 2 classes (for example cat OR dog OR bird).
+        Output layer: softmax over K classes. Loss: categorical cross-entropy. Predict the argmax.
+    Multi-label: each example can have any subset of the labels (a photo tagged &quot;beach&quot; AND &quot;sunset&quot; AND &quot;people&quot;).
+        Output layer: K independent sigmoids. Loss: binary cross-entropy per label. Threshold each label separately.
+    Metrics also differ. Multi-class uses accuracy and macro/micro F1. Multi-label uses per-label F1, Hamming loss,
+    subset accuracy, and mAP.
+</code></pre>
+<p><img src="https://4.bp.blogspot.com/-sCcOrQsTH9Q/XG1yv7mhERI/AAAAAAAAAJI/aEj6Jf1lookERHqPQS_Y6Q9bxBcTV7TIwCLcBGAs/s1600/multiclass-multilabel.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-a-confusion-matrix">What is a Confusion Matrix?</h4>
+<pre><code>    A confusion matrix, also known as an error matrix, is a specific table layout that allows visualization of
+     the performance of an algorithm, typically a supervised learning one (in unsupervised learning it is
+      usually called a matching matrix). Each row of the matrix represents the instances in a predicted class
+       while each column represents the instances in an actual class (or vice versa).
+    The name stems from the fact that it makes it easy to see if the system is confusing two classes
+    (i.e. commonly mislabeling one as another).
+</code></pre>
+<p><img src="https://www.unite.ai/wp-content/uploads/2019/12/Preventive_Medicine-e1576294312614.png" alt="" loading="lazy" /></p>
+<h4 id="which-algorithms-are-high-biased-algorithms">Which Algorithms are High Biased Algorithms?</h4>
+<pre><code>    Bias comes from the simplifying assumptions a model makes about the shape of the target function.
+        High-bias examples: linear regression, logistic regression, LDA, naive Bayes, shallow trees and decision stumps,
+        and kNN with a very large k. They assume linear or otherwise simple boundaries, or independent features.
+    They underfit when the true relationship is non-linear or has interactions. Fix that with feature engineering
+    (polynomial terms, interactions), kernels, or more flexible models.
+</code></pre>
+<h4 id="which-algorithms-are-high-and-low-variance-algorithms">Which Algorithms are High and low Variance Algorithms?</h4>
+<pre><code>    Variance is how much the learned function changes when the training data changes.
+
+        1) High variance (flexible, low bias): fully grown decision trees, kNN with small k, SVMs with RBF and a large C or γ,
+           high-degree polynomials, and deep neural networks without regularisation.
+        2) Low variance (rigid, higher bias): linear and logistic regression, LDA, naive Bayes, kNN with large k.
+
+    Most algorithms have a knob that moves them along this tradeoff: tree depth, k, C and γ, regularisation strength.
+    Ensembles cut variance (bagging) or bias (boosting).
+</code></pre>
+<h4 id="why-are-the-above-algorithms-are-high-biased-or-high-variance">Why are the above algorithms are High biased or high variance?</h4>
+<pre><code>    Linear machine learning algorithms often have a high bias but a low variance.
+    Nonlinear machine learning algorithms often have a low bias but a high variance.
+</code></pre>
+<h4 id="what-are-root-case-of-prediction-bias">What are root case of Prediction Bias?</h4>
+<pre><code>    Possible root causes of prediction bias are:
+
+    1) Incomplete feature set
+    2) Noisy data set
+    3) Buggy pipeline
+    4) Biased training sample
+    5) Overly strong regularization
+</code></pre>
+<h4 id="what-is-gradient-decent-difference-between-sgd-and-gd">What is Gradient Decent? Difference between SGD and GD?</h4>
+<pre><code>    Gradient Descent is an iterative method to solve the optimization problem. There is no concept of &quot;epoch&quot; or &quot;batch&quot; in classical gradient decent. The key of gradient decent are
+    * Update the weights by the gradient direction.
+    * The gradient is calculated precisely from all the data points.
+    Stochastic Gradient Descent can be explained as: 
+    * Quick and dirty way to &quot;approximate gradient&quot; from one single data point. 
+    * If we relax on this &quot;one single data point&quot; to &quot;a subset of data&quot;, then the concepts of batch and epoch come.
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/fit/t/1600/480/1*7LbtloKtsBZW1P0DmR4UDA.png" alt="OneVariableSGD" loading="lazy" /></p>
+<h4 id="what-is-randomforest-and-decision-trees">What is Randomforest and Decision Trees?</h4>
+<pre><code>    A decision tree recursively splits the data on the feature and threshold that most reduce impurity (Gini or entropy for
+    classification, variance for regression). Each leaf predicts the majority class or the mean value. Trees are
+    interpretable, need no feature scaling, and handle non-linearity. A single deep tree has high variance.
+
+    A random forest is a bagged ensemble of decision trees:
+        * each tree is trained on a bootstrap sample of the rows, and
+        * each split considers only a random subset of features (about sqrt(p) for classification).
+    This decorrelates the trees. Averaging their predictions (a majority vote for classification) cuts variance while
+    keeping bias low. Rows left out of each bootstrap sample (out-of-bag) give a free validation estimate.
+</code></pre>
+<p><img src="https://miro.medium.com/max/1200/1*5dq_1hnqkboZTcKFfwbO9A.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-process-of-splitting">What is Process of Splitting?</h4>
+<pre><code>    Splitting is how a decision tree grows. At each node it tries candidate (feature, threshold) pairs and picks the one
+    that most reduces impurity in the child nodes: Gini or entropy for classification, variance (MSE) for regression.
+    It then recurses on each child until a stopping rule is reached: max depth, min samples per leaf, or no gain.
+    Numeric features are split at thresholds between sorted values. Histogram-based methods (LightGBM) bin the values
+    first for speed.
+    (In the data sense, &quot;splitting&quot; also means dividing data into train, validation and test sets.)
+</code></pre>
+<h4 id="what-is-the-process-of-pruning">What is the process of pruning?</h4>
+<pre><code>    The shortening of branches of Decision Trees is termed as pruning. The process is done in order to reach the decision earlier than
+    expected, reducing the size of the tree by turning some branch nodes into leaf nodes, and removing the leaf nodes under the original branch.
+</code></pre>
+<h4 id="how-do-you-do-tree-selection">How do you do Tree Selection?</h4>
+<pre><code>    Tree selection is mainly done from the following
+    1) Entropy 
+            A decision tree is built top-down from a root node and involves partitioning the data into subsets that contain instances with similar 
+            values (homogeneous). ID 3 algorithm uses entropy to calculate the homogeneity of a sample. If the sample is completely homogeneous the
+            entropy is zero and if the sample is an equally divided it has entropy of one.
+            Entropy(x) -&gt; -p log(p) - qlog(q)  with log of base 2
+    2) Information Gain  
+            The information gain is based on the decrease in entropy after a dataset is split on an attribute. Constructing a decision tree is all about finding attribute that returns the highest information gain (i.e., the most homogeneous branches).
+
+            2.1) Calculate entropy of the target.
+            2.2) The dataset is then split on the different attributes. The entropy for each branch is calculated. Then it is added proportionally, to get total entropy for the split. The resulting entropy is subtracted from the entropy before the split. The result is the Information Gain, or decrease in entropy.
+            2.3) Choose attribute with the largest information gain as the decision node, divide the dataset by its branches and repeat the same process on every branch.
+</code></pre>
+<h4 id="pseudocode-for-entropy-in-decision-trees">Pseudocode for Entropy in Decision Trees:</h4>
+<pre><code class="language-python">from collections import Counter
+from math import log2
+
+def entropy(labels):
+    n = len(labels)
+    return -sum((c / n) * log2(c / n) for c in Counter(labels).values())
+
+def information_gain(parent, children):
+    n = len(parent)
+    weighted = sum(len(ch) / n * entropy(ch) for ch in children)
+    return entropy(parent) - weighted
+
+print(entropy([&quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;b&quot;]))                            # 1.0
+print(information_gain([&quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;b&quot;], [[&quot;a&quot;, &quot;a&quot;], [&quot;b&quot;, &quot;b&quot;]]))  # 1.0 (perfect split)
+</code></pre>
+<h4 id="how-does-randomforest-works-and-decision-trees">How does RandomForest Works and Decision Trees?</h4>
+<pre><code>    -* Decision Tree *- A Simple Tree compromising of the process defined in selection of Trees.
+    -* RandomForest *- Combination of Multiple N number of Decision Trees and using the aggregation to determine the final outcome.
+    The classifier outcome is based on Voting of each tree within random forest while in case of regression it is based on the 
+    averaging of the tree outcome.
+</code></pre>
+<h4 id="what-is-gini-index-explain-the-concept">What is Gini Index? Explain the concept?</h4>
+<pre><code>    The Gini Index is calculated by subtracting the sum of the squared probabilities of each class from one. It favors larger partitions.
+    Imagine, you want to draw a decision tree and wants to decide which feature/column you should use for your first split?, this is probably defined
+    by your gini index.
+</code></pre>
+<h4 id="what-is-the-process-of-gini-index-calculation">What is the process of gini index calculation?</h4>
+<pre><code>    Gini Index:
+    for each branch in split:
+        Calculate percent branch represents .Used for weighting
+        for each class in branch:
+            Calculate probability of class in the given branch.
+            Square the class probability.
+        Sum the squared class probabilities.
+        Subtract the sum from 1. #This is the Ginin Index for branch
+    Weight each branch based on the baseline probability.
+    Sum the weighted gini index for each split.
+</code></pre>
+<h4 id="what-is-the-formulation-of-gini-split--gini-index">What is the formulation of Gini Split / Gini Index?</h4>
+<pre><code>    Favors larger partitions.
+    Uses squared proportion of classes.
+    Perfectly classified, Gini Index would be zero.
+    Evenly distributed would be 1 - (1/# Classes).
+    You want a variable split that has a low Gini Index.
+    The algorithm works as 1 - ( P(class1)^2 + P(class2)^2 + … + P(classN)^2)
+</code></pre>
+<h4 id="what-is-probability-how-would-you-define-likelihood">What is probability? How would you define Likelihood?</h4>
+<pre><code>    Probability treats the parameters as fixed and asks how likely the data is:
+    &quot;if the coin is fair (p = 0.5), what is the chance of 7 heads in 10 tosses?&quot;
+
+    Likelihood treats the observed data as fixed and asks how well each parameter value explains it. It is the same formula,
+    read as a function of the parameter: L(p | data) = P(data | p). It is not a probability distribution over p,
+    because it does not have to sum to 1.
+
+    Binomial example with 7 heads in 10 tosses:
+        L(p) = C(10, 7) * p^7 * (1 - p)^3
+        L(0.5) = 120 * 0.5^10 ≈ 0.117
+        L(0.7) = 120 * 0.7^7 * 0.3^3 ≈ 0.267   &lt;- p = 0.7 explains the data better
+    In general, for k successes in n trials: L(p) = C(n, k) * p^k * (1 - p)^(n - k).
+    Maximum likelihood estimation picks the p that maximises L, which here is p_hat = k/n = 0.7.
+</code></pre>
+<h4 id="what-is-entropy-and-information-gain--there-difference-">What is Entropy? and Information Gain ? there difference ?</h4>
+<pre><code>    Entropy measures the impurity or uncertainty of a label distribution:
+        H(S) = -Σ p_k * log2(p_k)
+    It is 0 for a pure node and 1 bit for a 50/50 binary split.
+
+    Information gain is the reduction in entropy produced by a split:
+        IG(S, A) = H(S) - Σ_v (|S_v| / |S|) * H(S_v)
+    A decision tree picks the split with the highest information gain.
+
+    The difference: entropy describes one set, while information gain compares a parent set with its children after a split.
+    Caveat: information gain favours features with many distinct values (an ID column splits perfectly).
+    C4.5 corrects for this with the gain ratio.
+</code></pre>
+<h4 id="what-is-kl-divergence-how-would-you-define-its-usecase-in-ml">What is KL divergence, how would you define its usecase in ML?</h4>
+<pre><code>    Kullback-Leibler divergence measures how much a distribution Q differs from a reference distribution P:
+        KL(P || Q) = Σ P(x) * log(P(x) / Q(x))
+    It is always &gt;= 0, and equals 0 only when P = Q. It is not symmetric: KL(P||Q) ≠ KL(Q||P).
+    It is not a true distance.
+
+    Relationship to cross-entropy: H(P, Q) = H(P) + KL(P || Q). With P fixed (the labels), minimising cross-entropy is
+    the same as minimising KL.
+
+    Use cases:
+        * VAEs: a KL term pulls the latent posterior towards the prior.
+        * Knowledge distillation: a student matches the teacher's soft output distribution.
+        * RLHF / PPO / DPO: a KL penalty keeps the fine-tuned policy close to the reference model.
+        * Drift monitoring: compare feature distributions between training and production (often via the symmetric JS divergence).
+        * t-SNE minimises KL between neighbour distributions in high and low dimensions.
+</code></pre>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/4958785faae58310ca5ab69de1310e3aafd12b32" alt="" loading="lazy" /></p>
+<h4 id="how-would-you-define-cross-entropy-what-is-the-main-purpose-of-it-">How would you define Cross Entropy, What is the main purpose of it ?</h4>
+<pre><code>    Entropy: Randomness of information being processed.
+
+    Cross Entropy: A measure from the field of information theory, building upon entropy and generally calculating the difference between two
+    probability distributions. It is closely related to but is different from KL divergence that calculates the relative entropy between two
+    probability distributions, whereas cross-entropy can be thought to calculate the total entropy between the distributions.
+
+    Cross-entropy can be calculated using the probabilities of the events from P and Q, as follows:
+            H(P, Q) = -sum x in X P(x) * log(Q(x))
+</code></pre>
+<h4 id="how-would-you-define-auc---roc-curve">How would you define AUC - ROC Curve?</h4>
+<pre><code>    ROC is a probability curve and AUC represents degree or measure of separability. AUC - ROC curve is a performance measurement for classification problem at various thresholds settings.
+
+    It tells how much model is capable of distinguishing between classes. Mainly used in classification problems for measure at different thresholds.
+    Higher the AUC, better the model is at predicting 0s as 0s and 1s as 1s. By analogy, Higher the AUC, better the model is at distinguishing between patients with disease and no disease.
+</code></pre>
+<p><img src="https://miro.medium.com/max/722/1*pk05QGzoWhCgRiiFbz-oKQ.png" alt="" loading="lazy" /></p>
+<h4 id="how-would-you-define-false-positive-or-type-i-error-and-false-negative-or-type-ii-error-">How would you define False positive or Type I error and False Negative or Type II Error ?</h4>
+<pre><code>    False positive (Type I error): the actual class is negative, but the model predicts positive.
+        Example: a legitimate email flagged as spam, or a healthy patient diagnosed as sick.
+
+    False negative (Type II error): the actual class is positive, but the model predicts negative.
+        Example: a fraudulent transaction approved, or a sick patient told they are healthy.
+
+    In hypothesis testing, α = P(Type I) (the significance level) and β = P(Type II). Power = 1 - β.
+    Lowering the decision threshold trades FNs for FPs, and raising it does the opposite.
+</code></pre>
+<h4 id="how-would-you-define-precision-and-recalltrue-positive-rate">How would you define precision() and Recall(True positive Rate)?</h4>
+<pre><code>    Take a simple Classification example of &quot;Classifying email messages as spam or not spam&quot;
+
+    Precision measures the percentage of emails flagged as spam that were correctly classified, that is, the percentage of dots to the right of the threshold line, it is also defined as % of event being Called at positive rates e.g 
+            Precision = True Positive / (True Positive + False positive) 
+    
+    Recall measures the percentage of actual spam emails that were correctly classified
+            Recall = True Postives / (True Positive + False Negative)
+    
+    There is always a tradeoff between precision and Recall same is the case of Bias and Variance.
+</code></pre>
+<h4 id="which-one-would-you-prefer-for-you-classification-model-precision-or-recall">Which one would you prefer for you classification model Precision or Recall?</h4>
+<pre><code>    This totally depends on Business Usecase or SME usecase. In case of Fraud Detection Business domains such as banks, online ecommerce websites
+    recommends of better recall score than precision. While in other cases such as word suggestions or Multi label Categorization it can be precision.
+    In general, totally dependent on your use case.
+</code></pre>
+<h4 id="what-is-f1-score-which-intution-does-it-gives-">What is F1 Score? which intution does it gives ?</h4>
+<pre><code>    F1 = 2 * Precision * Recall / (Precision + Recall), which is the harmonic mean of precision and recall.
+    It ranges from 0 to 1. For binary sets it equals the Dice coefficient.
+
+    Intuition: the harmonic mean is dominated by the smaller value. A model with precision 1.0 and recall 0.01 gets
+    F1 ≈ 0.02, not 0.5. You only score well if both are reasonable. F1 also ignores true negatives, which suits
+    imbalanced problems.
+
+    Limitation: F1 weights precision and recall equally. When the costs differ, use F-beta
+    (beta &gt; 1 favours recall, beta &lt; 1 favours precision), or better, pick a threshold from an explicit cost model.
+    For multi-class problems, state whether you report macro F1 (every class equal), micro F1, or weighted F1.
+</code></pre>
+<h4 id="what-is-difference-between-preceptron-and-svm">What is difference between Preceptron and SVM?</h4>
+<pre><code>    Both are linear classifiers of the form sign(w·x + b). The difference is what they optimise.
+
+        * Perceptron: finds any separating hyperplane. Its update rule only fires on misclassified points.
+          The solution depends on the order of the data and never converges if the data is not separable.
+        * SVM: finds the maximum-margin hyperplane. It minimises hinge loss plus an L2 penalty,
+          which gives a unique solution that generalises better.
+
+    Put another way, SVM ≈ hinge loss + L2 regularisation + a margin, while the perceptron uses a &quot;zero-margin&quot; hinge
+    loss with no regularisation. Both can be kernelised. Both can be trained online (a linear SVM with SGD or Pegasos),
+    although classic kernel SVM solvers such as SMO are batch methods.
+</code></pre>
+<h4 id="what-is-the-difference-between-logistic-and-linear-regressions">What is the difference between Logistic and Linear Regressions?</h4>
+<pre><code>        Linear regression                          | Logistic regression
+        ------------------------------------------ | ------------------------------------------
+        Predicts a continuous value in (-inf, inf) | Predicts a probability in (0, 1), used for classification
+        y = w·x + b                                | P(y=1|x) = sigmoid(w·x + b)
+        Loss: mean squared error                   | Loss: log loss (binary cross-entropy)
+        Closed-form solution exists                | No closed form; solved iteratively (gradient descent, L-BFGS)
+        Coefficient = change in y per unit of x    | Coefficient = change in log-odds per unit of x
+
+    Both are linear models. Logistic regression's decision boundary w·x + b = 0 is a hyperplane.
+</code></pre>
+<p><img src="https://miro.medium.com/proxy/0*gKOV65tvGfY8SMem.png" alt="" loading="lazy" /></p>
+<h4 id="what-are-outliers-and-how-would-you-remove-them">What are outliers and How would you remove them?</h4>
+<pre><code>    An outlier is an observation that lies far from the rest of the data. It can be a data error (sensor glitch, typo)
+    or a genuine rare event (fraud, a viral post). Investigate first. Only drop points you can show are errors,
+    because in anomaly or fraud problems the outliers are the signal.
+
+    Detection:
+        1) IQR rule: flag values outside [Q1 - 1.5*IQR, Q3 + 1.5*IQR]. This is robust and works for skewed data.
+        2) Z-score: flag |z| &gt; 3. This assumes roughly normal data, and the outliers themselves inflate the std.
+           The modified z-score (based on the median and MAD) is more robust.
+        3) Multivariate: Isolation Forest, LOF, Mahalanobis distance.
+
+    Handling (often better than deleting):
+        * cap or winsorise at percentiles, or log-transform skewed features
+        * use robust models and losses (tree-based models, MAE or Huber loss, RobustScaler)
+</code></pre>
+<p><img src="https://www2.southeastern.edu/Academics/Faculty/dgurney/Outlier.jpg" alt="" loading="lazy" /></p>
+<h4 id="what-is-regularization">What is Regularization?</h4>
+<pre><code>    Regularization techniques are used to reduce the error by fitting a function appropriately on the given training set and avoid overfitting.
+    They add a penalty term (Lambda * weight magnitude) to the loss function to discourage overly complex models.
+</code></pre>
+<h4 id="difference-between-l1-and-l2-regularization">Difference between L1 and L2 Regularization?</h4>
+<pre><code>    1) L1 Regularization (Lasso Regression)
+        (Least Absolute Shrinkage and Selection Operator) adds “absolute value of magnitude” of coefficient as penalty term to the loss function.
+
+    2) L2 Regularization (Ridge Regression)
+        Adds “squared magnitude” of coefficient as penalty term to the loss function. Here the highlighted part represents L2 regularization element.
+
+    The key difference between these techniques is that Lasso shrinks the less important feature’s coefficient to zero thus, removing some feature
+    altogether. So, this works well for feature selection in case we have a huge number of features.
+</code></pre>
+<h4 id="what-are-different-technique-of-sampling-your-data">What are different Technique of Sampling your data?</h4>
+<pre><code>    Data Sampling statistical analysis technique used to select, manipulate and analyze a representative subset of data points to identify patterns and trends in the larger data set being examined.
+    There are different techniques of sampling your data
+    1) Simple Random Sampling (records are picked at random)
+    2) Stratified Sampling (subsets based on common factor with equal ratio distribution)
+    3) Cluster Sampling (largest set is breaken down in form of clusters based on defined factors and SRS is applied)
+    4) MultiStage Sampling (cluster on Cluster sampling)
+    5) Symentaic Sampling (Sample created by setting interval)
+</code></pre>
+<h4 id="can-you-define-the-concept-of-undersampling-and-oversampling">Can you define the concept of Undersampling and Oversampling?</h4>
+<pre><code>    Both rebalance class frequencies in the training set only. Never resample the validation or test set.
+
+    Undersampling removes examples from the majority class. For example, keep 100k of 1M negatives next to 100k positives.
+    It is fast, but it throws away information. Variants such as Tomek links and NearMiss remove redundant or borderline points.
+
+    Oversampling adds examples to the minority class, either by duplicating them (random oversampling) or by
+    synthesising new ones (SMOTE, ADASYN). It keeps all the data, but duplication can cause overfitting.
+
+    Resampling changes the base rate, so predicted probabilities become miscalibrated. Recalibrate them, or correct
+    for the sampling rate, before using the scores as probabilities.
+</code></pre>
+<h4 id="what-is-imbalanced-class">What is Imbalanced Class?</h4>
+<pre><code>    Imbalancment is when you don't have balance in between classes.
+    Imabalnced class is when the normal distribution/support count of multiple classes or classes being considered are not the same or almost same.
+    E.G:
+        Class A has 1 Million Record
+        Class B has 1000 Record
+    This is imbalanced data set and Class B is UnderBalanced Class.
+</code></pre>
+<h4 id="how-would-you-resolve-the-issue-of-imbalancment-data-set">How would you resolve the issue of Imbalancment data set?</h4>
+<pre><code>        1) Use the right metrics first: PR-AUC, recall at a fixed precision, F1. Never plain accuracy.
+        2) Class weights in the loss (class_weight=&quot;balanced&quot;, scale_pos_weight in XGBoost). This is often the simplest fix.
+        3) Resampling of the training data only: undersampling, oversampling, SMOTE.
+        4) Tune the decision threshold on validation data instead of using 0.5.
+        5) Focal loss (deep learning) to focus training on hard examples.
+        6) Collect more minority examples, or use data augmentation.
+        7) For extreme imbalance, frame the problem as anomaly detection.
+    Use stratified splits so every fold contains positives.
+</code></pre>
+<h4 id="how-would-you-define-weighted-moving-averages-">How would you define Weighted Moving Averages ?</h4>
+<pre><code>    A moving average smooths a time series by averaging the last n points. A weighted moving average gives each point in
+    the window a different weight, usually larger for recent points, so it reacts faster to changes:
+
+        WMA_t = Σ_{i=0..n-1} w_i * x_{t-i} / Σ w_i        e.g. weights n, n-1, ..., 1
+
+    The exponential moving average (EMA) is the most common version. Its weights decay geometrically:
+        EMA_t = α * x_t + (1 - α) * EMA_{t-1}
+    Use cases: trend smoothing, simple forecasting baselines, technical indicators, and the momentum and Adam optimisers
+    (which keep an EMA of gradients).
+</code></pre>
+<h4 id="what-is-meant-by-arima-models">What is meant by ARIMA Models?</h4>
+<pre><code>    ARIMA(p, d, q) = AutoRegressive Integrated Moving Average, a classical univariate forecasting model.
+        * AR(p): regress on the last p values of the series.
+        * I(d):  difference the series d times to make it stationary (remove the trend).
+        * MA(q): regress on the last q forecast errors.
+    Choose d with stationarity tests (ADF, KPSS). Choose p and q from the PACF and ACF plots, or by AIC (auto_arima).
+    SARIMA adds seasonal terms, and ARIMAX / SARIMAX add external regressors.
+    ARIMA is a strong baseline for a single short series. For many related series, gradient boosting on lag features or
+    global deep-learning models usually does better.
+</code></pre>
+<h4 id="how-would-you-define-bagging-and-boosting-how-would-xgboost-differ-from-randomforest">How would you define Bagging and Boosting? How would XGBoost differ from RandomForest?</h4>
+<pre><code>    Bagging (bootstrap aggregating): train many models independently, in parallel, on bootstrap samples of the data,
+    then average or vote. It reduces variance, so it suits high-variance base learners such as deep trees. Example: random forest.
+
+    Boosting: train models sequentially, each one correcting the errors of the ensemble so far. AdaBoost reweights
+    misclassified samples. Gradient boosting fits each new tree to the negative gradient of the loss (the residuals).
+    It mainly reduces bias and uses shallow trees. Examples: XGBoost, LightGBM, CatBoost.
+
+    XGBoost vs Random Forest:
+        * Sequential vs parallel tree building. Shallow trees vs deep trees.
+        * XGBoost has a learning rate, L1/L2 regularisation on leaf weights, native missing-value handling,
+          and second-order (Hessian) optimisation.
+        * XGBoost usually achieves higher accuracy on tabular data, but needs more tuning and can overfit.
+          Random forest is robust with default settings and hard to overfit by adding more trees.
+</code></pre>
+<h4 id="what-is-iqr-how-can-these-help-in-outliers-removal">What is IQR, how can these help in Outliers removal?</h4>
+<pre><code>    The interquartile range is the spread of the middle 50% of the data: IQR = Q3 - Q1, where
+        Q1 = 25th percentile, Q2 = 50th percentile (the median), Q3 = 75th percentile.
+    The quartiles are cut points, not ranges.
+
+    Outlier rule (Tukey's fences): flag x &lt; Q1 - 1.5*IQR or x &gt; Q3 + 1.5*IQR. Use 3*IQR for &quot;extreme&quot; outliers.
+    The whiskers of a box plot are drawn this way. Because the rule uses percentiles, it is robust to the outliers
+    themselves, unlike the z-score.
+
+        q1, q3 = np.percentile(x, [25, 75]); iqr = q3 - q1
+        mask = (x &gt;= q1 - 1.5 * iqr) &amp; (x &lt;= q3 + 1.5 * iqr)
+</code></pre>
+<h4 id="what-is-smote">What is SMOTE?</h4>
+<pre><code>    SMOTE (Synthetic Minority Over-sampling TEchnique) creates new minority-class examples instead of duplicating existing ones:
+        1) pick a minority sample x
+        2) find its k nearest minority-class neighbours (k = 5 by default)
+        3) create a synthetic point x_new = x + λ * (neighbour - x), with λ ~ Uniform(0, 1)
+    So the new points lie on line segments between minority samples.
+
+    Caveats:
+        * Apply it only to the training folds, inside the cross-validation pipeline (imblearn.pipeline). Otherwise it leaks.
+        * It can create noisy points in overlapping regions, and it works poorly in very high dimensions.
+        * It needs numeric features. For categorical features use SMOTENC.
+        * Variants: Borderline-SMOTE, ADASYN, SMOTE-Tomek.
+    With strong learners such as gradient boosting, class weights plus threshold tuning often match SMOTE.
+</code></pre>
+<h4 id="how-would-you-resolve-overfitting-or-underfitting">How would you resolve Overfitting or Underfitting?</h4>
+<pre><code>    Underfitting (high bias: training error is high):
+        1) Use a more complex model, or add capacity (deeper trees, more layers)
+        2) Add better features and interactions
+        3) Reduce regularisation
+        4) Train longer, or fix the learning rate (too high diverges, too low stalls)
+
+    Overfitting (high variance: train error is low but validation error is high):
+        1) Get more training data, or use data augmentation
+        2) Regularisation: L1/L2 penalties, dropout, weight decay
+        3) Early stopping on a validation metric
+        4) Simplify the model or remove noisy features
+        5) Bagging and ensembles
+        6) Use cross-validation to detect it and to tune the hyperparameters above
+</code></pre>
+<h4 id="mention-some-techniques-which-are-to-avoid-overfitting">Mention some techniques which are to avoid Overfitting?</h4>
+<pre><code>    1) More data, or data augmentation
+    2) L1 / L2 regularisation and weight decay
+    3) Dropout (neural networks)
+    4) Early stopping
+    5) Simpler models: shallower trees, fewer features, pruning
+    6) Ensembling (bagging, random forests)
+    7) Cross-validation for honest model selection
+    8) Batch normalisation and label smoothing (mild regularisers in deep learning)
+</code></pre>
+<h4 id="what-is-a-neuron">What is a Neuron?</h4>
+<pre><code>    A &quot;neuron&quot; in an artificial neural network is a mathematical approximation of a biological neuron.
+    It takes a vector of inputs, performs a transformation on them, and outputs a single scalar value.
+     It can be thought of as a filter. Typically we use nonlinear filters in neural networks.
+</code></pre>
+<h4 id="what-are-hidden-layers-and-input-layer">What are Hidden Layers and Input layer?</h4>
+<p><img src="https://www.i2tutorials.com/wp-content/uploads/2019/05/Hidden-layrs-1-i2tutorials.jpg" alt="" loading="lazy" /></p>
+<pre><code>    1) Input Layer: Initial input for your neural network
+    2) Hiddent layers: a hidden layer is located between the input and output of the algorithm, 
+    in which the function applies weights to the inputs and directs them through an activation function as the output.
+    In short, the hidden layers perform nonlinear transformations of the inputs entered into the network. 
+    Hidden layers vary depending on the function of the neural network, and similarly, the layers may vary depending 
+    on their associated weights.
+</code></pre>
+<h4 id="what-are-output-layers">What are Output Layers?</h4>
+<pre><code>    The output layer turns the last hidden representation into the prediction. Its activation and loss must match the task:
+        Regression                 -&gt; linear (no activation), MSE / MAE / Huber loss
+        Binary classification      -&gt; 1 unit with sigmoid, binary cross-entropy
+        Multi-class classification -&gt; K units with softmax, categorical cross-entropy
+        Multi-label classification -&gt; K units with sigmoid each, binary cross-entropy per label
+        Positive-only targets      -&gt; softplus or exp (e.g. counts, variances)
+    ReLU is a hidden-layer activation. It is rarely the right output activation.
+    In PyTorch, output raw logits and use CrossEntropyLoss or BCEWithLogitsLoss, which apply softmax or sigmoid
+    internally in a numerically stable way.
+</code></pre>
+<h4 id="what-are-activation-functions-">What are activation functions ?</h4>
+<pre><code>    An activation function adds non-linearity after each linear layer. Without it, any stack of linear layers collapses
+    into a single linear map, however deep the network is.
+    Common choices:
+        1) Sigmoid: squashes to (0, 1). Used for binary and multi-label outputs and LSTM gates. It saturates at both
+           ends, which causes vanishing gradients in deep hidden layers.
+        2) Softmax: turns a vector of logits into a probability distribution that sums to 1. Used for the multi-class
+           output layer (mutually exclusive classes).
+        3) Tanh: squashes to (-1, 1) and is zero-centred. It also saturates. Used for RNN hidden states.
+        4) ReLU: max(0, x). Cheap, and does not saturate for x &gt; 0. The default for hidden layers.
+           Units can &quot;die&quot; if they only ever receive negative inputs.
+        5) Leaky ReLU / PReLU / ELU: a small slope or smooth curve for x &lt; 0, which avoids dead units.
+        6) GELU / SiLU (Swish): smooth ReLU-like functions, standard in transformers and LLMs.
+</code></pre>
+<h4 id="what-is-a-convolutional-neural-network">What is a Convolutional Neural Network?</h4>
+<pre><code>    convolutional-neural-network is a subclass of neural-networks which have at least one convolution layer. 
+    They are great for capturing local information (e.g. neighbor pixels in an image or surrounding words in a text) 
+    as well as reducing the complexity of the model (faster training, needs fewer samples, reduces the chance of overfitting).
+    . A convolution unit receives its input from multiple units from the previous layer which together create a proximity.
+    Therefore, the input units (that form a small neighborhood) share their weights.
+</code></pre>
+<p><img src="https://miro.medium.com/max/3288/1*uAeANQIOQPqWZnnuH-VEyw.jpeg" alt="" loading="lazy" /></p>
+<h4 id="what-is-recurrent-neural-network">What is recurrent Neural Network?</h4>
+<pre><code>    A class of artificial neural networks where connections between nodes form a directed graph along a temporal sequence.
+    This allows it to exhibit temporal dynamic behavior. Derived from feedforward neural networks, RNNs can use their 
+    internal state (memory) to process variable length sequences of inputs. This makes them applicable to tasks such 
+    as unsegmented, connected handwriting recognition or speech recognition.
+</code></pre>
+<p><img src="https://www.i2tutorials.com/wp-content/uploads/2019/09/Neural-network-62-i2tutorials.png" alt="ImageAddress" loading="lazy" /></p>
+<h4 id="what-is-lstm-network">What is LSTM network?</h4>
+<pre><code>    Long Short-Term Memory (LSTM) is a recurrent neural network cell built to learn long-range dependencies that vanilla
+    RNNs forget because of vanishing gradients. It keeps a separate cell state that is updated additively, and three
+    sigmoid gates control it: forget (what to erase), input (what to write), and output (what to expose as the hidden
+    state). Because the additive path lets gradients flow across many time steps, it can remember information for
+    hundreds of steps.
+    Use cases: speech recognition, handwriting recognition, time-series forecasting, anomaly detection on sequences,
+    and machine translation before transformers. Transformers have largely replaced LSTMs for language, but LSTMs remain
+    useful for small, streaming, or on-device sequence models.
+</code></pre>
+<p><img src="https://miro.medium.com/max/1400/1*qn_quuUSYzozyH3CheoQsA.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-a-convolutional-layer">What is a Convolutional Layer?</h4>
+<pre><code>    A convolution is the simple application of a filter to an input that results in an activation. Repeated application of the 
+    same filter to an input results in a map of activations called a feature map, indicating the locations and strength of a 
+    detected feature in an input, such as an image.
+    You can use Filters which are based on Horizental Lines or Verticial Lines or Gray Scale conversion or other conversion filters.
+</code></pre>
+<p><img src="https://qph.fs.quoracdn.net/main-qimg-29982be98b548e9a3256b68c6ecbcb60.webp" alt="" loading="lazy" /></p>
+<h4 id="what-is-pooling-layer">What is Pooling Layer?</h4>
+<pre><code>    Pooling layers provide an approach to down sampling feature maps by summarizing the presence of features in patches of the feature map.
+    Two common pooling methods are average pooling and max pooling that summarize the average presence of a feature and the most activated 
+    presence of a feature respectively.      
+
+    This is required to downsize your feature scale (e.g You have detected vertical lines, now remove some of the feature to go in grain)
+</code></pre>
+<p><img src="https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/image_folder_4/Pooling_Simple_max.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-maxpooling-layer-how-does-it-work">What is MaxPooling Layer? How does it work?</h4>
+<pre><code>    Max pooling uses the maximum value found in a considered region. Maximum pooling, or max pooling, is a pooling operation that calculates the maximum, or largest, value in each patch of each feature map.
+</code></pre>
+<p><img src="https://computersciencewiki.org/images/8/8a/MaxpoolSample2.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-kernel-or-filter">What is Kernel or Filter?</h4>
+<pre><code>    The word &quot;kernel&quot; means two different things in ML.
+
+    1) In CNNs, a kernel (filter) is a small learned weight tensor, for example 3x3xC_in. It slides over the input and
+       computes a dot product at each position, producing one feature map per filter. Early layers learn edge and texture
+       detectors. Deeper layers learn parts and objects.
+
+    2) In kernel methods (SVMs, kernel PCA, Gaussian processes), a kernel K(x, z) = φ(x)·φ(z) is a similarity function
+       equal to a dot product in some (possibly infinite-dimensional) feature space. The &quot;kernel trick&quot; lets a linear
+       algorithm learn non-linear boundaries without ever computing φ(x). Common kernels are linear, polynomial and RBF.
+</code></pre>
+<p><img src="https://2.bp.blogspot.com/-iNPVcxMHMNg/WdDnyLPY9QI/AAAAAAAAAZU/hgwQOQ1liyE4nhKVYzOyuUprjHNEx7aygCLcBGAs/s1600/kernel.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-segmentation">What is Segmentation?</h4>
+<pre><code>    Segmentation partitions an input into meaningful regions, at the pixel level for images:
+        * Semantic segmentation: a class for every pixel.
+        * Instance segmentation: a separate mask for each object instance.
+        * Panoptic segmentation: both at once.
+    The same word also appears elsewhere: customer segmentation (clustering users), and text or audio segmentation
+    (splitting a stream into sentences, speakers, or events).
+</code></pre>
+<h4 id="what-is-pose-estimation">What is Pose Estimation?</h4>
+<pre><code>    Pose estimation predicts the positions of an object's keypoints. For humans these are joints such as shoulders,
+    elbows and knees, in 2D image coordinates or in 3D. Top-down methods detect each person and then find keypoints
+    (HRNet, ViTPose). Bottom-up methods find all keypoints and then group them into people (OpenPose).
+    Keypoints are usually predicted as heatmaps.
+    Uses: fitness apps, motion capture, AR, sign language, and action recognition.
+</code></pre>
+<h4 id="what-is-forward-propagation">What is Forward propagation?</h4>
+<pre><code>    The input data is fed in the forward direction through the network. Each hidden layer accepts the input data,
+    processes it as per the activation function and passes to the successive layer.
+</code></pre>
+<p><img src="https://miro.medium.com/max/3652/1*FczAiD6e8zWjWupOQkP_-Q.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-backward-propagation">What is backward propagation?</h4>
+<pre><code>    Backpropagation computes the gradient of the loss with respect to every weight by applying the chain rule backwards
+    through the network, from the output layer to the input (reverse-mode automatic differentiation). It reuses the
+    intermediate activations from the forward pass, so the whole gradient costs about as much as a couple of forward passes.
+
+    Backprop only computes the gradients. The optimiser (SGD, Adam) then uses them to update the weights,
+    w := w - lr * dL/dw. This happens on every mini-batch, not once per epoch.
+</code></pre>
+<p><img src="https://i.ytimg.com/vi/An5z8lR8asY/maxresdefault.jpg" alt="" loading="lazy" /></p>
+<h4 id="what-are-dropout-neurons">what are dropout neurons?</h4>
+<pre><code>    The term “dropout” refers to dropping out units (both hidden and visible) in a neural network.
+    Simply put, dropout refers to ignoring units (i.e. neurons) during the training phase of certain 
+    set of neurons which is chosen at random. By “ignoring”, I mean these units are not considered during
+    a particular forward or backward pass.
+    More technically, At each training stage, individual nodes are either dropped out of the net with 
+    probability 1-p or kept with probability p, so that a reduced network is left; incoming and 
+    outgoing edges to a dropped-out node are also removed.
+</code></pre>
+<h4 id="what-are-flattening-layers">what are flattening layers?</h4>
+<pre><code>    A flatten layer collapses the spatial dimensions of the input into the channel dimension. 
+    For example, if the input to the layer is an H-by-W-by-C-by-N-by-S array (sequences of images),
+    then the flattened output is an (H*W*C)-by-N-by-S array.
+</code></pre>
+<h4 id="how-is-backward-propagation-dealing-an-improvment-in-the-model">How is backward propagation dealing an improvment in the model?</h4>
+<pre><code>    The gradient dL/dw tells each weight which direction increases the loss and by how much. Moving every weight a small
+    step in the opposite direction lowers the loss on the current mini-batch. Repeating this over many batches makes the
+    network's predictions match the targets better.
+    Backprop makes this practical: the chain rule gives all gradients in a single backward pass, instead of perturbing
+    each of millions of weights one at a time.
+    Better training loss improves generalisation only if overfitting is controlled (validation monitoring, regularisation).
+</code></pre>
+<h4 id="what-is-correlation-and-covariance">What is correlation? and covariance?</h4>
+<pre><code>    Covariance measures how two variables vary together:
+        cov(X, Y) = E[(X - μx)(Y - μy)]
+    Its sign gives the direction of the linear relationship. Its magnitude depends on the units, so it is hard to compare
+    across variables.
+
+    Correlation (Pearson) is covariance scaled to [-1, 1]:
+        ρ = cov(X, Y) / (σx * σy)
+    This makes it unit-free, so it measures both the strength and the direction of the linear relationship.
+
+    Notes:
+        * Correlation does not imply causation. A confounder can drive both variables.
+        * Pearson only captures linear relationships. Spearman (rank-based) captures monotonic ones and is robust to outliers.
+        * A correlation of 0 does not mean the variables are independent (for example, y = x² on symmetric x).
+</code></pre>
+<p><img src="https://miro.medium.com/max/716/1*T52-LSuLQyq-6I2c1lkj-A.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-anova-when-to-use-anova">What is Anova? when to use Anova?</h4>
+<pre><code>    Analysis of variance (ANOVA) is a collection of statistical models and their associated estimation procedures 
+    (such as the &quot;variation&quot; among and between groups) used to analyze the differences among group means in a sample.
+
+    Use a one-way ANOVA when you have collected data about one categorical independent variable and 
+    one quantitative dependent variable. The independent variable should have at least three levels
+     (i.e. at least three different groups or categories)
+</code></pre>
+<h4 id="how-would-you-define-dimensionality-reduction-why-do-we-use-dimensionality-reduction">How would you define dimensionality reduction? Why do we use dimensionality reduction?</h4>
+<pre><code>    Dimensionality reduction or dimension reduction is the process of reducing the number of random variables 
+    under consideration by obtaining a set of principal variables. Approaches can be divided into feature 
+    selection and feature extraction.
+    The reason we use it is because
+            1) Immensive dataset 
+            2) Longer Trainnig time/gathering time
+            3) Too much complex assumptions/ Model overfitting
+    Types of Dimensionality reductions are 
+            1) Feature Selection
+            2) Feature Projection( transform data from higher dimention to lower space of fewer dimention)
+            3) Principle component Analysis
+                    Linear Technique for DR, performs linear mapping of data to lower dimention
+                    space in such a way variance is maximized.
+            4) Non Negative Metrics Factorization
+            5) Kernel PCA ( Non linear way of utilization of Kernel Trick)
+            6) Graph Based Kernel PCA ( locally linear embedding, Eigen Embeddings)
+
+            7) Linear Discriminant Analysis
+                    A method used in statistics, pattern recognition and machine learning to find a 
+                    linear combination of features that characterizes or separates two or more 
+                    classes of objects or events.
+            8) Generalized Discriminant Analysis 
+            8) TSNE (is a non-linear dimensionality reduction technique useful for visualization of high-dimensional datasets.)
+            9) U-Map
+                    Uniform manifold approximation and projection (UMAP) is a nonlinear dimensionality reduction technique. 
+                    Visually, it is similar to t-SNE, but it assumes that the data is uniformly distributed on a locally 
+                    connected Riemannian manifold and that the Riemannian metric 
+                    is locally constant or approximately locally constant.
+            10) Autoencoders (can learn from Non Linear dimention reduction function)
+</code></pre>
+<h4 id="what-is-principal-component-analysis-how-does-pca-work-in-dimensionality-reduction">What is Principal Component Analysis? How does PCA work in dimensionality reduction?</h4>
+<pre><code>    The main linear technique for dimensionality reduction, principal component analysis, performs
+     a linear mapping of the data to a lower-dimensional space in such a way that the variance of 
+     the data in the low-dimensional representation is maximized. In practice, the covariance (and 
+     sometimes the correlation) matrix of the data is constructed and the eigenvectors on this 
+     matrix are computed. The eigenvectors that correspond to the largest eigenvalues (the 
+     principal components) can now be used to reconstruct a large fraction of the variance of the 
+     original data. The original space (with dimension of the number of points) has been reduced 
+     (with data loss, but hopefully retaining the most important variance) to the space spanned by 
+     a few eigenvectors
+</code></pre>
+<p><img src="https://kindsonthegenius.com/blog/wp-content/uploads/2018/11/Principal-2BComponents-2BAnalysis-2BTutorial.jpg" alt="" loading="lazy" /></p>
+<h4 id="what-is-maximum-likelihood-estimation">What is Maximum Likelihood estimation?</h4>
+<pre><code>    Maximum likelihood estimation is a method that determines values for the parameters of a model. 
+    The parameter values are found such that they maximise the likelihood that the process described by the model
+    produced the data that were actually observed.
+</code></pre>
+<h4 id="what-is-naive-bayes-how-does-it-works">What is Naive Bayes? How does it works?</h4>
+<pre><code>    Naive Bayes is a generative classifier based on Bayes' theorem. It makes the &quot;naive&quot; assumption that features are
+    conditionally independent given the class:
+
+        P(class | x1..xn) ∝ P(class) * Π P(xi | class)
+        predict  argmax_c  [ log P(c) + Σ log P(xi | c) ]
+
+    Training only requires counting (class priors and per-feature likelihoods), so it is very fast and works with little data.
+        * GaussianNB for continuous features, MultinomialNB for word counts, BernoulliNB for binary features.
+        * Use Laplace (add-one) smoothing so that a word never seen in training does not zero out the whole product.
+        * Work in log space to avoid numerical underflow.
+    It is a strong baseline for text classification and spam filtering. Its predicted probabilities are usually poorly
+    calibrated, because the independence assumption does not hold.
+</code></pre>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/52bd0ca5938da89d7f9bf388dc7edcbd546c118e" alt="" loading="lazy" />
+<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/d0d9f596ba491384422716b01dbe74472060d0d7" alt="" loading="lazy" /></p>
+<h4 id="what-is-bayes-theorm">What is Bayes Theorm?</h4>
+<pre><code>    Bayes' theorem updates a belief after seeing evidence:
+
+        P(A | B) = P(B | A) * P(A) / P(B)
+        posterior = likelihood * prior / evidence
+
+    Classic example: a disease has 1% prevalence, and a test has 99% sensitivity and 5% false-positive rate.
+        P(disease | +) = 0.99 * 0.01 / (0.99 * 0.01 + 0.05 * 0.99) ≈ 0.167
+    A positive result means only about a 17% chance of disease, because the base rate is low.
+    This base-rate effect is why precision collapses on rare-event problems such as fraud.
+</code></pre>
+<h4 id="what-is-probability">What is Probability?</h4>
+<pre><code>    Probability is a number between 0 and 1, where, roughly speaking, 0 indicates impossibility and 1 indicates certainty.
+    The higher the probability of an event, the more likely it is that the event will occur. 
+    Example:
+    A simple example is the tossing of a fair (unbiased) 
+    coin. Since the coin is fair, the two outcomes (&quot;heads&quot; and &quot;tails&quot;) are both equally probable; the probability of &quot;heads&quot; equals the probability 
+    of &quot;tails&quot;; and since no other outcomes are possible, the probability of either &quot;heads&quot; or &quot;tails&quot; is 1/2 (which could also be written as 0.5 or 
+    50%).
+</code></pre>
+<p><a href="https://machinelearningmastery.com/joint-marginal-and-conditional-probability-for-machine-learning/">ReferenceLink</a></p>
+<h4 id="what-is-joint-probability">What is Joint Probability?</h4>
+<pre><code>    Joint probability is a statistical measure that calculates the likelihood of two events occurring together and at the same point in time.
+            P(A and B) or P (A ^ B) or P(A &amp; B)
+            The joint probability is detremeinded as :
+            P(A and B) = P(A given B) * P(B)       
+</code></pre>
+<p><img src="https://image.slidesharecdn.com/probabilitydistribution-150117052614-conversion-gate02/95/probabilitydistribution-14-638.jpg?cb=1421494048" alt="" loading="lazy" /></p>
+<h4 id="what-is-marginal-probability">What is Marginal Probability?</h4>
+<pre><code>    Marginal probability is the probability of one variable on its own, regardless of the values of other variables.
+    You get it by summing (or integrating) the joint distribution over the other variables:
+
+        P(A) = Σ_b P(A, B = b)
+
+    Example: if the joint table gives P(rain, weekend) and P(rain, weekday), then
+    P(rain) = P(rain, weekend) + P(rain, weekday). It is called &quot;marginal&quot; because these totals used to be written in the
+    margins of the table.
+</code></pre>
+<h4 id="what-is-conditional-probability-what-is-distributive-probability">What is Conditional Probability? what is distributive Probability?</h4>
+<pre><code>    Conditional probability is the probability of A given that B has happened:
+        P(A | B) = P(A, B) / P(B),  defined when P(B) &gt; 0
+    A and B are independent if and only if P(A | B) = P(A).
+
+    A probability distribution assigns probabilities to every possible value of a random variable.
+        * Discrete: a probability mass function (Bernoulli, Binomial, Poisson).
+        * Continuous: a probability density function (Normal, Exponential, Uniform).
+    The cumulative distribution function F(x) = P(X &lt;= x) exists for both.
+</code></pre>
+<h4 id="what-is-z-score">What is Z score?</h4>
+<pre><code>    The z-score says how many standard deviations a value lies from the mean: z = (x - μ) / σ.
+    Uses: standardising features, outlier flagging (|z| &gt; 3), comparing values on different scales, and
+    z-tests in hypothesis testing.
+    Under a normal distribution about 68% / 95% / 99.7% of values fall within 1 / 2 / 3 standard deviations.
+    The z-score is sensitive to outliers, because they inflate σ. The robust version uses the median and MAD.
+</code></pre>
+<h4 id="what-is-knn-how-does-it-works-what-is-neigbouring-criteria-how-you-can-change-it-">What is KNN how does it works? what is neigbouring criteria? How you can change it ?</h4>
+<pre><code>    k-Nearest Neighbours is a lazy, instance-based method. Training just stores the data. To predict a new point:
+        1) compute its distance to every training point
+        2) take the k closest points
+        3) classification: majority vote (optionally weighted by 1/distance). Regression: average of their targets.
+
+    The neighbour criterion has two parts, and both can be changed:
+        * the distance metric: Euclidean (default), Manhattan, Minkowski-p, cosine (for text and embeddings), Hamming
+        * k: a small k gives a noisy boundary (high variance), a large k gives a smooth boundary (high bias).
+          Tune k with cross-validation, and use an odd k for binary problems to avoid ties.
+
+    Practical notes: scale the features first, because distances are dominated by large-range features.
+    Prediction costs O(n·d) per query, so use KD-trees or ball trees, or approximate nearest-neighbour indexes (FAISS, HNSW)
+    at scale. kNN degrades in high dimensions because of the curse of dimensionality.
+</code></pre>
+<h4 id="which-one-would-you-prefer-low-fn-or-fps-based-on-fraudial-transaction">Which one would you prefer low FN or FP's based on Fraudial Transaction?</h4>
+<pre><code>    Recommended is low FN's, the reason is because if you consider Fraudly Transaction being occured and counting it as not being occured 
+    This has huge impact on the Business model.
+</code></pre>
+<h4 id="differentiate-between-knn-and-kmean">Differentiate between KNN and KMean?</h4>
+<pre><code>        KNN                                         | K-Means
+        ------------------------------------------- | ------------------------------------------------
+        Supervised (classification / regression)    | Unsupervised (clustering)
+        k = number of neighbours used to vote        | k = number of clusters to find
+        No training; all work happens at prediction | Iterative training: assign points to the nearest
+                                                    |   centroid, then recompute centroids until stable
+        Needs labels                                | Needs no labels
+        Output: a label or value for each query     | Output: k centroids plus a cluster id per point
+    The only thing they share is distance computation.
+</code></pre>
+<p><img src="https://qph.fs.quoracdn.net/main-qimg-e50401a4bdaf033ef6b451ea72334f8b" alt="" loading="lazy" /></p>
+<h4 id="what-is-attention--give-example-">What is Attention ? Give Example ?</h4>
+<pre><code>    Attention lets a model compute each output as a weighted average over its inputs, with the weights computed from
+    how relevant each input is to the current query:
+        Attention(Q, K, V) = softmax(Q·Kᵀ / sqrt(d_k)) · V
+    Examples:
+        * Machine translation (Bahdanau attention): while generating each target word, the decoder attends to the most
+          relevant source words instead of squeezing the whole sentence into one vector.
+        * Self-attention in transformers: every token attends to every other token in the same sequence.
+          &quot;it&quot; in &quot;The animal didn't cross the street because it was tired&quot; attends strongly to &quot;animal&quot;.
+        * Image captioning (&quot;Show, Attend and Tell&quot;): the model attends to image regions as it generates each word.
+    Soft attention (differentiable weights over all inputs) is the standard. Hard attention picks one location and needs
+    sampling or RL to train.
+</code></pre>
+<p><img src="https://distill.pub/2016/augmented-rnns/assets/show-attend-tell.png" alt="" loading="lazy" /></p>
+<h4 id="what-are-autoencoders-and-what-are-transformers">What are AutoEncoders? and what are transformers?</h4>
+<pre><code>    Autoencoders: an encoder compresses the input into a low-dimensional code (the bottleneck), and a decoder
+    reconstructs the input from that code. Training minimises reconstruction loss, so no labels are needed.
+        * Uses: dimensionality reduction, denoising (denoising autoencoders), anomaly detection
+          (a high reconstruction error flags unusual inputs), and pretraining.
+        * A variational autoencoder (VAE) makes the code a probability distribution, which turns the model into a generative model.
+
+    Transformers: a sequence architecture built from self-attention instead of recurrence. Every token attends to every
+    other token, with attention weights softmax(QKᵀ / sqrt(d)). Each layer stacks multi-head attention and a feed-forward
+    network, with residual connections and layer normalisation. Positional encodings supply word order.
+    Transformers process all tokens in parallel and model long-range dependencies well. They are the basis of BERT
+    (encoder-only), GPT and other LLMs (decoder-only), T5 (encoder-decoder), and Vision Transformers.
+    See deep_learning/intro_transformers.md for the full guide.
+</code></pre>
+<h4 id="what-is-image-captioning">What is Image Captioning?</h4>
+<pre><code>    Image Captioning is the process of generating textual description of an image. It uses both Natural Language Processing and Computer Vision to
+    generate the captions
+</code></pre>
+<p><img src="https://cdn.analyticsvidhya.com/wp-content/uploads/2018/03/example.png" alt="" loading="lazy" /></p>
+<h4 id="give-some-example-of-text-summarization">Give some example of Text summarization.</h4>
+<pre><code>    Summarization is the task of condensing a piece of text to a shorter version, reducing the size of the initial text while preserving the meaning.
+    Some examples are :
+            1) Essay Summarization
+            2) Document Summarization
+            etc
+</code></pre>
+<h4 id="define-style-transfer">Define Style Transfer?</h4>
+<pre><code>    Style transfer is a computer vision technique that applies the artistic style of one image to the content of another.
+    It uses convolutional neural networks (typically VGG) to separate and recombine the content and style representations
+    of two images. The loss function combines a content loss (preserving structure of the content image) with a style loss
+    (matching Gram matrix statistics of the style image). Neural Style Transfer was introduced by Gatys et al. (2015).
+    Modern approaches use fast style transfer (pre-trained feed-forward networks) for real-time applications.
+    Use cases: photo filters, artistic image generation, creative tools.
+</code></pre>
+<h4 id="define-image-segmentation-and-pose-analysis">Define Image Segmentation and Pose Analysis?</h4>
+<pre><code>    Image Segmentation : In digital image processing and computer vision, image segmentation is the process of partitioning a digital image into 
+    multiple segments (sets of pixels, also known as image objects). The goal of segmentation is to simplify and/or change the representation of 
+    an image into something that is more meaningful and easier to analyze.
+
+    Pose Analysis:
+            The process of determining the location and the orientation of a Human Entity (pose).
+</code></pre>
+<p><img src="https://i.ytimg.com/vi/KYNDzlcQMWA/maxresdefault.jpg" alt="PoseSegmentation" loading="lazy" /></p>
+<h4 id="define-semantic-segmentation">Define Semantic Segmentation?</h4>
+<pre><code>    Semantic segmentation assigns a class label to every pixel (road, car, person, sky). It does not separate objects:
+    two touching people are one &quot;person&quot; region.
+    Typical models are encoder-decoders with skip connections (U-Net, DeepLab with atrous convolutions, SegFormer).
+    Loss: per-pixel cross-entropy, often combined with Dice loss for imbalanced classes. Metric: mean IoU (mIoU).
+</code></pre>
+<p><img src="https://miro.medium.com/max/2436/0*QeOs5RvXlkbDkLOy.png" alt="" loading="lazy" /></p>
+<h4 id="what-is-instance-segmentation">What is Instance Segmentation?</h4>
+<pre><code>    Instance segmentation detects each individual object and gives it its own pixel mask: person #1, person #2, and so on.
+    It combines object detection with segmentation. Mask R-CNN, for example, adds a mask head to Faster R-CNN.
+    Background classes such as sky or road are ignored.
+    Panoptic segmentation combines both: every pixel gets a class, and every countable object also gets an instance ID.
+    Metric: mask AP (average precision over IoU thresholds).
+</code></pre>
+<h4 id="what-is-imperative-and-symbolic-programming">What is Imperative and Symbolic Programming?</h4>
+<pre><code>    Imperative (define-by-run / eager): each operation executes immediately, as in ordinary Python. PyTorch eager mode and
+    TensorFlow 2 eager mode work this way. It is easy to debug with print and pdb, and control flow is plain Python.
+
+    Symbolic (define-then-run / graph): you first build a computation graph, then compile and execute it. TensorFlow 1.x
+    graphs, Theano, and JAX's jit tracing work this way. The whole graph is known in advance, which enables optimisations
+    such as operator fusion, memory planning, and export to other runtimes. It is harder to debug.
+
+    Modern frameworks mix the two: write eager code, then compile it (torch.compile, tf.function, jax.jit).
+</code></pre>
+<p><img src="https://slideplayer.com/slide/14913960/91/images/17/Imperative+vs+Symbolic+Programming.jpg" alt="" loading="lazy" /></p>
+<h4 id="define-text-classification-give-some-usecase-examples">Define Text Classification, Give some usecase examples?</h4>
+<pre><code>    Text classification assigns one or more predefined labels to a piece of text.
+    Approaches, from simple to complex: TF-IDF with logistic regression or naive Bayes (a strong baseline),
+    fine-tuned transformers (BERT, DeBERTa), and zero-shot or few-shot classification with an LLM.
+    Use cases:
+            1) Spam and phishing detection
+            2) Sentiment analysis of reviews and social posts
+            3) Support-ticket routing and intent detection in chatbots
+            4) Topic and news categorisation
+            5) Toxicity and content moderation
+            6) Language identification
+</code></pre>
+<p><img src="https://www.researchgate.net/profile/Raghava_Rao_Mukkamala/publication/321892732/figure/fig3/AS:574016848764930@1513867689381/Text-Classification-Architecture.png" alt="" loading="lazy" /></p>
+<h4 id="which-algorithms-to-use-for-missing-data">which algorithms to use for Missing Data?</h4>
+<pre><code>    First ask why the data is missing: completely at random (MCAR), at random given other features (MAR), or not at random (MNAR).
+        1) Drop rows or columns: only when missingness is rare and MCAR.
+        2) Simple imputation: mean or median (numeric), mode or an &quot;unknown&quot; category (categorical).
+        3) Add a missing-indicator feature. The fact that a value is missing is often predictive.
+        4) Model-based imputation: KNNImputer, IterativeImputer / MICE, MissForest.
+        5) Time series: forward fill, backward fill, or interpolation.
+        6) Models that handle missing values natively: XGBoost, LightGBM, CatBoost, and HistGradientBoosting learn a default split direction.
+    Always fit the imputer on training data only, inside the pipeline, to avoid leakage.
+</code></pre>
+<p><img src="https://www.researchgate.net/publication/330704615/figure/fig2/AS:720385997815812@1548764814471/Machine-learning-with-missing-data-Conventional-single-imputation-methods-for-handling.ppm" alt="" loading="lazy" /></p>
+<p>REFERENCED FROM : https://github.com/andrewekhalel/MLQuestions</p>
+<h4 id="1-whats-the-trade-off-between-bias-and-variance-src">1) What's the trade-off between bias and variance? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>If our model is too simple and has very few parameters then it may have high bias and low variance. On the other hand if our model has large number of parameters then it’s going to have high variance and low bias. So we need to find the right/good balance without overfitting and underfitting the data. <a href="https://towardsdatascience.com/understanding-the-bias-variance-tradeoff-165e6942b229">[src]</a></p>
+<h4 id="2-what-is-gradient-descent-src">2) What is gradient descent? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p><a href="https://machinelearningmastery.com/gradient-descent-for-machine-learning/">[Answer]</a></p>
+<p>Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function (cost).</p>
+<p>Gradient descent is best used when the parameters cannot be calculated analytically (e.g. using linear algebra) and must be searched for by an optimization algorithm.</p>
+<h4 id="3-explain-over--and-under-fitting-and-how-to-combat-them-src">3) Explain over- and under-fitting and how to combat them? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p><a href="https://towardsdatascience.com/overfitting-vs-underfitting-a-complete-example-d05dd7e19765">[Answer]</a></p>
+<p>ML/DL models essentially learn a relationship between its given inputs(called training features) and objective outputs(called labels). Regardless of the quality of the learned relation(function), its performance on a test set(a collection of data different from the training input) is subject to investigation.</p>
+<p>Most ML/DL models have trainable parameters which will be learned to build that input-output relationship. Based on the number of parameters each model has, they can be sorted into more flexible(more parameters) to less flexible(less parameters).</p>
+<p>The problem of Underfitting arises when the flexibility of a model(its number of parameters) is not adequate to capture the underlying pattern in a training dataset. Overfitting, on the other hand, arises when the model is too flexible to the underlying pattern. In the later case it is said that the model has “memorized” the training data.</p>
+<p>An example of underfitting is estimating a second order polynomial(quadratic function) with a first order polynomial(a simple line). Similarly, estimating a line with a 10th order polynomial would be an example of overfitting.</p>
+<h4 id="4-how-do-you-combat-the-curse-of-dimensionality-src">4) How do you combat the curse of dimensionality? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<ul>
+<li>Feature Selection(manual or via statistical methods)</li>
+<li>Principal Component Analysis (PCA)</li>
+<li>Multidimensional Scaling</li>
+<li>Locally linear embedding<br />
+<a href="https://towardsdatascience.com/why-and-how-to-get-rid-of-the-curse-of-dimensionality-right-with-breast-cancer-dataset-7d528fb5f6c0">[src]</a></li>
+</ul>
+<h4 id="5-what-is-regularization-why-do-we-use-it-and-give-some-examples-of-common-methods-src">5) What is regularization, why do we use it, and give some examples of common methods? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>A technique that discourages learning a more complex or flexible model, so as to avoid the risk of overfitting.
+Examples</p>
+<ul>
+<li>Ridge (L2 norm)</li>
+<li>Lasso (L1 norm)<br />
+The obvious <em>disadvantage</em> of <strong>ridge</strong> regression, is model interpretability. It will shrink the coefficients for least important predictors, very close to zero. But it will never make them exactly zero. In other words, the <em>final model will include all predictors</em>. However, in the case of the <strong>lasso</strong>, the L1 penalty has the effect of forcing some of the coefficient estimates to be <em>exactly equal</em> to zero when the tuning parameter λ is sufficiently large. Therefore, the lasso method also performs variable selection and is said to yield sparse models.
+<a href="https://towardsdatascience.com/regularization-in-machine-learning-76441ddcf99a">[src]</a></li>
+</ul>
+<h4 id="6-explain-principal-component-analysis-pca-src">6) Explain Principal Component Analysis (PCA)? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p><a href="https://towardsdatascience.com/a-one-stop-shop-for-principal-component-analysis-5582fb7e0a9c">[Answer]</a></p>
+<p>Principal Component Analysis (PCA) is a dimensionality reduction technique used in machine learning to reduce the number of features in a dataset while retaining as much information as possible. It works by identifying the directions (principal components) in which the data varies the most, and projecting the data onto a lower-dimensional subspace along these directions.</p>
+<h4 id="7-why-is-relu-better-and-more-often-used-than-sigmoid-in-neural-networks-src">7) Why is ReLU better and more often used than Sigmoid in Neural Networks? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<ul>
+<li>Computation Efficiency:
+As ReLU is a simple threshold the forward and backward path will be faster.</li>
+<li>Reduced Likelihood of Vanishing Gradient:
+Gradient of ReLU is 1 for positive values and 0 for negative values while Sigmoid activation saturates (gradients close to 0) quickly with slightly higher or lower inputs leading to vanishing gradients.</li>
+<li>Sparsity:
+Sparsity happens when the input of ReLU is negative. This means fewer neurons are firing ( sparse activation ) and the network is lighter.</li>
+</ul>
+<p><a href="https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0">[src1]</a> <a href="https://stats.stackexchange.com/questions/126238/what-are-the-advantages-of-relu-over-sigmoid-function-in-deep-neural-networks">[src2]</a></p>
+<h4 id="8-given-stride-s-and-kernel-sizes--for-each-layer-of-a-1-dimensional-cnn-create-a-function-to-compute-the-receptive-field-of-a-particular-node-in-the-network-this-is-just-finding-how-many-input-nodes-actually-connect-through-to-a-neuron-in-a-cnn-src">8) Given stride S and kernel sizes  for each layer of a (1-dimensional) CNN, create a function to compute the <a href="https://www.quora.com/What-is-a-receptive-field-in-a-convolutional-neural-network">receptive field</a> of a particular node in the network. This is just finding how many input nodes actually connect through to a neuron in a CNN. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>The receptive field is the region of the input that can influence one output unit. For a stack of 1-D conv layers
+with kernel sizes <code>k_i</code> and strides <code>s_i</code>, each layer adds <code>(k_i - 1)</code> times the product of the strides of all
+earlier layers:</p>
+<pre><code class="language-python">def receptive_field(kernels, strides):
+    rf, jump = 1, 1              # jump = distance in input pixels between adjacent units
+    for k, s in zip(kernels, strides):
+        rf += (k - 1) * jump
+        jump *= s
+    return rf
+
+print(receptive_field([3, 3, 3], [1, 1, 1]))   # 7  (three 3x3 convs == one 7x7)
+print(receptive_field([3, 3, 3], [2, 2, 2]))   # 15
+</code></pre>
+<p>Dilation <code>d</code> multiplies the effective kernel size: <code>k_eff = d * (k - 1) + 1</code>.</p>
+<h4 id="9-implement-connected-components-on-an-imagematrix-src">9) Implement <a href="http://aishack.in/tutorials/labelling-connected-components-example/">connected components</a> on an image/matrix. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Label each group of touching foreground pixels with a BFS (or union-find) flood fill:</p>
+<pre><code class="language-python">from collections import deque
+
+def connected_components(grid):          # grid: list of lists of 0/1
+    h, w = len(grid), len(grid[0])
+    labels = [[0] * w for _ in range(h)]
+    current = 0
+    for i in range(h):
+        for j in range(w):
+            if grid[i][j] and not labels[i][j]:
+                current += 1
+                labels[i][j] = current
+                q = deque([(i, j)])
+                while q:
+                    y, x = q.popleft()
+                    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):   # 4-connectivity
+                        ny, nx = y + dy, x + dx
+                        if 0 &lt;= ny &lt; h and 0 &lt;= nx &lt; w and grid[ny][nx] and not labels[ny][nx]:
+                            labels[ny][nx] = current
+                            q.append((ny, nx))
+    return labels, current
+</code></pre>
+<p>This runs in O(H·W). The two-pass union-find algorithm is the classic alternative for streaming or hardware use.</p>
+<h4 id="10-implement-a-sparse-matrix-class-in-c-src">10) Implement a sparse matrix class in C++. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Store only the non-zero entries. A dictionary-of-keys (DOK) layout is simplest to build. CSR (compressed sparse row),
+which uses three arrays <code>values</code>, <code>col_idx</code> and <code>row_ptr</code>, is best for fast matrix-vector products.</p>
+<pre><code class="language-cpp">#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+class SparseMatrix {
+    size_t rows_, cols_;
+    std::unordered_map&lt;size_t, double&gt; data_;          // key = r * cols_ + c
+public:
+    SparseMatrix(size_t r, size_t c) : rows_(r), cols_(c) {}
+    void set(size_t r, size_t c, double v) {
+        size_t k = r * cols_ + c;
+        if (v == 0.0) data_.erase(k); else data_[k] = v;
+    }
+    double get(size_t r, size_t c) const {
+        auto it = data_.find(r * cols_ + c);
+        return it == data_.end() ? 0.0 : it-&gt;second;
+    }
+    std::vector&lt;double&gt; multiply(const std::vector&lt;double&gt;&amp; x) const {   // O(nnz)
+        std::vector&lt;double&gt; y(rows_, 0.0);
+        for (const auto&amp; [k, v] : data_) y[k / cols_] += v * x[k % cols_];
+        return y;
+    }
+};
+</code></pre>
+<p><a href="https://www.geeksforgeeks.org/sparse-matrix-representation/">[Answer]</a></p>
+<h4 id="11-create-a-function-to-compute-an-integral-image-and-create-another-function-to-get-area-sums-from-the-integral-imagesrc">11) Create a function to compute an <a href="https://en.wikipedia.org/wiki/Summed-area_table">integral image</a>, and create another function to get area sums from the integral image.[<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<pre><code class="language-python">import numpy as np
+
+def integral_image(img):
+    # pad with a zero row and column so the queries below need no bounds checks
+    ii = np.zeros((img.shape[0] + 1, img.shape[1] + 1), dtype=np.int64)
+    ii[1:, 1:] = img.cumsum(0).cumsum(1)
+    return ii
+
+def area_sum(ii, top, left, bottom, right):     # inclusive coordinates
+    return (ii[bottom + 1, right + 1] - ii[top, right + 1]
+            - ii[bottom + 1, left] + ii[top, left])
+</code></pre>
+<p>Building the integral image is O(H·W), and every rectangle sum afterwards is O(1). The Viola-Jones face detector
+relies on this for Haar features.
+<a href="https://www.geeksforgeeks.org/submatrix-sum-queries/">[Answer]</a></p>
+<h4 id="12-how-would-you-remove-outliers-when-trying-to-estimate-a-flat-plane-from-noisy-samples-src">12) How would you remove outliers when trying to estimate a flat plane from noisy samples? [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Random sample consensus (RANSAC) is an iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no influence on the values of the estimates.
+<a href="https://en.wikipedia.org/wiki/Random_sample_consensus">[src]</a></p>
+<h4 id="13-how-does-cbir-work-src">13) How does <a href="https://www.robots.ox.ac.uk/~vgg/publications/2013/arandjelovic13/arandjelovic13.pdf">CBIR</a> work? [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Content-based image retrieval (CBIR) finds images that look like a query image, using the pixels themselves rather than
+keywords or tags:</p>
+<ol>
+<li><strong>Represent</strong>: turn every image into a vector. Older systems used hand-crafted descriptors (colour histograms, SIFT
+aggregated with bag-of-visual-words, VLAD or Fisher vectors). Modern systems use embeddings from a CNN or ViT, or joint
+image-text embeddings (CLIP), which also allow text queries.</li>
+<li><strong>Index</strong>: store the vectors in an approximate nearest-neighbour index (FAISS, HNSW, IVF-PQ).</li>
+<li><strong>Query</strong>: embed the query image, retrieve the top-k nearest vectors by cosine or L2 distance, and optionally
+re-rank them (geometric verification with keypoint matching and RANSAC, or a heavier model).</li>
+</ol>
+<p>Train or fine-tune the embedding with a metric-learning loss (contrastive, triplet) on your own notion of &quot;similar&quot;:
+the same product, a near-duplicate, or the same landmark. Evaluate with recall@k and mAP.</p>
+<h4 id="14-how-does-image-registration-work-sparse-vs-dense-optical-flow-and-so-on-src">14) How does image registration work? Sparse vs. dense <a href="http://www.ncorr.com/download/publications/bakerunify.pdf">optical flow</a> and so on. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Image registration aligns two images of the same scene into one coordinate frame:</p>
+<ol>
+<li><strong>Detect and describe keypoints</strong> (SIFT, ORB, SuperPoint) in both images.</li>
+<li><strong>Match descriptors</strong> (nearest neighbour plus Lowe's ratio test).</li>
+<li><strong>Estimate a transform</strong> (affine, homography, or a deformable model) robustly with RANSAC.</li>
+<li><strong>Warp</strong> one image onto the other, optionally refining by directly optimising an intensity similarity (mutual information for multi-modal medical images).</li>
+</ol>
+<p><strong>Sparse vs dense optical flow:</strong> sparse flow (Lucas-Kanade) tracks motion only at selected keypoints. It is fast and
+suited to tracking. Dense flow (Farnebäck, or learned models such as RAFT) estimates a motion vector for every pixel.
+It is slower, but needed for segmentation, video interpolation, or stabilisation.</p>
+<h4 id="15-describe-how-convolution-works-what-about-if-your-inputs-are-grayscale-vs-rgb-imagery-what-determines-the-shape-of-the-next-layersrc">15) Describe how convolution works. What about if your inputs are grayscale vs RGB imagery? What determines the shape of the next layer?[<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>In a convolutional neural network (CNN), the convolution operation is applied to the input image using a small matrix called a kernel or filter. The kernel slides over the image in small steps, called strides, and performs element-wise multiplications with the corresponding elements of the image and then sums up the results. The output of this operation is called a feature map.</p>
+<p>When the input is RGB(or more than 3 channels) the sliding window will be a sliding cube. The shape of the next layer is determined by Kernel size, number of kernels, stride, padding, and dialation.</p>
+<p><a href="https://dev.to/sandeepbalachandran/machine-learning-convolution-with-color-images-2p41">[src1]</a><a href="https://stackoverflow.com/questions/70231487/output-dimensions-of-convolution-in-pytorch">[src2]</a></p>
+<h4 id="16-talk-me-through-how-you-would-create-a-3d-model-of-an-object-from-imagery-and-depth-sensor-measurements-taken-at-all-angles-around-the-object-src">16) Talk me through how you would create a 3D model of an object from imagery and depth sensor measurements taken at all angles around the object. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>There are two popular methods for 3D reconstruction:</p>
+<ul>
+<li>
+<p>Structure from Motion (SfM) <a href="https://www.mathworks.com/help/vision/ug/structure-from-motion.html">[src]</a></p>
+</li>
+<li>
+<p>Multi-View Stereo (MVS) <a href="https://www.youtube.com/watch?v=Zwwty2qPNs8">[src]</a></p>
+</li>
+</ul>
+<p>SfM is better suited for creating models of large scenes while MVS is better suited for creating models of small objects.</p>
+<h4 id="17-implement-sqrtconst-double--x-without-using-any-special-functions-just-fundamental-arithmetic-src">17) Implement SQRT(const double &amp; x) without using any special functions, just fundamental arithmetic. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Use Newton's method on <code>f(y) = y² - x</code>, which gives the update <code>y ← (y + x / y) / 2</code>. It converges quadratically
+(the number of correct digits roughly doubles each step), so it is much faster than a Taylor series:</p>
+<pre><code class="language-python">def sqrt(x, eps=1e-12):
+    if x &lt; 0:
+        raise ValueError(&quot;negative input&quot;)
+    if x == 0:
+        return 0.0
+    y = x if x &gt;= 1 else 1.0
+    while abs(y * y - x) &gt; eps * x:
+        y = 0.5 * (y + x / y)
+    return y
+</code></pre>
+<p>For an integer square root, binary search on <code>[0, x]</code> is the other common answer.
+<a href="https://math.stackexchange.com/questions/732540/taylor-series-of-sqrt1x-using-sigma-notation">[Answer]</a></p>
+<h4 id="18-reverse-a-bitstring-src">18) Reverse a bitstring. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>If you are using python3 :</p>
+<pre><code>data = b'\xAD\xDE\xDE\xC0'
+my_data = bytearray(data)
+my_data.reverse()
+</code></pre>
+<h4 id="19-implement-non-maximal-suppression-as-efficiently-as-you-can-src">19) Implement non maximal suppression as efficiently as you can. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<p>Non-Maximum Suppression (NMS) is a technique used to eliminate multiple detections of the same object in a given image.
+To solve that first sort bounding boxes based on their scores(N LogN). Starting with the box with the highest score, remove boxes whose overlapping metric(IoU) is greater than a certain threshold.(N^2)</p>
+<p>To optimize this solution you can use special data structures to query for overlapping boxes such as R-tree or KD-tree. (N LogN)
+<a href="https://towardsdatascience.com/non-maxima-suppression-139f7e00f0b5">[src]</a></p>
+<h4 id="20-reverse-a-linked-list-in-place-src">20) Reverse a linked list in place. [<a href="https://www.reddit.com/r/computervision/comments/7gku4z/technical_interview_questions_in_cv/">src</a>]</h4>
+<pre><code class="language-python">def reverse(head):
+    prev = None
+    while head:
+        head.next, prev, head = prev, head, head.next
+    return prev
+</code></pre>
+<p>O(n) time and O(1) extra space. Keep three pointers (<code>prev</code>, <code>current</code>, <code>next</code>) and flip each <code>next</code> pointer as you walk the list.
+<a href="https://www.geeksforgeeks.org/reverse-a-linked-list/">[Answer]</a></p>
+<h4 id="21-what-is-data-normalization-and-why-do-we-need-it-src">21) What is data normalization and why do we need it? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Normalization rescales features onto comparable ranges. The two usual forms are <strong>standardization</strong>
+<code>(x - mean) / std</code> and <strong>min-max scaling</strong> to <code>[0, 1]</code>. It matters because:</p>
+<ul>
+<li><strong>Gradient-based training converges faster.</strong> With features on very different scales the loss surface is a long,
+narrow valley, and gradient descent zig-zags or needs a tiny learning rate.</li>
+<li><strong>Distance- and margin-based models (kNN, k-means, SVM, PCA) depend on it.</strong> Without scaling, the feature with
+the largest range dominates every distance.</li>
+<li><strong>Regularisation treats weights fairly.</strong> An L1/L2 penalty only means something if the features share a scale.</li>
+</ul>
+<p>Tree-based models (random forests, gradient boosting) don't need it, because their splits are invariant to monotonic
+rescaling. Always fit the scaler on the training data only and reuse those statistics at validation, test and
+serving time. Otherwise you leak information, or your features drift between training and serving.</p>
+<h4 id="22-why-do-we-use-convolutions-for-images-rather-than-just-fc-layers-src">22) Why do we use convolutions for images rather than just FC layers? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Firstly, convolutions preserve, encode, and actually use the spatial information from the image. If we used only FC layers we would have no relative spatial information. Secondly, Convolutional Neural Networks (CNNs) have a partially built-in translation in-variance, since each convolution kernel acts as it's own filter/feature detector.</p>
+<h4 id="23-what-makes-cnns-translation-invariant-src">23) What makes CNNs translation invariant? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Two properties need to be kept apart:</p>
+<ul>
+<li><strong>Convolution is translation-<em>equivariant</em>.</strong> The same kernel (shared weights) is applied at every position, so if
+the input shifts, the feature map shifts by the same amount. A feature detector learned in one corner works everywhere.</li>
+<li><strong>Translation <em>invariance</em></strong> (the output doesn't change when the input shifts) comes from what is stacked on top:
+pooling, which gives small local invariance, and especially global average pooling or a classifier head that
+aggregates over all positions.</li>
+</ul>
+<p>In practice CNNs are only approximately invariant. Striding and downsampling break exact shift-equivariance, so a
+shift of a few pixels can change the prediction. Data augmentation with random crops and shifts and anti-aliased
+downsampling (blur pooling) improve robustness.</p>
+<h4 id="24-why-do-we-have-max-pooling-in-classification-cnns-src">24) Why do we have max-pooling in classification CNNs? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Max-pooling downsamples feature maps by keeping the strongest activation in each window (typically 2x2, stride 2):</p>
+<ul>
+<li><strong>Less computation and memory</strong> in later layers, because the feature maps are 4x smaller.</li>
+<li><strong>Larger receptive field.</strong> Later layers see more of the image, which they need to recognise whole objects.</li>
+<li><strong>Some local translation invariance.</strong> A feature that moves a pixel or two within the window gives the same maximum.</li>
+<li><strong>It keeps &quot;is the feature present?&quot;</strong> rather than exactly where it is, which is what classification needs.</li>
+</ul>
+<p>Many modern architectures replace most pooling with strided convolutions and end with global average pooling.
+Vision Transformers use patch embeddings instead. For dense tasks such as segmentation, too much pooling hurts
+localisation, which is why those models use skip connections or dilated convolutions.</p>
+<h4 id="25-why-do-segmentation-cnns-typically-have-an-encoder-decoder-style--structure-src">25) Why do segmentation CNNs typically have an encoder-decoder style / structure? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>The encoder CNN can basically be thought of as a feature extraction network, while the decoder uses that information to predict the image segments by &quot;decoding&quot; the features and upscaling to the original image size.</p>
+<h4 id="26-what-is-the-significance-of-residual-networks-src">26) What is the significance of Residual Networks? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Residual networks (ResNets) made very deep networks trainable. Each block learns a <em>residual</em> <code>F(x)</code> and outputs
+<code>y = x + F(x)</code> through an identity skip connection.</p>
+<ul>
+<li><strong>Before ResNets, deeper plain networks got <em>worse training</em> error.</strong> That rules out overfitting: it was an
+optimisation problem (degradation). With a skip connection, a block can easily learn the identity by driving <code>F</code>
+to zero, so adding depth shouldn't hurt.</li>
+<li><strong>Gradients flow directly.</strong> The gradient of <code>x + F(x)</code> includes an identity term, so the signal reaches early
+layers through the skip path without vanishing through dozens of multiplications.</li>
+<li><strong>Multiple paths.</strong> A ResNet behaves somewhat like an ensemble of many shallower paths of different lengths.</li>
+</ul>
+<p>Residual connections are now everywhere. Every transformer layer uses them around attention and the MLP, which is why
+100+ layer LLMs train at all.</p>
+<h4 id="27-what-is-batch-normalization-and-why-does-it-work-src">27) What is batch normalization and why does it work? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>Batch normalization normalises each channel's activations using the <strong>mini-batch</strong> mean and variance, then applies a
+learned scale and shift:</p>
+<pre><code>x_hat = (x - mean_batch) / sqrt(var_batch + eps)
+y     = gamma * x_hat + beta
+</code></pre>
+<p>During training it uses batch statistics and updates running averages. At inference it uses those running averages,
+so remember to call <code>model.eval()</code>.</p>
+<p><strong>Why it helps:</strong> the original explanation was reducing &quot;internal covariate shift&quot; (layer inputs changing
+distribution during training). Later work suggests the main effect is a <strong>smoother loss landscape</strong>, which allows
+larger learning rates and makes training less sensitive to initialisation. It also regularises a little, because
+batch statistics are noisy.</p>
+<p><strong>Limitations:</strong> it behaves badly with small batches, and it adds a train/inference discrepancy. It is awkward for
+variable-length sequences. That is why transformers use <strong>LayerNorm</strong> or <strong>RMSNorm</strong> (per-example statistics), and
+small-batch vision work uses GroupNorm.</p>
+<h4 id="28-why-would-you-use-many-small-convolutional-kernels-such-as-3x3-rather-than-a-few-large-ones-src">28) Why would you use many small convolutional kernels such as 3x3 rather than a few large ones? [<a href="http://houseofbots.com/news-detail/2849-4-data-science-and-machine-learning-interview-questions">src</a>]</h4>
+<p>This is very well explained in the <a href="https://arxiv.org/pdf/1409.1556.pdf">VGGNet paper</a>. There are 2 reasons: First, you can use several smaller kernels rather than few large ones to get the same receptive field and capture more spatial context, but with the smaller kernels you are using less parameters and computations. Secondly, because with smaller kernels you will be using more filters, you'll be able to use more activation functions and thus have a more discriminative mapping function being learned by your CNN.</p>
+<h4 id="29-why-do-we-need-a-validation-set-and-test-set-what-is-the-difference-between-them-src">29) Why do we need a validation set and test set? What is the difference between them? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>When training a model, we divide the available data into three separate sets:</p>
+<ul>
+<li>The training dataset is used for fitting the model’s parameters. However, the accuracy that we achieve on the training set is not reliable for predicting if the model will be accurate on new samples.</li>
+<li>The validation dataset is used to measure how well the model does on examples that weren’t part of the training dataset. The metrics computed on the validation data can be used to tune the hyperparameters of the model. However, every time we evaluate the validation data and we make decisions based on those scores, we are leaking information from the validation data into our model. The more evaluations, the more information is leaked. So we can end up overfitting to the validation data, and once again the validation score won’t be reliable for predicting the behaviour of the model in the real world.</li>
+<li>The test dataset is used to measure how well the model does on previously unseen examples. It should only be used once we have tuned the parameters using the validation set.</li>
+</ul>
+<p>So if we omit the test set and only use a validation set, the validation score won’t be a good estimate of the generalization of the model.</p>
+<h4 id="30-what-is-stratified-cross-validation-and-when-should-we-use-it-src">30) What is stratified cross-validation and when should we use it? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>Cross-validation is a technique for dividing data between training and validation sets. On typical cross-validation this split is done randomly. But in stratified cross-validation, the split preserves the ratio of the categories on both the training and validation datasets.</p>
+<p>For example, if we have a dataset with 10% of category A and 90% of category B, and we use stratified cross-validation, we will have the same proportions in training and validation. In contrast, if we use simple cross-validation, in the worst case we may find that there are no samples of category A in the validation set.</p>
+<p>Stratified cross-validation may be applied in the following scenarios:</p>
+<ul>
+<li>On a dataset with multiple categories. The smaller the dataset and the more imbalanced the categories, the more important it will be to use stratified cross-validation.</li>
+<li>On a dataset with data of different distributions. For example, in a dataset for autonomous driving, we may have images taken during the day and at night. If we do not ensure that both types are present in training and validation, we will have generalization problems.</li>
+</ul>
+<h4 id="31-why-do-ensembles-typically-have-higher-scores-than-individual-models-src">31) Why do ensembles typically have higher scores than individual models? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>An ensemble is the combination of multiple models to create a single prediction. The key idea for making better predictions is that the models should make different errors. That way the errors of one model will be compensated by the right guesses of the other models and thus the score of the ensemble will be higher.</p>
+<p>We need diverse models for creating an ensemble. Diversity can be achieved by:</p>
+<ul>
+<li>Using different ML algorithms. For example, you can combine logistic regression, k-nearest neighbors, and decision trees.</li>
+<li>Using different subsets of the data for training. This is called bagging.</li>
+<li>Giving a different weight to each of the samples of the training set. If this is done iteratively, weighting the samples according to the errors of the ensemble, it’s called boosting.
+Many winning solutions to data science competitions are ensembles. However, in real-life machine learning projects, engineers need to find a balance between execution time and accuracy.</li>
+</ul>
+<h4 id="32-what-is-an-imbalanced-dataset-can-you-list-some-ways-to-deal-with-it-src">32) What is an imbalanced dataset? Can you list some ways to deal with it? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>An imbalanced dataset is one that has different proportions of target categories. For example, a dataset with medical images where we have to detect some illness will typically have many more negative samples than positive samples: say, 98% of images are without the illness and 2% of images are with the illness.</p>
+<p>There are different options to deal with imbalanced datasets:</p>
+<ul>
+<li>Oversampling or undersampling. Instead of sampling with a uniform distribution from the training dataset, we can use other distributions so the model sees a more balanced dataset.</li>
+<li>Data augmentation. We can add data in the less frequent categories by modifying existing data in a controlled way. In the example dataset, we could flip the images with illnesses, or add noise to copies of the images in such a way that the illness remains visible.</li>
+<li>Using appropriate metrics. In the example dataset, if we had a model that always made negative predictions, it would achieve a precision of 98%. There are other metrics such as precision, recall, and F-score that describe the accuracy of the model better when using an imbalanced dataset.</li>
+</ul>
+<h4 id="33-can-you-explain-the-differences-between-supervised-unsupervised-and-reinforcement-learning-src">33) Can you explain the differences between supervised, unsupervised, and reinforcement learning? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>In supervised learning, we train a model to learn the relationship between input data and output data. We need to have labeled data to be able to do supervised learning.</p>
+<p>With unsupervised learning, we only have unlabeled data. The model learns a representation of the data. Unsupervised learning is frequently used to initialize the parameters of the model when we have a lot of unlabeled data and a small fraction of labeled data. We first train an unsupervised model and, after that, we use the weights of the model to train a supervised model.</p>
+<p>In reinforcement learning, the model has some input data and a reward depending on the output of the model. The model learns a policy that maximizes the reward. Reinforcement learning has been applied successfully to strategic games such as Go and even classic Atari video games.</p>
+<h4 id="34-what-is-data-augmentation-can-you-give-some-examples-src">34) What is data augmentation? Can you give some examples? [<a href="https://www.toptal.com/machine-learning/interview-questions">src</a>]</h4>
+<p>Data augmentation is a technique for synthesizing new data by modifying existing data in such a way that the target is not changed, or it is changed in a known way.</p>
+<p>Computer vision is one of fields where data augmentation is very useful. There are many modifications that we can do to images:</p>
+<ul>
+<li>Resize</li>
+<li>Horizontal or vertical flip</li>
+<li>Rotate</li>
+<li>Add noise</li>
+<li>Deform</li>
+<li>Modify colors
+Each problem needs a customized data augmentation pipeline. For example, on OCR, doing flips will change the text and won’t be beneficial; however, resizes and small rotations may help.</li>
+</ul>
+<h4 id="35-what-is-turing-test-src">35) What is Turing test? [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>Proposed by Alan Turing in 1950 as the &quot;imitation game&quot;: a human judge holds text conversations with a hidden human
+and a hidden machine. If the judge can't reliably tell which is which, the machine passes. It replaces the vague
+question &quot;can machines think?&quot; with an operational test of whether behaviour is indistinguishable from a human's.</p>
+<p>Criticisms: it rewards imitation and deception rather than intelligence (Searle's Chinese Room argument). It depends
+heavily on the judge. It tests only conversation. Modern LLMs can often pass informal versions, which has shifted
+evaluation towards task benchmarks, capability evals and safety evals rather than human-likeness.</p>
+<h4 id="36-what-is-precision">36) What is Precision?</h4>
+<p>Precision (also called positive predictive value) is the fraction of relevant instances among the retrieved instances<br />
+Precision = true positive / (true positive + false positive)<br />
+<a href="https://en.wikipedia.org/wiki/Precision_and_recall">[src]</a></p>
+<h4 id="37-what-is-recall">37) What is Recall?</h4>
+<p>Recall (also known as sensitivity) is the fraction of relevant instances that have been retrieved over the total amount of relevant instances.
+Recall = true positive / (true positive + false negative)<br />
+<a href="https://en.wikipedia.org/wiki/Precision_and_recall">[src]</a></p>
+<h4 id="38-define-f1-score-src">38) Define F1-score. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>It is the weighted average of precision and recall. It considers both false positive and false negative into account. It is used to measure the model’s performance.<br />
+F1-Score = 2 * (precision * recall) / (precision + recall)</p>
+<h4 id="39-what-is-cost-function-src">39) What is cost function? [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>A cost (or loss) function maps the model's predictions and the true targets to a single number that says how wrong
+the model is. Training minimises it. Strictly, the <em>loss</em> is per example and the <em>cost</em> is the average over the
+dataset, often plus a regularisation term: <code>J(w) = (1/n) Σ L(y_i, f(x_i; w)) + λ·R(w)</code>.</p>
+<p>The choice encodes what &quot;wrong&quot; means:</p>
+<ul>
+<li>regression: MSE (penalises large errors), MAE (robust to outliers), Huber (a compromise between the two)</li>
+<li>classification: cross-entropy / log loss (penalises confident mistakes), hinge loss (SVMs), focal loss (imbalance)</li>
+<li>ranking and embeddings: pairwise, contrastive and triplet losses</li>
+</ul>
+<p>A good training loss should be differentiable and aligned with the business metric. Often you optimise a surrogate
+(log loss) and then choose the threshold for the real metric (precision at a fixed recall).</p>
+<h4 id="40-list-different-activation-neurons-or-functions-src">40) List different activation neurons or functions. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Activation</th>
+<th>Formula</th>
+<th>Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear / identity</td>
+<td><code>x</code></td>
+<td>(-∞, ∞)</td>
+<td>Regression output layer</td>
+</tr>
+<tr>
+<td>Step (binary threshold)</td>
+<td><code>1 if x &gt; 0 else 0</code></td>
+<td>{0, 1}</td>
+<td>Original perceptron; not differentiable</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td><code>1 / (1 + e^-x)</code></td>
+<td>(0, 1)</td>
+<td>Binary / multi-label outputs, gates; saturates</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td><code>(e^x - e^-x)/(e^x + e^-x)</code></td>
+<td>(-1, 1)</td>
+<td>Zero-centred; still saturates; RNN hidden states</td>
+</tr>
+<tr>
+<td>ReLU</td>
+<td><code>max(0, x)</code></td>
+<td>[0, ∞)</td>
+<td>Default for CNNs/MLPs; can &quot;die&quot;</td>
+</tr>
+<tr>
+<td>Leaky ReLU / PReLU</td>
+<td><code>max(αx, x)</code></td>
+<td>(-∞, ∞)</td>
+<td>Fixes dying ReLU</td>
+</tr>
+<tr>
+<td>ELU / SELU</td>
+<td>smooth negative part</td>
+<td>(-α, ∞)</td>
+<td>Self-normalising (SELU)</td>
+</tr>
+<tr>
+<td>GELU</td>
+<td><code>x·Φ(x)</code></td>
+<td>≈(-0.17, ∞)</td>
+<td>Default in BERT/GPT-style transformers</td>
+</tr>
+<tr>
+<td>SiLU / Swish</td>
+<td><code>x·sigmoid(x)</code></td>
+<td>≈(-0.28, ∞)</td>
+<td>Used in SwiGLU feed-forward layers of modern LLMs</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td><code>e^{x_i} / Σ e^{x_j}</code></td>
+<td>(0, 1), sums to 1</td>
+<td>Multi-class output layer</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="41-define-learning-rate">41) Define Learning Rate.</h4>
+<p>Learning rate is a hyper-parameter that controls how much we are adjusting the weights of our network with respect the loss gradient. [<a href="https://en.wikipedia.org/wiki/Learning_rate">src</a>]</p>
+<h4 id="42-what-is-momentum-wrt-nn-optimization">42) What is Momentum (w.r.t NN optimization)?</h4>
+<p>Momentum keeps a running (exponentially decaying) average of past gradients and steps along that average instead of
+the raw gradient:</p>
+<pre><code>v = β·v + g          # β ≈ 0.9
+w = w - lr·v
+</code></pre>
+<p>It damps oscillation across steep, narrow valleys (the gradients there alternate sign and cancel out) and accelerates
+movement along consistent directions (the gradients add up). This gives faster convergence and helps roll through
+flat regions and saddle points. Nesterov momentum evaluates the gradient at the look-ahead point <code>w - lr·β·v</code>.
+Adam combines momentum (first moment) with per-parameter scaling (second moment).
+<a href="https://www.quora.com/What-is-the-difference-between-momentum-and-learning-rate">[src]</a></p>
+<h4 id="43-what-is-the-difference-between-batch-gradient-descent-and-stochastic-gradient-descent">43) What is the difference between Batch Gradient Descent and Stochastic Gradient Descent?</h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Batch GD</th>
+<th>Stochastic GD (1 sample)</th>
+<th>Mini-batch GD (e.g. 32-4096)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gradient from</td>
+<td>Whole dataset</td>
+<td>One example</td>
+<td>A small random batch</td>
+</tr>
+<tr>
+<td>Cost per update</td>
+<td>Very high</td>
+<td>Very low</td>
+<td>Moderate; uses GPU parallelism well</td>
+</tr>
+<tr>
+<td>Gradient noise</td>
+<td>None</td>
+<td>Very high</td>
+<td>Controlled by batch size</td>
+</tr>
+<tr>
+<td>Convergence</td>
+<td>Smooth; exact for convex problems</td>
+<td>Noisy; needs a decaying learning rate</td>
+<td>Good balance</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Must process all data per step</td>
+<td>Tiny</td>
+<td>Fits in GPU memory</td>
+</tr>
+</tbody>
+</table></div>
+<p>In practice &quot;SGD&quot; almost always means mini-batch SGD. The gradient noise isn't only a cost: it helps escape saddle
+points and sharp minima and is thought to improve generalisation, although very large batches tend to need learning
+rate retuning and warmup. Batch GD is only practical for small datasets or convex problems (where L-BFGS is often
+better anyway). <a href="https://stats.stackexchange.com/questions/49528/batch-gradient-descent-versus-stochastic-gradient-descent">[src]</a></p>
+<h4 id="44-epoch-vs-batch-vs-iteration">44) Epoch vs. Batch vs. Iteration.</h4>
+<ul>
+<li><strong>Epoch</strong>: one full pass over <strong>all</strong> the training examples.</li>
+<li><strong>Batch</strong>: the group of examples processed together in one forward and backward pass (the batch size is how many).</li>
+<li><strong>Iteration</strong>: one parameter update, i.e. one batch. Iterations per epoch = ceil(number of training examples / batch size).</li>
+</ul>
+<p>Example: 10,000 samples with batch size 100 gives 100 iterations per epoch.</p>
+<h4 id="45-what-is-vanishing-gradient-src">45) What is vanishing gradient? [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>Backpropagation multiplies one local derivative per layer. If those factors are mostly smaller than 1, the gradient
+shrinks exponentially with depth, so early layers barely learn. If they are mostly larger than 1, gradients <em>explode</em>.</p>
+<p>Causes: saturating activations (sigmoid's derivative is at most 0.25, and tanh's is near 0 at the tails), poor
+weight initialisation, and long unrolled RNNs, where the same weight matrix is multiplied at every time step.</p>
+<p>Fixes:</p>
+<ul>
+<li>ReLU-family activations</li>
+<li>careful initialisation (Xavier/Glorot for tanh, He/Kaiming for ReLU)</li>
+<li>normalisation layers (BatchNorm, LayerNorm)</li>
+<li>residual connections</li>
+<li>gated recurrent units (LSTM/GRU), or attention instead of recurrence</li>
+<li>for exploding gradients: gradient clipping</li>
+</ul>
+<h4 id="46-what-are-dropouts-src">46) What are dropouts? [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>Dropout is a regulariser: during training each unit's output is set to zero with probability <code>p</code> (commonly 0.1-0.5).
+With <em>inverted</em> dropout, which PyTorch uses, the surviving activations are scaled by <code>1/(1-p)</code> so the expected value
+is unchanged. At inference dropout is switched off (<code>model.eval()</code>) and no rescaling is needed.</p>
+<p>Why it works: units can't rely on specific other units being present, which reduces co-adaptation and pushes the
+network to learn redundant, robust features. It is also roughly equivalent to training an exponential number of
+thinned sub-networks that share weights and averaging them at test time.</p>
+<p>Practical notes: it is less common in modern CNNs (BatchNorm and data augmentation do much of the regularising) and
+in large LLM pre-training (often <code>p = 0</code> when there is enough data). It is still common in fine-tuning and small MLPs.
+Monte Carlo dropout (keeping it on at inference) gives cheap uncertainty estimates.</p>
+<h4 id="47-define-lstm-src">47) Define LSTM. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>Long Short Term Memory networks are explicitly designed to address the long term dependency problem, by maintaining a state what to remember and what to forget.</p>
+<h4 id="48-list-the-key-components-of-lstm-src">48) List the key components of LSTM. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<ul>
+<li><strong>Cell state <code>c_t</code></strong>: the long-term memory, updated additively, which lets gradients flow across many steps.</li>
+<li><strong>Forget gate</strong> <code>f_t = σ(W_f·[h_{t-1}, x_t] + b_f)</code>: what to erase from the cell state.</li>
+<li><strong>Input gate</strong> <code>i_t = σ(...)</code> and <strong>candidate</strong> <code>c̃_t = tanh(...)</code>: what new information to write.</li>
+<li><strong>Cell update</strong>: <code>c_t = f_t ⊙ c_{t-1} + i_t ⊙ c̃_t</code>.</li>
+<li><strong>Output gate</strong> <code>o_t = σ(...)</code>, and <strong>hidden state</strong> <code>h_t = o_t ⊙ tanh(c_t)</code>: what to expose to the next layer and time step.</li>
+</ul>
+<p>The sigmoid gates output values in (0, 1) and act as soft switches. tanh keeps candidate values in (-1, 1).
+A GRU merges the forget and input gates into a single update gate and has no separate cell state.</p>
+<h4 id="49-list-the-variants-of-rnn-src">49) List the variants of RNN. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<ul>
+<li><strong>Vanilla (Elman) RNN</strong>: <code>h_t = tanh(W·h_{t-1} + U·x_t)</code>. It suffers from vanishing gradients.</li>
+<li><strong>LSTM</strong>: a gated cell state for long-range dependencies.</li>
+<li><strong>GRU</strong>: a simpler gated variant (update and reset gates). Often matches LSTM with fewer parameters.</li>
+<li><strong>Bidirectional RNN</strong>: runs forward and backward passes and concatenates them. It uses future context, so it can't stream.</li>
+<li><strong>Stacked / deep RNN</strong>: several recurrent layers.</li>
+<li><strong>Encoder-decoder (seq2seq)</strong>: one RNN encodes, another decodes, usually with attention.</li>
+<li>Modern relatives: linear-recurrence and state-space models (S4, Mamba, RWKV) that train in parallel like
+transformers but run with constant memory per step at inference.</li>
+</ul>
+<h4 id="50-what-is-autoencoder-name-few-applications-src">50) What is Autoencoder, name few applications. [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<p>Auto encoder is basically used to learn a compressed form of given data. Few applications include</p>
+<ul>
+<li>Data denoising</li>
+<li>Dimensionality reduction</li>
+<li>Image reconstruction</li>
+<li>Image colorization</li>
+</ul>
+<h4 id="51-what-are-the-components-of-gan-src">51) What are the components of GAN? [<a href="https://intellipaat.com/interview-question/artificial-intelligence-interview-questions/">src</a>]</h4>
+<ul>
+<li>Generator</li>
+<li>Discriminator</li>
+</ul>
+<h4 id="52-whats-the-difference-between-boosting-and-bagging">52) What's the difference between boosting and bagging?</h4>
+<p>Both combine many models, but in opposite ways:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Bagging</th>
+<th>Boosting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>Parallel, independent models on bootstrap samples</td>
+<td>Sequential; each model fixes the errors of the ensemble so far</td>
+</tr>
+<tr>
+<td>Base learner</td>
+<td>Strong, high-variance (deep trees)</td>
+<td>Weak, high-bias (shallow trees or stumps)</td>
+</tr>
+<tr>
+<td>Mainly reduces</td>
+<td>Variance</td>
+<td>Bias (and some variance)</td>
+</tr>
+<tr>
+<td>Combination</td>
+<td>Plain average or majority vote</td>
+<td>Weighted sum</td>
+</tr>
+<tr>
+<td>Overfitting risk</td>
+<td>Low; more trees don't hurt</td>
+<td>Higher; needs a learning rate, early stopping, regularisation</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Random Forest, ExtraTrees</td>
+<td>AdaBoost, Gradient Boosting, XGBoost, LightGBM, CatBoost</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="53-explain-how-a-roc-curve-works-srchttpswwwspringboardcomblogmachine-learning-interview-questions">53) Explain how a ROC curve works. <a href="https://www.springboard.com/blog/machine-learning-interview-questions/">[src]</a></h4>
+<p>Sweep the decision threshold from high to low. At each threshold compute the <strong>true positive rate</strong>
+<code>TPR = TP / (TP + FN)</code> (recall) and the <strong>false positive rate</strong> <code>FPR = FP / (FP + TN)</code>, and plot TPR against FPR.</p>
+<ul>
+<li>A random classifier lies on the diagonal (AUC = 0.5). A perfect one hugs the top-left corner (AUC = 1).</li>
+<li><strong>AUC</strong> equals the probability that a randomly chosen positive gets a higher score than a randomly chosen negative.
+It measures ranking quality and doesn't depend on any threshold.</li>
+<li>ROC-AUC doesn't depend on class balance, and that becomes a weakness when positives are rare: a tiny FPR can still
+mean many more false positives than true positives. Use the <strong>precision-recall curve / PR-AUC</strong> for imbalanced
+problems.</li>
+<li>ROC doesn't measure calibration. You still have to pick an operating threshold from the costs of FPs and FNs.</li>
+</ul>
+<h4 id="54-whats-the-difference-between-type-i-and-type-ii-error-srchttpswwwspringboardcomblogmachine-learning-interview-questions">54) What’s the difference between Type I and Type II error? <a href="https://www.springboard.com/blog/machine-learning-interview-questions/">[src]</a></h4>
+<ul>
+<li><strong>Type I error (false positive)</strong>: rejecting a true null hypothesis, i.e. claiming an effect or positive when there
+isn't one. Its probability is <code>α</code>, the significance level (commonly 0.05).</li>
+<li><strong>Type II error (false negative)</strong>: failing to reject a false null hypothesis, i.e. missing a real effect or
+positive. Its probability is <code>β</code>. <strong>Power = 1 - β</strong> (commonly targeted at 0.8).</li>
+</ul>
+<p>For a fixed sample size, lowering α raises β. The only way to reduce both is more data, or a larger effect.
+In ML terms: a spam filter blocking a real email is a Type I error, and a fraud model approving a fraudulent
+transaction is a Type II error. Which is worse depends on the business costs, and that is what sets the threshold.</p>
+<h4 id="55-whats-the-difference-between-a-generative-and-discriminative-model-srchttpswwwspringboardcomblogmachine-learning-interview-questions">55) What’s the difference between a generative and discriminative model? <a href="https://www.springboard.com/blog/machine-learning-interview-questions/">[src]</a></h4>
+<p>A <strong>discriminative</strong> model learns the decision boundary directly, <code>P(y | x)</code>. Examples: logistic regression, SVM,
+most neural classifiers. A <strong>generative</strong> model learns how the data is produced, <code>P(x | y)·P(y)</code> or <code>P(x)</code>, and
+classifies via Bayes' rule. Examples: naive Bayes, Gaussian mixture models, HMMs, and in modern use VAEs, GANs,
+diffusion models and LLMs, which can sample new data.</p>
+<p>With plenty of data, discriminative models usually give better classification accuracy. Generative models need less
+data when their assumptions hold, can handle missing features, and can generate samples.</p>
+<h4 id="56-instance-based-versus-model-based-learning">56) Instance-Based Versus Model-Based Learning.</h4>
+<ul>
+<li>
+<p><strong>Instance-based Learning</strong>: The system learns the examples by heart, then generalizes to new cases using a similarity measure.</p>
+</li>
+<li>
+<p><strong>Model-based Learning</strong>: Another way to generalize from a set of examples is to build a model of these examples, then use that model to make predictions. This is called model-based learning.
+<a href="https://medium.com/@sanidhyaagrawal08/what-is-instance-based-and-model-based-learning-s1e10-8e68364ae084">[src]</a></p>
+</li>
+</ul>
+<h4 id="57-when-to-use-a-label-encoding-vs-one-hot-encoding">57) When to use a Label Encoding vs. One Hot Encoding?</h4>
+<p>This question generally depends on your dataset and the model which you wish to apply. But still, a few points to note before choosing the right encoding technique for your model:</p>
+<p>We apply One-Hot Encoding when:</p>
+<ul>
+<li>The categorical feature is not ordinal (like the countries above)</li>
+<li>The number of categorical features is less so one-hot encoding can be effectively applied</li>
+</ul>
+<p>We apply Label Encoding when:</p>
+<ul>
+<li>The categorical feature is ordinal (like Jr. kg, Sr. kg, Primary school, high school)</li>
+<li>The number of categories is quite large as one-hot encoding can lead to high memory consumption</li>
+</ul>
+<p><a href="https://www.analyticsvidhya.com/blog/2020/03/one-hot-encoding-vs-label-encoding-using-scikit-learn/">[src]</a></p>
+<h4 id="58-what-is-the-difference-between-lda-and-pca-for-dimensionality-reduction">58) What is the difference between LDA and PCA for dimensionality reduction?</h4>
+<p>Both LDA and PCA are linear transformation techniques: LDA is supervised whereas PCA is unsupervised: PCA ignores class labels.</p>
+<p>We can picture PCA as a technique that finds the directions of maximal variance. In contrast to PCA, LDA attempts to find a feature subspace that maximizes class separability.</p>
+<p><a href="https://sebastianraschka.com/faq/docs/lda-vs-pca.html">[src]</a></p>
+<h4 id="59-what-is-t-sne">59) What is t-SNE?</h4>
+<p>t-Distributed Stochastic Neighbor Embedding (t-SNE) is an unsupervised, non-linear technique primarily used for data exploration and visualizing high-dimensional data. In simpler terms, t-SNE gives you a feel or intuition of how the data is arranged in a high-dimensional space.</p>
+<p><a href="https://towardsdatascience.com/an-introduction-to-t-sne-with-python-example-5a3a293108d1">[src]</a></p>
+<h4 id="60-what-is-the-difference-between-t-sne-and-pca-for-dimensionality-reduction">60) What is the difference between t-SNE and PCA for dimensionality reduction?</h4>
+<p>The first thing to note is that PCA was developed in 1933 while t-SNE was developed in 2008. A lot has changed in the world of data science since 1933 mainly in compute and size of data. Second, PCA is a linear dimension reduction technique that seeks to maximize variance and preserves large pairwise distances. In other words, things that are different end up far apart. This can lead to poor visualization especially when dealing with non-linear manifold structures. Think of a manifold structure as any geometric shape like: cylinder, ball, curve, etc.</p>
+<p>t-SNE differs from PCA by preserving only small pairwise distances or local similarities whereas PCA is concerned with preserving large pairwise distances to maximize variance.</p>
+<p><a href="https://towardsdatascience.com/an-introduction-to-t-sne-with-python-example-5a3a293108d1">[src]</a></p>
+<h4 id="61-what-is-umap">61) What is UMAP?</h4>
+<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. UMAP is constructed from a theoretical framework based in Riemannian geometry and algebraic topology. The result is a practical scalable algorithm that applies to real world data.</p>
+<p><a href="https://arxiv.org/abs/1802.03426#:~:text=UMAP%20">[src]</a></p>
+<h4 id="62-what-is-the-difference-between-t-sne-and-umap-for-dimensionality-reduction">62) What is the difference between t-SNE and UMAP for dimensionality reduction?</h4>
+<p>The biggest difference between the output of UMAP when compared with t-SNE is this balance between local and global structure - UMAP is often better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, because UMAP and t-SNE both necessarily warp the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.</p>
+<p><a href="https://pair-code.github.io/understanding-umap/">[src]</a></p>
+<h4 id="63-how-random-number-generator-works-eg-rand-function-in-python-works">63) How Random Number Generator Works, e.g. rand() function in python works?</h4>
+<p>Computers usually generate <strong>pseudo</strong>-random numbers: a deterministic algorithm expands a <strong>seed</strong> into a sequence
+that looks statistically random. The same seed always gives the same sequence, which is why setting seeds makes
+experiments reproducible.</p>
+<ul>
+<li><strong>Linear congruential generator</strong>: <code>x_{n+1} = (a·x_n + c) mod m</code>. Simple and fast, but has visible correlations.</li>
+<li><strong>Mersenne Twister</strong> (period <code>2^19937 - 1</code>): the engine behind Python's <code>random</code> module and NumPy's legacy <code>np.random.*</code>.</li>
+<li><strong>PCG64</strong>: the default for NumPy's modern <code>np.random.default_rng()</code>. Better statistics and small state.</li>
+<li><strong>Cryptographically secure</strong> generators (<code>secrets</code>, <code>os.urandom</code>) draw on OS entropy and are unpredictable.
+Use them for tokens and passwords, never Mersenne Twister, whose state can be recovered from its outputs.</li>
+</ul>
+<p>To get other distributions, transform uniform samples (inverse CDF, Box-Muller for normals).
+<a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">[src]</a></p>
+<h4 id="64-given-that-we-want-to-evaluate-the-performance-of-n-different-machine-learning-models-on-the-same-data-why-would-the-following-splitting-mechanism-be-incorrect-">64) Given that we want to evaluate the performance of 'n' different machine learning models on the same data, why would the following splitting mechanism be incorrect :</h4>
+<pre><code>def get_splits():
+    df = pd.DataFrame(...)
+    rnd = np.random.rand(len(df))
+    train = df[ rnd &lt; 0.8 ]
+    valid = df[ rnd &gt;= 0.8 &amp; rnd &lt; 0.9 ]
+    test = df[ rnd &gt;= 0.9 ]
+
+    return train, valid, test
+
+#Model 1
+
+from sklearn.tree import DecisionTreeClassifier
+train, valid, test = get_splits()
+...
+
+#Model 2
+
+from sklearn.linear_model import LogisticRegression
+train, valid, test = get_splits()
+...
+</code></pre>
+<p>There are two bugs here.</p>
+<p><strong>1. Operator precedence.</strong> In Python <code>&amp;</code> binds tighter than <code>&gt;=</code> and <code>&lt;</code>, so <code>rnd &gt;= 0.8 &amp; rnd &lt; 0.9</code> is parsed as <code>rnd &gt;= (0.8 &amp; rnd) &lt; 0.9</code>. That raises an error for float arrays. Each comparison needs parentheses: <code>df[(rnd &gt;= 0.8) &amp; (rnd &lt; 0.9)]</code>.</p>
+<p><strong>2. Different splits for every model.</strong> The rand() function orders the data differently each time it is run, so if we run the splitting mechanism again, the 80% of the rows we get will be different from the ones we got the first time it was run. This presents an issue as we need to compare the performance of our models on the same test set. In order to ensure reproducible and consistent sampling we would have to set the random seed in advance or store the data once it is split. Alternatively, we could simply set the 'random_state' parameter in sklearn's train_test_split() function in order to get the same train, validation and test sets across different executions.</p>
+<p><a href="https://towardsdatascience.com/why-do-we-set-a-random-state-in-machine-learning-models-bb2dc68d8431#:~:text=In%20Scikit%2Dlearn%2C%20the%20random,random%20state%20instance%20from%20np.">[src]</a></p>
+<h4 id="65-what-is-the-difference-between-bayesian-vs-frequentist-statistics-srchttpswwwkdnuggetscom202210nlp-interview-questionshtml">65) What is the difference between Bayesian vs frequentist statistics? <a href="https://www.kdnuggets.com/2022/10/nlp-interview-questions.html">[src]</a></h4>
+<p>Frequentist statistics is a framework that focuses on estimating population parameters using sample statistics, and providing point estimates and confidence intervals.</p>
+<p>Bayesian statistics, on the other hand, is a framework that uses prior knowledge and information to update beliefs about a parameter or hypothesis, and provides probability distributions for parameters.</p>
+<p>The main difference is that Bayesian statistics incorporates prior knowledge and beliefs into the analysis, while frequentist statistics doesn't.</p>
+<h2 id="contributions">Contributions</h2>
+<p>Contributions are most welcomed.</p>
+<ol>
+<li>Fork the repository.</li>
+<li>Commit your <em>questions</em> or <em>answers</em>.</li>
+<li>Open <strong>pull request</strong>.</li>
+</ol>
+<h2 id="more-study-material">More Study Material</h2>
+<ul>
+<li>Preparation resources and modern references: <a href="docs/resources-and-references.html"><code>docs/resources-and-references.md</code></a></li>
+<li>Recommended topic breakdown: <a href="docs/study-pattern.html"><code>docs/study-pattern.md</code></a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testing AI Systems: Playwright, Puppeteer &amp; Beyond | Cracking ML Interviews</title>
+<meta name="description" content="Testing AI Systems: Playwright, Puppeteer &amp; Beyond: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_testing_ai.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Testing AI Systems: Playwright, Puppeteer &amp; Beyond | Cracking ML Interviews">
+<meta property="og:description" content="Testing AI Systems: Playwright, Puppeteer &amp; Beyond: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_testing_ai.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Testing AI Systems: Playwright, Puppeteer &amp; Beyond | Cracking ML Interviews">
+<meta name="twitter:description" content="Testing AI Systems: Playwright, Puppeteer &amp; Beyond: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Testing AI Systems: Playwright, Puppeteer & Beyond",
+   "description": "Testing AI Systems: Playwright, Puppeteer & Beyond: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_testing_ai.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Testing AI Systems",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_testing_ai.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Testing AI Systems</span></nav>
+<p class="meta"><a href="../../#devops/intro_testing_ai.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="testing-ai-systems-playwright-puppeteer--beyond">Testing AI Systems: Playwright, Puppeteer &amp; Beyond</h1>
+<h2 id="testing-ai-applications-is-different">Testing AI Applications is Different</h2>
+<p>Traditional software testing: deterministic outputs, binary pass/fail.
+AI application testing: probabilistic outputs, quality scores, behavioral properties.</p>
+<pre><code>Traditional Testing:          AI System Testing:
+assert output == expected      assert quality(output) &gt;= threshold
+                               assert output_is_safe(output)
+                               assert output_is_grounded(output, context)
+                               assert latency &lt; 3000ms
+                               assert cost_per_call &lt; $0.01
+</code></pre>
+<hr />
+<h2 id="playwright-end-to-end-testing-for-ai-uis">Playwright: End-to-End Testing for AI UIs</h2>
+<p>Playwright is Microsoft's browser automation library for E2E testing of AI-powered web applications.</p>
+<h3 id="setup">Setup</h3>
+<pre><code class="language-bash">pip install playwright pytest-playwright
+playwright install chromium  # Download browser
+</code></pre>
+<h3 id="basic-ai-chatbot-ui-test">Basic AI Chatbot UI Test</h3>
+<pre><code class="language-python">import pytest
+from playwright.sync_api import Page, expect, sync_playwright
+import re
+
+@pytest.fixture(scope=&quot;session&quot;)
+def browser():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        yield browser
+        browser.close()
+
+@pytest.fixture
+def page(browser):
+    page = browser.new_page()
+    yield page
+    page.close()
+
+class TestMLChatbotUI:
+
+    def test_basic_question_gets_response(self, page: Page):
+        &quot;&quot;&quot;Test that the chatbot responds to a basic ML question&quot;&quot;&quot;
+        page.goto(&quot;http://localhost:3000&quot;)
+
+        # Type question
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;What is overfitting?&quot;)
+        page.click('[data-testid=&quot;send-button&quot;]')
+
+        # Wait for response (AI can take up to 30s)
+        response_element = page.wait_for_selector(
+            '[data-testid=&quot;assistant-message&quot;]',
+            timeout=30000
+        )
+
+        response_text = response_element.inner_text()
+
+        # Validate response quality (not empty, relevant)
+        assert len(response_text) &gt; 50, &quot;Response too short&quot;
+        assert any(word in response_text.lower() for word in
+                  [&quot;training&quot;, &quot;generalization&quot;, &quot;validation&quot;, &quot;data&quot;]), \
+            &quot;Response doesn't mention relevant ML concepts&quot;
+
+    def test_streaming_response_appears_incrementally(self, page: Page):
+        &quot;&quot;&quot;Test that streaming tokens appear progressively, not all at once&quot;&quot;&quot;
+        page.goto(&quot;http://localhost:3000&quot;)
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;Explain transformers&quot;)
+        page.click('[data-testid=&quot;send-button&quot;]')
+
+        # Capture text at different time intervals
+        texts = []
+        for _ in range(5):
+            page.wait_for_timeout(500)
+            el = page.query_selector('[data-testid=&quot;assistant-message&quot;]')
+            if el:
+                texts.append(el.inner_text())
+
+        # Text should grow over time (streaming)
+        non_empty = [t for t in texts if t]
+        assert len(non_empty) &gt;= 2, &quot;No incremental content detected&quot;
+        assert len(non_empty[-1]) &gt; len(non_empty[0]), &quot;Text didn't grow (streaming broken?)&quot;
+
+    def test_error_handling_displayed_to_user(self, page: Page):
+        &quot;&quot;&quot;Test that LLM errors are shown gracefully&quot;&quot;&quot;
+        # Intercept API calls and return error
+        page.route(&quot;**/api/chat&quot;, lambda route: route.fulfill(
+            status=502, body='{&quot;error&quot;: &quot;LLM service unavailable&quot;}'
+        ))
+
+        page.goto(&quot;http://localhost:3000&quot;)
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;Test question&quot;)
+        page.click('[data-testid=&quot;send-button&quot;]')
+
+        # Verify error is shown gracefully (not raw exception)
+        error_element = page.wait_for_selector('[data-testid=&quot;error-message&quot;]', timeout=5000)
+        assert &quot;try again&quot; in error_element.inner_text().lower()
+
+    def test_chat_history_persists(self, page: Page):
+        &quot;&quot;&quot;Test that conversation history is maintained&quot;&quot;&quot;
+        page.goto(&quot;http://localhost:3000&quot;)
+
+        # First message
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;My name is Alice&quot;)
+        page.click('[data-testid=&quot;send-button&quot;]')
+        page.wait_for_selector('[data-testid=&quot;assistant-message&quot;]', timeout=20000)
+
+        # Second message: should remember context
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;What is my name?&quot;)
+        page.click('[data-testid=&quot;send-button&quot;]')
+        page.wait_for_selector(
+            '[data-testid=&quot;assistant-message&quot;]:nth-child(2)', timeout=20000
+        )
+
+        messages = page.query_selector_all('[data-testid=&quot;assistant-message&quot;]')
+        last_response = messages[-1].inner_text()
+        assert &quot;alice&quot; in last_response.lower(), &quot;Chatbot forgot user's name&quot;
+
+    def test_response_latency_within_sla(self, page: Page):
+        &quot;&quot;&quot;Test that responses arrive within SLA&quot;&quot;&quot;
+        import time
+        page.goto(&quot;http://localhost:3000&quot;)
+        page.fill('[data-testid=&quot;chat-input&quot;]', &quot;What is 2+2?&quot;)
+
+        start = time.time()
+        page.click('[data-testid=&quot;send-button&quot;]')
+        page.wait_for_selector('[data-testid=&quot;assistant-message&quot;]', timeout=15000)
+        latency = time.time() - start
+
+        assert latency &lt; 10.0, f&quot;Response took {latency:.1f}s, exceeds 10s SLA&quot;
+</code></pre>
+<h3 id="async-playwright-for-parallel-tests">Async Playwright for Parallel Tests</h3>
+<pre><code class="language-python">import asyncio
+import pytest
+from playwright.async_api import async_playwright, expect
+
+@pytest.mark.asyncio
+async def test_concurrent_users():
+    &quot;&quot;&quot;Test that the system handles concurrent users&quot;&quot;&quot;
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+
+        async def simulate_user(user_id: int) -&gt; bool:
+            page = await browser.new_page()
+            await page.goto(&quot;http://localhost:3000&quot;)
+            await page.fill('[data-testid=&quot;chat-input&quot;]', f&quot;User {user_id}: What is ML?&quot;)
+            await page.click('[data-testid=&quot;send-button&quot;]')
+
+            response = await page.wait_for_selector(
+                '[data-testid=&quot;assistant-message&quot;]',
+                timeout=30000
+            )
+            text = await response.inner_text()
+            await page.close()
+            return len(text) &gt; 20
+
+        # Simulate 10 concurrent users
+        results = await asyncio.gather(*[
+            simulate_user(i) for i in range(10)
+        ])
+
+        success_rate = sum(results) / len(results)
+        assert success_rate &gt;= 0.9, f&quot;Only {success_rate:.0%} of concurrent requests succeeded&quot;
+
+        await browser.close()
+</code></pre>
+<hr />
+<h2 id="puppeteer-nodejs">Puppeteer (Node.js)</h2>
+<p>Puppeteer is Chrome's official Node.js browser automation library. Used when your test infra is JavaScript-based.</p>
+<pre><code class="language-javascript">// test/chatbot.test.js
+const puppeteer = require('puppeteer');
+
+describe('ML Chatbot E2E', () =&gt; {
+    let browser, page;
+
+    beforeAll(async () =&gt; {
+        browser = await puppeteer.launch({ headless: true });
+        page = await browser.newPage();
+    });
+
+    afterAll(async () =&gt; {
+        await browser.close();
+    });
+
+    test('responds to ML questions', async () =&gt; {
+        await page.goto('http://localhost:3000');
+        await page.type('[data-testid=&quot;chat-input&quot;]', 'Explain gradient descent');
+        await page.click('[data-testid=&quot;send-button&quot;]');
+
+        // Wait for response with timeout
+        await page.waitForSelector('[data-testid=&quot;assistant-message&quot;]', {
+            timeout: 30000
+        });
+
+        const responseText = await page.$eval(
+            '[data-testid=&quot;assistant-message&quot;]',
+            el =&gt; el.textContent
+        );
+
+        expect(responseText.length).toBeGreaterThan(50);
+        expect(responseText.toLowerCase()).toMatch(/gradient|loss|learning rate/);
+    });
+
+    test('captures network calls for debugging', async () =&gt; {
+        const requests = [];
+
+        page.on('request', req =&gt; {
+            if (req.url().includes('/api/chat')) {
+                requests.push({
+                    url: req.url(),
+                    method: req.method(),
+                    body: req.postData()
+                });
+            }
+        });
+
+        await page.type('[data-testid=&quot;chat-input&quot;]', 'What is RAG?');
+        await page.click('[data-testid=&quot;send-button&quot;]');
+        await page.waitForSelector('[data-testid=&quot;assistant-message&quot;]', { timeout: 20000 });
+
+        // Verify request was made with correct payload
+        expect(requests.length).toBe(1);
+        const body = JSON.parse(requests[0].body);
+        expect(body).toHaveProperty('question');
+    });
+});
+</code></pre>
+<hr />
+<h2 id="api-level-testing-for-llm-backends">API-Level Testing for LLM Backends</h2>
+<h3 id="pytest-with-httpx-for-fastapi">pytest with httpx for FastAPI</h3>
+<pre><code class="language-python">import pytest
+import httpx
+from fastapi.testclient import TestClient
+from unittest.mock import AsyncMock, patch
+
+from app.main import app  # Your FastAPI app
+
+client = TestClient(app)
+
+class TestChatAPI:
+
+    def test_valid_question_returns_200(self):
+        response = client.post(&quot;/chat&quot;, json={
+            &quot;question&quot;: &quot;What is machine learning?&quot;,
+            &quot;max_tokens&quot;: 256
+        })
+        assert response.status_code == 200
+        data = response.json()
+        assert &quot;answer&quot; in data
+        assert len(data[&quot;answer&quot;]) &gt; 0
+        assert &quot;latency_ms&quot; in data
+
+    def test_empty_question_returns_422(self):
+        response = client.post(&quot;/chat&quot;, json={&quot;question&quot;: &quot;&quot;})
+        assert response.status_code == 422  # Pydantic validation error
+
+    def test_question_too_long_returns_422(self):
+        response = client.post(&quot;/chat&quot;, json={&quot;question&quot;: &quot;x&quot; * 5000})
+        assert response.status_code == 422
+
+    @patch(&quot;app.main.call_anthropic&quot;)
+    def test_llm_failure_returns_502(self, mock_llm):
+        mock_llm.side_effect = Exception(&quot;API Error&quot;)
+        response = client.post(&quot;/chat&quot;, json={&quot;question&quot;: &quot;test&quot;})
+        assert response.status_code == 502
+
+    def test_rate_limit_enforced(self):
+        &quot;&quot;&quot;Test that rate limiting kicks in&quot;&quot;&quot;
+        responses = []
+        for _ in range(15):  # Exceed 10 req/sec limit
+            r = client.post(&quot;/chat&quot;, json={&quot;question&quot;: &quot;test&quot;})
+            responses.append(r.status_code)
+
+        assert 429 in responses, &quot;Rate limiting not enforced&quot;
+
+    def test_streaming_endpoint_returns_sse(self):
+        with client.stream(&quot;POST&quot;, &quot;/chat/stream&quot;, json={&quot;question&quot;: &quot;Explain AI&quot;}):
+            # Check response headers
+            pass  # Streaming test is complex: use async client
+</code></pre>
+<h3 id="mock-llm-for-fast-tests">Mock LLM for Fast Tests</h3>
+<pre><code class="language-python">from unittest.mock import AsyncMock, MagicMock
+import pytest
+
+@pytest.fixture
+def mock_anthropic_response():
+    mock = MagicMock()
+    mock.content = [MagicMock(text=&quot;This is a mock LLM response about machine learning.&quot;)]
+    mock.usage.input_tokens = 50
+    mock.usage.output_tokens = 100
+    mock.model = &quot;claude-sonnet-4-6&quot;
+    return mock
+
+@pytest.fixture
+def mock_anthropic_client(mock_anthropic_response):
+    client = AsyncMock()
+    client.messages.create.return_value = mock_anthropic_response
+    return client
+
+@pytest.fixture
+def test_app(mock_anthropic_client):
+    app.state.anthropic_client = mock_anthropic_client
+    return TestClient(app)
+
+def test_chat_with_mock_llm(test_app, mock_anthropic_client):
+    &quot;&quot;&quot;Fast test that doesn't call real LLM&quot;&quot;&quot;
+    response = test_app.post(&quot;/chat&quot;, json={&quot;question&quot;: &quot;What is ML?&quot;})
+    assert response.status_code == 200
+    assert &quot;mock LLM response&quot; in response.json()[&quot;answer&quot;]
+
+    # Verify LLM was called with correct params
+    mock_anthropic_client.messages.create.assert_called_once()
+    call_kwargs = mock_anthropic_client.messages.create.call_args.kwargs
+    assert call_kwargs[&quot;max_tokens&quot;] == 1024  # Default
+</code></pre>
+<hr />
+<h2 id="tracing-and-debugging-ai-applications">Tracing and Debugging AI Applications</h2>
+<h3 id="opentelemetry-tracing">OpenTelemetry Tracing</h3>
+<pre><code class="language-python">from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+
+# Setup (once at app startup)
+provider = TracerProvider()
+exporter = OTLPSpanExporter(endpoint=&quot;http://jaeger:4318/v1/traces&quot;)
+provider.add_span_processor(BatchSpanProcessor(exporter))
+trace.set_tracer_provider(provider)
+
+tracer = trace.get_tracer(&quot;ml-app&quot;)
+
+@app.post(&quot;/chat&quot;)
+async def chat(request: ChatRequest):
+    with tracer.start_as_current_span(&quot;chat_request&quot;) as span:
+        span.set_attribute(&quot;question.length&quot;, len(request.question))
+        span.set_attribute(&quot;model&quot;, request.model)
+
+        with tracer.start_as_current_span(&quot;vector_retrieval&quot;):
+            docs = retrieve_context(request.question)
+            span.set_attribute(&quot;docs.count&quot;, len(docs))
+
+        with tracer.start_as_current_span(&quot;llm_generation&quot;):
+            answer = await generate_answer(request.question, docs)
+            span.set_attribute(&quot;answer.tokens&quot;, len(answer.split()))
+
+        return {&quot;answer&quot;: answer}
+</code></pre>
+<hr />
+<h2 id="cicd-integration">CI/CD Integration</h2>
+<pre><code class="language-yaml"># .github/workflows/ai-tests.yml
+name: AI Application Tests
+
+on: [push, pull_request]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run unit tests (mocked LLM)
+        env:
+          ANTHROPIC_API_KEY: &quot;test-key&quot;
+        run: pytest tests/unit/ -v --mock-llm
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v5
+      - name: Start app
+        run: docker compose up -d --wait
+      - name: Install Playwright
+        run: pip install playwright pytest-playwright &amp;&amp; playwright install --with-deps chromium
+      - name: Run E2E tests
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: pytest tests/e2e/ -v --timeout=60
+      - name: Run eval suite
+        run: python scripts/run_eval.py --threshold 0.85
+</code></pre>
+<hr />
+<h2 id="playwright-vs-puppeteer">Playwright vs Puppeteer</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Playwright (Python/JS)</th>
+<th>Puppeteer (JS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Language</strong></td>
+<td>Python, JS, Java, C#</td>
+<td>JavaScript only</td>
+</tr>
+<tr>
+<td><strong>Browsers</strong></td>
+<td>Chromium, Firefox, WebKit (Safari's engine)</td>
+<td>Chrome/Chromium and Firefox</td>
+</tr>
+<tr>
+<td><strong>Auto-wait</strong></td>
+<td>Built-in smart waits (locators)</td>
+<td>Locator API auto-waits; older <code>waitForSelector</code> style is manual</td>
+</tr>
+<tr>
+<td><strong>Network intercept</strong></td>
+<td>Full request/response mock</td>
+<td>Request interception, can respond with mocks</td>
+</tr>
+<tr>
+<td><strong>Parallel tests</strong></td>
+<td>Built-in in Playwright Test (JS); <code>pytest-xdist</code> for Python</td>
+<td>External tooling (test runner)</td>
+</tr>
+<tr>
+<td><strong>Screenshots/video</strong></td>
+<td>Built-in</td>
+<td>Built-in</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Cross-browser AI UI testing</td>
+<td>Chrome-focused JS automation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: How do you test an LLM chatbot UI end-to-end?</strong></p>
+<blockquote>
+<p>Use Playwright or Puppeteer to automate browser interactions. Key tests: (1) basic response received, (2) streaming works incrementally, (3) errors shown gracefully, (4) conversation history maintained, (5) latency within SLA. For AI-specific: assert that responses contain relevant domain terms, not just that they're non-empty.</p>
+</blockquote>
+<p><strong>Q: How do you write fast unit tests for LLM applications?</strong></p>
+<blockquote>
+<p>Mock the LLM client. Use <code>unittest.mock.AsyncMock</code> to return fixed responses without calling the real API. This makes tests 100x faster, free, and deterministic. Only call real LLMs in integration/eval tests that run less frequently.</p>
+</blockquote>
+<p><strong>Q: What's the biggest challenge in E2E testing for AI apps?</strong></p>
+<blockquote>
+<p>Non-determinism: the same test can pass one run and fail the next. Solutions: (1) test behavioral properties (&quot;mentions relevant terms&quot;) not exact strings, (2) reduce variance where the API allows it (low temperature on models that accept sampling parameters; many current models, including recent Claude models, reject <code>temperature</code> and no provider guarantees bit-identical outputs), pin model snapshots, and cache recorded responses, (3) set adequate timeouts (AI is slow), (4) mock LLM for most tests, only use real LLM for integration tests.</p>
+</blockquote>
+<p><strong>Q: How do you test streaming responses?</strong></p>
+<blockquote>
+<p>Capture response text at intervals (e.g., every 500ms). Assert that the text grows over time. Check that the first token arrives within acceptable time (e.g., &lt; 2s). Verify the final response is complete. Use network interception to validate SSE format.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_observability.html"><small>Previous</small>Observability</a><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_testing_ai.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

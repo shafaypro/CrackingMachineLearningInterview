@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic AI Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Anthropic is an AI safety company and the creator of Claude: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_anthropic.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Anthropic AI Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Anthropic is an AI safety company and the creator of Claude: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_anthropic.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Anthropic AI Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Anthropic is an AI safety company and the creator of Claude: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Anthropic AI",
+   "description": "Anthropic is an AI safety company and the creator of Claude: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_anthropic.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Anthropic & Claude",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_anthropic.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Anthropic &amp; Claude</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_anthropic.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="anthropic-ai">Anthropic AI</h1>
+<p>Anthropic is an AI safety company and the creator of <strong>Claude</strong>: a family of large language models (LLMs) designed to be safe, helpful, and honest. This guide covers Claude's capabilities, the Anthropic API, key AI concepts, and how to build with Claude in 2026.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#anthropic--claude-overview">Anthropic &amp; Claude Overview</a></li>
+<li><a href="#claude-model-family">Claude Model Family</a></li>
+<li><a href="#core-aillm-concepts">Core AI/LLM Concepts</a></li>
+<li><a href="#anthropic-api-basics">Anthropic API Basics</a></li>
+<li><a href="#messages-api">Messages API</a></li>
+<li><a href="#tool-use-function-calling">Tool Use (Function Calling)</a></li>
+<li><a href="#vision--multimodal">Vision &amp; Multimodal</a></li>
+<li><a href="#streaming">Streaming</a></li>
+<li><a href="#prompt-engineering">Prompt Engineering</a></li>
+<li><a href="#claudes-constitution--safety">Claude's Constitution &amp; Safety</a></li>
+<li><a href="#model-context-protocol-mcp">Model Context Protocol (MCP)</a></li>
+<li><a href="#claude-in-production">Claude in Production</a></li>
+<li><a href="#2026-whats-new">2026: What's New</a></li>
+</ol>
+<hr />
+<h2 id="anthropic--claude-overview">Anthropic &amp; Claude Overview</h2>
+<p><strong>Anthropic</strong> was founded in 2021 by former OpenAI researchers (Dario Amodei, Daniela Amodei, and others) with a focus on <strong>AI safety research</strong>.</p>
+<h3 id="anthropics-core-philosophy">Anthropic's Core Philosophy</h3>
+<ul>
+<li><strong>Constitutional AI (CAI)</strong>: Training models to be helpful, harmless, and honest using a set of principles rather than just RLHF</li>
+<li><strong>Interpretability Research</strong>: Understanding what's happening inside neural networks</li>
+<li><strong>Responsible Scaling Policy (RSP)</strong>: Commitments to assess and mitigate risks as models scale</li>
+</ul>
+<h3 id="why-claude">Why Claude?</h3>
+<p>Claude is designed to be:</p>
+<ul>
+<li><strong>Helpful</strong>: Useful for complex tasks</li>
+<li><strong>Harmless</strong>: Avoids causing harm through careful training</li>
+<li><strong>Honest</strong>: Acknowledges uncertainty, won't deceive</li>
+</ul>
+<hr />
+<h2 id="claude-model-family">Claude Model Family</h2>
+<p>As of late 2026 (model lineups change several times a year, so check Anthropic's models page or the Models API, <code>client.models.list()</code>, before quoting IDs):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>ID</th>
+<th>Best For</th>
+<th>Context Window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Fable 5.1</strong></td>
+<td><code>claude-fable-5-1</code></td>
+<td>Most capable tier: hardest reasoning, long-horizon agentic work</td>
+<td>1M tokens</td>
+</tr>
+<tr>
+<td><strong>Claude Opus 5.5</strong></td>
+<td><code>claude-opus-5-5</code></td>
+<td>Complex reasoning, agentic coding, deep analysis</td>
+<td>1M tokens</td>
+</tr>
+<tr>
+<td><strong>Claude Sonnet 5</strong></td>
+<td><code>claude-sonnet-5</code></td>
+<td>Balanced: performance + speed</td>
+<td>1M tokens</td>
+</tr>
+<tr>
+<td><strong>Claude Haiku 4.5</strong></td>
+<td><code>claude-haiku-4-5-20251001</code> (alias <code>claude-haiku-4-5</code>)</td>
+<td>Fast, lightweight tasks</td>
+<td>200K tokens</td>
+</tr>
+</tbody>
+</table></div>
+<p>Older models (for example the Claude 4.6 and 4.8 releases) stay available for a while after a new generation ships, but new code should start from the current tier.</p>
+<h3 id="choosing-a-model">Choosing a Model</h3>
+<pre><code>Hardest, longest-running problems?            → Fable
+Need maximum intelligence for complex tasks?  → Opus
+Balanced production workloads?                → Sonnet (most popular)
+High-volume, latency-sensitive tasks?         → Haiku
+</code></pre>
+<h3 id="token-pricing-concepts">Token Pricing Concepts</h3>
+<ul>
+<li><strong>Input tokens</strong>: Text you send to the model</li>
+<li><strong>Output tokens</strong>: Text the model generates</li>
+<li><strong>Context caching</strong>: Reuse large prompts (up to 90% input cost reduction)</li>
+</ul>
+<hr />
+<h2 id="core-aillm-concepts">Core AI/LLM Concepts</h2>
+<h3 id="how-llms-work">How LLMs Work</h3>
+<pre><code>Training Data → Pre-training (predict next token) → Base Model
+                                                         ↓
+                                              RLHF / Constitutional AI
+                                                         ↓
+                                              Aligned Assistant Model
+</code></pre>
+<h3 id="key-terminology">Key Terminology</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Token</strong></td>
+<td>Smallest unit of text (roughly 4 characters, or about 0.75 English words, per token on average). Models process tokens, not words.</td>
+</tr>
+<tr>
+<td><strong>Context Window</strong></td>
+<td>Max tokens a model can process at once (input + output combined)</td>
+</tr>
+<tr>
+<td><strong>Temperature</strong></td>
+<td>Controls sampling randomness (0 = near-deterministic, higher = more varied). The Claude API accepts 0 to 1.</td>
+</tr>
+<tr>
+<td><strong>Top-p (nucleus sampling)</strong></td>
+<td>Probability mass for token selection (0.9 = consider top 90% likely tokens)</td>
+</tr>
+<tr>
+<td><strong>System prompt</strong></td>
+<td>Instructions that shape the model's behavior for the conversation</td>
+</tr>
+<tr>
+<td><strong>Few-shot prompting</strong></td>
+<td>Providing examples in the prompt to guide output format/style</td>
+</tr>
+<tr>
+<td><strong>Chain-of-thought (CoT)</strong></td>
+<td>Asking the model to reason step-by-step before answering</td>
+</tr>
+<tr>
+<td><strong>Hallucination</strong></td>
+<td>Model generating confident but incorrect information</td>
+</tr>
+<tr>
+<td><strong>Grounding</strong></td>
+<td>Anchoring model output to retrieved facts/documents (RAG)</td>
+</tr>
+<tr>
+<td><strong>Fine-tuning</strong></td>
+<td>Further training a model on domain-specific data</td>
+</tr>
+<tr>
+<td><strong>RLHF</strong></td>
+<td>Reinforcement Learning from Human Feedback: trains models on human preferences</td>
+</tr>
+<tr>
+<td><strong>Constitutional AI</strong></td>
+<td>Anthropic's method: model critiques and revises itself against a set of principles</td>
+</tr>
+<tr>
+<td><strong>Embedding</strong></td>
+<td>Dense vector representation of text for similarity search</td>
+</tr>
+<tr>
+<td><strong>Tokenizer</strong></td>
+<td>Converts raw text to tokens (and back)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="context-windows-in-detail">Context Windows in Detail</h3>
+<pre><code>200,000 tokens ≈ 150,000 words ≈ ~500 pages of text   (Haiku 4.5)
+1,000,000 tokens ≈ 750,000 words                      (current Sonnet, Opus, Fable)
+
+What fits in Claude's context window:
+- A full codebase (small/medium projects)
+- Entire books or research papers
+- Hours of transcript
+- Hundreds of documents
+</code></pre>
+<hr />
+<h2 id="anthropic-api-basics">Anthropic API Basics</h2>
+<h3 id="setup">Setup</h3>
+<pre><code class="language-bash">pip install anthropic
+</code></pre>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic(
+    api_key=&quot;sk-ant-...&quot;  # or set ANTHROPIC_API_KEY env var
+)
+</code></pre>
+<h3 id="environment-setup">Environment Setup</h3>
+<pre><code class="language-bash">export ANTHROPIC_API_KEY=sk-ant-api03-...
+</code></pre>
+<h3 id="basic-message">Basic Message</h3>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+message = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain quantum entanglement in simple terms.&quot;}
+    ]
+)
+
+print(next(b.text for b in message.content if b.type == &quot;text&quot;))
+</code></pre>
+<hr />
+<h2 id="messages-api">Messages API</h2>
+<p>The Messages API is the primary way to interact with Claude.</p>
+<h3 id="request-structure">Request Structure</h3>
+<pre><code class="language-python">response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,     # required
+    max_tokens=4096,              # required: max output tokens
+    system=&quot;You are a helpful data engineer...&quot;,  # optional system prompt
+    messages=[                    # required: conversation history
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello&quot;},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Hi! How can I help?&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write me a SQL query...&quot;},
+    ],
+    stop_sequences=[&quot;###&quot;],       # optional: stop generation on these
+    # temperature / top_p / top_k: accepted by older models (Sonnet 4.6, Haiku 4.5),
+    # but rejected with a 400 by the newest ones (Sonnet 5, Opus 4.7+, Fable).
+    # On those, steer with the prompt and output_config={&quot;effort&quot;: ...} instead.
+)
+</code></pre>
+<h3 id="response-structure">Response Structure</h3>
+<pre><code class="language-python">response.id               # message ID
+response.model            # model used
+response.role             # &quot;assistant&quot;
+response.stop_reason      # &quot;end_turn&quot; | &quot;max_tokens&quot; | &quot;stop_sequence&quot; | &quot;tool_use&quot; | &quot;pause_turn&quot; | &quot;refusal&quot;
+response.content          # list of content blocks (text, thinking, tool_use, ...)
+response.usage.input_tokens
+response.usage.output_tokens
+
+# Get text: check block types rather than assuming content[0] is text, because
+# current models can return a thinking block first
+text = next(b.text for b in response.content if b.type == &quot;text&quot;)
+</code></pre>
+<h3 id="multi-turn-conversation">Multi-turn Conversation</h3>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+def chat(messages: list, system: str = &quot;&quot;) -&gt; str:
+    response = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=2048,
+        system=system,
+        messages=messages,
+    )
+    return next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+# Build conversation
+conversation = []
+system = &quot;You are a senior data engineer. Be concise and practical.&quot;
+
+# Turn 1
+conversation.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is dbt?&quot;})
+reply = chat(conversation, system)
+conversation.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: reply})
+print(&quot;Assistant:&quot;, reply)
+
+# Turn 2
+conversation.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;How does it differ from Spark?&quot;})
+reply = chat(conversation, system)
+conversation.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: reply})
+print(&quot;Assistant:&quot;, reply)
+</code></pre>
+<hr />
+<h2 id="tool-use-function-calling">Tool Use (Function Calling)</h2>
+<p>Tool use lets Claude call external functions/APIs to get real-time data or perform actions.</p>
+<h3 id="define-tools">Define Tools</h3>
+<pre><code class="language-python">import anthropic
+import json
+
+client = anthropic.Anthropic()
+
+# Define tools (like OpenAPI schemas)
+tools = [
+    {
+        &quot;name&quot;: &quot;get_weather&quot;,
+        &quot;description&quot;: &quot;Get current weather for a location&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;location&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;description&quot;: &quot;City and country, e.g. 'London, UK'&quot;
+                },
+                &quot;unit&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;enum&quot;: [&quot;celsius&quot;, &quot;fahrenheit&quot;],
+                    &quot;description&quot;: &quot;Temperature unit&quot;
+                }
+            },
+            &quot;required&quot;: [&quot;location&quot;]
+        }
+    },
+    {
+        &quot;name&quot;: &quot;run_sql_query&quot;,
+        &quot;description&quot;: &quot;Execute a SQL query against the data warehouse and return results&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;query&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;description&quot;: &quot;The SQL query to execute&quot;
+                }
+            },
+            &quot;required&quot;: [&quot;query&quot;]
+        }
+    }
+]
+
+# Implement actual tool functions
+def get_weather(location: str, unit: str = &quot;celsius&quot;) -&gt; dict:
+    # In real life: call weather API
+    return {&quot;temperature&quot;: 22, &quot;condition&quot;: &quot;sunny&quot;, &quot;unit&quot;: unit}
+
+def run_sql_query(query: str) -&gt; list:
+    # In real life: query your DWH
+    return [{&quot;user_id&quot;: 1, &quot;revenue&quot;: 100}]
+
+# Tool dispatcher
+def execute_tool(name: str, inputs: dict):
+    if name == &quot;get_weather&quot;:
+        return get_weather(**inputs)
+    elif name == &quot;run_sql_query&quot;:
+        return run_sql_query(**inputs)
+    raise ValueError(f&quot;Unknown tool: {name}&quot;)
+</code></pre>
+<h3 id="agentic-loop">Agentic Loop</h3>
+<pre><code class="language-python">def run_agent(user_message: str):
+    messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_message}]
+
+    while True:
+        response = client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=4096,
+            tools=tools,
+            messages=messages,
+        )
+
+        # Add Claude's response to messages
+        messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content})
+
+        # Check if Claude wants to use a tool
+        if response.stop_reason == &quot;tool_use&quot;:
+            # Process all tool calls
+            tool_results = []
+            for block in response.content:
+                if block.type == &quot;tool_use&quot;:
+                    print(f&quot;Calling tool: {block.name}({block.input})&quot;)
+                    result = execute_tool(block.name, block.input)
+                    tool_results.append({
+                        &quot;type&quot;: &quot;tool_result&quot;,
+                        &quot;tool_use_id&quot;: block.id,
+                        &quot;content&quot;: json.dumps(result)
+                    })
+
+            # Add tool results and continue
+            messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: tool_results})
+
+        else:
+            # Claude is done: extract final text
+            for block in response.content:
+                if hasattr(block, &quot;text&quot;):
+                    return block.text
+
+result = run_agent(&quot;What's the total revenue this week?&quot;)
+print(result)
+</code></pre>
+<hr />
+<h2 id="vision--multimodal">Vision &amp; Multimodal</h2>
+<p>Claude can analyze images, charts, screenshots, and documents.</p>
+<pre><code class="language-python">import anthropic
+import base64
+from pathlib import Path
+
+client = anthropic.Anthropic()
+
+# Method 1: URL (for publicly accessible images)
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
+            {
+                &quot;type&quot;: &quot;image&quot;,
+                &quot;source&quot;: {
+                    &quot;type&quot;: &quot;url&quot;,
+                    &quot;url&quot;: &quot;https://example.com/chart.png&quot;
+                }
+            },
+            {
+                &quot;type&quot;: &quot;text&quot;,
+                &quot;text&quot;: &quot;Describe the trends in this chart.&quot;
+            }
+        ]
+    }]
+)
+
+# Method 2: Base64 encoded image
+image_data = base64.standard_b64encode(
+    Path(&quot;./chart.png&quot;).read_bytes()
+).decode(&quot;utf-8&quot;)
+
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
+            {
+                &quot;type&quot;: &quot;image&quot;,
+                &quot;source&quot;: {
+                    &quot;type&quot;: &quot;base64&quot;,
+                    &quot;media_type&quot;: &quot;image/png&quot;,
+                    &quot;data&quot;: image_data
+                }
+            },
+            {
+                &quot;type&quot;: &quot;text&quot;,
+                &quot;text&quot;: &quot;What SQL query would produce this data visualization?&quot;
+            }
+        ]
+    }]
+)
+print(next(b.text for b in response.content if b.type == &quot;text&quot;))
+</code></pre>
+<hr />
+<h2 id="streaming">Streaming</h2>
+<p>Stream responses token-by-token for better perceived performance.</p>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+# Streaming with context manager
+with client.messages.stream(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write a 500-word essay on AI safety.&quot;}]
+) as stream:
+    for text in stream.text_stream:
+        print(text, end=&quot;&quot;, flush=True)
+    # Get final message with usage stats (call it inside the `with` block)
+    final_message = stream.get_final_message()
+
+print()  # newline
+print(f&quot;\nInput tokens: {final_message.usage.input_tokens}&quot;)
+print(f&quot;Output tokens: {final_message.usage.output_tokens}&quot;)
+</code></pre>
+<hr />
+<h2 id="prompt-engineering">Prompt Engineering</h2>
+<h3 id="system-prompts">System Prompts</h3>
+<pre><code class="language-python">system = &quot;&quot;&quot;You are an expert data engineer with 10 years of experience.
+
+Guidelines:
+- Be concise and practical
+- Show code examples when relevant
+- Point out performance implications
+- Consider production readiness
+
+When writing SQL: use CTEs, proper indentation, and add comments for complex logic.&quot;&quot;&quot;
+</code></pre>
+<h3 id="effective-prompt-patterns">Effective Prompt Patterns</h3>
+<pre><code class="language-python"># 1. Role + Task + Format
+prompt = &quot;&quot;&quot;You are a senior Python developer.
+
+Task: Review the following Python function and suggest improvements.
+
+Focus on:
+- Performance
+- Readability
+- Error handling
+- Type hints
+
+Function:
+```python
+{code}
+```
+
+Provide your review in this format:
+## Issues Found
+## Suggested Improvements
+## Revised Code&quot;&quot;&quot;
+
+# 2. Chain-of-Thought
+prompt = &quot;&quot;&quot;Solve this step by step:
+
+A data pipeline processes 10M rows/day. Query time is 45 seconds.
+Target: &lt; 5 seconds.
+
+Think through each possible optimization before recommending.&quot;&quot;&quot;
+
+# 3. Few-shot example
+prompt = &quot;&quot;&quot;Convert natural language to SQL.
+
+Examples:
+Input: &quot;Show me top 5 customers by revenue last month&quot;
+SQL: SELECT customer_id, SUM(amount) as revenue
+     FROM orders
+     WHERE date &gt;= date_trunc('month', current_date - interval '1 month')
+     GROUP BY customer_id ORDER BY revenue DESC LIMIT 5;
+
+Input: &quot;How many new users signed up this week?&quot;
+SQL: SELECT COUNT(*) FROM users WHERE created_at &gt;= current_date - 7;
+
+Input: {user_query}
+SQL:&quot;&quot;&quot;
+
+# 4. XML tags for structure (Claude responds well to these)
+prompt = &quot;&quot;&quot;&lt;task&gt;
+Analyze the following data pipeline and identify bottlenecks.
+&lt;/task&gt;
+
+&lt;pipeline_code&gt;
+{code}
+&lt;/pipeline_code&gt;
+
+&lt;requirements&gt;
+- Focus on I/O bottlenecks
+- Identify parallelization opportunities
+- Suggest specific optimizations
+&lt;/requirements&gt;&quot;&quot;&quot;
+</code></pre>
+<h3 id="temperature-guide">Temperature Guide</h3>
+<p>This applies to models that still accept sampling parameters (for example Sonnet 4.6 and Haiku 4.5). The newest Claude models (Sonnet 5, Opus 4.7 and later, Fable) reject non-default <code>temperature</code>/<code>top_p</code>/<code>top_k</code>; control them with clear instructions, examples, and the <code>effort</code> setting instead.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Temperature</th>
+<th>Use Case</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0.0</code></td>
+<td>Deterministic, factual</td>
+<td>SQL generation, code, math</td>
+</tr>
+<tr>
+<td><code>0.3</code></td>
+<td>Mostly consistent, slight variation</td>
+<td>Summaries, analysis</td>
+</tr>
+<tr>
+<td><code>0.7</code></td>
+<td>Balanced creativity</td>
+<td>Writing, brainstorming</td>
+</tr>
+<tr>
+<td><code>1.0</code></td>
+<td>Creative, varied</td>
+<td>Creative writing, diverse ideas</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="claudes-constitution--safety">Claude's Constitution &amp; Safety</h2>
+<h3 id="constitutional-ai-cai">Constitutional AI (CAI)</h3>
+<p>Anthropic trains Claude using a set of principles (a &quot;constitution&quot;) rather than relying purely on human ratings:</p>
+<ol>
+<li><strong>Self-critique</strong>: Claude generates responses, then critiques them against principles</li>
+<li><strong>Revision</strong>: Claude revises problematic responses</li>
+<li><strong>RL from AI Feedback (RLAIF)</strong>: AI-generated preferences used for reinforcement learning</li>
+</ol>
+<h3 id="claudes-values">Claude's Values</h3>
+<p>Claude is designed to:</p>
+<ul>
+<li>Be <strong>genuinely helpful</strong>, not watered-down or overly cautious</li>
+<li>Avoid <strong>deception</strong>: won't create false impressions</li>
+<li>Avoid <strong>harm</strong>: won't assist with clearly harmful actions</li>
+<li>Be <strong>transparent</strong> about limitations and uncertainty</li>
+<li>Have <strong>good character</strong>, not just follow rules, but actually care</li>
+</ul>
+<h3 id="responsible-scaling-policy-rsp">Responsible Scaling Policy (RSP)</h3>
+<p>Anthropic commits to:</p>
+<ul>
+<li>Evaluating each new model for dangerous capabilities before deployment</li>
+<li>Implementing safety measures before crossing defined capability thresholds</li>
+<li>Publishing transparency reports</li>
+</ul>
+<hr />
+<h2 id="model-context-protocol-mcp">Model Context Protocol (MCP)</h2>
+<p><strong>MCP</strong> is Anthropic's open standard for connecting LLMs to tools and data sources. See <a href="intro_mcp.html">intro_mcp.md</a> for the full guide.</p>
+<p>Quick summary:</p>
+<pre><code>Claude (LLM client) ←→ MCP Protocol ←→ MCP Server (tools, data, APIs)
+</code></pre>
+<pre><code class="language-bash"># Example: Claude Code uses MCP to connect to GitHub, databases, etc.
+claude mcp add github-server npx @modelcontextprotocol/server-github
+</code></pre>
+<hr />
+<h2 id="claude-in-production">Claude in Production</h2>
+<h3 id="rate-limits--batching">Rate Limits &amp; Batching</h3>
+<pre><code class="language-python">from anthropic import Anthropic, RateLimitError
+import time
+
+client = Anthropic()
+
+def with_retry(fn, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except RateLimitError:
+            wait = 2 ** attempt
+            print(f&quot;Rate limited. Waiting {wait}s...&quot;)
+            time.sleep(wait)
+    raise Exception(&quot;Max retries exceeded&quot;)
+</code></pre>
+<h3 id="context-caching-cost-optimization">Context Caching (cost optimization)</h3>
+<pre><code class="language-python"># Cache a large system prompt/document: up to 90% cost reduction
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    system=[
+        {
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;text&quot;: very_long_document,   # 50K+ tokens
+            &quot;cache_control&quot;: {&quot;type&quot;: &quot;ephemeral&quot;}  # cache this
+        }
+    ],
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize chapter 3.&quot;}]
+)
+</code></pre>
+<h3 id="batch-api-for-high-volume-async-workloads">Batch API (for high-volume, async workloads)</h3>
+<pre><code class="language-python"># Process thousands of requests at 50% cost
+batch = client.messages.batches.create(
+    requests=[
+        {
+            &quot;custom_id&quot;: f&quot;req-{i}&quot;,
+            &quot;params&quot;: {
+                &quot;model&quot;: &quot;claude-haiku-4-5-20251001&quot;,
+                &quot;max_tokens&quot;: 100,
+                &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: text}]
+            }
+        }
+        for i, text in enumerate(texts)
+    ]
+)
+
+# Poll for completion
+import time
+while batch.processing_status != &quot;ended&quot;:
+    batch = client.messages.batches.retrieve(batch.id)
+    time.sleep(30)
+</code></pre>
+<hr />
+<h2 id="2026-whats-new">2026: What's New</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Current model lineup</strong></td>
+<td>Fable 5.1, Opus 5.5, Sonnet 5, Haiku 4.5 (Opus/Sonnet/Fable have 1M-token context)</td>
+</tr>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>Agentic coding tool using Claude in the terminal / IDE</td>
+</tr>
+<tr>
+<td><strong>Adaptive thinking + effort</strong></td>
+<td>Claude decides how much to think; you set <code>effort</code> (<code>low</code> to <code>max</code>) instead of a fixed token budget</td>
+</tr>
+<tr>
+<td><strong>MCP ecosystem</strong></td>
+<td>Thousands of MCP servers connecting Claude to every tool imaginable</td>
+</tr>
+<tr>
+<td><strong>Computer use</strong></td>
+<td>Claude can operate a computer (click, type, navigate)</td>
+</tr>
+<tr>
+<td><strong>Multi-agent</strong></td>
+<td>Orchestrate multiple Claude instances for complex workflows</td>
+</tr>
+<tr>
+<td><strong>Artifacts</strong></td>
+<td>Claude can create and iterate on files, code, documents directly</td>
+</tr>
+<tr>
+<td><strong>Projects</strong></td>
+<td>Persistent memory and context across conversations</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="extended-thinking-adaptive-thinking">Extended Thinking (Adaptive Thinking)</h3>
+<p>The older form, <code>thinking={&quot;type&quot;: &quot;enabled&quot;, &quot;budget_tokens&quot;: N}</code>, only works on pre-4.6 models (and Haiku 4.5); it is deprecated on the 4.6 models and returns a 400 on Sonnet 5, Opus 4.7 and later, and Fable. Current models use <strong>adaptive thinking</strong>: the model decides how much to reason, and you tune depth and cost with <code>effort</code>.</p>
+<pre><code class="language-python"># Claude &quot;thinks&quot; before answering
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=16000,
+    thinking={&quot;type&quot;: &quot;adaptive&quot;, &quot;display&quot;: &quot;summarized&quot;},  # summarized: return a readable summary
+    output_config={&quot;effort&quot;: &quot;high&quot;},  # low | medium | high | xhigh | max
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Prove that sqrt(2) is irrational.&quot;}]
+)
+
+# Response includes thinking blocks (a summary, never the raw chain of thought) + final answer
+for block in response.content:
+    if block.type == &quot;thinking&quot;:
+        print(&quot;Thinking:&quot;, block.thinking[:200], &quot;...&quot;)
+    elif block.type == &quot;text&quot;:
+        print(&quot;Answer:&quot;, block.text)
+</code></pre>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<pre><code class="language-python"># Basic setup
+import anthropic
+client = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var
+
+# Models (verify with client.models.list(); these change often)
+&quot;claude-fable-5-1&quot;          # most capable tier
+&quot;claude-opus-5-5&quot;           # top Opus model
+&quot;claude-sonnet-5&quot;           # recommended default
+&quot;claude-haiku-4-5-20251001&quot; # fastest/cheapest
+
+# Simple message
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}]
+)
+text = next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+# With system prompt
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    system=&quot;You are a helpful assistant.&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}]
+)
+
+# Streaming
+with client.messages.stream(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Tell me a story.&quot;}]
+) as stream:
+    for text in stream.text_stream:
+        print(text, end=&quot;&quot;, flush=True)
+
+# Usage tracking
+print(response.usage.input_tokens, response.usage.output_tokens)
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_crewai.html"><small>Previous</small>CrewAI</a><a rel="next" class="next" href="intro_llm_security.html"><small>Next</small>LLM Security</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_anthropic.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

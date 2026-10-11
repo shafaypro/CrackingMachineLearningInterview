@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMOps and MLOps Engineering Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide connects classical MLOps with the additional operational requirements of LLM-powered systems.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llmops_mlops_engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LLMOps and MLOps Engineering Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide connects classical MLOps with the additional operational requirements of LLM-powered systems.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llmops_mlops_engineering.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLMOps and MLOps Engineering Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide connects classical MLOps with the additional operational requirements of LLM-powered systems.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LLMOps and MLOps Engineering",
+   "description": "This guide connects classical MLOps with the additional operational requirements of LLM-powered systems.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llmops_mlops_engineering.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LLMOps / MLOps Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llmops_mlops_engineering.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">LLMOps / MLOps Engineering</span></nav>
+<p class="meta"><a href="../../#mlops/intro_llmops_mlops_engineering.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="llmops-and-mlops-engineering">LLMOps and MLOps Engineering</h1>
+<p>This guide connects classical MLOps with the additional operational requirements of LLM-powered systems.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>MLOps is the discipline of training, deploying, versioning, and monitoring ML systems in production. LLMOps extends that foundation with prompt management, retrieval quality, agent traces, model routing, and generative-AI-specific evaluation.</p>
+<p>Modern teams need both because production AI systems are now a combination of models, prompts, retrieval pipelines, tools, guardrails, and observability.</p>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="model-deployment">Model deployment</h3>
+<p>Deployment is not just &quot;serve a model endpoint.&quot; It includes packaging, rollout policy, rollback strategy, capacity planning, and security boundaries.</p>
+<h3 id="monitoring-and-logging">Monitoring and logging</h3>
+<p>For LLM systems you need both system metrics and semantic traces: latency, token usage, error rate, retrieval misses, tool failures, and quality regressions.</p>
+<h3 id="evaluation-pipelines">Evaluation pipelines</h3>
+<p>Evaluation should run before release and after release. Offline evals catch regressions early; online evals verify business impact.</p>
+<h3 id="versioning">Versioning</h3>
+<p>In LLM systems, versioning covers more than weights. You should version prompts, model choice, retrieval settings, tool schemas, and eval datasets.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="tracking-experiments">Tracking experiments</h3>
+<p>In practice, that means comparing runs with enough metadata to explain why a system improved or regressed.</p>
+<h3 id="cicd-for-ai-systems">CI/CD for AI systems</h3>
+<p>Good AI CI/CD includes unit tests, prompt tests, schema checks, eval gates, and rollout controls.</p>
+<h3 id="observability">Observability</h3>
+<p>Observability means you can explain failures after the fact, not just notice them. Traces, structured logs, and per-component metrics matter.</p>
+<h3 id="prompt-and-version-management">Prompt and version management</h3>
+<p>A mature team treats prompts as versioned assets with test coverage, review history, and rollback paths.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLflow</td>
+<td>Track runs, metrics, and artifacts</td>
+<td>Open-source experiment tracking and registry</td>
+</tr>
+<tr>
+<td>Weights &amp; Biases</td>
+<td>Experiment tracking and collaboration</td>
+<td>Research-heavy teams and richer dashboards</td>
+</tr>
+<tr>
+<td>LangSmith</td>
+<td>LLM traces, evals, and debugging</td>
+<td>LLM app observability and regression testing</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>Portable packaging for training and serving</td>
+<td>Reproducible deployments</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>Scalable orchestration platform</td>
+<td>Multi-service production AI systems</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="model-deployment-pipeline">Model deployment pipeline</h3>
+<ul>
+<li>Goal: Train, package, register, and deploy an ML model with rollback support.</li>
+<li>Key components: build pipeline, registry, deployment gate, canary or blue-green strategy.</li>
+<li>Suggested tech stack: MLflow, Docker, FastAPI, Kubernetes.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="evaluation-dashboard">Evaluation dashboard</h3>
+<ul>
+<li>Goal: Show quality, cost, latency, and failure trends across model or prompt versions.</li>
+<li>Key components: run store, metrics API, score slices, trend charts.</li>
+<li>Suggested tech stack: LangSmith or MLflow, Postgres, Grafana or Streamlit.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="experiment-tracking-system">Experiment tracking system</h3>
+<ul>
+<li>Goal: Standardize how experiments are logged and compared.</li>
+<li>Key components: config capture, dataset version linkage, artifact storage, metadata tags.</li>
+<li>Suggested tech stack: MLflow or W&amp;B, object storage, Python.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="cicd-for-ai-app">CI/CD for AI app</h3>
+<ul>
+<li>Goal: Block releases when AI quality or structured output contracts regress.</li>
+<li>Key components: unit tests, eval suite, build artifacts, staged rollout.</li>
+<li>Suggested tech stack: GitHub Actions, pytest, Docker, LangSmith.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">import mlflow
+
+with mlflow.start_run(run_name=&quot;rag-eval-v3&quot;):
+    mlflow.log_param(&quot;model&quot;, &quot;gpt-5.4-mini&quot;)
+    mlflow.log_param(&quot;chunk_size&quot;, 600)
+    mlflow.log_metric(&quot;answer_correctness&quot;, 0.84)
+    mlflow.log_metric(&quot;avg_latency_ms&quot;, 920)
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">ai-cicd/
+├── app/
+├── evals/
+├── infra/
+├── .github/workflows/
+├── docker/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-does-llmops-differ-from-traditional-mlops">How does LLMOps differ from traditional MLOps?</h4>
+<p>The pipeline shape is similar; the hard parts move. In MLOps the artifact is a trained model and the risks are drift, retraining, and reproducibility. In LLMOps the model is often someone else's and unchangeable, so the artifacts you version are <strong>prompts, retrieval indexes, tool definitions, and model versions</strong>, and the deployment risk is that a provider silently updates the model under you.</p>
+<p>Other genuine differences: outputs are non-deterministic, so testing is statistical rather than exact; evaluation has no ground-truth label for most requests; cost is per-request and unbounded rather than a fixed serving cost; and latency is dominated by generation length, which the model itself decides. Security also enters the runtime path: prompt injection is a live attack surface that has no MLOps analogue.</p>
+<p>What stays identical: you still need versioning, staged rollout, monitoring, rollback, and a regression suite. Candidates who claim LLMOps is entirely new usually haven't operated either.</p>
+<h4 id="what-do-you-version-in-an-llm-application-and-why-does-it-matter">What do you version in an LLM application, and why does it matter?</h4>
+<p>Everything that can change the output: the prompt template, the model ID <em>and</em> provider version, sampling parameters, the tool schemas, the retrieval index version and embedding model, the chunking configuration, and the eval suite version. Bundle them into one immutable release artifact rather than versioning each independently.</p>
+<p>The reason is debuggability. Without it, &quot;quality dropped last Tuesday&quot; is unanswerable: you cannot tell whether someone edited a prompt, the index was reindexed, or the provider shipped a new model snapshot. Pinning provider model <em>snapshots</em> rather than floating aliases is the specific practice that saves you here.</p>
+<h4 id="how-do-you-deploy-a-prompt-change-safely">How do you deploy a prompt change safely?</h4>
+<p>Like a code change, because it is one. It goes through review, runs against the regression suite in CI, and ships behind a flag with a staged rollout: a small traffic percentage first, watching quality signals, error rate, latency, and cost before widening. Keep the previous version live for instant rollback.</p>
+<p>The additional LLM-specific step is a <strong>shadow run</strong>: send a sample of production traffic to the new prompt without serving its output, and compare against the current one offline. It catches regressions on real inputs that a curated eval set misses, at no user risk.</p>
+<h4 id="what-do-you-monitor-for-an-llm-feature-in-production">What do you monitor for an LLM feature in production?</h4>
+<p>Four layers:</p>
+<ul>
+<li><strong>System</strong>: latency (TTFT and total, at p50/p95/p99), error rate by type, timeout rate, provider availability.</li>
+<li><strong>Cost</strong>: tokens in and out per request, cost per request and per user, cache hit rate, and spend against budget with alerting <em>before</em> the limit.</li>
+<li><strong>Quality</strong>: sampled automated evals, user feedback signals, abstention rate, guardrail trip rate, schema validation failure rate, and for agents the tool error rate and step count distribution.</li>
+<li><strong>Behavioral drift</strong>: input distribution shift (are users asking different things?) and output length distribution, both of which move before quality metrics do.</li>
+</ul>
+<p>The cheapest high-value alert is on <strong>schema validation failures</strong>: it catches provider model changes, prompt regressions, and malformed tool calls in one signal.</p>
+<h4 id="how-do-you-trace-a-multi-step-agent-request-for-debugging">How do you trace a multi-step agent request for debugging?</h4>
+<p>Structured tracing with a span per step, all correlated by one request ID: the initial prompt, each model call with its full input and output, each tool invocation with arguments and result, retrieval queries and returned document IDs, retries, and the final response. Record token counts and latency per span so you can attribute cost and time to a specific step.</p>
+<p>That's what LangSmith, Langfuse, and OpenTelemetry-based setups provide. The point is that agent failures are almost never in the last step: a bad answer usually traces back to a tool returning something unexpected five steps earlier, and without span-level traces you're guessing.</p>
+<h4 id="how-do-you-control-llm-spend">How do you control LLM spend?</h4>
+<p>Instrument before optimizing: cost per request broken down by feature, user, and route, so you know where the money goes. Then the levers in order of impact for most systems: prompt caching (input tokens usually dominate), trimming retrieved context, routing easy requests to a smaller model, semantic caching for repeated queries, capping <code>max_tokens</code>, and moving offline work to batch APIs.</p>
+<p>Add hard controls too: per-user and per-tenant rate and spend limits, a global budget circuit breaker, and alerting on cost-per-request anomalies. An agent stuck in a retry loop can burn a month's budget in an afternoon, so a step limit and a per-request cost ceiling are not optional.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompts edited in production without review</td>
+<td>No history, no rollback, no test coverage</td>
+<td>Prompts in version control, reviewed and CI-tested</td>
+</tr>
+<tr>
+<td>Floating model aliases instead of pinned snapshots</td>
+<td>The provider updates the model and quality shifts silently</td>
+<td>Pin snapshot versions; upgrade deliberately with an eval run</td>
+</tr>
+<tr>
+<td>Versioning the prompt but not the index or embedding model</td>
+<td>A reindex changes behavior with no trace</td>
+<td>One immutable release artifact covering all components</td>
+</tr>
+<tr>
+<td>No per-request cost ceiling or step limit</td>
+<td>A looping agent can burn the budget in hours</td>
+<td>Hard caps plus a budget circuit breaker</td>
+</tr>
+<tr>
+<td>Logging only the final response</td>
+<td>Agent failures originate several steps earlier</td>
+<td>Span-level tracing with a shared request ID</td>
+</tr>
+<tr>
+<td>Monitoring latency only in aggregate</td>
+<td>TTFT and total latency have different causes</td>
+<td>Track TTFT and per-token latency separately at p95/p99</td>
+</tr>
+<tr>
+<td>Shipping a prompt change to 100% of traffic</td>
+<td>No safe way to observe a regression</td>
+<td>Staged rollout behind a flag, with shadow comparison</td>
+</tr>
+<tr>
+<td>No alerting on schema validation failures</td>
+<td>The earliest signal of model or prompt regression is missed</td>
+<td>Alert on validation failure rate</td>
+</tr>
+<tr>
+<td>Treating evaluation as a launch gate only</td>
+<td>Quality drifts as inputs and providers change</td>
+<td>Continuous sampled evaluation in production</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">MLOps Overview</a></li>
+<li><a href="../ai_genai/intro_llmops.html">LLMOps</a></li>
+<li><a href="intro_evaluation_guardrails.html">Evaluation &amp; Guardrails</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_cicd_for_ml.html"><small>Next</small>CI/CD for ML</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_llmops_mlops_engineering.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

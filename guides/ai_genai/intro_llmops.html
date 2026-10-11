@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMOps: Deploying and Operating LLMs in Production | Cracking ML Interviews</title>
+<meta name="description" content="LLMOps is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llmops.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LLMOps: Deploying and Operating LLMs in Production | Cracking ML Interviews">
+<meta property="og:description" content="LLMOps is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llmops.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLMOps: Deploying and Operating LLMs in Production | Cracking ML Interviews">
+<meta name="twitter:description" content="LLMOps is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LLMOps: Deploying and Operating LLMs in Production",
+   "description": "LLMOps is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llmops.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LLMOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llmops.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LLMOps</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_llmops.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="llmops-deploying-and-operating-llms-in-production">LLMOps: Deploying and Operating LLMs in Production</h1>
+<p><strong>LLMOps</strong> is the practice of deploying, monitoring, evaluating, and maintaining LLM-powered applications in production. It extends MLOps with LLM-specific concerns: prompt management, evals, hallucination detection, cost control, and guardrails.</p>
+<hr />
+<h2 id="llmops-vs-mlops">LLMOps vs MLOps</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>MLOps</th>
+<th>LLMOps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model training pipelines</td>
+<td>Prompt engineering &amp; versioning</td>
+</tr>
+<tr>
+<td>Feature engineering</td>
+<td>Context management</td>
+</tr>
+<tr>
+<td>Model versioning</td>
+<td>Model version + prompt version</td>
+</tr>
+<tr>
+<td>Accuracy metrics</td>
+<td>LLM-specific evals (faithfulness, relevancy)</td>
+</tr>
+<tr>
+<td>Data drift</td>
+<td>Prompt/response drift</td>
+</tr>
+<tr>
+<td>Latency/throughput</td>
+<td>Token costs, latency per token</td>
+</tr>
+<tr>
+<td>A/B testing</td>
+<td>Prompt A/B testing</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="the-llmops-stack">The LLMOps Stack</h2>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                    Application Layer                  │
+│         (your RAG app, chatbot, agent, etc.)         │
+└──────────────────┬────────────────────────────────────┘
+                   │
+┌──────────────────▼────────────────────────────────────┐
+│                  LLMOps Platform                       │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────┐  │
+│  │ Tracing  │  │  Evals   │  │ Prompts  │  │ Cost  │  │
+│  │(LangSmith│  │  (RAGAS, │  │(PromptHub│  │Tracking│ │
+│  │ Arize,   │  │  custom) │  │ Helicone)│  │       │  │
+│  │ Langfuse)│  │          │  │          │  │       │  │
+│  └──────────┘  └──────────┘  └──────────┘  └───────┘  │
+└──────────────────┬────────────────────────────────────┘
+                   │
+┌──────────────────▼────────────────────────────────────┐
+│               Model / API Layer                        │
+│     Anthropic Claude / OpenAI / Bedrock / etc.        │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="observability--tracing">Observability &amp; Tracing</h2>
+<h3 id="langsmith">LangSmith</h3>
+<pre><code class="language-python">import os
+os.environ[&quot;LANGSMITH_TRACING&quot;] = &quot;true&quot;
+os.environ[&quot;LANGSMITH_API_KEY&quot;] = &quot;lsv2_...&quot;
+os.environ[&quot;LANGSMITH_PROJECT&quot;] = &quot;production-rag&quot;
+
+# Automatic tracing of all LangChain calls
+# View at smith.langchain.com: latency, tokens, errors, full traces
+</code></pre>
+<h3 id="langfuse-open-source">Langfuse (Open-source)</h3>
+<pre><code class="language-python"># Langfuse Python SDK v2 API shown. SDK v3+ is built on OpenTelemetry: import
+# `observe` from `langfuse` directly and use context managers such as
+# `langfuse.start_as_current_span(...)` instead of `langfuse.trace(...)`.
+from langfuse import Langfuse
+from langfuse.decorators import observe
+
+langfuse = Langfuse(
+    public_key=&quot;pk-...&quot;,
+    secret_key=&quot;sk-...&quot;,
+    host=&quot;https://cloud.langfuse.com&quot;
+)
+
+@observe()
+def rag_query(question: str) -&gt; str:
+    &quot;&quot;&quot;Automatically traced function.&quot;&quot;&quot;
+    docs = retrieve(question)
+    answer = generate(question, docs)
+    return answer
+
+# Manual tracing
+trace = langfuse.trace(name=&quot;rag-query&quot;, user_id=&quot;user-123&quot;)
+span = trace.span(name=&quot;retrieval&quot;)
+docs = retrieve(question)
+span.end(output={&quot;doc_count&quot;: len(docs)})
+
+generation = trace.generation(
+    name=&quot;llm-call&quot;,
+    model=&quot;claude-sonnet-5&quot;,
+    input=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: question}],
+    output=answer,
+    usage={&quot;input&quot;: 500, &quot;output&quot;: 200}
+)
+trace.update(output=answer)
+</code></pre>
+<h3 id="helicone-api-proxy-with-analytics">Helicone (API Proxy with analytics)</h3>
+<pre><code class="language-python"># Just change base URL: automatic logging, cost tracking
+from anthropic import Anthropic
+
+client = Anthropic(
+    base_url=&quot;https://anthropic.helicone.ai&quot;,
+    default_headers={
+        &quot;Helicone-Auth&quot;: f&quot;Bearer {HELICONE_API_KEY}&quot;,
+        &quot;Helicone-User-Id&quot;: &quot;user-123&quot;,         # user-level analytics
+        &quot;Helicone-Session-Id&quot;: &quot;session-456&quot;,   # session tracking
+    }
+)
+</code></pre>
+<hr />
+<h2 id="evaluations-evals">Evaluations (Evals)</h2>
+<p>Evals are automated tests that measure LLM output quality. They're the unit tests of LLMOps.</p>
+<h3 id="types-of-evals">Types of Evals</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it measures</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exact match</strong></td>
+<td>Does output match expected exactly?</td>
+<td>String comparison</td>
+</tr>
+<tr>
+<td><strong>Contains</strong></td>
+<td>Does output contain required info?</td>
+<td>Regex/substring</td>
+</tr>
+<tr>
+<td><strong>LLM-as-judge</strong></td>
+<td>Is output high quality?</td>
+<td>Another LLM grades it</td>
+</tr>
+<tr>
+<td><strong>RAGAS</strong></td>
+<td>RAG-specific quality metrics</td>
+<td>Framework</td>
+</tr>
+<tr>
+<td><strong>Human eval</strong></td>
+<td>Human rates output quality</td>
+<td>Annotation tools</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="llm-as-judge">LLM-as-Judge</h3>
+<pre><code class="language-python">import anthropic
+from dataclasses import dataclass
+
+client = anthropic.Anthropic()
+
+@dataclass
+class EvalResult:
+    score: float  # 0.0 - 1.0
+    reason: str
+
+def llm_judge(
+    question: str,
+    answer: str,
+    context: str,
+    criteria: str = &quot;helpfulness and accuracy&quot;
+) -&gt; EvalResult:
+    &quot;&quot;&quot;Use an LLM to judge the quality of another LLM's answer.&quot;&quot;&quot;
+
+    response = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=500,
+        system=&quot;&quot;&quot;You are an expert evaluator for LLM outputs.
+Rate the answer on a scale of 0.0 to 1.0 and explain your reasoning.
+Return JSON: {&quot;score&quot;: 0.X, &quot;reason&quot;: &quot;...&quot;}&quot;&quot;&quot;,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;&quot;&quot;Evaluate this answer on: {criteria}
+
+Question: {question}
+Context: {context}
+Answer: {answer}
+
+Return JSON with score (0.0-1.0) and reason.&quot;&quot;&quot;
+        }]
+    )
+
+    import json
+    result = json.loads(next(b.text for b in response.content if b.type == &quot;text&quot;))
+    return EvalResult(score=result[&quot;score&quot;], reason=result[&quot;reason&quot;])
+
+# Run eval
+result = llm_judge(
+    question=&quot;What is dbt used for?&quot;,
+    answer=&quot;dbt transforms data in your data warehouse using SQL&quot;,
+    context=&quot;dbt is a transformation tool that runs SQL models...&quot;,
+    criteria=&quot;accuracy and completeness&quot;
+)
+print(f&quot;Score: {result.score} | {result.reason}&quot;)
+</code></pre>
+<h3 id="ragas-evaluation">RAGAS Evaluation</h3>
+<pre><code class="language-python">from ragas import evaluate
+from ragas.metrics import (
+    faithfulness,           # Is answer grounded in context?
+    answer_relevancy,       # Does answer address the question?
+    context_precision,      # Are retrieved docs relevant?
+    context_recall,         # Did we retrieve all needed docs?
+    answer_correctness,     # Is the answer factually correct?
+)
+from datasets import Dataset
+
+# Prepare evaluation dataset
+eval_data = {
+    &quot;question&quot;: [&quot;What is dbt?&quot;, &quot;How does Kafka work?&quot;],
+    &quot;answer&quot;: [&quot;dbt transforms data in warehouses&quot;, &quot;Kafka is a distributed event streaming platform&quot;],
+    &quot;contexts&quot;: [
+        [&quot;dbt (Data Build Tool) is a transformation tool...&quot;],
+        [&quot;Apache Kafka is a distributed streaming platform...&quot;]
+    ],
+    &quot;ground_truth&quot;: [&quot;dbt is a SQL transformation tool&quot;, &quot;Kafka streams events between systems&quot;]
+}
+
+dataset = Dataset.from_dict(eval_data)
+
+results = evaluate(
+    dataset,
+    metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
+)
+print(results)
+# faithfulness: 0.92, answer_relevancy: 0.88, ...
+</code></pre>
+<h3 id="eval-suites-continuous-testing">Eval Suites (Continuous Testing)</h3>
+<pre><code class="language-python"># Run evals on every deployment in CI/CD
+# .github/workflows/eval.yml
+
+import pytest
+import anthropic
+
+client = anthropic.Anthropic()
+
+EVAL_CASES = [
+    {
+        &quot;input&quot;: &quot;What is the capital of France?&quot;,
+        &quot;expected_contains&quot;: [&quot;Paris&quot;],
+        &quot;max_tokens&quot;: 100,
+    },
+    {
+        &quot;input&quot;: &quot;Explain SQL JOINs&quot;,
+        &quot;min_length&quot;: 100,
+        &quot;expected_contains&quot;: [&quot;INNER JOIN&quot;, &quot;LEFT JOIN&quot;],
+    }
+]
+
+@pytest.mark.parametrize(&quot;case&quot;, EVAL_CASES)
+def test_llm_response(case):
+    response = client.messages.create(
+        model=&quot;claude-haiku-4-5-20251001&quot;,
+        max_tokens=case.get(&quot;max_tokens&quot;, 500),
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: case[&quot;input&quot;]}]
+    )
+    text = next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+    if &quot;expected_contains&quot; in case:
+        for phrase in case[&quot;expected_contains&quot;]:
+            assert phrase.lower() in text.lower(), f&quot;Expected '{phrase}' in response&quot;
+
+    if &quot;min_length&quot; in case:
+        assert len(text) &gt;= case[&quot;min_length&quot;]
+</code></pre>
+<hr />
+<h2 id="prompt-management">Prompt Management</h2>
+<h3 id="prompt-versioning">Prompt Versioning</h3>
+<pre><code class="language-python"># Store prompts in code (version controlled)
+# prompts/rag_system.py
+
+RAG_SYSTEM_V1 = &quot;&quot;&quot;You are a helpful assistant. Answer based on context.&quot;&quot;&quot;
+
+RAG_SYSTEM_V2 = &quot;&quot;&quot;You are an expert assistant. Answer questions based ONLY on the provided context.
+If the answer isn't in the context, say &quot;I don't have that information.&quot;
+Always cite the source document when possible.&quot;&quot;&quot;
+
+# Or use the LangSmith prompt hub
+from langsmith import Client
+prompt = Client().pull_prompt(&quot;rlm/rag-prompt&quot;)   # community prompt
+</code></pre>
+<h3 id="ab-testing-prompts">A/B Testing Prompts</h3>
+<pre><code class="language-python">import random
+from langfuse import Langfuse
+
+langfuse = Langfuse()
+
+def get_prompt(variant: str = None) -&gt; str:
+    if variant is None:
+        variant = random.choice([&quot;control&quot;, &quot;treatment&quot;])
+
+    prompts = {
+        &quot;control&quot;: &quot;Answer the question helpfully.&quot;,
+        &quot;treatment&quot;: &quot;Answer the question as a senior expert. Be concise and practical.&quot;,
+    }
+
+    # Track which variant was used
+    langfuse.trace(name=&quot;prompt-ab-test&quot;).update(metadata={&quot;variant&quot;: variant})
+    return prompts[variant]
+</code></pre>
+<hr />
+<h2 id="cost-management">Cost Management</h2>
+<h3 id="token-usage-tracking">Token Usage Tracking</h3>
+<pre><code class="language-python">from anthropic import Anthropic
+from dataclasses import dataclass, field
+from collections import defaultdict
+
+client = Anthropic()
+
+# Pricing (USD per million tokens, standard rates as of late 2026).
+# Prices change: load them from config and check the provider's pricing page.
+PRICING = {
+    &quot;claude-opus-5-5&quot;:           {&quot;input&quot;: 4.0, &quot;output&quot;: 20.0},
+    &quot;claude-sonnet-5&quot;:           {&quot;input&quot;: 2.0, &quot;output&quot;: 10.0},
+    &quot;claude-haiku-4-5-20251001&quot;: {&quot;input&quot;: 1.0, &quot;output&quot;: 5.0},
+}
+
+class CostTracker:
+    def __init__(self):
+        self.usage = defaultdict(lambda: {&quot;input_tokens&quot;: 0, &quot;output_tokens&quot;: 0, &quot;cost_usd&quot;: 0})
+
+    def track(self, model: str, response):
+        usage = response.usage
+        price = PRICING.get(model, {&quot;input&quot;: 2.0, &quot;output&quot;: 10.0})
+
+        cost = (
+            usage.input_tokens * price[&quot;input&quot;] / 1_000_000 +
+            usage.output_tokens * price[&quot;output&quot;] / 1_000_000
+        )
+
+        self.usage[model][&quot;input_tokens&quot;] += usage.input_tokens
+        self.usage[model][&quot;output_tokens&quot;] += usage.output_tokens
+        self.usage[model][&quot;cost_usd&quot;] += cost
+
+    def report(self):
+        for model, stats in self.usage.items():
+            print(f&quot;{model}: ${stats['cost_usd']:.4f} &quot;
+                  f&quot;({stats['input_tokens']} in, {stats['output_tokens']} out)&quot;)
+
+tracker = CostTracker()
+
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello&quot;}]
+)
+tracker.track(&quot;claude-sonnet-5&quot;, response)
+tracker.report()
+</code></pre>
+<h3 id="cost-optimization-strategies">Cost Optimization Strategies</h3>
+<pre><code class="language-python"># 1. Use appropriate model tier
+def route_to_model(task_complexity: str) -&gt; str:
+    return {
+        &quot;simple&quot;: &quot;claude-haiku-4-5-20251001&quot;,   # FAQs, classification
+        &quot;medium&quot;: &quot;claude-sonnet-5&quot;,            # most tasks
+        &quot;complex&quot;: &quot;claude-opus-5-5&quot;,             # deep reasoning
+    }[task_complexity]
+
+# 2. Context caching (up to 90% savings on repeated context)
+response = client.messages.create(
+    model=&quot;claude-sonnet-5&quot;,
+    max_tokens=1024,
+    system=[{
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: LARGE_DOCUMENT,   # 50K token doc
+        &quot;cache_control&quot;: {&quot;type&quot;: &quot;ephemeral&quot;}  # cache it
+    }],
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: question}]
+)
+
+# 3. Batch API (50% cheaper, async)
+batch = client.messages.batches.create(requests=[...])
+
+# 4. max_tokens optimization: set realistic limits
+# Don't use max_tokens=4096 for a one-sentence answer task
+
+# 5. Truncate retrieved context to essentials
+def trim_context(docs: list, max_chars: int = 4000) -&gt; str:
+    context = &quot;&quot;
+    for doc in docs:
+        if len(context) + len(doc) &gt; max_chars:
+            break
+        context += doc + &quot;\n---\n&quot;
+    return context
+</code></pre>
+<hr />
+<h2 id="guardrails">Guardrails</h2>
+<pre><code class="language-python">import re
+
+class GuardrailError(Exception):
+    pass
+
+class Guardrails:
+    &quot;&quot;&quot;Input and output safety checks.&quot;&quot;&quot;
+
+    # Input guardrails
+    def check_input(self, user_input: str) -&gt; str:
+        # Length check
+        if len(user_input) &gt; 10_000:
+            raise GuardrailError(&quot;Input too long&quot;)
+
+        # PII detection (simplified)
+        pii_patterns = [
+            r&quot;\b\d{3}-\d{2}-\d{4}\b&quot;,           # SSN
+            r&quot;\b\d{16}\b&quot;,                        # Credit card
+            r&quot;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b&quot;,  # Email
+        ]
+        for pattern in pii_patterns:
+            if re.search(pattern, user_input):
+                user_input = re.sub(pattern, &quot;[REDACTED]&quot;, user_input)
+
+        # Prompt injection detection
+        injection_keywords = [
+            &quot;ignore previous instructions&quot;,
+            &quot;disregard your guidelines&quot;,
+            &quot;you are now&quot;,
+        ]
+        if any(kw in user_input.lower() for kw in injection_keywords):
+            raise GuardrailError(&quot;Potential prompt injection detected&quot;)
+
+        return user_input
+
+    # Output guardrails
+    def check_output(self, output: str) -&gt; str:
+        # Check for hallucination signals
+        uncertainty_phrases = [&quot;I'm not sure&quot;, &quot;I think&quot;, &quot;I believe&quot;, &quot;might be&quot;]
+
+        # Check for harmful content (in production: use dedicated classifiers)
+        # ...
+
+        return output
+
+    def check_relevance(self, question: str, answer: str) -&gt; bool:
+        &quot;&quot;&quot;Use LLM to verify answer is relevant to question.&quot;&quot;&quot;
+        response = client.messages.create(
+            model=&quot;claude-haiku-4-5-20251001&quot;,
+            max_tokens=50,
+            messages=[{
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: f&quot;Is this answer relevant to the question? Answer yes/no.\nQuestion: {question}\nAnswer: {answer}&quot;
+            }]
+        )
+        return &quot;yes&quot; in next(b.text for b in response.content if b.type == &quot;text&quot;).lower()
+
+# Use in application
+guardrails = Guardrails()
+
+def safe_query(user_input: str) -&gt; str:
+    try:
+        clean_input = guardrails.check_input(user_input)
+        response = client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=1024,
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: clean_input}]
+        )
+        output = next(b.text for b in response.content if b.type == &quot;text&quot;)
+        return guardrails.check_output(output)
+    except GuardrailError as e:
+        return f&quot;I can't process that request: {e}&quot;
+</code></pre>
+<hr />
+<h2 id="production-checklist">Production Checklist</h2>
+<pre><code class="language-markdown">## LLMOps Production Checklist
+
+### Observability
+- [ ] Tracing enabled (LangSmith / Langfuse / Arize)
+- [ ] Token usage logged per request
+- [ ] Cost tracking per user/feature
+- [ ] Error rates monitored
+- [ ] Latency p50/p95/p99 tracked
+
+### Reliability
+- [ ] Retry logic with exponential backoff
+- [ ] Fallback model configured
+- [ ] Circuit breaker for API failures
+- [ ] Graceful degradation
+- [ ] Rate limit handling
+
+### Quality
+- [ ] Eval suite running in CI/CD
+- [ ] Golden dataset for regression testing
+- [ ] LLM-as-judge for subjective metrics
+- [ ] Human eval sample review weekly
+
+### Cost
+- [ ] Model routing by task complexity
+- [ ] Context caching implemented where applicable
+- [ ] max_tokens optimized per use case
+- [ ] Monthly budget alerts set
+
+### Safety
+- [ ] Input sanitization
+- [ ] PII detection/redaction
+- [ ] Output content filtering
+- [ ] Prompt injection protection
+- [ ] Audit logs retained
+
+### Deployment
+- [ ] Prompt versions in source control
+- [ ] Canary deployments for prompt changes
+- [ ] Rollback plan documented
+- [ ] SLA defined and monitored
+</code></pre>
+<hr />
+<h2 id="llmops-tools-in-2026">LLMOps Tools in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LangSmith</strong></td>
+<td>Tracing + Evals</td>
+<td>LangChain's observability platform</td>
+</tr>
+<tr>
+<td><strong>Langfuse</strong></td>
+<td>Tracing + Evals</td>
+<td>Open-source, self-hostable</td>
+</tr>
+<tr>
+<td><strong>Helicone</strong></td>
+<td>Proxy + Analytics</td>
+<td>API proxy with analytics</td>
+</tr>
+<tr>
+<td><strong>Arize AI</strong></td>
+<td>Observability</td>
+<td>Enterprise LLM monitoring</td>
+</tr>
+<tr>
+<td><strong>Weights &amp; Biases</strong></td>
+<td>Experiment tracking</td>
+<td>ML + LLM experiments</td>
+</tr>
+<tr>
+<td><strong>RAGAS</strong></td>
+<td>Evals</td>
+<td>RAG evaluation metrics</td>
+</tr>
+<tr>
+<td><strong>PromptFlow</strong></td>
+<td>Prompt management</td>
+<td>Microsoft Azure</td>
+</tr>
+<tr>
+<td><strong>Braintrust</strong></td>
+<td>Evals + Tracing</td>
+<td>Developer-friendly evals</td>
+</tr>
+<tr>
+<td><strong>Phoenix</strong></td>
+<td>Tracing + Evals</td>
+<td>Open-source by Arize</td>
+</tr>
+<tr>
+<td><strong>Guardrails AI</strong></td>
+<td>Guardrails</td>
+<td>Output validation framework</td>
+</tr>
+<tr>
+<td><strong>NeMo Guardrails</strong></td>
+<td>Guardrails</td>
+<td>NVIDIA's guardrail toolkit</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_rag.html">RAG</a></td>
+<td>Evaluating and monitoring RAG pipelines is a core LLMOps concern</td>
+</tr>
+<tr>
+<td><a href="intro_vector_databases.html">Vector Databases</a></td>
+<td>Monitoring embedding quality and retrieval performance</td>
+</tr>
+<tr>
+<td><a href="intro_agentic_ai.html">Agentic AI</a></td>
+<td>Observability for long-running agent workflows</td>
+</tr>
+<tr>
+<td><a href="intro_langchain.html">LangChain</a></td>
+<td>LangSmith is LangChain's LLMOps platform</td>
+</tr>
+<tr>
+<td><a href="intro_anthropic.html">Anthropic Overview</a></td>
+<td>Claude API usage patterns and rate limit management</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_llm_inference_optimization.html"><small>Previous</small>LLM Inference Optimization</a><a rel="next" class="next" href="intro_agentic_ai.html"><small>Next</small>Agentic AI</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_llmops.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terraform Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Terraform (and its open-source fork OpenTofu) is the leading Infrastructure as Code (IaC) tool. It lets you define, provision, and manage cloud…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_terraform.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Terraform Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Terraform (and its open-source fork OpenTofu) is the leading Infrastructure as Code (IaC) tool. It lets you define, provision, and manage cloud…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_terraform.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Terraform Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Terraform (and its open-source fork OpenTofu) is the leading Infrastructure as Code (IaC) tool. It lets you define, provision, and manage cloud…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Terraform",
+   "description": "Terraform (and its open-source fork OpenTofu) is the leading Infrastructure as Code (IaC) tool. It lets you define, provision, and manage cloud…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_terraform.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "DevOps & Infrastructure",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#devops--infrastructure"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Terraform",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/devops/intro_terraform.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#devops--infrastructure">DevOps &amp; Infrastructure</a> <span aria-hidden="true">/</span> <span aria-current="page">Terraform</span></nav>
+<p class="meta"><a href="../../#devops/intro_terraform.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="terraform">Terraform</h1>
+<p>Terraform (and its open-source fork <strong>OpenTofu</strong>) is the leading <strong>Infrastructure as Code (IaC)</strong> tool. It lets you define, provision, and manage cloud infrastructure using declarative configuration files: AWS, GCP, Azure, Kubernetes, and 3,000+ other providers.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-terraform">What is Terraform?</a></li>
+<li><a href="#core-concepts">Core Concepts</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#hcl-language-basics">HCL Language Basics</a></li>
+<li><a href="#resources--data-sources">Resources &amp; Data Sources</a></li>
+<li><a href="#variables--outputs">Variables &amp; Outputs</a></li>
+<li><a href="#state-management">State Management</a></li>
+<li><a href="#modules">Modules</a></li>
+<li><a href="#workspaces--environments">Workspace &amp; Environments</a></li>
+<li><a href="#terraform-workflow">Terraform Workflow</a></li>
+<li><a href="#real-world-examples">Real-World Examples</a></li>
+<li><a href="#testing-terraform">Testing Terraform</a></li>
+<li><a href="#terraform-in-2026-opentofu">Terraform in 2026 (OpenTofu)</a></li>
+<li><a href="#cheat-sheet">Cheat Sheet</a></li>
+</ol>
+<hr />
+<h2 id="what-is-terraform">What is Terraform?</h2>
+<p>Without IaC, you click around cloud consoles or write imperative scripts. This creates &quot;snowflake servers&quot;: unique, undocumented, unrepeatable infrastructure.</p>
+<p><strong>Terraform</strong> lets you describe infrastructure in code:</p>
+<pre><code class="language-hcl">resource &quot;aws_instance&quot; &quot;web&quot; {
+  ami           = &quot;ami-0c55b159cbfafe1f0&quot;
+  instance_type = &quot;t3.micro&quot;
+}
+</code></pre>
+<p>Run <code>terraform apply</code> and Terraform provisions the EC2 instance. The code IS the documentation.</p>
+<h3 id="why-terraform">Why Terraform?</h3>
+<ul>
+<li><strong>Declarative</strong>: describe <em>what</em> you want, not <em>how</em> to create it</li>
+<li><strong>Idempotent</strong>: running <code>apply</code> twice is safe</li>
+<li><strong>Multi-cloud</strong>: AWS, GCP, Azure, Kubernetes, Datadog, GitHub, etc.</li>
+<li><strong>State tracking</strong>: knows what exists vs. what should exist</li>
+<li><strong>Plan before apply</strong>: see changes before making them</li>
+<li><strong>Modules</strong>: reusable, composable infrastructure components</li>
+</ul>
+<h3 id="terraform-vs-alternatives">Terraform vs Alternatives</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Approach</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Terraform / OpenTofu</td>
+<td>Declarative HCL</td>
+<td>Multi-cloud, all infra types</td>
+</tr>
+<tr>
+<td>Pulumi</td>
+<td>Imperative (Python/TS/Go)</td>
+<td>Developers who prefer real code</td>
+</tr>
+<tr>
+<td>AWS CDK</td>
+<td>Imperative (TS/Python)</td>
+<td>AWS-native, complex logic</td>
+</tr>
+<tr>
+<td>CloudFormation</td>
+<td>Declarative JSON/YAML</td>
+<td>AWS-only, native integration</td>
+</tr>
+<tr>
+<td>Ansible</td>
+<td>Imperative (YAML)</td>
+<td>Configuration management, not IaC</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<pre><code>Configuration Files (.tf)
+         ↓
+    terraform init    (download providers + modules)
+         ↓
+    terraform plan    (show what will change)
+         ↓
+    terraform apply   (make the changes)
+         ↓
+       State File     (terraform.tfstate: records real-world resources)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Provider</strong></td>
+<td>Plugin to interact with a cloud/service API (aws, google, azurerm)</td>
+</tr>
+<tr>
+<td><strong>Resource</strong></td>
+<td>A piece of infrastructure (EC2 instance, S3 bucket, DNS record)</td>
+</tr>
+<tr>
+<td><strong>Data Source</strong></td>
+<td>Read-only lookup of existing resources</td>
+</tr>
+<tr>
+<td><strong>Variable</strong></td>
+<td>Input parameter to make configs reusable</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>Export values from your config (IP addresses, ARNs, etc.)</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>JSON file recording current real-world infrastructure</td>
+</tr>
+<tr>
+<td><strong>Module</strong></td>
+<td>Reusable group of resources (like a function in code)</td>
+</tr>
+<tr>
+<td><strong>Workspace</strong></td>
+<td>Multiple independent state files from the same config</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="installation">Installation</h2>
+<h3 id="terraform-1">Terraform</h3>
+<pre><code class="language-bash"># macOS
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+
+# Linux
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main&quot; | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update &amp;&amp; sudo apt install terraform
+</code></pre>
+<h3 id="opentofu-open-source-fork">OpenTofu (open-source fork)</h3>
+<pre><code class="language-bash"># macOS
+brew install opentofu
+
+# Linux
+curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh | sh
+
+# Verify
+tofu version   # or: terraform version
+</code></pre>
+<h3 id="tfenv-version-manager">tfenv (version manager)</h3>
+<pre><code class="language-bash">brew install tfenv
+tfenv install 1.9.0
+tfenv use 1.9.0
+</code></pre>
+<hr />
+<h2 id="hcl-language-basics">HCL Language Basics</h2>
+<p>Terraform uses <strong>HCL (HashiCorp Configuration Language)</strong>: readable, declarative, JSON-compatible.</p>
+<h3 id="types">Types</h3>
+<pre><code class="language-hcl"># Primitives
+name    = &quot;my-app&quot;           # string
+count   = 3                  # number
+enabled = true               # bool
+
+# Collections
+tags = {                     # map(string)
+  Environment = &quot;production&quot;
+  Team        = &quot;platform&quot;
+}
+
+cidr_blocks = [              # list(string)
+  &quot;10.0.0.0/8&quot;,
+  &quot;172.16.0.0/12&quot;
+]
+
+# Expressions
+name    = &quot;app-${var.environment}&quot;           # interpolation
+doubled = var.count * 2                      # arithmetic
+enabled = var.env == &quot;production&quot; ? true : false  # ternary
+</code></pre>
+<h3 id="built-in-functions">Built-in Functions</h3>
+<pre><code class="language-hcl"># String
+lower(&quot;HELLO&quot;)         # → &quot;hello&quot;
+upper(&quot;hello&quot;)         # → &quot;HELLO&quot;
+join(&quot;-&quot;, [&quot;a&quot;,&quot;b&quot;])   # → &quot;a-b&quot;
+split(&quot;,&quot;, &quot;a,b,c&quot;)   # → [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+format(&quot;Hello, %s!&quot;, var.name)
+replace(&quot;foo-bar&quot;, &quot;-&quot;, &quot;_&quot;)
+
+# Numeric
+min(1, 2, 3)           # → 1
+max(1, 2, 3)           # → 3
+ceil(1.2)              # → 2
+floor(1.8)             # → 1
+
+# Collections
+length(var.list)
+toset(var.list)         # deduplicate
+flatten([[1,2],[3,4]])  # → [1,2,3,4]
+merge(map1, map2)
+keys(map)
+values(map)
+
+# Type conversion
+tostring(42)
+tonumber(&quot;42&quot;)
+tolist(toset([&quot;a&quot;,&quot;b&quot;,&quot;a&quot;]))
+</code></pre>
+<h3 id="conditional--loops">Conditional &amp; Loops</h3>
+<pre><code class="language-hcl"># Conditional expression
+instance_type = var.env == &quot;prod&quot; ? &quot;t3.large&quot; : &quot;t3.micro&quot;
+
+# count (create N resources)
+resource &quot;aws_instance&quot; &quot;web&quot; {
+  count         = var.instance_count
+  instance_type = &quot;t3.micro&quot;
+  tags = {
+    Name = &quot;web-${count.index}&quot;
+  }
+}
+
+# for_each (create resources from a map or set)
+resource &quot;aws_s3_bucket&quot; &quot;buckets&quot; {
+  for_each = toset([&quot;logs&quot;, &quot;backups&quot;, &quot;artifacts&quot;])
+  bucket   = &quot;${var.project}-${each.key}-${var.env}&quot;
+}
+
+# for expression (transform collections)
+output &quot;bucket_names&quot; {
+  value = [for b in aws_s3_bucket.buckets : b.bucket]
+}
+
+tag_map = {
+  for k, v in var.tags : lower(k) =&gt; v
+  if v != &quot;&quot;
+}
+
+# dynamic blocks (generate repeated nested blocks)
+dynamic &quot;ingress&quot; {
+  for_each = var.ingress_rules
+  content {
+    from_port   = ingress.value.from_port
+    to_port     = ingress.value.to_port
+    protocol    = ingress.value.protocol
+    cidr_blocks = ingress.value.cidr_blocks
+  }
+}
+</code></pre>
+<hr />
+<h2 id="resources--data-sources">Resources &amp; Data Sources</h2>
+<h3 id="resources">Resources</h3>
+<pre><code class="language-hcl"># Syntax: resource &quot;&lt;PROVIDER_TYPE&gt;&quot; &quot;&lt;LOCAL_NAME&gt;&quot;
+resource &quot;aws_s3_bucket&quot; &quot;my_bucket&quot; {
+  bucket = &quot;my-unique-bucket-name-2026&quot;
+
+  tags = {
+    Name        = &quot;My Bucket&quot;
+    Environment = var.environment
+  }
+}
+
+# Reference another resource with: resource_type.local_name.attribute
+resource &quot;aws_s3_bucket_versioning&quot; &quot;my_bucket&quot; {
+  bucket = aws_s3_bucket.my_bucket.id   # ← reference
+
+  versioning_configuration {
+    status = &quot;Enabled&quot;
+  }
+}
+</code></pre>
+<h3 id="data-sources-read-existing-resources">Data Sources (read existing resources)</h3>
+<pre><code class="language-hcl"># Syntax: data &quot;&lt;PROVIDER_TYPE&gt;&quot; &quot;&lt;LOCAL_NAME&gt;&quot;
+data &quot;aws_ami&quot; &quot;ubuntu&quot; {
+  most_recent = true
+  owners      = [&quot;099720109477&quot;]   # Canonical
+
+  filter {
+    name   = &quot;name&quot;
+    values = [&quot;ubuntu/images/hvm-ssd/ubuntu-*-22.04-amd64-server-*&quot;]
+  }
+}
+
+resource &quot;aws_instance&quot; &quot;web&quot; {
+  ami           = data.aws_ami.ubuntu.id   # ← reference data source
+  instance_type = &quot;t3.micro&quot;
+}
+</code></pre>
+<hr />
+<h2 id="variables--outputs">Variables &amp; Outputs</h2>
+<h3 id="input-variables">Input Variables</h3>
+<pre><code class="language-hcl"># variables.tf
+variable &quot;environment&quot; {
+  description = &quot;Deployment environment&quot;
+  type        = string
+  default     = &quot;development&quot;
+
+  validation {
+    condition     = contains([&quot;development&quot;, &quot;staging&quot;, &quot;production&quot;], var.environment)
+    error_message = &quot;Environment must be development, staging, or production.&quot;
+  }
+}
+
+variable &quot;instance_count&quot; {
+  description = &quot;Number of instances&quot;
+  type        = number
+  default     = 1
+}
+
+variable &quot;allowed_cidr_blocks&quot; {
+  description = &quot;CIDRs allowed to access the load balancer&quot;
+  type        = list(string)
+  default     = [&quot;0.0.0.0/0&quot;]
+}
+
+variable &quot;tags&quot; {
+  description = &quot;Resource tags&quot;
+  type        = map(string)
+  default     = {}
+}
+</code></pre>
+<h3 id="setting-variable-values">Setting Variable Values</h3>
+<pre><code class="language-bash"># 1. Command line flag
+terraform apply -var=&quot;environment=production&quot;
+
+# 2. terraform.tfvars file (auto-loaded)
+# terraform.tfvars
+environment   = &quot;production&quot;
+instance_count = 3
+
+# 3. *.auto.tfvars (auto-loaded)
+# production.auto.tfvars
+
+# 4. Environment variables (TF_VAR_ prefix)
+export TF_VAR_environment=production
+</code></pre>
+<h3 id="outputs">Outputs</h3>
+<pre><code class="language-hcl"># outputs.tf
+output &quot;load_balancer_dns&quot; {
+  description = &quot;DNS name of the load balancer&quot;
+  value       = aws_lb.main.dns_name
+}
+
+output &quot;database_endpoint&quot; {
+  description = &quot;RDS endpoint&quot;
+  value       = aws_db_instance.main.endpoint
+  sensitive   = true   # hidden in CLI output, still stored in state
+}
+</code></pre>
+<pre><code class="language-bash"># Access outputs after apply
+terraform output
+terraform output load_balancer_dns
+terraform output -json
+</code></pre>
+<hr />
+<h2 id="state-management">State Management</h2>
+<p>State is Terraform's record of what infrastructure it manages. <strong>Never manually edit state.</strong></p>
+<h3 id="remote-state-required-for-teams">Remote State (required for teams)</h3>
+<pre><code class="language-hcl"># backend.tf: store state in S3
+terraform {
+  backend &quot;s3&quot; {
+    bucket         = &quot;my-terraform-state&quot;
+    key            = &quot;production/terraform.tfstate&quot;
+    region         = &quot;us-east-1&quot;
+    encrypt        = true
+    use_lockfile   = true   # S3-native state locking (Terraform 1.10+); replaces the deprecated dynamodb_table
+  }
+}
+</code></pre>
+<pre><code class="language-hcl"># HCP Terraform (formerly Terraform Cloud) backend
+terraform {
+  cloud {
+    organization = &quot;my-org&quot;
+    workspaces {
+      name = &quot;my-app-production&quot;
+    }
+  }
+}
+</code></pre>
+<h3 id="state-commands">State Commands</h3>
+<pre><code class="language-bash"># List all tracked resources
+terraform state list
+
+# Show details of a resource
+terraform state show aws_instance.web
+
+# Move resource (rename without recreating)
+terraform state mv aws_instance.web aws_instance.web_server
+
+# Remove resource from state (stop managing, don't destroy)
+terraform state rm aws_s3_bucket.logs
+
+# Import existing resource into state
+terraform import aws_s3_bucket.my_bucket existing-bucket-name
+# (Terraform 1.5+ also supports declarative `import {}` blocks, reviewed in plan)
+
+# Pull current state
+terraform state pull
+
+# Force unlock (if locked)
+terraform force-unlock LOCK_ID
+</code></pre>
+<hr />
+<h2 id="modules">Modules</h2>
+<p>Modules are <strong>reusable packages</strong> of Terraform configurations.</p>
+<h3 id="using-a-module">Using a Module</h3>
+<pre><code class="language-hcl"># From Terraform Registry
+module &quot;vpc&quot; {
+  source  = &quot;terraform-aws-modules/vpc/aws&quot;
+  version = &quot;~&gt; 5.0&quot;
+
+  name = &quot;my-vpc&quot;
+  cidr = &quot;10.0.0.0/16&quot;
+
+  azs             = [&quot;us-east-1a&quot;, &quot;us-east-1b&quot;, &quot;us-east-1c&quot;]
+  private_subnets = [&quot;10.0.1.0/24&quot;, &quot;10.0.2.0/24&quot;, &quot;10.0.3.0/24&quot;]
+  public_subnets  = [&quot;10.0.101.0/24&quot;, &quot;10.0.102.0/24&quot;, &quot;10.0.103.0/24&quot;]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+# Access module outputs
+resource &quot;aws_instance&quot; &quot;web&quot; {
+  subnet_id = module.vpc.private_subnets[0]
+}
+</code></pre>
+<h3 id="writing-a-module">Writing a Module</h3>
+<pre><code>modules/
+└── ec2-instance/
+    ├── main.tf
+    ├── variables.tf
+    ├── outputs.tf
+    └── README.md
+</code></pre>
+<pre><code class="language-hcl"># modules/ec2-instance/variables.tf
+variable &quot;name&quot; { type = string }
+variable &quot;instance_type&quot; {
+  type    = string
+  default = &quot;t3.micro&quot;
+}
+
+# modules/ec2-instance/main.tf
+resource &quot;aws_instance&quot; &quot;this&quot; {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  tags = { Name = var.name }
+}
+
+# modules/ec2-instance/outputs.tf
+output &quot;instance_id&quot; { value = aws_instance.this.id }
+output &quot;private_ip&quot;  { value = aws_instance.this.private_ip }
+</code></pre>
+<pre><code class="language-hcl"># Use local module
+module &quot;web_server&quot; {
+  source        = &quot;./modules/ec2-instance&quot;
+  name          = &quot;web-server&quot;
+  instance_type = &quot;t3.medium&quot;
+}
+</code></pre>
+<hr />
+<h2 id="workspaces--environments">Workspaces &amp; Environments</h2>
+<h3 id="workspaces">Workspaces</h3>
+<pre><code class="language-bash"># Create and switch workspace
+terraform workspace new staging
+terraform workspace new production
+terraform workspace list
+terraform workspace select production
+terraform workspace show
+</code></pre>
+<pre><code class="language-hcl"># Use workspace name in config
+locals {
+  instance_type = {
+    staging    = &quot;t3.micro&quot;
+    production = &quot;t3.large&quot;
+  }
+}
+
+resource &quot;aws_instance&quot; &quot;web&quot; {
+  instance_type = local.instance_type[terraform.workspace]
+}
+</code></pre>
+<h3 id="environment-pattern-recommended-for-complex-setups">Environment Pattern (recommended for complex setups)</h3>
+<pre><code>infra/
+├── modules/
+│   ├── networking/
+│   ├── compute/
+│   └── database/
+└── environments/
+    ├── dev/
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── terraform.tfvars
+    ├── staging/
+    └── production/
+</code></pre>
+<hr />
+<h2 id="terraform-workflow">Terraform Workflow</h2>
+<pre><code class="language-bash"># 1. Initialize (download providers, configure backend)
+terraform init
+terraform init -upgrade          # update providers
+
+# 2. Validate syntax
+terraform validate
+
+# 3. Format code
+terraform fmt
+terraform fmt -recursive
+
+# 4. Plan (preview changes)
+terraform plan
+terraform plan -detailed-exitcode # exit code 2 = changes exist (useful in CI)
+terraform plan -out=tfplan        # save plan
+terraform plan -var=&quot;env=prod&quot;
+
+# 5. Apply
+terraform apply
+terraform apply tfplan            # apply saved plan
+terraform apply -auto-approve     # skip confirmation (CI/CD)
+terraform apply -target=aws_instance.web  # specific resource
+
+# 6. Destroy
+terraform destroy
+terraform destroy -target=aws_instance.web
+
+# Refresh (sync state with real world; `terraform refresh` is deprecated)
+terraform apply -refresh-only
+
+# Graph (visualize dependencies)
+terraform graph | dot -Tpng &gt; graph.png
+</code></pre>
+<hr />
+<h2 id="real-world-examples">Real-World Examples</h2>
+<h3 id="aws-vpc--eks-cluster">AWS VPC + EKS Cluster</h3>
+<pre><code class="language-hcl">terraform {
+  required_providers {
+    aws = {
+      source  = &quot;hashicorp/aws&quot;
+      version = &quot;~&gt; 5.0&quot;
+    }
+  }
+}
+
+provider &quot;aws&quot; {
+  region = var.region
+}
+
+# VPC
+module &quot;vpc&quot; {
+  source  = &quot;terraform-aws-modules/vpc/aws&quot;
+  version = &quot;~&gt; 5.0&quot;
+
+  name = &quot;${var.project}-vpc&quot;
+  cidr = &quot;10.0.0.0/16&quot;
+
+  azs             = data.aws_availability_zones.available.names
+  private_subnets = [&quot;10.0.1.0/24&quot;, &quot;10.0.2.0/24&quot;, &quot;10.0.3.0/24&quot;]
+  public_subnets  = [&quot;10.0.101.0/24&quot;, &quot;10.0.102.0/24&quot;, &quot;10.0.103.0/24&quot;]
+
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+
+  public_subnet_tags = {
+    &quot;kubernetes.io/role/elb&quot; = 1
+  }
+
+  private_subnet_tags = {
+    &quot;kubernetes.io/role/internal-elb&quot; = 1
+  }
+}
+
+# EKS Cluster
+module &quot;eks&quot; {
+  source  = &quot;terraform-aws-modules/eks/aws&quot;
+  version = &quot;~&gt; 20.0&quot;
+
+  cluster_name    = &quot;${var.project}-eks&quot;
+  cluster_version = &quot;1.32&quot;   # pick a version still in EKS standard support
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+
+  eks_managed_node_groups = {
+    general = {
+      instance_types = [&quot;t3.medium&quot;]
+      min_size       = 2
+      max_size       = 10
+      desired_size   = 2
+    }
+  }
+}
+</code></pre>
+<hr />
+<h2 id="testing-terraform">Testing Terraform</h2>
+<h3 id="terraform-test-native-v16">Terraform Test (native, v1.6+)</h3>
+<pre><code class="language-hcl"># tests/s3_bucket.tftest.hcl
+run &quot;creates_bucket_with_versioning&quot; {
+  command = apply
+
+  variables {
+    bucket_name = &quot;tftest-example-bucket&quot;   # must be globally unique in real runs
+    environment = &quot;test&quot;
+  }
+
+  assert {
+    condition     = aws_s3_bucket.main.bucket == var.bucket_name
+    error_message = &quot;Bucket name mismatch&quot;
+  }
+}
+</code></pre>
+<h3 id="terratest-go-based">Terratest (Go-based)</h3>
+<pre><code class="language-go">func TestTerraformS3Bucket(t *testing.T) {
+    opts := &amp;terraform.Options{
+        TerraformDir: &quot;../modules/s3-bucket&quot;,
+        Vars: map[string]interface{}{
+            &quot;bucket_name&quot;: &quot;test-bucket-&quot; + uuid.New().String(),
+        },
+    }
+    defer terraform.Destroy(t, opts)
+    terraform.InitAndApply(t, opts)
+
+    bucketName := terraform.Output(t, opts, &quot;bucket_name&quot;)
+    assert.Equal(t, &quot;test-bucket&quot;, bucketName[:11])
+}
+</code></pre>
+<hr />
+<h2 id="terraform-in-2026-opentofu">Terraform in 2026 (OpenTofu)</h2>
+<h3 id="opentofu">OpenTofu</h3>
+<p>In August 2023, HashiCorp changed Terraform's license from MPL to the Business Source License (BSL, source-available rather than open source). The community forked it as <strong>OpenTofu</strong>, now under the Linux Foundation.</p>
+<pre><code class="language-bash"># OpenTofu is a drop-in replacement
+tofu init
+tofu plan
+tofu apply
+
+# Same syntax, same providers
+</code></pre>
+<h3 id="whats-new-in-2026">What's New in 2026</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Provider Functions</strong> (Terraform 1.8+/OpenTofu 1.7+)</td>
+<td>Call provider-defined functions in HCL</td>
+</tr>
+<tr>
+<td><strong>Stacks</strong> (HCP Terraform)</td>
+<td>Orchestrate multiple configurations as a unit</td>
+</tr>
+<tr>
+<td><strong>Ephemeral Values</strong> (Terraform 1.10+)</td>
+<td>Sensitive values that aren't stored in state</td>
+</tr>
+<tr>
+<td><strong>State encryption</strong> (OpenTofu 1.7)</td>
+<td>Native state file encryption</td>
+</tr>
+<tr>
+<td><strong><code>terraform test</code></strong></td>
+<td>Built-in unit testing framework (no Terratest needed)</td>
+</tr>
+<tr>
+<td><strong>Drift detection</strong></td>
+<td>Automatic detection of out-of-band changes</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="tools-ecosystem">Tools Ecosystem</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Terragrunt</strong></td>
+<td>DRY wrapper for Terraform (keep configs DRY across envs)</td>
+</tr>
+<tr>
+<td><strong>Atlantis</strong></td>
+<td>GitOps for Terraform: auto-plan/apply on PR</td>
+</tr>
+<tr>
+<td><strong>Infracost</strong></td>
+<td>Cost estimation before <code>terraform apply</code></td>
+</tr>
+<tr>
+<td><strong>tflint</strong></td>
+<td>Linter for Terraform configurations</td>
+</tr>
+<tr>
+<td><strong>Checkov</strong></td>
+<td>Security scanning for IaC</td>
+</tr>
+<tr>
+<td><strong>Trivy</strong></td>
+<td>Security scanner that absorbed tfsec (tfsec is now in maintenance; migrate to <code>trivy config</code>)</td>
+</tr>
+<tr>
+<td><strong>terraform-docs</strong></td>
+<td>Auto-generate module documentation</td>
+</tr>
+<tr>
+<td><strong>env0 / Spacelift</strong></td>
+<td>Terraform collaboration platforms</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># === INIT &amp; SETUP ===
+terraform init                    # initialize + download providers
+terraform init -upgrade           # upgrade provider versions
+terraform init -reconfigure       # reconfigure backend
+
+# === PLANNING ===
+terraform validate                # syntax check
+terraform fmt [-recursive]        # format code
+terraform plan                    # preview changes
+terraform plan -out=tfplan        # save plan to file
+terraform plan -destroy           # preview destroy
+
+# === APPLYING ===
+terraform apply                   # apply changes (interactive)
+terraform apply -auto-approve     # skip confirmation
+terraform apply tfplan            # apply saved plan
+terraform apply -target=res.name  # apply specific resource
+
+# === DESTROYING ===
+terraform destroy
+terraform destroy -target=res.name
+terraform destroy -auto-approve
+
+# === STATE ===
+terraform state list              # list all resources
+terraform state show res.name     # show resource details
+terraform state mv old new        # rename resource
+terraform state rm res.name       # remove from state
+terraform import res.name ID      # import existing
+terraform apply -refresh-only     # sync state with reality (replaces deprecated refresh)
+
+# === WORKSPACES ===
+terraform workspace new name
+terraform workspace select name
+terraform workspace list
+terraform workspace show
+terraform workspace delete name
+
+# === OUTPUTS ===
+terraform output                  # all outputs
+terraform output name             # specific output
+terraform output -json            # JSON format
+
+# === DEBUGGING ===
+export TF_LOG=DEBUG               # verbose logging
+export TF_LOG_PATH=./terraform.log
+terraform graph | dot -Tpng &gt; graph.png
+
+# === OPENTOFU ===
+tofu init / plan / apply / destroy    # same as terraform
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_helm.html"><small>Previous</small>Helm</a><a rel="next" class="next" href="intro_github_actions.html"><small>Next</small>GitHub Actions</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/devops/intro_terraform.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

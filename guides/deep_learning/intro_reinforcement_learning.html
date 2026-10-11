@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reinforcement Learning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Supervised learning learns from labelled answers; reinforcement learning learns from the consequences of its own actions, with feedback that is delayed…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_reinforcement_learning.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Reinforcement Learning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Supervised learning learns from labelled answers; reinforcement learning learns from the consequences of its own actions, with feedback that is delayed…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_reinforcement_learning.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Reinforcement Learning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Supervised learning learns from labelled answers; reinforcement learning learns from the consequences of its own actions, with feedback that is delayed…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Reinforcement Learning",
+   "description": "Supervised learning learns from labelled answers; reinforcement learning learns from the consequences of its own actions, with feedback that is delayed…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_reinforcement_learning.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Reinforcement Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_reinforcement_learning.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Reinforcement Learning</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_reinforcement_learning.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 9 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="reinforcement-learning">Reinforcement Learning</h1>
+<p>Supervised learning learns from labelled answers; reinforcement learning learns from the consequences of its own actions, with feedback that is delayed, sparse and dependent on what the agent chose to try. It comes up in interviews in three forms: as fundamentals (Bellman equations, Q-learning vs SARSA, on- vs off-policy), as applied industry questions dressed up as something else (bandits for recommendations, ads, pricing, and evaluating a new policy from logged data), and, increasingly, as &quot;explain RLHF and why DPO exists&quot; for anyone working near LLMs. The strongest answers also know when RL is the wrong tool.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#when-rl-is-the-right-frame">When RL Is the Right Frame</a></li>
+<li><a href="#the-mdp-formalism">The MDP Formalism</a></li>
+<li><a href="#returns-value-functions-and-bellman-equations">Returns, Value Functions and Bellman Equations</a></li>
+<li><a href="#the-taxonomy">The Taxonomy</a></li>
+<li><a href="#dynamic-programming">Dynamic Programming</a></li>
+<li><a href="#monte-carlo-vs-temporal-difference">Monte Carlo vs Temporal Difference</a></li>
+<li><a href="#q-learning-vs-sarsa">Q-Learning vs SARSA</a></li>
+<li><a href="#exploration">Exploration</a></li>
+<li><a href="#multi-armed-and-contextual-bandits">Multi-Armed and Contextual Bandits</a></li>
+<li><a href="#dqn">DQN</a></li>
+<li><a href="#policy-gradients-and-reinforce">Policy Gradients and REINFORCE</a></li>
+<li><a href="#actor-critic-and-ppo">Actor-Critic and PPO</a></li>
+<li><a href="#offline-rl-and-off-policy-evaluation">Offline RL and Off-Policy Evaluation</a></li>
+<li><a href="#reward-design-shaping-and-hacking">Reward Design, Shaping and Hacking</a></li>
+<li><a href="#rl-for-llms">RL for LLMs</a></li>
+<li><a href="#when-not-to-use-rl">When Not to Use RL</a></li>
+<li><a href="#algorithm-comparison">Algorithm Comparison</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="when-rl-is-the-right-frame">When RL Is the Right Frame</h2>
+<p>RL fits when <strong>actions change what data you see next</strong> and the goal is a long-run outcome rather than a one-step prediction.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Why it's RL-shaped</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recommendations / ads ranking</td>
+<td>Choosing what to show determines what feedback you get (partial feedback)</td>
+</tr>
+<tr>
+<td>Dynamic pricing</td>
+<td>Price is an action; revenue feedback is only observed for the price you set</td>
+</tr>
+<tr>
+<td>Robotics, game playing</td>
+<td>Sequential control with delayed reward</td>
+</tr>
+<tr>
+<td>Resource allocation (bidding, scheduling)</td>
+<td>Actions consume budget that constrains future actions</td>
+</tr>
+<tr>
+<td>LLM alignment</td>
+<td>Optimize a sequence-level preference signal that isn't differentiable w.r.t. tokens</td>
+</tr>
+</tbody>
+</table></div>
+<p>The key distinction from supervised learning: <strong>you only observe the outcome of the action you took</strong>. There is no label telling you what would have happened under the other action. That single fact is the source of the exploration problem, the off-policy evaluation problem, and most of the difficulty.</p>
+<hr />
+<h2 id="the-mdp-formalism">The MDP Formalism</h2>
+<p>A Markov Decision Process is a tuple <code>(S, A, P, R, γ)</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Example (recsys session)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>S</code></td>
+<td>States</td>
+<td>User context + session history</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>Actions</td>
+<td>Which item to show</td>
+</tr>
+<tr>
+<td><code>P(s' | s, a)</code></td>
+<td>Transition dynamics</td>
+<td>How the user's state changes after seeing the item</td>
+</tr>
+<tr>
+<td><code>R(s, a)</code></td>
+<td>Reward</td>
+<td>Click, watch time, purchase</td>
+</tr>
+<tr>
+<td><code>γ ∈ [0, 1)</code></td>
+<td>Discount factor</td>
+<td>How much future reward counts relative to now</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The Markov property</strong>: the next state depends only on the current state and action, not on the full history. If it doesn't hold for your raw observations, you fold history into the state (stacked frames, an RNN hidden state) or treat it as a POMDP.</p>
+<p>A <strong>policy</strong> <code>π(a | s)</code> maps states to a distribution over actions. The goal is to find a policy that maximizes expected discounted return.</p>
+<p><strong>Why discount?</strong> Three reasons worth stating: it makes infinite-horizon returns finite (for bounded rewards and <code>γ &lt; 1</code>), it encodes a preference for sooner reward, and it reduces variance by down-weighting distant, noisy rewards. The effective horizon is roughly <code>1 / (1 − γ)</code>, so <code>γ = 0.99</code> looks about 100 steps ahead.</p>
+<hr />
+<h2 id="returns-value-functions-and-bellman-equations">Returns, Value Functions and Bellman Equations</h2>
+<p>The <strong>return</strong> from time <code>t</code>:</p>
+<pre><code>G_t = r_{t+1} + γ r_{t+2} + γ² r_{t+3} + ... = Σ_k γ^k r_{t+k+1}
+</code></pre>
+<p>Two value functions:</p>
+<pre><code>V^π(s)    = E_π[ G_t | s_t = s ]                  # how good is this state under π
+Q^π(s, a) = E_π[ G_t | s_t = s, a_t = a ]         # how good is this action here, then follow π
+A^π(s, a) = Q^π(s, a) − V^π(s)                    # advantage: better or worse than average
+</code></pre>
+<p>The <strong>Bellman expectation equation</strong> expresses value recursively, one step of reward plus the discounted value of where you land:</p>
+<pre><code>V^π(s)    = Σ_a π(a|s) Σ_s' P(s'|s,a) [ R(s,a) + γ V^π(s') ]
+Q^π(s, a) = Σ_s' P(s'|s,a) [ R(s,a) + γ Σ_a' π(a'|s') Q^π(s',a') ]
+</code></pre>
+<p>The <strong>Bellman optimality equation</strong> replaces the policy average with a max:</p>
+<pre><code>V*(s)    = max_a Σ_s' P(s'|s,a) [ R(s,a) + γ V*(s') ]
+Q*(s, a) = Σ_s' P(s'|s,a) [ R(s,a) + γ max_a' Q*(s',a') ]
+</code></pre>
+<p>Once you have <code>Q*</code>, the optimal policy is just <code>argmax_a Q*(s, a)</code>: no model needed. That is why so much of RL is about estimating <code>Q</code>.</p>
+<hr />
+<h2 id="the-taxonomy">The Taxonomy</h2>
+<p>Three axes that interviewers use to check you have a map of the field:</p>
+<p><strong>Value-based vs policy-based</strong></p>
+<ul>
+<li><em>Value-based</em> (Q-learning, DQN): learn <code>Q</code>, act greedily. Works well for discrete actions; awkward for continuous ones because of the <code>max_a</code>.</li>
+<li><em>Policy-based</em> (REINFORCE): parameterize <code>π_θ</code> directly and do gradient ascent on return. Handles continuous and stochastic policies naturally; high variance.</li>
+<li><em>Actor-critic</em> (A2C, PPO, SAC): both, a policy (actor) updated with help from a learned value function (critic).</li>
+</ul>
+<p><strong>Model-based vs model-free</strong></p>
+<ul>
+<li><em>Model-based</em>: learn or are given <code>P</code> and <code>R</code>, then plan (dynamic programming, MCTS, model-predictive control). Much more sample-efficient; errors in the model compound over long rollouts.</li>
+<li><em>Model-free</em>: learn values or policies directly from experience. Simpler and robust to model error, but data-hungry.</li>
+</ul>
+<p><strong>On-policy vs off-policy</strong></p>
+<ul>
+<li><em>On-policy</em> (SARSA, REINFORCE, PPO): learn about the policy that is currently collecting the data. Data goes stale after each update.</li>
+<li><em>Off-policy</em> (Q-learning, DQN, SAC): learn about a <em>target</em> policy from data collected by a different <em>behaviour</em> policy. Can reuse old data from a replay buffer or logs, which is what makes offline RL and logged-data evaluation possible.</li>
+</ul>
+<hr />
+<h2 id="dynamic-programming">Dynamic Programming</h2>
+<p>When the MDP is fully known and small, you can solve it exactly.</p>
+<ul>
+<li><strong>Policy evaluation</strong>: iterate the Bellman expectation equation until <code>V^π</code> converges.</li>
+<li><strong>Policy iteration</strong>: alternate evaluation and greedy improvement <code>π(s) ← argmax_a Q^π(s, a)</code>. Converges in a finite number of iterations for finite MDPs.</li>
+<li><strong>Value iteration</strong>: apply the Bellman optimality update directly, <code>V(s) ← max_a Σ P [R + γ V(s')]</code>. Each sweep is a contraction with factor <code>γ</code>, so it converges to <code>V*</code>.</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+
+def value_iteration(P, R, gamma=0.99, tol=1e-8):
+    &quot;&quot;&quot;P: (S, A, S) transition probs; R: (S, A) expected reward.&quot;&quot;&quot;
+    V = np.zeros(P.shape[0])
+    while True:
+        Q = R + gamma * P @ V              # (S, A): one-step lookahead
+        V_new = Q.max(axis=1)
+        if np.abs(V_new - V).max() &lt; tol:
+            return V_new, Q.argmax(axis=1)
+        V = V_new
+</code></pre>
+<p>DP is rarely the production answer (you almost never know <code>P</code>), but it's the conceptual base: every model-free method is an approximation of one of these updates using samples instead of the true expectation.</p>
+<hr />
+<h2 id="monte-carlo-vs-temporal-difference">Monte Carlo vs Temporal Difference</h2>
+<p>Both estimate value from experience without a model. They differ in what target they update towards.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Monte Carlo</th>
+<th>TD(0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Target</td>
+<td>Full observed return <code>G_t</code></td>
+<td><code>r + γ V(s')</code> (bootstrapped)</td>
+</tr>
+<tr>
+<td>Needs episode to finish?</td>
+<td>Yes</td>
+<td>No: updates every step</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>Unbiased</td>
+<td>Biased (depends on current estimate of <code>V(s')</code>)</td>
+</tr>
+<tr>
+<td>Variance</td>
+<td>High (sum of many random rewards)</td>
+<td>Low (one reward + an estimate)</td>
+</tr>
+<tr>
+<td>Uses Markov structure?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Continuing (non-episodic) tasks</td>
+<td>Awkward</td>
+<td>Natural</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>MC:     V(s) ← V(s) + α [ G_t − V(s) ]
+TD(0):  V(s) ← V(s) + α [ r + γ V(s') − V(s) ]      # bracket = TD error δ
+</code></pre>
+<p><strong>The middle ground</strong> is n-step returns and TD(λ): use <code>n</code> real rewards and then bootstrap. Generalized Advantage Estimation (GAE), used in PPO, is the same idea applied to advantage estimation, with <code>λ</code> trading bias for variance.</p>
+<hr />
+<h2 id="q-learning-vs-sarsa">Q-Learning vs SARSA</h2>
+<p>Both are tabular TD control methods. The difference is one term in the target:</p>
+<pre><code>SARSA:      Q(s,a) ← Q(s,a) + α [ r + γ Q(s', a')        − Q(s,a) ]   # a' actually taken
+Q-learning: Q(s,a) ← Q(s,a) + α [ r + γ max_a' Q(s', a') − Q(s,a) ]   # greedy a'
+</code></pre>
+<ul>
+<li><strong>SARSA is on-policy</strong>: it learns the value of the policy it is actually following, exploration included.</li>
+<li><strong>Q-learning is off-policy</strong>: it learns the value of the greedy policy regardless of how actions were chosen.</li>
+</ul>
+<p>The textbook illustration is the <strong>cliff-walking</strong> gridworld. With ε-greedy exploration, Q-learning learns the optimal path along the cliff edge but falls off during training because of random exploratory steps. SARSA learns a safer path further from the edge because its values account for the fact that it will sometimes explore. If exploration happens at deployment too, SARSA's answer is the better one.</p>
+<p>A minimal tabular Q-learning agent on a 1-D corridor (reach the right end for +1):</p>
+<pre><code class="language-python">import numpy as np
+
+n_states, n_actions = 6, 2          # actions: 0 = left, 1 = right
+goal = n_states - 1
+Q = np.zeros((n_states, n_actions))
+alpha, gamma, eps = 0.1, 0.95, 0.1
+rng = np.random.default_rng(0)
+
+def step(s, a):
+    s2 = min(s + 1, goal) if a == 1 else max(s - 1, 0)
+    r = 1.0 if s2 == goal else 0.0
+    return s2, r, s2 == goal
+
+for episode in range(500):
+    s, done = 0, False
+    while not done:
+        # epsilon-greedy with random tie-breaking
+        if rng.random() &lt; eps:
+            a = int(rng.integers(n_actions))
+        else:
+            a = int(rng.choice(np.flatnonzero(Q[s] == Q[s].max())))
+        s2, r, done = step(s, a)
+        target = r if done else r + gamma * Q[s2].max()   # no bootstrap past terminal
+        Q[s, a] += alpha * (target - Q[s, a])
+        s = s2
+
+print(Q.argmax(axis=1)[:-1])   # [1 1 1 1 1] -&gt; always move right
+</code></pre>
+<p>Note the <code>if done</code> in the target: bootstrapping from a terminal state is a common bug. Tabular Q-learning converges to <code>Q*</code> given every state-action pair is visited infinitely often and the learning rate decays appropriately.</p>
+<hr />
+<h2 id="exploration">Exploration</h2>
+<p>The agent only learns about actions it tries. Too little exploration locks in an early mistake; too much wastes reward.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ε-greedy</strong></td>
+<td>Random action with probability ε, else greedy</td>
+<td>Simple, default; explores uniformly, including obviously bad actions; decay ε over time</td>
+</tr>
+<tr>
+<td><strong>Softmax / Boltzmann</strong></td>
+<td>Sample <code>a ∝ exp(Q(s,a)/τ)</code></td>
+<td>Explores near-best actions more than terrible ones</td>
+</tr>
+<tr>
+<td><strong>UCB</strong></td>
+<td>Pick <code>argmax_a Q(a) + c √(ln t / N(a))</code></td>
+<td>Optimism in the face of uncertainty; bonus shrinks as an arm is tried; deterministic</td>
+</tr>
+<tr>
+<td><strong>Thompson sampling</strong></td>
+<td>Sample a plausible model from the posterior, act greedily under it</td>
+<td>Explores in proportion to probability of being optimal; strong empirically; handles delayed batch updates well</td>
+</tr>
+<tr>
+<td><strong>Entropy bonus</strong></td>
+<td>Add <code>β · H(π(·|s))</code> to the objective</td>
+<td>Standard in policy-gradient methods to prevent premature collapse</td>
+</tr>
+<tr>
+<td><strong>Intrinsic motivation</strong></td>
+<td>Reward novelty / prediction error</td>
+<td>For sparse-reward environments</td>
+</tr>
+</tbody>
+</table></div>
+<p>UCB and Thompson sampling come with logarithmic regret guarantees in the stochastic multi-armed bandit setting; plain ε-greedy with fixed ε has linear regret because it never stops exploring.</p>
+<hr />
+<h2 id="multi-armed-and-contextual-bandits">Multi-Armed and Contextual Bandits</h2>
+<p>A bandit is RL with <strong>one step</strong>: no state transitions, so no credit assignment over time, only the exploration-exploitation trade-off. This is where most industrial RL actually lives.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>State</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Multi-armed bandit</strong></td>
+<td>None</td>
+<td>Which of 5 headlines gets the most clicks</td>
+</tr>
+<tr>
+<td><strong>Contextual bandit</strong></td>
+<td>Context <code>x</code> observed before acting</td>
+<td>Which article to show <em>this</em> user; which ad; what discount to offer</td>
+</tr>
+<tr>
+<td><strong>Full RL</strong></td>
+<td>State evolves with actions</td>
+<td>Session-level recommendations optimizing long-term retention</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Bandits vs A/B tests.</strong> An A/B test explores uniformly for a fixed period and then exploits; it is built to estimate an effect with a confidence interval. A bandit shifts traffic toward winners as evidence accumulates, which reduces regret (lost reward during the experiment) but makes clean inference about effect sizes harder. Use A/B tests when you need a defensible measurement; use bandits when you care about reward during learning, have many arms, or the best arm drifts (headlines, promos, creatives).</p>
+<p>Beta-Bernoulli Thompson sampling for click-through rates:</p>
+<pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(0)
+true_ctr = np.array([0.04, 0.05, 0.07])          # unknown to the agent
+alpha = np.ones(3); beta = np.ones(3)            # Beta(1,1) priors
+
+for t in range(20_000):
+    theta = rng.beta(alpha, beta)                # sample a plausible CTR per arm
+    arm = int(theta.argmax())
+    click = rng.random() &lt; true_ctr[arm]
+    alpha[arm] += click
+    beta[arm] += 1 - click
+
+print((alpha + beta - 2).astype(int))            # pulls concentrate on arm 2
+</code></pre>
+<p><strong>Contextual bandits</strong> in practice: LinUCB (a linear reward model per arm with a UCB bonus from its covariance), linear or neural Thompson sampling, or a greedy model with ε-exploration. The operational essentials are the same across methods: <strong>log the propensity</strong> (probability the chosen action had) with every decision, so the data can later be used for off-policy evaluation, and keep some exploration forever so the logs cover alternatives.</p>
+<p><strong>Pricing</strong> is a contextual bandit with a twist: reward is <code>price × P(purchase | price)</code>, the arms are ordered, and demand is usually monotone in price, so parametric demand models share information across price points far more efficiently than independent arms.</p>
+<hr />
+<h2 id="dqn">DQN</h2>
+<p>Deep Q-Networks replace the Q-table with a neural network <code>Q_θ(s, a)</code>. Naively combining Q-learning with function approximation is unstable; DQN's two main stabilizers are the interview answer:</p>
+<ol>
+<li><strong>Experience replay</strong>: store transitions <code>(s, a, r, s', done)</code> in a buffer and train on random minibatches. Breaks the temporal correlation between consecutive samples and reuses each transition many times. Only valid because Q-learning is off-policy.</li>
+<li><strong>Target network</strong>: compute targets with a lagged copy <code>θ⁻</code>, updated every <code>C</code> steps (or by Polyak averaging). Without it, every update moves the target it is regressing toward.</li>
+</ol>
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+def dqn_loss(q_net, target_net, batch, gamma=0.99):
+    s, a, r, s2, done = batch                        # tensors; done is 0/1 float
+    q = q_net(s).gather(1, a.unsqueeze(1)).squeeze(1)
+    with torch.no_grad():
+        # Double DQN: online net selects the action, target net evaluates it
+        a2 = q_net(s2).argmax(dim=1, keepdim=True)
+        q2 = target_net(s2).gather(1, a2).squeeze(1)
+        target = r + gamma * (1 - done) * q2
+    return F.smooth_l1_loss(q, target)               # Huber loss
+</code></pre>
+<p><strong>The deadly triad</strong> (Sutton &amp; Barto): function approximation + bootstrapping + off-policy learning together can diverge. DQN has all three; replay and target networks mitigate rather than eliminate it.</p>
+<p><strong>Common improvements</strong>: Double DQN (shown above; reduces the overestimation bias from <code>max</code> over noisy estimates), dueling architecture (separate <code>V</code> and <code>A</code> streams), prioritized replay (sample high-TD-error transitions more often), n-step returns, distributional RL. Rainbow combines several of these.</p>
+<hr />
+<h2 id="policy-gradients-and-reinforce">Policy Gradients and REINFORCE</h2>
+<p>Parameterize the policy <code>π_θ(a|s)</code> and ascend <code>J(θ) = E_π[G]</code>. The <strong>policy gradient theorem</strong> gives a gradient that does not require differentiating the environment:</p>
+<pre><code>∇_θ J(θ) = E_π[ Σ_t ∇_θ log π_θ(a_t | s_t) · G_t ]
+</code></pre>
+<p>Intuition: increase the log-probability of actions in proportion to how good the return after them was. This is the <strong>log-derivative (score function) trick</strong>, the same estimator used whenever you need gradients through a sampling step you can't differentiate.</p>
+<p><strong>REINFORCE</strong> is the Monte Carlo version: roll out a full episode, compute <code>G_t</code>, step along the gradient. It is unbiased but very high variance.</p>
+<p><strong>Baselines</strong> are the standard variance reduction: subtract <code>b(s_t)</code> from <code>G_t</code>. Any baseline that doesn't depend on the action leaves the gradient unbiased (because <code>E[∇ log π] = 0</code>). Using <code>b = V(s)</code> turns <code>G_t − V(s_t)</code> into an advantage estimate, which is the step to actor-critic.</p>
+<pre><code class="language-python">import torch
+
+def reinforce_loss(log_probs, rewards, gamma=0.99):
+    &quot;&quot;&quot;log_probs: list of log π(a_t|s_t) tensors for one episode.&quot;&quot;&quot;
+    G, returns = 0.0, []
+    for r in reversed(rewards):
+        G = r + gamma * G
+        returns.insert(0, G)
+    returns = torch.tensor(returns)
+    returns = (returns - returns.mean()) / (returns.std() + 1e-8)   # simple baseline
+    return -(torch.stack(log_probs) * returns).sum()
+</code></pre>
+<p>Policy gradients handle continuous actions (output a Gaussian mean and std) and stochastic optimal policies, which value-based methods cannot represent with a greedy argmax.</p>
+<hr />
+<h2 id="actor-critic-and-ppo">Actor-Critic and PPO</h2>
+<p><strong>Actor-critic</strong> learns a critic <code>V_φ(s)</code> alongside the actor <code>π_θ</code>, and uses the critic to form a lower-variance advantage estimate, e.g. the TD error <code>δ = r + γ V(s') − V(s)</code> or GAE. A2C/A3C are synchronous/asynchronous versions of this. SAC and TD3 are off-policy actor-critic methods popular for continuous control.</p>
+<p>The problem with vanilla policy gradients: step size. One large update can collapse the policy, and because the policy generates its own data, a bad policy then collects bad data and may not recover. TRPO constrains each update with a KL-divergence trust region; <strong>PPO</strong> gets most of the benefit with a simple clipped objective:</p>
+<pre><code>r_t(θ) = π_θ(a_t|s_t) / π_θ_old(a_t|s_t)
+
+L_CLIP(θ) = E_t[ min( r_t(θ) Â_t,  clip(r_t(θ), 1−ε, 1+ε) Â_t ) ]
+</code></pre>
+<ul>
+<li>If the advantage is positive, the objective stops rewarding increases in <code>r_t</code> beyond <code>1 + ε</code>.</li>
+<li>If negative, it stops rewarding decreases beyond <code>1 − ε</code>.</li>
+<li>The <code>min</code> makes it a pessimistic bound: the clip removes the incentive to move far, but never hides a change that makes things worse.</li>
+</ul>
+<pre><code class="language-python">import torch
+
+def ppo_clip_loss(logp_new, logp_old, adv, eps=0.2):
+    ratio = torch.exp(logp_new - logp_old)
+    unclipped = ratio * adv
+    clipped = torch.clamp(ratio, 1 - eps, 1 + eps) * adv
+    return -torch.min(unclipped, clipped).mean()
+</code></pre>
+<p>The full PPO loss adds a value-function loss and an entropy bonus. PPO is on-policy but reuses each batch for a few epochs of minibatch updates, which the clipping makes safe. It is the default general-purpose deep RL algorithm and was the standard optimizer in RLHF pipelines.</p>
+<hr />
+<h2 id="offline-rl-and-off-policy-evaluation">Offline RL and Off-Policy Evaluation</h2>
+<p>In industry you usually cannot let an untested policy explore on live users. You have <strong>logs</strong> from the current production policy (the behaviour policy <code>π_0</code>) and want to either evaluate or learn a new policy <code>π</code> from them.</p>
+<p><strong>Off-policy evaluation (OPE)</strong> for contextual bandits, with logged tuples <code>(x_i, a_i, r_i, p_i)</code> where <code>p_i = π_0(a_i | x_i)</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Estimator</th>
+<th>Formula (per-sample average)</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Direct method (DM)</strong></td>
+<td><code>Σ_a π(a|x) r̂(x, a)</code></td>
+<td>Low variance; biased if the reward model is wrong</td>
+</tr>
+<tr>
+<td><strong>IPS</strong></td>
+<td><code>π(a_i|x_i) / p_i · r_i</code></td>
+<td>Unbiased if propensities are correct and overlap holds; high variance when weights are large</td>
+</tr>
+<tr>
+<td><strong>SNIPS</strong></td>
+<td>IPS divided by the mean weight</td>
+<td>Small bias, much lower variance</td>
+</tr>
+<tr>
+<td><strong>Doubly robust (DR)</strong></td>
+<td><code>DM + π(a_i|x_i)/p_i · (r_i − r̂(x_i, a_i))</code></td>
+<td>Unbiased if <em>either</em> the propensities or the reward model is correct; usually lower variance than IPS</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+
+def ope_estimates(pi_new, p_logged, r, r_hat_logged, r_hat_policy):
+    &quot;&quot;&quot;pi_new: π(a_i|x_i) for logged actions; p_logged: π_0(a_i|x_i);
+    r_hat_logged: r̂(x_i, a_i); r_hat_policy: Σ_a π(a|x_i) r̂(x_i, a).&quot;&quot;&quot;
+    w = pi_new / p_logged
+    ips = np.mean(w * r)
+    snips = np.sum(w * r) / np.sum(w)
+    dr = np.mean(r_hat_policy + w * (r - r_hat_logged))
+    return {&quot;IPS&quot;: ips, &quot;SNIPS&quot;: snips, &quot;DR&quot;: dr}
+</code></pre>
+<p>Requirements that interviews probe: <strong>logged propensities</strong> (reconstructing them after the fact is error-prone), <strong>overlap/support</strong> (if <code>π_0</code> never takes an action that <code>π</code> takes, no estimator can evaluate it: this is why production systems keep some randomization), and <strong>weight clipping</strong> to control variance at the cost of bias. This is the same machinery as inverse propensity weighting in causal inference.</p>
+<p>For sequential problems, importance weights multiply across time steps and variance explodes with horizon: a big reason long-horizon OPE is hard.</p>
+<p><strong>Offline RL</strong> (learning a policy from a fixed dataset) faces <strong>distributional shift</strong>: the learned <code>Q</code> overestimates the value of actions the data never tried, and the policy exploits those errors. Methods constrain the policy toward the data: BCQ, CQL (penalizes Q-values for out-of-distribution actions), IQL (avoids querying unseen actions entirely). Behaviour cloning on the best logged trajectories is a strong baseline that is often hard to beat.</p>
+<hr />
+<h2 id="reward-design-shaping-and-hacking">Reward Design, Shaping and Hacking</h2>
+<p>The agent optimizes exactly the reward you wrote, not the one you meant.</p>
+<p><strong>Reward hacking / specification gaming</strong>: the policy finds a way to score highly that violates the intent. Classic forms: exploiting a simulator bug, looping to collect a repeatable reward, optimizing a proxy (clicks) at the expense of the goal (satisfaction): clickbait is reward hacking. In RLHF, the policy learns to exploit weaknesses of the learned reward model: longer answers, confident tone, sycophancy.</p>
+<p><strong>Reward shaping</strong> adds intermediate rewards to speed up learning in sparse-reward problems, and can change the optimal policy if done carelessly. <strong>Potential-based shaping</strong> <code>F(s, s') = γ Φ(s') − Φ(s)</code> provably preserves the optimal policy (Ng, Harada &amp; Russell, 1999), because the shaping terms telescope along any trajectory.</p>
+<p>Mitigations: reward the outcome, not the method; combine multiple signals with guardrail metrics; add a KL penalty to a trusted reference policy; audit high-reward episodes by hand; and refresh learned reward models on the new policy's outputs.</p>
+<hr />
+<h2 id="rl-for-llms">RL for LLMs</h2>
+<p><strong>Why RL at all?</strong> Next-token cross-entropy can only imitate. Preferences (&quot;answer A is better than B&quot;) and verifiable outcomes (&quot;the code passes tests&quot;) are sequence-level signals that aren't a per-token target, so you optimize them with RL or an RL-derived objective. See <a href="intro_fine_tuning.html">Fine-Tuning</a> for the full SFT → preference-tuning pipeline.</p>
+<p><strong>RLHF pipeline</strong></p>
+<ol>
+<li><strong>SFT</strong>: supervised fine-tune on demonstrations.</li>
+<li><strong>Reward model</strong>: train <code>r_φ(x, y)</code> on human preference pairs with a Bradley-Terry loss, <code>−log σ(r_φ(x, y_w) − r_φ(x, y_l))</code>.</li>
+<li><strong>RL</strong>: optimize the policy with PPO to maximize <code>r_φ(x, y) − β · KL(π_θ(·|x) ‖ π_ref(·|x))</code>.</li>
+</ol>
+<p>In the MDP framing, the state is the prompt plus tokens so far, the action is the next token, and reward typically arrives only at the end of the sequence. The <strong>KL penalty</strong> keeps the policy near the SFT model: it limits reward hacking of an imperfect reward model and preserves fluency.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it needs</th>
+<th>How it works</th>
+<th>Trade-offs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PPO (RLHF)</strong></td>
+<td>Reward model, value model, reference model, policy</td>
+<td>Online RL with clipped updates and KL penalty</td>
+<td>Most flexible; four models in memory; many hyperparameters; unstable</td>
+</tr>
+<tr>
+<td><strong>DPO</strong></td>
+<td>Preference pairs, reference model</td>
+<td>Closed-form reparameterization of the KL-regularized objective turns it into a classification loss on pairs</td>
+<td>No reward model, no sampling, simple and stable; offline: limited to the preference data's distribution</td>
+</tr>
+<tr>
+<td><strong>GRPO</strong></td>
+<td>Reward function or model, reference model</td>
+<td>Sample a group of responses per prompt; advantage = reward normalized by the group mean and std; PPO-style clipped update</td>
+<td>No value network; works well with verifiable rewards (math, code); popularized by DeepSeek's reasoning models</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>RL with verifiable rewards (RLVR)</strong>: for math and code, the reward comes from checking the answer or running tests rather than a learned reward model, which removes one source of reward hacking (though models can still exploit weak test suites or answer-format checks).</p>
+<hr />
+<h2 id="when-not-to-use-rl">When Not to Use RL</h2>
+<p>This is where interviewers separate practitioners from enthusiasts.</p>
+<ul>
+<li><strong>Actions don't affect future states</strong> → it's a bandit, not full RL. Use a contextual bandit.</li>
+<li><strong>You can get labels for the right action</strong> → it's supervised learning. Imitation/behaviour cloning beats RL when good demonstrations exist.</li>
+<li><strong>You only need a ranking score and exploration is cheap to fake</strong> → a supervised model plus a small ε of randomization and logged propensities covers most recsys needs.</li>
+<li><strong>You need a defensible effect estimate</strong> → run an A/B test.</li>
+<li><strong>No simulator and online exploration is unsafe or expensive</strong> → RL's sample appetite is a real barrier; offline RL is possible but hard to validate.</li>
+<li><strong>The reward is a proxy you don't trust</strong> → RL will optimize the gap between the proxy and the goal.</li>
+</ul>
+<p>Deep RL is also notoriously sensitive to seeds, hyperparameters and implementation details; results should be reported over multiple seeds. The practical ladder is: supervised model → bandit → offline evaluation of a candidate policy → cautious online RL.</p>
+<hr />
+<h2 id="algorithm-comparison">Algorithm Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Q-learning / DQN</th>
+<th>SARSA</th>
+<th>REINFORCE</th>
+<th>PPO</th>
+<th>SAC</th>
+<th>Contextual bandit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Family</td>
+<td>Value</td>
+<td>Value</td>
+<td>Policy</td>
+<td>Actor-critic</td>
+<td>Actor-critic</td>
+<td>One-step</td>
+</tr>
+<tr>
+<td>On/off-policy</td>
+<td>Off</td>
+<td>On</td>
+<td>On</td>
+<td>On</td>
+<td>Off</td>
+<td>Either (off with logged propensities)</td>
+</tr>
+<tr>
+<td>Action space</td>
+<td>Discrete</td>
+<td>Discrete</td>
+<td>Any</td>
+<td>Any</td>
+<td>Continuous</td>
+<td>Discrete, usually</td>
+</tr>
+<tr>
+<td>Sample efficiency</td>
+<td>Good (replay)</td>
+<td>Moderate</td>
+<td>Poor</td>
+<td>Moderate</td>
+<td>Good</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>Moderate</td>
+<td>Good (tabular)</td>
+<td>Poor (variance)</td>
+<td><strong>Good</strong></td>
+<td>Good</td>
+<td><strong>Good</strong></td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>Atari, discrete control</td>
+<td>Safe tabular control</td>
+<td>Teaching, simple tasks</td>
+<td>General default; RLHF</td>
+<td>Robotics</td>
+<td>Recsys, ads, pricing</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="what-is-the-difference-between-q-learning-and-sarsa">What is the difference between Q-learning and SARSA?</h4>
+<p>Both are TD control methods that update <code>Q(s, a)</code> toward a one-step target. SARSA uses the action the agent actually takes next, <code>r + γ Q(s', a')</code>, so it learns the value of its current (exploring) policy: it is on-policy. Q-learning uses <code>r + γ max_a' Q(s', a')</code>, the greedy action, so it learns the value of the optimal policy regardless of how data was collected: it is off-policy.</p>
+<p>The practical consequence shows up in cliff walking: under ε-greedy exploration, Q-learning learns the risky optimal path along the edge and falls off during training; SARSA learns a safer path because its values include the cost of occasional random moves. If you'll keep exploring when deployed, SARSA's policy performs better. Q-learning's off-policy nature is also what allows DQN's experience replay.</p>
+<h4 id="explain-the-bellman-equation-and-why-it-matters">Explain the Bellman equation and why it matters.</h4>
+<p>It writes value recursively: the value of a state equals the expected immediate reward plus the discounted value of the next state, <code>V(s) = E[r + γ V(s')]</code>. The optimality version takes a max over actions.</p>
+<p>It matters because it turns a sum over infinite futures into a local consistency condition. Dynamic programming iterates it to the fixed point when the model is known. TD learning and Q-learning replace the expectation with a single sampled transition and nudge the estimate toward it. DQN is Q-learning with a neural network regressing onto Bellman targets. Almost every value-based method is some approximation of this equation.</p>
+<h4 id="monte-carlo-vs-td-which-would-you-use">Monte Carlo vs TD, which would you use?</h4>
+<p>MC waits for the episode's full return: unbiased but high variance, and it needs episodes to terminate. TD bootstraps from the current estimate of the next state: biased, but much lower variance, updates online, and works on continuing tasks. TD usually learns faster in practice because it exploits the Markov structure.</p>
+<p>The real answer is often in between: n-step returns or GAE, which use a few real rewards before bootstrapping and expose the bias-variance trade-off as a tunable knob (<code>n</code> or <code>λ</code>). If the Markov property is badly violated, MC-style targets are more robust because they don't rely on the state being a sufficient summary.</p>
+<h4 id="why-does-dqn-need-a-replay-buffer-and-a-target-network">Why does DQN need a replay buffer and a target network?</h4>
+<p>Q-learning with a neural network is unstable for two reasons. Consecutive transitions are highly correlated, which violates the i.i.d. assumption SGD relies on and makes the network overfit to the recent trajectory. And the regression target <code>r + γ max Q(s', a')</code> depends on the same parameters being updated, so the target moves with every step.</p>
+<p>The replay buffer samples random past transitions, decorrelating minibatches and reusing data: valid because Q-learning is off-policy. The target network freezes the parameters used for targets for many steps, so the network regresses toward a fixed objective for a while. Double DQN additionally decouples action selection from evaluation to reduce the overestimation bias caused by taking a max over noisy estimates.</p>
+<h4 id="explain-the-policy-gradient-theorem-and-why-baselines-help">Explain the policy gradient theorem and why baselines help.</h4>
+<p>The gradient of expected return is <code>E[∇ log π(a|s) · G]</code>: push up the log-probability of actions in proportion to the return that followed. It doesn't require a differentiable environment: only the ability to differentiate the policy's log-probability.</p>
+<p>The estimator is unbiased but very noisy, because <code>G</code> varies a lot for reasons that have nothing to do with the action. Subtracting a baseline <code>b(s)</code> keeps it unbiased, since the expected score function is zero, but reduces variance substantially. The natural baseline is <code>V(s)</code>, which turns the multiplier into an advantage (&quot;was this action better than usual here?&quot;), and that is exactly the actor-critic setup.</p>
+<h4 id="what-problem-does-ppo-solve-and-how-does-the-clipped-objective-work">What problem does PPO solve, and how does the clipped objective work?</h4>
+<p>Policy gradient step size is dangerous: a single oversized update can wreck the policy, and since the policy collects its own data, a bad policy may never recover. TRPO fixes this with a hard KL constraint, but it's complex to implement.</p>
+<p>PPO uses the probability ratio <code>r = π_new/π_old</code> and optimizes <code>min(r·A, clip(r, 1−ε, 1+ε)·A)</code>. For a good action it stops rewarding the policy for raising its probability past <code>1+ε</code>; for a bad action, past <code>1−ε</code> downward. The min makes it pessimistic, so the clip never masks an update that makes things worse. This lets PPO run several epochs of minibatch SGD on each batch of rollouts without the policy drifting too far, with a first-order optimizer and few moving parts.</p>
+<h4 id="when-would-you-use-a-bandit-instead-of-an-ab-test-and-instead-of-full-rl">When would you use a bandit instead of an A/B test, and instead of full RL?</h4>
+<p>Instead of an A/B test when regret during the experiment matters and I don't need a precise effect estimate: many creatives, short-lived content like headlines or promos, or a best option that drifts. A/B tests are the right tool when I need a clean, defensible measurement for a launch decision.</p>
+<p>Instead of full RL when my action doesn't meaningfully change the user's future state, or when I'm willing to ignore that effect. Most recommendation, ad and pricing decisions are modelled as contextual bandits because they're far easier to train, evaluate offline and debug. I'd move to full RL only if there's clear evidence that myopic optimization hurts long-term outcomes, for example that optimizing immediate clicks is reducing retention.</p>
+<h4 id="how-do-you-evaluate-a-new-recommendation-policy-without-deploying-it">How do you evaluate a new recommendation policy without deploying it?</h4>
+<p>Off-policy evaluation on logged data. For each logged decision I need the context, action, reward and the propensity with which the production policy chose that action. IPS reweights each logged reward by <code>π_new(a|x) / π_old(a|x)</code>; it's unbiased if propensities are correct and the old policy gave positive probability to every action the new one takes, but variance blows up when weights are large. SNIPS normalizes by the sum of weights to cut variance. Doubly robust combines a reward model with an IPS correction on its residual, and stays unbiased if either component is correct.</p>
+<p>In practice I'd report DR and SNIPS with confidence intervals, check the effective sample size of the weights, clip extreme weights, and treat OPE as a filter for which candidates go to an online A/B test rather than a replacement for it. If the logging policy was deterministic, there's no overlap and OPE is impossible, which is why you keep some randomization in production.</p>
+<h4 id="what-is-the-exploration-exploitation-trade-off-and-how-do-ucb-and-thompson-sampling-handle-it">What is the exploration-exploitation trade-off and how do UCB and Thompson sampling handle it?</h4>
+<p>Exploiting means choosing what currently looks best; exploring means trying things to find out whether something else is better. Without exploration you can lock in an early wrong estimate forever.</p>
+<p>UCB adds an optimism bonus that shrinks with the number of times an action has been tried, so under-sampled actions get a chance until their uncertainty is resolved. Thompson sampling keeps a posterior over each action's reward, samples once from it, and acts greedily on the sample; an action is chosen roughly in proportion to the probability that it's the best. Both achieve logarithmic regret in stochastic bandits. Thompson sampling tends to do well empirically and copes well with delayed, batched feedback, since the randomization avoids every server picking the same arm between updates.</p>
+<h4 id="explain-rlhf-and-why-dpo-and-grpo-exist">Explain RLHF, and why DPO and GRPO exist.</h4>
+<p>RLHF trains a reward model on human preference pairs, then uses PPO to maximize that reward minus a KL penalty to the SFT reference model. The KL term prevents the policy from drifting into regions where the reward model is wrong and being exploited. It works, but it holds a policy, reference model, reward model and value model in memory, is sensitive to hyperparameters, and the reward model can be hacked: longer, more confident or more flattering outputs.</p>
+<p>DPO shows that the optimal policy of the KL-regularized objective has a closed form in terms of the reward, so you can substitute it back and train the policy directly on preference pairs with a logistic loss: no reward model, no sampling, no RL loop. The cost is that it's offline: it only learns from the pairs you have.</p>
+<p>GRPO keeps online sampling but drops the value network: for each prompt it samples a group of responses, uses their mean and standard deviation as the baseline to normalize rewards into advantages, and applies a PPO-style clipped update with a KL penalty. It's cheaper than PPO and particularly effective with verifiable rewards like passing unit tests or matching a math answer.</p>
+<h4 id="what-is-reward-hacking-and-how-do-you-guard-against-it">What is reward hacking, and how do you guard against it?</h4>
+<p>The policy finds behaviour that scores well on the reward you specified but violates what you intended: the gap between a proxy and the true goal gets optimized. Examples: a recommender maximizing clicks learns clickbait; an RLHF model learns that longer answers score higher with the reward model; a code model special-cases the test inputs.</p>
+<p>Guards: use rewards close to the true outcome, pair the primary metric with guardrail metrics, regularize toward a trusted reference policy with a KL penalty, and inspect the highest-reward samples manually, because that's where hacks show up first. For learned reward models, periodically collect fresh human labels on the current policy's outputs and retrain. If you need to shape rewards, potential-based shaping is the form that provably doesn't change the optimal policy.</p>
+<h4 id="when-should-a-company-not-use-rl">When should a company not use RL?</h4>
+<p>When the problem doesn't actually need it. If actions don't affect future states, it's a bandit. If you can label the correct action, it's supervised learning, and imitation learning on good demonstrations is far more sample-efficient. If the need is a launch decision, it's an A/B test.</p>
+<p>RL also needs either a trustworthy simulator or safe online exploration, a reward you actually trust, and the engineering capacity to handle instability, seed sensitivity and hard offline evaluation. Lacking those, a supervised ranker with logged exploration and OPE, or a contextual bandit, captures most of the value with a fraction of the risk. I'd want evidence that myopic decisions are measurably hurting long-term metrics before committing to full sequential RL.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bootstrapping from terminal states</td>
+<td>Adds phantom future value; wrong targets</td>
+<td>Multiply the next-state term by <code>(1 − done)</code></td>
+</tr>
+<tr>
+<td>Treating time-limit truncation as termination</td>
+<td>Agent learns the episode &quot;ends&quot; when it doesn't</td>
+<td>Bootstrap on truncation; only zero out on true terminal</td>
+</tr>
+<tr>
+<td>No logged propensities</td>
+<td>Off-policy evaluation becomes impossible or biased</td>
+<td>Log <code>π(a|x)</code> with every decision</td>
+</tr>
+<tr>
+<td>Deterministic production policy</td>
+<td>No overlap; can't evaluate alternatives from logs</td>
+<td>Keep a small amount of randomization</td>
+</tr>
+<tr>
+<td>Plain IPS with tiny propensities</td>
+<td>Variance explodes; estimates are noise</td>
+<td>SNIPS, doubly robust, weight clipping, check effective sample size</td>
+</tr>
+<tr>
+<td>Fixed ε forever</td>
+<td>Linear regret; wastes reward</td>
+<td>Decay ε, or use UCB / Thompson sampling</td>
+</tr>
+<tr>
+<td>Optimizing a proxy reward</td>
+<td>Reward hacking: clickbait, verbosity</td>
+<td>Guardrail metrics, KL to reference, audit top-reward samples</td>
+</tr>
+<tr>
+<td>Careless reward shaping</td>
+<td>Changes the optimal policy</td>
+<td>Potential-based shaping</td>
+</tr>
+<tr>
+<td>DQN without a target network or replay</td>
+<td>Moving targets and correlated samples cause divergence</td>
+<td>Replay buffer + lagged target network</td>
+</tr>
+<tr>
+<td>Single-seed RL results</td>
+<td>High variance across seeds; false conclusions</td>
+<td>Report mean and spread over several seeds</td>
+</tr>
+<tr>
+<td>Offline RL with unconstrained Q-learning</td>
+<td>Overestimates unseen actions and exploits them</td>
+<td>CQL / IQL / BCQ; compare against behaviour cloning</td>
+</tr>
+<tr>
+<td>Using full RL when a bandit suffices</td>
+<td>Complexity and instability with no gain</td>
+<td>Start with a contextual bandit</td>
+</tr>
+<tr>
+<td>Dropping the KL penalty in RLHF</td>
+<td>Policy drifts, exploits reward model, loses fluency</td>
+<td>Tune <code>β</code>; monitor KL during training</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_fine_tuning.html">Fine-Tuning</a></li>
+<li><a href="intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="intro_sequence_models.html">Sequence Models</a></li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift Modeling</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing &amp; Experimentation</a></li>
+<li><a href="../ai_genai/intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../mlops/intro_llm_evaluation.html">LLM Evaluation</a></li>
+<li><a href="../system_design/recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="../frameworks/intro_pytorch.html">PyTorch</a></li>
+<li><a href="./">Deep Learning Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_distributed_training.html"><small>Previous</small>Distributed Training</a><a rel="next" class="next" href="intro_speech_audio.html"><small>Next</small>Speech &amp; Audio</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_reinforcement_learning.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

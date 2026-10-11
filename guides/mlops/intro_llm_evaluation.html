@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Evaluation: Testing, Benchmarks &amp; Production Evals | Cracking ML Interviews</title>
+<meta name="description" content="LLM Evaluation: Testing, Benchmarks &amp; Production Evals: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llm_evaluation.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LLM Evaluation: Testing, Benchmarks &amp; Production Evals | Cracking ML Interviews">
+<meta property="og:description" content="LLM Evaluation: Testing, Benchmarks &amp; Production Evals: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llm_evaluation.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLM Evaluation: Testing, Benchmarks &amp; Production Evals | Cracking ML Interviews">
+<meta name="twitter:description" content="LLM Evaluation: Testing, Benchmarks &amp; Production Evals: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LLM Evaluation: Testing, Benchmarks & Production Evals",
+   "description": "LLM Evaluation: Testing, Benchmarks & Production Evals: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llm_evaluation.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LLM Evaluation",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_llm_evaluation.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">LLM Evaluation</span></nav>
+<p class="meta"><a href="../../#mlops/intro_llm_evaluation.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="llm-evaluation-testing-benchmarks--production-evals">LLM Evaluation: Testing, Benchmarks &amp; Production Evals</h1>
+<h2 id="why-llm-evaluation-is-critical">Why LLM Evaluation is Critical</h2>
+<p>LLM outputs are probabilistic and hard to test with traditional unit tests. Evaluation is the discipline of systematically measuring whether your LLM application is doing what you want: both before and after deployment.</p>
+<pre><code>Traditional Software:          LLM Applications:
+input → deterministic fn       input → probabilistic LLM
+  → exact output                  → variable output
+  → pass/fail test                → quality score (0-1)
+</code></pre>
+<hr />
+<h2 id="evaluation-taxonomy">Evaluation Taxonomy</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Question</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Offline eval</strong></td>
+<td>Does the system work before deployment?</td>
+<td>Benchmarks, golden datasets</td>
+</tr>
+<tr>
+<td><strong>Online eval</strong></td>
+<td>Does it work in production?</td>
+<td>User feedback, implicit signals</td>
+</tr>
+<tr>
+<td><strong>Unit eval</strong></td>
+<td>Does component X work?</td>
+<td>Retriever precision, reranker quality</td>
+</tr>
+<tr>
+<td><strong>End-to-end eval</strong></td>
+<td>Does the full pipeline work?</td>
+<td>RAG answer quality</td>
+</tr>
+<tr>
+<td><strong>Safety eval</strong></td>
+<td>Is it safe?</td>
+<td>Toxicity, bias, jailbreak resistance</td>
+</tr>
+<tr>
+<td><strong>Cost/latency eval</strong></td>
+<td>Is it efficient?</td>
+<td>Token count, response time</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-evaluation-metrics">Core Evaluation Metrics</h2>
+<h3 id="correctness-metrics">Correctness Metrics</h3>
+<pre><code class="language-python"># Exact Match: for factoid QA
+def exact_match(prediction: str, reference: str) -&gt; float:
+    return float(prediction.strip().lower() == reference.strip().lower())
+
+# F1 Token Overlap: for extractive QA (SQuAD-style, counts repeated tokens)
+from collections import Counter
+
+def token_f1(prediction: str, reference: str) -&gt; float:
+    pred_tokens = prediction.lower().split()
+    ref_tokens = reference.lower().split()
+    if not pred_tokens or not ref_tokens:
+        return 0.0
+    num_common = sum((Counter(pred_tokens) &amp; Counter(ref_tokens)).values())
+    precision = num_common / len(pred_tokens)
+    recall = num_common / len(ref_tokens)
+    if precision + recall == 0:
+        return 0.0
+    return 2 * (precision * recall) / (precision + recall)
+
+# ROUGE for summarization
+from rouge_score import rouge_scorer
+scorer = rouge_scorer.RougeScorer([&quot;rouge1&quot;, &quot;rouge2&quot;, &quot;rougeL&quot;])
+scores = scorer.score(prediction, reference)
+</code></pre>
+<h3 id="semantic-similarity">Semantic Similarity</h3>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer, util
+
+model = SentenceTransformer(&quot;all-MiniLM-L6-v2&quot;)
+
+def semantic_similarity(text1: str, text2: str) -&gt; float:
+    emb1 = model.encode(text1, convert_to_tensor=True)
+    emb2 = model.encode(text2, convert_to_tensor=True)
+    return util.cos_sim(emb1, emb2).item()
+
+# Score: 1.0 = identical, 0.0 = orthogonal, &gt;0.8 = semantically similar
+</code></pre>
+<hr />
+<h2 id="llm-as-judge">LLM-as-Judge</h2>
+<p>Using a powerful LLM to evaluate another LLM's output. Standard in 2026 for open-ended generation tasks.</p>
+<h3 id="basic-llm-judge">Basic LLM Judge</h3>
+<pre><code class="language-python">from anthropic import Anthropic
+from pydantic import BaseModel, Field
+import json
+
+class EvaluationResult(BaseModel):
+    score: float = Field(ge=0, le=1, description=&quot;Quality score 0-1&quot;)
+    reasoning: str = Field(description=&quot;Detailed reasoning for the score&quot;)
+    strengths: list[str]
+    weaknesses: list[str]
+    verdict: str = Field(description=&quot;One-sentence summary&quot;)
+
+def llm_judge(
+    question: str,
+    answer: str,
+    reference: str | None = None,
+    criteria: str = &quot;accuracy, completeness, and clarity&quot;
+) -&gt; EvaluationResult:
+    client = Anthropic()
+
+    ref_section = f&quot;\nReference answer: {reference}&quot; if reference else &quot;&quot;
+
+    # Structured outputs: the SDK validates the reply against the Pydantic model.
+    # (Forcing a tool with tool_choice={&quot;type&quot;: &quot;tool&quot;} is rejected by newer models.)
+    response = client.messages.parse(
+        model=&quot;claude-opus-5-5&quot;,  # Use a strong current model as judge
+        max_tokens=16000,
+        output_format=EvaluationResult,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;&quot;&quot;Evaluate this answer based on {criteria}.
+
+Question: {question}{ref_section}
+
+Answer to evaluate: {answer}
+
+Be strict and objective.&quot;&quot;&quot;
+        }]
+    )
+
+    return response.parsed_output
+
+# Example
+result = llm_judge(
+    question=&quot;What is the difference between L1 and L2 regularization?&quot;,
+    answer=&quot;L1 adds absolute value of weights, L2 adds squared weights to the loss.&quot;,
+    reference=&quot;L1 (Lasso) regularization adds |w| to loss, promoting sparsity. L2 (Ridge) adds w² to loss, penalizing large weights without inducing sparsity.&quot;,
+    criteria=&quot;technical accuracy and completeness for an ML interview&quot;
+)
+print(f&quot;Score: {result.score:.2f} | {result.verdict}&quot;)
+</code></pre>
+<h3 id="pairwise-comparison-ab-eval">Pairwise Comparison (A/B Eval)</h3>
+<pre><code class="language-python">def pairwise_judge(question: str, answer_a: str, answer_b: str) -&gt; dict:
+    &quot;&quot;&quot;Returns which answer is better and why: controls for verbosity bias&quot;&quot;&quot;
+    client = Anthropic()
+
+    response = client.messages.create(
+        model=&quot;claude-opus-5-5&quot;,
+        max_tokens=16000,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;&quot;&quot;Compare these two answers to: &quot;{question}&quot;
+
+Answer A: {answer_a}
+
+Answer B: {answer_b}
+
+Which is more accurate and complete for an ML interview?
+Return JSON: {{&quot;winner&quot;: &quot;A&quot; or &quot;B&quot; or &quot;tie&quot;, &quot;reason&quot;: &quot;...&quot;, &quot;confidence&quot;: 0-1}}&quot;&quot;&quot;
+        }]
+    )
+
+    # Newer models may return thinking blocks first: read the text block by type
+    text = next(b.text for b in response.content if b.type == &quot;text&quot;)
+    return json.loads(text)
+
+# Run both orders to detect position bias
+result_1 = pairwise_judge(q, model_a_output, model_b_output)
+result_2 = pairwise_judge(q, model_b_output, model_a_output)
+</code></pre>
+<hr />
+<h2 id="prompt-testing-frameworks">Prompt Testing Frameworks</h2>
+<h3 id="promptfoo-cli-based-prompt-testing">Promptfoo: CLI-based Prompt Testing</h3>
+<pre><code class="language-yaml"># promptfooconfig.yaml
+description: ML Interview Bot Evaluation
+
+prompts:
+  - &quot;You are an ML expert. Answer: {{question}}&quot;
+  - &quot;As an ML interview coach with 10 years experience, explain: {{question}}&quot;
+
+providers:
+  - anthropic:messages:claude-sonnet-5
+  - anthropic:messages:claude-haiku-4-5-20251001
+
+tests:
+  - description: &quot;L1 vs L2 regularization&quot;
+    vars:
+      question: &quot;What is the difference between L1 and L2 regularization?&quot;
+    assert:
+      - type: contains
+        value: &quot;Lasso&quot;
+      - type: contains
+        value: &quot;Ridge&quot;
+      - type: llm-rubric
+        value: &quot;Explains sparsity effect of L1&quot;
+
+  - description: &quot;Explain attention mechanism&quot;
+    vars:
+      question: &quot;How does the attention mechanism work in transformers?&quot;
+    assert:
+      - type: llm-rubric
+        value: &quot;Mentions query, key, value matrices and softmax&quot;
+      - type: not-contains
+        value: &quot;I don't know&quot;
+</code></pre>
+<pre><code class="language-bash"># Run evaluation
+npx promptfoo eval
+
+# View results in browser
+npx promptfoo view
+</code></pre>
+<h3 id="custom-eval-framework-in-python">Custom Eval Framework in Python</h3>
+<pre><code class="language-python">from dataclasses import dataclass
+from typing import Callable
+import asyncio
+
+@dataclass
+class EvalCase:
+    id: str
+    input: dict
+    expected: str | None = None
+    tags: list[str] = None
+
+@dataclass
+class EvalResult:
+    case_id: str
+    score: float
+    output: str
+    reasoning: str
+    passed: bool
+
+class EvalSuite:
+    def __init__(self, name: str, threshold: float = 0.7):
+        self.name = name
+        self.threshold = threshold
+        self.cases: list[EvalCase] = []
+        self.evaluators: list[Callable] = []
+
+    def add_case(self, case: EvalCase):
+        self.cases.append(case)
+
+    def add_evaluator(self, fn: Callable):
+        self.evaluators.append(fn)
+
+    async def run(self, app_fn: Callable) -&gt; dict:
+        results = []
+        for case in self.cases:
+            output = await app_fn(case.input)
+            scores = [await ev(case, output) for ev in self.evaluators]
+            avg_score = sum(scores) / len(scores)
+            results.append(EvalResult(
+                case_id=case.id,
+                score=avg_score,
+                output=output,
+                reasoning=&quot;&quot;,
+                passed=avg_score &gt;= self.threshold
+            ))
+
+        pass_rate = sum(1 for r in results if r.passed) / len(results)
+        return {
+            &quot;suite&quot;: self.name,
+            &quot;pass_rate&quot;: pass_rate,
+            &quot;avg_score&quot;: sum(r.score for r in results) / len(results),
+            &quot;results&quot;: results,
+            &quot;passed&quot;: pass_rate &gt;= self.threshold
+        }
+</code></pre>
+<hr />
+<h2 id="regression-testing-for-ai-outputs">Regression Testing for AI Outputs</h2>
+<h3 id="core-principle">Core Principle</h3>
+<p>Every production bug becomes a test case. Build a growing safety net.</p>
+<pre><code class="language-python"># When a bug is found in production:
+# 1. Add the failing case to the dataset
+# 2. Fix the bug (prompt, retrieval, model)
+# 3. Verify the case now passes
+# 4. Ensure it doesn't regress in future
+
+class RegressionTestManager:
+    def __init__(self, langsmith_client):
+        self.client = langsmith_client
+
+    def add_bug_as_test(self, run_id: str, correct_output: str, bug_description: str):
+        &quot;&quot;&quot;Convert a production failure into a regression test&quot;&quot;&quot;
+        run = self.client.read_run(run_id)
+        self.client.create_example(
+            inputs=run.inputs,
+            outputs={&quot;answer&quot;: correct_output},
+            dataset_name=&quot;regression-tests&quot;,
+            metadata={&quot;bug&quot;: bug_description, &quot;run_id&quot;: run_id}
+        )
+
+    def run_regression_suite(self, app_fn, pass_threshold: float = 0.95):
+        from langsmith.evaluation import evaluate
+        results = evaluate(app_fn, data=&quot;regression-tests&quot;, evaluators=[...])
+        pass_rate = results.to_pandas()[&quot;score&quot;].mean()
+        assert pass_rate &gt;= pass_threshold, f&quot;Regression suite failed: {pass_rate:.2%}&quot;
+</code></pre>
+<hr />
+<h2 id="hallucination-detection">Hallucination Detection</h2>
+<h3 id="rule-based-detection">Rule-Based Detection</h3>
+<pre><code class="language-python">def detect_hallucination_signals(answer: str, context: str) -&gt; dict:
+    signals = {}
+
+    # 1. Confident language without context support
+    confidence_phrases = [&quot;definitely&quot;, &quot;certainly&quot;, &quot;always&quot;, &quot;never&quot;, &quot;100%&quot;]
+    signals[&quot;overconfident&quot;] = any(p in answer.lower() for p in confidence_phrases)
+
+    # 2. Specific numbers not in context
+    import re
+    answer_numbers = set(re.findall(r'\b\d+\.?\d*\b', answer))
+    context_numbers = set(re.findall(r'\b\d+\.?\d*\b', context))
+    novel_numbers = answer_numbers - context_numbers
+    signals[&quot;novel_numbers&quot;] = list(novel_numbers)
+
+    # 3. Named entities not in context (requires NER)
+    # signals[&quot;novel_entities&quot;] = find_novel_entities(answer, context)
+
+    return signals
+</code></pre>
+<h3 id="llm-based-faithfulness-check">LLM-Based Faithfulness Check</h3>
+<pre><code class="language-python">def check_faithfulness(context: str, answer: str) -&gt; float:
+    &quot;&quot;&quot;Returns 0-1 faithfulness score&quot;&quot;&quot;
+    client = Anthropic()
+
+    response = client.messages.create(
+        model=&quot;claude-opus-5-5&quot;,
+        max_tokens=16000,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;&quot;&quot;Analyze each claim in the answer and determine if it's supported by the context.
+
+Context: {context}
+
+Answer: {answer}
+
+Return JSON: {{
+  &quot;supported_claims&quot;: [...],
+  &quot;unsupported_claims&quot;: [...],
+  &quot;faithfulness_score&quot;: 0.0-1.0
+}}&quot;&quot;&quot;
+        }]
+    )
+
+    text = next(b.text for b in response.content if b.type == &quot;text&quot;)
+    result = json.loads(text)
+    return result[&quot;faithfulness_score&quot;]
+</code></pre>
+<hr />
+<h2 id="human-in-the-loop-evaluation">Human-in-the-Loop Evaluation</h2>
+<h3 id="when-humans-must-evaluate">When Humans Must Evaluate</h3>
+<ul>
+<li><strong>Subjective quality</strong>: Creativity, tone, helpfulness</li>
+<li><strong>Safety</strong>: Sensitive topics, harmful content</li>
+<li><strong>Domain expertise</strong>: Medical, legal, financial accuracy</li>
+<li><strong>Ground truth creation</strong>: Building golden datasets</li>
+<li><strong>Edge case validation</strong>: Ambiguous or novel inputs</li>
+</ul>
+<h3 id="implementation-pattern">Implementation Pattern</h3>
+<pre><code class="language-python"># Queue system for human review
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+class HumanReviewTask(BaseModel):
+    run_id: str
+    question: str
+    model_answer: str
+    context: str | None
+    reviewer_instructions: str
+
+class HumanReviewResult(BaseModel):
+    run_id: str
+    reviewer_id: str
+    score: float  # 0-1
+    label: str  # &quot;correct&quot;, &quot;partial&quot;, &quot;wrong&quot;, &quot;harmful&quot;
+    feedback: str
+    corrected_answer: str | None
+
+review_queue: list[HumanReviewTask] = []
+completed_reviews: list[HumanReviewResult] = []
+
+@app.post(&quot;/review/queue&quot;)
+async def add_to_review_queue(task: HumanReviewTask):
+    review_queue.append(task)
+    return {&quot;queued&quot;: True}
+
+@app.get(&quot;/review/next&quot;)
+async def get_next_review():
+    if review_queue:
+        return review_queue.pop(0)
+    return None
+
+@app.post(&quot;/review/submit&quot;)
+async def submit_review(result: HumanReviewResult):
+    completed_reviews.append(result)
+    # Add to LangSmith dataset if high-quality example
+    if result.label in [&quot;correct&quot;, &quot;wrong&quot;]:
+        add_to_golden_dataset(result)
+</code></pre>
+<hr />
+<h2 id="standard-benchmarks-2026">Standard Benchmarks (2026)</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Task</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MMLU</strong></td>
+<td>Multiple choice</td>
+<td>Broad knowledge (57 subjects)</td>
+</tr>
+<tr>
+<td><strong>HumanEval / MBPP</strong></td>
+<td>Code generation</td>
+<td>Programming capability</td>
+</tr>
+<tr>
+<td><strong>GSM8K</strong></td>
+<td>Math word problems</td>
+<td>Reasoning, arithmetic</td>
+</tr>
+<tr>
+<td><strong>BIG-Bench Hard</strong></td>
+<td>Diverse tasks</td>
+<td>Complex reasoning</td>
+</tr>
+<tr>
+<td><strong>MT-Bench</strong></td>
+<td>Multi-turn chat</td>
+<td>Instruction following</td>
+</tr>
+<tr>
+<td><strong>TruthfulQA</strong></td>
+<td>Factual QA</td>
+<td>Hallucination resistance</td>
+</tr>
+<tr>
+<td><strong>HELMET</strong></td>
+<td>Long-context tasks</td>
+<td>128K+ context performance</td>
+</tr>
+<tr>
+<td><strong>SWE-Bench</strong></td>
+<td>Real GitHub issues</td>
+<td>Software engineering</td>
+</tr>
+<tr>
+<td><strong>RAGAS</strong></td>
+<td>RAG pipelines</td>
+<td>Retrieval + generation quality</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="evaluation-in-cicd-pipeline">Evaluation in CI/CD Pipeline</h2>
+<pre><code class="language-yaml"># .github/workflows/eval.yml
+name: LLM Evaluation Gate
+
+on:
+  pull_request:
+    paths:
+      - &quot;prompts/**&quot;
+      - &quot;src/rag/**&quot;
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run eval suite
+        env:
+          LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install langsmith langchain-anthropic
+          python scripts/run_eval.py \
+            --dataset &quot;ml-interview-qa-regression&quot; \
+            --threshold 0.85 \
+            --experiment-prefix &quot;pr-${{ github.event.number }}&quot;
+
+      - name: Comment eval results on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('eval_results.json'));
+            github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: `## Eval Results\n- Score: ${results.avg_score.toFixed(2)}\n- Pass rate: ${results.pass_rate.toFixed(1)}%\n- Status: ${results.passed ? '✅ PASSED' : '❌ FAILED'}`
+            });
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: How do you evaluate an LLM application that generates open-ended text?</strong></p>
+<blockquote>
+<p>Three layers: (1) automatic metrics like ROUGE/BERTScore for quick feedback, (2) LLM-as-judge with a powerful model scoring on a rubric, (3) human evaluation on a sample. Build a golden dataset, run offline evals in CI/CD, and monitor online with user feedback signals.</p>
+</blockquote>
+<p><strong>Q: What are the limitations of LLM-as-judge evaluation?</strong></p>
+<blockquote>
+<p>Positional bias (prefers first option), verbosity bias (longer = better), self-consistency issues, and the judge may share the same biases as the evaluated model. Mitigate: randomize answer order, use structured rubrics, ensemble multiple judge models, validate with human annotators.</p>
+</blockquote>
+<p><strong>Q: How do you detect hallucinations programmatically?</strong></p>
+<blockquote>
+<p>Faithfulness scoring: extract claims from the answer, check each against the retrieved context using NLI or LLM judge. NLI models (like MNLI) classify each claim as &quot;entailed,&quot; &quot;neutral,&quot; or &quot;contradicted.&quot; High contradiction rate = likely hallucination. Also: semantic similarity between answer and context.</p>
+</blockquote>
+<p><strong>Q: How would you set up regression testing for an LLM chatbot?</strong></p>
+<blockquote>
+<p>Curate golden examples: (question, expected_answer) pairs. Every production bug gets added as a new test case. Run the full suite on each PR with LangSmith or a custom evaluator. Block merge if overall pass rate drops below threshold (e.g., 90%). This creates a growing safety net that catches regressions.</p>
+</blockquote>
+<p><strong>Q: What's the difference between offline and online evaluation?</strong></p>
+<blockquote>
+<p>Offline: evaluate on a fixed dataset before deployment, reproducible, controlled, catches obvious regressions. Online: monitor real production traffic: catches distribution shift, novel failures, and measures actual user satisfaction. You need both: offline prevents obvious regressions, online catches what offline missed.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_model_monitoring.html"><small>Previous</small>Model Monitoring</a><a rel="next" class="next" href="intro_evaluation_guardrails.html"><small>Next</small>Evaluation &amp; Guardrails</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_llm_evaluation.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

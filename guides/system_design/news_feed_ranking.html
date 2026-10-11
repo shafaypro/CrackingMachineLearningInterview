@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News Feed Ranking System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design the ranking system for a social media news feed&quot; sounds like a standard recommendation problem, and much of the machinery is the same: candidate…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/news_feed_ranking.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="News Feed Ranking System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design the ranking system for a social media news feed&quot; sounds like a standard recommendation problem, and much of the machinery is the same: candidate…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/news_feed_ranking.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="News Feed Ranking System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design the ranking system for a social media news feed&quot; sounds like a standard recommendation problem, and much of the machinery is the same: candidate…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "News Feed Ranking System Design",
+   "description": "\"Design the ranking system for a social media news feed\" sounds like a standard recommendation problem, and much of the machinery is the same: candidate…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/news_feed_ranking.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "News Feed Ranking",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/news_feed_ranking.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">News Feed Ranking</span></nav>
+<p class="meta"><a href="../../#system_design/news_feed_ranking.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="news-feed-ranking-system-design">News Feed Ranking System Design</h1>
+<p>&quot;Design the ranking system for a social media news feed&quot; sounds like a standard recommendation problem, and much of the machinery is the same: candidate generation, a heavy ranker, a re-ranker. What makes feeds different is the objective. There is no single label. A post can be liked, commented on, shared, read for a minute, hidden, or reported, and the system has to turn all of those into one ordering. The feed also sits on a social graph, so ranking decisions change what creators post, what friends see, and how experiments behave. Strong answers spend their time on the value model, the graph, and the long-term effects, and treat the generic recsys pieces as known.</p>
+<p>For two-tower retrieval, generic cold start, and a baseline recsys serving stack, see <a href="recommendation_system.html">Recommendation System Design</a>. This guide focuses on what is specific to feeds.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#defining-the-objective">Defining the Objective</a></li>
+<li><a href="#the-feed-ranking-funnel">The Feed Ranking Funnel</a></li>
+<li><a href="#candidate-generation">Candidate Generation</a></li>
+<li><a href="#ranking-models">Ranking Models</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#re-ranking-and-feed-composition">Re-Ranking and Feed Composition</a></li>
+<li><a href="#bias-in-logged-data">Bias in Logged Data</a></li>
+<li><a href="#negative-feedback">Negative Feedback</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#serving-architecture">Serving Architecture</a></li>
+<li><a href="#capacity-and-cost">Capacity and Cost</a></li>
+<li><a href="#cold-start">Cold Start</a></li>
+<li><a href="#feedback-loops-integrity-and-wellbeing">Feedback Loops, Integrity and Wellbeing</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p>Feed prompts hide two very different products behind one sentence. Pin down which one before designing.</p>
+<p><strong>Which feed?</strong> A <strong>connected feed</strong> shows posts from accounts the user follows or is friends with. The candidate set is bounded by the graph, and the job is mostly ordering. An <strong>interest-based (&quot;for you&quot;) feed</strong> can show any public post. The candidate set is the whole platform, and retrieval becomes the hard part. Most modern apps blend both, so ask what share of the feed is in-network versus out-of-network.</p>
+<p><strong>Graph type?</strong> Symmetric friendships (bounded, a few hundred connections typical) or asymmetric follows (unbounded; some accounts have tens of millions of followers). Asymmetric follows create the celebrity problem in fan-out.</p>
+<p><strong>Content types?</strong> Text, photos, short video, long video, links, reshares, group posts, events, ads. Each has different engagement patterns. A like on a photo and a like on a long video are not equally informative, and video needs watch-time labels.</p>
+<p><strong>What does success mean?</strong> Daily active users, time spent, meaningful interactions, retention, creator growth, reported satisfaction. This decides the labels and the value model weights, so get the interviewer to commit.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Daily active users and feed requests per user per day</li>
+<li>Posts created per day, and the distribution of follower counts</li>
+<li>Latency budget for a feed page (often a few hundred ms end to end, with ranking getting a slice)</li>
+<li>How fast a new post must be eligible to appear (seconds to minutes)</li>
+</ul>
+<p><strong>Constraints:</strong> integrity policy (misinformation, borderline content), age-appropriate experiences for minors, ads load, regulatory requirements such as offering a non-personalized feed option in some jurisdictions.</p>
+<p>For the rest of this guide, assume a concrete brief: <strong>a mixed feed (friends, followed pages, and recommended posts), 500M DAU, ~20 feed requests per user per day, p99 of 300 ms for the ranking stack, new posts eligible within a minute.</strong> These are working assumptions for the exercise, not figures from any real platform.</p>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ranking latency (p99)</td>
+<td>~300 ms for retrieval + ranking + re-ranking</td>
+</tr>
+<tr>
+<td>Freshness</td>
+<td>New posts rankable within ~1 minute; engagement counters within seconds</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Degrade to a simpler ranking (or chronological) rather than an empty feed</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>Deleted or blocked content must disappear immediately, even from caches</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="defining-the-objective">Defining the Objective</h2>
+<h3 id="the-value-model">The value model</h3>
+<p>There is no single &quot;relevance&quot; label. The standard approach is to predict the probability of each action separately, then combine them into one score with a weighted sum:</p>
+<pre><code>score(u, p) =  w_like    · P(like | u, p)
+             + w_comment · P(comment | u, p)
+             + w_share   · P(share | u, p)
+             + w_dwell   · P(dwell &gt; t | u, p)
+             + w_click   · P(click | u, p)
+             + w_survey  · P(survey says &quot;worth your time&quot; | u, p)
+             − w_hide    · P(hide | u, p)
+             − w_report  · P(report | u, p)
+</code></pre>
+<p>The model predicts the probabilities. The weights are a <strong>product and policy decision</strong>, not something the model learns. Changing a weight changes what the platform rewards, and creators respond to it.</p>
+<p>Two consequences:</p>
+<ul>
+<li><strong>Every head must be calibrated.</strong> A weighted sum of probabilities only makes sense if the probabilities are on the right scale. If P(comment) is inflated 2x after a model change, you have silently doubled the comment weight. Monitor calibration per head, the same way ads monitors pCTR (see <a href="ads_ctr_prediction.html#calibration">Calibration</a>).</li>
+<li><strong>Rare actions need large weights.</strong> Shares and comments are much rarer than likes. If weights are chosen as &quot;how much we value this action,&quot; rare, high-value actions matter only when their weight compensates for their low base rate.</li>
+</ul>
+<h3 id="choosing-and-tuning-weights">Choosing and tuning weights</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>How it works</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Business-set values</strong></td>
+<td>Product teams assign relative value per action (e.g. a comment is worth k likes)</td>
+<td>Interpretable; easy to argue about; may not reflect what drives retention</td>
+</tr>
+<tr>
+<td><strong>Regression on a long-term outcome</strong></td>
+<td>Fit how much each short-term action predicts a long-term metric (retention, future sessions) and use the coefficients as weights</td>
+<td>Ties weights to what matters; correlational, so confounded</td>
+</tr>
+<tr>
+<td><strong>Online tuning</strong></td>
+<td>Treat weights as hyperparameters and run experiments, often with Bayesian optimization over several arms, optimizing a primary metric under guardrails</td>
+<td>Most direct; slow, and each experiment must run long enough to see long-term effects</td>
+</tr>
+<tr>
+<td><strong>Constrained optimization</strong></td>
+<td>Maximize one metric subject to others not dropping more than x%</td>
+<td>Makes trade-offs explicit; needs a clear metric hierarchy</td>
+</tr>
+</tbody>
+</table></div>
+<p>Weights also differ by context. The right weight on watch time for a video-heavy surface differs from a text-heavy one, so many systems keep weights per surface or per content type.</p>
+<h3 id="short-term-engagement-vs-long-term-satisfaction">Short-term engagement vs long-term satisfaction</h3>
+<p>Optimizing clicks and dwell alone reliably finds content that people engage with but regret: outrage bait, clickbait, sensational posts. Engagement goes up for weeks while satisfaction, trust, and eventually retention fall.</p>
+<p>Ways to push the objective toward long-term value:</p>
+<ul>
+<li><strong>Survey labels.</strong> Ask a random sample of users about specific posts they just saw (&quot;Was this worth your time?&quot;, &quot;Do you want to see more like this?&quot;). Train a head to predict the answer and include it in the value model. Survey responses are sparse and biased (only some users answer), so reweight respondents and treat the head as one signal among many.</li>
+<li><strong>Meaningful-interaction heads.</strong> Weight actions between people who know each other (a comment from a friend, a reply thread) more than passive consumption.</li>
+<li><strong>Negative heads with real weight.</strong> Hides, &quot;see less,&quot; unfollows, and reports should reduce a score, not just be ignored.</li>
+<li><strong>Long-term metrics as the experiment decision criterion.</strong> Ship based on retention and satisfaction measured over weeks, with short-term engagement as a secondary signal.</li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class ValueWeights:
+    like: float = 1.0
+    comment: float = 4.0       # illustrative values, set by product policy
+    share: float = 6.0
+    dwell: float = 0.5
+    survey_worth_it: float = 8.0
+    hide: float = 10.0
+    report: float = 50.0
+
+def value_score(preds: dict, w: ValueWeights) -&gt; float:
+    &quot;&quot;&quot;Combine calibrated per-action probabilities into one ranking score.&quot;&quot;&quot;
+    positive = (w.like * preds[&quot;like&quot;] + w.comment * preds[&quot;comment&quot;]
+                + w.share * preds[&quot;share&quot;] + w.dwell * preds[&quot;dwell&quot;]
+                + w.survey_worth_it * preds[&quot;survey_worth_it&quot;])
+    negative = w.hide * preds[&quot;hide&quot;] + w.report * preds[&quot;report&quot;]
+    return positive - negative
+</code></pre>
+<hr />
+<h2 id="the-feed-ranking-funnel">The Feed Ranking Funnel</h2>
+<pre><code>Feed request (user, device, session context)
+  │
+  ▼
+┌──────────────────────────────┐   millions ──► ~2-5k
+│ Candidate generation         │  in-network (follow graph inbox)
+└──────────────┬───────────────┘  + out-of-network (embeddings, ANN, trending)
+               ▼
+┌──────────────────────────────┐   ~5k ──► ~500
+│ Light ranking                │  two-tower or small MLP, cheap features
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐   ~500 ──► ~100
+│ Heavy ranking                │  multi-task model: P(like), P(comment),
+└──────────────┬───────────────┘  P(share), P(dwell), P(hide), ... → value score
+               ▼
+┌──────────────────────────────┐
+│ Re-ranking / feed composition│  integrity demotions, diversity, freshness,
+└──────────────┬───────────────┘  dedup, creator fairness, ads insertion
+               ▼
+        Feed page ──► impression / engagement logs ──► training data
+</code></pre>
+<p>The shape is the same as search and ads. The feed-specific parts are the in-network candidate source, the multi-head value model, and a re-ranker that has to compose a page (with ads, diversity, and integrity rules) rather than just sort a list.</p>
+<hr />
+<h2 id="candidate-generation">Candidate Generation</h2>
+<h3 id="in-network-the-follow-graph">In-network: the follow graph</h3>
+<p>For connected content, candidates are recent posts from accounts the user follows, plus posts from groups and pages they joined. The question is how to assemble those posts fast. Two classic strategies:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How it works</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fan-out on write (push)</strong></td>
+<td>When an account posts, write the post ID into every follower's inbox (a per-user list in a key-value store)</td>
+<td>Reads are one fetch; feed load is fast</td>
+<td>A post from an account with 50M followers means 50M writes; wasted work for inactive followers</td>
+</tr>
+<tr>
+<td><strong>Fan-out on read (pull)</strong></td>
+<td>At request time, look up who the user follows and fetch each account's recent posts</td>
+<td>No write amplification; always current</td>
+<td>Slow reads for users following thousands of accounts; heavy load at peak</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>Push for most accounts; pull for high-follower accounts and merge at read time</td>
+<td>Bounds both write and read cost</td>
+<td>Two code paths; merge logic; threshold tuning</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The celebrity problem</strong> is why hybrid is the standard answer. Pushing one post from a very large account to every follower creates a write storm and delays delivery for everyone else in the queue. Instead, mark accounts above a follower threshold as &quot;pull&quot; accounts, and at read time fetch their recent posts from a per-author cache (which is hot, since many users read it) and merge with the pushed inbox.</p>
+<p>Other refinements: skip fan-out to users who haven't been active for weeks (build their inbox on demand when they return), and cap inbox length since only recent posts matter.</p>
+<pre><code class="language-python">CELEBRITY_THRESHOLD = 100_000   # tuned from write cost vs read cost
+
+def on_new_post(author_id, post_id, graph, inbox_store, author_cache):
+    author_cache.push(author_id, post_id)            # always: per-author recent posts
+    if graph.follower_count(author_id) &gt;= CELEBRITY_THRESHOLD:
+        return                                        # pulled at read time instead
+    for follower in graph.active_followers(author_id):
+        inbox_store.prepend(follower, post_id, max_len=1000)
+
+def in_network_candidates(user_id, graph, inbox_store, author_cache, k=2000):
+    pushed = inbox_store.get(user_id, limit=k)
+    pulled = [p for a in graph.followed_celebrities(user_id)
+                for p in author_cache.recent(a, limit=20)]
+    return dedup_by_id(pushed + pulled)[:k]
+</code></pre>
+<h3 id="out-of-network-interest-based-retrieval">Out-of-network: interest-based retrieval</h3>
+<p>For &quot;for you&quot; content, the candidate set is every eligible public post. Several sources run in parallel and their outputs are merged:</p>
+<ul>
+<li><strong>Two-tower ANN.</strong> User embedding against post embeddings in an ANN index. The mechanics are covered in <a href="recommendation_system.html#two-tower-model-architecture">Two-Tower Model Architecture</a>. The feed-specific issue is freshness: posts are short-lived, so new post embeddings must enter the index within minutes, which favors indexes that support incremental inserts.</li>
+<li><strong>Graph-based.</strong> Posts engaged with by people you follow or by users similar to you (&quot;friends of friends liked this&quot;). Random-walk methods over a user-post interaction graph also work well here.</li>
+<li><strong>Author-based.</strong> Recent posts from authors similar to authors you engage with (author embeddings are more stable than post embeddings).</li>
+<li><strong>Topic and trending.</strong> Posts that are gaining engagement quickly within topics or regions the user cares about.</li>
+</ul>
+<p>Each source gets a quota so no single source dominates. Quotas are tuned by experiment, and each source should be evaluated on recall of posts the user later engaged with.</p>
+<hr />
+<h2 id="ranking-models">Ranking Models</h2>
+<h3 id="light-ranking">Light ranking</h3>
+<p>A two-tower model or small MLP over a few dozen cheap features, trained to predict the same value score (or a distilled version of the heavy model's score). Its job is recall: cut ~5k to ~500 without losing the posts the heavy ranker would put on top. Distilling from the heavy ranker keeps the two stages aligned.</p>
+<h3 id="heavy-ranking-multi-task">Heavy ranking: multi-task</h3>
+<p>One model with a shared representation and one output head per action. Training separate models per action is wasteful (the same features and embeddings everywhere) and gives rare heads like share or report too little data. Multi-task learning lets sparse heads borrow representation from dense ones.</p>
+<p>The difficulty is <strong>negative transfer</strong>: tasks that conflict (e.g. click and hide can both be high for clickbait) pull a shared bottom in different directions.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Idea</th>
+<th>When it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shared bottom</strong></td>
+<td>One shared MLP, per-task towers</td>
+<td>Tasks are closely related; simplest baseline</td>
+</tr>
+<tr>
+<td><strong>MMoE</strong></td>
+<td>Several shared experts; each task has a softmax gate choosing a mix of experts</td>
+<td>Tasks partly conflict; lets them use different experts</td>
+</tr>
+<tr>
+<td><strong>PLE</strong></td>
+<td>Task-specific experts plus shared experts, stacked in several extraction layers</td>
+<td>Stronger task conflicts; reduces the &quot;seesaw&quot; where improving one task hurts another</td>
+</tr>
+</tbody>
+</table></div>
+<p>An MMoE implementation is shown in <a href="ads_ctr_prediction.html#model-progression">Model Progression</a>. For feeds you would have 6 to 12 heads instead of 2.</p>
+<p><strong>Loss.</strong> Sum of per-task binary cross-entropy (or regression for dwell time), each head trained only on examples where its label is defined. For example, P(comment | click) heads only train on clicked examples, so conditional heads need care about sample selection, much like CVR in ads. Per-task loss weights are tuned so rare heads aren't drowned out.</p>
+<p><strong>Sequence features.</strong> Heavy rankers often include the user's recent engagement sequence (last N posts interacted with) processed by attention against the candidate post. This captures short-term intent that aggregate features miss.</p>
+<hr />
+<h2 id="features">Features</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User</strong></td>
+<td>User embedding, account age, activity level, content-type preferences, recent engagement sequence, device, language</td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>Author embedding, follower count, historical engagement rate, posting frequency, integrity/quality scores</td>
+</tr>
+<tr>
+<td><strong>Post</strong></td>
+<td>Content type, text/image/video embeddings, length or duration, age of post, language, topic classifier outputs, link domain quality</td>
+</tr>
+<tr>
+<td><strong>User-author affinity</strong></td>
+<td>How often the user liked, commented on, or messaged this author; profile visits; closeness in the graph; recency of last interaction</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Time of day, session depth (how far into the feed), connection type, surface, time since last session</td>
+</tr>
+<tr>
+<td><strong>Real-time engagement</strong></td>
+<td>Likes, comments, shares, hides in the last 5 minutes / hour; engagement velocity (rate of change); engagement from the user's friends</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>User-author affinity</strong> is usually the strongest group for in-network content. People care most about posts from people they actually interact with, and a follow edge alone says little about that. Affinity is typically a set of decayed interaction counters per (user, author) pair, updated in streaming.</p>
+<p><strong>Engagement velocity</strong> separates a post that is taking off from one that had its moment yesterday. Compute it from streaming counters at several windows, and normalize by impressions (engagements per impression), otherwise it mostly measures how widely the post was already distributed.</p>
+<p><strong>Point-in-time correctness</strong> matters more here than in most systems, because real-time counters change every second. A training example must use counter values from the moment of the impression. Logging the served features at impression time is the simplest way to guarantee that.</p>
+<hr />
+<h2 id="re-ranking-and-feed-composition">Re-Ranking and Feed Composition</h2>
+<p>Sorting by value score gives a list. A feed is a page, and several properties of a good page are about the set, not about individual posts.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Typical rule or method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Author diversity</strong></td>
+<td>No more than k posts from the same author in any window of n positions; penalty that grows with repeats</td>
+</tr>
+<tr>
+<td><strong>Content-type diversity</strong></td>
+<td>Mix of video, photo, text; avoid long runs of one type</td>
+</tr>
+<tr>
+<td><strong>Topic diversity</strong></td>
+<td>MMR-style penalty on similarity to already-placed posts</td>
+</tr>
+<tr>
+<td><strong>Freshness</strong></td>
+<td>Time decay on score; boost unseen recent posts from close connections</td>
+</tr>
+<tr>
+<td><strong>Dedup</strong></td>
+<td>Collapse reshares and near-duplicate media (perceptual hash) into one item</td>
+</tr>
+<tr>
+<td><strong>Seen-post suppression</strong></td>
+<td>Drop or heavily demote posts already shown in earlier sessions</td>
+</tr>
+<tr>
+<td><strong>Creator fairness</strong></td>
+<td>Minimum exposure for new or small creators; cap on concentration of impressions among top creators</td>
+</tr>
+<tr>
+<td><strong>Integrity demotions</strong></td>
+<td>Multiply score down for borderline content, low-quality domains, likely misinformation pending review</td>
+</tr>
+<tr>
+<td><strong>Ads insertion</strong></td>
+<td>Place ads at allowed slots with minimum spacing, trading ad value against predicted organic value lost</td>
+</tr>
+</tbody>
+</table></div>
+<p>A simple greedy re-ranker handles most of these in one pass: at each position, pick the candidate with the best adjusted score given what is already on the page.</p>
+<pre><code class="language-python">def rerank(candidates, page_size=20, author_cap=2, window=5, sim_penalty=0.3):
+    &quot;&quot;&quot;Greedy slate construction with author caps and a similarity penalty.
+    candidates: list of dicts with 'score', 'author', 'embedding' (unit norm),
+    'integrity_multiplier' in (0, 1].&quot;&quot;&quot;
+    pool = sorted(candidates, key=lambda c: c[&quot;score&quot;] * c[&quot;integrity_multiplier&quot;],
+                  reverse=True)
+    page = []
+    while pool and len(page) &lt; page_size:
+        best, best_val = None, float(&quot;-inf&quot;)
+        for c in pool:
+            recent = page[-window:]
+            if sum(p[&quot;author&quot;] == c[&quot;author&quot;] for p in recent) &gt;= author_cap:
+                continue
+            max_sim = max((float(c[&quot;embedding&quot;] @ p[&quot;embedding&quot;]) for p in page),
+                          default=0.0)
+            val = c[&quot;score&quot;] * c[&quot;integrity_multiplier&quot;] - sim_penalty * max_sim
+            if val &gt; best_val:
+                best, best_val = c, val
+        if best is None:          # every remaining post hits a cap; relax it
+            best = pool[0]
+        page.append(best)
+        pool.remove(best)
+    return page
+</code></pre>
+<p>The penalty mixes score units with similarity units, so <code>sim_penalty</code> has to be tuned by experiment. The integrity multiplier is applied before diversity so a demoted post cannot win a slot just because it is different from its neighbors.</p>
+<p><strong>Ads insertion.</strong> Ads are ranked by their own system (see <a href="ads_ctr_prediction.html">Ads CTR Prediction</a>) and then placed into the organic feed. A good placement rule compares the ad's expected value with the predicted organic value lost by pushing posts down, plus a user-experience cost, and respects a minimum gap between ads. Ad load is usually tuned with long-term holdouts, because the cost of too many ads shows up as slowly falling engagement.</p>
+<hr />
+<h2 id="bias-in-logged-data">Bias in Logged Data</h2>
+<p>Every training example comes from a feed the previous model built. That creates two biases.</p>
+<p><strong>Position bias.</strong> Posts near the top of the feed get more attention regardless of quality, and posts below where the user stopped scrolling were never seen at all. In a feed, &quot;position&quot; means scroll depth, and the right definition of an impression is <strong>the post was in the viewport for some minimum time</strong>, not &quot;the server returned it.&quot; Treating returned-but-never-viewed posts as negatives is one of the most common data bugs in feed ranking.</p>
+<p>Fixes carry over from search and ads (see <a href="ads_ctr_prediction.html#position-bias">Position Bias</a>): position as a training-only feature or bias tower, inverse propensity weighting with propensities measured from randomized swaps on a small traffic slice.</p>
+<p><strong>Exposure (selection) bias.</strong> You only have labels for posts the old ranker chose to show. Posts it never showed have no labels, so the new model learns nothing about them and tends to reproduce the old ranker's preferences. Mitigations:</p>
+<ul>
+<li><strong>Exploration traffic.</strong> A small, randomized share of impressions (random candidates from retrieval inserted into feeds) gives unbiased labels and makes off-policy evaluation possible.</li>
+<li><strong>Logging propensities.</strong> If ranking has any stochasticity, log the probability each post had of being shown at its position. Without logged propensities, off-policy correction is guesswork.</li>
+<li><strong>Unbiased evaluation sets.</strong> Evaluate on exploration traffic, where the old ranker's preferences didn't decide what was shown.</li>
+</ul>
+<hr />
+<h2 id="negative-feedback">Negative Feedback</h2>
+<p>Negative signals are rare but carry far more information per event than a like. Treat them as first-class labels.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Strength</th>
+<th>How to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scroll past quickly</strong></td>
+<td>Weak, very noisy</td>
+<td>Low-dwell label; don't treat as negative without viewport data</td>
+</tr>
+<tr>
+<td><strong>&quot;See less of this&quot; / &quot;Not interested&quot;</strong></td>
+<td>Strong, explicit</td>
+<td>Negative head; also update user-topic and user-author affinity immediately</td>
+</tr>
+<tr>
+<td><strong>Hide post</strong></td>
+<td>Strong</td>
+<td>Negative head with a large weight in the value model</td>
+</tr>
+<tr>
+<td><strong>Unfollow / mute author</strong></td>
+<td>Very strong, about the author</td>
+<td>Remove author from in-network candidates; user-author affinity to zero</td>
+</tr>
+<tr>
+<td><strong>Report</strong></td>
+<td>Strongest; also an integrity signal</td>
+<td>Negative head; feeds integrity review queues</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two practical points. First, act on explicit feedback <strong>within the session</strong>. If a user hides a post and the next three posts are from the same author or topic, the feedback feels ignored. A real-time filter layer that reads recent negative actions is cheaper and faster than waiting for the model to learn. Second, negative heads need large weights in the value model, because their base rates are tiny. A well-calibrated P(hide) of 0.5% still needs to outweigh a P(like) of 5% for the posts users most dislike.</p>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AUC / log loss per head</strong></td>
+<td>Whether each action predictor improved; log loss also catches calibration</td>
+</tr>
+<tr>
+<td><strong>Calibration ratio per head</strong></td>
+<td>Required because heads are combined by weighted sum</td>
+</tr>
+<tr>
+<td><strong>NDCG / recall@k on the value score</strong></td>
+<td>Ordering quality of the combined score, using the value-weighted actions as graded relevance</td>
+</tr>
+<tr>
+<td><strong>Retrieval recall per source</strong></td>
+<td>Whether the posts users engaged with were in the candidate set</td>
+</tr>
+<tr>
+<td><strong>Off-policy estimates</strong></td>
+<td>Predicted online value of the new policy from logged data</td>
+</tr>
+</tbody>
+</table></div>
+<p>An improvement in one head's AUC does not guarantee a better feed, because the value score depends on all heads and on weights. Always evaluate the combined score too.</p>
+<h3 id="counterfactual-off-policy-evaluation">Counterfactual (off-policy) evaluation</h3>
+<p>The question is &quot;what would the reward have been if the new ranker had chosen the feed?&quot; using logs from the old ranker. The basic estimator is inverse propensity scoring:</p>
+<pre><code>V̂_IPS(π_new) = (1/N) Σᵢ [ π_new(aᵢ | xᵢ) / π_log(aᵢ | xᵢ) ] · rᵢ
+</code></pre>
+<p>It is unbiased only if the logging policy gave every action the new policy might take a non-zero probability, which a deterministic ranker does not. That is why exploration traffic with logged propensities matters. In practice:</p>
+<ul>
+<li><strong>Clip or self-normalize</strong> the importance weights (SNIPS) to control variance.</li>
+<li><strong>Doubly robust</strong> estimators combine a reward model with IPS, so they stay reasonable when either the propensities or the reward model is off.</li>
+<li><strong>Slates are hard.</strong> The action space of full feeds is huge, so exact slate propensities are tiny. Practical systems estimate per-position rewards with assumptions (such as additive rewards across positions) or evaluate at the item level.</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+
+def snips(rewards, p_new, p_log, clip=10.0):
+    &quot;&quot;&quot;Self-normalized IPS with weight clipping. p_log must be logged at serve time.&quot;&quot;&quot;
+    w = np.minimum(p_new / np.clip(p_log, 1e-6, None), clip)
+    return float((w * rewards).sum() / w.sum())
+</code></pre>
+<p>Use OPE to screen candidates and pick which ones deserve an A/B test, not to replace the test.</p>
+<h3 id="online">Online</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary</strong></td>
+<td>Daily active users, sessions per user, meaningful interactions, survey-based satisfaction</td>
+</tr>
+<tr>
+<td><strong>Engagement</strong></td>
+<td>Likes, comments, shares, time spent, feed depth</td>
+</tr>
+<tr>
+<td><strong>Guardrails</strong></td>
+<td>Hide and report rates, integrity prevalence (share of views on violating content), ad revenue, latency, creator-side metrics (posting rate, reach of new creators)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Novelty effects.</strong> A new ranker often shows users different content, and people engage with novelty. The treatment lift is largest in week one and can fade or reverse. Look at the effect over time, not just the average, and run important tests for several weeks.</p>
+<p><strong>Long-term holdouts.</strong> Keep a small group of users on an older ranker (or without a whole class of changes) for months. Comparing them with everyone else measures the cumulative effect of many launches that each looked small, and it catches slow harms like falling satisfaction.</p>
+<p><strong>Network effects and interference.</strong> Feed experiments break the usual assumption that one user's treatment doesn't affect another user. If treatment ranks comments higher, treated users comment more, and their friends in control get more notifications and engage more. Both arms move, and the measured difference is biased. Mitigations:</p>
+<ul>
+<li><strong>Graph cluster randomization:</strong> partition the social graph into clusters with few cross-cluster edges and randomize whole clusters.</li>
+<li><strong>Creator-side experiments:</strong> when the change affects distribution (who gets reach), randomize creators and measure creator outcomes, not only viewer outcomes.</li>
+<li><strong>Measure spillover directly:</strong> compare control users with many treated friends against control users with few.</li>
+</ul>
+<hr />
+<h2 id="serving-architecture">Serving Architecture</h2>
+<pre><code>                           NEWS FEED RANKING
+═══════════════════════════════════════════════════════════════════════════
+
+ Client ──► Feed Service ──┬──► In-network: Inbox store (pushed) ──┐
+                           │                + Author cache (pulled)│
+                           ├──► Out-of-network: ANN index,         ├─► Merge,
+                           │    graph walks, trending               │   filter
+                           │                                        │  (blocks,
+                           ├──► Real-time filter ◄──────────────────┘   seen,
+                           │    (recent hides, blocks, deletes)         deleted)
+                           │                  │
+                           │                  ▼
+                           ├──► Feature Store ─► Light Ranker ─► Heavy Ranker
+                           │    (user, author,                   (multi-task,
+                           │     post, affinity,                  GPU, batched)
+                           │     streaming counters)                  │
+                           │                                          ▼
+                           ├──► Integrity scores ──────────────► Re-ranker ◄── Ads system
+                           │                                          │
+                           ▼                                          ▼
+                       Response ◄──────────────────────────────── Feed page
+                           │
+                           ▼
+    Viewport impressions, engagements, negative feedback ──► Kafka
+                           │                                    │
+                           ▼                                    ▼
+         Streaming aggregates (velocity,             Training data (logged
+         affinity, counters) ──► Feature Store       features + labels)
+                                                                │
+                                                                ▼
+                                           Continuous training ──► Validation ──► Push
+
+═══════════════════════════════════════════════════════════════════════════
+</code></pre>
+<p><strong>Real-time features.</strong> A stream processor consumes engagement events and updates per-post counters (at several time windows), per-(user, author) affinity, and per-user session state. These land in a low-latency key-value store. Keep the same aggregation code for training and serving, or log served values, to avoid training/serving skew.</p>
+<p><strong>Caching.</strong></p>
+<ul>
+<li><strong>Post features and embeddings</strong> are shared across many requests; cache them on ranking hosts with short TTLs.</li>
+<li><strong>Precomputed feeds.</strong> Some systems rank a feed ahead of time (for example when a user is likely to open the app soon) and serve it on request, re-ranking lightly with fresh signals. This cuts request latency but spends compute on sessions that never happen.</li>
+<li><strong>Pagination.</strong> Rank a larger slate on the first request and serve later pages from it, refreshing when the user pulls to refresh or when the slate is stale.</li>
+</ul>
+<p><strong>Deletes and blocks.</strong> Caches must never serve a deleted post or a post from a blocked author. Apply a final filter at response time against a fast deletion and block set, regardless of what upstream caches return.</p>
+<p><strong>Fallbacks.</strong> If the heavy ranker times out, serve light-ranker order. If candidate generation fails, fall back to a chronological in-network feed. An empty feed is the worst outcome.</p>
+<hr />
+<h2 id="capacity-and-cost">Capacity and Cost</h2>
+<p>Work these through out loud, stating assumptions.</p>
+<pre><code>Request rate:
+  500M DAU × 20 requests/day = 10B requests/day
+  10B / 86,400 s ≈ 116k requests/s average; assume ~3x at peak ≈ 350k/s
+
+Heavy ranking load:
+  350k req/s × 500 candidates ≈ 175M post scorings/s at peak
+  → batch per request on GPU; the light ranker's 5k → 500 cut exists to
+    keep this affordable; ranking larger slates less often (pagination)
+    cuts it further
+
+Fan-out on write (illustrative):
+  If 100M posts/day go through push with an average of 300 active followers
+  → 30B inbox writes/day ≈ 350k writes/s average
+  → hence skipping inactive followers and pulling for large accounts
+</code></pre>
+<hr />
+<h2 id="cold-start">Cold Start</h2>
+<p>Generic strategies (onboarding, content features, bandits) are covered in <a href="recommendation_system.html#handling-cold-start">Handling Cold Start</a>. The feed-specific points:</p>
+<p><strong>New users</strong> have no graph yet, so the connected feed is empty. The feed is interest-based by default at first. Use onboarding topic choices, contacts or friend suggestions (with consent), and popular posts in their region and language. Suggesting accounts to follow is part of solving feed cold start, since each follow adds in-network candidates. Adapt within the session from dwell and early engagement.</p>
+<p><strong>New posts</strong> have no engagement, and engagement velocity is one of the strongest features. For in-network posts, the author and affinity features carry the prediction. For out-of-network distribution, a common pattern is <strong>staged distribution</strong>: show the post to a small audience that is likely to be interested (such as the author's followers or a matched interest cluster), measure engagement per impression, and widen the audience if it performs. This is exploration with a budget, and it is where integrity checks should run before large-scale reach.</p>
+<p><strong>New creators</strong> face both problems. Without exposure they get no engagement, and without engagement they get no exposure. Creator-fairness rules in re-ranking (a minimum exposure budget for new creators) break the loop.</p>
+<hr />
+<h2 id="feedback-loops-integrity-and-wellbeing">Feedback Loops, Integrity and Wellbeing</h2>
+<p>The ranker decides what people see, which decides what they engage with, which becomes the next training set. Creators also learn what the ranker rewards and produce more of it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Cause</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Engagement bait</strong></td>
+<td>Posts ask for likes/comments/shares to game heads</td>
+<td>Classifiers for bait patterns; demote; don't count bait-driven actions</td>
+</tr>
+<tr>
+<td><strong>Outrage amplification</strong></td>
+<td>Comments and shares are high on divisive content</td>
+<td>Weight comments by quality (e.g. between friends); survey heads; integrity demotions</td>
+</tr>
+<tr>
+<td><strong>Filter bubbles</strong></td>
+<td>Model narrows to what the user already engaged with</td>
+<td>Topic diversity in re-ranking, exploration slots, monitor topic entropy per user</td>
+</tr>
+<tr>
+<td><strong>Popularity concentration</strong></td>
+<td>Large creators get more impressions, better-trained embeddings, and more impressions again</td>
+<td>Creator fairness constraints, exposure caps, new-creator budgets</td>
+</tr>
+<tr>
+<td><strong>Returned ≠ seen labels</strong></td>
+<td>Unviewed posts logged as negatives</td>
+<td>Viewport-based impression logging</td>
+</tr>
+<tr>
+<td><strong>Creator gaming of weights</strong></td>
+<td>Creators optimize for whichever action is weighted highest</td>
+<td>Change weights deliberately, audit what content gains reach after each change</td>
+</tr>
+<tr>
+<td><strong>Harmful content going viral</strong></td>
+<td>Engagement velocity boosts it before review</td>
+<td>Velocity-triggered review; cap reach until integrity classifiers clear it</td>
+</tr>
+<tr>
+<td><strong>Problematic use</strong></td>
+<td>Endless feed optimized for time spent</td>
+<td>Wellbeing guardrails, &quot;you're all caught up&quot; markers, time-spent tools, age-appropriate defaults</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Integrity integration.</strong> Integrity classifiers (see <a href="content_moderation_system.html">Content Moderation System Design</a>) produce two kinds of output. Clear violations are removed and never reach ranking. Borderline content (sensational, low-quality, likely-false but unconfirmed) is <strong>demoted</strong>: its score is multiplied down in re-ranking. Prevalence, the share of all feed views that land on violating content, is the standard way to measure whether this works, since it reflects what users actually saw.</p>
+<p><strong>Wellbeing.</strong> Some objectives are hard to express as a per-post prediction, such as how users feel about their time on the platform, or effects on younger users. They show up as survey metrics, guardrails in experiments, and product decisions (defaults, time limits, chronological options) rather than as model heads. In an interview, naming these trade-offs and saying they belong in the decision criteria, not just the model, is what separates a strong answer.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-you-combine-likes-comments-shares-and-hides-into-one-ranking-score">How do you combine likes, comments, shares, and hides into one ranking score?</h4>
+<p>Predict each action's probability with a multi-task model, calibrate every head, and combine them with a weighted sum in which negative actions (hide, report, unfollow) get negative weights. The weights are a product decision. They express how much the platform values each action, and they are tuned by online experiments against long-term metrics, with guardrails on negative feedback and integrity.</p>
+<p>Calibration matters because the sum only means something if each probability is on the right scale. If a model update inflates P(share) by 50%, the effective share weight rises by 50% without anyone deciding it. So check calibration per head, per surface, and per content type after every model change.</p>
+<h4 id="why-not-just-optimize-time-spent">Why not just optimize time spent?</h4>
+<p>Because time spent is easy to increase with content people regret: outrage, clickbait, endless low-effort video. Engagement rises for a while, then satisfaction and retention fall, and the damage shows up only in long-term metrics. Time spent also treats a minute of passive scrolling the same as a minute of conversation with a friend.</p>
+<p>A better objective combines several actions, includes negative feedback, and adds heads trained on survey responses about whether posts were worth the user's time. Launch decisions should be based on long-term retention and satisfaction, with time spent as one metric among several.</p>
+<h4 id="fan-out-on-write-or-fan-out-on-read">Fan-out on write or fan-out on read?</h4>
+<p>Hybrid. Fan-out on write makes reads cheap, since each user's inbox is precomputed, which matters because reads far outnumber posts. But for an account with tens of millions of followers, one post means tens of millions of writes, which is slow and wasteful when most of those followers won't open the app soon.</p>
+<p>So push for regular accounts, skip inactive followers, and pull for accounts above a follower threshold. At read time, merge the user's pushed inbox with recent posts from the large accounts they follow, fetched from a per-author cache that stays hot because many users read it. The threshold is tuned by comparing write cost with read-time merge cost.</p>
+<h4 id="your-new-ranker-wins-the-ab-test-by-2-on-engagement-in-week-one-do-you-ship">Your new ranker wins the A/B test by 2% on engagement in week one. Do you ship?</h4>
+<p>Not yet. First, check whether the lift holds over time. New rankers often show different content and get a novelty boost that fades. Plot the treatment effect by day and run the test for several weeks.</p>
+<p>Second, check guardrails: hide and report rates, integrity prevalence, survey satisfaction, and creator-side metrics. A ranker that raises engagement by surfacing more borderline content is a regression. Third, consider interference. If the change affects how much users post or comment, control users are affected through their friends, so the measured difference may be biased. For changes like that, use graph cluster randomization. Finally, ship with a long-term holdout so the cumulative effect can be measured months later.</p>
+<h4 id="how-do-you-evaluate-a-new-ranker-offline-when-you-only-have-logs-from-the-old-one">How do you evaluate a new ranker offline when you only have logs from the old one?</h4>
+<p>Per-head AUC and log loss tell you whether predictions improved on posts the old ranker chose to show, but not whether the new ranker would choose better posts. For that you need off-policy evaluation: reweight logged rewards by how much more or less likely the new policy is to take the logged action (IPS), with clipping or self-normalization to control variance, or a doubly robust estimator that also uses a reward model.</p>
+<p>This requires logged propensities and some exploration, since IPS cannot say anything about actions the logging policy never takes. Full-slate OPE has very high variance, so in practice teams make simplifying assumptions (per-position rewards) and use OPE to decide which candidates are worth an online test.</p>
+<h4 id="a-user-hides-a-post-what-should-happen">A user hides a post. What should happen?</h4>
+<p>Several things at different speeds. Immediately, a real-time filter should remove similar posts from the rest of the session: other posts from that author, reshares of the same content, and possibly the same topic. Within minutes, streaming updates should lower the user-author and user-topic affinity features. At the next training run, the hide is a positive label for the hide head.</p>
+<p>If hides cluster on one author or post across many users, that's also a signal for integrity and quality systems, and for demoting the post more broadly.</p>
+<h4 id="how-do-you-make-sure-small-creators-get-a-fair-chance">How do you make sure small creators get a fair chance?</h4>
+<p>Without intervention, exposure concentrates. Large creators have more engagement data, better embeddings, and higher predicted scores, so they get more impressions and more data. Mitigations: content features (text, image, and video embeddings) so new posts get sensible predictions without history, staged distribution that tests a new post on a small matched audience before widening, a minimum exposure budget for new creators in re-ranking, and caps on how concentrated impressions can become.</p>
+<p>Measure it with creator-side metrics: the distribution of reach across creators, new-creator retention, and the share of impressions going to creators outside the user's network.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ranking by a single engagement label</td>
+<td>Rewards clickbait and outrage</td>
+<td>Multi-head value model with negative terms and survey heads</td>
+</tr>
+<tr>
+<td>Uncalibrated heads in a weighted sum</td>
+<td>Model changes silently change effective weights</td>
+<td>Calibrate and monitor each head</td>
+</tr>
+<tr>
+<td>Counting returned posts as impressions</td>
+<td>Unseen posts become false negatives</td>
+<td>Viewport-based impression logging</td>
+</tr>
+<tr>
+<td>Pure fan-out on write</td>
+<td>Celebrity posts cause write storms</td>
+<td>Hybrid push/pull with a follower threshold</td>
+</tr>
+<tr>
+<td>Ignoring user-author affinity</td>
+<td>Friends' posts lose to generic viral content</td>
+<td>Decayed per-pair interaction features</td>
+</tr>
+<tr>
+<td>Deciding launches on week-one engagement</td>
+<td>Novelty effects fade; long-term harms missed</td>
+<td>Multi-week tests, long-term holdouts</td>
+</tr>
+<tr>
+<td>User-level A/B for social changes</td>
+<td>Spillover through the graph biases results</td>
+<td>Graph cluster randomization, spillover measurement</td>
+</tr>
+<tr>
+<td>No exploration or logged propensities</td>
+<td>OPE impossible; ranker reproduces itself</td>
+<td>Small randomized slice; log propensities</td>
+</tr>
+<tr>
+<td>Ignoring explicit negative feedback in-session</td>
+<td>Users see more of what they just hid</td>
+<td>Real-time filter on recent negative actions</td>
+</tr>
+<tr>
+<td>Diversity only by author</td>
+<td>Same topic or media repeated</td>
+<td>Topic and content-type diversity; near-duplicate collapse</td>
+</tr>
+<tr>
+<td>Integrity as a separate afterthought</td>
+<td>Borderline content goes viral before review</td>
+<td>Demotions in re-ranking; velocity-triggered review</td>
+</tr>
+<tr>
+<td>No creator-side metrics</td>
+<td>Concentration and creator churn go unnoticed</td>
+<td>Track reach distribution and new-creator outcomes</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="ads_ctr_prediction.html">Ads CTR Prediction and Ranking</a></li>
+<li><a href="search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="content_moderation_system.html">Content Moderation System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift</a></li>
+<li><a href="../ai_genai/intro_embeddings.html">Embeddings</a></li>
+<li><a href="../ai_genai/intro_vector_databases_advanced.html">Vector Databases: Advanced</a></li>
+<li><a href="../data_engineering/intro_apache_kafka.html">Apache Kafka</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Store</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_responsible_ai_fairness.html">Responsible AI and Fairness</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="eta_prediction.html"><small>Previous</small>ETA Prediction</a><a rel="next" class="next" href="visual_search_system.html"><small>Next</small>Visual Search</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/news_feed_ranking.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

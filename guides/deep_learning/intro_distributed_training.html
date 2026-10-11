@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distributed and Large-Scale Model Training | Cracking ML Interviews</title>
+<meta name="description" content="Once a model or its batch stops fitting on one GPU, training becomes a systems problem: how to split memory, compute, and communication across hundreds of…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_distributed_training.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Distributed and Large-Scale Model Training | Cracking ML Interviews">
+<meta property="og:description" content="Once a model or its batch stops fitting on one GPU, training becomes a systems problem: how to split memory, compute, and communication across hundreds of…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_distributed_training.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Distributed and Large-Scale Model Training | Cracking ML Interviews">
+<meta name="twitter:description" content="Once a model or its batch stops fitting on one GPU, training becomes a systems problem: how to split memory, compute, and communication across hundreds of…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Distributed and Large-Scale Model Training",
+   "description": "Once a model or its batch stops fitting on one GPU, training becomes a systems problem: how to split memory, compute, and communication across hundreds of…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_distributed_training.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Distributed Training",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_distributed_training.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Distributed Training</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_distributed_training.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 11 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="distributed-and-large-scale-model-training">Distributed and Large-Scale Model Training</h1>
+<p>Once a model or its batch stops fitting on one GPU, training becomes a systems problem: how to split memory, compute, and communication across hundreds of devices without the network becoming the bottleneck. This comes up in interviews at any company training foundation models or fine-tuning large ones, and increasingly as a general probe of whether you understand what &quot;we trained a 70B model on 512 GPUs&quot; actually involves. The questions are predictable: where does the memory go, what does ZeRO shard, why is tensor parallelism kept inside a node, what is a pipeline bubble, and what do you do when the job hangs at step 40,000.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#where-the-memory-goes">Where the Memory Goes</a></li>
+<li><a href="#communication-collectives-and-interconnect">Communication Collectives and Interconnect</a></li>
+<li><a href="#data-parallelism-and-ddp">Data Parallelism and DDP</a></li>
+<li><a href="#zero-and-fsdp">ZeRO and FSDP</a></li>
+<li><a href="#tensor-parallelism">Tensor Parallelism</a></li>
+<li><a href="#pipeline-parallelism">Pipeline Parallelism</a></li>
+<li><a href="#sequence-and-context-parallelism">Sequence and Context Parallelism</a></li>
+<li><a href="#expert-parallelism-for-moe">Expert Parallelism for MoE</a></li>
+<li><a href="#3d-parallelism-and-how-to-choose">3D Parallelism and How to Choose</a></li>
+<li><a href="#mixed-precision">Mixed Precision</a></li>
+<li><a href="#activation-checkpointing-and-gradient-accumulation">Activation Checkpointing and Gradient Accumulation</a></li>
+<li><a href="#large-batch-training">Large-Batch Training</a></li>
+<li><a href="#fault-tolerance-and-checkpointing">Fault Tolerance and Checkpointing</a></li>
+<li><a href="#throughput-metrics">Throughput Metrics</a></li>
+<li><a href="#debugging-distributed-jobs">Debugging Distributed Jobs</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="where-the-memory-goes">Where the Memory Goes</h2>
+<p>Every distributed training strategy is an answer to one question: which of these tensors do we split, and across which devices?</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Size (mixed-precision Adam)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameters (bf16/fp16)</td>
+<td>2 bytes/param</td>
+<td>Used in forward and backward</td>
+</tr>
+<tr>
+<td>Gradients (bf16/fp16)</td>
+<td>2 bytes/param</td>
+<td>Same shape as parameters</td>
+</tr>
+<tr>
+<td>fp32 master weights</td>
+<td>4 bytes/param</td>
+<td>Optimizer updates these, then casts down</td>
+</tr>
+<tr>
+<td>Adam first moment <code>m</code></td>
+<td>4 bytes/param</td>
+<td>fp32</td>
+</tr>
+<tr>
+<td>Adam second moment <code>v</code></td>
+<td>4 bytes/param</td>
+<td>fp32</td>
+</tr>
+<tr>
+<td><strong>Model states total</strong></td>
+<td><strong>16 bytes/param</strong></td>
+<td>Before any activations</td>
+</tr>
+<tr>
+<td>Activations</td>
+<td>Depends on batch, sequence length, hidden size, depth</td>
+<td>Often the largest term for long sequences</td>
+</tr>
+<tr>
+<td>Temporary buffers, fragmentation</td>
+<td>Several GB</td>
+<td>Communication buffers, allocator overhead</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>16 bytes/param</strong> rule is the number to have memorized. Note that the optimizer (12 bytes) dominates, not the weights themselves.</p>
+<p><strong>Worked example: a 7B-parameter model.</strong></p>
+<pre><code>Model states:   7e9 × 16 bytes = 112 GB
+  bf16 params      14 GB
+  bf16 grads       14 GB
+  fp32 master      28 GB
+  Adam m, v        56 GB
+
+Inference only (bf16 weights): 7e9 × 2 = 14 GB
+</code></pre>
+<p>112 GB does not fit on one 80 GB GPU before a single activation is stored. So full fine-tuning of a 7B model with Adam already needs sharding (ZeRO/FSDP), CPU offload, or a memory-lighter method (LoRA, 8-bit optimizers). With ZeRO-3 across 8 GPUs, model states drop to 14 GB per GPU, leaving room for activations.</p>
+<p><strong>Activations.</strong> For a transformer layer with sequence length <code>s</code>, micro-batch <code>b</code>, hidden size <code>h</code>, and <code>a</code> heads, the Megatron-LM activation analysis gives roughly:</p>
+<pre><code>activation bytes per layer ≈ s · b · h · (34 + 5 · a · s / h)     (16-bit activations, no recomputation)
+</code></pre>
+<p>The <code>5as/h</code> term is the attention score matrix, which is quadratic in <code>s</code>. FlashAttention never materializes it, which removes that term and is a large part of why long-context training became practical. Multiply by the number of layers and activations easily exceed model states at long sequence lengths, which is why activation checkpointing and sequence parallelism exist.</p>
+<pre><code class="language-python">def training_memory_gb(n_params, bytes_per_param=16):
+    &quot;&quot;&quot;Model-state memory for mixed-precision Adam, excluding activations.&quot;&quot;&quot;
+    return n_params * bytes_per_param / 1e9
+
+training_memory_gb(7e9)    # 112.0
+training_memory_gb(70e9)   # 1120.0 -&gt; needs sharding across at least ~16 x 80GB GPUs
+</code></pre>
+<hr />
+<h2 id="communication-collectives-and-interconnect">Communication Collectives and Interconnect</h2>
+<p>Distributed training is built from a handful of collective operations. Knowing which strategy uses which collective is what lets you reason about cost.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Collective</th>
+<th>What it does</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All-reduce</strong></td>
+<td>Every rank ends with the sum (or mean) of all ranks' tensors</td>
+<td>DDP gradient sync, tensor-parallel layer outputs</td>
+</tr>
+<tr>
+<td><strong>Reduce-scatter</strong></td>
+<td>Sum across ranks, each rank keeps one shard of the result</td>
+<td>ZeRO-2/3 and FSDP gradient sync</td>
+</tr>
+<tr>
+<td><strong>All-gather</strong></td>
+<td>Each rank contributes a shard, every rank ends with the full tensor</td>
+<td>ZeRO-3/FSDP parameter gathering, sequence parallelism</td>
+</tr>
+<tr>
+<td><strong>All-to-all</strong></td>
+<td>Each rank sends a distinct chunk to every other rank</td>
+<td>MoE token dispatch, Ulysses sequence parallelism</td>
+</tr>
+<tr>
+<td><strong>Broadcast</strong></td>
+<td>One rank sends to all</td>
+<td>Initial weight sync</td>
+</tr>
+<tr>
+<td><strong>Send / Recv (P2P)</strong></td>
+<td>Point-to-point</td>
+<td>Pipeline parallelism between stages</td>
+</tr>
+</tbody>
+</table></div>
+<p>A useful identity: <strong>all-reduce = reduce-scatter + all-gather.</strong> That is exactly why ZeRO-2 costs the same bandwidth as DDP: it performs the two halves separately and keeps only its shard in between.</p>
+<p><strong>Ring all-reduce cost.</strong> With <code>N</code> ranks and a tensor of <code>M</code> bytes, ring all-reduce runs a reduce-scatter phase and an all-gather phase, each with <code>N-1</code> steps moving <code>M/N</code> bytes per step. Each rank sends and receives:</p>
+<pre><code>2 · (N - 1) / N · M   bytes   ≈ 2M for large N
+</code></pre>
+<p>The per-rank bandwidth cost is nearly independent of <code>N</code>, which is why data parallelism scales. Latency, however, grows with <code>N</code> (there are <code>2(N-1)</code> steps), so at large scale NCCL uses tree or hierarchical algorithms for small messages.</p>
+<p><strong>Interconnect.</strong> The bandwidth gap between links drives every placement decision.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Typical scope</th>
+<th>Order of magnitude bandwidth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NVLink / NVSwitch</strong></td>
+<td>GPUs within a node (e.g. 8 per node)</td>
+<td>Hundreds of GB/s per GPU (H100: 900 GB/s aggregate bidirectional)</td>
+</tr>
+<tr>
+<td><strong>InfiniBand / RoCE</strong></td>
+<td>Across nodes</td>
+<td>~25-50 GB/s per NIC (200-400 Gb/s), typically one NIC per GPU</td>
+</tr>
+<tr>
+<td><strong>PCIe</strong></td>
+<td>GPU to CPU, or GPUs without NVLink</td>
+<td>Tens of GB/s</td>
+</tr>
+<tr>
+<td><strong>Ethernet (commodity)</strong></td>
+<td>Cloud without RDMA</td>
+<td>Often the bottleneck</td>
+</tr>
+</tbody>
+</table></div>
+<p>The intra-node link is roughly an order of magnitude faster than the inter-node one. Rule of thumb: put the chattiest parallelism (tensor parallelism) inside the node and the least chatty (data parallelism, pipeline P2P) across nodes.</p>
+<hr />
+<h2 id="data-parallelism-and-ddp">Data Parallelism and DDP</h2>
+<p>Every GPU holds a full replica of the model, processes a different slice of the batch, and gradients are averaged so all replicas take the same step.</p>
+<pre><code>1. Each rank: forward + backward on its local micro-batch
+2. All-reduce gradients (average across ranks)
+3. Each rank: identical optimizer step -&gt; replicas stay in sync
+</code></pre>
+<p>PyTorch <strong>DistributedDataParallel (DDP)</strong> makes this efficient by grouping gradients into <strong>buckets</strong> (default 25 MB) and launching an all-reduce for each bucket as soon as its gradients are ready during backward. Communication overlaps with the rest of the backward pass, so for a well-sized model it is mostly hidden.</p>
+<p><strong>DDP vs DataParallel</strong>: <code>nn.DataParallel</code> is single-process, multi-threaded, scatters inputs and gathers outputs through GPU 0 every step, and is limited by the Python GIL. DDP runs one process per GPU with no central bottleneck. Always use DDP.</p>
+<pre><code class="language-python"># train_ddp.py  -- launch with: torchrun --nproc_per_node=8 train_ddp.py
+import os
+import torch
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data import DataLoader, DistributedSampler
+
+def main():
+    dist.init_process_group(backend=&quot;nccl&quot;)          # torchrun sets RANK, WORLD_SIZE, MASTER_ADDR
+    local_rank = int(os.environ[&quot;LOCAL_RANK&quot;])
+    torch.cuda.set_device(local_rank)
+
+    model = build_model().cuda(local_rank)
+    model = DDP(model, device_ids=[local_rank])
+
+    sampler = DistributedSampler(dataset, shuffle=True, drop_last=True)
+    loader = DataLoader(dataset, batch_size=32, sampler=sampler, num_workers=4, pin_memory=True)
+    opt = torch.optim.AdamW(model.parameters(), lr=3e-4)
+
+    for epoch in range(num_epochs):
+        sampler.set_epoch(epoch)                     # otherwise every epoch uses the same shuffle
+        for x, y in loader:
+            x, y = x.cuda(local_rank, non_blocking=True), y.cuda(local_rank, non_blocking=True)
+            loss = loss_fn(model(x), y)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()                          # gradient all-reduce overlaps with backward
+            opt.step()
+
+    if dist.get_rank() == 0:
+        torch.save(model.module.state_dict(), &quot;ckpt.pt&quot;)
+    dist.destroy_process_group()
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>The limitation is obvious from the memory table: <strong>every rank stores all 16 bytes/param.</strong> DDP scales throughput but does nothing for model size. That is what ZeRO fixes.</p>
+<hr />
+<h2 id="zero-and-fsdp">ZeRO and FSDP</h2>
+<p>ZeRO (Zero Redundancy Optimizer, from DeepSpeed) observes that in DDP every rank stores identical optimizer states, gradients, and parameters. It shards them across the data-parallel group in three progressive stages.</p>
+<p>Using <code>Ψ</code> for parameter count and <code>N</code> for data-parallel degree, per-GPU model-state memory is:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Shards</th>
+<th>Memory per GPU</th>
+<th>Communication vs DDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDP (baseline)</td>
+<td>Nothing</td>
+<td><code>16Ψ</code></td>
+<td>1x (all-reduce of grads)</td>
+</tr>
+<tr>
+<td><strong>ZeRO-1</strong></td>
+<td>Optimizer states</td>
+<td><code>4Ψ + 12Ψ/N</code></td>
+<td>1x</td>
+</tr>
+<tr>
+<td><strong>ZeRO-2</strong></td>
+<td>+ Gradients</td>
+<td><code>2Ψ + 14Ψ/N</code></td>
+<td>1x (reduce-scatter grads, all-gather params after step)</td>
+</tr>
+<tr>
+<td><strong>ZeRO-3</strong></td>
+<td>+ Parameters</td>
+<td><code>16Ψ/N</code></td>
+<td>~1.5x (all-gather params in forward and again in backward, reduce-scatter grads)</td>
+</tr>
+</tbody>
+</table></div>
+<p>For the 7B model on 8 GPUs: DDP needs 112 GB/GPU, ZeRO-1 about 38.5 GB, ZeRO-2 about 26 GB, ZeRO-3 about 14 GB.</p>
+<p><strong>How ZeRO-3 runs a layer</strong>: before the layer's forward, all-gather its parameter shards into a full copy; compute; free the gathered copy. Repeat in backward, then reduce-scatter the gradients so each rank keeps only the gradient shard for the parameters it owns, and runs the optimizer on that shard. Prefetching the next layer's all-gather while the current layer computes hides most of the cost.</p>
+<p><strong>FSDP</strong> (Fully Sharded Data Parallel) is PyTorch's native implementation of the same idea.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>FSDP sharding strategy</th>
+<th>Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FULL_SHARD</code></td>
+<td>ZeRO-3</td>
+</tr>
+<tr>
+<td><code>SHARD_GRAD_OP</code></td>
+<td>ZeRO-2</td>
+</tr>
+<tr>
+<td><code>NO_SHARD</code></td>
+<td>DDP</td>
+</tr>
+<tr>
+<td><code>HYBRID_SHARD</code></td>
+<td>ZeRO-3 within a node, replicate across nodes (keeps all-gathers on NVLink)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>wrapping unit</strong> matters: FSDP gathers one unit at a time, so wrapping each transformer block separately bounds peak memory to roughly one block's full parameters plus the shards. Wrapping the whole model as one unit gathers everything at once and saves nothing.</p>
+<pre><code class="language-python"># FSDP2 (per-parameter sharding, PyTorch 2.x). Launch with torchrun as above.
+import torch
+from torch.distributed.fsdp import fully_shard, MixedPrecisionPolicy
+
+mp = MixedPrecisionPolicy(param_dtype=torch.bfloat16, reduce_dtype=torch.float32)
+
+model = build_transformer()                    # can be built on the &quot;meta&quot; device for huge models
+for block in model.layers:                     # shard each transformer block as its own unit
+    fully_shard(block, mp_policy=mp)
+fully_shard(model, mp_policy=mp)               # root: embeddings, final norm, head
+
+opt = torch.optim.AdamW(model.parameters(), lr=3e-4)   # optimizer only ever sees local shards
+
+for x, y in loader:
+    loss = loss_fn(model(x), y)
+    loss.backward()                            # reduce-scatter of grads happens here
+    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+    opt.step()
+    opt.zero_grad(set_to_none=True)
+</code></pre>
+<p>The older FSDP1 API (<code>FullyShardedDataParallel(model, auto_wrap_policy=..., sharding_strategy=...)</code>) does the same thing with a module wrapper; many codebases still use it.</p>
+<p><strong>ZeRO-Offload / ZeRO-Infinity</strong> move optimizer states (and optionally parameters) to CPU RAM or NVMe. It lets you fit much larger models on few GPUs, at the price of PCIe traffic and CPU-side optimizer steps. It suits fine-tuning on a small cluster, not throughput-critical pretraining.</p>
+<hr />
+<h2 id="tensor-parallelism">Tensor Parallelism</h2>
+<p>Tensor parallelism (TP) splits individual weight matrices across GPUs, so each GPU computes part of every layer. The Megatron-LM scheme pairs two splits so that only one collective is needed per block.</p>
+<p><strong>MLP block</strong> (<code>Y = GeLU(X A) B</code>):</p>
+<pre><code>A split by columns:  A = [A1 | A2]       -&gt; GPU i computes GeLU(X Ai)       (no communication; GeLU is elementwise)
+B split by rows:     B = [B1 ; B2]       -&gt; GPU i computes GeLU(X Ai) Bi    (partial sums)
+Y = Σ_i GeLU(X Ai) Bi                    -&gt; one all-reduce
+</code></pre>
+<p>Column-parallel first is what makes this work: each GPU holds complete output columns, so the nonlinearity can be applied locally. If you split <code>A</code> by rows, you would need an all-reduce before GeLU.</p>
+<p><strong>Attention block</strong>: split heads across GPUs (Q, K, V projections column-parallel, each GPU owns <code>a/t</code> heads and computes attention for them independently), then the output projection is row-parallel, followed by one all-reduce.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collectives per transformer layer</td>
+<td>2 all-reduces in forward (attention + MLP), 2 in backward</td>
+</tr>
+<tr>
+<td>What it shards</td>
+<td>Parameters, gradients, optimizer states, and much of the activation memory</td>
+</tr>
+<tr>
+<td>Communication pattern</td>
+<td>Blocking, on the critical path, every layer</td>
+</tr>
+<tr>
+<td>Typical degree</td>
+<td>2-8, within one NVLink node</td>
+</tr>
+</tbody>
+</table></div>
+<p>Because those all-reduces sit on the critical path of every layer and scale with activation size, <strong>TP is almost always confined to a single node.</strong> Crossing InfiniBand with TP usually destroys throughput. Embedding and output layers are split along the vocabulary dimension, with a parallel cross-entropy that avoids gathering the full logits.</p>
+<hr />
+<h2 id="pipeline-parallelism">Pipeline Parallelism</h2>
+<p>Pipeline parallelism (PP) splits the model by layers into <code>p</code> stages on different GPUs. Activations flow forward stage to stage via point-to-point sends; gradients flow back.</p>
+<p>The naive version leaves all but one GPU idle at any moment. The fix is to split the batch into <code>m</code> <strong>micro-batches</strong> so stages can work on different micro-batches at once.</p>
+<p><strong>The bubble.</strong> At the start and end of each step, some stages are idle while the pipeline fills and drains. For GPipe-style schedules:</p>
+<pre><code>bubble fraction = (p - 1) / (m + p - 1)
+</code></pre>
+<p>With <code>p = 8</code> stages and <code>m = 8</code> micro-batches the bubble is 7/15, or 47% idle. With <code>m = 64</code> it drops to about 10%. More micro-batches means a smaller bubble, but each micro-batch must still be large enough to use the GPU efficiently, and the global batch grows.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Schedule</th>
+<th>How it works</th>
+<th>Bubble</th>
+<th>Activation memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GPipe</strong></td>
+<td>All <code>m</code> forwards, then all <code>m</code> backwards</td>
+<td><code>(p-1)/(m+p-1)</code></td>
+<td>Stores activations for all <code>m</code> micro-batches</td>
+</tr>
+<tr>
+<td><strong>1F1B</strong> (PipeDream-Flush)</td>
+<td>After warmup, alternate one forward, one backward</td>
+<td>Same as GPipe</td>
+<td>Bounded by <code>p</code> in-flight micro-batches, independent of <code>m</code></td>
+</tr>
+<tr>
+<td><strong>Interleaved 1F1B</strong></td>
+<td>Each GPU holds <code>v</code> non-contiguous chunks of layers</td>
+<td>Reduced by ~<code>v</code>x</td>
+<td>Similar to 1F1B, more P2P messages</td>
+</tr>
+<tr>
+<td><strong>Zero-bubble variants</strong></td>
+<td>Split backward into input-grad and weight-grad, reschedule</td>
+<td>Near zero</td>
+<td>More bookkeeping</td>
+</tr>
+</tbody>
+</table></div>
+<p>The key interview point: <strong>1F1B does not shrink the bubble, it shrinks memory.</strong> Because memory no longer grows with <code>m</code>, you can afford many more micro-batches, and that is what shrinks the bubble in practice.</p>
+<p>PP's strengths: communication is small (only activations at stage boundaries) and point-to-point, so it tolerates the slower inter-node link. Its weaknesses: the bubble, load balancing between stages (the embedding and output layers make first and last stages uneven), and implementation complexity.</p>
+<hr />
+<h2 id="sequence-and-context-parallelism">Sequence and Context Parallelism</h2>
+<p>Long sequences make activations, not parameters, the binding constraint. Two related ideas split along the sequence dimension.</p>
+<p><strong>Sequence parallelism (Megatron-SP)</strong> complements TP. Inside the TP region, LayerNorm and dropout activations are replicated on every TP rank, which wastes memory. Megatron-SP shards those regions along the sequence dimension and replaces each all-reduce with a reduce-scatter (entering the sequence-parallel region) and an all-gather (entering the tensor-parallel region). Same communication volume, activation memory in those regions divided by <code>t</code>.</p>
+<p><strong>Context parallelism (CP)</strong> shards the whole sequence across GPUs for all layers, which is needed for sequences of hundreds of thousands of tokens. Everything except attention is per-token and needs no communication. Attention needs every query to see every key, handled in one of two ways:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Mechanism</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ring attention</strong></td>
+<td>Each GPU keeps its query block and passes K/V blocks around a ring, accumulating attention with an online softmax</td>
+<td>Overlaps P2P with compute; causal masking needs load balancing (e.g. each rank takes a chunk from the start and one from the end)</td>
+</tr>
+<tr>
+<td><strong>All-to-all (DeepSpeed Ulysses)</strong></td>
+<td>All-to-all switches from sequence-sharded to head-sharded, runs full attention per head group, switches back</td>
+<td>Degree limited by the number of attention heads (or KV heads with GQA)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="expert-parallelism-for-moe">Expert Parallelism for MoE</h2>
+<p>A mixture-of-experts layer replaces the dense MLP with <code>E</code> expert MLPs and a router that sends each token to its top-<code>k</code> experts. Parameters grow with <code>E</code>; compute per token grows only with <code>k</code>.</p>
+<p><strong>Expert parallelism (EP)</strong> places different experts on different GPUs:</p>
+<pre><code>1. Router picks top-k experts per token
+2. All-to-all: dispatch tokens to the GPUs that own their experts
+3. Each GPU runs its local experts on the tokens it received
+4. All-to-all: return outputs to the tokens' original GPUs, combine with router weights
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Why it matters</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two all-to-alls per MoE layer</td>
+<td>Latency-bound, sensitive to inter-node bandwidth</td>
+<td>Keep EP within a node where possible; overlap with compute</td>
+</tr>
+<tr>
+<td>Load imbalance</td>
+<td>A popular expert makes its GPU the straggler for everyone</td>
+<td>Auxiliary load-balancing loss, or bias-based balancing without an auxiliary loss</td>
+</tr>
+<tr>
+<td>Capacity limits</td>
+<td>Fixed buffers per expert; overflow tokens are dropped or rerouted</td>
+<td>Tune capacity factor (e.g. 1.0-1.25); dropless implementations</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>All experts' parameters and optimizer states must live somewhere</td>
+<td>Combine EP with ZeRO/FSDP over the non-expert parameters</td>
+</tr>
+</tbody>
+</table></div>
+<p>EP is typically composed with data parallelism: the non-expert layers are replicated across the EP group, and experts are sharded across it.</p>
+<hr />
+<h2 id="3d-parallelism-and-how-to-choose">3D Parallelism and How to Choose</h2>
+<p>Large runs combine strategies along separate axes of a device mesh: <code>total GPUs = DP × TP × PP</code> (plus CP and EP when used).</p>
+<p>A standard placement on 8-GPU nodes:</p>
+<pre><code>TP  (degree ≤ 8)       inside a node        chatty, per-layer all-reduces, needs NVLink
+PP  (degree 2-16+)     across nodes         small P2P messages, tolerates InfiniBand
+DP / FSDP (the rest)   outermost            gradient sync overlaps with backward
+</code></pre>
+<p><strong>Decision procedure</strong> (roughly the order practitioners reason in):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Start with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model + optimizer fit on one GPU</td>
+<td>DDP. Nothing else needed</td>
+</tr>
+<tr>
+<td>Model fits for inference but not training</td>
+<td>FSDP / ZeRO-2 or ZeRO-3</td>
+</tr>
+<tr>
+<td>Single layer too large, or FSDP all-gathers dominate at high GPU counts</td>
+<td>Add TP within the node</td>
+</tr>
+<tr>
+<td>Model too large even with TP=8 and FSDP, or cross-node bandwidth is weak</td>
+<td>Add PP across nodes</td>
+</tr>
+<tr>
+<td>Very long sequences, activations dominate</td>
+<td>Add sequence / context parallelism, activation checkpointing</td>
+</tr>
+<tr>
+<td>MoE model</td>
+<td>Add EP for the expert layers</td>
+</tr>
+</tbody>
+</table></div>
+<p>Guiding principles: use the simplest scheme that fits, since each added axis brings complexity and new failure modes. Keep the global batch within what the optimizer tolerates, because DP degree multiplies it. Measure MFU after each change rather than assuming the textbook configuration is best for your cluster.</p>
+<hr />
+<h2 id="mixed-precision">Mixed Precision</h2>
+<p>Training in 16-bit roughly halves activation and weight memory and uses tensor cores, which are much faster than fp32 math.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Exponent bits</th>
+<th>Mantissa bits</th>
+<th>Max value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fp32</td>
+<td>8</td>
+<td>23</td>
+<td>~3.4e38</td>
+<td>Master weights, optimizer states, reductions</td>
+</tr>
+<tr>
+<td><strong>fp16</strong></td>
+<td>5</td>
+<td>10</td>
+<td>65,504</td>
+<td>Narrow range; needs loss scaling</td>
+</tr>
+<tr>
+<td><strong>bf16</strong></td>
+<td>8</td>
+<td>7</td>
+<td>~3.4e38</td>
+<td>Same range as fp32, lower precision; no loss scaling needed</td>
+</tr>
+<tr>
+<td>fp8 E4M3</td>
+<td>4</td>
+<td>3</td>
+<td>448</td>
+<td>Forward activations and weights</td>
+</tr>
+<tr>
+<td>fp8 E5M2</td>
+<td>5</td>
+<td>2</td>
+<td>57,344</td>
+<td>Gradients (need range more than precision)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Loss scaling (fp16 only).</strong> Small gradients underflow to zero in fp16. Multiply the loss by a scale factor <code>S</code> before backward, so gradients are <code>S×</code> larger. Unscale before the optimizer step, and skip the step and halve <code>S</code> if any gradient is inf/NaN. Dynamic scaling increases <code>S</code> again after a run of clean steps. bf16 has fp32's exponent range, so it does not need this. That is the main reason it became the default on A100/H100/TPU.</p>
+<p><strong>What stays in fp32</strong> even in &quot;bf16 training&quot;: master weights, optimizer states, and usually softmax, LayerNorm statistics, loss computation, and gradient reductions. Updating bf16 weights directly loses small updates because bf16 has only 8 bits of significand precision (about 2-3 significant decimal digits).</p>
+<p><strong>fp8</strong> (H100 and later) needs per-tensor (or finer-grained) scaling factors, usually computed from a history of recent absolute maxima (&quot;delayed scaling&quot;), because its range is tiny. Libraries such as NVIDIA Transformer Engine handle this for matmuls; sensitive operations stay in higher precision. It can give a substantial speedup over bf16 for large matmuls, but it needs careful validation against a bf16 baseline.</p>
+<pre><code class="language-python"># bf16 autocast (no scaler needed)
+with torch.autocast(device_type=&quot;cuda&quot;, dtype=torch.bfloat16):
+    loss = loss_fn(model(x), y)
+loss.backward()
+
+# fp16 requires a GradScaler
+scaler = torch.amp.GradScaler(&quot;cuda&quot;)
+with torch.autocast(device_type=&quot;cuda&quot;, dtype=torch.float16):
+    loss = loss_fn(model(x), y)
+scaler.scale(loss).backward()
+scaler.unscale_(opt)                          # unscale before clipping
+torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+scaler.step(opt)                              # skips the step if grads are inf/NaN
+scaler.update()
+</code></pre>
+<hr />
+<h2 id="activation-checkpointing-and-gradient-accumulation">Activation Checkpointing and Gradient Accumulation</h2>
+<p><strong>Activation checkpointing</strong> (gradient checkpointing, recomputation) stores only the inputs to selected blocks during forward and recomputes the internals during backward.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>No checkpointing</th>
+<th>Full checkpointing per layer</th>
+<th>Selective checkpointing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activation memory</td>
+<td>All intermediates</td>
+<td>Only layer inputs</td>
+<td>Keep cheap-to-store, drop cheap-to-recompute (e.g. attention scores)</td>
+</tr>
+<tr>
+<td>Extra compute</td>
+<td>0</td>
+<td>~1 extra forward (~33% more total, since backward ≈ 2x forward)</td>
+<td>A few percent</td>
+</tr>
+</tbody>
+</table></div>
+<p>Checkpointing trades compute for memory. The memory saved is often reinvested in a larger micro-batch, which can recover much of the lost throughput.</p>
+<pre><code class="language-python">from torch.utils.checkpoint import checkpoint
+
+def forward(self, x):
+    for block in self.layers:
+        x = checkpoint(block, x, use_reentrant=False)
+    return x
+</code></pre>
+<p><strong>Gradient accumulation</strong> runs <code>k</code> micro-batches before each optimizer step, so the effective batch is <code>k × micro_batch × DP</code>. It is how you reach a target global batch when memory limits the micro-batch. In DDP, skip the all-reduce on the non-final micro-batches:</p>
+<pre><code class="language-python">import contextlib
+
+for i, (x, y) in enumerate(loader):
+    sync = (i + 1) % accum_steps == 0
+    ctx = contextlib.nullcontext() if sync else model.no_sync()   # DDP: no all-reduce until last micro-batch
+    with ctx:
+        loss = loss_fn(model(x), y) / accum_steps                 # divide, or gradients are k times too large
+        loss.backward()
+    if sync:
+        opt.step()
+        opt.zero_grad(set_to_none=True)
+</code></pre>
+<p>Two things to remember: accumulation gives the same gradient as a bigger batch only for batch-independent layers (BatchNorm statistics still see the micro-batch), and the loss normalization must be right when micro-batches have different token counts. Sum token losses and divide by total tokens across the accumulated micro-batches (and ranks), not by the number of micro-batches.</p>
+<hr />
+<h2 id="large-batch-training">Large-Batch Training</h2>
+<p>Data parallelism multiplies the batch size, and a bigger batch does not automatically train as well.</p>
+<ul>
+<li><strong>Linear scaling rule</strong> (SGD): when the batch grows by <code>k</code>, multiply the learning rate by <code>k</code>. It holds up to a point and was used to train ImageNet ResNets with batches in the thousands.</li>
+<li><strong>Square-root scaling</strong> is often a better starting point for Adam-family optimizers.</li>
+<li><strong>Warmup</strong> is essential at large batch or high LR. Ramp the LR linearly over the first hundreds to thousands of steps, while early gradients are large and Adam's second-moment estimates are unreliable.</li>
+<li><strong>Layer-wise adaptive optimizers</strong> (LARS for SGD, LAMB for Adam) scale each layer's update by the ratio of its weight norm to its update norm, which stabilized very large-batch training for ResNets and BERT.</li>
+<li><strong>Critical batch size</strong>: beyond some batch size (which depends on the task, and grows as loss falls), extra batch size gives diminishing reductions in steps. Past it you spend more compute for the same result. The gradient noise scale is one way to estimate it.</li>
+</ul>
+<p>Practical consequence: adding GPUs through DP is only free up to the critical batch size. Beyond that, adding TP/PP to use more GPUs at a fixed global batch is often better than growing the batch.</p>
+<hr />
+<h2 id="fault-tolerance-and-checkpointing">Fault Tolerance and Checkpointing</h2>
+<p>On thousands of GPUs, hardware failures (a GPU falling off the bus, ECC errors, NIC flaps, node reboots) happen routinely over a multi-week run. The question is not whether the job will crash but how much work you lose each time.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Practice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sharded / distributed checkpoints</strong> (<code>torch.distributed.checkpoint</code>, DeepSpeed)</td>
+<td>Each rank writes its own shard in parallel; no rank-0 gather of a terabyte-scale state</td>
+</tr>
+<tr>
+<td><strong>Async checkpointing</strong></td>
+<td>Copy to CPU memory, write to storage in the background; training resumes in seconds</td>
+</tr>
+<tr>
+<td><strong>Save everything needed for an exact resume</strong></td>
+<td>Model, optimizer, LR scheduler, step count, data loader position, RNG states, loss scaler</td>
+</tr>
+<tr>
+<td><strong>Resharding on load</strong></td>
+<td>Resume on a different number of GPUs or parallel layout</td>
+</tr>
+<tr>
+<td><strong>Checkpoint interval from failure rate</strong></td>
+<td>Balance checkpoint overhead against expected lost work (interval ≈ sqrt(2 × checkpoint cost × mean time between failures) is a classic approximation)</td>
+</tr>
+<tr>
+<td><strong>Elastic launch</strong> (<code>torchrun --max-restarts</code>, spare nodes)</td>
+<td>Replace a failed node and restart automatically</td>
+</tr>
+<tr>
+<td><strong>Health checks</strong></td>
+<td>Run NCCL and GPU burn-in tests on nodes before admitting them; blacklist repeat offenders</td>
+</tr>
+</tbody>
+</table></div>
+<p>Silent data corruption is the nastier failure: a faulty GPU produces wrong numbers without crashing. Symptoms are unexplained loss spikes or divergence between replicas that should be identical. Some teams periodically compare parameter checksums across data-parallel replicas to catch it.</p>
+<hr />
+<h2 id="throughput-metrics">Throughput Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Definition</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tokens/sec (per GPU)</strong></td>
+<td>Training tokens processed per second, divided by GPU count</td>
+<td>Day-to-day throughput; compare configs on the same hardware</td>
+</tr>
+<tr>
+<td><strong>MFU</strong> (Model FLOPs Utilization)</td>
+<td>Model FLOPs per second achieved ÷ hardware peak FLOPs</td>
+<td>Hardware-independent efficiency; comparable across clusters</td>
+</tr>
+<tr>
+<td><strong>HFU</strong> (Hardware FLOPs Utilization)</td>
+<td>Like MFU but counts recomputation FLOPs too</td>
+<td>Always ≥ MFU; can flatter a checkpointed run</td>
+</tr>
+<tr>
+<td><strong>Step time breakdown</strong></td>
+<td>Compute vs exposed communication vs data loading vs bubble</td>
+<td>Tells you what to fix</td>
+</tr>
+</tbody>
+</table></div>
+<p>For a dense transformer, training costs about <strong>6 FLOPs per parameter per token</strong> (2 forward, 4 backward), ignoring attention:</p>
+<pre><code class="language-python">def mfu(n_params, tokens_per_sec, n_gpus, peak_flops_per_gpu):
+    achieved = 6 * n_params * tokens_per_sec
+    return achieved / (n_gpus * peak_flops_per_gpu)
+
+# 7B model, 64 H100s (~989e12 dense bf16 peak), 0.5M tokens/s total
+mfu(7e9, 0.5e6, 64, 989e12)   # ≈ 0.33
+</code></pre>
+<p>Doing this sanity check out loud is worth it in an interview. Well-tuned large dense runs typically report MFU in the roughly 35-55% range. Numbers far above that usually mean a counting bug. Use MFU rather than tokens/sec when comparing model sizes, since tokens/sec naturally falls as models grow.</p>
+<hr />
+<h2 id="debugging-distributed-jobs">Debugging Distributed Jobs</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely causes</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hang with no error</strong></td>
+<td>Ranks issued collectives in a different order or count (conditional code path on one rank, uneven number of batches, a rank skipped backward on an unused parameter)</td>
+<td><code>py-spy dump</code> every rank to see where each is stuck; <code>TORCH_DISTRIBUTED_DEBUG=DETAIL</code>; <code>DistributedSampler(drop_last=True)</code></td>
+</tr>
+<tr>
+<td><strong>NCCL timeout / watchdog error</strong></td>
+<td>A hang that hit the timeout, a crashed peer, network faults, one rank far slower</td>
+<td><code>NCCL_DEBUG=INFO</code>; check which rank failed first (the others' errors are downstream); PyTorch's flight recorder dumps recent collectives per rank</td>
+</tr>
+<tr>
+<td><strong>&quot;Expected to mark a variable ready only once&quot; / unused parameters</strong></td>
+<td>Parts of the model not used on every step</td>
+<td>Fix the model, or <code>find_unused_parameters=True</code> (costs an extra graph traversal)</td>
+</tr>
+<tr>
+<td><strong>Stragglers</strong> (step time set by the slowest rank)</td>
+<td>Thermal throttling, a bad NIC, noisy neighbor, data-loading skew, MoE load imbalance</td>
+<td>Per-rank step timing; <code>nvidia-smi</code> clocks and ECC errors; NCCL tests on suspect nodes; replace the node</td>
+</tr>
+<tr>
+<td><strong>Loss spikes</strong></td>
+<td>Bad data batch, LR too high, fp16 overflow, attention logit growth, a faulty GPU</td>
+<td>Log the batch at each spike; clip gradients; lower LR / longer warmup; QK-norm or z-loss; skip the batch and rewind to the last checkpoint</td>
+</tr>
+<tr>
+<td><strong>Replicas diverge</strong></td>
+<td>Nondeterministic ops, missing gradient sync, silent data corruption</td>
+<td>Compare parameter checksums across DP ranks</td>
+</tr>
+<tr>
+<td><strong>OOM on one rank only</strong></td>
+<td>Uneven sequence lengths, a larger pipeline stage, rank 0 doing extra work (logging, eval)</td>
+<td>Pack or bucket sequences; rebalance stages; move extras off the critical rank</td>
+</tr>
+<tr>
+<td><strong>Low MFU with no errors</strong></td>
+<td>Exposed communication, data-loader starvation, too-small micro-batch, large bubble</td>
+<td>Profile with <code>torch.profiler</code> / Nsight Systems; look for gaps between kernels</td>
+</tr>
+</tbody>
+</table></div>
+<p>The single most useful habit: <strong>when one rank errors, find the first rank to fail.</strong> In a collective job everything else times out as a consequence, and hundreds of identical timeout messages hide the one real stack trace.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-much-gpu-memory-does-it-take-to-train-a-7b-model-and-why">How much GPU memory does it take to train a 7B model, and why?</h4>
+<p>With mixed-precision Adam the model states alone cost about 16 bytes per parameter: 2 for bf16 weights, 2 for bf16 gradients, 4 for the fp32 master copy, and 4 each for Adam's two moments. For 7B parameters that is 112 GB before activations. It does not fit on a single 80 GB GPU, even though the same model needs only 14 GB for bf16 inference.</p>
+<p>On top of that come activations, which scale with micro-batch size, sequence length, hidden size, and depth, and can exceed model states at long context. So the realistic options are sharding across GPUs (ZeRO-3/FSDP brings it to 14 GB per GPU across 8 GPUs), offloading optimizer states to CPU, using an 8-bit optimizer, or avoiding full fine-tuning entirely with LoRA. I would also mention activation checkpointing to control the activation term.</p>
+<h4 id="explain-ring-all-reduce-and-why-data-parallelism-scales">Explain ring all-reduce and why data parallelism scales.</h4>
+<p>The <code>N</code> ranks form a ring and the gradient tensor is split into <code>N</code> chunks. In the reduce-scatter phase each rank sends one chunk to its neighbor and adds the chunk it receives, for <code>N-1</code> steps. After that, each rank holds the fully summed version of one chunk. The all-gather phase then circulates the finished chunks for another <code>N-1</code> steps so every rank has everything.</p>
+<p>Each rank sends and receives <code>2(N-1)/N</code> times the tensor size, which approaches <code>2M</code> as <code>N</code> grows. Per-rank bandwidth is essentially constant, so adding GPUs does not increase the communication each GPU does. DDP also overlaps these all-reduces with backward by bucketing gradients. The catch is latency: the number of steps grows with <code>N</code>, so for small messages at large scale NCCL switches to tree-based algorithms.</p>
+<h4 id="what-do-zero-stages-1-2-and-3-shard-and-what-does-each-cost">What do ZeRO stages 1, 2, and 3 shard, and what does each cost?</h4>
+<p>Stage 1 shards the optimizer states, the biggest term at 12 bytes/param, across the data-parallel ranks. Stage 2 also shards gradients: instead of an all-reduce, each rank reduce-scatters so it only keeps the gradient shard for the parameters it updates. Then an all-gather redistributes updated parameters. Since all-reduce equals reduce-scatter plus all-gather, stages 1 and 2 cost the same bandwidth as DDP.</p>
+<p>Stage 3 also shards the parameters themselves, so each layer's weights must be all-gathered before its forward and again before its backward. That is about 1.5x DDP's communication volume, in exchange for memory of <code>16Ψ/N</code>, which scales down linearly with GPU count. FSDP's <code>FULL_SHARD</code> is ZeRO-3 and <code>SHARD_GRAD_OP</code> is ZeRO-2. The practical question is whether the extra all-gathers can be hidden behind compute by prefetching, which depends on having enough compute per layer and fast interconnect.</p>
+<h4 id="how-does-megatron-style-tensor-parallelism-split-an-mlp-and-why-is-tp-kept-inside-a-node">How does Megatron-style tensor parallelism split an MLP, and why is TP kept inside a node?</h4>
+<p>For <code>Y = GeLU(XA)B</code>, split <code>A</code> by columns and <code>B</code> by rows. Each GPU computes <code>GeLU(X A_i)</code> without communicating, because it holds whole output columns and GeLU is elementwise. It then multiplies by its row shard <code>B_i</code>, producing a partial sum. One all-reduce combines the partials. Attention works the same way: heads are split across GPUs through column-parallel QKV, and the output projection is row-parallel, followed by one all-reduce.</p>
+<p>That makes two all-reduces in forward and two in backward per transformer layer. They are on the critical path (the next layer cannot start without them), and their size scales with the activations, not the parameters. Over NVLink that is affordable. Over InfiniBand, roughly an order of magnitude slower per GPU, the GPUs would mostly wait. So TP degree is usually capped at the GPUs per node, typically 8.</p>
+<h4 id="what-is-the-pipeline-bubble-and-how-do-you-reduce-it">What is the pipeline bubble and how do you reduce it?</h4>
+<p>With <code>p</code> stages, the pipeline needs time to fill at the start of a step and drain at the end, and during those phases some stages are idle. With <code>m</code> micro-batches under a GPipe or 1F1B schedule, the idle fraction is <code>(p-1)/(m+p-1)</code>. Eight stages with eight micro-batches wastes almost half the time.</p>
+<p>The levers: more micro-batches per step (limited by global batch size and by keeping each micro-batch big enough to use the GPU), interleaved schedules where each GPU hosts several non-contiguous layer chunks, which cuts the bubble roughly by that factor at the cost of more P2P messages, and zero-bubble schedules that split backward into input-gradient and weight-gradient work to fill the gaps. Using fewer stages, meaning less PP and more of another parallelism, also helps.</p>
+<h4 id="gpipe-vs-1f1b-what-is-the-difference">GPipe vs 1F1B: what is the difference?</h4>
+<p>GPipe runs all forward micro-batches, then all backwards, so it must hold activations for all <code>m</code> micro-batches at once. 1F1B, after a short warmup, alternates one forward and one backward per stage, so each stage holds at most about <code>p</code> micro-batches of activations regardless of <code>m</code>.</p>
+<p>The bubble fraction is the same for both. The benefit of 1F1B is memory, and the memory headroom is what lets you increase <code>m</code>, which is what actually shrinks the bubble. Candidates often say 1F1B reduces the bubble directly, and that is wrong.</p>
+<h4 id="you-have-512-gpus-and-a-70b-dense-model-how-would-you-parallelize-it">You have 512 GPUs and a 70B dense model. How would you parallelize it?</h4>
+<p>Start from the constraints. Model states are about 1.1 TB at 16 bytes/param, so they must be sharded. Nodes have 8 GPUs on NVLink, and nodes connect over InfiniBand.</p>
+<p>A reasonable starting point is TP=8 within each node, which splits every layer and cuts activation memory too. Then either FSDP/ZeRO across the remaining 64-way data-parallel dimension, or a modest PP degree (say 4) if cross-node bandwidth is weak or FSDP's all-gathers show up as exposed communication, with DP=16 on the rest. I would add activation checkpointing (selective if possible), and sequence parallelism alongside TP for long contexts. Then I would check the global batch: DP degree times micro-batch times accumulation must stay under what the optimizer tolerates, and the LR schedule needs warmup. Finally, measure MFU and the step-time breakdown, and iterate. The &quot;right&quot; config depends on the cluster's actual bandwidth, so I would benchmark two or three layouts rather than trust one on paper.</p>
+<h4 id="why-is-bf16-preferred-over-fp16-and-where-does-fp8-fit">Why is bf16 preferred over fp16, and where does fp8 fit?</h4>
+<p>fp16 has 5 exponent bits, max about 65,504, and small gradients underflow. It needs dynamic loss scaling, and overflows still cause skipped steps and occasional instability. bf16 keeps fp32's 8 exponent bits, trading mantissa precision for range, so gradients neither underflow nor overflow in practice and no loss scaling is needed. The lower precision is tolerable because master weights and optimizer states stay in fp32.</p>
+<p>fp8 on H100-class hardware roughly doubles matmul throughput again. E4M3 is typically used for weights and activations, E5M2 for gradients. With so few bits, it needs per-tensor or block-wise scaling factors maintained from recent absolute maxima. Sensitive operations such as softmax, norms, and the loss stay in higher precision. It works for large models but should be validated against a bf16 baseline, since subtle divergence can appear late in training.</p>
+<h4 id="how-do-you-train-with-very-long-sequences">How do you train with very long sequences?</h4>
+<p>Activations become the problem: they scale linearly with sequence length, plus a quadratic term for attention scores if those are materialized. In order of adoption: FlashAttention removes the quadratic memory term; activation checkpointing trades compute for memory; Megatron sequence parallelism shards the LayerNorm/dropout activations that TP otherwise replicates.</p>
+<p>Beyond that comes context parallelism, which shards the sequence across GPUs for every layer. Per-token operations need no communication. Attention is handled by ring attention (K/V blocks circulate while each GPU keeps its queries, combined with an online softmax) or by all-to-all methods like Ulysses that switch to head sharding for the attention computation. With causal masks, ring attention needs a load-balanced sequence assignment or the ranks holding later tokens do more work.</p>
+<h4 id="how-does-expert-parallelism-work-and-what-goes-wrong">How does expert parallelism work, and what goes wrong?</h4>
+<p>Experts are distributed across GPUs. After routing, an all-to-all sends each token to the GPU owning its chosen expert, the experts run locally, and a second all-to-all returns the results. The non-expert layers are data-parallel.</p>
+<p>The typical problems: all-to-all is latency-sensitive and suffers across nodes. Load imbalance means one hot expert makes its GPU everyone's straggler, which is why MoE training uses load-balancing losses or bias adjustments. Capacity limits drop tokens when an expert overflows. And parameter memory is large even though compute per token is small, so EP is usually combined with sharding of the dense parameters.</p>
+<h4 id="a-training-job-on-256-gpus-hangs-with-no-error-how-do-you-debug-it">A training job on 256 GPUs hangs with no error. How do you debug it?</h4>
+<p>A silent hang almost always means ranks disagree about which collective comes next. Some rank is waiting in an all-reduce the others never reach. Common causes are data-dependent control flow (one rank skips a layer, or takes an early <code>continue</code>), uneven data so one rank runs out of batches first, a rank that crashed or is stuck in I/O, or a checkpoint/eval path that only some ranks execute.</p>
+<p>Diagnosis: <code>py-spy dump</code> across ranks to see each stack, looking for the odd one out. Enable <code>NCCL_DEBUG=INFO</code> and <code>TORCH_DISTRIBUTED_DEBUG=DETAIL</code> to check collective sequences, and use PyTorch's NCCL flight recorder if available. If a timeout eventually fires, find the first rank that errored, since the rest are consequences. Fixes are usually making control flow identical on all ranks, using <code>drop_last=True</code> or equalizing the number of batches, and making sure save/eval code calls collectives from every rank.</p>
+<h4 id="how-do-you-measure-whether-your-distributed-training-is-efficient">How do you measure whether your distributed training is efficient?</h4>
+<p>Model FLOPs utilization. Compute the FLOPs the model needs (about <code>6 × params × tokens</code> for a dense transformer, plus attention), divide by elapsed time, and divide by the aggregate peak FLOPs of the hardware. Unlike tokens/sec, it compares across model sizes and hardware, and it excludes recomputation, so activation checkpointing does not inflate it (that is HFU).</p>
+<p>Good large runs land somewhere around 35-55%. If MFU is low, break the step time into compute, exposed communication, pipeline bubble, and data loading with a profiler, then fix whichever dominates. I would also sanity-check the number itself: an MFU above the plausible range usually means the token count or FLOPs formula is wrong.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forgetting optimizer states in memory estimates</td>
+<td>Adam is 12 of the 16 bytes/param; plans off by 4-8x</td>
+<td>Budget 16 bytes/param plus activations</td>
+</tr>
+<tr>
+<td>Using <code>nn.DataParallel</code></td>
+<td>GIL-bound, GPU 0 bottleneck</td>
+<td>DDP (or FSDP) with one process per GPU</td>
+</tr>
+<tr>
+<td>Not calling <code>sampler.set_epoch(epoch)</code></td>
+<td>Same shuffle every epoch</td>
+<td>Call it at the start of each epoch</td>
+</tr>
+<tr>
+<td>Tensor parallelism across nodes</td>
+<td>Per-layer all-reduces over InfiniBand stall compute</td>
+<td>TP within NVLink domain; PP/DP across nodes</td>
+</tr>
+<tr>
+<td>FSDP wrapping the whole model as one unit</td>
+<td>Gathers all parameters at once; no memory saving</td>
+<td>Wrap each transformer block</td>
+</tr>
+<tr>
+<td>Too few micro-batches with PP</td>
+<td>Bubble wastes a large fraction of GPU time</td>
+<td><code>m</code> well above <code>p</code>; 1F1B or interleaved schedules</td>
+</tr>
+<tr>
+<td>fp16 without loss scaling</td>
+<td>Gradients underflow; training stalls or diverges</td>
+<td>bf16, or <code>GradScaler</code> with fp16</td>
+</tr>
+<tr>
+<td>Clipping gradients before unscaling</td>
+<td>Clip threshold applies to scaled gradients</td>
+<td><code>scaler.unscale_(opt)</code> before <code>clip_grad_norm_</code></td>
+</tr>
+<tr>
+<td>Gradient accumulation without <code>no_sync</code></td>
+<td>All-reduce on every micro-batch; wasted bandwidth</td>
+<td><code>model.no_sync()</code> on non-final micro-batches</td>
+</tr>
+<tr>
+<td>Not dividing loss by accumulation steps</td>
+<td>Effective gradient <code>k</code>x too large</td>
+<td>Normalize by accumulated tokens or steps</td>
+</tr>
+<tr>
+<td>Scaling DP without adjusting LR / warmup</td>
+<td>Large-batch instability or wasted steps</td>
+<td>LR scaling rule plus warmup; stay near the critical batch size</td>
+</tr>
+<tr>
+<td>Rank-dependent control flow</td>
+<td>Mismatched collectives cause hangs</td>
+<td>Identical collective sequence on every rank</td>
+</tr>
+<tr>
+<td>Saving only model weights</td>
+<td>Resume changes optimizer and data order; loss jumps</td>
+<td>Save optimizer, scheduler, RNG, data position</td>
+</tr>
+<tr>
+<td>Gathering full state to rank 0 for checkpoints</td>
+<td>Slow and can OOM at scale</td>
+<td>Sharded / async distributed checkpoints</td>
+</tr>
+<tr>
+<td>Reading only the last NCCL timeout in logs</td>
+<td>Real error hidden behind hundreds of downstream timeouts</td>
+<td>Find the first rank that failed</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="intro_fine_tuning.html">Fine-Tuning</a></li>
+<li><a href="intro_model_compression.html">Model Compression</a></li>
+<li><a href="../frameworks/intro_pytorch.html">PyTorch</a></li>
+<li><a href="../ai_genai/intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="../cloud_ml/intro_cloud_ml_platforms.html">Cloud ML Platforms</a></li>
+<li><a href="../devops/intro_kubernetes.html">Kubernetes</a></li>
+<li><a href="./">Deep Learning Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_model_compression.html"><small>Previous</small>Model Compression</a><a rel="next" class="next" href="intro_reinforcement_learning.html"><small>Next</small>Reinforcement Learning</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_distributed_training.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

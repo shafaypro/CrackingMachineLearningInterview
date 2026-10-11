@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsible AI: Fairness, Bias, Privacy, and Governance | Cracking ML Interviews</title>
+<meta name="description" content="Any model that decides who gets a loan, a job interview, a medical follow-up, or a content takedown will eventually be asked &quot;is this fair, and can you…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_responsible_ai_fairness.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Responsible AI: Fairness, Bias, Privacy, and Governance | Cracking ML Interviews">
+<meta property="og:description" content="Any model that decides who gets a loan, a job interview, a medical follow-up, or a content takedown will eventually be asked &quot;is this fair, and can you…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_responsible_ai_fairness.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Responsible AI: Fairness, Bias, Privacy, and Governance | Cracking ML Interviews">
+<meta name="twitter:description" content="Any model that decides who gets a loan, a job interview, a medical follow-up, or a content takedown will eventually be asked &quot;is this fair, and can you…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Responsible AI: Fairness, Bias, Privacy, and Governance",
+   "description": "Any model that decides who gets a loan, a job interview, a medical follow-up, or a content takedown will eventually be asked \"is this fair, and can you…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_responsible_ai_fairness.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Responsible AI & Fairness",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_responsible_ai_fairness.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Responsible AI &amp; Fairness</span></nav>
+<p class="meta"><a href="../../#mlops/intro_responsible_ai_fairness.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 11 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="responsible-ai-fairness-bias-privacy-and-governance">Responsible AI: Fairness, Bias, Privacy, and Governance</h1>
+<p>Any model that decides who gets a loan, a job interview, a medical follow-up, or a content takedown will eventually be asked &quot;is this fair, and can you prove it?&quot; Interviewers use Responsible AI questions to check whether you can move past slogans: name the fairness metric you would use and why, explain why you cannot satisfy all of them at once, say where bias entered the pipeline, and describe how you would protect training data. It comes up in ML system design rounds (especially lending, hiring, healthcare, ads, and moderation), in LLM roles, and increasingly in MLOps roles where audits and documentation are part of the release process.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-responsible-ai-covers">What Responsible AI Covers</a></li>
+<li><a href="#sources-of-bias-across-the-lifecycle">Sources of Bias Across the Lifecycle</a></li>
+<li><a href="#protected-attributes-and-proxies">Protected Attributes and Proxies</a></li>
+<li><a href="#group-fairness-metrics">Group Fairness Metrics</a></li>
+<li><a href="#computing-fairness-metrics-in-numpy">Computing Fairness Metrics in NumPy</a></li>
+<li><a href="#impossibility-results">Impossibility Results</a></li>
+<li><a href="#individual-and-counterfactual-fairness">Individual and Counterfactual Fairness</a></li>
+<li><a href="#bias-mitigation">Bias Mitigation</a></li>
+<li><a href="#fairness-for-llms">Fairness for LLMs</a></li>
+<li><a href="#privacy">Privacy</a></li>
+<li><a href="#documentation-model-cards-and-datasheets">Documentation: Model Cards and Datasheets</a></li>
+<li><a href="#governance-and-regulation">Governance and Regulation</a></li>
+<li><a href="#practical-fairness-audit-checklist">Practical Fairness Audit Checklist</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="what-responsible-ai-covers">What Responsible AI Covers</h2>
+<p>Responsible AI is an umbrella term. In interviews it usually breaks down into five concerns:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Core question</th>
+<th>Typical tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fairness</td>
+<td>Does the system treat groups and individuals equitably?</td>
+<td>Disaggregated metrics, mitigation methods, audits</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Can the system leak or misuse personal data?</td>
+<td>PII handling, differential privacy, federated learning</td>
+</tr>
+<tr>
+<td>Transparency</td>
+<td>Can people understand what the system does and why?</td>
+<td>Model cards, datasheets, explanations</td>
+</tr>
+<tr>
+<td>Safety and robustness</td>
+<td>Does it fail gracefully and resist misuse?</td>
+<td>Red-teaming, guardrails, monitoring</td>
+</tr>
+<tr>
+<td>Accountability</td>
+<td>Who owns decisions, and can they be contested?</td>
+<td>Governance reviews, logging, appeal processes</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fairness and privacy get the most technical depth in interviews, so most of this guide focuses there. Explainability has its own guide (see Related Topics).</p>
+<hr />
+<h2 id="sources-of-bias-across-the-lifecycle">Sources of Bias Across the Lifecycle</h2>
+<p>&quot;The model is biased&quot; is not a diagnosis. Bias enters at specific stages, and the fix depends on the stage. A useful taxonomy:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Where it enters</th>
+<th>Example</th>
+<th>Typical fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Historical</strong></td>
+<td>The world itself</td>
+<td>Past hiring decisions favored one group, so &quot;hired&quot; labels encode that preference</td>
+<td>Question the label; reconsider the target; constraints; human review</td>
+</tr>
+<tr>
+<td><strong>Representation</strong></td>
+<td>Sampling</td>
+<td>Face dataset is mostly light-skinned adults; the model underperforms on others</td>
+<td>Targeted data collection, stratified sampling, reweighting</td>
+</tr>
+<tr>
+<td><strong>Measurement</strong></td>
+<td>Features and labels</td>
+<td>&quot;Arrests&quot; used as a proxy for &quot;crime&quot; when policing intensity differs by neighborhood</td>
+<td>Choose a better-grounded label; audit proxy validity</td>
+</tr>
+<tr>
+<td><strong>Aggregation</strong></td>
+<td>Modeling</td>
+<td>One model for a population where the feature-label relationship differs by subgroup (e.g., a clinical marker with different normal ranges)</td>
+<td>Subgroup-aware features, interaction terms, or separate models</td>
+</tr>
+<tr>
+<td><strong>Evaluation</strong></td>
+<td>Benchmarks and metrics</td>
+<td>Test set mirrors the skewed training set, so aggregate accuracy hides subgroup failures</td>
+<td>Disaggregated evaluation; representative test sets</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>Use in context</td>
+<td>A risk score built for triage is used for punitive decisions</td>
+<td>Clear intended-use documentation; access controls</td>
+</tr>
+<tr>
+<td><strong>Feedback loops</strong></td>
+<td>After launch</td>
+<td>Predictive policing sends patrols where arrests were high, generating more arrests there, which retrains the model to send more patrols</td>
+<td>Log exploration, counterfactual evaluation, monitor outcome drift by group</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two points worth saying in an interview:</p>
+<ul>
+<li><strong>Label bias is the hardest.</strong> If the label itself reflects past discrimination, a perfectly accurate model reproduces it. No amount of balancing the features fixes a bad target.</li>
+<li><strong>Feedback loops only show up after launch.</strong> You see only outcomes for people the model approved (selective labels), so the data you retrain on is shaped by the model's own decisions.</li>
+</ul>
+<hr />
+<h2 id="protected-attributes-and-proxies">Protected Attributes and Proxies</h2>
+<p><strong>Protected attributes</strong> are characteristics that anti-discrimination law or policy says should not drive certain decisions. The exact list depends on jurisdiction and domain, but it commonly includes race, color, sex or gender, religion, national origin, age, disability, and in many places sexual orientation, pregnancy, and marital status.</p>
+<p><strong>Fairness through unawareness</strong> (just drop the protected column) does not work, for two reasons:</p>
+<ol>
+<li><strong>Proxies.</strong> Other features correlate with the protected attribute. ZIP code, first name, school attended, shopping patterns, and even writing style can encode race or gender. The model rebuilds the attribute from its proxies.</li>
+<li><strong>You lose the ability to measure.</strong> Without the attribute, you cannot compute any group fairness metric. Many teams keep protected attributes out of the model's inputs but store them separately, under access controls, for auditing only.</li>
+</ol>
+<p><strong>Detecting proxies:</strong> train a model to predict the protected attribute from the other features. If it does much better than chance, the information is there and the main model can use it. Per-feature mutual information with the protected attribute helps you find the worst offenders, but dropping them rarely removes the leakage entirely because it is spread across many weak features.</p>
+<p><strong>Disparate treatment vs. disparate impact</strong> (US legal framing): disparate treatment is using the attribute directly; disparate impact is a facially neutral policy that produces substantially different outcomes across groups. A model without the protected attribute can still produce disparate impact.</p>
+<hr />
+<h2 id="group-fairness-metrics">Group Fairness Metrics</h2>
+<p>Notation: <code>Y</code> is the true label, <code>Ŷ</code> the predicted label, <code>S</code> a score, <code>A</code> the group attribute. Most group metrics compare a conditional rate across values of <code>A</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Condition</th>
+<th>Plain meaning</th>
+<th>When it fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Demographic (statistical) parity</strong></td>
+<td><code>P(Ŷ=1 | A=a) = P(Ŷ=1 | A=b)</code></td>
+<td>Same selection rate per group</td>
+<td>When base-rate differences are themselves considered an artifact of injustice, or for exposure/allocation</td>
+</tr>
+<tr>
+<td><strong>Equal opportunity</strong></td>
+<td><code>P(Ŷ=1 | Y=1, A=a) = P(Ŷ=1 | Y=1, A=b)</code></td>
+<td>Same true positive rate</td>
+<td>When missing a qualified person is the main harm (loans, hiring shortlists)</td>
+</tr>
+<tr>
+<td><strong>Equalized odds</strong></td>
+<td>Equal TPR <strong>and</strong> equal FPR across groups</td>
+<td>Same error rates on both classes</td>
+<td>When both false positives and false negatives cause harm (risk scores, fraud flags)</td>
+</tr>
+<tr>
+<td><strong>Predictive parity</strong></td>
+<td><code>P(Y=1 | Ŷ=1, A=a) = P(Y=1 | Ŷ=1, A=b)</code></td>
+<td>Same precision (PPV)</td>
+<td>When a positive prediction must mean the same thing for everyone</td>
+</tr>
+<tr>
+<td><strong>Calibration within groups</strong></td>
+<td><code>P(Y=1 | S=s, A=a) = s</code> for every group and score</td>
+<td>A score of 0.7 means 70% risk regardless of group</td>
+<td>When scores are shown to humans who act on them</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ratios versus differences: you can report <code>rate_a - rate_b</code> or <code>rate_a / rate_b</code>. The <strong>disparate impact ratio</strong> (selection rate of the least-selected group divided by that of the most-selected group) is common in hiring contexts. The US EEOC &quot;four-fifths rule&quot; treats a ratio below 0.8 as evidence of possible adverse impact. It is a rule of thumb for screening, not a legal safe harbor.</p>
+<p>Choosing a metric is a value judgment, not a technical one. The honest interview answer is: pick based on which errors harm whom, involve domain and legal stakeholders, and document the choice.</p>
+<hr />
+<h2 id="computing-fairness-metrics-in-numpy">Computing Fairness Metrics in NumPy</h2>
+<pre><code class="language-python">import numpy as np
+
+def group_rates(y_true, y_pred, mask):
+    yt, yp = y_true[mask], y_pred[mask]
+    tp = np.sum((yp == 1) &amp; (yt == 1)); fp = np.sum((yp == 1) &amp; (yt == 0))
+    fn = np.sum((yp == 0) &amp; (yt == 1)); tn = np.sum((yp == 0) &amp; (yt == 0))
+    return {
+        &quot;selection_rate&quot;: yp.mean(),
+        &quot;tpr&quot;: tp / max(tp + fn, 1),
+        &quot;fpr&quot;: fp / max(fp + tn, 1),
+        &quot;ppv&quot;: tp / max(tp + fp, 1),
+        &quot;base_rate&quot;: yt.mean(),
+    }
+
+def fairness_report(y_true, y_pred, group):
+    rates = {g: group_rates(y_true, y_pred, group == g) for g in np.unique(group)}
+    sel = [r[&quot;selection_rate&quot;] for r in rates.values()]
+    tpr = [r[&quot;tpr&quot;] for r in rates.values()]
+    fpr = [r[&quot;fpr&quot;] for r in rates.values()]
+    ppv = [r[&quot;ppv&quot;] for r in rates.values()]
+    summary = {
+        &quot;demographic_parity_diff&quot;: max(sel) - min(sel),
+        &quot;disparate_impact_ratio&quot;: min(sel) / max(max(sel), 1e-12),
+        &quot;equal_opportunity_diff&quot;: max(tpr) - min(tpr),
+        &quot;equalized_odds_diff&quot;: max(max(tpr) - min(tpr), max(fpr) - min(fpr)),
+        &quot;predictive_parity_diff&quot;: max(ppv) - min(ppv),
+    }
+    return rates, summary
+
+def calibration_by_group(y_true, scores, group, bins=10):
+    edges = np.linspace(0, 1, bins + 1)
+    out = {}
+    for g in np.unique(group):
+        s, y = scores[group == g], y_true[group == g]
+        idx = np.clip(np.digitize(s, edges) - 1, 0, bins - 1)
+        out[g] = [(s[idx == b].mean(), y[idx == b].mean())  # (mean score, observed rate)
+                  for b in range(bins) if np.any(idx == b)]
+    return out
+
+rng = np.random.default_rng(0)
+n = 10_000
+group = rng.choice([&quot;a&quot;, &quot;b&quot;], size=n, p=[0.7, 0.3])
+y_true = rng.binomial(1, np.where(group == &quot;a&quot;, 0.30, 0.20))
+scores = np.clip(0.5 * y_true + rng.normal(0.25, 0.2, n) - 0.05 * (group == &quot;b&quot;), 0, 1)
+y_pred = (scores &gt;= 0.5).astype(int)
+
+rates, summary = fairness_report(y_true, y_pred, group)
+for g, r in rates.items():
+    print(g, {k: round(float(v), 3) for k, v in r.items()})
+print({k: round(float(v), 3) for k, v in summary.items()})
+</code></pre>
+<p>In practice, libraries such as Fairlearn (<code>MetricFrame</code>) and AIF360 compute the same quantities with confidence handling and many more metrics. Knowing how to compute them by hand matters because interviewers often ask you to derive them from a confusion matrix.</p>
+<p>Always report <strong>group sizes and confidence intervals</strong> next to these numbers. A 5-point TPR gap on a group of 40 positives is mostly noise.</p>
+<hr />
+<h2 id="impossibility-results">Impossibility Results</h2>
+<p>The most important theoretical fact in this area: <strong>when base rates differ across groups, several natural fairness criteria cannot all hold at once</strong> except in degenerate cases.</p>
+<p>Results by Kleinberg, Mullainathan and Raghavan (2016) and by Chouldechova (2017) show that, if <code>P(Y=1 | A=a) ≠ P(Y=1 | A=b)</code>:</p>
+<ul>
+<li><strong>Calibration within groups</strong> and <strong>equalized odds</strong> (balance of error rates) cannot both hold unless the classifier is perfect.</li>
+<li><strong>Predictive parity</strong> and <strong>equal FPR and FNR</strong> cannot all hold at once.</li>
+</ul>
+<p>Why, intuitively: for a binary classifier in one group,</p>
+<pre><code>FPR = p / (1 - p) · (1 - PPV) / PPV · TPR
+</code></pre>
+<p>where <code>p</code> is that group's base rate. If two groups share the same PPV and the same TPR but have different <code>p</code>, their FPRs must differ. Fix any two of the quantities and the base rate forces the third apart.</p>
+<p>The widely discussed COMPAS recidivism debate is the standard example: one analysis showed unequal false positive rates across racial groups, while the vendor argued the scores were calibrated across groups. With different base rates, both statements can be true at once.</p>
+<p>Other tensions worth knowing:</p>
+<ul>
+<li><strong>Demographic parity vs. calibration:</strong> with different base rates, equal selection rates require a selection threshold that treats the same score differently by group.</li>
+<li><strong>Fairness vs. accuracy:</strong> constraints usually cost some aggregate accuracy, though often less than people expect, and sometimes none when the unconstrained model was overfitting to a majority group.</li>
+</ul>
+<p>The practical takeaway: you choose which criterion matters for the use case and state the tradeoff openly.</p>
+<hr />
+<h2 id="individual-and-counterfactual-fairness">Individual and Counterfactual Fairness</h2>
+<p>Group metrics can be satisfied while individuals are treated arbitrarily (for example, a random subset of one group is approved to hit a quota). Two alternative framings:</p>
+<p><strong>Individual fairness</strong> (Dwork et al., &quot;fairness through awareness&quot;): similar individuals should receive similar outcomes. Formally, a Lipschitz condition <code>D(f(x), f(x')) ≤ L · d(x, x')</code>. The hard part is the similarity metric <code>d</code>: deciding what &quot;similar with respect to this task&quot; means is exactly the contested question, so the definition moves the problem rather than solving it.</p>
+<p><strong>Counterfactual fairness</strong> (Kusner et al.): a prediction is fair for an individual if it would be the same in the counterfactual world where their protected attribute were different, holding everything not causally downstream of it fixed. It requires a causal graph, and the answer depends on which paths you treat as legitimate (a path through &quot;years of experience&quot; may be acceptable, a path through &quot;name&quot; is not).</p>
+<p>A cheap practical approximation is a <strong>counterfactual flip test</strong>: change the protected attribute or an obvious proxy (a name, a pronoun) in the input and measure how much the prediction changes. It is not full counterfactual fairness, because it ignores downstream effects, but it catches direct dependence and is very useful for text models.</p>
+<hr />
+<h2 id="bias-mitigation">Bias Mitigation</h2>
+<p>Mitigation methods are grouped by where they intervene.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Method</th>
+<th>How it works</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pre-processing</td>
+<td><strong>Reweighing</strong></td>
+<td>Weight each <code>(group, label)</code> cell so group and label look independent</td>
+<td>Model-agnostic, simple</td>
+<td>Only fixes the joint distribution, not label bias</td>
+</tr>
+<tr>
+<td>Pre-processing</td>
+<td>Resampling / targeted collection</td>
+<td>Over-sample or collect more data for underrepresented groups</td>
+<td>Often the best real fix</td>
+<td>Collection is slow and costly</td>
+</tr>
+<tr>
+<td>Pre-processing</td>
+<td>Fair representations</td>
+<td>Learn features that predict <code>Y</code> but not <code>A</code></td>
+<td>Reusable downstream</td>
+<td>Hard to verify; can lose signal</td>
+</tr>
+<tr>
+<td>In-processing</td>
+<td><strong>Fairness constraints</strong></td>
+<td>Optimize loss subject to, e.g., TPR gap ≤ ε (reductions approach, Lagrangian penalties)</td>
+<td>Directly targets the chosen metric</td>
+<td>Needs <code>A</code> at training time; tuning</td>
+</tr>
+<tr>
+<td>In-processing</td>
+<td><strong>Adversarial debiasing</strong></td>
+<td>Predictor tries to predict <code>Y</code> while an adversary tries to recover <code>A</code> from its output; predictor is penalized when the adversary succeeds</td>
+<td>Works with neural nets</td>
+<td>Unstable training, like GANs</td>
+</tr>
+<tr>
+<td>Post-processing</td>
+<td><strong>Group-specific thresholds</strong></td>
+<td>Pick a threshold per group to equalize TPR/FPR or selection rates</td>
+<td>Cheap, no retraining</td>
+<td>Needs <code>A</code> at inference; explicit group treatment may be legally restricted in some domains</td>
+</tr>
+<tr>
+<td>Post-processing</td>
+<td>Reject-option classification</td>
+<td>Route uncertain cases near the threshold to humans or adjust them</td>
+<td>Targets borderline cases</td>
+<td>Needs a human process</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="reweighing-example">Reweighing Example</h3>
+<p>Weights are <code>w(a, y) = P(A=a) · P(Y=y) / P(A=a, Y=y)</code>, so under-represented cells (such as positives in a low-base-rate group) get upweighted.</p>
+<pre><code class="language-python">import numpy as np
+
+def reweighing_weights(group, y):
+    w = np.empty(len(y), dtype=float)
+    for g in np.unique(group):
+        for label in np.unique(y):
+            cell = (group == g) &amp; (y == label)
+            if cell.any():
+                w[cell] = (group == g).mean() * (y == label).mean() / cell.mean()
+    return w
+
+# model.fit(X, y, sample_weight=reweighing_weights(group, y))
+</code></pre>
+<h3 id="group-threshold-example">Group Threshold Example</h3>
+<pre><code class="language-python">def threshold_for_tpr(scores, y, target_tpr):
+    pos_scores = np.sort(scores[y == 1])
+    k = int(np.floor((1 - target_tpr) * len(pos_scores)))
+    return pos_scores[min(k, len(pos_scores) - 1)]
+
+thresholds = {g: threshold_for_tpr(scores[group == g], y_true[group == g], 0.80)
+              for g in np.unique(group)}
+</code></pre>
+<p>Equalizing both TPR and FPR exactly with thresholds alone may be impossible, which is why the Hardt, Price and Srebro post-processing method allows randomizing between two thresholds for a group.</p>
+<h3 id="tradeoffs-to-discuss">Tradeoffs to Discuss</h3>
+<ul>
+<li><strong>Fairness vs. accuracy:</strong> plot the frontier (accuracy against fairness gap) and let stakeholders choose a point, rather than picking one silently.</li>
+<li><strong>One metric vs. another:</strong> fixing equal opportunity can worsen predictive parity (see the impossibility results).</li>
+<li><strong>Legal constraints on the fix:</strong> using the protected attribute to set thresholds can itself be prohibited in some domains, even when the goal is fairness. Get legal review.</li>
+<li><strong>Fixing the metric vs. fixing the cause:</strong> post-processing can close a gap on paper while the model still performs poorly on the minority group. Better data is usually the durable fix.</li>
+</ul>
+<hr />
+<h2 id="fairness-for-llms">Fairness for LLMs</h2>
+<p>Generative models shift the focus from allocation decisions to <strong>representational harms</strong>: stereotyping, demeaning or erasing groups, uneven toxicity, and quality-of-service gaps (the model works worse in some dialects or languages).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Harm</th>
+<th>Example</th>
+<th>How to measure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stereotyping</td>
+<td>Completing &quot;The nurse said that...&quot; with &quot;she&quot; far more than &quot;he&quot;</td>
+<td>Template probes, co-reference benchmarks</td>
+</tr>
+<tr>
+<td>Differential toxicity or sentiment</td>
+<td>More negative continuations for prompts mentioning certain groups</td>
+<td>Toxicity/sentiment classifiers over prompt sets</td>
+</tr>
+<tr>
+<td>Quality-of-service gaps</td>
+<td>Worse answers or higher refusal rates for some dialects or languages</td>
+<td>Per-language and per-dialect evaluation</td>
+</tr>
+<tr>
+<td>Allocation via LLM</td>
+<td>LLM screens resumes and scores identical CVs differently by name</td>
+<td>Counterfactual name-swap tests</td>
+</tr>
+<tr>
+<td>Erasure</td>
+<td>Groups missing from generated content (e.g., images of &quot;a doctor&quot;)</td>
+<td>Distribution of generated attributes</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Bias benchmarks</strong> you can name: WinoBias and WinoGender (gender bias in co-reference), BBQ (bias in question answering, including ambiguous contexts), StereoSet and CrowS-Pairs (stereotype preference), BOLD (open-ended generation), and RealToxicityPrompts (toxic continuations). Benchmarks have known validity problems, including noisy or culturally narrow examples, and they are mostly English and US-centric. Treat them as smoke tests, not certificates.</p>
+<p><strong>Practical LLM fairness evaluation:</strong></p>
+<ol>
+<li>Build <strong>counterfactual prompt pairs</strong> that differ only in a group signal (name, pronoun, dialect) and compare outputs with an automatic metric or an LLM judge.</li>
+<li>Measure <strong>refusal rate and answer quality by group and language</strong>, not only toxicity.</li>
+<li><strong>Red-team</strong> with diverse testers, including people from affected communities, looking for stereotypes, slurs, and jailbreaks that elicit biased content.</li>
+<li>Mitigate with data curation, preference tuning (RLHF/DPO with fairness-aware guidelines), system prompts, and output classifiers, then re-run the same evaluation as a regression suite.</li>
+</ol>
+<p>LLM-as-judge evaluators can carry their own biases, so spot-check judge outputs against human ratings on a sample.</p>
+<hr />
+<h2 id="privacy">Privacy</h2>
+<h3 id="pii-handling">PII Handling</h3>
+<ul>
+<li><strong>Minimize:</strong> collect only what the task needs; drop or truncate fields you do not use.</li>
+<li><strong>Detect and redact:</strong> run PII detectors (regex plus NER models) on training data, logs, and prompts. For LLMs, also scrub outputs, since models can regurgitate training data.</li>
+<li><strong>Pseudonymize vs. anonymize:</strong> replacing names with IDs is pseudonymization. Under GDPR, pseudonymized data is still personal data.</li>
+<li><strong>Access control and retention:</strong> separate sensitive columns, log access, and set deletion schedules. Remember deletion requests may apply to derived artifacts too, which is hard for trained models (machine unlearning is an open research area).</li>
+</ul>
+<h3 id="why-k-anonymity-is-not-enough">Why k-Anonymity Is Not Enough</h3>
+<p>k-anonymity requires every record to be indistinguishable from at least <code>k-1</code> others on quasi-identifiers (ZIP, birth date, sex). Its limits:</p>
+<ul>
+<li><strong>Homogeneity attack:</strong> if all <code>k</code> records in a group share the same sensitive value, you learn it anyway. l-diversity and t-closeness were proposed to address this.</li>
+<li><strong>Background-knowledge and linkage attacks:</strong> auxiliary datasets re-identify people. Latanya Sweeney showed that ZIP code, birth date, and sex alone uniquely identify a large majority of the US population, and the Netflix Prize data was de-anonymized by linking it with public IMDb ratings.</li>
+<li><strong>High-dimensional data</strong> (browsing histories, embeddings) cannot be generalized enough without destroying utility.</li>
+</ul>
+<h3 id="differential-privacy">Differential Privacy</h3>
+<p>A randomized mechanism <code>M</code> is <strong>(ε, δ)-differentially private</strong> if for any two datasets <code>D, D'</code> differing in one person's record and any set of outputs <code>S</code>:</p>
+<pre><code>P(M(D) ∈ S) ≤ e^ε · P(M(D') ∈ S) + δ
+</code></pre>
+<p>In words, the output distribution barely changes whether or not any one person is in the data. Smaller <strong>ε</strong> means stronger privacy and more noise. <code>δ</code> is a small failure probability, typically chosen well below <code>1/n</code>.</p>
+<p>Key properties:</p>
+<ul>
+<li><strong>Composition:</strong> privacy loss adds up across queries or training steps; you manage a <strong>privacy budget</strong>.</li>
+<li><strong>Post-processing immunity:</strong> anything computed from a DP output is still DP.</li>
+<li><strong>Protects against any attacker</strong>, regardless of auxiliary data, unlike k-anonymity.</li>
+</ul>
+<p>The <strong>Laplace mechanism</strong> for a counting query (sensitivity 1):</p>
+<pre><code class="language-python">import numpy as np
+
+def dp_count(values, predicate, epsilon, rng=np.random.default_rng()):
+    true_count = sum(predicate(v) for v in values)
+    sensitivity = 1.0  # adding/removing one person changes a count by at most 1
+    return true_count + rng.laplace(0.0, sensitivity / epsilon)
+
+ages = [34, 45, 29, 61, 52, 38]
+print(dp_count(ages, lambda a: a &gt; 40, epsilon=1.0))
+</code></pre>
+<p><strong>DP-SGD</strong> makes neural network training differentially private:</p>
+<ol>
+<li>Compute <strong>per-example gradients</strong>.</li>
+<li><strong>Clip</strong> each to a maximum L2 norm <code>C</code>, bounding any one person's influence.</li>
+<li>Add <strong>Gaussian noise</strong> with standard deviation proportional to <code>σ · C</code> to the summed gradient.</li>
+<li>Track cumulative privacy loss with an <strong>accountant</strong> (moments accountant or Rényi DP), which also accounts for the privacy amplification from sampling mini-batches.</li>
+</ol>
+<p>Libraries: Opacus (PyTorch) and TensorFlow Privacy. The costs are slower training (per-example gradients), an accuracy drop that is usually worse for small or underrepresented groups, and extra hyperparameters. That last point matters for fairness: DP noise tends to hurt the tails of the distribution most.</p>
+<h3 id="federated-learning">Federated Learning</h3>
+<p>Training happens on devices or silos; only model updates are sent to a server, which aggregates them (e.g., FedAvg). It keeps raw data local, but <strong>it is not a privacy guarantee on its own</strong>: gradients can leak information about the training examples. Production systems combine it with <strong>secure aggregation</strong> (the server sees only the sum of updates) and often <strong>DP</strong> on the updates. Challenges include non-IID data across clients, stragglers, and communication cost.</p>
+<h3 id="membership-inference-and-related-attacks">Membership Inference and Related Attacks</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Attack</th>
+<th>Goal</th>
+<th>Signal exploited</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Membership inference</td>
+<td>Was this record in the training set?</td>
+<td>Lower loss or higher confidence on training examples (overfitting); shadow models</td>
+</tr>
+<tr>
+<td>Model inversion / attribute inference</td>
+<td>Recover sensitive attributes of training records</td>
+<td>Model outputs correlated with the attribute</td>
+</tr>
+<tr>
+<td>Training data extraction</td>
+<td>Get verbatim training text out of an LLM</td>
+<td>Memorization of repeated or rare sequences</td>
+</tr>
+</tbody>
+</table></div>
+<p>Defenses: regularization and early stopping (reduce overfitting), deduplicating training data, DP training (the principled defense), limiting output precision (return labels not full probabilities), and rate-limiting queries.</p>
+<hr />
+<h2 id="documentation-model-cards-and-datasheets">Documentation: Model Cards and Datasheets</h2>
+<p><strong>Model cards</strong> (Mitchell et al.) document a trained model: intended use and out-of-scope uses, training and evaluation data, metrics <strong>disaggregated by group and intersection</strong>, fairness analysis, known limitations, ethical considerations, and caveats.</p>
+<p><strong>Datasheets for datasets</strong> (Gebru et al.) document a dataset: motivation, composition, collection process, preprocessing and labeling, recommended uses, distribution, and maintenance. They force questions such as &quot;who is missing from this data?&quot; and &quot;did the people in it consent to this use?&quot;</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Model card</th>
+<th>Datasheet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Purpose</td>
+<td>Intended use, users, out-of-scope uses</td>
+<td>Why the dataset was created, who funded it</td>
+</tr>
+<tr>
+<td>Content</td>
+<td>Architecture, training setup</td>
+<td>Instances, labels, missing data, sensitive fields</td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>Metrics per subgroup, fairness metrics</td>
+<td>Known biases, splits</td>
+</tr>
+<tr>
+<td>Risks</td>
+<td>Limitations, failure modes</td>
+<td>Consent, privacy, potential misuse</td>
+</tr>
+<tr>
+<td>Lifecycle</td>
+<td>Version, owner, update cadence</td>
+<td>Maintenance, deprecation plan</td>
+</tr>
+</tbody>
+</table></div>
+<p>Treat both as living artifacts versioned with the model in your registry, not a one-off PDF. A card generated by the training pipeline (metrics auto-filled) stays accurate far longer than a hand-written one.</p>
+<hr />
+<h2 id="governance-and-regulation">Governance and Regulation</h2>
+<p>Regulation changes quickly and details depend on jurisdiction, so in interviews speak at the level of principles and say you would involve legal counsel. The high-level picture:</p>
+<h3 id="eu-ai-act">EU AI Act</h3>
+<p>A risk-based regulation that entered into force in 2024, with obligations phasing in over several years.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Examples</th>
+<th>Obligations (summary)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unacceptable risk</td>
+<td>Social scoring by public authorities, manipulative techniques that cause harm, certain biometric uses</td>
+<td>Prohibited</td>
+</tr>
+<tr>
+<td>High risk</td>
+<td>AI in hiring, credit scoring, education, critical infrastructure, law enforcement, some medical uses</td>
+<td>Risk management, data governance, technical documentation, logging, human oversight, accuracy and robustness, conformity assessment</td>
+</tr>
+<tr>
+<td>Limited risk</td>
+<td>Chatbots, AI-generated or manipulated content</td>
+<td>Transparency: tell people they are interacting with AI; label synthetic content</td>
+</tr>
+<tr>
+<td>Minimal risk</td>
+<td>Spam filters, game AI</td>
+<td>No specific obligations</td>
+</tr>
+</tbody>
+</table></div>
+<p>It also adds obligations for providers of general-purpose AI models, such as documentation and additional duties for models considered to pose systemic risk.</p>
+<h3 id="gdpr">GDPR</h3>
+<ul>
+<li>Applies to processing personal data of people in the EU. Relevant principles: lawful basis, purpose limitation, data minimization, storage limitation.</li>
+<li><strong>Article 22</strong> restricts decisions based <strong>solely</strong> on automated processing that produce legal or similarly significant effects, with exceptions, and requires safeguards such as the right to obtain human intervention and to contest the decision.</li>
+<li>Articles 13 to 15 require &quot;meaningful information about the logic involved&quot; in such automated decisions. Whether this amounts to a full <strong>&quot;right to explanation&quot;</strong> of individual decisions is debated among legal scholars; the safe engineering position is to be able to produce a clear, per-decision explanation anyway.</li>
+<li>Data subject rights (access, erasure) apply to training data and can reach into ML pipelines.</li>
+</ul>
+<h3 id="nyc-local-law-144-automated-employment-decision-tools">NYC Local Law 144 (Automated Employment Decision Tools)</h3>
+<p>Employers and employment agencies in New York City that use automated tools to substantially assist hiring or promotion decisions must have an <strong>independent bias audit</strong> within the past year, publish a summary of the results, and <strong>notify candidates</strong> that such a tool is used. The audit reports selection rates and <strong>impact ratios</strong> across sex and race/ethnicity categories, which is essentially the disparate impact ratio from the metrics section.</p>
+<h3 id="other-frameworks-to-name">Other Frameworks to Name</h3>
+<ul>
+<li><strong>US sector law:</strong> fair lending (ECOA), fair housing, and employment discrimination law (Title VII) already apply to algorithmic decisions; credit denials require adverse-action reasons.</li>
+<li><strong>NIST AI Risk Management Framework:</strong> voluntary US framework organized around Govern, Map, Measure, and Manage.</li>
+<li><strong>ISO/IEC 42001:</strong> management system standard for AI governance.</li>
+</ul>
+<h3 id="internal-governance">Internal Governance</h3>
+<p>Laws set a floor. A mature organization also has: a risk classification for each ML use case, a review board for high-risk launches, required model cards, pre-launch fairness and privacy sign-off, incident response for AI harms, and an appeal path for affected users.</p>
+<hr />
+<h2 id="practical-fairness-audit-checklist">Practical Fairness Audit Checklist</h2>
+<ol>
+<li><strong>Scope the harm.</strong> Who is affected, what decision is made, and what does a false positive vs. false negative cost each group?</li>
+<li><strong>Choose groups and metrics with stakeholders.</strong> Include intersections (e.g., older women), and write down why the chosen metric fits.</li>
+<li><strong>Get group labels responsibly.</strong> Self-reported where possible; if inferred (e.g., BISG for race in lending), acknowledge the error it adds. Store under access control.</li>
+<li><strong>Check the data.</strong> Group representation, label quality and label bias, missingness by group, proxies for the protected attribute.</li>
+<li><strong>Evaluate disaggregated.</strong> Accuracy, TPR, FPR, PPV, selection rate, and calibration per group, with sample sizes and confidence intervals.</li>
+<li><strong>Run counterfactual tests.</strong> Flip names, pronouns, or the attribute; measure output change.</li>
+<li><strong>Mitigate and compare.</strong> Try at least one pre-, in-, or post-processing method; show the accuracy-fairness frontier.</li>
+<li><strong>Check privacy exposure.</strong> PII in features and logs, membership-inference risk, need for DP.</li>
+<li><strong>Document.</strong> Model card and datasheet, including known gaps and the rejected alternatives.</li>
+<li><strong>Get sign-off.</strong> Legal, domain experts, and the accountable owner.</li>
+<li><strong>Monitor in production.</strong> Track fairness metrics by group over time, watch for feedback loops, and re-audit on retrain or population shift.</li>
+<li><strong>Provide recourse.</strong> A way for affected people to understand, contest, and correct decisions.</li>
+</ol>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-doesnt-removing-the-protected-attribute-make-a-model-fair">Why doesn't removing the protected attribute make a model fair?</h4>
+<p>Because the information is usually still present through proxies. ZIP code, name, school, purchase history, and many weak features together can reconstruct race or gender quite accurately, and a flexible model will find that signal if it helps predict the label. Removing the attribute also removes your ability to measure fairness. A better approach is to keep the attribute out of the model inputs (if the domain requires that) but retain it for auditing, test how well the other features predict it, and measure outcomes by group directly.</p>
+<h4 id="demographic-parity-vs-equalized-odds-when-would-you-use-each">Demographic parity vs. equalized odds: when would you use each?</h4>
+<p>Demographic parity requires equal selection rates across groups regardless of true labels. It suits cases where you believe differences in base rates are themselves produced by unfairness, or where the goal is equal exposure (e.g., showing job ads). Its downside is that with different base rates it forces accepting less-qualified or rejecting more-qualified people in some group. Equalized odds requires equal TPR and FPR, so errors are distributed evenly among people with the same true outcome. It suits cases where the labels are trustworthy and both error types cause harm, such as fraud or risk scoring. If the labels themselves are biased, equalized odds just equalizes errors with respect to a biased target.</p>
+<h4 id="explain-the-impossibility-theorem-in-plain-terms">Explain the impossibility theorem in plain terms.</h4>
+<p>If two groups have different base rates of the outcome, you cannot have a score that is calibrated within each group and also has equal false positive and false negative rates across groups, unless it predicts perfectly. The confusion-matrix identity <code>FPR = p/(1-p) · (1-PPV)/PPV · TPR</code> makes this concrete: hold PPV and TPR equal and the base rate <code>p</code> forces FPR apart. The practical consequence is that &quot;is this model fair?&quot; has no single answer; you must pick the criterion that matches the harm and say what you are giving up.</p>
+<h4 id="your-credit-model-has-a-10-point-tpr-gap-between-two-groups-what-do-you-do">Your credit model has a 10-point TPR gap between two groups. What do you do?</h4>
+<p>First, check it is real: group sizes, confidence intervals, and whether it holds across time slices. Then diagnose the cause: fewer training examples for the group, noisier features (thin credit files), label bias, or a threshold that falls in a different part of each group's score distribution. Fixes in rough order of durability: better data for the underserved group, features that capture creditworthiness better for thin-file applicants, reweighing or a constrained training objective, and finally group-aware thresholds if legally allowed. I would show the accuracy vs. TPR-gap tradeoff to risk, legal, and business owners, pick a point together, document it in the model card, and monitor the gap in production.</p>
+<h4 id="what-is-the-difference-between-individual-and-group-fairness">What is the difference between individual and group fairness?</h4>
+<p>Group fairness compares aggregate statistics across groups, such as selection rate or TPR. It is easy to measure but can be satisfied while individuals are treated inconsistently. Individual fairness says similar people should get similar outcomes, formalized as a Lipschitz condition on the model with respect to a task-specific similarity metric. It protects individuals but depends entirely on choosing that metric, which is the contested part. Counterfactual fairness is a causal version: the prediction should not change if the person's protected attribute had been different, holding non-descendant factors fixed.</p>
+<h4 id="how-does-adversarial-debiasing-work">How does adversarial debiasing work?</h4>
+<p>You train two networks. The predictor maps inputs to the task output. The adversary takes the predictor's output (or its internal representation, and for equalized odds also the true label) and tries to predict the protected attribute. The predictor's loss is its task loss minus a weighted adversary loss, so it is rewarded for making the attribute unrecoverable. If the adversary sees only the prediction, this pushes toward demographic parity; if it also sees the true label, it pushes toward equalized odds. It is flexible but can be unstable and needs careful tuning of the adversary weight.</p>
+<h4 id="how-would-you-evaluate-an-llm-for-bias">How would you evaluate an LLM for bias?</h4>
+<p>Combine several methods because no single benchmark is sufficient. Run established benchmarks such as BBQ or WinoBias as smoke tests. Build counterfactual prompt pairs specific to the product (identical requests differing only in a name, pronoun, or dialect) and compare quality, sentiment, refusal rate, and any scores the model produces. Measure performance per language and dialect. Red-team with diverse testers for stereotypes and harmful content. Validate any LLM-as-judge scoring against human ratings. Then turn the failures into a regression suite that runs on every model or prompt change.</p>
+<h4 id="what-is-differential-privacy-and-what-does-epsilon-mean">What is differential privacy, and what does epsilon mean?</h4>
+<p>A mechanism is ε-differentially private if its output distribution changes by at most a factor of <code>e^ε</code> when any one person's data is added or removed. So an attacker who sees the output cannot tell with much confidence whether a given person was in the data, no matter what else they know. Smaller ε means stronger privacy and more noise. Privacy loss composes: running many queries or training steps spends more of the budget. In practice, single-digit ε values are common for deployed ML, and the meaning of a particular ε depends on the unit of privacy (record vs. user) and on δ, so reporting those details matters as much as the number.</p>
+<h4 id="how-does-dp-sgd-work-and-what-does-it-cost">How does DP-SGD work, and what does it cost?</h4>
+<p>It clips each example's gradient to a fixed norm <code>C</code>, sums the clipped gradients, adds Gaussian noise scaled to <code>C</code>, and takes a step. Clipping bounds any one person's influence; noise hides what remains. A privacy accountant tracks cumulative ε across steps, benefiting from the amplification of sampling random mini-batches. The costs are compute (per-example gradients), accuracy loss, and extra hyperparameters (clip norm, noise multiplier, batch size). The accuracy loss is often concentrated on rare or underrepresented examples, so DP can widen fairness gaps and should be evaluated by group.</p>
+<h4 id="does-federated-learning-guarantee-privacy">Does federated learning guarantee privacy?</h4>
+<p>No. It keeps raw data on the device, which reduces exposure, but model updates can still leak information: gradient inversion attacks can reconstruct inputs from updates in some settings, and the final model can memorize data like any other. Real deployments add secure aggregation so the server only sees summed updates, and differential privacy on client updates to bound what any single user contributes. Federated learning is a data-minimization architecture, not a formal privacy guarantee.</p>
+<h4 id="what-is-a-membership-inference-attack-and-how-do-you-defend-against-it">What is a membership inference attack and how do you defend against it?</h4>
+<p>The attacker wants to know whether a specific record was in the training set. The basic signal is that models tend to have lower loss and higher confidence on training examples than on unseen ones, so a threshold on loss or confidence, or a classifier trained on shadow models, can distinguish members. It matters when membership is itself sensitive, for example being in a dataset of patients with a particular condition. Defenses: reduce overfitting (regularization, early stopping, more data), deduplicate, train with DP for a formal bound, return labels or rounded scores instead of full probabilities, and rate-limit queries.</p>
+<h4 id="what-goes-in-a-model-card-for-a-high-risk-model-and-who-reads-it">What goes in a model card for a high-risk model, and who reads it?</h4>
+<p>Intended use and explicitly out-of-scope uses; training and evaluation data sources with known gaps; metrics disaggregated by group and relevant intersections with sample sizes; the fairness criterion chosen and why; mitigation applied and the tradeoffs; privacy measures; limitations and failure modes; human oversight requirements; version, owner, and review date. Readers include downstream engineers deciding whether to reuse the model, auditors and regulators, product owners, and sometimes affected users. Generating the metrics sections automatically from the training pipeline keeps it accurate.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dropping the protected attribute and calling it fair</td>
+<td>Proxies reconstruct it; you can no longer measure bias</td>
+<td>Keep it for auditing under access control; test proxy leakage</td>
+</tr>
+<tr>
+<td>Reporting only aggregate accuracy</td>
+<td>Subgroup failures are hidden by the majority</td>
+<td>Disaggregate every metric by group and intersection</td>
+</tr>
+<tr>
+<td>Tiny subgroups with no confidence intervals</td>
+<td>Gaps are noise; false alarms or false comfort</td>
+<td>Report counts and bootstrap CIs; pool time windows</td>
+</tr>
+<tr>
+<td>Picking a fairness metric by default</td>
+<td>Different metrics encode different values and conflict</td>
+<td>Choose with stakeholders based on harm; document why</td>
+</tr>
+<tr>
+<td>Trying to satisfy every fairness metric</td>
+<td>Impossible with differing base rates</td>
+<td>Pick the one that matches the harm; state the tradeoff</td>
+</tr>
+<tr>
+<td>Treating labels as ground truth</td>
+<td>Historical bias in labels is reproduced perfectly</td>
+<td>Audit how labels were generated; consider alternative targets</td>
+</tr>
+<tr>
+<td>Post-processing to close a gap without investigating</td>
+<td>Metric looks fair while the model still fails the group</td>
+<td>Diagnose root cause; improve data and features</td>
+</tr>
+<tr>
+<td>Ignoring feedback loops</td>
+<td>Model's own decisions shape future training data</td>
+<td>Log exploration; counterfactual evaluation; monitor drift by group</td>
+</tr>
+<tr>
+<td>Assuming anonymization protects privacy</td>
+<td>Linkage attacks re-identify records</td>
+<td>Use differential privacy for strong guarantees</td>
+</tr>
+<tr>
+<td>Assuming federated learning is private</td>
+<td>Updates and models leak information</td>
+<td>Add secure aggregation and DP</td>
+</tr>
+<tr>
+<td>Applying DP without checking subgroup accuracy</td>
+<td>Noise hurts minority groups most</td>
+<td>Evaluate DP models per group; tune budget</td>
+</tr>
+<tr>
+<td>One-time fairness audit at launch</td>
+<td>Population and model drift change outcomes</td>
+<td>Monitor fairness metrics continuously; re-audit on retrain</td>
+</tr>
+<tr>
+<td>Relying only on public bias benchmarks for LLMs</td>
+<td>Narrow, English-centric, may not match your use case</td>
+<td>Build product-specific counterfactual tests and red-team</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_model_explainability.html">Model Explainability</a>: SHAP, LIME, and explanation requirements under GDPR and the EU AI Act</li>
+<li><a href="intro_model_monitoring.html">Model Monitoring</a>: Tracking drift and per-segment metrics in production</li>
+<li><a href="intro_data_quality.html">Data Quality</a>: Validation and data checks that catch representation problems early</li>
+<li><a href="intro_llm_evaluation.html">LLM Evaluation</a>: Evaluation methods and LLM-as-judge for generative models</li>
+<li><a href="intro_evaluation_guardrails.html">Evaluation and Guardrails</a>: Output filters and safety checks for LLM systems</li>
+<li><a href="intro_ab_testing.html">A/B Testing</a>: Measuring impact, including by segment, after launch</li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a>: Confusion matrices, calibration, and slicing metrics</li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference</a>: Background for counterfactual fairness</li>
+<li><a href="../ai_genai/intro_llm_security.html">LLM Security</a>: Red-teaming, jailbreaks, and data leakage in LLMs</li>
+<li><a href="../system_design/fraud_detection.html">Fraud Detection System Design</a>: A high-stakes system where error-rate balance matters</li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_data_labeling_active_learning.html"><small>Previous</small>Data Labeling &amp; Active Learning</a><span></span></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_responsible_ai_fairness.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

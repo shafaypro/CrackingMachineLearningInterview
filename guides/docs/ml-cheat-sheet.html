@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Interview Cheat Sheet | Cracking ML Interviews</title>
+<meta name="description" content="The night-before quick reference: formulas, tables and the numbers interviewers expect you to know cold. No derivations, no narrative. Every section ends…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-cheat-sheet.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ML Interview Cheat Sheet | Cracking ML Interviews">
+<meta property="og:description" content="The night-before quick reference: formulas, tables and the numbers interviewers expect you to know cold. No derivations, no narrative. Every section ends…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-cheat-sheet.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ML Interview Cheat Sheet | Cracking ML Interviews">
+<meta name="twitter:description" content="The night-before quick reference: formulas, tables and the numbers interviewers expect you to know cold. No derivations, no narrative. Every section ends…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ML Interview Cheat Sheet",
+   "description": "The night-before quick reference: formulas, tables and the numbers interviewers expect you to know cold. No derivations, no narrative. Every section ends…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-cheat-sheet.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Roadmap & Study Guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#roadmap--study-guides"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "ML Cheat Sheet",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/ml-cheat-sheet.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#roadmap--study-guides">Roadmap &amp; Study Guides</a> <span aria-hidden="true">/</span> <span aria-current="page">ML Cheat Sheet</span></nav>
+<p class="meta"><a href="../../#docs/ml-cheat-sheet.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ml-interview-cheat-sheet">ML Interview Cheat Sheet</h1>
+<p>The night-before quick reference: formulas, tables and the numbers interviewers expect you to know cold. No derivations, no narrative. Every section ends with a link to the guide that explains it properly.</p>
+<p>Notation: <code>n</code> = samples, <code>d</code> = features, <code>k</code> = classes/clusters/top-k, <code>p</code> = predicted probability, <code>y</code> = label, <code>ŷ</code> = prediction, <code>η</code> = learning rate, <code>log</code> = natural log unless stated.</p>
+<p><strong>Jump to:</strong> <a href="#classification-metrics">Classification</a> · <a href="#regression-metrics">Regression</a> · <a href="#ranking-metrics">Ranking</a> · <a href="#loss-functions">Losses</a> · <a href="#probability-and-statistics">Prob &amp; Stats</a> · <a href="#linear-algebra-and-calculus">Lin Alg &amp; Calculus</a> · <a href="#optimization">Optimization</a> · <a href="#algorithm-cheat-table">Algorithms</a> · <a href="#bias-variance-diagnostics">Bias-Variance</a> · <a href="#neural-network-essentials">Neural Nets</a> · <a href="#llm-numbers">LLM Numbers</a> · <a href="#system-design-numbers">System Numbers</a> · <a href="#top-20-traps">Top 20 Traps</a></p>
+<hr />
+<h2 id="classification-metrics">Classification Metrics</h2>
+<pre><code>                  Predicted
+                Neg      Pos
+Actual  Neg  |  TN   |   FP   |   FP = false alarm (Type I)
+        Pos  |  FN   |   TP   |   FN = miss (Type II)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td><code>(TP+TN) / (TP+TN+FP+FN)</code></td>
+<td>Balanced classes, symmetric costs</td>
+</tr>
+<tr>
+<td>Precision (PPV)</td>
+<td><code>TP / (TP+FP)</code></td>
+<td>False positives are expensive (spam filter, alerts)</td>
+</tr>
+<tr>
+<td>Recall (TPR, sensitivity)</td>
+<td><code>TP / (TP+FN)</code></td>
+<td>Misses are expensive (cancer, fraud)</td>
+</tr>
+<tr>
+<td>Specificity (TNR)</td>
+<td><code>TN / (TN+FP)</code></td>
+<td>Clearing negatives matters; <code>FPR = 1 - TNR</code></td>
+</tr>
+<tr>
+<td>F1</td>
+<td><code>2PR / (P+R)</code> = <code>2TP / (2TP+FP+FN)</code></td>
+<td>One number, imbalanced data</td>
+</tr>
+<tr>
+<td>F-beta</td>
+<td><code>(1+β²)·P·R / (β²·P + R)</code></td>
+<td><code>β&gt;1</code> weights recall, <code>β&lt;1</code> weights precision</td>
+</tr>
+<tr>
+<td>Balanced accuracy</td>
+<td><code>(TPR + TNR) / 2</code></td>
+<td>Imbalanced, both classes matter</td>
+</tr>
+<tr>
+<td>MCC</td>
+<td><code>(TP·TN - FP·FN) / √((TP+FP)(TP+FN)(TN+FP)(TN+FN))</code></td>
+<td>Honest single score in <code>[-1, 1]</code></td>
+</tr>
+<tr>
+<td>Log loss (BCE)</td>
+<td><code>-(1/n) Σ [y log p + (1-y) log(1-p)]</code></td>
+<td>Probabilities feed decisions; punishes confident errors</td>
+</tr>
+<tr>
+<td>Brier score</td>
+<td><code>(1/n) Σ (p - y)²</code></td>
+<td>Calibration + sharpness; bounded <code>[0, 1]</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Baselines to quote:</strong> always predicting <code>0.5</code> gives Brier <code>0.25</code> and log loss <code>log 2 ≈ 0.693</code>. Predicting the prevalence <code>π</code> gives log loss <code>-[π log π + (1-π) log(1-π)]</code>.</li>
+<li><strong>Averaging (multiclass):</strong> macro = unweighted mean over classes (rare classes count); micro = pool counts (equals accuracy for single-label multiclass); weighted = by support (hides rare-class failure).</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>ROC-AUC</th>
+<th>PR-AUC (average precision)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Axes</td>
+<td>TPR vs FPR</td>
+<td>Precision vs Recall</td>
+</tr>
+<tr>
+<td>Meaning</td>
+<td><code>P(score(random pos) &gt; score(random neg))</code></td>
+<td>Precision averaged over recall levels</td>
+</tr>
+<tr>
+<td>Random baseline</td>
+<td><code>0.5</code></td>
+<td>Prevalence <code>π</code> (e.g. <code>0.01</code> at 1% positives)</td>
+</tr>
+<tr>
+<td>Class balance</td>
+<td>Invariant to prevalence</td>
+<td>Sensitive to prevalence</td>
+</tr>
+<tr>
+<td>Prefer when</td>
+<td>Balanced data; care about ranking both classes</td>
+<td>Rare positives; you only act on the top of the list</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Which metric when:</strong></p>
+<ul>
+<li>Rare-event detection (fraud, disease): PR-AUC, recall at fixed precision, precision@k.</li>
+<li>Threshold will be tuned later: ROC-AUC / PR-AUC (threshold-free).</li>
+<li>Probabilities are consumed (bidding, risk pricing, expected value): log loss + calibration plot / Brier.</li>
+<li>Costs are known: pick the threshold minimising <code>C_FP·FP + C_FN·FN</code>, not <code>0.5</code>.</li>
+<li>Stakeholder report: precision and recall at the operating threshold, never accuracy alone.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a> · <a href="../classical_ml/intro_anomaly_detection.html">Anomaly Detection</a></p>
+<hr />
+<h2 id="regression-metrics">Regression Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Optimal constant / notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MSE</td>
+<td><code>(1/n) Σ (y - ŷ)²</code></td>
+<td>Minimised by the <strong>mean</strong>; outlier-sensitive</td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td><code>√MSE</code></td>
+<td>Same units as <code>y</code></td>
+</tr>
+<tr>
+<td>MAE</td>
+<td><code>(1/n) Σ |y - ŷ|</code></td>
+<td>Minimised by the <strong>median</strong>; robust</td>
+</tr>
+<tr>
+<td>MAPE</td>
+<td><code>(100/n) Σ |(y - ŷ) / y|</code></td>
+<td>Undefined at <code>y=0</code>; penalises over-forecasts more (unbounded) than under-forecasts (capped at 100%)</td>
+</tr>
+<tr>
+<td>sMAPE</td>
+<td><code>(100/n) Σ |y - ŷ| / ((|y| + |ŷ|)/2)</code></td>
+<td>Bounded <code>[0, 200%]</code>; still unstable near 0</td>
+</tr>
+<tr>
+<td>RMSLE</td>
+<td><code>√((1/n) Σ (log(1+ŷ) - log(1+y))²)</code></td>
+<td>Relative errors; penalises under-prediction more</td>
+</tr>
+<tr>
+<td>R²</td>
+<td><code>1 - SS_res / SS_tot</code></td>
+<td>Fraction of variance explained; can be <strong>negative</strong> on test data</td>
+</tr>
+<tr>
+<td>Adjusted R²</td>
+<td><code>1 - (1-R²)(n-1)/(n-p-1)</code></td>
+<td>Penalises adding features (<code>p</code> = #predictors)</td>
+</tr>
+<tr>
+<td>Pinball (quantile τ)</td>
+<td><code>mean(max(τ·(y-ŷ), (τ-1)·(y-ŷ)))</code></td>
+<td>Minimised by the τ-quantile; prediction intervals</td>
+</tr>
+<tr>
+<td>MASE</td>
+<td><code>MAE / MAE of naive (seasonal) forecast</code></td>
+<td>Time series; scale-free; <code>&lt; 1</code> beats naive</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><code>SS_res = Σ(y - ŷ)²</code>, <code>SS_tot = Σ(y - ȳ)²</code>. R² of a model that predicts <code>ȳ</code> is <code>0</code>.</li>
+<li>Huber loss as a metric: MSE near zero, MAE in the tails.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a> · <a href="../classical_ml/intro_time_series.html">Time Series</a></p>
+<hr />
+<h2 id="ranking-metrics">Ranking Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Precision@k</td>
+<td><code>(# relevant in top k) / k</code></td>
+<td>Ignores order within top k</td>
+</tr>
+<tr>
+<td>Recall@k</td>
+<td><code>(# relevant in top k) / (total # relevant)</code></td>
+<td>Retrieval stage of a recsys/RAG</td>
+</tr>
+<tr>
+<td>Hit rate@k</td>
+<td><code>1 if any relevant in top k else 0</code>, averaged</td>
+<td>One correct answer per query</td>
+</tr>
+<tr>
+<td>MRR</td>
+<td><code>(1/|Q|) Σ_q 1 / rank_q</code></td>
+<td><code>rank_q</code> = position of <strong>first</strong> relevant item</td>
+</tr>
+<tr>
+<td>AP (per query)</td>
+<td><code>(1/R) Σ_{i=1..k} P@i · rel_i</code></td>
+<td><code>R</code> = # relevant items; <code>rel_i ∈ {0,1}</code></td>
+</tr>
+<tr>
+<td>MAP</td>
+<td>mean of AP over queries</td>
+<td>Binary relevance, rewards putting all hits early</td>
+</tr>
+<tr>
+<td>DCG@k</td>
+<td><code>Σ_{i=1..k} (2^rel_i - 1) / log2(i + 1)</code></td>
+<td>Graded relevance; some use gain <code>rel_i</code> instead of <code>2^rel_i - 1</code></td>
+</tr>
+<tr>
+<td>NDCG@k</td>
+<td><code>DCG@k / IDCG@k</code></td>
+<td>IDCG = DCG of the ideal ordering; in <code>[0, 1]</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Position 1 discount is <code>1/log2(2) = 1</code>; position 2 is <code>1/log2(3) ≈ 0.63</code>; position 3 is <code>0.5</code>.</li>
+<li>Offline ranking gains often fail to move online metrics (CTR, dwell, revenue). Always pair with an A/B test.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a> · <a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a> · <a href="../system_design/search_ranking_system.html">Search Ranking System</a></p>
+<hr />
+<h2 id="loss-functions">Loss Functions</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loss</th>
+<th>Formula</th>
+<th>When used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MSE / L2</td>
+<td><code>(1/n) Σ (y - ŷ)²</code></td>
+<td>Regression, Gaussian noise; gradient <code>∝ (ŷ - y)</code></td>
+</tr>
+<tr>
+<td>MAE / L1</td>
+<td><code>(1/n) Σ |y - ŷ|</code></td>
+<td>Regression with outliers, Laplace noise; gradient is ±1 (non-smooth at 0)</td>
+</tr>
+<tr>
+<td>Huber (δ)</td>
+<td><code>½r²</code> if <code>|r| ≤ δ</code>, else <code>δ(|r| - ½δ)</code>, <code>r = y - ŷ</code></td>
+<td>Robust regression; smooth version of L1</td>
+</tr>
+<tr>
+<td>Binary cross-entropy</td>
+<td><code>-[y log p + (1-y) log(1-p)]</code>, <code>p = σ(z)</code></td>
+<td>Binary / multi-label classification</td>
+</tr>
+<tr>
+<td>Categorical CE</td>
+<td><code>-Σ_c y_c log p_c</code>, <code>p = softmax(z)</code></td>
+<td>Multiclass, LM next-token prediction</td>
+</tr>
+<tr>
+<td>Label-smoothed CE</td>
+<td>CE with target <code>(1-ε)·y + ε/K</code></td>
+<td>Reduce over-confidence; classification, MT</td>
+</tr>
+<tr>
+<td>Focal</td>
+<td><code>-α_t (1 - p_t)^γ log p_t</code></td>
+<td>Heavy class imbalance (dense detection); <code>γ≈2</code> down-weights easy examples</td>
+</tr>
+<tr>
+<td>Hinge</td>
+<td><code>max(0, 1 - y·f(x))</code>, <code>y ∈ {-1, +1}</code></td>
+<td>SVMs; margin-based, not probabilistic</td>
+</tr>
+<tr>
+<td>Contrastive (pairwise)</td>
+<td><code>y·d² + (1-y)·max(0, m - d)²</code></td>
+<td>Siamese nets; <code>y=1</code> similar pair, <code>d</code> = distance, <code>m</code> = margin</td>
+</tr>
+<tr>
+<td>InfoNCE</td>
+<td><code>-log( exp(s(q,k⁺)/τ) / Σ_j exp(s(q,k_j)/τ) )</code></td>
+<td>CLIP, SimCLR, dense retrieval; in-batch negatives, temperature <code>τ</code></td>
+</tr>
+<tr>
+<td>Triplet</td>
+<td><code>max(0, d(a,p) - d(a,n) + m)</code></td>
+<td>Face ID, metric learning; needs hard-negative mining</td>
+</tr>
+<tr>
+<td>KL divergence</td>
+<td><code>KL(P‖Q) = Σ P(x) log(P(x)/Q(x))</code></td>
+<td>Distillation, VAEs, RLHF penalty; <code>≥ 0</code>, <strong>not symmetric</strong></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><code>CrossEntropy(P, Q) = H(P) + KL(P‖Q)</code>: with fixed labels, minimising CE = minimising KL.</li>
+<li>Maximum likelihood view: MSE = Gaussian NLL, MAE = Laplace NLL, BCE = Bernoulli NLL.</li>
+<li>Forward KL <code>KL(P‖Q)</code> is mean-seeking (covers all modes); reverse KL <code>KL(Q‖P)</code> is mode-seeking.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a> · <a href="../ai_genai/intro_embeddings.html">Embeddings</a> · <a href="../deep_learning/intro_model_compression.html">Model Compression</a></p>
+<hr />
+<h2 id="probability-and-statistics">Probability and Statistics</h2>
+<p><strong>Core rules</strong></p>
+<ul>
+<li>Bayes: <code>P(A|B) = P(B|A)·P(A) / P(B)</code>, with <code>P(B) = Σ_i P(B|A_i)·P(A_i)</code>.</li>
+<li>Classic: prevalence 1%, sensitivity 99%, FPR 5% → <code>P(D|+) = 0.0099 / (0.0099 + 0.0495) ≈ 16.7%</code>. Base rates dominate.</li>
+<li><code>E[aX + bY] = aE[X] + bE[Y]</code> always. <code>Var(aX + b) = a²Var(X)</code>. <code>Var(X + Y) = Var(X) + Var(Y) + 2Cov(X, Y)</code>.</li>
+<li>MAP with Gaussian prior on weights = L2 (ridge); Laplace prior = L1 (lasso).</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Distribution</th>
+<th>Mean</th>
+<th>Variance</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bernoulli(p)</td>
+<td><code>p</code></td>
+<td><code>p(1-p)</code></td>
+<td>Single click / conversion</td>
+</tr>
+<tr>
+<td>Binomial(n, p)</td>
+<td><code>np</code></td>
+<td><code>np(1-p)</code></td>
+<td># successes in <code>n</code> trials</td>
+</tr>
+<tr>
+<td>Geometric(p) (trials to 1st success)</td>
+<td><code>1/p</code></td>
+<td><code>(1-p)/p²</code></td>
+<td>Attempts until success</td>
+</tr>
+<tr>
+<td>Poisson(λ)</td>
+<td><code>λ</code></td>
+<td><code>λ</code></td>
+<td>Counts per interval (arrivals, events)</td>
+</tr>
+<tr>
+<td>Uniform(a, b)</td>
+<td><code>(a+b)/2</code></td>
+<td><code>(b-a)²/12</code></td>
+<td>Random init, priors</td>
+</tr>
+<tr>
+<td>Normal(μ, σ²)</td>
+<td><code>μ</code></td>
+<td><code>σ²</code></td>
+<td>Sums/means (CLT), noise</td>
+</tr>
+<tr>
+<td>Exponential(λ)</td>
+<td><code>1/λ</code></td>
+<td><code>1/λ²</code></td>
+<td>Waiting time; memoryless</td>
+</tr>
+<tr>
+<td>Gamma(k, θ) (shape, scale)</td>
+<td><code>kθ</code></td>
+<td><code>kθ²</code></td>
+<td>Sum of <code>k</code> exponentials; positive skew</td>
+</tr>
+<tr>
+<td>Beta(α, β)</td>
+<td><code>α/(α+β)</code></td>
+<td><code>αβ / ((α+β)²(α+β+1))</code></td>
+<td>Prior on a rate (Thompson sampling)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Normal: 68 / 95 / 99.7% within 1 / 2 / 3 σ. <code>z = 1.645</code> (90%, two-sided), <code>1.96</code> (95%), <code>2.576</code> (99%).</li>
+</ul>
+<p><strong>Inference</strong></p>
+<ul>
+<li><strong>CLT:</strong> for i.i.d. samples with finite variance, <code>x̄ ≈ N(μ, σ²/n)</code> for large <code>n</code>. Standard error <code>SE = σ/√n</code>.</li>
+<li><strong>95% CI (mean):</strong> <code>x̄ ± 1.96·s/√n</code> (use <code>t_{n-1}</code> for small <code>n</code>). <strong>Proportion:</strong> <code>p̂ ± 1.96·√(p̂(1-p̂)/n)</code>.</li>
+<li>A 95% CI means: 95% of intervals built this way contain the true value. Not &quot;95% probability the value is in this interval&quot;.</li>
+<li><strong>p-value:</strong> <code>P(data at least this extreme | H0 true)</code>. It is <strong>not</strong> <code>P(H0 | data)</code> and says nothing about effect size.</li>
+<li><code>α</code> = Type I rate (false positive), <code>β</code> = Type II rate (false negative), power = <code>1 - β</code>.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>z-test</td>
+<td>Means with known σ or large <code>n</code>; comparing two proportions (CTR, conversion)</td>
+</tr>
+<tr>
+<td>t-test (one/two-sample)</td>
+<td>Means, unknown σ, small-to-moderate <code>n</code>; <strong>Welch</strong> if variances differ</td>
+</tr>
+<tr>
+<td>Paired t-test</td>
+<td>Same units measured twice (before/after, same queries under two models)</td>
+</tr>
+<tr>
+<td>Chi-square</td>
+<td>Categorical counts: independence (contingency table) or goodness of fit; expected counts <code>≥ 5</code></td>
+</tr>
+<tr>
+<td>Mann-Whitney U</td>
+<td>Two groups, non-normal / ordinal, no mean assumption</td>
+</tr>
+<tr>
+<td>ANOVA</td>
+<td>Means across <code>&gt; 2</code> groups</td>
+</tr>
+<tr>
+<td>Bootstrap</td>
+<td>Any statistic (median, AUC, ratio metrics) without a closed-form SE</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>A/B test sample size (per arm, two-sided):</strong></p>
+<pre><code>n ≈ (z_{1-α/2} + z_{1-β})² · 2σ² / δ²
+α = 0.05, power = 0.8  →  (1.96 + 0.84)² ≈ 7.85  →  n ≈ 16·σ² / δ²
+binary metric: σ² = p(1-p)
+</code></pre>
+<ul>
+<li>Example: baseline conversion 10%, detect +1pp absolute → <code>16·0.09 / 0.0001 = 14,400</code> per arm.</li>
+<li>Halving the detectable effect <code>δ</code> quadruples <code>n</code>.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Multiple-testing correction</th>
+<th>Controls</th>
+<th>Rule (<code>m</code> tests)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bonferroni</td>
+<td>FWER</td>
+<td>Reject if <code>p &lt; α/m</code>; simple, conservative</td>
+</tr>
+<tr>
+<td>Holm (step-down)</td>
+<td>FWER</td>
+<td>Sort p ascending; reject while <code>p_(i) ≤ α/(m - i + 1)</code>; always at least as powerful as Bonferroni</td>
+</tr>
+<tr>
+<td>Benjamini-Hochberg</td>
+<td>FDR</td>
+<td>Sort ascending; largest <code>i</code> with <code>p_(i) ≤ (i/m)·α</code>; reject hypotheses <code>1..i</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_statistics_probability.html">Statistics and Probability</a> · <a href="../mlops/intro_ab_testing.html">A/B Testing</a> · <a href="../classical_ml/intro_causal_inference.html">Causal Inference</a></p>
+<hr />
+<h2 id="linear-algebra-and-calculus">Linear Algebra and Calculus</h2>
+<p><strong>Derivatives to know</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Derivative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sigmoid <code>σ(x) = 1/(1 + e^{-x})</code></td>
+<td><code>σ(x)·(1 - σ(x))</code>, max <code>0.25</code> at <code>x = 0</code></td>
+</tr>
+<tr>
+<td><code>tanh(x)</code></td>
+<td><code>1 - tanh²(x)</code>, max <code>1</code> at <code>x = 0</code></td>
+</tr>
+<tr>
+<td>ReLU <code>max(0, x)</code></td>
+<td><code>1</code> if <code>x &gt; 0</code>, else <code>0</code></td>
+</tr>
+<tr>
+<td>Softmax <code>p_i = e^{z_i} / Σ_j e^{z_j}</code></td>
+<td><code>∂p_i/∂z_j = p_i(δ_ij - p_j)</code></td>
+</tr>
+<tr>
+<td>Softmax + CE loss</td>
+<td><code>∂L/∂z = p - y</code></td>
+</tr>
+<tr>
+<td>Sigmoid + BCE loss</td>
+<td><code>∂L/∂z = p - y</code></td>
+</tr>
+<tr>
+<td>MSE for linear model <code>Xw</code></td>
+<td><code>∇_w = (2/n)·Xᵀ(Xw - y)</code></td>
+</tr>
+<tr>
+<td><code>aᵀx</code></td>
+<td><code>a</code></td>
+</tr>
+<tr>
+<td><code>xᵀAx</code></td>
+<td><code>(A + Aᵀ)x</code> (= <code>2Ax</code> if <code>A</code> symmetric)</td>
+</tr>
+<tr>
+<td><code>‖x‖²</code></td>
+<td><code>2x</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Shapes and costs</strong></p>
+<ul>
+<li><code>(m×n)·(n×p) → (m×p)</code>, costing <code>m·n·p</code> multiply-adds (<code>2mnp</code> FLOPs).</li>
+<li>Dense layer: <code>X (batch×d_in) · W (d_in×d_out) + b (d_out) → (batch×d_out)</code>.</li>
+<li>Attention scores: <code>Q (n×d_k) · Kᵀ (d_k×n) → (n×n)</code>: quadratic in sequence length.</li>
+<li>Normal equation: <code>w = (XᵀX)⁻¹Xᵀy</code>, cost <code>O(nd² + d³)</code>; ridge: <code>w = (XᵀX + λI)⁻¹Xᵀy</code> (always invertible for <code>λ &gt; 0</code>).</li>
+</ul>
+<p><strong>Decompositions</strong></p>
+<ul>
+<li>Eigen: <code>Av = λv</code>. Symmetric matrices (covariance) have real eigenvalues and orthogonal eigenvectors.</li>
+<li>SVD: <code>A = UΣVᵀ</code> for any <code>A (m×n)</code>; <code>U (m×m)</code>, <code>V (n×n)</code> orthogonal; <code>Σ</code> diagonal with singular values <code>σ_1 ≥ σ_2 ≥ ... ≥ 0</code>.</li>
+<li>Truncated SVD (top <code>k</code>) is the best rank-<code>k</code> approximation in Frobenius and spectral norm (Eckart-Young).</li>
+<li>PCA = SVD of <strong>centred</strong> <code>X</code>: components are columns of <code>V</code>; variance along component <code>i</code> = <code>σ_i² / (n-1)</code>.</li>
+<li>Rank = number of non-zero singular values. Condition number = <code>σ_max / σ_min</code> (large → numerically unstable).</li>
+<li>Numerical stability: compute softmax/log-sum-exp as <code>m + log Σ e^{z_i - m}</code> with <code>m = max(z)</code>.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_math_for_ml.html">Math for ML</a> · <a href="../classical_ml/intro_dimensionality_reduction.html">Dimensionality Reduction</a></p>
+<hr />
+<h2 id="optimization">Optimization</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Update rule (<code>g = ∇L(θ)</code>)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GD / SGD</td>
+<td><code>θ ← θ - η·g</code></td>
+<td>SGD uses a mini-batch estimate of <code>g</code></td>
+</tr>
+<tr>
+<td>Momentum</td>
+<td><code>v ← μ·v + g</code>; <code>θ ← θ - η·v</code></td>
+<td><code>μ ≈ 0.9</code>; damps oscillation, speeds up ravines</td>
+</tr>
+<tr>
+<td>Nesterov</td>
+<td>gradient evaluated at look-ahead <code>θ - η·μ·v</code></td>
+<td>Slightly better convergence than plain momentum</td>
+</tr>
+<tr>
+<td>AdaGrad</td>
+<td><code>s ← s + g²</code>; <code>θ ← θ - η·g / (√s + ε)</code></td>
+<td>Per-parameter LR; LR decays forever (sparse features)</td>
+</tr>
+<tr>
+<td>RMSProp</td>
+<td><code>s ← ρ·s + (1-ρ)·g²</code>; <code>θ ← θ - η·g / (√s + ε)</code></td>
+<td>Fixes AdaGrad's decay; <code>ρ ≈ 0.9</code></td>
+</tr>
+<tr>
+<td>Adam</td>
+<td><code>m ← β₁m + (1-β₁)g</code>; <code>v ← β₂v + (1-β₂)g²</code>; <code>m̂ = m/(1-β₁ᵗ)</code>; <code>v̂ = v/(1-β₂ᵗ)</code>; <code>θ ← θ - η·m̂/(√v̂ + ε)</code></td>
+<td>Defaults <code>β₁=0.9, β₂=0.999, ε=1e-8</code>; bias correction matters early</td>
+</tr>
+<tr>
+<td>AdamW</td>
+<td>Adam step, plus <code>θ ← θ - η·λ·θ</code> applied separately</td>
+<td>Decoupled weight decay; default for transformers</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Weight decay vs L2</strong></p>
+<ul>
+<li>L2 regularisation adds <code>(λ/2)‖θ‖²</code> to the loss → adds <code>λθ</code> to the gradient.</li>
+<li>With plain SGD this is identical to weight decay (<code>θ ← (1 - ηλ)θ - η·g</code>).</li>
+<li>With Adam it is <strong>not</strong>: the <code>λθ</code> term gets divided by <code>√v̂</code>, so parameters with large gradients are barely regularised. AdamW decouples it.</li>
+<li>Usually exclude biases and norm gains from weight decay.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>LR schedule</th>
+<th>Formula / shape</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step decay</td>
+<td>multiply by <code>γ</code> (e.g. 0.1) every <code>s</code> epochs</td>
+<td>Classic CNNs</td>
+</tr>
+<tr>
+<td>Exponential</td>
+<td><code>η_t = η_0·γᵗ</code></td>
+<td>Simple decay</td>
+</tr>
+<tr>
+<td>Cosine</td>
+<td><code>η_t = η_min + ½(η_max - η_min)(1 + cos(π·t/T))</code></td>
+<td>Default for modern training</td>
+</tr>
+<tr>
+<td>Linear warmup</td>
+<td><code>η_t = η_max·t/T_warm</code> for first steps</td>
+<td>Transformers, large batches (Adam's <code>v</code> is noisy early)</td>
+</tr>
+<tr>
+<td>Inverse sqrt</td>
+<td><code>η_t ∝ d_model^{-0.5}·min(t^{-0.5}, t·T_warm^{-1.5})</code></td>
+<td>Original transformer</td>
+</tr>
+<tr>
+<td>One-cycle</td>
+<td>ramp up then anneal down</td>
+<td>Fast convergence on CNNs</td>
+</tr>
+<tr>
+<td>Reduce-on-plateau</td>
+<td>cut LR when val metric stalls</td>
+<td>Small projects, fine-tuning</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Gradient clipping by global norm (e.g. <code>1.0</code>) guards against spikes, essential for RNNs and LLMs.</li>
+<li>Batch size scaling (heuristic): linear LR scaling for SGD (<code>k×</code> batch → <code>k×</code> LR, with warmup); roughly <code>√k</code> for Adam.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a> · <a href="../classical_ml/intro_math_for_ml.html">Math for ML</a></p>
+<hr />
+<h2 id="algorithm-cheat-table">Algorithm Cheat Table</h2>
+<p><code>n</code> = samples, <code>d</code> = features, <code>k</code> = clusters/neighbours, <code>T</code> = trees, <code>L</code> = tree depth, <code>n_sv</code> = support vectors.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Type</th>
+<th>Train / predict (per sample)</th>
+<th>Key hyperparams</th>
+<th>Scale features?</th>
+<th>Missing values?</th>
+<th>Pros / cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear regression (OLS/ridge/lasso)</td>
+<td>Supervised, regression</td>
+<td><code>O(nd² + d³)</code> closed form, <code>O(nd)</code> per SGD epoch / <code>O(d)</code></td>
+<td><code>α</code> (L1/L2 strength)</td>
+<td>Yes if regularised</td>
+<td>No</td>
+<td>+ fast, interpretable / − linear only, sensitive to outliers and collinearity</td>
+</tr>
+<tr>
+<td>Logistic regression</td>
+<td>Supervised, classification</td>
+<td><code>O(nd · iters)</code> / <code>O(d)</code></td>
+<td><code>C</code> (=1/λ), penalty</td>
+<td>Yes</td>
+<td>No</td>
+<td>+ calibrated-ish probabilities, strong baseline / − linear boundary</td>
+</tr>
+<tr>
+<td>Naive Bayes</td>
+<td>Supervised, classification</td>
+<td><code>O(nd)</code> / <code>O(dK)</code></td>
+<td>smoothing <code>α</code>, variant</td>
+<td>No</td>
+<td>Can skip features in principle; not in sklearn</td>
+<td>+ tiny data, text / − independence assumption, poor probabilities</td>
+</tr>
+<tr>
+<td>k-NN</td>
+<td>Supervised, lazy</td>
+<td><code>O(1)</code> (store) or <code>O(nd log n)</code> tree / <code>O(nd)</code> brute</td>
+<td><code>k</code>, distance, weights</td>
+<td>Yes</td>
+<td>No</td>
+<td>+ no training, flexible / − slow predict, curse of dimensionality</td>
+</tr>
+<tr>
+<td>SVM (kernel)</td>
+<td>Supervised</td>
+<td><code>O(n²)</code> to <code>O(n³)</code> / <code>O(n_sv·d)</code></td>
+<td><code>C</code>, kernel, <code>γ</code></td>
+<td>Yes</td>
+<td>No</td>
+<td>+ strong on small/medium, high-dim data / − doesn't scale past ~100k rows, no native probabilities</td>
+</tr>
+<tr>
+<td>Decision tree</td>
+<td>Supervised</td>
+<td><code>O(nd log n)</code> / <code>O(L)</code></td>
+<td><code>max_depth</code>, <code>min_samples_leaf</code></td>
+<td>No</td>
+<td>Impl-dependent (sklearn ≥ 1.3 yes)</td>
+<td>+ interpretable, nonlinear, mixed types / − high variance</td>
+</tr>
+<tr>
+<td>Random forest</td>
+<td>Ensemble (bagging)</td>
+<td><code>O(T·n·d' log n)</code>, <code>d'</code> = features tried per split / <code>O(T·L)</code></td>
+<td><code>n_estimators</code>, <code>max_features</code>, depth</td>
+<td>No</td>
+<td>Impl-dependent (sklearn ≥ 1.4 yes)</td>
+<td>+ robust, little tuning, OOB estimate / − large models, weak extrapolation</td>
+</tr>
+<tr>
+<td>Gradient boosting (XGBoost/LightGBM/CatBoost)</td>
+<td>Ensemble (boosting)</td>
+<td><code>O(T·n·d)</code> with histograms / <code>O(T·L)</code></td>
+<td><code>learning_rate</code>, <code>n_estimators</code>, <code>max_depth</code>/<code>num_leaves</code>, subsample</td>
+<td>No</td>
+<td>Yes (learned default direction)</td>
+<td>+ best on tabular data / − sequential training, overfits without early stopping</td>
+</tr>
+<tr>
+<td>k-means</td>
+<td>Unsupervised, clustering</td>
+<td><code>O(n·k·d·iters)</code> / <code>O(kd)</code></td>
+<td><code>k</code>, init (k-means++)</td>
+<td>Yes</td>
+<td>No</td>
+<td>+ simple, fast / − spherical equal-size clusters, needs <code>k</code>, local optima</td>
+</tr>
+<tr>
+<td>DBSCAN</td>
+<td>Unsupervised, clustering</td>
+<td><code>O(n log n)</code> with index, <code>O(n²)</code> worst / no native predict</td>
+<td><code>eps</code>, <code>min_samples</code></td>
+<td>Yes</td>
+<td>No</td>
+<td>+ arbitrary shapes, finds noise / − struggles with varying density, high <code>d</code></td>
+</tr>
+<tr>
+<td>Gaussian mixture (EM)</td>
+<td>Unsupervised, density</td>
+<td><code>O(n·k·d²·iters)</code> full cov / <code>O(k·d²)</code></td>
+<td><code>k</code>, covariance type</td>
+<td>Yes</td>
+<td>No</td>
+<td>+ soft assignments, elliptical clusters / − local optima, sensitive to init</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>Unsupervised, dim. reduction</td>
+<td><code>O(nd² + d³)</code> full, <code>O(ndk)</code> randomised / <code>O(dk)</code></td>
+<td><code>n_components</code></td>
+<td>Yes (standardise)</td>
+<td>No</td>
+<td>+ decorrelates, denoises / − linear, components hard to interpret</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Tree models are invariant to monotonic feature transforms; distance, margin and gradient-based models are not.</li>
+<li>Default tabular pipeline: logistic regression baseline → gradient boosting → tune → only then consider deep learning.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/">Classical ML Overview</a> · <a href="../classical_ml/intro_ensemble_methods.html">Ensemble Methods</a> · <a href="../classical_ml/intro_clustering.html">Clustering</a> · <a href="../classical_ml/intro_dimensionality_reduction.html">Dimensionality Reduction</a></p>
+<hr />
+<h2 id="bias-variance-diagnostics">Bias-Variance Diagnostics</h2>
+<p><code>Expected test error = bias² + variance + irreducible noise</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Diagnosis</th>
+<th>Fixes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Train error high, val error ≈ train error</td>
+<td>High bias (underfitting)</td>
+<td>Bigger model, more/better features, less regularisation, train longer, boosting</td>
+</tr>
+<tr>
+<td>Train error low, val error much higher</td>
+<td>High variance (overfitting)</td>
+<td>More data, augmentation, regularisation (L1/L2, dropout), simpler model, early stopping, bagging</td>
+</tr>
+<tr>
+<td>Both high, big gap</td>
+<td>Both</td>
+<td>Fix bias first, then variance</td>
+</tr>
+<tr>
+<td>Val good, test/prod bad</td>
+<td>Leakage or distribution shift</td>
+<td>Audit splits and features; check drift, training-serving skew</td>
+</tr>
+<tr>
+<td>Val error noisy across folds</td>
+<td>Small or heterogeneous val set</td>
+<td>More folds, repeated CV, stratify, report CI</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Learning curves (error vs training-set size)</strong></p>
+<ul>
+<li>Curves converge at a high error → high bias; more data will <strong>not</strong> help.</li>
+<li>Large persistent gap that shrinks with more data → high variance; more data <strong>will</strong> help.</li>
+</ul>
+<p><strong>Knobs and their direction</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>↑ increases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tree depth, <code>num_leaves</code>, polynomial degree, hidden units</td>
+<td>Variance</td>
+</tr>
+<tr>
+<td><code>k</code> in k-NN</td>
+<td>Bias</td>
+</tr>
+<tr>
+<td>Regularisation <code>λ</code> (or ↓ <code>C</code> in SVM/logreg)</td>
+<td>Bias</td>
+</tr>
+<tr>
+<td>Number of trees in random forest</td>
+<td>Neither much (variance ↓, plateaus)</td>
+</tr>
+<tr>
+<td>Boosting rounds (without early stopping)</td>
+<td>Variance</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Double descent: very over-parameterised nets can see test error fall again past the interpolation threshold.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a> · <a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a> · <a href="../classical_ml/intro_ensemble_methods.html">Ensemble Methods</a></p>
+<hr />
+<h2 id="neural-network-essentials">Neural Network Essentials</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Activation</th>
+<th>Formula</th>
+<th>Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sigmoid</td>
+<td><code>1/(1 + e^{-x})</code></td>
+<td><code>(0, 1)</code></td>
+<td>Output for binary / multi-label; saturates, gradient ≤ 0.25</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td><code>(eˣ - e^{-x})/(eˣ + e^{-x})</code></td>
+<td><code>(-1, 1)</code></td>
+<td>Zero-centred; RNN gates/state; still saturates</td>
+</tr>
+<tr>
+<td>ReLU</td>
+<td><code>max(0, x)</code></td>
+<td><code>[0, ∞)</code></td>
+<td>Default for CNNs/MLPs; &quot;dying ReLU&quot;</td>
+</tr>
+<tr>
+<td>Leaky ReLU</td>
+<td><code>max(αx, x)</code>, <code>α ≈ 0.01</code></td>
+<td><code>(-∞, ∞)</code></td>
+<td>Fixes dying ReLU</td>
+</tr>
+<tr>
+<td>GELU</td>
+<td><code>x·Φ(x)</code></td>
+<td><code>≈ (-0.17, ∞)</code></td>
+<td>BERT, GPT</td>
+</tr>
+<tr>
+<td>SiLU / Swish</td>
+<td><code>x·σ(x)</code></td>
+<td><code>≈ (-0.28, ∞)</code></td>
+<td>SwiGLU FFN in LLaMA-family models</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td><code>e^{z_i}/Σ_j e^{z_j}</code></td>
+<td>simplex</td>
+<td>Multiclass output, attention weights</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Init</th>
+<th>Weight variance</th>
+<th>Pair with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xavier / Glorot</td>
+<td><code>Var(W) = 2/(fan_in + fan_out)</code> (uniform bound <code>√(6/(fan_in + fan_out))</code>)</td>
+<td>tanh, sigmoid</td>
+</tr>
+<tr>
+<td>He / Kaiming</td>
+<td><code>Var(W) = 2/fan_in</code></td>
+<td>ReLU family</td>
+</tr>
+<tr>
+<td>LeCun</td>
+<td><code>Var(W) = 1/fan_in</code></td>
+<td>SELU, linear</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Goal of all three: keep activation/gradient variance roughly constant across layers. Never initialise all weights equal (symmetry never breaks).</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Normalization</th>
+<th>Normalizes over</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BatchNorm</td>
+<td>Batch (+ spatial) dims, per channel</td>
+<td>CNNs; running stats at eval; breaks with tiny batches</td>
+</tr>
+<tr>
+<td>LayerNorm</td>
+<td>Features of each sample</td>
+<td>Transformers, RNNs; same at train and eval</td>
+</tr>
+<tr>
+<td>RMSNorm</td>
+<td>Features, divides by RMS only (no mean subtraction)</td>
+<td>LLaMA-style LLMs; cheaper than LayerNorm</td>
+</tr>
+<tr>
+<td>GroupNorm</td>
+<td>Groups of channels per sample</td>
+<td>Detection/segmentation with small batches</td>
+</tr>
+<tr>
+<td>InstanceNorm</td>
+<td>Each channel of each sample</td>
+<td>Style transfer</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>All compute <code>y = γ·(x - μ)/√(σ² + ε) + β</code> (RMSNorm: <code>y = γ·x/RMS(x)</code>); they differ only in which axes give <code>μ</code>, <code>σ</code>.</li>
+<li><strong>Dropout:</strong> at train, zero each unit with prob <code>p</code> and scale survivors by <code>1/(1-p)</code> (inverted dropout); at eval, identity. Call <code>model.eval()</code>.</li>
+</ul>
+<p><strong>Parameter counts</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Params</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear <code>d_in → d_out</code></td>
+<td><code>d_in·d_out + d_out</code></td>
+<td>Drop <code>+ d_out</code> if no bias</td>
+</tr>
+<tr>
+<td>Conv2d</td>
+<td><code>(K_h·K_w·C_in + 1)·C_out</code></td>
+<td><code>groups = 1</code>; FLOPs ≈ <code>2·K_h·K_w·C_in·C_out·H_out·W_out</code></td>
+</tr>
+<tr>
+<td>Conv output size</td>
+<td><code>floor((H + 2P - K)/S) + 1</code></td>
+<td><code>P</code> padding, <code>S</code> stride</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td><code>V·d</code></td>
+<td>Often tied with output layer</td>
+</tr>
+<tr>
+<td>Multi-head attention</td>
+<td><code>4·d² + 4d</code></td>
+<td>Q, K, V, O projections; independent of head count</td>
+</tr>
+<tr>
+<td>Transformer block (FFN 4×)</td>
+<td><code>≈ 12·d²</code></td>
+<td><code>4d²</code> attention + <code>8d²</code> FFN, ignoring biases/norms</td>
+</tr>
+<tr>
+<td>Decoder-only LLM</td>
+<td><code>N ≈ 12·L·d² + V·d</code></td>
+<td><code>L</code> layers; e.g. <code>L=32, d=4096</code> → <code>≈ 6.4B</code> + embeddings</td>
+</tr>
+<tr>
+<td>LSTM layer</td>
+<td><code>4·(h·(h + x) + h)</code></td>
+<td>Four gates; PyTorch keeps two bias vectors: <code>4·(h·(h + x) + 2h)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Attention</strong></p>
+<pre><code>Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V
+</code></pre>
+<ul>
+<li><code>√d_k</code> keeps dot-product variance ≈ 1 so softmax doesn't saturate.</li>
+<li>Cost: <code>O(n²·d)</code> time, <code>O(n²)</code> memory for the score matrix (FlashAttention avoids materialising it, same FLOPs).</li>
+<li>Causal mask sets future positions to <code>-∞</code> before softmax. Multi-head: <code>h</code> heads of size <code>d/h</code>, concatenated then projected.</li>
+</ul>
+<p><strong>Compute rules of thumb</strong></p>
+<ul>
+<li>Training FLOPs <code>≈ 6·N·D</code> (<code>N</code> params, <code>D</code> training tokens): <code>2ND</code> forward + <code>4ND</code> backward.</li>
+<li>Inference FLOPs <code>≈ 2·N</code> per generated token (ignoring attention over the context).</li>
+<li>Chinchilla compute-optimal: <code>D ≈ 20·N</code> tokens (approximate).</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a> · <a href="../deep_learning/intro_transformers.html">Transformers</a> · <a href="../deep_learning/intro_computer_vision.html">Computer Vision</a> · <a href="../deep_learning/intro_sequence_models.html">Sequence Models</a></p>
+<hr />
+<h2 id="llm-numbers">LLM Numbers</h2>
+<p><strong>Memory per parameter</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>dtype</th>
+<th>Bytes/param</th>
+<th>7B model weights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fp32</td>
+<td>4</td>
+<td>28 GB</td>
+</tr>
+<tr>
+<td>fp16 / bf16</td>
+<td>2</td>
+<td>14 GB</td>
+</tr>
+<tr>
+<td>fp8 / int8</td>
+<td>1</td>
+<td>7 GB</td>
+</tr>
+<tr>
+<td>int4 (e.g. GPTQ, AWQ, NF4)</td>
+<td>0.5</td>
+<td>3.5 GB (+ small overhead for scales)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Full fine-tuning with Adam, mixed precision: <code>≈ 16 bytes/param</code> (2 weights + 2 grads + 4 fp32 master + 4 <code>m</code> + 4 <code>v</code>), before activations. 7B → <code>~112 GB</code>.</li>
+<li>LoRA adds <code>r·(d_in + d_out)</code> params per adapted matrix; only those get gradients and optimizer state.</li>
+</ul>
+<p><strong>KV cache</strong></p>
+<pre><code>KV bytes = 2 (K and V) × n_layers × n_kv_heads × d_head × seq_len × batch × bytes_per_elem
+</code></pre>
+<ul>
+<li>Llama-2-7B (32 layers, 32 KV heads, <code>d_head = 128</code>, fp16): <code>2·32·32·128·2 = 512 KB/token</code> → <code>~2 GB</code> for one 4k-token sequence.</li>
+<li>GQA/MQA shrink <code>n_kv_heads</code> (Llama-3-8B: 8 KV heads → <code>128 KB/token</code>). KV cache, not weights, often limits batch size.</li>
+</ul>
+<p><strong>Rules of thumb (approximate)</strong></p>
+<ul>
+<li>English: <code>1 token ≈ 0.75 words ≈ 4 characters</code>; 1,000 tokens ≈ 750 words. Code and non-English text use more tokens per word.</li>
+<li>Prefill is compute-bound; decode is memory-bandwidth-bound.</li>
+<li>Batch-1 decode ceiling: <code>tokens/s ≈ memory bandwidth / model bytes</code> (e.g. 14 GB model on ~2 TB/s HBM → ~140 tok/s upper bound).</li>
+<li>Cost/latency levers: quantisation, KV-cache reuse (prefix caching), continuous batching, speculative decoding, shorter prompts.</li>
+</ul>
+<p><strong>Read more:</strong> <a href="../ai_genai/intro_llm_fundamentals.html">LLM Fundamentals</a> · <a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a> · <a href="../deep_learning/intro_model_compression.html">Model Compression</a> · <a href="../deep_learning/intro_fine_tuning.html">Fine-Tuning</a></p>
+<hr />
+<h2 id="system-design-numbers">System Design Numbers</h2>
+<p>All values are <strong>approximate orders of magnitude</strong>; hardware varies. Use them for back-of-envelope estimates, not SLAs.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Approx. latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 cache reference</td>
+<td>~1 ns</td>
+</tr>
+<tr>
+<td>Branch mispredict</td>
+<td>~5 ns</td>
+</tr>
+<tr>
+<td>Main memory reference</td>
+<td>~100 ns</td>
+</tr>
+<tr>
+<td>Compress 1 KB (fast codec)</td>
+<td>~2-3 µs</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from RAM</td>
+<td>~10-100 µs</td>
+</tr>
+<tr>
+<td>SSD (NVMe) random read</td>
+<td>~10-100 µs</td>
+</tr>
+<tr>
+<td>Round trip within a datacenter</td>
+<td>~0.5 ms</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from SSD</td>
+<td>~0.1-1 ms</td>
+</tr>
+<tr>
+<td>Cache / KV-store lookup over network (Redis)</td>
+<td>~0.5-1 ms</td>
+</tr>
+<tr>
+<td>HDD seek</td>
+<td>~10 ms</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from HDD</td>
+<td>~5-20 ms</td>
+</tr>
+<tr>
+<td>Cross-continent round trip</td>
+<td>~100-150 ms</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Useful quantity</th>
+<th>Approx. value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seconds per day</td>
+<td><code>86,400 ≈ 10⁵</code></td>
+</tr>
+<tr>
+<td>Seconds per year</td>
+<td><code>≈ 3.15 × 10⁷</code></td>
+</tr>
+<tr>
+<td>QPS from daily volume</td>
+<td><code>requests/day ÷ 86,400</code>; plan peak at 2-3× average</td>
+</tr>
+<tr>
+<td>1M float32 vectors × 768 dims</td>
+<td><code>≈ 3 GB</code> (<code>10⁶ · 768 · 4 bytes</code>)</td>
+</tr>
+<tr>
+<td>Interactive latency budget</td>
+<td>Users notice &gt; ~100 ms; recsys/ads end-to-end often 50-200 ms</td>
+</tr>
+<tr>
+<td>Online feature-store read (p99)</td>
+<td>Single-digit to ~10 ms</td>
+</tr>
+<tr>
+<td>GBDT inference, one row on CPU</td>
+<td>~µs to ~1 ms (depends on trees/depth)</td>
+</tr>
+<tr>
+<td>GPU HBM bandwidth (A100 / H100)</td>
+<td>~2 / ~3.35 TB/s</td>
+</tr>
+<tr>
+<td>Dense bf16 throughput (A100 / H100 SXM)</td>
+<td>~312 / ~990 TFLOPS</td>
+</tr>
+<tr>
+<td>PCIe 4.0 x16</td>
+<td>~32 GB/s per direction</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Read more:</strong> <a href="../system_design/ml_system_design_patterns.html">ML System Design Patterns</a> · <a href="../mlops/intro_model_serving.html">Model Serving</a> · <a href="../system_design/backend_system_design_interview_guide.html">Backend System Design Guide</a></p>
+<hr />
+<h2 id="top-20-traps">Top 20 Traps</h2>
+<ol>
+<li><strong>Target leakage</strong>: a feature that is only known after the label (e.g. &quot;refund issued&quot; to predict fraud). Ask &quot;would I have this at prediction time?&quot;</li>
+<li><strong>Fitting preprocessing on all data</strong>: scalers, imputers, target encoders or feature selection fit before the split. Put them inside a <code>Pipeline</code> fit per fold.</li>
+<li><strong>Random split on time series</strong>: trains on the future. Use time-based splits / forward-chaining CV with a gap.</li>
+<li><strong>Entity leakage</strong>: same user, patient or session in train and test. Use <code>GroupKFold</code>.</li>
+<li><strong>Accuracy on imbalanced data</strong>: 99% accuracy at 1% prevalence is a constant predictor. Use PR-AUC, recall@precision, F1.</li>
+<li><strong>ROC-AUC on rare events</strong>: looks great while precision is terrible. Report PR-AUC too.</li>
+<li><strong>Oversampling (SMOTE) before splitting</strong>: synthetic copies of test points leak into training. Resample only the training fold.</li>
+<li><strong>Tuning on the test set</strong>: every peek makes it a validation set. Hold out a final test set touched once.</li>
+<li><strong>Default 0.5 threshold</strong>: choose the threshold from costs or a precision/recall target on validation data.</li>
+<li><strong>Uncalibrated probabilities</strong>: after class weights, undersampling or boosting, scores are not probabilities. Recalibrate (Platt, isotonic) or correct for the sampling rate.</li>
+<li><strong>Training-serving skew</strong>: features computed differently offline vs online. Share feature code, log served features.</li>
+<li><strong>Duplicates across splits</strong>: near-duplicate images/texts, or benchmark contamination in LLM pretraining data. Dedupe before splitting.</li>
+<li><strong>Peeking at A/B tests</strong>: stopping when <code>p &lt; 0.05</code> inflates false positives. Fix sample size up front or use sequential tests.</li>
+<li><strong>Multiple comparisons</strong>: 20 metrics at <code>α = 0.05</code> gives ~1 false win by chance. Pre-register a primary metric; correct (Holm, BH).</li>
+<li><strong>Sample ratio mismatch</strong>: a 50/50 test landing 52/48 means broken assignment/logging. Check with a chi-square test before reading results.</li>
+<li><strong>Correlation ≠ causation</strong>: confounding and Simpson's paradox. Feature importance is not a causal effect.</li>
+<li><strong>Missing feature scaling</strong>: k-NN, SVM, k-means, PCA and regularised linear models all depend on scale; trees don't.</li>
+<li><strong>Forgetting <code>model.eval()</code></strong>: dropout stays on and BatchNorm uses batch stats at inference.</li>
+<li><strong>Bad metric for the target</strong>: MAPE when <code>y</code> can be ~0, RMSE on heavy-tailed targets, R² compared across datasets.</li>
+<li><strong>Feedback loops and selection bias</strong>: training only on data your model chose to show or approve (clicks on shown items, approved loans). Log propensities, keep exploration traffic.</li>
+</ol>
+<p><strong>Read more:</strong> <a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a> · <a href="../classical_ml/intro_time_series.html">Time Series</a> · <a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a> · <a href="../mlops/intro_ab_testing.html">A/B Testing</a> · <a href="../mlops/intro_model_monitoring.html">Model Monitoring</a> · <a href="glossary.html">Glossary</a></p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="glossary.html">Glossary</a>: every term in one or two sentences</li>
+<li><a href="interview_questions_2026.html">2026 Interview Questions</a></li>
+<li><a href="2026-interview-roadmap.html">2026 Interview Roadmap</a></li>
+<li><a href="study-pattern.html">Study Pattern</a></li>
+<li><a href="../readme.html">Repository Home</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="glossary.html"><small>Previous</small>Glossary</a><a rel="next" class="next" href="ml-debugging-scenarios.html"><small>Next</small>ML Debugging Scenarios</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/docs/ml-cheat-sheet.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

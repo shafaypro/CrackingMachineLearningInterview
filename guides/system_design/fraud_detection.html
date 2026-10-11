@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraud Detection System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A complete ML system design for real-time fraud detection at scale.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/fraud_detection.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Fraud Detection System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A complete ML system design for real-time fraud detection at scale.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/fraud_detection.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fraud Detection System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A complete ML system design for real-time fraud detection at scale.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Fraud Detection System Design",
+   "description": "A complete ML system design for real-time fraud detection at scale.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/fraud_detection.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Fraud Detection",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/fraud_detection.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Fraud Detection</span></nav>
+<p class="meta"><a href="../../#system_design/fraud_detection.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="fraud-detection-system-design">Fraud Detection System Design</h1>
+<p>A complete ML system design for real-time fraud detection at scale.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#problem-definition-and-requirements">Problem Definition and Requirements</a></li>
+<li><a href="#data-sources-and-features">Data Sources and Features</a></li>
+<li><a href="#model-selection">Model Selection</a></li>
+<li><a href="#real-time-vs-batch-scoring">Real-Time vs Batch Scoring</a></li>
+<li><a href="#handling-class-imbalance">Handling Class Imbalance</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#production-architecture">Production Architecture</a></li>
+<li><a href="#monitoring-and-retraining-strategy">Monitoring and Retraining Strategy</a></li>
+</ol>
+<hr />
+<h2 id="problem-definition-and-requirements">Problem Definition and Requirements</h2>
+<h3 id="business-context">Business Context</h3>
+<p>A payment processing company wants to automatically detect fraudulent transactions in real-time to prevent financial loss while minimizing false positives that frustrate legitimate customers.</p>
+<h3 id="functional-requirements">Functional Requirements</h3>
+<ul>
+<li>Score every transaction as fraud or legitimate</li>
+<li>Real-time decision before transaction authorization (&lt; 100ms)</li>
+<li>Support rule overrides by fraud analysts</li>
+<li>Explainable decisions for regulatory compliance</li>
+<li>Human review queue for borderline cases</li>
+</ul>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency (p99)</td>
+<td>&lt; 100ms</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>10,000 TPS (transactions per second)</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>99.99% (≤ 52 minutes downtime/year)</td>
+</tr>
+<tr>
+<td>False Positive Rate</td>
+<td>&lt; 0.5% (keep customer friction low)</td>
+</tr>
+<tr>
+<td>Fraud Detection Rate</td>
+<td>&gt; 80% of fraud dollars caught</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>500M transactions/day</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ml-objective">ML Objective</h3>
+<p>Binary classification: <code>fraud (1) vs legitimate (0)</code></p>
+<p>Business-aware objective: Maximize fraud dollars caught while limiting false positive rate to &lt; 0.5%.</p>
+<hr />
+<h2 id="data-sources-and-features">Data Sources and Features</h2>
+<h3 id="data-sources">Data Sources</h3>
+<pre><code>Transaction Stream (Kafka)
+├── transaction_id
+├── user_id
+├── merchant_id
+├── amount
+├── currency
+├── timestamp
+├── device_fingerprint
+├── ip_address
+├── card_type
+└── payment_method
+
+User History (Data Warehouse)
+├── account_age_days
+├── total_transactions_30d
+├── avg_transaction_amount_30d
+├── countries_transacted_30d
+└── dispute_history
+
+Merchant Database
+├── merchant_risk_score
+├── merchant_category_code (MCC)
+├── merchant_country
+├── chargeback_rate_30d
+└── merchant_age_days
+
+Device Intelligence (Third-party API)
+├── device_type
+├── is_known_device
+├── device_age_days
+├── vpn_detected
+└── tor_detected
+
+IP Intelligence (MaxMind/Third-party)
+├── ip_country
+├── ip_city
+├── ip_isp
+├── ip_proxy_type
+└── ip_risk_score
+</code></pre>
+<h3 id="feature-engineering">Feature Engineering</h3>
+<pre><code class="language-python"># Transaction-level features
+features = {
+    # Amount features
+    &quot;amount&quot;: transaction.amount,
+    &quot;log_amount&quot;: np.log1p(transaction.amount),
+    &quot;amount_deviation&quot;: (amount - user_avg_amount) / user_std_amount,
+    &quot;is_round_number&quot;: amount % 10 == 0,
+
+    # Velocity features (aggregated over sliding windows)
+    &quot;txn_count_1h&quot;: count_transactions(user_id, window=&quot;1h&quot;),
+    &quot;txn_count_24h&quot;: count_transactions(user_id, window=&quot;24h&quot;),
+    &quot;txn_count_7d&quot;: count_transactions(user_id, window=&quot;7d&quot;),
+    &quot;unique_merchants_24h&quot;: count_unique(user_id, &quot;merchant_id&quot;, window=&quot;24h&quot;),
+    &quot;unique_countries_7d&quot;: count_unique(user_id, &quot;country&quot;, window=&quot;7d&quot;),
+
+    # Amount velocity
+    &quot;total_amount_1h&quot;: sum_amount(user_id, window=&quot;1h&quot;),
+    &quot;max_amount_7d&quot;: max_amount(user_id, window=&quot;7d&quot;),
+
+    # Behavioral anomalies
+    &quot;unusual_hour&quot;: 1 if transaction.hour in [2, 3, 4, 5] else 0,
+    &quot;new_country&quot;: transaction.country not in user_frequent_countries,
+    &quot;new_device&quot;: not is_known_device(transaction.device_fingerprint),
+
+    # Merchant risk
+    &quot;merchant_risk_score&quot;: merchant.risk_score,
+    &quot;merchant_chargeback_rate&quot;: merchant.chargeback_rate_30d,
+    &quot;high_risk_mcc&quot;: merchant.mcc in HIGH_RISK_MCC_CODES,
+
+    # Network features
+    &quot;ip_risk_score&quot;: ip_lookup(transaction.ip),
+    &quot;vpn_detected&quot;: ip_info.vpn_detected,
+    &quot;country_mismatch&quot;: transaction.ip_country != user.home_country,
+    &quot;ip_velocity&quot;: count_unique_users_from_ip(transaction.ip, window=&quot;1h&quot;),
+}
+</code></pre>
+<hr />
+<h2 id="model-selection">Model Selection</h2>
+<h3 id="why-gradient-boosting-xgboostlightgbm">Why Gradient Boosting (XGBoost/LightGBM)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance</td>
+<td>Usually the most accurate on tabular data</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Inference &lt; 5ms on CPU</td>
+</tr>
+<tr>
+<td>Interpretability</td>
+<td>SHAP values for feature importance</td>
+</tr>
+<tr>
+<td>Class imbalance</td>
+<td>Built-in <code>scale_pos_weight</code> parameter</td>
+</tr>
+<tr>
+<td>Handles missing</td>
+<td>Native handling</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="model-architecture">Model Architecture</h3>
+<pre><code>Hybrid: Rules Engine + ML Model
+
+1. Hard Rules (&lt; 1ms):
+   - Block: Known fraud IP, blacklisted cards, sanctioned countries
+   - Allow: Trusted merchant + known device + low amount
+
+2. ML Model (&lt; 10ms):
+   - LightGBM with 500 trees, depth 6
+   - Input: ~100 features
+   - Output: Fraud probability (0-1)
+
+3. Decision Logic:
+   - P &gt; 0.9: Auto-decline
+   - 0.5 &lt; P &lt; 0.9: Hold for review / 3DS challenge
+   - P &lt; 0.5: Auto-approve (with continued monitoring)
+   - Threshold tuned for &lt; 0.5% FPR
+
+4. Fallback:
+   - If ML model unavailable: rules engine only
+   - If ML scoring exceeds its timeout (latency budget): decide on rules, flag for review
+</code></pre>
+<pre><code class="language-python">import lightgbm as lgb
+from sklearn.metrics import roc_auc_score
+
+# Heavily imbalanced: 0.1% fraud rate
+# scale_pos_weight compensates: ~ 999 for 1:999 ratio
+fraud_weight = len(y_train[y_train == 0]) / len(y_train[y_train == 1])
+
+model = lgb.LGBMClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    num_leaves=63,
+    scale_pos_weight=fraud_weight,   # Handle imbalance
+    max_depth=6,
+    min_child_samples=100,
+    reg_alpha=0.1,
+    reg_lambda=0.1,
+    random_state=42
+)
+
+model.fit(
+    X_train, y_train,
+    eval_set=[(X_val, y_val)],
+    eval_metric=&quot;auc&quot;,
+    callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)]
+)
+</code></pre>
+<hr />
+<h2 id="real-time-vs-batch-scoring">Real-Time vs Batch Scoring</h2>
+<h3 id="real-time-scoring-primary-path">Real-Time Scoring (Primary Path)</h3>
+<pre><code>Transaction Event → Kafka → Feature Service → ML Model → Decision
+         ↓                        ↓
+   &lt; 100ms total         Online Feature Store (Redis)
+                         Latest velocity features
+</code></pre>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Feature retrieval: &lt; 20ms (Redis lookup)</li>
+<li>Model inference: &lt; 5ms (LightGBM on CPU)</li>
+<li>Total end-to-end: &lt; 100ms (SLA)</li>
+</ul>
+<h3 id="batch-scoring-supplementary">Batch Scoring (Supplementary)</h3>
+<p>Used for:</p>
+<ul>
+<li>Historical analysis of past transactions</li>
+<li>Model training data preparation</li>
+<li>Backdating fraud labels when chargebacks arrive (delayed feedback)</li>
+<li>Generating risk scores for inactive accounts</li>
+</ul>
+<pre><code>S3 Transaction Files → Spark Job → Feature Join → Model Scoring → Risk Database
+(daily batch)        (hourly)     (warehouse)    (millions/hr)   (for analytics)
+</code></pre>
+<hr />
+<h2 id="handling-class-imbalance">Handling Class Imbalance</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Implementation</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Class weights</td>
+<td><code>scale_pos_weight=999</code></td>
+<td>Most important, built-in</td>
+</tr>
+<tr>
+<td>Threshold tuning</td>
+<td>Set P &gt; 0.5 based on cost-benefit</td>
+<td>Tune on validation set</td>
+</tr>
+<tr>
+<td>SMOTE</td>
+<td>Oversample minority class</td>
+<td>Use carefully: may generate unrealistic fraud</td>
+</tr>
+<tr>
+<td>Undersampling</td>
+<td>Downsample legitimate transactions</td>
+<td>Risk losing signal</td>
+</tr>
+<tr>
+<td>Cost-sensitive learning</td>
+<td>Weight misclassification by fraud amount</td>
+<td>Custom loss function</td>
+</tr>
+<tr>
+<td>Stratified splitting</td>
+<td>Ensure fraud rate consistent across folds</td>
+<td>Critical for cross-validation</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Practical recommendation:</strong> Use <code>scale_pos_weight</code> + careful threshold tuning. Avoid SMOTE: synthetic fraud patterns may not reflect real fraud behavior. Note that heavy class weights inflate predicted probabilities, so calibrate the scores (Platt or isotonic on unweighted validation data) before treating thresholds like P &gt; 0.9 as probabilities.</p>
+<hr />
+<h2 id="evaluation-metrics">Evaluation Metrics</h2>
+<h3 id="why-not-accuracy">Why Not Accuracy?</h3>
+<p>With 0.1% fraud rate, a model predicting &quot;no fraud&quot; for everything achieves 99.9% accuracy but catches zero fraud. Useless.</p>
+<h3 id="primary-metrics">Primary Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Target</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recall@FPR0.5%</strong></td>
+<td>Fraud caught at 0.5% false positives</td>
+<td>&gt; 80%</td>
+<td>Maximize catch rate at acceptable customer friction</td>
+</tr>
+<tr>
+<td><strong>Fraud Dollar Recall</strong></td>
+<td>Fraud $ caught / Total fraud $</td>
+<td>&gt; 85%</td>
+<td>High-value fraud disproportionately important</td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>TP / (TP + FP)</td>
+<td>&gt; 30% at review threshold</td>
+<td>Review queue capacity</td>
+</tr>
+<tr>
+<td><strong>AUC-ROC</strong></td>
+<td>Area under ROC curve</td>
+<td>&gt; 0.97</td>
+<td>Model discrimination ability</td>
+</tr>
+<tr>
+<td><strong>AUC-PR</strong></td>
+<td>Area under Precision-Recall</td>
+<td>&gt; 0.50</td>
+<td>Better for imbalanced data</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="business-metrics">Business Metrics</h3>
+<pre><code>Financial metrics:
+- Fraud loss prevented ($)
+- False positive customer impact (declined legitimate transactions)
+- Review queue cost (analyst hours)
+- Cost per fraud case reviewed
+
+Operational metrics:
+- Model latency (p99)
+- Model availability
+- False alert rate for high-value merchants
+</code></pre>
+<hr />
+<h2 id="production-architecture">Production Architecture</h2>
+<pre><code>                        FRAUD DETECTION SYSTEM
+═══════════════════════════════════════════════════════════════════════
+
+  Payment API        Feature Store              ML Service
+  ─────────────      ──────────────             ─────────────
+  POST /authorize  ──→  Redis Online Store  ──→  LightGBM Model
+       │               (velocity features)       │
+       │               ──────────────            │
+       │             User Profile Service         │
+       │               (account age,              │
+       │                history)                  │
+       │                                          │
+       ↓                                          ↓
+   Transaction                               Risk Score (0-1)
+   Event → Kafka                                  │
+       │                                          ↓
+       │                               Decision Engine
+       │                               ├── Rules: Block/Allow
+       │                               ├── P &gt; 0.9: Decline
+       │                               ├── 0.5-0.9: Review
+       │                               └── P &lt; 0.5: Approve
+       │                                          │
+       ↓                                          ↓
+  Offline Store (S3)              ─→  Case Management System
+  Training Data                      (Human Review Queue)
+  Labels from Chargebacks
+
+═══════════════════════════════════════════════════════════════════════
+
+Offline Training Pipeline (Daily/Weekly):
+  S3 Transactions → Spark Feature Engineering → Training Dataset
+                 → LightGBM Training (MLflow tracking)
+                 → Model Evaluation (compare vs champion)
+                 → Deploy if better → Canary (5% traffic)
+                 → Full rollout if metrics OK
+</code></pre>
+<h3 id="infrastructure">Infrastructure</h3>
+<pre><code class="language-yaml">services:
+  ml-service:
+    replicas: 20           # Auto-scale to 50 under load
+    resources:
+      cpu: &quot;4&quot;
+      memory: &quot;8Gi&quot;
+    model: lgb-fraud-v12   # Load model into memory at startup
+
+  feature-service:
+    replicas: 10
+    redis:
+      cluster: true
+      nodes: 6
+      memory: &quot;50Gi&quot;       # Stores 10M user velocity features
+
+  kafka:
+    partitions: 100        # High throughput
+    replication: 3
+    retention: &quot;7d&quot;
+</code></pre>
+<hr />
+<h2 id="monitoring-and-retraining-strategy">Monitoring and Retraining Strategy</h2>
+<h3 id="what-to-monitor">What to Monitor</h3>
+<pre><code>Real-time dashboards (refresh every 5 minutes):
+├── Alert rate (% transactions declined)
+├── Auto-decline rate
+├── Review queue length
+├── Model latency (p50, p95, p99)
+└── Feature compute failures
+
+Daily reports:
+├── Fraud detection rate (when chargebacks arrive ~30 days later)
+├── False positive rate (from user feedback)
+├── Feature drift (PSI on top features)
+├── Score distribution shift
+└── New fraud patterns identified by analysts
+
+Alerts:
+├── Alert rate spikes &gt; 2x baseline → possible fraud attack or model bug
+├── Alert rate drops &gt; 50% → possible model degradation
+├── Latency p99 &gt; 150ms → scaling issue
+└── Kafka consumer lag &gt; 10K → processing bottleneck
+</code></pre>
+<h3 id="retraining-strategy">Retraining Strategy</h3>
+<p><strong>Trigger conditions:</strong></p>
+<ol>
+<li>Fraud detection rate drops &gt; 5% (weekly measurement)</li>
+<li>PSI &gt; 0.25 on top 10 features (monthly)</li>
+<li>New fraud pattern identified by analysts</li>
+<li>Scheduled monthly retraining (safety net)</li>
+</ol>
+<p><strong>Training data strategy:</strong></p>
+<pre><code>Training window: Rolling 90 days
+├── Include recent fraud confirmed via chargebacks (30-60 day lag)
+├── Balance: keep the natural fraud rate and use class weights, or downsample
+│   legitimate transactions (e.g. to ~2% fraud) and correct scores before thresholding
+├── Temporal split: train on oldest 80%, validate on most recent 20%
+└── Never shuffle: time ordering is critical (prevents leakage)
+</code></pre>
+<p><strong>Deployment process:</strong></p>
+<pre><code>1. Train new model on recent data
+2. Backtest on historical holdout period
+3. Shadow mode: run new model alongside production (no impact)
+4. Canary: 5% traffic → new model (monitor for 48 hours)
+5. Ramp: 20% → 50% → 100% (if metrics stable)
+6. Rollback available instantly via feature flag
+</code></pre>
+<hr />
+<h2 id="key-interview-points">Key Interview Points</h2>
+<ol>
+<li>
+<p><strong>Why gradient boosting over deep learning?</strong> Gradient boosting trains faster, has lower latency inference, is more interpretable (SHAP), and performs better on tabular data with engineered features.</p>
+</li>
+<li>
+<p><strong>How do you handle the label delay problem?</strong> Fraud is only confirmed when chargebacks arrive (30-60 days later). Solution: train on data where labels are confirmed; accept that recent data cannot be used for training until labels arrive.</p>
+</li>
+<li>
+<p><strong>How do you prevent data leakage?</strong> Use temporal splits (train on past, test on future). Use point-in-time correct feature values. Never include information available only after the transaction.</p>
+</li>
+<li>
+<p><strong>How would you scale to 10x traffic?</strong> Horizontal scaling of ML service pods, scale Redis cluster, increase Kafka partitions, consider moving to online feature computation with lower latency.</p>
+</li>
+<li>
+<p><strong>How do you handle adversarial fraud?</strong> Fraudsters adapt. Monitor distribution shifts, use anomaly detection layers on top of the model, use behavioral analytics, and include analyst feedback loops for emerging patterns.</p>
+</li>
+</ol>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="llm_assistant_system.html"><small>Previous</small>LLM Assistant System</a><a rel="next" class="next" href="ads_ctr_prediction.html"><small>Next</small>Ads CTR Prediction</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/fraud_detection.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

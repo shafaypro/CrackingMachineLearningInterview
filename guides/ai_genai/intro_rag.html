@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG: Retrieval-Augmented Generation Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="RAG (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="RAG: Retrieval-Augmented Generation Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="RAG (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RAG: Retrieval-Augmented Generation Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="RAG (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "RAG: Retrieval-Augmented Generation",
+   "description": "RAG (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Intro to RAG",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_rag.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Intro to RAG</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_rag.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="rag-retrieval-augmented-generation">RAG: Retrieval-Augmented Generation</h1>
+<p><strong>RAG</strong> (Retrieval-Augmented Generation) is the technique of enhancing LLM responses by retrieving relevant documents from a knowledge base and including them in the prompt. It's the primary way to give LLMs access to private, up-to-date, or domain-specific knowledge.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-rag">What is RAG?</a></li>
+<li><a href="#rag-pipeline-architecture">RAG Pipeline Architecture</a></li>
+<li><a href="#indexing-offline">Indexing (Offline)</a></li>
+<li><a href="#retrieval-online">Retrieval (Online)</a></li>
+<li><a href="#generation">Generation</a></li>
+<li><a href="#advanced-rag-techniques">Advanced RAG Techniques</a></li>
+<li><a href="#agentic-rag">Agentic RAG</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#end-to-end-example">End-to-End Example</a></li>
+<li><a href="#rag-in-2026">RAG in 2026</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="what-is-rag">What is RAG?</h2>
+<h3 id="the-problem-rag-solves">The Problem RAG Solves</h3>
+<p>LLMs have limitations:</p>
+<ul>
+<li><strong>Knowledge cutoff</strong>: don't know recent events</li>
+<li><strong>No private data</strong>: can't access your internal docs</li>
+<li><strong>Hallucination</strong>: may make up facts confidently</li>
+<li><strong>Context limits</strong>: can't fit millions of docs in one prompt</li>
+</ul>
+<p>RAG solves all of these by <strong>retrieving relevant documents at query time</strong> and adding them to the prompt.</p>
+<pre><code>Without RAG:
+&quot;What's our Q4 revenue?&quot; → LLM: &quot;I don't have access to your financial data.&quot;
+
+With RAG:
+&quot;What's our Q4 revenue?&quot;
+→ Search financial_reports/ → find Q4_2025_report.pdf
+→ Extract relevant section → add to prompt
+→ LLM: &quot;Based on your Q4 2025 report: $4.2M, up 23% YoY&quot;
+</code></pre>
+<h3 id="rag-vs-fine-tuning">RAG vs Fine-tuning</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Use For</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RAG</strong></td>
+<td>Private/changing knowledge</td>
+<td>Easy to update, transparent</td>
+<td>Retrieval latency, depends on retrieval quality</td>
+</tr>
+<tr>
+<td><strong>Fine-tuning</strong></td>
+<td>Style, format, domain skills</td>
+<td>Faster inference, baked-in knowledge</td>
+<td>Expensive to update, knowledge can fade</td>
+</tr>
+<tr>
+<td><strong>Both</strong></td>
+<td>Best of both worlds</td>
+<td>High quality + current knowledge</td>
+<td>Complex, expensive</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="rag-pipeline-architecture">RAG Pipeline Architecture</h2>
+<pre><code>INDEXING (offline)                    RETRIEVAL (online)
+─────────────────────────────         ──────────────────────────────────────
+
+Documents                             User Query
+    │                                     │
+    ▼                                     ▼
+Load &amp; Parse                         Embed Query
+    │                                     │
+    ▼                                     ▼
+Chunk                              Vector Search ──────────────────────┐
+    │                                     │                             │
+    ▼                                     ▼                             │
+Embed (text → vector)            Top-K Documents                       │
+    │                                     │                             │
+    ▼                                     ▼                             ▼
+Store in Vector DB             [Rerank] → Context Building → LLM → Answer
+</code></pre>
+<hr />
+<h2 id="indexing-offline">Indexing (Offline)</h2>
+<h3 id="step-1-load-documents">Step 1: Load Documents</h3>
+<pre><code class="language-python">from pathlib import Path
+import PyPDF2
+import docx
+
+def load_document(path: str) -&gt; str:
+    path = Path(path)
+
+    if path.suffix == &quot;.pdf&quot;:
+        reader = PyPDF2.PdfReader(path)
+        return &quot;\n&quot;.join(page.extract_text() for page in reader.pages)
+
+    elif path.suffix in [&quot;.docx&quot;, &quot;.doc&quot;]:
+        doc = docx.Document(path)
+        return &quot;\n&quot;.join(p.text for p in doc.paragraphs)
+
+    elif path.suffix == &quot;.md&quot;:
+        return path.read_text()
+
+    elif path.suffix == &quot;.txt&quot;:
+        return path.read_text()
+
+    raise ValueError(f&quot;Unsupported format: {path.suffix}&quot;)
+
+# LangChain loaders (handles 50+ formats)
+from langchain_community.document_loaders import (
+    PyPDFLoader, WebBaseLoader, GitLoader,
+    ConfluenceLoader, NotionDirectoryLoader
+)
+</code></pre>
+<h3 id="step-2-chunking">Step 2: Chunking</h3>
+<p>The key insight: <strong>chunk size is a trade-off</strong>. Small chunks are more precise, large chunks have more context.</p>
+<pre><code class="language-python">from langchain_text_splitters import (
+    RecursiveCharacterTextSplitter,
+    MarkdownHeaderTextSplitter,
+    SentenceTransformersTokenTextSplitter,
+)
+
+# Recursive character splitter (most common)
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,       # characters per chunk
+    chunk_overlap=200,     # overlap to preserve context across chunks
+    separators=[&quot;\n\n&quot;, &quot;\n&quot;, &quot;. &quot;, &quot; &quot;, &quot;&quot;],
+)
+chunks = splitter.split_text(document_text)
+
+# Semantic chunking (splits at semantic boundaries)
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings
+semantic_splitter = SemanticChunker(OpenAIEmbeddings())
+chunks = semantic_splitter.split_text(document_text)
+
+# Markdown-aware chunking
+md_splitter = MarkdownHeaderTextSplitter(
+    headers_to_split_on=[
+        (&quot;#&quot;, &quot;section&quot;),
+        (&quot;##&quot;, &quot;subsection&quot;),
+        (&quot;###&quot;, &quot;subsubsection&quot;),
+    ]
+)
+md_chunks = md_splitter.split_text(markdown_text)
+</code></pre>
+<h3 id="step-3-embedding">Step 3: Embedding</h3>
+<p>Embeddings convert text into vectors for similarity search.</p>
+<pre><code class="language-python">from anthropic import Anthropic
+import numpy as np
+
+# Voyage AI (Anthropic's embedding models)
+import voyageai
+voyage = voyageai.Client()
+
+def embed_texts(texts: list[str]) -&gt; list[list[float]]:
+    result = voyage.embed(
+        texts,
+        model=&quot;voyage-3&quot;,           # voyage-3, voyage-code-3, voyage-finance-2
+        input_type=&quot;document&quot;,      # &quot;document&quot; for indexing, &quot;query&quot; for search
+    )
+    return result.embeddings
+
+# OpenAI embeddings
+from openai import OpenAI
+openai_client = OpenAI()
+
+def embed_openai(texts: list[str]) -&gt; list[list[float]]:
+    response = openai_client.embeddings.create(
+        model=&quot;text-embedding-3-large&quot;,
+        input=texts
+    )
+    return [e.embedding for e in response.data]
+
+# Sentence Transformers (local, free)
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer(&quot;all-MiniLM-L6-v2&quot;)
+embeddings = model.encode(texts)
+</code></pre>
+<h3 id="step-4-store-in-vector-db">Step 4: Store in Vector DB</h3>
+<pre><code class="language-python">import chromadb
+from chromadb.utils import embedding_functions
+
+# ChromaDB (local development)
+client = chromadb.PersistentClient(path=&quot;./chroma_db&quot;)
+collection = client.get_or_create_collection(
+    name=&quot;documents&quot;,
+    metadata={&quot;hnsw:space&quot;: &quot;cosine&quot;}
+)
+
+# Add documents
+collection.add(
+    documents=chunks,
+    embeddings=embed_texts(chunks),
+    ids=[f&quot;chunk_{i}&quot; for i in range(len(chunks))],
+    metadatas=[{&quot;source&quot;: &quot;report.pdf&quot;, &quot;page&quot;: i} for i in range(len(chunks))]
+)
+</code></pre>
+<hr />
+<h2 id="retrieval-online">Retrieval (Online)</h2>
+<h3 id="basic-vector-search">Basic Vector Search</h3>
+<pre><code class="language-python">def retrieve(query: str, collection, n_results: int = 5) -&gt; list[dict]:
+    query_embedding = embed_texts([query])[0]
+
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=n_results,
+        include=[&quot;documents&quot;, &quot;metadatas&quot;, &quot;distances&quot;]
+    )
+
+    return [
+        {
+            &quot;text&quot;: doc,
+            &quot;metadata&quot;: meta,
+            &quot;score&quot;: 1 - dist  # cosine distance → similarity
+        }
+        for doc, meta, dist in zip(
+            results[&quot;documents&quot;][0],
+            results[&quot;metadatas&quot;][0],
+            results[&quot;distances&quot;][0]
+        )
+    ]
+</code></pre>
+<h3 id="hybrid-search-bm25--vector">Hybrid Search (BM25 + Vector)</h3>
+<p>Best of both worlds: keyword precision + semantic understanding.</p>
+<pre><code class="language-python">from rank_bm25 import BM25Okapi
+
+class HybridSearcher:
+    def __init__(self, documents: list[str]):
+        self.documents = documents
+        self.embeddings = embed_texts(documents)
+
+        # BM25 (keyword)
+        tokenized = [doc.split() for doc in documents]
+        self.bm25 = BM25Okapi(tokenized)
+
+    def search(self, query: str, k: int = 5, alpha: float = 0.5) -&gt; list[dict]:
+        # BM25 scores
+        bm25_scores = self.bm25.get_scores(query.split())
+
+        # Vector similarity scores
+        q_emb = embed_texts([query])[0]
+        vec_scores = np.dot(self.embeddings, q_emb)
+
+        # Normalize and combine
+        bm25_norm = (bm25_scores - bm25_scores.min()) / (bm25_scores.max() + 1e-8)
+        vec_norm = (vec_scores - vec_scores.min()) / (vec_scores.max() + 1e-8)
+        combined = alpha * vec_norm + (1 - alpha) * bm25_norm
+
+        # Return top-k
+        top_k = np.argsort(combined)[::-1][:k]
+        return [{&quot;text&quot;: self.documents[i], &quot;score&quot;: combined[i]} for i in top_k]
+</code></pre>
+<h3 id="reranking">Reranking</h3>
+<p>After initial retrieval, use a cross-encoder to rerank for better precision.</p>
+<pre><code class="language-python">from sentence_transformers import CrossEncoder
+
+reranker = CrossEncoder(&quot;cross-encoder/ms-marco-MiniLM-L-6-v2&quot;)
+
+def rerank(query: str, candidates: list[str], top_k: int = 3) -&gt; list[str]:
+    pairs = [(query, doc) for doc in candidates]
+    scores = reranker.predict(pairs)
+    ranked = sorted(zip(scores, candidates), reverse=True)
+    return [doc for _, doc in ranked[:top_k]]
+</code></pre>
+<hr />
+<h2 id="generation">Generation</h2>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+def rag_query(user_question: str, collection, n_docs: int = 5) -&gt; str:
+    # 1. Retrieve
+    relevant_docs = retrieve(user_question, collection, n_docs)
+
+    # 2. Build context
+    context = &quot;\n\n---\n\n&quot;.join([
+        f&quot;Source: {doc['metadata'].get('source', 'unknown')}\n{doc['text']}&quot;
+        for doc in relevant_docs
+    ])
+
+    # 3. Generate
+    response = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=2048,
+        system=&quot;&quot;&quot;You are a helpful assistant that answers questions based on provided documents.
+
+Rules:
+- Answer based ONLY on the provided context
+- If the answer isn't in the context, say &quot;I don't have information about that in the provided documents&quot;
+- Cite sources when possible
+- Be concise and accurate&quot;&quot;&quot;,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;&quot;&quot;Context documents:
+
+{context}
+
+---
+
+Question: {user_question}&quot;&quot;&quot;
+        }]
+    )
+
+    return next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+answer = rag_query(&quot;What was our revenue in Q4 2025?&quot;, collection)
+print(answer)
+</code></pre>
+<hr />
+<h2 id="advanced-rag-techniques">Advanced RAG Techniques</h2>
+<h3 id="query-rewriting">Query Rewriting</h3>
+<pre><code class="language-python">def rewrite_query(original_query: str) -&gt; list[str]:
+    &quot;&quot;&quot;Generate multiple search queries for better recall.&quot;&quot;&quot;
+    response = client.messages.create(
+        model=&quot;claude-haiku-4-5-20251001&quot;,
+        max_tokens=200,
+        system=&quot;Generate 3 different search queries for the given question. Return as JSON array.&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: original_query}]
+    )
+    import json
+    return json.loads(next(b.text for b in response.content if b.type == &quot;text&quot;))
+
+# Search with all rewritten queries, deduplicate results
+queries = rewrite_query(&quot;What's our churn rate?&quot;)
+# → [&quot;customer churn rate&quot;, &quot;subscriber cancellation percentage&quot;, &quot;customer retention metrics&quot;]
+</code></pre>
+<h3 id="hyde-hypothetical-document-embeddings">HyDE (Hypothetical Document Embeddings)</h3>
+<pre><code class="language-python">def hyde_search(question: str, collection) -&gt; list[dict]:
+    &quot;&quot;&quot;Generate a hypothetical answer, embed it, use that for retrieval.&quot;&quot;&quot;
+
+    # Generate hypothetical answer
+    hyp_response = client.messages.create(
+        model=&quot;claude-haiku-4-5-20251001&quot;,
+        max_tokens=300,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;Write a paragraph that answers: {question}\n(Be concise, doesn't need to be factual)&quot;
+        }]
+    )
+    hypothetical_answer = next(b.text for b in hyp_response.content if b.type == &quot;text&quot;)
+
+    # Use the hypothetical answer for retrieval (better semantic match)
+    return retrieve(hypothetical_answer, collection)
+</code></pre>
+<h3 id="contextual-compression">Contextual Compression</h3>
+<pre><code class="language-python">def compress_context(question: str, raw_context: str) -&gt; str:
+    &quot;&quot;&quot;Extract only the relevant parts of retrieved chunks.&quot;&quot;&quot;
+    response = client.messages.create(
+        model=&quot;claude-haiku-4-5-20251001&quot;,
+        max_tokens=500,
+        system=&quot;Extract only the parts of the document relevant to the question. Be concise.&quot;,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;Question: {question}\n\nDocument:\n{raw_context}&quot;
+        }]
+    )
+    return next(b.text for b in response.content if b.type == &quot;text&quot;)
+</code></pre>
+<hr />
+<h2 id="agentic-rag">Agentic RAG</h2>
+<p>In 2026, RAG has evolved beyond simple retrieval to <strong>agentic RAG</strong> where the LLM decides when and how to retrieve.</p>
+<pre><code class="language-python"># Tools for agentic RAG
+rag_tools = [
+    {
+        &quot;name&quot;: &quot;search_knowledge_base&quot;,
+        &quot;description&quot;: &quot;Search the internal knowledge base for relevant information&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;query&quot;: {&quot;type&quot;: &quot;string&quot;},
+                &quot;filters&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                        &quot;date_after&quot;: {&quot;type&quot;: &quot;string&quot;},
+                        &quot;department&quot;: {&quot;type&quot;: &quot;string&quot;},
+                        &quot;doc_type&quot;: {&quot;type&quot;: &quot;string&quot;}
+                    }
+                }
+            },
+            &quot;required&quot;: [&quot;query&quot;]
+        }
+    },
+    {
+        &quot;name&quot;: &quot;search_web&quot;,
+        &quot;description&quot;: &quot;Search the web for current information&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {&quot;query&quot;: {&quot;type&quot;: &quot;string&quot;}},
+            &quot;required&quot;: [&quot;query&quot;]
+        }
+    }
+]
+
+# Agent can choose to search, re-search with better query, or combine sources
+</code></pre>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<p>Evaluating a RAG system requires assessing both the <strong>retrieval</strong> and <strong>generation</strong> components separately, then the end-to-end pipeline. This is the most overlooked part of RAG and the primary reason RAG systems fail in production.</p>
+<h3 id="rag-evaluation-framework">RAG Evaluation Framework</h3>
+<pre><code>                    ┌─────────────────────────────────────────┐
+                    │           RAG Evaluation                 │
+                    └─────────────────────────────────────────┘
+                          │                         │
+               ┌──────────▼──────────┐    ┌────────▼────────────┐
+               │   Retrieval Quality  │    │  Generation Quality  │
+               └──────────────────────┘    └─────────────────────┘
+               │ - Context Precision  │    │ - Faithfulness       │
+               │ - Context Recall     │    │ - Answer Relevancy   │
+               │ - MRR / NDCG         │    │ - Correctness        │
+               │ - Hit Rate           │    │ - Hallucination Rate │
+               └──────────────────────┘    └─────────────────────┘
+</code></pre>
+<h3 id="ragas-metrics-most-common">RAGAS Metrics (Most Common)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What It Measures</th>
+<th>Formula / Approach</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Faithfulness</strong></td>
+<td>Is the answer grounded in retrieved context? No hallucinations?</td>
+<td>LLM judges if each claim in the answer is supported by context</td>
+<td>&gt; 0.9</td>
+</tr>
+<tr>
+<td><strong>Answer Relevancy</strong></td>
+<td>Does the answer actually address the question?</td>
+<td>LLM generates back-questions from answer, measures similarity to original</td>
+<td>&gt; 0.85</td>
+</tr>
+<tr>
+<td><strong>Context Precision</strong></td>
+<td>What fraction of retrieved context is actually relevant?</td>
+<td>Ground-truth verified: relevant chunks / total retrieved chunks</td>
+<td>&gt; 0.8</td>
+</tr>
+<tr>
+<td><strong>Context Recall</strong></td>
+<td>Were all ground-truth relevant docs retrieved?</td>
+<td>Ground-truth verified: retrieved relevant / all relevant</td>
+<td>&gt; 0.8</td>
+</tr>
+<tr>
+<td><strong>Answer Correctness</strong></td>
+<td>Is the answer factually correct?</td>
+<td>F1 between answer and ground truth (factual + semantic)</td>
+<td>Task-specific</td>
+</tr>
+<tr>
+<td><strong>Context Entity Recall</strong></td>
+<td>Are all key entities from ground truth present in context?</td>
+<td>Entity overlap between context and reference</td>
+<td>&gt; 0.7</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from ragas import evaluate
+from ragas.metrics import (
+    faithfulness,
+    answer_relevancy,
+    context_precision,
+    context_recall,
+    answer_correctness,
+)
+from datasets import Dataset
+
+# Evaluation dataset format
+data = {
+    &quot;question&quot;: [
+        &quot;What is our Q4 revenue?&quot;,
+        &quot;Who is the CEO of the company?&quot;,
+    ],
+    &quot;answer&quot;: [
+        &quot;Q4 revenue was $4.2M, up 23% YoY.&quot;,
+        &quot;Jane Smith has been CEO since 2023.&quot;,
+    ],
+    &quot;contexts&quot;: [
+        [&quot;From Q4 2025 report: Total revenue reached $4.2M, a 23% increase year-over-year.&quot;],
+        [&quot;Leadership page: Jane Smith joined as CEO in January 2023.&quot;],
+    ],
+    &quot;ground_truth&quot;: [
+        &quot;Q4 2025 revenue was $4.2M, 23% YoY growth.&quot;,
+        &quot;Jane Smith is the CEO.&quot;,
+    ],
+}
+
+dataset = Dataset.from_dict(data)
+
+results = evaluate(
+    dataset,
+    metrics=[
+        faithfulness,
+        answer_relevancy,
+        context_precision,
+        context_recall,
+        answer_correctness,
+    ],
+)
+print(results)
+# Output: {'faithfulness': 0.92, 'answer_relevancy': 0.88, ...}
+</code></pre>
+<h3 id="retrieval-only-evaluation">Retrieval-Only Evaluation</h3>
+<pre><code class="language-python"># Evaluate just the retrieval component using standard IR metrics
+def evaluate_retrieval(questions, relevant_doc_ids, retrieved_doc_ids_list, k=5):
+    &quot;&quot;&quot;
+    questions: list of questions
+    relevant_doc_ids: dict of {question: [relevant_doc_id, ...]}
+    retrieved_doc_ids_list: list of [retrieved_doc_id, ...] per question
+    &quot;&quot;&quot;
+    hit_rate = 0
+    mrr_total = 0
+    precision_total = 0
+
+    for q, retrieved in zip(questions, retrieved_doc_ids_list):
+        relevant = set(relevant_doc_ids[q])
+        retrieved_k = retrieved[:k]
+
+        # Hit Rate@k: Did at least one relevant doc appear in top-k?
+        hit = any(doc_id in relevant for doc_id in retrieved_k)
+        hit_rate += int(hit)
+
+        # MRR (Mean Reciprocal Rank): Rank of first relevant result
+        for rank, doc_id in enumerate(retrieved_k, 1):
+            if doc_id in relevant:
+                mrr_total += 1 / rank
+                break
+
+        # Precision@k: fraction of retrieved that are relevant
+        relevant_retrieved = sum(1 for d in retrieved_k if d in relevant)
+        precision_total += relevant_retrieved / k
+
+    n = len(questions)
+    return {
+        f&quot;hit_rate@{k}&quot;: hit_rate / n,
+        &quot;mrr&quot;: mrr_total / n,
+        f&quot;precision@{k}&quot;: precision_total / n,
+    }
+</code></pre>
+<h3 id="building-an-evaluation-dataset">Building an Evaluation Dataset</h3>
+<pre><code class="language-python"># Option 1: LLM-generated synthetic QA pairs (RAGAS TestsetGenerator)
+# RAGAS 0.2+ API (the 0.1 `ragas.testset.generator` / `evolutions` modules were removed).
+# The library changes quickly: check the docs for the version you pin.
+from ragas.testset import TestsetGenerator
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
+from langchain_anthropic import ChatAnthropic
+from langchain_community.document_loaders import DirectoryLoader
+
+loader = DirectoryLoader(&quot;./docs&quot;, glob=&quot;**/*.md&quot;)
+documents = loader.load()
+
+generator = TestsetGenerator(
+    llm=LangchainLLMWrapper(ChatAnthropic(model=&quot;claude-sonnet-4-6&quot;)),
+    embedding_model=LangchainEmbeddingsWrapper(embeddings),  # any LangChain embeddings
+)
+
+testset = generator.generate_with_langchain_docs(documents, testset_size=50)
+testset.to_pandas().to_csv(&quot;rag_eval_dataset.csv&quot;, index=False)
+</code></pre>
+<h3 id="trulens-evaluation-alternative-to-ragas">TruLens Evaluation (Alternative to RAGAS)</h3>
+<blockquote>
+<p>The snippet below uses the legacy <code>trulens_eval</code> package. TruLens 1.x renamed it to <code>trulens</code> (split into <code>trulens-core</code>, <code>trulens-apps-langchain</code>, and provider packages, with <code>TruSession</code> replacing <code>Tru</code>), so check current import paths before copying it. The feedback-function idea is unchanged.</p>
+</blockquote>
+<pre><code class="language-python">from trulens_eval import Tru, TruChain, Feedback
+from trulens_eval.feedback.provider import Anthropic as TruAnthropic
+
+tru = Tru()
+provider = TruAnthropic(model_engine=&quot;claude-sonnet-4-6&quot;)
+
+# Define feedback functions
+f_groundedness = (
+    Feedback(provider.groundedness_measure_with_cot_reasons, name=&quot;Groundedness&quot;)
+    .on(TruChain.Select.RecordCalls.retriever.get_relevant_documents.rets.page_content[:].collect())
+    .on_output()
+    .aggregate(provider.grounded_statements_aggregator)
+)
+
+f_qa_relevance = Feedback(provider.relevance, name=&quot;QA Relevance&quot;).on_input_output()
+
+tru_rag = TruChain(
+    rag_chain,
+    app_id=&quot;rag-v1&quot;,
+    feedbacks=[f_groundedness, f_qa_relevance]
+)
+
+# Run and view results
+with tru_rag as recording:
+    rag_chain.invoke(&quot;What is our Q4 revenue?&quot;)
+
+tru.get_leaderboard(app_ids=[&quot;rag-v1&quot;])
+</code></pre>
+<h3 id="continuous-evaluation-in-production">Continuous Evaluation in Production</h3>
+<pre><code class="language-python"># Sample a percentage of queries for automated evaluation
+import random
+
+class ProductionRAGMonitor:
+    def __init__(self, rag_system, eval_sample_rate=0.05):
+        self.rag = rag_system
+        self.sample_rate = eval_sample_rate
+        self.eval_buffer = []
+
+    def query(self, question: str) -&gt; str:
+        answer = self.rag.query(question)
+
+        # Sample for evaluation
+        if random.random() &lt; self.sample_rate:
+            self.eval_buffer.append({
+                &quot;question&quot;: question,
+                &quot;answer&quot;: answer,
+                &quot;contexts&quot;: self.rag.last_retrieved_contexts,
+                &quot;timestamp&quot;: datetime.now().isoformat()
+            })
+
+        return answer
+
+    def flush_evals(self):
+        &quot;&quot;&quot;Periodically run RAGAS on the buffer and log to monitoring system.&quot;&quot;&quot;
+        if len(self.eval_buffer) &gt;= 50:
+            results = evaluate(
+                Dataset.from_list(self.eval_buffer),
+                metrics=[faithfulness, answer_relevancy]
+            )
+            # Log to Datadog, Grafana, etc.
+            log_metrics(results)
+            self.eval_buffer.clear()
+</code></pre>
+<h3 id="evaluation-best-practices">Evaluation Best Practices</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Practice</th>
+<th>Why It Matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Separate retrieval and generation evals</strong></td>
+<td>Isolate where failures occur (bad retrieval vs bad generation)</td>
+</tr>
+<tr>
+<td><strong>Use ground-truth datasets for precision/recall</strong></td>
+<td>LLM-only metrics can miss factual correctness</td>
+</tr>
+<tr>
+<td><strong>Human eval for a sample</strong></td>
+<td>Automated metrics miss nuance; validate with human judges</td>
+</tr>
+<tr>
+<td><strong>A/B test retrieval strategies</strong></td>
+<td>Compare embedding models, chunk sizes, top-k values</td>
+</tr>
+<tr>
+<td><strong>Track metrics over time</strong></td>
+<td>Catch embedding drift and dataset staleness</td>
+</tr>
+<tr>
+<td><strong>Test adversarial queries</strong></td>
+<td>Off-topic, ambiguous, or unanswerable questions</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="end-to-end-example">End-to-End Example</h2>
+<pre><code class="language-python">import chromadb
+import anthropic
+import os
+from pathlib import Path
+
+client = anthropic.Anthropic()
+chroma_client = chromadb.PersistentClient(&quot;./rag_db&quot;)
+collection = chroma_client.get_or_create_collection(&quot;docs&quot;)
+
+class RAGSystem:
+    def __init__(self, docs_dir: str):
+        self.docs_dir = Path(docs_dir)
+        self._index_documents()
+
+    def _embed(self, texts: list[str]) -&gt; list[list[float]]:
+        import voyageai
+        voyage = voyageai.Client()
+        return voyage.embed(texts, model=&quot;voyage-3&quot;, input_type=&quot;document&quot;).embeddings
+
+    def _index_documents(self):
+        &quot;&quot;&quot;Load and index all documents.&quot;&quot;&quot;
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
+        splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150)
+
+        all_chunks = []
+        all_metadata = []
+
+        for file in self.docs_dir.glob(&quot;**/*.md&quot;):
+            text = file.read_text()
+            chunks = splitter.split_text(text)
+            all_chunks.extend(chunks)
+            all_metadata.extend([{&quot;source&quot;: str(file), &quot;type&quot;: &quot;markdown&quot;}] * len(chunks))
+
+        if all_chunks:
+            embeddings = self._embed(all_chunks)
+            collection.add(
+                documents=all_chunks,
+                embeddings=embeddings,
+                ids=[f&quot;doc_{i}&quot; for i in range(len(all_chunks))],
+                metadatas=all_metadata
+            )
+            print(f&quot;Indexed {len(all_chunks)} chunks from {self.docs_dir}&quot;)
+
+    def query(self, question: str) -&gt; str:
+        # Retrieve
+        q_emb = self._embed([question])[0]
+        results = collection.query(query_embeddings=[q_emb], n_results=5)
+        docs = results[&quot;documents&quot;][0]
+
+        # Generate
+        context = &quot;\n---\n&quot;.join(docs)
+        response = client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=1024,
+            system=&quot;Answer questions based on the provided context. Be concise and cite sources.&quot;,
+            messages=[{
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: f&quot;Context:\n{context}\n\nQuestion: {question}&quot;
+            }]
+        )
+        return next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+# Usage
+rag = RAGSystem(&quot;./docs&quot;)
+print(rag.query(&quot;How do I set up dbt incrementally?&quot;))
+</code></pre>
+<hr />
+<h2 id="rag-in-2026">RAG in 2026</h2>
+<h3 id="ecosystem">Ecosystem</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Voyage AI</strong></td>
+<td>Anthropic's embedding models (strong retrieval quality)</td>
+</tr>
+<tr>
+<td><strong>LangChain</strong></td>
+<td>RAG pipelines, document loaders, retrievers</td>
+</tr>
+<tr>
+<td><strong>LlamaIndex</strong></td>
+<td>Advanced RAG, knowledge graphs, query engines</td>
+</tr>
+<tr>
+<td><strong>RAGAS</strong></td>
+<td>RAG evaluation framework</td>
+</tr>
+<tr>
+<td><strong>Weaviate</strong></td>
+<td>Vector DB with built-in hybrid search</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td>Managed vector DB</td>
+</tr>
+<tr>
+<td><strong>pgvector</strong></td>
+<td>PostgreSQL extension for vectors</td>
+</tr>
+<tr>
+<td><strong>Chroma</strong></td>
+<td>Open-source, developer-friendly vector DB</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>Rust-based high-performance vector DB</td>
+</tr>
+<tr>
+<td><strong>Cohere Rerank</strong></td>
+<td>Widely used hosted reranking API</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="trends-in-2026">Trends in 2026</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trend</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Graph RAG</strong></td>
+<td>Build knowledge graphs from docs for better multi-hop reasoning</td>
+</tr>
+<tr>
+<td><strong>Multimodal RAG</strong></td>
+<td>Retrieve images, charts, tables alongside text</td>
+</tr>
+<tr>
+<td><strong>Streaming RAG</strong></td>
+<td>Stream context from DB as generation happens</td>
+</tr>
+<tr>
+<td><strong>Corrective RAG</strong></td>
+<td>Agent validates retrieved context relevance, retries if needed</td>
+</tr>
+<tr>
+<td><strong>Self-RAG</strong></td>
+<td>Model decides when to retrieve, what to retrieve, and validates answers</td>
+</tr>
+<tr>
+<td><strong>Long-context alternatives</strong></td>
+<td>For smaller corpora, just put everything in a long context window (up to 1M tokens on current frontier models), ideally with prompt caching</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_vector_databases.html">Vector Databases</a></td>
+<td>RAG depends on vector DBs for semantic retrieval</td>
+</tr>
+<tr>
+<td><a href="intro_llmops.html">LLMOps</a></td>
+<td>Monitoring, evaluation, and deployment of RAG pipelines</td>
+</tr>
+<tr>
+<td><a href="intro_agentic_ai.html">Agentic AI</a></td>
+<td>Agentic RAG extends retrieval into multi-step reasoning</td>
+</tr>
+<tr>
+<td><a href="intro_langchain.html">LangChain</a></td>
+<td>Primary framework for building RAG pipelines</td>
+</tr>
+<tr>
+<td><a href="intro_anthropic.html">Anthropic Overview</a></td>
+<td>Claude models as the generation backbone in RAG</td>
+</tr>
+<tr>
+<td><a href="../mlops/intro_mlflow.html">MLflow (MLOps)</a></td>
+<td>Experiment tracking for RAG evaluation runs</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_structured_outputs.html"><small>Previous</small>Structured Outputs</a><a rel="next" class="next" href="intro_rag_engineering.html"><small>Next</small>RAG Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_rag.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Evaluation and Metrics Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Choosing the wrong metric is the most expensive mistake in applied ML, and interviewers probe it constantly. A model with 99% accuracy on a 1% fraud rate…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_model_evaluation.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Evaluation and Metrics Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Choosing the wrong metric is the most expensive mistake in applied ML, and interviewers probe it constantly. A model with 99% accuracy on a 1% fraud rate…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_model_evaluation.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Evaluation and Metrics Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Choosing the wrong metric is the most expensive mistake in applied ML, and interviewers probe it constantly. A model with 99% accuracy on a 1% fraud rate…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Evaluation and Metrics",
+   "description": "Choosing the wrong metric is the most expensive mistake in applied ML, and interviewers probe it constantly. A model with 99% accuracy on a 1% fraud rate…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_model_evaluation.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Model Evaluation & Metrics",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_model_evaluation.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Model Evaluation &amp; Metrics</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_model_evaluation.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 9 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="model-evaluation-and-metrics">Model Evaluation and Metrics</h1>
+<p>Choosing the wrong metric is the most expensive mistake in applied ML, and interviewers probe it constantly. A model with 99% accuracy on a 1% fraud rate has learned nothing. This guide covers classification and regression metrics, ROC vs PR curves, probability calibration, threshold selection, and validation strategies that survive contact with production.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#the-confusion-matrix">The Confusion Matrix</a></li>
+<li><a href="#classification-metrics">Classification Metrics</a></li>
+<li><a href="#roc-auc-vs-pr-auc">ROC-AUC vs PR-AUC</a></li>
+<li><a href="#threshold-selection">Threshold Selection</a></li>
+<li><a href="#probability-calibration">Probability Calibration</a></li>
+<li><a href="#regression-metrics">Regression Metrics</a></li>
+<li><a href="#ranking-and-recommendation-metrics">Ranking and Recommendation Metrics</a></li>
+<li><a href="#cross-validation-strategies">Cross-Validation Strategies</a></li>
+<li><a href="#offline-vs-online-metrics">Offline vs Online Metrics</a></li>
+<li><a href="#metric-selection-cheat-sheet">Metric Selection Cheat Sheet</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="the-confusion-matrix">The Confusion Matrix</h2>
+<p>Every classification metric is a ratio of these four cells:</p>
+<pre><code>                  Predicted
+                Neg      Pos
+Actual  Neg  |  TN   |   FP   |   ← FP = false alarm (Type I error)
+        Pos  |  FN   |   TP   |   ← FN = miss (Type II error)
+</code></pre>
+<pre><code class="language-python">from sklearn.metrics import confusion_matrix, classification_report
+
+tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+print(classification_report(y_true, y_pred, digits=3))
+</code></pre>
+<p>Ask in every interview: <strong>what does a false positive cost, and what does a false negative cost?</strong> The answer determines the metric, and stating it unprompted is a strong signal.</p>
+<hr />
+<h2 id="classification-metrics">Classification Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Answers</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td><code>(TP+TN)/(TP+TN+FP+FN)</code></td>
+<td>Overall correctness</td>
+<td>Balanced classes, symmetric costs</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td><code>TP/(TP+FP)</code></td>
+<td>&quot;Of my positive calls, how many were right?&quot;</td>
+<td>False positives are costly</td>
+</tr>
+<tr>
+<td>Recall (Sensitivity, TPR)</td>
+<td><code>TP/(TP+FN)</code></td>
+<td>&quot;Of all real positives, how many did I catch?&quot;</td>
+<td>Misses are costly</td>
+</tr>
+<tr>
+<td>Specificity (TNR)</td>
+<td><code>TN/(TN+FP)</code></td>
+<td>&quot;Of all real negatives, how many did I clear?&quot;</td>
+<td>Screening; ROC's x-axis is FPR = 1 - specificity</td>
+</tr>
+<tr>
+<td>F1</td>
+<td><code>2PR/(P+R)</code></td>
+<td>Harmonic mean of P and R</td>
+<td>Need one number, imbalanced data</td>
+</tr>
+<tr>
+<td>Fβ</td>
+<td><code>(1+β²)PR/(β²P+R)</code></td>
+<td>Weighted P/R tradeoff</td>
+<td>β=2 favors recall, β=0.5 favors precision</td>
+</tr>
+<tr>
+<td>Balanced accuracy</td>
+<td><code>(TPR+TNR)/2</code></td>
+<td>Accuracy corrected for imbalance</td>
+<td>Imbalanced, both classes matter</td>
+</tr>
+<tr>
+<td>MCC</td>
+<td>correlation of predictions and labels</td>
+<td>Single balanced score in [-1, 1]</td>
+<td>Imbalanced, want one honest number</td>
+</tr>
+<tr>
+<td>Log loss</td>
+<td><code>-mean[y log p + (1-y) log(1-p)]</code></td>
+<td>Probability quality</td>
+<td>You need calibrated probabilities</td>
+</tr>
+<tr>
+<td>Brier score</td>
+<td><code>mean((p - y)²)</code></td>
+<td>Squared probability error</td>
+<td>Calibration + sharpness together</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why the harmonic mean in F1?</strong> It punishes imbalance between P and R. A model with P=1.0 and R=0.01 has arithmetic mean 0.505 but F1 = 0.0198: the harmonic mean refuses to reward a model that gets one number by destroying the other.</p>
+<p><strong>Macro vs micro vs weighted averaging</strong> (multiclass):</p>
+<ul>
+<li><strong>Macro</strong>: unweighted mean over classes: every class counts equally, so rare classes matter. Use when rare classes are important.</li>
+<li><strong>Micro</strong>: pool all TP/FP/FN, then compute: equals accuracy in single-label multiclass. Dominated by frequent classes.</li>
+<li><strong>Weighted</strong>: mean weighted by class support: a compromise, but hides rare-class failure.</li>
+</ul>
+<hr />
+<h2 id="roc-auc-vs-pr-auc">ROC-AUC vs PR-AUC</h2>
+<p>Both summarize a ranking across all thresholds, but they answer different questions.</p>
+<p><strong>ROC</strong> plots TPR vs FPR. <strong>ROC-AUC</strong> = probability that a random positive is ranked above a random negative. It is <strong>invariant to class balance</strong>, which is exactly its strength and its trap.</p>
+<p><strong>PR curve</strong> plots Precision vs Recall. <strong>PR-AUC (average precision)</strong> depends on prevalence and reflects what an operator actually experiences on an imbalanced problem.</p>
+<pre><code class="language-python">from sklearn.metrics import roc_auc_score, average_precision_score
+
+y_proba = model.predict_proba(X_val)[:, 1]
+print(f&quot;ROC-AUC: {roc_auc_score(y_val, y_proba):.4f}&quot;)
+print(f&quot;PR-AUC : {average_precision_score(y_val, y_proba):.4f}&quot;)
+print(f&quot;Baseline PR-AUC (prevalence): {y_val.mean():.4f}&quot;)
+</code></pre>
+<p>Always print the prevalence baseline. A PR-AUC of 0.30 is excellent at 1% prevalence and terrible at 40%.</p>
+<h3 id="the-worked-example-every-interviewer-wants">The worked example every interviewer wants</h3>
+<p>100,000 transactions, 100 are fraud (0.1%). A model flags 1,000 transactions and catches 90 frauds.</p>
+<ul>
+<li>Recall = 90/100 = <strong>90%</strong></li>
+<li>Precision = 90/1000 = <strong>9%</strong></li>
+<li>FPR = 910/99,900 = <strong>0.9%</strong> → ROC looks superb</li>
+<li>Accuracy = (100,000 - 910 - 10)/100,000 = 99.08%: <em>worse than predicting &quot;never fraud&quot;</em> (99.9%)</li>
+</ul>
+<p>This operating point sits at TPR 0.90, FPR 0.009, right in ROC's top-left corner, so ROC-AUC can look excellent because FPR is normalized by the huge negative class. PR-AUC honestly reports that 91% of the analyst's review queue is noise. <strong>On heavy imbalance, report PR-AUC; use ROC-AUC only as a secondary ranking check.</strong></p>
+<hr />
+<h2 id="threshold-selection">Threshold Selection</h2>
+<p>Models output scores; decisions need a cutoff. <code>0.5</code> is a default, not an answer.</p>
+<pre><code class="language-python">import numpy as np
+from sklearn.metrics import precision_recall_curve
+
+precision, recall, thresholds = precision_recall_curve(y_val, y_proba)
+
+# Option A: maximize F1
+f1 = 2 * precision * recall / (precision + recall + 1e-12)
+best_f1_threshold = thresholds[np.argmax(f1[:-1])]
+
+# Option B: highest recall subject to a precision floor the business set
+mask = precision[:-1] &gt;= 0.80
+best_recall_threshold = thresholds[mask][np.argmax(recall[:-1][mask])] if mask.any() else None
+
+# Option C: minimize expected cost, the most defensible in an interview
+COST_FN, COST_FP = 500, 10     # e.g. missed fraud vs wasted analyst review
+
+def expected_cost(threshold):
+    predicted = y_proba &gt;= threshold
+    false_negatives = ((~predicted) &amp; (y_val == 1)).sum()
+    false_positives = ((predicted) &amp; (y_val == 0)).sum()
+    return false_negatives * COST_FN + false_positives * COST_FP
+
+best_cost_threshold = thresholds[int(np.argmin([expected_cost(t) for t in thresholds]))]
+</code></pre>
+<p>Option C is the strongest answer: express the decision as expected cost, and the optimal threshold falls out of the cost ratio rather than a convention. Also account for <strong>capacity</strong>: if analysts can review 500 cases a day, the threshold is whatever produces 500 alerts, regardless of what F1 prefers.</p>
+<p>Tune the threshold on a <strong>validation</strong> set and report final numbers on a <strong>test</strong> set. Choosing the threshold on the test set is a subtle but real form of overfitting.</p>
+<hr />
+<h2 id="probability-calibration">Probability Calibration</h2>
+<p>A model is calibrated if, among predictions of 0.7, roughly 70% are positive. Ranking quality (AUC) and calibration are independent: a model can rank perfectly and still be systematically overconfident.</p>
+<pre><code class="language-python">from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.frozen import FrozenEstimator   # sklearn &gt;= 1.6; replaces the removed cv='prefit'
+from sklearn.metrics import brier_score_loss
+
+prob_true, prob_pred = calibration_curve(y_val, y_proba, n_bins=10, strategy='quantile')
+# Perfect calibration lies on y = x; plot and look at the deviation.
+
+calibrated = CalibratedClassifierCV(FrozenEstimator(model), method='isotonic')
+calibrated.fit(X_cal, y_cal)      # a held-out calibration set, not the training set
+print(f&quot;Brier before: {brier_score_loss(y_val, y_proba):.4f}&quot;)
+print(f&quot;Brier after : {brier_score_loss(y_val, calibrated.predict_proba(X_val)[:,1]):.4f}&quot;)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Shape assumed</th>
+<th>Data needed</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platt scaling</strong> (sigmoid)</td>
+<td>Sigmoid distortion</td>
+<td>Small (~hundreds)</td>
+<td>Good for SVMs and small calibration sets</td>
+</tr>
+<tr>
+<td><strong>Isotonic regression</strong></td>
+<td>Any monotonic</td>
+<td>Larger (~1000+)</td>
+<td>More flexible, overfits on small sets</td>
+</tr>
+<tr>
+<td><strong>Temperature scaling</strong></td>
+<td>Single scalar on logits</td>
+<td>Very small</td>
+<td>Standard for neural networks, preserves argmax</td>
+</tr>
+</tbody>
+</table></div>
+<p>Which models need calibration? SVMs do not output probabilities at all, and naive Bayes pushes scores toward 0 and 1 because of its independence assumption. AdaBoost-style boosting distorts scores into a sigmoid shape; gradient boosting trained with log loss is often reasonably calibrated but can drift with many trees or reweighting. Random Forests are compressed toward the middle (averaging pulls away from extremes). Logistic regression trained with log loss is usually close to calibrated already. Anything trained with class reweighting or on a resampled dataset is miscalibrated by design and must be corrected before its scores feed a downstream cost calculation.</p>
+<p>Calibration matters when the score is <strong>used as a number</strong>: expected-value decisions, pricing, ranking against a cost threshold, or feeding another model. If you only threshold once, ranking is enough.</p>
+<hr />
+<h2 id="regression-metrics">Regression Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Units</th>
+<th>Sensitivity to outliers</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAE</td>
+<td><code>mean|y - ŷ|</code></td>
+<td>Target units</td>
+<td>Low</td>
+<td>Outliers are noise; you want the median behavior</td>
+</tr>
+<tr>
+<td>MSE</td>
+<td><code>mean(y - ŷ)²</code></td>
+<td>Squared units</td>
+<td>High</td>
+<td>Large errors are disproportionately bad</td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td><code>√MSE</code></td>
+<td>Target units</td>
+<td>High</td>
+<td>Same as MSE but readable</td>
+</tr>
+<tr>
+<td>MAPE</td>
+<td><code>mean|y-ŷ|/|y|</code></td>
+<td>Percent</td>
+<td>Medium</td>
+<td>Comparing across scales: breaks near <code>y=0</code></td>
+</tr>
+<tr>
+<td>SMAPE</td>
+<td>symmetric variant</td>
+<td>Percent</td>
+<td>Medium</td>
+<td>MAPE with bounded blow-up</td>
+</tr>
+<tr>
+<td>R²</td>
+<td><code>1 - SSE/SST</code></td>
+<td>Unitless</td>
+<td>High</td>
+<td>Explaining variance vs the mean baseline</td>
+</tr>
+<tr>
+<td>Quantile / pinball loss</td>
+<td>asymmetric</td>
+<td>Target units</td>
+<td>Tunable</td>
+<td>Over- and under-prediction cost differently</td>
+</tr>
+<tr>
+<td>Huber</td>
+<td>quadratic then linear</td>
+<td>Target units</td>
+<td>Medium</td>
+<td>Want MSE's gradients with MAE's robustness</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two things worth saying out loud in an interview:</p>
+<ul>
+<li><strong>MAE optimizes the median, MSE optimizes the mean.</strong> If you train with MSE on a right-skewed target (revenue, latency), the model systematically over-predicts the typical case. That's a modeling choice, not a bug, but it should be deliberate.</li>
+<li><strong>R² can be negative</strong> (worse than predicting the mean) and never decreases on the training data when you add features (for least squares with an intercept), so use adjusted R² when comparing models with different feature counts. R² is also not comparable across datasets with different target variance.</li>
+</ul>
+<p>For skewed positive targets, training on <code>log1p(y)</code> and reporting RMSE in log space (RMSLE) penalizes under-prediction more than over-prediction and stops a few huge values from dominating the loss.</p>
+<hr />
+<h2 id="ranking-and-recommendation-metrics">Ranking and Recommendation Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it captures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precision@k</strong></td>
+<td>Fraction of the top-k that are relevant: matches a fixed-size UI slot</td>
+</tr>
+<tr>
+<td><strong>Recall@k</strong></td>
+<td>Fraction of all relevant items appearing in top-k: the standard retrieval metric</td>
+</tr>
+<tr>
+<td><strong>MRR</strong></td>
+<td><code>mean(1 / rank of first relevant)</code>: right for &quot;one correct answer&quot; tasks</td>
+</tr>
+<tr>
+<td><strong>MAP</strong></td>
+<td>Mean average precision: rewards relevant items ranked higher</td>
+</tr>
+<tr>
+<td><strong>NDCG@k</strong></td>
+<td>Discounted cumulative gain, normalized: handles graded relevance and position discount</td>
+</tr>
+<tr>
+<td><strong>Hit rate@k</strong></td>
+<td>Any relevant item in top-k: coarse but interpretable</td>
+</tr>
+</tbody>
+</table></div>
+<p>NDCG is the default for search and recommendation because it handles both <em>graded</em> relevance (a 4-star match beats a 2-star match) and <em>position discount</em> (rank 1 is worth more than rank 10):</p>
+<pre><code>DCG@k = Σ (2^rel_i - 1) / log₂(i + 1)      NDCG@k = DCG@k / IDCG@k
+</code></pre>
+<p>These same metrics apply to RAG retrieval evaluation: recall@k on the retriever is usually the first thing to measure when a RAG system gives wrong answers.</p>
+<hr />
+<h2 id="cross-validation-strategies">Cross-Validation Strategies</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>When</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>K-Fold</strong></td>
+<td>i.i.d. data, plenty of it</td>
+<td>Standard, low bias</td>
+</tr>
+<tr>
+<td><strong>Stratified K-Fold</strong></td>
+<td>Classification, especially imbalanced</td>
+<td>Preserves class ratio per fold</td>
+</tr>
+<tr>
+<td><strong>TimeSeriesSplit</strong></td>
+<td>Any temporal data</td>
+<td>Train always precedes validation</td>
+</tr>
+<tr>
+<td><strong>GroupKFold</strong></td>
+<td>Repeated entities (users, patients, sessions)</td>
+<td>Keeps a group entirely in one fold</td>
+</tr>
+<tr>
+<td><strong>StratifiedGroupKFold</strong></td>
+<td>Both of the above</td>
+<td>Rare in libraries, common in reality</td>
+</tr>
+<tr>
+<td><strong>Nested CV</strong></td>
+<td>Reporting a performance estimate <em>and</em> tuning</td>
+<td>Outer loop estimates, inner loop tunes</td>
+</tr>
+<tr>
+<td><strong>LOOCV</strong></td>
+<td>Very small datasets</td>
+<td>Nearly unbiased, high variance, expensive</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from sklearn.model_selection import TimeSeriesSplit, GroupKFold, cross_val_score
+
+# Temporal: fold i trains on [0..i] and validates on [i+1]
+tscv = TimeSeriesSplit(n_splits=5, gap=7)   # `gap` guards against label leakage windows
+
+# Grouped: no user appears in both train and validation
+gkf = GroupKFold(n_splits=5)
+scores = cross_val_score(model, X, y, groups=user_ids, cv=gkf, scoring='roc_auc')
+print(f&quot;AUC {scores.mean():.4f} ± {scores.std():.4f}&quot;)
+</code></pre>
+<p>Always report the <strong>standard deviation</strong> across folds, not just the mean. A model scoring 0.82 ± 0.01 and one scoring 0.84 ± 0.06 are not clearly different, and saying so is a strong interview signal.</p>
+<p><strong>Nested CV</strong> exists because tuning on the same folds you report from is optimistically biased: the hyperparameter search has already seen every validation fold. Outer loop for the estimate, inner loop for tuning.</p>
+<hr />
+<h2 id="offline-vs-online-metrics">Offline vs Online Metrics</h2>
+<p>Offline metrics are proxies. The model exists to move a business number.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Examples</th>
+<th>Measured by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Model metrics</strong></td>
+<td>AUC, RMSE, NDCG</td>
+<td>Offline holdout</td>
+</tr>
+<tr>
+<td><strong>System metrics</strong></td>
+<td>p99 latency, error rate, cost per 1k predictions</td>
+<td>Production telemetry</td>
+</tr>
+<tr>
+<td><strong>Product metrics</strong></td>
+<td>CTR, conversion, session length, task completion</td>
+<td>A/B test</td>
+</tr>
+<tr>
+<td><strong>Business metrics</strong></td>
+<td>Revenue, retention, fraud loss, support cost</td>
+<td>A/B test + finance</td>
+</tr>
+</tbody>
+</table></div>
+<p>Proxies diverge from outcomes. A recommender optimizing CTR learns clickbait; a fraud model optimizing AUC may improve on the frauds you already catch. The standard answer: pick one primary online metric, define <strong>guardrail metrics</strong> that must not regress (latency, complaint rate, revenue per session), and validate offline gains with an A/B test before you believe them.</p>
+<p>Include a <strong>degradation plan</strong> too: metrics drift as the input distribution moves, so define what a regression looks like and what triggers a rollback.</p>
+<hr />
+<h2 id="metric-selection-cheat-sheet">Metric Selection Cheat Sheet</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Primary metric</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Balanced binary classification</td>
+<td>ROC-AUC + accuracy</td>
+<td>Both meaningful when classes are balanced</td>
+</tr>
+<tr>
+<td>Fraud / rare-event detection</td>
+<td>PR-AUC, recall @ fixed precision</td>
+<td>ROC hides the false-positive burden</td>
+</tr>
+<tr>
+<td>Medical screening</td>
+<td>Recall at a specificity floor</td>
+<td>Misses are far costlier than follow-ups</td>
+</tr>
+<tr>
+<td>Spam filtering</td>
+<td>Precision at a recall floor</td>
+<td>A blocked legitimate email is expensive</td>
+</tr>
+<tr>
+<td>Credit scoring</td>
+<td>AUC + calibration (Brier)</td>
+<td>Scores feed pricing, so they must be real probabilities</td>
+</tr>
+<tr>
+<td>Demand forecasting</td>
+<td>MAE or quantile loss</td>
+<td>Robust to spikes; over/under stock costs differ</td>
+</tr>
+<tr>
+<td>Revenue prediction</td>
+<td>RMSLE or MAE</td>
+<td>Skewed target, relative error matters</td>
+</tr>
+<tr>
+<td>Search / recommendation</td>
+<td>NDCG@k, recall@k</td>
+<td>Position and graded relevance matter</td>
+</tr>
+<tr>
+<td>RAG retrieval</td>
+<td>Recall@k, MRR</td>
+<td>Generation cannot fix what retrieval missed</td>
+</tr>
+<tr>
+<td>LLM generation</td>
+<td>Task success rate, LLM-as-judge + human review</td>
+<td>No single automatic metric is sufficient</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="your-model-has-99-accuracy-is-it-good">Your model has 99% accuracy. Is it good?</h4>
+<p>Unanswerable without the class balance and the cost structure. If 99% of examples are negative, predicting &quot;always negative&quot; scores 99% and has zero value: accuracy is measuring the prior, not the model. I'd ask for prevalence, then report PR-AUC against the prevalence baseline, plus recall at whatever precision the business can tolerate. I'd also ask what a false positive and a false negative each cost, because that determines both the metric and the operating threshold.</p>
+<h4 id="when-would-you-use-roc-auc-over-pr-auc-and-vice-versa">When would you use ROC-AUC over PR-AUC, and vice versa?</h4>
+<p>ROC-AUC when classes are roughly balanced, when both classes matter symmetrically, or when I need a prevalence-invariant number to compare the same model across populations with different base rates. PR-AUC when positives are rare and I care about the quality of the positive predictions specifically.</p>
+<p>The mechanism: ROC's x-axis is FPR = FP/(FP+TN). With a huge negative class, thousands of false positives barely move FPR, so ROC stays optimistic while precision collapses. PR-AUC uses FP/(TP+FP), which has no large denominator to hide behind.</p>
+<h4 id="what-is-probability-calibration-and-when-do-you-need-it">What is probability calibration, and when do you need it?</h4>
+<p>Calibration means predicted probabilities match observed frequencies: of the cases scored 0.7, about 70% should be positive. You need it whenever the score is consumed as a number rather than as a rank: expected-value decisions, risk pricing, thresholds derived from costs, or feeding the score into a downstream model or human judgment.</p>
+<p>You don't strictly need it when you only rank (recommendations shown in order) or threshold once at an empirically tuned cutoff. Check with a reliability diagram and the Brier score; fix with Platt scaling (small data), isotonic regression (larger data), or temperature scaling (neural networks): always fit on a held-out calibration set.</p>
+<h4 id="why-is-a-random-traintest-split-wrong-for-time-series">Why is a random train/test split wrong for time series?</h4>
+<p>It leaks the future into the past. A random split lets the model train on Tuesday and Thursday while validating on Wednesday, so it can exploit information no production model would have: trends, same-day correlated events, or explicit lag features computed over the whole series. Validation scores look great and production degrades immediately.</p>
+<p>Use a forward-chaining split (<code>TimeSeriesSplit</code>), evaluate on strictly later data than training, and add a <code>gap</code> when the label takes time to materialize, e.g. a 30-day churn label means the last 30 days of training data would not have been labeled yet in production.</p>
+<h4 id="explain-the-precision-recall-tradeoff-and-how-you-pick-a-threshold">Explain the precision-recall tradeoff and how you pick a threshold.</h4>
+<p>Both derive from one score and one cutoff. Lower the threshold and you predict positive more often: recall rises, precision falls. The curve is a property of the model's ranking; the threshold is a business decision on top of it.</p>
+<p>I pick it by expected cost when costs are known: choose the threshold minimizing <code>COST_FN × FN + COST_FP × FP</code> on validation data. When costs aren't quantified, I anchor on an operational constraint (reviewer capacity, or a precision floor stakeholders will accept), and take the best recall subject to it. F1-optimal is a fallback for when no business context exists at all, which is rarer than people assume.</p>
+<h4 id="whats-the-difference-between-mae-and-rmse-and-when-does-the-choice-matter">What's the difference between MAE and RMSE, and when does the choice matter?</h4>
+<p>RMSE squares errors before averaging, so a single error of 10 contributes as much as 100 errors of 1. MAE weighs every error linearly. Consequently RMSE ≥ MAE always, and the gap grows with error variance.</p>
+<p>The choice matters when outliers exist and their treatment is a real decision. Training on MSE fits the conditional mean and chases outliers; training on MAE fits the conditional median and ignores them. For delivery-time prediction, a rare 3-hour delay may be catastrophic (RMSE), while for sensor data the same spike is measurement noise (MAE, or Huber for a middle ground).</p>
+<h4 id="how-do-you-evaluate-a-model-when-labels-arrive-weeks-later">How do you evaluate a model when labels arrive weeks later?</h4>
+<p>Three moves, used together:</p>
+<ol>
+<li><strong>Proxy metrics available immediately</strong>: prediction distribution shift, feature drift (PSI/KL), and model confidence, monitored for anomalies that predict a quality drop.</li>
+<li><strong>A delayed evaluation pipeline</strong>: join predictions to labels as they arrive and backfill true performance on a rolling basis, accepting that today's number describes the model from weeks ago.</li>
+<li><strong>A fast-label subsample</strong>: for some domains you can buy or manually label a small sample quickly for a same-week signal.</li>
+</ol>
+<p>I'd also make sure the training setup respects the delay: features must be as-of prediction time and the CV gap must equal the label latency, or offline scores will be unreachable in production.</p>
+<h4 id="your-offline-auc-improved-but-the-ab-test-is-flat-what-happened">Your offline AUC improved but the A/B test is flat. What happened?</h4>
+<p>The usual suspects, in the order I'd check them:</p>
+<ul>
+<li><strong>Train/serve skew</strong>: features computed differently offline and online: the most common cause by a wide margin.</li>
+<li><strong>The offline metric is the wrong proxy</strong>: AUC improved on easy examples that don't change any decision, or the threshold means the ranking improvement never crosses into a different action.</li>
+<li><strong>The improvement is inside noise</strong>: the A/B test may be underpowered for an effect that size; check the minimum detectable effect before concluding &quot;flat&quot;.</li>
+<li><strong>Leakage offline</strong>: the offline gain was never real.</li>
+<li><strong>System effects</strong>: latency added by the new model reduced engagement enough to cancel the quality gain.</li>
+<li><strong>Position/feedback effects</strong>: the model's own past outputs shaped the training data, so offline replay overestimates the gain.</li>
+</ul>
+<h4 id="why-report-standard-deviation-across-cv-folds">Why report standard deviation across CV folds?</h4>
+<p>Because a single mean hides instability. Fold variance tells you whether a difference between two models is real, whether the dataset has heterogeneous subgroups (one fold much worse usually means a distinct segment the model fails on), and whether the model is sensitive to which rows it sees. If model A is 0.84 ± 0.06 and model B is 0.82 ± 0.01, B may be the better production choice: the paired difference across folds, not the raw means, is what to test.</p>
+<h4 id="what-is-data-leakage-and-how-do-you-detect-it">What is data leakage, and how do you detect it?</h4>
+<p>Leakage is any information in training features that would not be available at prediction time in production. Common forms: a feature computed after the label event, target encoding fit before the split, scaler or imputer fit on the full dataset, duplicate rows spanning the split, and IDs correlated with the label.</p>
+<p>Detection signals: implausibly high scores, one feature dominating importance, a large gap between offline and online performance, and a metric that collapses when the split is made temporal instead of random. The structural fix is to build every transformation inside a <code>Pipeline</code> fit only on the training fold, and to write features with explicit as-of timestamps.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy on imbalanced data</td>
+<td>The majority-class baseline already scores high</td>
+<td>PR-AUC, recall at fixed precision, MCC</td>
+</tr>
+<tr>
+<td>Fitting the scaler/imputer before splitting</td>
+<td>Test statistics leak into training</td>
+<td>Fit inside a <code>Pipeline</code> per fold</td>
+</tr>
+<tr>
+<td>Tuning the threshold on the test set</td>
+<td>Test performance becomes optimistic</td>
+<td>Tune on validation, report on test</td>
+</tr>
+<tr>
+<td>Comparing R² across different datasets</td>
+<td>R² depends on target variance</td>
+<td>Compare RMSE/MAE in the same units</td>
+</tr>
+<tr>
+<td>Ignoring calibration when scores drive decisions</td>
+<td>Expected-value math is wrong even with great AUC</td>
+<td>Reliability diagram + isotonic/Platt</td>
+</tr>
+<tr>
+<td>Reporting only the CV mean</td>
+<td>Hides instability and subgroup failure</td>
+<td>Report mean ± std, inspect worst fold</td>
+</tr>
+<tr>
+<td>Random split with repeated users/sessions</td>
+<td>The same entity in train and test inflates scores</td>
+<td><code>GroupKFold</code> on the entity</td>
+</tr>
+<tr>
+<td>MAPE on targets near zero</td>
+<td>Division by ~0 explodes the metric</td>
+<td>SMAPE, MAE, or a relative-error variant</td>
+</tr>
+<tr>
+<td>Optimizing a proxy without guardrails</td>
+<td>CTR up, satisfaction down</td>
+<td>Primary metric + explicit guardrail metrics</td>
+</tr>
+<tr>
+<td>One aggregate metric for all segments</td>
+<td>Masks failure on a minority segment</td>
+<td>Slice metrics by segment and report the worst</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_ensemble_methods.html">Ensemble Methods and Gradient Boosting</a></li>
+<li><a href="intro_statistics_probability.html">Statistics and Probability</a></li>
+<li><a href="intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_llm_evaluation.html">LLM Evaluation</a></li>
+<li><a href="./">Classical ML Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_statistics_probability.html"><small>Previous</small>Statistics &amp; Probability</a><a rel="next" class="next" href="intro_ensemble_methods.html"><small>Next</small>Ensemble Methods &amp; Boosting</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_model_evaluation.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

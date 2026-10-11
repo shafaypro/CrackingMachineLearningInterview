@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anomaly Detection Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Anomaly detection is where the usual supervised playbook breaks down: you rarely have labels, the positive class is a fraction of a percent, &quot;normal&quot;…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_anomaly_detection.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Anomaly Detection Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Anomaly detection is where the usual supervised playbook breaks down: you rarely have labels, the positive class is a fraction of a percent, &quot;normal&quot;…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_anomaly_detection.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Anomaly Detection Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Anomaly detection is where the usual supervised playbook breaks down: you rarely have labels, the positive class is a fraction of a percent, &quot;normal&quot;…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Anomaly Detection",
+   "description": "Anomaly detection is where the usual supervised playbook breaks down: you rarely have labels, the positive class is a fraction of a percent, \"normal\"…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_anomaly_detection.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Anomaly Detection",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_anomaly_detection.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Anomaly Detection</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_anomaly_detection.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 9 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="anomaly-detection">Anomaly Detection</h1>
+<p>Anomaly detection is where the usual supervised playbook breaks down: you rarely have labels, the positive class is a fraction of a percent, &quot;normal&quot; drifts over time, and the cost of a miss is wildly different from the cost of a false alarm. It underpins fraud, intrusion detection, predictive maintenance, and data quality monitoring, and interviewers use it to test whether you can reason without a clean training signal.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#three-kinds-of-anomaly">Three Kinds of Anomaly</a></li>
+<li><a href="#choosing-a-problem-framing">Choosing a Problem Framing</a></li>
+<li><a href="#statistical-methods">Statistical Methods</a></li>
+<li><a href="#distance-and-density-methods">Distance and Density Methods</a></li>
+<li><a href="#isolation-forest">Isolation Forest</a></li>
+<li><a href="#one-class-svm">One-Class SVM</a></li>
+<li><a href="#autoencoders">Autoencoders</a></li>
+<li><a href="#time-series-anomalies">Time Series Anomalies</a></li>
+<li><a href="#evaluation-without-labels">Evaluation Without Labels</a></li>
+<li><a href="#thresholding-and-alert-budgets">Thresholding and Alert Budgets</a></li>
+<li><a href="#production-concerns">Production Concerns</a></li>
+<li><a href="#method-selection">Method Selection</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="three-kinds-of-anomaly">Three Kinds of Anomaly</h2>
+<p>Naming which one you're dealing with is the first move in any interview answer, because the method follows from it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+<th>Example</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Point</strong></td>
+<td>A single record is abnormal on its own</td>
+<td>A $50,000 charge on a card averaging $40</td>
+<td>Density, distance, isolation</td>
+</tr>
+<tr>
+<td><strong>Contextual</strong></td>
+<td>Normal in general, abnormal <em>in context</em></td>
+<td>30°C is fine in July, anomalous in January</td>
+<td>Model conditioned on context; residual-based</td>
+</tr>
+<tr>
+<td><strong>Collective</strong></td>
+<td>Each point is fine; the <em>sequence</em> is not</td>
+<td>A steady, slow data exfiltration</td>
+<td>Sequence models, windowed features</td>
+</tr>
+</tbody>
+</table></div>
+<p>The classic interview trap is applying a point method to a contextual problem. A transaction of $500 is unremarkable globally and highly unusual for a specific user at 3am in a new country, so the useful features are <em>relative</em> to context (deviation from the user's own baseline), not absolute.</p>
+<hr />
+<h2 id="choosing-a-problem-framing">Choosing a Problem Framing</h2>
+<p>Before picking an algorithm, settle what labels you actually have. This determines everything:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Framing</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No labels at all</td>
+<td><strong>Unsupervised</strong></td>
+<td>Assume anomalies are rare and different; most common starting point</td>
+</tr>
+<tr>
+<td>Only clean &quot;normal&quot; data</td>
+<td><strong>Semi-supervised (novelty detection)</strong></td>
+<td>Model normality, flag deviations. Often the strongest setup</td>
+</tr>
+<tr>
+<td>A few labelled anomalies</td>
+<td><strong>Supervised, heavily imbalanced</strong></td>
+<td>Use them: a supervised model on 200 labelled frauds usually beats any unsupervised method</td>
+</tr>
+<tr>
+<td>Labels arrive later</td>
+<td><strong>Hybrid</strong></td>
+<td>Unsupervised for cold start, supervised as labels accumulate</td>
+</tr>
+</tbody>
+</table></div>
+<p>The answer interviewers want: <strong>if you have labels, use them.</strong> Unsupervised anomaly detection finds what is <em>statistically unusual</em>, which is not the same as what is <em>bad</em>. A user's first-ever large purchase is unusual and legitimate; a $4 test charge before a fraud spree is usual-looking and malicious. Supervised learning targets the thing you care about; unsupervised targets a proxy.</p>
+<p>The realistic production design is both: an unsupervised layer for novel patterns nobody has labelled yet, and a supervised model for known fraud patterns, with the union feeding a review queue.</p>
+<hr />
+<h2 id="statistical-methods">Statistical Methods</h2>
+<p>Start here. They are fast, explainable, and often sufficient.</p>
+<p><strong>Z-score</strong>: assumes roughly Gaussian data: <code>z = (x - μ) / σ</code>, flag <code>|z| &gt; 3</code>. Its weakness is that the mean and standard deviation are themselves corrupted by the outliers you're hunting.</p>
+<p><strong>Modified Z-score</strong>: uses the median and MAD instead, which are robust:</p>
+<pre><code class="language-python">import numpy as np
+
+def modified_zscore(x, threshold=3.5):
+    &quot;&quot;&quot;Robust to outliers: median and MAD are not dragged by extreme values.&quot;&quot;&quot;
+    x = np.asarray(x, dtype=float)
+    median = np.median(x)
+    mad = np.median(np.abs(x - median))
+    if mad &gt; 0:
+        scores = 0.6745 * (x - median) / mad      # 0.6745 makes MAD comparable to σ
+    else:                                         # degenerate: &gt;=50% identical values
+        mean_ad = np.mean(np.abs(x - median))     # fall back to mean absolute deviation
+        scores = (x - median) / (1.253314 * mean_ad) if mean_ad &gt; 0 else np.zeros_like(x)
+    return np.abs(scores) &gt; threshold, scores
+</code></pre>
+<p><strong>IQR</strong>: flag outside <code>[Q1 - 1.5·IQR, Q3 + 1.5·IQR]</code>. Distribution-free and the basis of the box plot.</p>
+<p><strong>Extreme value theory (POT)</strong>: instead of assuming a distribution for all the data, model only the <em>tail</em> above a high quantile with a generalized Pareto distribution. This is the principled way to set a threshold for &quot;how extreme is too extreme&quot; and is what a strong candidate mentions when asked how to pick a cutoff on a heavy-tailed metric.</p>
+<p><strong>Why robust statistics matter here</strong>: with 5% contamination, the sample mean and standard deviation shift enough that genuine outliers fall inside <code>3σ</code>: the outliers mask themselves. Median and MAD have a 50% breakdown point and don't.</p>
+<hr />
+<h2 id="distance-and-density-methods">Distance and Density Methods</h2>
+<p><strong>k-NN distance</strong>: score each point by its distance to its k-th nearest neighbour. Simple, effective, <code>O(n²)</code> without an index.</p>
+<p><strong>Local Outlier Factor (LOF)</strong>: the key idea is that density is <em>local</em>. A point in a sparse cluster is normal for that cluster even if it's far from everything else in absolute terms. LOF compares a point's local density to that of its neighbours:</p>
+<pre><code class="language-python">from sklearn.neighbors import LocalOutlierFactor
+
+lof = LocalOutlierFactor(n_neighbors=20, contamination=0.02)
+labels = lof.fit_predict(X)            # -1 = outlier, 1 = inlier
+scores = -lof.negative_outlier_factor_  # higher = more anomalous
+</code></pre>
+<p>LOF is the right answer when the data has clusters of differing density: a global distance threshold either floods you with false positives from the sparse cluster or misses outliers near the dense one. Its cost is <code>O(n²)</code> and it doesn't naturally handle new points (use <code>novelty=True</code> to enable <code>predict</code> on unseen data).</p>
+<hr />
+<h2 id="isolation-forest">Isolation Forest</h2>
+<p>The most practical default for tabular anomaly detection, and the one most likely to come up.</p>
+<p><strong>The insight is inverted from other methods</strong>: rather than modelling what normal looks like and measuring deviation, it exploits the fact that anomalies are <em>easy to isolate</em>. Build random trees by picking a random feature and a random split value; anomalies, being few and different, get separated into their own leaf in very few splits. The anomaly score is the average path length across the forest: short path means anomalous.</p>
+<pre><code class="language-python">from sklearn.ensemble import IsolationForest
+
+iso = IsolationForest(
+    n_estimators=200,
+    max_samples=256,        # subsampling is deliberate: see below
+    contamination=0.01,     # expected anomaly rate; sets the decision threshold
+    random_state=42,
+    n_jobs=-1,
+)
+iso.fit(X_train)                       # ideally clean-ish data
+scores = -iso.score_samples(X_test)    # higher = more anomalous
+labels = iso.predict(X_test)           # -1 anomaly, 1 normal
+</code></pre>
+<p>Two details worth knowing:</p>
+<ul>
+<li><strong><code>max_samples=256</code> is not a performance shortcut.</strong> Small subsamples <em>improve</em> accuracy by reducing swamping (normal points misjudged because the sample is crowded) and masking (a cluster of anomalies looking normal because there are enough of them to form their own dense region). The original paper found 256 works well across datasets.</li>
+<li><strong><code>contamination</code> only sets the threshold</strong>, not the model. The scores are unchanged; it just picks where to cut. If you don't know the rate, keep the continuous scores and threshold on your own operational criterion.</li>
+</ul>
+<p>Strengths: linear time, no distance computation, no scaling needed, handles high dimensions reasonably. Weakness: it splits on axis-aligned boundaries, so it struggles with anomalies defined by a <em>combination</em> of correlated features: a point that is normal in <code>x</code> and normal in <code>y</code> but abnormal in <code>x/y</code>. Feature engineering (add the ratio) or Extended Isolation Forest addresses that.</p>
+<hr />
+<h2 id="one-class-svm">One-Class SVM</h2>
+<p>Learns a boundary enclosing the normal data in a kernel-induced feature space; anything outside is anomalous.</p>
+<pre><code class="language-python">from sklearn.svm import OneClassSVM
+from sklearn.preprocessing import StandardScaler
+
+X_scaled = StandardScaler().fit_transform(X_train)   # scaling is REQUIRED here
+oc = OneClassSVM(kernel='rbf', gamma='scale', nu=0.01)  # nu ≈ expected outlier fraction
+oc.fit(X_scaled)
+</code></pre>
+<p>It works best in the semi-supervised setting where training data is clean. It is sensitive to <code>gamma</code> and <code>nu</code>, scales poorly (<code>O(n²)</code> to <code>O(n³)</code>), and requires standardized features. In practice Isolation Forest has largely displaced it for tabular data: mention it as the classical option and say why you'd usually pick something else.</p>
+<hr />
+<h2 id="autoencoders">Autoencoders</h2>
+<p>Train a neural network to reconstruct its input through a bottleneck. Trained only on normal data, it learns to reconstruct normal patterns well and fails on anomalies; reconstruction error becomes the anomaly score.</p>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class AutoEncoder(nn.Module):
+    def __init__(self, d_in, d_hidden=32, d_latent=8):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(d_in, d_hidden), nn.ReLU(),
+            nn.Linear(d_hidden, d_latent),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(d_latent, d_hidden), nn.ReLU(),
+            nn.Linear(d_hidden, d_in),
+        )
+
+    def forward(self, x):
+        return self.decoder(self.encoder(x))
+
+
+def anomaly_scores(model, X):
+    model.eval()
+    with torch.no_grad():
+        recon = model(X)
+        return ((X - recon) ** 2).mean(dim=1)    # per-sample reconstruction error
+</code></pre>
+<p>The bottleneck is the whole mechanism: if the latent dimension is large enough, the network learns the identity function and reconstructs anomalies perfectly too, scoring everything as normal. That is the number-one autoencoder failure, and naming it is a strong signal.</p>
+<p>Use an autoencoder when the data is high-dimensional with rich structure (images, sensor arrays, network traffic embeddings), where simpler methods can't capture what &quot;normal&quot; means. For a 20-column tabular table, Isolation Forest is faster, needs no tuning, and usually wins.</p>
+<p>Variants worth naming: <strong>VAE</strong> (probabilistic, gives a likelihood rather than a raw error), <strong>denoising autoencoder</strong> (harder to learn identity), and <strong>LSTM autoencoder</strong> for sequences.</p>
+<hr />
+<h2 id="time-series-anomalies">Time Series Anomalies</h2>
+<p>Most real anomaly detection is temporal, and the framing changes.</p>
+<p><strong>Decompose first.</strong> Split into trend, seasonality, and residual, then detect on the residual, otherwise every Monday morning peak is an &quot;anomaly&quot;:</p>
+<pre><code class="language-python">from statsmodels.tsa.seasonal import STL
+
+stl = STL(series, period=24*7, robust=True).fit()   # robust=True downweights outliers
+resid = stl.resid
+flags, _ = modified_zscore(resid, threshold=4.0)     # detect on the residual, not the raw series
+</code></pre>
+<p><strong>Forecast-and-compare.</strong> Predict the next value with any forecaster (ARIMA, Prophet, gradient boosting on lags); a large prediction interval violation is an anomaly. This handles contextual anomalies naturally because the forecast <em>is</em> the context.</p>
+<p><strong>Changepoint detection</strong> answers a different question, not &quot;is this point weird&quot; but &quot;did the underlying regime shift&quot;. CUSUM and Bayesian online changepoint detection are the standard tools, and they're what you want for drift monitoring rather than spike detection.</p>
+<p><strong>Windowed features</strong> turn a collective anomaly into a point anomaly: compute rolling mean, variance, rate of change, and entropy over a window, then run any point detector on the window features. This is the simplest way to catch &quot;slow exfiltration&quot; patterns.</p>
+<p>Two temporal-specific mistakes to avoid: computing normalization statistics over the whole series (leaks the future into the past), and evaluating with a random split rather than a forward-chaining one.</p>
+<hr />
+<h2 id="evaluation-without-labels">Evaluation Without Labels</h2>
+<p>The hardest part, and where interviews go deep.</p>
+<p><strong>If you have any labels</strong>, even a few hundred, use them properly: PR-AUC (not ROC-AUC, see the <a href="intro_model_evaluation.html">model evaluation guide</a> for why prevalence breaks ROC), and precision at the alert volume you can actually review.</p>
+<p><strong>If you have none</strong>, you still have options and should name several:</p>
+<ul>
+<li><strong>Synthetic anomaly injection</strong>: perturb real records in ways that mimic real anomalies (swap a field, scale a value, shuffle a sequence) and measure recall on the injected set. Imperfect, but it gives a number.</li>
+<li><strong>Analyst feedback loop</strong>: sample flagged cases for human review, measure precision on that sample, and feed the labels back. This is how real systems bootstrap.</li>
+<li><strong>Stability</strong>: score distributions and flagged-rate should be stable day over day; a sudden jump means the data changed, not that fraud tripled.</li>
+<li><strong>Consensus</strong>: agreement between independent methods is weak evidence, but disagreement is a useful triage signal.</li>
+<li><strong>Downstream proxy</strong>: chargebacks, incident tickets, or machine failures arriving weeks later.</li>
+</ul>
+<p><strong>Time-aware evaluation for series</strong>: point-wise metrics badly misrepresent event detection. If an anomalous event spans 60 minutes and you flag one minute of it, point-wise recall says 1/60 while operationally you caught it. Use event-level or range-based (point-adjusted) metrics, and say so: it's a detail that distinguishes people who have actually shipped this.</p>
+<hr />
+<h2 id="thresholding-and-alert-budgets">Thresholding and Alert Budgets</h2>
+<p>A detector outputs a score; the threshold is a business decision, and it's usually the real question behind &quot;how would you deploy this?&quot;</p>
+<p>Anchor on <strong>review capacity</strong>. If analysts can process 200 alerts a day, the threshold is whatever produces 200 alerts a day: a percentile of the score distribution, recomputed on a rolling basis. This automatically adapts as volume grows, and it's a far more defensible answer than picking a fixed score.</p>
+<p>Other practical mechanics:</p>
+<ul>
+<li><strong>Dynamic thresholds</strong> per segment: a global cutoff over-alerts on the highest-volume merchant and under-alerts on the smallest.</li>
+<li><strong>Alert deduplication and grouping</strong>: one incident should be one alert, not 400.</li>
+<li><strong>Hysteresis</strong>: require N consecutive breaches to fire, and a lower threshold to clear, so a flapping metric doesn't generate a storm.</li>
+<li><strong>Severity tiers</strong>: auto-block at extreme scores, queue for review in the middle, log only at the bottom.</li>
+</ul>
+<hr />
+<h2 id="production-concerns">Production Concerns</h2>
+<p><strong>Concept drift is guaranteed.</strong> Normal behaviour shifts: seasonally, and because the world changes. A model trained on last year's traffic flags this year's normal. Retrain on a rolling window, and monitor the flagged rate as a first-class metric: a jump usually means drift, not an attack.</p>
+<p><strong>Adversarial adaptation.</strong> In fraud and security, the anomalies are generated by people who adapt to your detector. Anything you deploy has a shelf life, attackers probe for the threshold, and a detector that's public knowledge stops working. This argues for ensembles, randomized thresholds, and not exposing the score.</p>
+<p><strong>Feedback loops.</strong> If you block everything the model flags, you never learn whether those cases were truly bad, and the model's own decisions shape its future training data. Hold out a small random unblocked control group to keep an unbiased signal: the same idea as an exploration arm in a bandit.</p>
+<p><strong>Explainability is not optional.</strong> An analyst can't action &quot;score 0.87&quot;. Ship the top contributing features per alert (SHAP works on Isolation Forest, or use per-feature deviation from baseline), plus the entity's recent history. Alert quality is judged on how fast a human can decide.</p>
+<p><strong>Cold start.</strong> New users have no baseline. Fall back to population-level or segment-level norms and taper toward personal baselines as history accumulates.</p>
+<hr />
+<h2 id="method-selection">Method Selection</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Method</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tabular, no labels, want a default</td>
+<td><strong>Isolation Forest</strong></td>
+<td>Fast, minimal tuning, scales linearly</td>
+</tr>
+<tr>
+<td>Clusters of varying density</td>
+<td><strong>LOF</strong></td>
+<td>Local density comparison</td>
+</tr>
+<tr>
+<td>Clean training data available</td>
+<td><strong>One-Class SVM</strong> or autoencoder</td>
+<td>Semi-supervised is stronger when it applies</td>
+</tr>
+<tr>
+<td>High-dimensional, structured (images, sensors)</td>
+<td><strong>Autoencoder / VAE</strong></td>
+<td>Learns the manifold of normal</td>
+</tr>
+<tr>
+<td>Time series with seasonality</td>
+<td><strong>STL + residual detection</strong> or forecast-based</td>
+<td>Removes the pattern before detecting</td>
+</tr>
+<tr>
+<td>Regime change, not spikes</td>
+<td><strong>Changepoint (CUSUM, BOCPD)</strong></td>
+<td>Different question entirely</td>
+</tr>
+<tr>
+<td>Some labels exist</td>
+<td><strong>Supervised (gradient boosting)</strong></td>
+<td>Targets what's bad, not just what's rare</td>
+</tr>
+<tr>
+<td>Need interpretability for analysts</td>
+<td><strong>Statistical / rules / IF + SHAP</strong></td>
+<td>Explainable per alert</td>
+</tr>
+<tr>
+<td>Streaming, low latency</td>
+<td><strong>Robust z-score, HalfSpaceTrees</strong></td>
+<td>Constant memory, online update</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-you-detect-anomalies-when-you-have-no-labels-at-all">How do you detect anomalies when you have no labels at all?</h4>
+<p>Start by defining the anomaly type (point, contextual, or collective), because that decides the method. Then establish a baseline of &quot;normal&quot;: for tabular data I'd start with Isolation Forest for a fast unsupervised score, plus simple robust-statistical rules for interpretability. For anything temporal, decompose out trend and seasonality first and detect on the residual.</p>
+<p>The part people miss is <strong>evaluation</strong>. Without labels I'd inject synthetic anomalies to get a recall estimate, sample flagged cases for analyst review to get precision, monitor score-distribution stability, and set the threshold by review capacity rather than an arbitrary cutoff. I'd also build the feedback loop from day one, so that analyst dispositions accumulate into a labelled set: within a few months you can usually switch to a supervised model, which targets what's actually harmful rather than what's merely rare.</p>
+<h4 id="explain-isolation-forest-why-does-subsampling-improve-it">Explain Isolation Forest. Why does subsampling improve it?</h4>
+<p>It inverts the usual approach: instead of modelling normality and measuring deviation, it exploits that anomalies are easy to isolate. Random trees split on a random feature at a random threshold; because anomalies are few and different, they end up alone after very few splits. The score is average path length across the forest: shorter means more anomalous.</p>
+<p>Subsampling (<code>max_samples=256</code>) improves accuracy rather than just speed, because of <strong>swamping</strong> and <strong>masking</strong>. Swamping is when normal points near an anomalous region get misjudged in a crowded sample; masking is when a cluster of anomalies is dense enough to look like a legitimate mode. Small subsamples make anomalies sparser relative to the sample, so both effects shrink. It's a rare case where less data per estimator is better.</p>
+<h4 id="why-is-roc-auc-misleading-for-anomaly-detection">Why is ROC-AUC misleading for anomaly detection?</h4>
+<p>Because anomalies are rare and ROC's x-axis is FPR = FP/(FP+TN). With 0.1% anomalies, the negative class is enormous, so thousands of false positives move FPR almost imperceptibly: you can report ROC-AUC 0.98 while 95% of the analyst's queue is noise.</p>
+<p>PR-AUC uses FP/(TP+FP), which has no large denominator to hide behind, so it reflects what an operator actually experiences. I'd report PR-AUC against the prevalence baseline, plus precision at the alert volume the team can review, which is the number that determines whether the system is usable.</p>
+<h4 id="a-point-wise-metric-says-your-time-series-detector-has-2-recall-but-operators-say-it-catches-everything-whats-going-on">A point-wise metric says your time series detector has 2% recall, but operators say it catches everything. What's going on?</h4>
+<p>Point-wise metrics mismatch how anomalies actually occur. An incident spans a range (say 60 minutes), and if you flag only the first minute, point-wise recall is 1/60 ≈ 2%, while operationally you detected the event promptly and completely.</p>
+<p>The fix is <strong>event-level or range-based evaluation</strong>: an event counts as detected if any point within it is flagged (optionally weighted by how early), and false positives are counted per distinct alert rather than per timestamp. I'd also report detection latency, since catching an incident 2 minutes in versus 50 minutes in matters enormously and no point-wise metric captures it.</p>
+<h4 id="when-would-you-use-a-supervised-model-instead-of-an-unsupervised-detector">When would you use a supervised model instead of an unsupervised detector?</h4>
+<p>Whenever I have labels, because they target a different quantity. Unsupervised methods find what is statistically <em>unusual</em>; supervised models find what is <em>bad</em>. Those diverge constantly: a customer's first big purchase is unusual and fine, while a small card-testing charge looks perfectly ordinary and is malicious.</p>
+<p>Even a few hundred labelled positives typically beat any unsupervised method, using class weighting and PR-AUC. The production design I'd propose is both layers: supervised for known patterns, unsupervised for novel ones nobody has labelled yet, with a feedback loop turning reviewed alerts into new labels.</p>
+<h4 id="how-do-you-set-the-threshold">How do you set the threshold?</h4>
+<p>From operational constraints, not from the score distribution in isolation. The most defensible version is <strong>capacity-based</strong>: if analysts review 200 cases a day, take the rolling percentile of the score that yields 200 alerts a day. It adapts automatically as volume grows.</p>
+<p>If costs are quantified, minimize expected cost (<code>COST_FN × misses + COST_FP × false alarms</code>), which puts the threshold where the cost ratio says it belongs. For heavy-tailed metrics, extreme value theory (peaks-over-threshold with a generalized Pareto fit on the tail) gives a principled extremeness cutoff rather than a guessed one.</p>
+<p>Then the operational layer: per-segment thresholds so one high-volume entity doesn't dominate, hysteresis so a flapping metric doesn't storm, deduplication so one incident is one alert, and severity tiers so extreme scores auto-action while mid-range ones queue.</p>
+<h4 id="your-autoencoder-reconstructs-anomalies-perfectly-and-flags-nothing-why">Your autoencoder reconstructs anomalies perfectly and flags nothing. Why?</h4>
+<p>The bottleneck is too wide, so the network learned something close to the identity function: it reconstructs everything, including anomalies, and reconstruction error carries no signal.</p>
+<p>Fixes: shrink the latent dimension until reconstruction of normal data is good but not perfect; add noise (denoising autoencoder), which makes identity useless; add regularization (sparse or contractive penalties); and verify the training data is actually clean: if anomalies are in the training set the model learns to reconstruct them by design. I'd also sanity-check by plotting reconstruction-error distributions for known-normal versus injected-anomalous data; if they overlap completely, capacity is the first suspect.</p>
+<h4 id="how-do-you-handle-seasonality-and-drift">How do you handle seasonality and drift?</h4>
+<p>Seasonality: never detect on the raw series. Decompose with STL (using <code>robust=True</code> so existing outliers don't distort the fit) and detect on the residual, or use a forecaster whose prediction interval encodes the expected seasonal pattern: a violation is then a contextual anomaly by construction.</p>
+<p>Drift: assume normal moves. Retrain on a rolling window, and monitor the <strong>flagged rate</strong> as a first-class metric: a sudden jump almost always means the input distribution shifted rather than that the anomaly rate really tripled. I'd separate &quot;the world changed&quot; from &quot;something bad happened&quot; by checking whether the shift is broad across features (drift) or concentrated in a few entities (real anomaly), and I'd run changepoint detection on the monitoring metrics themselves.</p>
+<h4 id="whats-different-about-anomaly-detection-in-an-adversarial-setting">What's different about anomaly detection in an adversarial setting?</h4>
+<p>The data-generating process fights back. Attackers probe to find your threshold, then operate just under it; they mimic normal behaviour; and any detector's effectiveness decays from the moment it ships.</p>
+<p>Practical consequences: don't expose scores or reasons to the user, randomize thresholds slightly so probing is noisy, ensemble diverse detectors so evading one isn't enough, retrain frequently on recent data, and hold out an unblocked control group so you keep an unbiased read on the true rate. It also changes evaluation: offline metrics on historical data overstate future performance, because that history predates the adaptation your deployment will cause.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Using mean/σ with contaminated data</td>
+<td>Outliers inflate σ and mask themselves</td>
+<td>Median and MAD, or trimmed statistics</td>
+</tr>
+<tr>
+<td>Point method on a contextual problem</td>
+<td>Misses &quot;normal value, wrong context&quot; anomalies</td>
+<td>Model conditioned on context; detect on residuals</td>
+</tr>
+<tr>
+<td>Detecting on a raw seasonal series</td>
+<td>Every recurring peak is flagged</td>
+<td>STL decompose, detect on the residual</td>
+</tr>
+<tr>
+<td>ROC-AUC as the headline metric</td>
+<td>Hides a false-positive flood at low prevalence</td>
+<td>PR-AUC + precision at alert volume</td>
+</tr>
+<tr>
+<td>Point-wise metrics on ranged events</td>
+<td>Understates real detection performance</td>
+<td>Event-level / range-based metrics + latency</td>
+</tr>
+<tr>
+<td>Autoencoder latent dimension too large</td>
+<td>Learns identity; flags nothing</td>
+<td>Shrink bottleneck; denoising; verify clean training data</td>
+</tr>
+<tr>
+<td>Training on data containing anomalies</td>
+<td>The model learns them as normal</td>
+<td>Clean the training set, or use a robust method</td>
+</tr>
+<tr>
+<td>Fixed threshold forever</td>
+<td>Volume grows, alerts flood or vanish</td>
+<td>Rolling percentile tied to review capacity</td>
+</tr>
+<tr>
+<td>Normalizing over the whole time series</td>
+<td>Leaks future information into the past</td>
+<td>Fit scalers on the training window only</td>
+</tr>
+<tr>
+<td>Blocking everything flagged</td>
+<td>Destroys the unbiased label signal</td>
+<td>Keep a small unblocked control group</td>
+</tr>
+<tr>
+<td>Score with no explanation</td>
+<td>Analysts can't action it</td>
+<td>Per-alert top contributing features + entity history</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="intro_time_series.html">Time Series Analysis &amp; Forecasting</a></li>
+<li><a href="intro_clustering.html">Clustering Algorithms</a></li>
+<li><a href="intro_ensemble_methods.html">Ensemble Methods</a></li>
+<li><a href="intro_statistics_probability.html">Statistics &amp; Probability</a></li>
+<li><a href="../system_design/fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_data_quality.html">Data Quality &amp; Validation</a></li>
+<li><a href="./">Classical ML Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_causal_inference.html"><small>Previous</small>Causal Inference &amp; Uplift</a><a rel="next" class="next" href="intro_nlp_fundamentals.html"><small>Next</small>NLP Fundamentals</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_anomaly_detection.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

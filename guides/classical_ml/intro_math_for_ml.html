@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mathematics for ML: Linear Algebra, Calculus, and Optimization | Cracking ML Interviews</title>
+<meta name="description" content="Interviewers use math questions to separate people who can call model.fit() from people who can debug a model when fit() misbehaves. You will rarely be…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_math_for_ml.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Mathematics for ML: Linear Algebra, Calculus, and Optimization | Cracking ML Interviews">
+<meta property="og:description" content="Interviewers use math questions to separate people who can call model.fit() from people who can debug a model when fit() misbehaves. You will rarely be…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_math_for_ml.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mathematics for ML: Linear Algebra, Calculus, and Optimization | Cracking ML Interviews">
+<meta name="twitter:description" content="Interviewers use math questions to separate people who can call model.fit() from people who can debug a model when fit() misbehaves. You will rarely be…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Mathematics for ML: Linear Algebra, Calculus, and Optimization",
+   "description": "Interviewers use math questions to separate people who can call model.fit() from people who can debug a model when fit() misbehaves. You will rarely be…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_math_for_ml.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Math for ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_math_for_ml.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Math for ML</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_math_for_ml.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 11 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="mathematics-for-ml-linear-algebra-calculus-and-optimization">Mathematics for ML: Linear Algebra, Calculus, and Optimization</h1>
+<p>Interviewers use math questions to separate people who can call <code>model.fit()</code> from people who can debug a model when <code>fit()</code> misbehaves. You will rarely be asked to prove a theorem, but you will be asked to derive the OLS solution on a whiteboard, explain why L1 gives sparse weights, say what the Hessian tells you, explain why Adam converges faster than SGD on a badly scaled problem, or explain why <code>softmax</code> returned <code>nan</code>. This guide covers the linear algebra, calculus, optimization, and information theory those questions rely on. Probability and statistics have their own guide: <a href="intro_statistics_probability.html">Statistics &amp; Probability</a>.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#vectors-dot-products-and-norms">Vectors, Dot Products, and Norms</a></li>
+<li><a href="#matrices-as-linear-maps">Matrices as Linear Maps</a></li>
+<li><a href="#eigendecomposition-and-svd">Eigendecomposition and SVD</a></li>
+<li><a href="#positive-definite-matrices-and-covariance">Positive Definite Matrices and Covariance</a></li>
+<li><a href="#gradients-jacobians-and-hessians">Gradients, Jacobians, and Hessians</a></li>
+<li><a href="#chain-rule-and-backpropagation">Chain Rule and Backpropagation</a></li>
+<li><a href="#matrix-calculus-identities">Matrix Calculus Identities</a></li>
+<li><a href="#worked-derivations-ols-and-logistic-regression">Worked Derivations: OLS and Logistic Regression</a></li>
+<li><a href="#convexity">Convexity</a></li>
+<li><a href="#first-order-optimization">First-Order Optimization</a></li>
+<li><a href="#second-order-methods">Second-Order Methods</a></li>
+<li><a href="#constrained-optimization-lagrange-and-kkt">Constrained Optimization: Lagrange and KKT</a></li>
+<li><a href="#regularization-constraint-and-prior-views">Regularization: Constraint and Prior Views</a></li>
+<li><a href="#information-theory">Information Theory</a></li>
+<li><a href="#numerical-stability">Numerical Stability</a></li>
+<li><a href="#gradient-checking">Gradient Checking</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="vectors-dot-products-and-norms">Vectors, Dot Products, and Norms</h2>
+<p>A feature vector <code>x ∈ R^d</code> is a point in <code>d</code>-dimensional space. Most of ML is computing distances and angles between such points. <strong>Dot product</strong>: <code>x · y = Σ_i x_i y_i = ||x|| ||y|| cos θ</code>. It measures alignment. A linear model's score <code>w · x + b</code> is a dot product. So is an attention logit <code>q · k</code>, and so is a single neuron's pre-activation.</p>
+<p><strong>Cosine similarity</strong>: <code>cos θ = (x · y) / (||x|| ||y||)</code>. This is the dot product after normalizing both vectors to unit length, so it ignores magnitude. It is the standard choice for comparing embeddings. <strong>Norms</strong> measure vector size:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Norm</th>
+<th>Formula</th>
+<th>Unit ball shape</th>
+<th>Where it shows up</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td><code>Σ |x_i|</code></td>
+<td>Diamond (cross-polytope)</td>
+<td>Lasso, sparse coding, MAE loss</td>
+</tr>
+<tr>
+<td>L2</td>
+<td><code>sqrt(Σ x_i²)</code></td>
+<td>Sphere</td>
+<td>Ridge / weight decay, Euclidean distance, MSE</td>
+</tr>
+<tr>
+<td>L∞</td>
+<td><code>max_i |x_i|</code></td>
+<td>Cube</td>
+<td>Adversarial robustness (FGSM/PGD budgets)</td>
+</tr>
+<tr>
+<td>L0 (not a true norm)</td>
+<td>count of non-zeros</td>
+<td>Axes only</td>
+<td>What L1 approximates; NP-hard to optimize directly</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why L1 induces sparsity.</strong> There are two ways to see it:</p>
+<ol>
+<li><strong>Geometry.</strong> Minimize the loss subject to <code>||w||_1 ≤ t</code>. The loss contours are ellipses, and they usually first touch the L1 diamond at a corner, and corners lie on the axes, where some coordinates are exactly zero. The L2 ball is round and has no corners, so the contact point is generically off-axis. Weights get small but not zero.</li>
+<li><strong>Gradients.</strong> The L2 penalty's gradient is <code>2λw</code>, which shrinks as <code>w → 0</code>, so the pull toward zero weakens and the weight never gets there exactly. The L1 penalty's (sub)gradient is <code>λ · sign(w)</code>, a constant push regardless of how small <code>w</code> is. If a feature's loss gradient is smaller than <code>λ</code> in magnitude, the optimum is exactly <code>w = 0</code>. That is the soft-thresholding operator: <code>w ← sign(z) · max(|z| - λ, 0)</code>.</li>
+</ol>
+<pre><code class="language-python">import numpy as np
+
+x = np.array([3.0, -4.0, 0.0])
+print(np.linalg.norm(x, 1), np.linalg.norm(x, 2), np.linalg.norm(x, np.inf))  # 7.0 5.0 4.0
+
+def soft_threshold(z, lam):
+    &quot;&quot;&quot;Proximal operator of lam * ||w||_1: the step that produces exact zeros.&quot;&quot;&quot;
+    return np.sign(z) * np.maximum(np.abs(z) - lam, 0.0)
+
+print(soft_threshold(np.array([2.5, 0.3, -0.8, -3.0]), lam=1.0))  # [ 1.5  0.  -0.  -2. ]
+</code></pre>
+<hr />
+<h2 id="matrices-as-linear-maps">Matrices as Linear Maps</h2>
+<p>A matrix <code>A ∈ R^{m×n}</code> is a function that maps <code>R^n → R^m</code> linearly. A linear layer <code>y = Wx + b</code> is a linear map followed by a shift. Stacking linear layers without nonlinearities gives <code>W_2 W_1 x</code>, which is still a single linear map. That is why activations are necessary.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+<th>ML relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Column space</td>
+<td>All outputs <code>Ax</code> can reach</td>
+<td>Predictions of a linear model live here</td>
+</tr>
+<tr>
+<td>Null space</td>
+<td>All <code>x</code> with <code>Ax = 0</code></td>
+<td>Directions the model cannot see; causes non-unique solutions</td>
+</tr>
+<tr>
+<td>Rank</td>
+<td>Dimension of the column space (= number of non-zero singular values)</td>
+<td>Perfect multicollinearity → rank-deficient <code>XᵀX</code></td>
+</tr>
+<tr>
+<td>Inverse <code>A⁻¹</code></td>
+<td>Exists iff <code>A</code> is square and full rank</td>
+<td>Rarely computed explicitly in practice</td>
+</tr>
+<tr>
+<td>Determinant</td>
+<td>Volume scaling factor; 0 iff singular</td>
+<td>Normalizing flows (log-det Jacobian), Gaussian densities</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>Sum of diagonal = sum of eigenvalues</td>
+<td>Matrix calculus tricks, <code>E[xᵀAx]</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Rank-nullity</strong>: <code>rank(A) + dim(null(A)) = n</code>. If you have more features than samples (<code>d &gt; n</code>), <code>XᵀX</code> (size <code>d×d</code>) has rank at most <code>n &lt; d</code>, so it is singular and OLS has infinitely many solutions.</p>
+<p><strong>Pseudo-inverse.</strong> For any <code>A</code>, the Moore-Penrose pseudo-inverse <code>A⁺</code> is computed from the SVD <code>A = U Σ Vᵀ</code> as <code>A⁺ = V Σ⁺ Uᵀ</code>, where <code>Σ⁺</code> inverts the non-zero singular values and leaves zeros as zeros. <code>x = A⁺b</code> gives the least-squares solution. When that solution is not unique, it gives the one with minimum <code>||x||_2</code>.</p>
+<p><strong>Practical rule:</strong> never write <code>np.linalg.inv(A) @ b</code>. Use <code>np.linalg.solve(A, b)</code> for square systems and <code>np.linalg.lstsq(A, b)</code> for least squares. They are faster and far more accurate when <code>A</code> is ill-conditioned.</p>
+<pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(0)
+X = rng.normal(size=(5, 8))           # more features than samples: underdetermined
+y = rng.normal(size=5)
+
+print(np.linalg.matrix_rank(X.T @ X))  # 5, not 8 -&gt; X^T X is singular
+w_pinv = np.linalg.pinv(X) @ y         # minimum-norm solution
+w_lstsq, *_ = np.linalg.lstsq(X, y, rcond=None)
+print(np.allclose(w_pinv, w_lstsq), np.allclose(X @ w_pinv, y))  # True True
+</code></pre>
+<hr />
+<h2 id="eigendecomposition-and-svd">Eigendecomposition and SVD</h2>
+<p><strong>Eigendecomposition.</strong> For a square matrix <code>A</code>, an eigenvector <code>v</code> satisfies <code>Av = λv</code>: <code>A</code> only stretches it by <code>λ</code>. If <code>A</code> is symmetric (covariance matrices, Hessians, <code>XᵀX</code>), the spectral theorem guarantees <code>A = Q Λ Qᵀ</code>, with real eigenvalues and orthonormal eigenvectors. Non-symmetric matrices may have complex eigenvalues or no full eigenbasis at all.</p>
+<p><strong>SVD.</strong> Every matrix <code>A ∈ R^{m×n}</code> (any shape, any rank) factors as <code>A = U Σ Vᵀ</code>, where <code>V</code> (<code>n×n</code>, orthogonal) holds input directions, <code>Σ</code> (diagonal, <code>σ_1 ≥ σ_2 ≥ ... ≥ 0</code>) holds stretch factors, and <code>U</code> (<code>m×m</code>, orthogonal) holds output directions. Geometrically: rotate, scale along the axes, rotate again.</p>
+<p><strong>The connection:</strong> <code>AᵀA = V Σ² Vᵀ</code>. The right singular vectors of <code>A</code> are the eigenvectors of <code>AᵀA</code>, and the eigenvalues are <code>σ_i²</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Application</th>
+<th>How it uses the decomposition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PCA</strong></td>
+<td>Center <code>X</code>, then take the SVD <code>X = U Σ Vᵀ</code>. Rows of <code>Vᵀ</code> are principal directions; explained variance is <code>σ_i² / (n-1)</code>. Equivalent to eigendecomposing the covariance matrix, but numerically better because you never form <code>XᵀX</code></td>
+</tr>
+<tr>
+<td><strong>Low-rank approximation</strong></td>
+<td>Eckart-Young: keeping the top <code>k</code> singular triplets gives the best rank-<code>k</code> approximation in Frobenius and spectral norm</td>
+</tr>
+<tr>
+<td><strong>LoRA</strong></td>
+<td>Assumes the fine-tuning <em>update</em> <code>ΔW</code> is low rank and parameterizes it as <code>ΔW = BA</code>, with <code>B ∈ R^{d×r}</code>, <code>A ∈ R^{r×k}</code>, <code>r ≪ min(d,k)</code>. That trains <code>r(d+k)</code> parameters instead of <code>dk</code></td>
+</tr>
+<tr>
+<td><strong>Recommenders</strong></td>
+<td>Matrix factorization of the user-item matrix (SVD-style latent factors)</td>
+</tr>
+<tr>
+<td><strong>Condition number</strong></td>
+<td><code>κ(A) = σ_max / σ_min</code>. Large <code>κ</code> means solving is numerically unstable and gradient descent is slow</td>
+</tr>
+<tr>
+<td><strong>Spectral norm</strong></td>
+<td><code>||A||_2 = σ_max</code>, the largest possible stretch. Used in spectral normalization for GAN discriminators</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(0)
+X = rng.normal(size=(200, 5)) @ rng.normal(size=(5, 5))  # correlated features
+Xc = X - X.mean(axis=0)
+
+U, S, Vt = np.linalg.svd(Xc, full_matrices=False)
+explained_var = S**2 / (len(Xc) - 1)
+eigvals = np.linalg.eigvalsh(np.cov(Xc, rowvar=False))[::-1]   # eigh returns ascending
+print(np.allclose(explained_var, eigvals))                     # True: PCA via SVD == eig of cov
+
+k = 2
+X_k = U[:, :k] @ np.diag(S[:k]) @ Vt[:k]                       # best rank-2 approximation
+print(np.linalg.norm(Xc - X_k), np.sqrt((S[k:]**2).sum()))     # equal (Eckart-Young)
+</code></pre>
+<p>More on PCA in practice: <a href="intro_dimensionality_reduction.html">Dimensionality Reduction</a>.</p>
+<hr />
+<h2 id="positive-definite-matrices-and-covariance">Positive Definite Matrices and Covariance</h2>
+<p>A symmetric matrix <code>A</code> is <strong>positive semidefinite (PSD)</strong> if <code>xᵀAx ≥ 0</code> for all <code>x</code> (all eigenvalues <code>≥ 0</code>), and <strong>positive definite (PD)</strong> if <code>xᵀAx &gt; 0</code> for all <code>x ≠ 0</code> (all eigenvalues <code>&gt; 0</code>).</p>
+<p><strong>Why you care:</strong></p>
+<ul>
+<li><strong>Covariance matrices are always PSD.</strong> <code>Var(aᵀx) = aᵀ Σ a ≥ 0</code>, because a variance cannot be negative. <code>Σ</code> is PD unless some linear combination of features is constant, i.e. there is perfect collinearity.</li>
+<li><strong><code>XᵀX</code> is always PSD.</strong> <code>vᵀXᵀXv = ||Xv||² ≥ 0</code>. Adding <code>λI</code> (ridge) makes it PD for any <code>λ &gt; 0</code>, which is why ridge always has a unique solution.</li>
+<li><strong>Hessian PSD everywhere ⇔ convex function.</strong> A PD Hessian at a critical point means a strict local minimum.</li>
+<li><strong>Kernels.</strong> A valid kernel must produce a PSD Gram matrix (Mercer's condition).</li>
+<li><strong>Cholesky.</strong> A PD matrix factors as <code>A = LLᵀ</code>. This is the fast way to solve PD systems and to sample from <code>N(μ, Σ)</code> via <code>μ + Lz</code> with <code>z ~ N(0, I)</code>.</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(1)
+X = rng.normal(size=(100, 3))
+cov = np.cov(X, rowvar=False)
+print(np.linalg.eigvalsh(cov).min() &gt; 0)          # True: PD
+
+L = np.linalg.cholesky(cov)                        # fails with LinAlgError if not PD
+samples = rng.normal(size=(10000, 3)) @ L.T        # samples with covariance ~= cov
+print(np.allclose(np.cov(samples, rowvar=False), cov, atol=0.05))
+</code></pre>
+<hr />
+<h2 id="gradients-jacobians-and-hessians">Gradients, Jacobians, and Hessians</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Function type</th>
+<th>Shape</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Derivative</td>
+<td><code>R → R</code></td>
+<td>scalar</td>
+<td>Slope</td>
+</tr>
+<tr>
+<td>Gradient <code>∇f</code></td>
+<td><code>R^n → R</code></td>
+<td><code>n</code> vector</td>
+<td>Direction of steepest ascent; <code>-∇f</code> is steepest descent</td>
+</tr>
+<tr>
+<td>Jacobian <code>J</code></td>
+<td><code>R^n → R^m</code></td>
+<td><code>m×n</code></td>
+<td><code>J_ij = ∂f_i/∂x_j</code>; best linear approximation of <code>f</code></td>
+</tr>
+<tr>
+<td>Hessian <code>H</code></td>
+<td><code>R^n → R</code></td>
+<td><code>n×n</code></td>
+<td><code>H_ij = ∂²f/∂x_i∂x_j</code>; curvature. Symmetric if <code>f</code> is twice continuously differentiable</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Taylor expansion</strong> ties them together, and most optimizers are built from it:</p>
+<pre><code>f(x + δ) ≈ f(x) + ∇f(x)ᵀ δ + ½ δᵀ H(x) δ
+</code></pre>
+<p>Gradient descent uses the first-order term; Newton's method minimizes the full quadratic.</p>
+<p><strong>Reading the Hessian at a critical point (<code>∇f = 0</code>):</strong> all eigenvalues <code>&gt; 0</code> means a local minimum, all <code>&lt; 0</code> a local maximum, and mixed signs a saddle point. In high dimensions, saddles are by far the most common critical points in neural network losses. Zero eigenvalues mean flat directions, and the test is inconclusive.</p>
+<p>The size of the Hessian is the practical problem: a model with 1B parameters would have a <code>10^18</code>-entry Hessian. That is why deep learning optimizers stay first-order or use cheap diagonal/Hessian-vector-product approximations.</p>
+<hr />
+<h2 id="chain-rule-and-backpropagation">Chain Rule and Backpropagation</h2>
+<p>For a composition <code>L = f(g(h(x)))</code>, the chain rule gives <code>dL/dx = f'(g(h(x))) · g'(h(x)) · h'(x)</code>. With vectors, each factor is a Jacobian and the product is a chain of matrix multiplications.</p>
+<p><strong>Backpropagation is reverse-mode automatic differentiation.</strong> The two orders of evaluating that Jacobian product differ enormously in cost:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Order</th>
+<th>Cost for <code>f: R^n → R^m</code></th>
+<th>Best when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward mode</td>
+<td>Input → output, carries <code>∂/∂x_j</code> for one input</td>
+<td>One pass per <strong>input</strong> (<code>n</code> passes)</td>
+<td>Few inputs, many outputs</td>
+</tr>
+<tr>
+<td>Reverse mode</td>
+<td>Output → input, carries <code>∂L/∂(node)</code></td>
+<td>One pass per <strong>output</strong> (<code>m</code> passes)</td>
+<td>Many inputs, scalar output: <strong>every loss function</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>A neural network has millions of inputs (parameters) and one output (scalar loss), so reverse mode gets the entire gradient in one backward pass, at roughly 2-3x the cost of the forward pass. The price is memory: every intermediate activation from the forward pass has to be stored for the backward pass. Gradient checkpointing trades recomputation for that memory.</p>
+<p><strong>Tiny worked example.</strong> <code>L = (σ(w·x + b) - y)²</code> with <code>w=0.5, x=2, b=-1, y=1</code>.</p>
+<pre><code>Forward:
+  z = w·x + b      = 0.5·2 - 1 = 0
+  a = σ(z)         = 0.5
+  L = (a - y)²     = 0.25
+
+Backward (each local derivative times the upstream gradient):
+  dL/da = 2(a - y)          = -1.0
+  da/dz = σ(z)(1 - σ(z))    = 0.25      -&gt; dL/dz = -1.0 · 0.25 = -0.25
+  dz/dw = x = 2             -&gt; dL/dw = -0.25 · 2 = -0.5
+  dz/db = 1                 -&gt; dL/db = -0.25
+</code></pre>
+<pre><code class="language-python">import numpy as np
+
+def forward_backward(w, b, x, y):
+    z = w * x + b
+    a = 1 / (1 + np.exp(-z))
+    L = (a - y) ** 2
+    dL_da = 2 * (a - y)
+    dL_dz = dL_da * a * (1 - a)
+    return L, dL_dz * x, dL_dz          # loss, dL/dw, dL/db
+
+print(forward_backward(0.5, -1.0, 2.0, 1.0))   # (0.25, -0.5, -0.25)
+</code></pre>
+<p>Note that <code>σ'(z) ≤ 0.25</code>. Chain ten sigmoids together and the gradient shrinks by at least <code>0.25^10 ≈ 10⁻⁶</code>. That is the vanishing-gradient problem in one line, and it is why ReLU (derivative 1 on the active side), residual connections, and careful initialization matter. See <a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a>.</p>
+<hr />
+<h2 id="matrix-calculus-identities">Matrix Calculus Identities</h2>
+<p>These cover almost every derivation you will be asked to do. Convention: gradient of a scalar with respect to a column vector is a column vector (denominator layout).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Expression <code>f(x)</code></th>
+<th><code>∇_x f</code></th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aᵀx</code></td>
+<td><code>a</code></td>
+<td>Linear</td>
+</tr>
+<tr>
+<td><code>xᵀx = ||x||²</code></td>
+<td><code>2x</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>xᵀAx</code></td>
+<td><code>(A + Aᵀ)x</code></td>
+<td><code>= 2Ax</code> if <code>A</code> is symmetric</td>
+</tr>
+<tr>
+<td><code>||Ax - b||²</code></td>
+<td><code>2Aᵀ(Ax - b)</code></td>
+<td>Least squares</td>
+</tr>
+<tr>
+<td><code>Ax</code> (vector-valued)</td>
+<td>Jacobian <code>A</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>log(1 + e^{x})</code> (softplus)</td>
+<td><code>σ(x)</code></td>
+<td>Logistic loss building block</td>
+</tr>
+<tr>
+<td><code>σ(x)</code></td>
+<td><code>σ(x)(1 - σ(x))</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>log Σ_j e^{x_j}</code> (log-sum-exp)</td>
+<td><code>softmax(x)</code></td>
+<td>Why softmax + cross-entropy has a clean gradient</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Matrix arguments:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Expression <code>f(W)</code></th>
+<th><code>∇_W f</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aᵀWb</code></td>
+<td><code>abᵀ</code></td>
+</tr>
+<tr>
+<td><code>tr(AW)</code></td>
+<td><code>Aᵀ</code></td>
+</tr>
+<tr>
+<td><code>||W||_F²</code></td>
+<td><code>2W</code></td>
+</tr>
+<tr>
+<td><code>log det W</code></td>
+<td><code>W⁻ᵀ</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Linear layer rule</strong> (the one you use constantly): for <code>Y = XW</code> with upstream gradient <code>G = ∂L/∂Y</code>:</p>
+<pre><code>∂L/∂W = Xᵀ G        ∂L/∂X = G Wᵀ
+</code></pre>
+<p>Sanity-check with shapes: <code>X</code> is <code>n×d</code>, <code>W</code> is <code>d×k</code>, <code>G</code> is <code>n×k</code>. The only way to get a <code>d×k</code> result from <code>X</code> and <code>G</code> is <code>XᵀG</code>. When you forget a transpose, matching shapes usually tells you where it goes.</p>
+<hr />
+<h2 id="worked-derivations-ols-and-logistic-regression">Worked Derivations: OLS and Logistic Regression</h2>
+<h3 id="ols-normal-equations">OLS normal equations</h3>
+<p>Model <code>ŷ = Xw</code>, with <code>X ∈ R^{n×d}</code>. Loss:</p>
+<pre><code>L(w) = ||Xw - y||² = wᵀXᵀXw - 2yᵀXw + yᵀy
+∇L   = 2XᵀXw - 2Xᵀy
+Set to 0:  XᵀX w = Xᵀy                    (normal equations)
+           w*    = (XᵀX)⁻¹ Xᵀy            (if XᵀX is invertible)
+Ridge:     w*    = (XᵀX + λI)⁻¹ Xᵀy       (always invertible for λ &gt; 0)
+</code></pre>
+<p>The Hessian is <code>2XᵀX</code>, which is PSD, so the loss is convex and any stationary point is a global minimum. Geometrically, <code>Xw*</code> is the orthogonal projection of <code>y</code> onto the column space of <code>X</code>: the residual <code>y - Xw*</code> is orthogonal to every column (<code>Xᵀ(y - Xw*) = 0</code> is literally the normal equations). Cost: forming <code>XᵀX</code> is <code>O(nd²)</code> and solving is <code>O(d³)</code>. That is fine for <code>d</code> in the thousands, but not for millions of features. Past that point, use (stochastic) gradient descent.</p>
+<h3 id="logistic-regression-gradient">Logistic regression gradient</h3>
+<p>Model <code>p_i = σ(x_iᵀw)</code>, labels <code>y_i ∈ {0, 1}</code>. Negative log-likelihood:</p>
+<pre><code>L(w) = -Σ_i [ y_i log p_i + (1 - y_i) log(1 - p_i) ]
+</code></pre>
+<p>Using <code>dσ/dz = σ(1-σ)</code>, per example <code>∂L_i/∂z_i = p_i - y_i</code> (the <code>σ(1-σ)</code> factors cancel), so:</p>
+<pre><code>∇L = Xᵀ(p - y)                 (same form as OLS: features times residual)
+H  = Xᵀ S X,  S = diag(p_i(1 - p_i))   PSD -&gt; convex
+</code></pre>
+<p>There is no closed-form solution because <code>p</code> is nonlinear in <code>w</code>. Solve with gradient descent or Newton's method (called IRLS, iteratively reweighted least squares, in this setting). If the data is linearly separable, the unregularized MLE does not exist: <code>||w|| → ∞</code>. Add L2 regularization.</p>
+<pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(0)
+n, d = 500, 3
+X = np.c_[np.ones(n), rng.normal(size=(n, d))]
+w_true = np.array([0.5, 2.0, -1.0, 0.0])
+
+# OLS closed form vs lstsq
+y = X @ w_true + 0.1 * rng.normal(size=n)
+w_ols = np.linalg.solve(X.T @ X, X.T @ y)
+print(np.round(w_ols, 2))                          # ~[0.5, 2.0, -1.0, 0.0]
+
+# Logistic regression by gradient descent
+y_cls = (rng.random(n) &lt; 1 / (1 + np.exp(-X @ w_true))).astype(float)
+w = np.zeros(d + 1)
+for _ in range(2000):
+    p = 1 / (1 + np.exp(-X @ w))
+    w -= 0.5 * X.T @ (p - y_cls) / n               # mean gradient
+print(np.round(w, 2))                              # close to w_true (noisy)
+</code></pre>
+<hr />
+<h2 id="convexity">Convexity</h2>
+<p>A function is <strong>convex</strong> if the chord between any two points lies on or above the graph: <code>f(θx + (1-θ)y) ≤ θf(x) + (1-θ)f(y)</code>. Equivalently (if twice differentiable), <code>H ⪰ 0</code> everywhere.</p>
+<p><strong>Why it matters:</strong> for a convex function every local minimum is a global minimum, and gradient methods come with convergence guarantees. With strong convexity (<code>H ⪰ μI</code>, <code>μ &gt; 0</code>) the minimizer is unique and gradient descent converges linearly.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Convex</th>
+<th>Not convex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear / ridge / lasso regression</td>
+<td>Neural networks (any hidden layer)</td>
+</tr>
+<tr>
+<td>Logistic regression, softmax regression</td>
+<td>Matrix factorization <code>||R - UVᵀ||²</code> (convex in <code>U</code> or <code>V</code> alone, not jointly)</td>
+</tr>
+<tr>
+<td>SVM (hinge loss + L2)</td>
+<td>k-means objective</td>
+</tr>
+<tr>
+<td>Norms, max of convex functions, log-sum-exp</td>
+<td>Gaussian mixture log-likelihood</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Composition rules:</strong> sums with non-negative weights, pointwise maxima, and affine pre-compositions (<code>f(Ax + b)</code>) preserve convexity.</p>
+<p><strong>Neural networks are non-convex, and they still train.</strong> Two facts explain most of this. In high dimensions most critical points are saddle points rather than bad local minima, and SGD noise escapes saddles. Heavily overparameterized networks also tend to have many global-quality minima connected by low-loss paths. Nothing is guaranteed, but in practice it works.</p>
+<hr />
+<h2 id="first-order-optimization">First-Order Optimization</h2>
+<p><strong>Gradient descent:</strong> <code>w ← w - η ∇L(w)</code>.</p>
+<p><strong>Learning rate and the condition number.</strong> Near a minimum the loss is roughly quadratic with Hessian <code>H</code>, whose eigenvalues run from <code>λ_min</code> to <code>λ_max</code>. GD is stable only if <code>η &lt; 2/λ_max</code>. The steepest direction sets the ceiling. Progress along the flattest direction per step is then about <code>η · λ_min ≤ 2λ_min/λ_max = 2/κ</code>. With condition number <code>κ = λ_max/λ_min = 10⁴</code>, you get oscillation across the narrow valley and a crawl along it, and you need <code>O(κ)</code> iterations. This is the reason for feature standardization (a rounder loss surface, smaller <code>κ</code>), for batch/layer normalization (partly the same role inside networks), and for momentum and adaptive methods (which cope with ill-conditioning).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Optimizer</th>
+<th>Update (simplified)</th>
+<th>What it fixes</th>
+<th>Caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SGD</strong></td>
+<td><code>w -= η g</code> on a minibatch gradient <code>g</code></td>
+<td>Full-batch cost; noise helps escape saddles and may aid generalization</td>
+<td>Sensitive to <code>η</code>; slow on ill-conditioned problems</td>
+</tr>
+<tr>
+<td><strong>Momentum</strong></td>
+<td><code>v = βv + g;  w -= η v</code></td>
+<td>Averages out oscillation, accelerates along consistent directions (<code>~1/(1-β)</code> speedup)</td>
+<td>Another hyperparameter (<code>β ≈ 0.9</code>)</td>
+</tr>
+<tr>
+<td><strong>AdaGrad</strong></td>
+<td><code>w -= η g / sqrt(Σ g²)</code></td>
+<td>Per-parameter rates; good for sparse features</td>
+<td>Accumulator only grows, so the LR decays to zero</td>
+</tr>
+<tr>
+<td><strong>RMSProp</strong></td>
+<td>EMA of <code>g²</code> instead of a sum</td>
+<td>Fixes AdaGrad's decay</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Adam</strong></td>
+<td>Momentum (<code>m</code>) + RMSProp (<code>v</code>) + bias correction</td>
+<td>Robust default; handles badly scaled gradients</td>
+<td>Can generalize slightly worse than tuned SGD on vision</td>
+</tr>
+<tr>
+<td><strong>AdamW</strong></td>
+<td>Adam with weight decay decoupled from the gradient</td>
+<td>L2 inside Adam is scaled by <code>1/sqrt(v)</code>, which is not true weight decay; AdamW fixes that</td>
+<td>Standard for transformers</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+
+def adam_step(w, g, m, v, t, lr=1e-3, b1=0.9, b2=0.999, eps=1e-8):
+    m = b1 * m + (1 - b1) * g
+    v = b2 * v + (1 - b2) * g**2
+    m_hat = m / (1 - b1**t)          # bias correction: m, v start at 0
+    v_hat = v / (1 - b2**t)
+    w = w - lr * m_hat / (np.sqrt(v_hat) + eps)
+    return w, m, v
+
+# Ill-conditioned quadratic: L = 0.5 * (100 * w0^2 + 1 * w1^2), kappa = 100
+grad = lambda w: np.array([100 * w[0], w[1]])
+w_gd = np.array([1.0, 1.0])
+for _ in range(100):
+    w_gd = w_gd - 0.019 * grad(w_gd)          # eta just under 2/lambda_max = 0.02
+print(w_gd)   # [~3e-05, ~0.15]: w0 flips sign every step (factor -0.9); w1 still crawls
+</code></pre>
+<p><strong>Learning rate schedules.</strong> Warmup avoids early instability while Adam's second-moment estimates are still noisy and the network is at a sharp initial point. Cosine or linear decay then lets the iterate settle into a minimum instead of bouncing around at the SGD noise floor.</p>
+<hr />
+<h2 id="second-order-methods">Second-Order Methods</h2>
+<p><strong>Newton's method:</strong> minimize the local quadratic model and you get <code>w ← w - H⁻¹ ∇L</code>. It rescales every direction by its curvature, so it is immune to conditioning. It converges quadratically near the optimum and solves a quadratic exactly in one step.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Idea</th>
+<th>Cost per step</th>
+<th>Used in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Newton</td>
+<td>Exact <code>H⁻¹∇L</code></td>
+<td><code>O(d²)</code> memory, <code>O(d³)</code> solve</td>
+<td>Small convex problems, logistic regression (IRLS)</td>
+</tr>
+<tr>
+<td>Gauss-Newton / Levenberg-Marquardt</td>
+<td>Approximates <code>H ≈ JᵀJ</code> for least squares</td>
+<td>Same order as Newton</td>
+<td>Curve fitting, bundle adjustment</td>
+</tr>
+<tr>
+<td>BFGS</td>
+<td>Builds a <code>H⁻¹</code> estimate from gradient differences</td>
+<td><code>O(d²)</code> memory</td>
+<td>Medium-sized smooth problems</td>
+</tr>
+<tr>
+<td><strong>L-BFGS</strong></td>
+<td>Keeps only the last <code>m</code> (≈10) gradient/step pairs</td>
+<td><code>O(md)</code></td>
+<td>scikit-learn's default <code>LogisticRegression</code> solver, CRFs, full-batch convex problems</td>
+</tr>
+<tr>
+<td>K-FAC, Shampoo</td>
+<td>Block/Kronecker-factored curvature</td>
+<td>Moderate overhead</td>
+<td>Some large-scale DL research and production</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why they are rare in deep learning:</strong></p>
+<ol>
+<li><strong>Size.</strong> <code>d</code> is in the millions to billions. An <code>O(d²)</code> Hessian cannot be stored and an <code>O(d³)</code> solve cannot be run.</li>
+<li><strong>Noise.</strong> Minibatch curvature estimates are noisy, and quasi-Newton methods like L-BFGS assume consistent gradients and break under stochastic ones.</li>
+<li><strong>Non-convexity.</strong> <code>H</code> has negative eigenvalues near saddles, so the raw Newton step moves <em>toward</em> saddles and maxima. It needs damping or trust regions.</li>
+<li><strong>Adequate substitutes.</strong> Adam's <code>1/sqrt(v)</code> is a cheap diagonal preconditioner, and it captures a good share of the benefit at <code>O(d)</code> cost.</li>
+</ol>
+<hr />
+<h2 id="constrained-optimization-lagrange-and-kkt">Constrained Optimization: Lagrange and KKT</h2>
+<p><strong>Equality constraints.</strong> To minimize <code>f(x)</code> subject to <code>h(x) = 0</code>, form the Lagrangian <code>ℒ(x, ν) = f(x) + ν h(x)</code> and set <code>∇_x ℒ = 0</code>, <code>h(x) = 0</code>. At the optimum <code>∇f</code> is parallel to <code>∇h</code>: you cannot decrease <code>f</code> without leaving the constraint surface.</p>
+<p>Classic example: PCA as <code>max_w wᵀΣw</code> subject to <code>wᵀw = 1</code>. Setting <code>∇ℒ = 2Σw - 2νw = 0</code> gives <code>Σw = νw</code>, so <code>w</code> is an eigenvector, and the objective equals <code>ν</code>, so you take the largest eigenvalue.</p>
+<p><strong>KKT conditions.</strong> For <code>min f(x)</code> subject to <code>g_i(x) ≤ 0</code> and <code>h_j(x) = 0</code>, a solution satisfies:</p>
+<pre><code>1. Stationarity:          ∇f + Σ μ_i ∇g_i + Σ ν_j ∇h_j = 0
+2. Primal feasibility:    g_i(x) ≤ 0,  h_j(x) = 0
+3. Dual feasibility:      μ_i ≥ 0
+4. Complementary slackness: μ_i g_i(x) = 0
+</code></pre>
+<p>For convex problems satisfying a constraint qualification (e.g. Slater's condition), KKT is necessary and sufficient, and strong duality holds.</p>
+<p><strong>SVM link.</strong> The hard-margin SVM is <code>min ½||w||²</code> subject to <code>y_i(wᵀx_i + b) ≥ 1</code>. The dual is:</p>
+<pre><code>max_α  Σ α_i - ½ Σ_i Σ_j α_i α_j y_i y_j x_iᵀx_j     s.t. α_i ≥ 0, Σ α_i y_i = 0
+w = Σ α_i y_i x_i
+</code></pre>
+<p>Two consequences interviewers look for:</p>
+<ul>
+<li><strong>Complementary slackness</strong> gives <code>α_i &gt; 0</code> only for points with <code>y_i(wᵀx_i + b) = 1</code>, i.e. points on the margin. Those are the <strong>support vectors</strong>. All other points have <code>α_i = 0</code> and do not affect the solution.</li>
+<li>The data enters the dual only through the dot products <code>x_iᵀx_j</code>. Replace them with <code>k(x_i, x_j)</code> and you have the <strong>kernel trick</strong>.</li>
+</ul>
+<hr />
+<h2 id="regularization-constraint-and-prior-views">Regularization: Constraint and Prior Views</h2>
+<p>Three equivalent views of <code>min L(w) + λ R(w)</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>View</th>
+<th>Statement</th>
+<th>What it explains</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Penalty</td>
+<td>Add <code>λ||w||²</code> or <code>λ||w||_1</code> to the loss</td>
+<td>The implementation</td>
+</tr>
+<tr>
+<td>Constraint</td>
+<td><code>min L(w)</code> s.t. <code>R(w) ≤ t</code>; <code>λ</code> is the Lagrange multiplier for <code>t</code></td>
+<td>The L1-diamond sparsity picture; larger <code>λ</code> ↔ smaller <code>t</code></td>
+</tr>
+<tr>
+<td>Bayesian MAP</td>
+<td><code>argmax log p(D|w) + log p(w)</code></td>
+<td>L2 ↔ Gaussian prior <code>N(0, σ²I)</code> with <code>λ ∝ 1/σ²</code>; L1 ↔ Laplace prior</td>
+</tr>
+</tbody>
+</table></div>
+<p>MAP derivation for L2: <code>-log p(w) = ||w||²/(2σ²) + const</code>. Add that to the negative log-likelihood and you get exactly the ridge penalty. More detail in <a href="intro_statistics_probability.html">Statistics &amp; Probability</a>.</p>
+<p><strong>Weight decay vs L2.</strong> In plain SGD, <code>w ← w - η(∇L + λw) = (1 - ηλ)w - η∇L</code>, so L2 and weight decay are identical. In Adam they are not, because the L2 gradient gets divided by <code>sqrt(v)</code>. That is why AdamW exists.</p>
+<hr />
+<h2 id="information-theory">Information Theory</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Formula</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entropy <code>H(p)</code></td>
+<td><code>-Σ p(x) log p(x)</code></td>
+<td>Average surprise; minimum bits needed to encode samples from <code>p</code></td>
+</tr>
+<tr>
+<td>Cross-entropy <code>H(p, q)</code></td>
+<td><code>-Σ p(x) log q(x)</code></td>
+<td>Bits needed to encode samples from <code>p</code> using a code built for <code>q</code></td>
+</tr>
+<tr>
+<td>KL divergence <code>D_KL(p‖q)</code></td>
+<td><code>Σ p(x) log(p(x)/q(x)) = H(p,q) - H(p)</code></td>
+<td>Extra bits from using <code>q</code> instead of <code>p</code>. <code>≥ 0</code>, <code>= 0</code> iff <code>p = q</code>, <strong>not symmetric</strong></td>
+</tr>
+<tr>
+<td>Mutual information <code>I(X;Y)</code></td>
+<td><code>D_KL(p(x,y) ‖ p(x)p(y))</code></td>
+<td>How much knowing <code>Y</code> reduces uncertainty about <code>X</code>. Used in feature selection and decision-tree information gain</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why cross-entropy loss is MLE.</strong> Let <code>p</code> be the empirical data distribution (one-hot on the true label for each example) and <code>q_θ</code> the model. Then</p>
+<pre><code>H(p, q_θ) = -(1/n) Σ_i log q_θ(y_i | x_i) = average negative log-likelihood
+</code></pre>
+<p>Minimizing cross-entropy is exactly maximizing likelihood. And since <code>H(p)</code> does not depend on <code>θ</code>, minimizing cross-entropy also minimizes <code>D_KL(p‖q_θ)</code>. The same argument turns MSE into MLE under Gaussian noise.</p>
+<p><strong>KL asymmetry matters in practice.</strong> Forward KL <code>D_KL(p‖q)</code> (which MLE minimizes) is <em>mean-seeking</em>: <code>q</code> must put mass wherever <code>p</code> does, so it spreads out to cover all modes. Reverse KL <code>D_KL(q‖p)</code> (used in variational inference) is <em>mode-seeking</em>: <code>q</code> is punished for putting mass where <code>p</code> is small, so it locks onto one mode.</p>
+<p><strong>Softmax + cross-entropy gradient</strong>: with logits <code>z</code> and one-hot <code>y</code>, <code>∂L/∂z = softmax(z) - y</code>. It is bounded and never saturates the way <code>MSE ∘ sigmoid</code> does.</p>
+<hr />
+<h2 id="numerical-stability">Numerical Stability</h2>
+<p>Floating point has limited range: float32 overflows near <code>3.4e38</code>, so <code>exp(89)</code> is already <code>inf</code>. Float16 overflows at 65504, which means <code>exp(12)</code> is too big. The fixes all rely on algebraic identities that keep exponent arguments bounded.</p>
+<p><strong>Log-sum-exp trick:</strong> <code>log Σ exp(x_i) = m + log Σ exp(x_i - m)</code> with <code>m = max(x)</code>. The largest term becomes <code>exp(0) = 1</code>, so nothing overflows and at least one term does not underflow.</p>
+<p><strong>Stable softmax:</strong> subtract the max before exponentiating. The result is mathematically identical because softmax is shift-invariant.</p>
+<p><strong>Stable sigmoid:</strong> <code>1/(1+exp(-z))</code> overflows for very negative <code>z</code>. Branch on sign so the exponent argument is always <code>≤ 0</code>.</p>
+<p><strong>Fused losses:</strong> compute log-probabilities directly (<code>log_softmax</code>, <code>BCEWithLogitsLoss</code>, <code>softmax_cross_entropy_with_logits</code>) instead of <code>log(softmax(z))</code>. Otherwise tiny probabilities round to 0 and <code>log(0) = -inf</code>.</p>
+<pre><code class="language-python">import numpy as np
+
+def logsumexp(x):
+    m = np.max(x)
+    return m + np.log(np.sum(np.exp(x - m)))
+
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / e.sum()
+
+def log_softmax(x):
+    return x - logsumexp(x)
+
+def sigmoid(z):
+    z = np.asarray(z, dtype=float)
+    out = np.empty_like(z)
+    pos = z &gt;= 0
+    out[pos] = 1 / (1 + np.exp(-z[pos]))
+    ez = np.exp(z[~pos])                      # z &lt; 0 -&gt; exp(z) in (0, 1), no overflow
+    out[~pos] = ez / (1 + ez)
+    return out
+
+def bce_with_logits(z, y):
+    &quot;&quot;&quot;-[y log σ(z) + (1-y) log(1-σ(z))] rewritten to be stable for any z.&quot;&quot;&quot;
+    return np.maximum(z, 0) - z * y + np.log1p(np.exp(-np.abs(z)))
+
+x = np.array([1000.0, 1001.0, 1002.0])
+with np.errstate(over=&quot;ignore&quot;, invalid=&quot;ignore&quot;):
+    print(np.exp(x) / np.exp(x).sum())        # [nan nan nan]
+print(softmax(x))                             # [0.090 0.245 0.665]
+print(logsumexp(x))                           # 1002.4076
+print(sigmoid(np.array([-1000.0, 0.0, 1000.0])))   # [0.  0.5 1. ] with no warnings
+print(bce_with_logits(np.array([-50.0, 50.0]), np.array([1.0, 0.0])))  # [50. 50.] not inf
+</code></pre>
+<p>Other stability habits: add <code>eps</code> inside <code>log</code> and <code>sqrt</code> (Adam's denominator, normalization layers); use <code>np.log1p</code>/<code>np.expm1</code> for small arguments; keep float32 master weights and use loss scaling in fp16 mixed precision so small gradients do not underflow; clip gradients by global norm.</p>
+<hr />
+<h2 id="gradient-checking">Gradient Checking</h2>
+<p>When you write a gradient by hand (custom layer, custom loss, interview coding round), verify it against central finite differences:</p>
+<pre><code>∂f/∂x_i ≈ (f(x + h e_i) - f(x - h e_i)) / (2h)      error O(h²)
+</code></pre>
+<p>Use central rather than forward differences, whose error is <code>O(h)</code>. Use float64, and pick <code>h ≈ 1e-5</code>: much smaller and floating-point cancellation dominates. Compare with a <strong>relative</strong> error.</p>
+<pre><code class="language-python">import numpy as np
+
+def numerical_grad(f, x, h=1e-5):
+    grad = np.zeros_like(x)
+    for i in range(x.size):
+        old = x.flat[i]
+        x.flat[i] = old + h; f_plus = f(x)
+        x.flat[i] = old - h; f_minus = f(x)
+        x.flat[i] = old
+        grad.flat[i] = (f_plus - f_minus) / (2 * h)
+    return grad
+
+def rel_error(a, b):
+    return np.linalg.norm(a - b) / max(np.linalg.norm(a) + np.linalg.norm(b), 1e-12)
+
+# Check the analytic logistic-regression gradient X^T (p - y)
+rng = np.random.default_rng(0)
+X, y = rng.normal(size=(20, 4)), rng.integers(0, 2, 20).astype(float)
+w = rng.normal(size=4)
+
+def loss(w):
+    z = X @ w
+    return np.sum(np.maximum(z, 0) - z * y + np.log1p(np.exp(-np.abs(z))))
+
+analytic = X.T @ (1 / (1 + np.exp(-X @ w)) - y)
+print(rel_error(analytic, numerical_grad(loss, w.copy())))   # ~1e-10: correct
+</code></pre>
+<p>Rules of thumb for relative error: below <code>1e-7</code> is correct; around <code>1e-4</code> is suspicious unless there are kinks (ReLU, max, hinge, L1) near the evaluation point; above <code>1e-2</code> is a bug. Turn off dropout and other randomness during the check, and check a few coordinates rather than all of them for big models.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="derive-the-closed-form-solution-for-linear-regression-when-wouldnt-you-use-it">Derive the closed-form solution for linear regression. When wouldn't you use it?</h4>
+<p>Write the loss as <code>||Xw - y||²</code>, expand, and take the gradient: <code>2XᵀXw - 2Xᵀy</code>. Setting it to zero gives the normal equations <code>XᵀXw = Xᵀy</code>, so <code>w = (XᵀX)⁻¹Xᵀy</code>. The Hessian <code>2XᵀX</code> is PSD, so this is a global minimum.</p>
+<p>Don't use it when <code>d</code> is large, since forming and solving <code>XᵀX</code> is <code>O(nd² + d³)</code>. Don't use it when <code>XᵀX</code> is singular or badly conditioned (collinear features, <code>d &gt; n</code>); use ridge, <code>lstsq</code>, or the pseudo-inverse instead. And don't use it when the data does not fit in memory, where SGD streams over it. Even when the closed form is appropriate, solve the system with <code>solve</code>/Cholesky/QR rather than computing the inverse.</p>
+<h4 id="why-does-l1-regularization-produce-sparse-solutions-and-l2-does-not">Why does L1 regularization produce sparse solutions and L2 does not?</h4>
+<p>Geometrically, the L1 constraint region is a diamond whose corners sit on the axes. The loss contours typically touch it first at a corner, where some weights are exactly zero. The L2 ball is smooth, so the touching point is generically off-axis.</p>
+<p>From the optimization side, the L1 subgradient <code>λ·sign(w)</code> pushes toward zero with constant force no matter how small <code>w</code> is, and any weight whose loss gradient is weaker than <code>λ</code> sits exactly at zero (soft thresholding). The L2 gradient <code>2λw</code> fades as <code>w</code> shrinks, so weights get small but not zero. The Bayesian version: a Laplace prior has a sharp peak at zero, while a Gaussian prior is flat there.</p>
+<h4 id="what-is-the-relationship-between-svd-eigendecomposition-and-pca">What is the relationship between SVD, eigendecomposition, and PCA?</h4>
+<p>For centered data <code>X = UΣVᵀ</code>, the covariance is <code>XᵀX/(n-1) = VΣ²Vᵀ/(n-1)</code>. The right singular vectors <code>V</code> are the eigenvectors of the covariance (the principal directions), and the eigenvalues are <code>σ_i²/(n-1)</code> (the variance along each direction). PCA can therefore be done either way. SVD is preferred because forming <code>XᵀX</code> squares the condition number and loses precision. Keeping the top <code>k</code> components is the best rank-<code>k</code> approximation (Eckart-Young).</p>
+<h4 id="what-is-the-condition-number-and-why-does-it-matter-for-training">What is the condition number and why does it matter for training?</h4>
+<p>For a matrix it is <code>σ_max/σ_min</code>. For a loss near its minimum it is <code>λ_max/λ_min</code> of the Hessian. Gradient descent needs <code>η &lt; 2/λ_max</code> for stability, so progress along the flattest direction is limited to about <code>1/κ</code> per step. With high <code>κ</code> you zig-zag across a narrow valley and crawl along it. The fixes are to precondition the problem: standardize features, normalize activations, use momentum or Adam (a diagonal preconditioner), or go second-order. In linear systems, high <code>κ</code> also means small input perturbations cause large solution changes.</p>
+<h4 id="explain-backpropagation-why-reverse-mode-and-not-forward-mode">Explain backpropagation. Why reverse mode and not forward mode?</h4>
+<p>Backprop applies the chain rule from the output back toward the inputs, reusing each node's upstream gradient <code>∂L/∂node</code> and multiplying it by local Jacobians. Reverse mode costs one backward pass per <em>output</em>, and forward mode costs one pass per <em>input</em>. A loss is a single scalar and a network has millions of parameters, so reverse mode gets the full gradient in roughly the cost of one extra forward pass. Forward mode would need millions of passes. The tradeoff is memory: reverse mode must store forward activations. Gradient checkpointing recomputes some of them to save memory.</p>
+<h4 id="derive-the-gradient-of-logistic-regression-is-the-problem-convex">Derive the gradient of logistic regression. Is the problem convex?</h4>
+<p>With <code>p = σ(Xw)</code> and the negative log-likelihood, per example <code>∂L/∂z = p - y</code>, because the <code>σ(1-σ)</code> derivative cancels against the <code>1/p</code> and <code>1/(1-p)</code> terms of the log loss. So <code>∇L = Xᵀ(p - y)</code>. The Hessian is <code>XᵀSX</code> with <code>S = diag(p(1-p)) ≥ 0</code>, which is PSD, so the problem is convex. There is no closed form because <code>p</code> is nonlinear in <code>w</code>. On linearly separable data the loss keeps decreasing as <code>||w|| → ∞</code>, so the MLE does not exist without regularization.</p>
+<h4 id="why-is-cross-entropy-the-standard-classification-loss-rather-than-mse">Why is cross-entropy the standard classification loss rather than MSE?</h4>
+<p>First, it is maximum likelihood under a categorical/Bernoulli model: minimizing cross-entropy equals minimizing NLL and equals minimizing <code>D_KL(data ‖ model)</code>. Second, the gradient with respect to the logits is <code>p - y</code>, which stays large when the model is confidently wrong. MSE on a sigmoid output has gradient <code>(p - y)·σ'(z)</code>, and <code>σ'(z)</code> vanishes exactly when the model is confidently wrong, so learning stalls. Cross-entropy also gives a convex problem for logistic regression, while MSE on a sigmoid does not.</p>
+<h4 id="what-does-the-hessian-tell-you-and-why-dont-we-use-newtons-method-for-neural-networks">What does the Hessian tell you, and why don't we use Newton's method for neural networks?</h4>
+<p>The Hessian describes local curvature. Its eigenvalues classify critical points (all positive: minimum; mixed: saddle), its condition number predicts how hard first-order optimization will be, and the magnitude of its top eigenvalue relates to &quot;sharpness&quot; of minima. Newton's method <code>w -= H⁻¹∇L</code> fixes conditioning and converges quadratically. But for <code>d</code> parameters it needs <code>O(d²)</code> memory and an <code>O(d³)</code> solve, minibatch curvature estimates are noisy, and in non-convex regions it gets attracted to saddles. L-BFGS works well for full-batch convex problems such as scikit-learn's logistic regression. Deep learning uses Adam's diagonal preconditioning instead.</p>
+<h4 id="why-does-adam-often-converge-faster-than-sgd-and-when-might-you-still-prefer-sgd">Why does Adam often converge faster than SGD, and when might you still prefer SGD?</h4>
+<p>Adam divides each coordinate's step by a running RMS of its gradient. That makes the step size roughly invariant to gradient scale per parameter, so it handles ill-conditioned or badly scaled problems and sparse gradients without per-parameter tuning, and its momentum term smooths noise. SGD with momentum and a well-tuned schedule sometimes generalizes slightly better, historically on image classification with CNNs, and it uses less optimizer memory (Adam stores two extra tensors per parameter). For transformers, AdamW is the default. If you use Adam, use AdamW so weight decay is not distorted by the adaptive scaling.</p>
+<h4 id="explain-kkt-conditions-and-how-they-show-up-in-svms">Explain KKT conditions and how they show up in SVMs.</h4>
+<p>KKT generalizes Lagrange multipliers to inequality constraints. The conditions are stationarity of the Lagrangian, primal feasibility, non-negative multipliers, and complementary slackness (<code>μ_i g_i(x) = 0</code>: a multiplier can be non-zero only if its constraint is active). For convex problems with a constraint qualification they characterize the optimum exactly. In the SVM dual, complementary slackness means only points on the margin have <code>α_i &gt; 0</code>. These are the support vectors, and the solution <code>w = Σα_i y_i x_i</code> depends only on them. Because the dual touches the data only through dot products, you can replace them with a kernel.</p>
+<h4 id="what-is-kl-divergence-and-why-is-it-asymmetric">What is KL divergence and why is it asymmetric?</h4>
+<p><code>D_KL(p‖q) = E_p[log p/q]</code> is the expected extra code length from using <code>q</code> to encode data from <code>p</code>. It is non-negative and zero iff <code>p = q</code>, but it is not a metric, because the expectation is taken under <code>p</code>. Forward KL <code>D_KL(p‖q)</code> blows up where <code>p &gt; 0</code> and <code>q ≈ 0</code>, so <code>q</code> must cover all of <code>p</code>'s modes (mean-seeking; this is what MLE does). Reverse KL <code>D_KL(q‖p)</code> blows up where <code>q &gt; 0</code> and <code>p ≈ 0</code>, so <code>q</code> hides inside a single mode (mode-seeking; this is what variational inference and many RL policy constraints use).</p>
+<h4 id="your-training-loss-suddenly-becomes-nan-what-do-you-check">Your training loss suddenly becomes NaN. What do you check?</h4>
+<p>Work from the math outward. Check for exponential overflow: unstable softmax/sigmoid, or <code>exp</code> of unbounded logits. Check for <code>log(0)</code> or division by zero: probabilities computed and then logged separately instead of through a fused <code>log_softmax</code> or with-logits loss, or a missing <code>eps</code> in normalization or the Adam denominator. Check for exploding gradients from too high a learning rate relative to curvature (<code>η &gt; 2/λ_max</code>), which you can fix with gradient clipping, warmup, or a lower LR. In fp16, check for overflow above 65504 (use loss scaling or bf16). And check for bad inputs: NaN or inf in the data, or unnormalized features with huge scale. Use <code>torch.autograd.detect_anomaly()</code> or per-layer gradient-norm logging to find the first bad op.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>np.linalg.inv(X.T @ X) @ X.T @ y</code></td>
+<td>Explicit inverse is slow; forming <code>XᵀX</code> squares the condition number</td>
+<td><code>np.linalg.lstsq</code>, <code>solve</code>, or QR/Cholesky</td>
+</tr>
+<tr>
+<td>Not standardizing features before GD</td>
+<td>Different feature scales inflate the Hessian's condition number; training is slow or unstable</td>
+<td>Standardize; use normalization layers</td>
+</tr>
+<tr>
+<td>Regularizing the bias term</td>
+<td>Pulls the intercept toward zero for no reason and shifts predictions</td>
+<td>Exclude the bias from the penalty</td>
+</tr>
+<tr>
+<td><code>np.exp(logits) / sum(...)</code></td>
+<td>Overflows to <code>inf/inf = nan</code> for large logits</td>
+<td>Subtract the max; use <code>log_softmax</code></td>
+</tr>
+<tr>
+<td><code>log(sigmoid(z))</code> or <code>log(softmax(z))</code> computed separately</td>
+<td>Probabilities round to 0, giving <code>-inf</code> loss and NaN gradients</td>
+<td>Fused with-logits losses</td>
+</tr>
+<tr>
+<td>Using L2 penalty inside Adam as &quot;weight decay&quot;</td>
+<td>Adaptive scaling weakens decay on high-variance parameters</td>
+<td>AdamW (decoupled decay)</td>
+</tr>
+<tr>
+<td>Assuming a local minimum is global</td>
+<td>Only true for convex problems</td>
+<td>Know which models are convex; use multiple restarts for non-convex ones</td>
+</tr>
+<tr>
+<td>Treating KL as symmetric / a distance</td>
+<td>Forward and reverse KL give very different fits</td>
+<td>Pick the direction deliberately; use JS divergence if you need symmetry</td>
+</tr>
+<tr>
+<td>Forward differences in gradient checks, or float32</td>
+<td><code>O(h)</code> error plus rounding give false alarms</td>
+<td>Central differences, float64, <code>h ≈ 1e-5</code>, relative error</td>
+</tr>
+<tr>
+<td>Gradient-checking with dropout on or near ReLU kinks</td>
+<td>Randomness or non-differentiable points produce spurious mismatches</td>
+<td>Fix seeds / disable dropout; nudge away from kinks</td>
+</tr>
+<tr>
+<td>Confusing eigen- and singular values for non-symmetric matrices</td>
+<td>They differ unless the matrix is symmetric PSD</td>
+<td>Use SVD for general matrices, <code>eigh</code> for symmetric ones</td>
+</tr>
+<tr>
+<td>Picking the learning rate without regard to curvature</td>
+<td><code>η &gt; 2/λ_max</code> diverges; far below it crawls</td>
+<td>LR range test, warmup, schedules</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_statistics_probability.html">Statistics &amp; Probability</a></li>
+<li><a href="intro_dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li><a href="intro_model_evaluation.html">Model Evaluation</a></li>
+<li><a href="intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="../deep_learning/intro_fine_tuning.html">Fine-Tuning (LoRA)</a></li>
+<li><a href="../deep_learning/intro_transformers.html">Transformers</a></li>
+<li><a href="../deep_learning/intro_generative_models.html">Generative Models</a></li>
+<li><a href="../coding_challenges/ml_coding_challenges.html">ML Coding Challenges</a></li>
+<li><a href="./">Classical ML Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_statistics_probability.html"><small>Next</small>Statistics &amp; Probability</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_math_for_ml.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

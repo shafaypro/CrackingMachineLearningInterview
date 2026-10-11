@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrewAI: Multi-Agent Framework Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="CrewAI: Multi-Agent Framework: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_crewai.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="CrewAI: Multi-Agent Framework Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="CrewAI: Multi-Agent Framework: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_crewai.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CrewAI: Multi-Agent Framework Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="CrewAI: Multi-Agent Framework: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "CrewAI: Multi-Agent Framework",
+   "description": "CrewAI: Multi-Agent Framework: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_crewai.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "CrewAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_crewai.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">CrewAI</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_crewai.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="crewai-multi-agent-framework">CrewAI: Multi-Agent Framework</h1>
+<h2 id="what-is-crewai">What is CrewAI?</h2>
+<p>CrewAI is an open-source framework for orchestrating <strong>role-playing autonomous AI agents</strong> that collaborate to accomplish complex tasks. Unlike single-agent systems, CrewAI models work as a &quot;crew&quot;: each agent has a defined <strong>role</strong>, <strong>goal</strong>, and <strong>backstory</strong> that shapes its behavior.</p>
+<pre><code>                    ┌─────────────────────────────┐
+                    │           CREW               │
+                    │                              │
+                    │  ┌────────┐  ┌────────────┐  │
+                    │  │ Agent  │  │   Agent    │  │
+                    │  │Researcher│ │  Writer    │  │
+                    │  └───┬────┘  └─────┬──────┘  │
+                    │      │             │          │
+                    │  ┌───▼─────────────▼──────┐  │
+                    │  │        Tasks            │  │
+                    │  │  Task1 → Task2 → Task3  │  │
+                    │  └─────────────────────────┘  │
+                    └─────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="core-architecture">Core Architecture</h2>
+<h3 id="key-components">Key Components</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agent</strong></td>
+<td>An AI worker with a role, goal, tools, and an LLM backbone</td>
+</tr>
+<tr>
+<td><strong>Task</strong></td>
+<td>A discrete unit of work assigned to an agent</td>
+</tr>
+<tr>
+<td><strong>Crew</strong></td>
+<td>The collection of agents + tasks + execution process</td>
+</tr>
+<tr>
+<td><strong>Process</strong></td>
+<td>How tasks execute: <code>sequential</code> or <code>hierarchical</code></td>
+</tr>
+<tr>
+<td><strong>Tool</strong></td>
+<td>External capability an agent can invoke (search, code, DB)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="execution-processes">Execution Processes</h3>
+<ul>
+<li><strong>Sequential</strong>: Tasks run one after another; output of Task N feeds Task N+1</li>
+<li><strong>Hierarchical</strong>: A &quot;manager&quot; agent delegates tasks to worker agents and validates outputs (requires a manager LLM)</li>
+</ul>
+<hr />
+<h2 id="code-example-research--write-crew">Code Example: Research + Write Crew</h2>
+<pre><code class="language-python">from crewai import Agent, Task, Crew, Process
+from crewai_tools import SerperDevTool
+
+# Tools
+search_tool = SerperDevTool()
+
+# Agents
+researcher = Agent(
+    role=&quot;Senior ML Researcher&quot;,
+    goal=&quot;Find the latest trends in LLM fine-tuning techniques&quot;,
+    backstory=&quot;You are an expert AI researcher with 10 years of experience in NLP.&quot;,
+    tools=[search_tool],
+    verbose=True,
+    llm=&quot;anthropic/claude-opus-4-6&quot;  # provider/model format, e.g. &quot;openai/&lt;model&gt;&quot;
+)
+
+writer = Agent(
+    role=&quot;Technical Writer&quot;,
+    goal=&quot;Write a concise, interview-ready summary of ML findings&quot;,
+    backstory=&quot;You turn complex research into clear engineering documentation.&quot;,
+    verbose=True
+)
+
+# Tasks
+research_task = Task(
+    description=&quot;Research the top 3 LLM fine-tuning methods in 2026 with citations.&quot;,
+    expected_output=&quot;Bullet-point list of techniques with pros/cons&quot;,
+    agent=researcher
+)
+
+write_task = Task(
+    description=&quot;Convert research findings into a structured markdown document.&quot;,
+    expected_output=&quot;A 500-word markdown doc with headers and code examples.&quot;,
+    agent=writer,
+    context=[research_task]  # Receives researcher output
+)
+
+# Crew
+crew = Crew(
+    agents=[researcher, writer],
+    tasks=[research_task, write_task],
+    process=Process.sequential,
+    verbose=True
+)
+
+result = crew.kickoff()
+print(result.raw)
+</code></pre>
+<hr />
+<h2 id="hierarchical-process-example">Hierarchical Process Example</h2>
+<pre><code class="language-python">from crewai import Agent, Task, Crew, Process
+
+manager = Agent(
+    role=&quot;Project Manager&quot;,
+    goal=&quot;Coordinate team to deliver a complete ML pipeline report&quot;,
+    backstory=&quot;Experienced tech lead who delegates and validates all work.&quot;,
+    allow_delegation=True
+)
+
+analyst = Agent(role=&quot;Data Analyst&quot;, goal=&quot;Analyze ML benchmark results&quot;, ...)
+engineer = Agent(role=&quot;ML Engineer&quot;, goal=&quot;Explain implementation details&quot;, ...)
+
+crew = Crew(
+    agents=[analyst, engineer],
+    tasks=[...],
+    process=Process.hierarchical,
+    manager_agent=manager,  # Manager validates each step
+    verbose=True
+)
+</code></pre>
+<hr />
+<h2 id="memory-in-crewai">Memory in CrewAI</h2>
+<p>CrewAI supports multiple memory scopes:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Memory Type</th>
+<th>Scope</th>
+<th>Backend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Short-term</strong></td>
+<td>Within current task execution</td>
+<td>In-memory context</td>
+</tr>
+<tr>
+<td><strong>Long-term</strong></td>
+<td>Across crew runs</td>
+<td>SQLite / vector store</td>
+</tr>
+<tr>
+<td><strong>Entity</strong></td>
+<td>Facts about people/things</td>
+<td>Knowledge graph / vector</td>
+</tr>
+<tr>
+<td><strong>Contextual</strong></td>
+<td>Injected at task start</td>
+<td>Custom embeddings</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">crew = Crew(
+    agents=[...],
+    tasks=[...],
+    memory=True,              # Enable all memory types
+    embedder={
+        &quot;provider&quot;: &quot;openai&quot;,
+        &quot;config&quot;: {&quot;model&quot;: &quot;text-embedding-3-small&quot;}
+    }
+)
+</code></pre>
+<hr />
+<h2 id="tool-calling-in-crewai">Tool Calling in CrewAI</h2>
+<p>Agents use tools via natural language: CrewAI routes the call automatically:</p>
+<pre><code class="language-python">from crewai_tools import (
+    SerperDevTool,      # Web search
+    FileReadTool,       # File I/O
+    CodeInterpreterTool, # Python execution
+    PGSearchTool        # PostgreSQL queries
+)
+
+agent = Agent(
+    role=&quot;Data Scientist&quot;,
+    goal=&quot;Analyze sales data and find anomalies&quot;,
+    tools=[FileReadTool(), CodeInterpreterTool()],
+    llm=&quot;anthropic/claude-sonnet-5&quot;
+)
+</code></pre>
+<hr />
+<h2 id="crewai-vs-langgraph-vs-autogen">CrewAI vs LangGraph vs AutoGen</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>CrewAI</th>
+<th>LangGraph</th>
+<th>AutoGen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mental model</strong></td>
+<td>Role-based crew</td>
+<td>State machine / graph</td>
+<td>Conversation agents</td>
+</tr>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>Sequential / hierarchical</td>
+<td>Graph-based (explicit edges)</td>
+<td>Chat-based turns</td>
+</tr>
+<tr>
+<td><strong>State management</strong></td>
+<td>Implicit via task context</td>
+<td>Explicit <code>StateGraph</code></td>
+<td>Message history</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Business process automation</td>
+<td>Complex branching logic</td>
+<td>Research / debate agents</td>
+</tr>
+<tr>
+<td><strong>Learning curve</strong></td>
+<td>Low</td>
+<td>Medium</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Determinism</strong></td>
+<td>Low (LLM-driven)</td>
+<td>High (graph-controlled)</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="when-to-use-crewai">When to Use CrewAI</h2>
+<p><strong>Use CrewAI when:</strong></p>
+<ul>
+<li>You can decompose work into clear roles and sequential tasks</li>
+<li>You need rapid prototyping of multi-agent pipelines</li>
+<li>Your workflow is relatively linear (research → draft → review → publish)</li>
+<li>Business process automation with human-readable agent descriptions</li>
+</ul>
+<p><strong>Avoid CrewAI when:</strong></p>
+<ul>
+<li>You need strict control flow (loops, conditionals) → use LangGraph</li>
+<li>You need real-time streaming with complex state → use LangGraph</li>
+<li>You need agents to debate/vote → use AutoGen</li>
+<li>Production systems with SLA requirements (CrewAI is still maturing)</li>
+</ul>
+<hr />
+<h2 id="production-pitfalls">Production Pitfalls</h2>
+<ol>
+<li>
+<p><strong>Runaway token consumption</strong>: Agents with web search can loop and burn tokens. Always set <code>max_iter</code> and <code>max_execution_time</code>.</p>
+<pre><code class="language-python">agent = Agent(..., max_iter=10, max_execution_time=60)
+</code></pre>
+</li>
+<li>
+<p><strong>Context window overflow</strong>: Long task chains compound context. Use <code>context</code> selectively; don't pass all prior tasks.</p>
+</li>
+<li>
+<p><strong>Non-determinism</strong>: Same crew can produce different outputs. Add expected_output constraints and use output validators.</p>
+</li>
+<li>
+<p><strong>Tool errors cascade</strong>: If a tool fails, the agent retries by default. Add <code>exception_on_tool_error=True</code> to fail fast.</p>
+</li>
+<li>
+<p><strong>Cost estimation</strong>: A 5-agent crew with web search can cost $0.50-$5 per run. Monitor with LangSmith or Literal AI.</p>
+</li>
+</ol>
+<hr />
+<h2 id="failure-handling--retries">Failure Handling &amp; Retries</h2>
+<pre><code class="language-python">from crewai import Agent, Task
+
+# Agent-level retry config
+agent = Agent(
+    role=&quot;Researcher&quot;,
+    goal=&quot;...&quot;,
+    max_iter=5,           # Max reasoning loops per task
+    max_retry_limit=2,    # Task-level retries on failure
+)
+
+# Task-level human validation
+task = Task(
+    description=&quot;Write production-ready code&quot;,
+    expected_output=&quot;Python function with tests&quot;,
+    human_input=True,     # Pauses for human approval before continuing
+    agent=agent
+)
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: What is CrewAI and when would you choose it over LangChain?</strong></p>
+<blockquote>
+<p>CrewAI is a multi-agent orchestration framework where each agent has a role, goal, and backstory. Choose CrewAI when you have distinct agent personas with clear task division (researcher, writer, reviewer). LangChain is lower-level: it's a toolkit for building chains and agents but doesn't natively model &quot;crews.&quot;</p>
+</blockquote>
+<p><strong>Q: How does CrewAI handle agent communication?</strong></p>
+<blockquote>
+<p>Agents don't communicate directly. Task outputs are passed as context to downstream tasks. In hierarchical mode, a manager agent delegates and validates results.</p>
+</blockquote>
+<p><strong>Q: What are the risks of using CrewAI in production?</strong></p>
+<blockquote>
+<p>Non-determinism, token cost blowout, context overflow, and tool error cascades. Mitigate with <code>max_iter</code>, structured output validators, tool error handling, and observability via LangSmith.</p>
+</blockquote>
+<p><strong>Q: How do you make a CrewAI workflow deterministic?</strong></p>
+<blockquote>
+<p>Define strict <code>expected_output</code> formats, use Pydantic output models, limit tools, set <code>max_iter</code> conservatively, and add human-in-the-loop checkpoints for critical decisions.</p>
+</blockquote>
+<p><strong>Q: Explain memory types in CrewAI.</strong></p>
+<blockquote>
+<p>Short-term: in-memory context within a run. Long-term: persisted to SQLite, recalled across runs. Entity: structured facts about people/objects. Use long-term memory to avoid re-searching the same information across crew runs.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_langsmith.html"><small>Previous</small>LangSmith</a><a rel="next" class="next" href="intro_anthropic.html"><small>Next</small>Anthropic &amp; Claude</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_crewai.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

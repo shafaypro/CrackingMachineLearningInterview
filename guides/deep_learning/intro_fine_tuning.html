@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT | Cracking ML Interviews</title>
+<meta name="description" content="Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_fine_tuning.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT | Cracking ML Interviews">
+<meta property="og:description" content="Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_fine_tuning.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT | Cracking ML Interviews">
+<meta name="twitter:description" content="Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Fine-Tuning Large Language Models: LoRA, QLoRA & PEFT",
+   "description": "Fine-Tuning Large Language Models: LoRA, QLoRA & PEFT: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_fine_tuning.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Fine-Tuning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_fine_tuning.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Fine-Tuning</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_fine_tuning.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="fine-tuning-large-language-models-lora-qlora--peft">Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT</h1>
+<h2 id="why-fine-tune">Why Fine-Tune?</h2>
+<p>Pre-trained LLMs are general-purpose. Fine-tuning adapts them to specific tasks, domains, or styles without training from scratch. The challenge: LLMs have billions of parameters: full fine-tuning is memory-prohibitive for most practitioners.</p>
+<p><strong>When to fine-tune vs. prompt engineer:</strong></p>
+<ul>
+<li><strong>Prompt engineering first</strong>: if you can solve the task with few-shot examples, do that</li>
+<li><strong>Fine-tune when</strong>: consistent format/style is needed, task is domain-specific (legal, medical), latency requires shorter prompts, behavior that's hard to describe in a prompt</li>
+</ul>
+<hr />
+<h2 id="full-fine-tuning-vs-parameter-efficient-fine-tuning-peft">Full Fine-Tuning vs. Parameter-Efficient Fine-Tuning (PEFT)</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Full Fine-Tuning</th>
+<th>PEFT (LoRA/QLoRA)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameters updated</td>
+<td>All (~7B for 7B model)</td>
+<td>&lt;1% of model (~4-40M)</td>
+</tr>
+<tr>
+<td>GPU memory (7B)</td>
+<td>~112 GB+ (mixed-precision AdamW, before activations)</td>
+<td>~6-10 GB (QLoRA)</td>
+</tr>
+<tr>
+<td>Risk of catastrophic forgetting</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Training speed</td>
+<td>Slow</td>
+<td>Fast</td>
+</tr>
+<tr>
+<td>Multiple task adapters</td>
+<td>Impractical</td>
+<td>Swap adapters cheaply</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="lora-low-rank-adaptation">LoRA: Low-Rank Adaptation</h2>
+<h3 id="core-idea">Core Idea</h3>
+<p>Instead of updating weight matrix <strong>W</strong> (d×k), LoRA learns two small matrices <strong>B</strong> (d×r) and <strong>A</strong> (r×k) where r &lt;&lt; min(d, k).</p>
+<pre><code>W_new = W_pretrained + ΔW = W_pretrained + B · A
+</code></pre>
+<p>During training, W_pretrained is <strong>frozen</strong>. Only A and B are updated.</p>
+<p><strong>Why low rank works:</strong> The updates needed to adapt a pre-trained model to a downstream task tend to have low intrinsic dimensionality, they lie in a small subspace.</p>
+<h3 id="lora-math">LoRA Math</h3>
+<pre><code>h = W₀x + ΔWx = W₀x + BAx
+</code></pre>
+<ul>
+<li>W₀ ∈ ℝ^(d×k): frozen pretrained weights</li>
+<li>B ∈ ℝ^(d×r), A ∈ ℝ^(r×k): trainable low-rank matrices</li>
+<li>r = rank (typical: 4, 8, 16, 64)</li>
+<li>A is initialized with random Gaussian, B with zeros → ΔW = 0 at init</li>
+</ul>
+<p><strong>Scaling factor α:</strong> Often ΔW = (α/r) · BA. Setting α=r gives no scaling; α &lt; r downscales the update.</p>
+<h3 id="parameter-savings-example">Parameter Savings Example</h3>
+<pre><code># 7B model, attention projection: d=4096, k=4096
+# Full: 4096 * 4096 = 16.7M parameters
+# LoRA r=16: 4096*16 + 16*4096 = 131K parameters → 99.2% savings
+</code></pre>
+<h3 id="which-modules-to-apply-lora-to">Which Modules to Apply LoRA To?</h3>
+<p>Common choices (the original LoRA paper adapted attention projections, mainly <code>q_proj</code> and <code>v_proj</code>; QLoRA showed that adapting every linear layer, including the MLP, works better):</p>
+<ul>
+<li><code>q_proj</code>, <code>v_proj</code>: query and value projections in attention</li>
+<li><code>k_proj</code>, <code>o_proj</code>: key and output projections</li>
+<li><code>gate_proj</code>, <code>up_proj</code>, <code>down_proj</code>: MLP layers</li>
+</ul>
+<p>Applying LoRA to all linear layers usually outperforms selective application.</p>
+<h3 id="lora-with-huggingface-peft">LoRA with HuggingFace PEFT</h3>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model, TaskType
+
+model = AutoModelForCausalLM.from_pretrained(
+    &quot;meta-llama/Llama-2-7b-hf&quot;,
+    torch_dtype=torch.bfloat16,
+    device_map=&quot;auto&quot;
+)
+
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=16,                          # rank
+    lora_alpha=32,                 # scaling: alpha/r = 2x
+    target_modules=[&quot;q_proj&quot;, &quot;v_proj&quot;, &quot;k_proj&quot;, &quot;o_proj&quot;,
+                    &quot;gate_proj&quot;, &quot;up_proj&quot;, &quot;down_proj&quot;],
+    lora_dropout=0.05,
+    bias=&quot;none&quot;,
+)
+
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# trainable params: 39,976,960 || all params: 6,778,392,576 || trainable%: 0.5898
+# (32 layers x r=16 x [4 x (4096+4096) + 3 x (4096+11008)] = 39,976,960)
+</code></pre>
+<hr />
+<h2 id="qlora-quantized-lora">QLoRA: Quantized LoRA</h2>
+<p>QLoRA (Dettmers et al., 2023) enables fine-tuning 65B models on a single 48GB GPU by combining:</p>
+<ol>
+<li><strong>4-bit NormalFloat (NF4)</strong> quantization of the base model</li>
+<li><strong>Double quantization</strong>: quantize the quantization constants themselves</li>
+<li><strong>Paged optimizers</strong>: offload optimizer states to CPU RAM when GPU memory spikes</li>
+<li><strong>LoRA adapters</strong> trained in bf16</li>
+</ol>
+<h3 id="nf4-quantization">NF4 Quantization</h3>
+<p>NF4 is an information-theoretically optimal quantization for normally distributed weights. Standard int4 assumes uniform distribution; NF4 uses quantile bins.</p>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,    # double quantization
+    bnb_4bit_quant_type=&quot;nf4&quot;,         # NormalFloat4
+    bnb_4bit_compute_dtype=torch.bfloat16  # compute in bf16
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    &quot;meta-llama/Llama-2-13b-hf&quot;,
+    quantization_config=bnb_config,
+    device_map=&quot;auto&quot;
+)
+</code></pre>
+<h3 id="full-qlora-training-script">Full QLoRA Training Script</h3>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from trl import SFTConfig, SFTTrainer
+from datasets import load_dataset
+
+# 1. Load in 4-bit
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type=&quot;nf4&quot;,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    &quot;mistralai/Mistral-7B-v0.1&quot;,
+    quantization_config=bnb_config,
+    device_map=&quot;auto&quot;,
+)
+
+# 2. Prepare for k-bit training (enables gradient checkpointing, casts norms to fp32)
+model = prepare_model_for_kbit_training(model)
+
+# 3. Add LoRA adapters
+lora_config = LoraConfig(
+    r=64,
+    lora_alpha=16,
+    target_modules=[&quot;q_proj&quot;, &quot;k_proj&quot;, &quot;v_proj&quot;, &quot;o_proj&quot;,
+                    &quot;gate_proj&quot;, &quot;up_proj&quot;, &quot;down_proj&quot;],
+    lora_dropout=0.1,
+    bias=&quot;none&quot;,
+    task_type=&quot;CAUSAL_LM&quot;
+)
+model = get_peft_model(model, lora_config)
+
+# 4. Training arguments (SFTConfig extends TrainingArguments with SFT-specific options)
+training_args = SFTConfig(
+    output_dir=&quot;./qlora-mistral-7b&quot;,
+    max_length=2048,                  # called max_seq_length in older TRL releases
+    packing=True,                     # pack short samples into one sequence for efficiency
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,    # effective batch = 16
+    gradient_checkpointing=True,      # save memory at cost of recompute
+    optim=&quot;paged_adamw_8bit&quot;,         # paged optimizer
+    learning_rate=2e-4,
+    lr_scheduler_type=&quot;cosine&quot;,
+    warmup_ratio=0.03,
+    bf16=True,
+    logging_steps=10,
+    save_strategy=&quot;epoch&quot;,
+)
+
+# 5. Dataset (instruction format)
+dataset = load_dataset(&quot;your-dataset&quot;, split=&quot;train&quot;)
+
+def format_instruction(sample):
+    return f&quot;&quot;&quot;### Instruction:
+{sample['instruction']}
+
+### Response:
+{sample['output']}&quot;&quot;&quot;
+
+# 6. Train with SFTTrainer (handles packing, formatting)
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset,
+    args=training_args,
+    formatting_func=format_instruction,
+)
+
+trainer.train()
+trainer.save_model()
+</code></pre>
+<h3 id="memory-comparison-7b-model">Memory Comparison (7B Model)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>GPU Memory</th>
+<th>Hardware</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full fine-tune (bf16)</td>
+<td>~112 GB</td>
+<td>2× A100 80GB</td>
+</tr>
+<tr>
+<td>LoRA (bf16 base)</td>
+<td>~28 GB</td>
+<td>1× A100 40GB</td>
+</tr>
+<tr>
+<td>QLoRA (4-bit base)</td>
+<td>~10 GB</td>
+<td>1× RTX 3090</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="instruction-tuning">Instruction Tuning</h2>
+<p>Instruction tuning fine-tunes a pretrained LLM to follow natural language instructions by training on (instruction, output) pairs.</p>
+<h3 id="data-formats">Data Formats</h3>
+<p><strong>Alpaca format:</strong></p>
+<pre><code class="language-json">{
+  &quot;instruction&quot;: &quot;Classify the sentiment of the following review.&quot;,
+  &quot;input&quot;: &quot;The product broke after one week. Very disappointing.&quot;,
+  &quot;output&quot;: &quot;Negative&quot;
+}
+</code></pre>
+<p><strong>ShareGPT / conversational format:</strong></p>
+<pre><code class="language-json">{
+  &quot;conversations&quot;: [
+    {&quot;from&quot;: &quot;human&quot;, &quot;value&quot;: &quot;Explain gradient descent like I'm five.&quot;},
+    {&quot;from&quot;: &quot;gpt&quot;, &quot;value&quot;: &quot;Imagine you're lost on a foggy hill...&quot;}
+  ]
+}
+</code></pre>
+<p><strong>Chat template (model-specific):</strong></p>
+<pre><code class="language-python"># Llama-3 format
+tokenizer.apply_chat_template(
+    [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is backprop?&quot;}],
+    tokenize=False,
+    add_generation_prompt=True
+)
+# &lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;\n\nWhat is backprop?&lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;\n\n
+</code></pre>
+<h3 id="key-instruction-tuning-tips">Key Instruction Tuning Tips</h3>
+<ol>
+<li><strong>Quality &gt; Quantity</strong>: 1K high-quality examples often outperforms 100K noisy ones</li>
+<li><strong>Diversity of instructions</strong>: cover many task types (summarization, QA, code, classification)</li>
+<li><strong>Response length calibration</strong>: include both short and long answers</li>
+<li><strong>System prompts</strong>: include them in training data if you'll use them at inference</li>
+</ol>
+<hr />
+<h2 id="rlhf-and-dpo">RLHF and DPO</h2>
+<h3 id="rlhf-reinforcement-learning-from-human-feedback">RLHF (Reinforcement Learning from Human Feedback)</h3>
+<p>Three-stage process:</p>
+<ol>
+<li><strong>SFT</strong>: Supervised fine-tuning on demonstrations</li>
+<li><strong>Reward modeling</strong>: Train a reward model on human preference pairs (chosen vs rejected)</li>
+<li><strong>PPO</strong>: Fine-tune the SFT model with RL using reward model signal</li>
+</ol>
+<p>Expensive: requires running 4 models simultaneously (SFT, reward, policy, value function).</p>
+<h3 id="dpo-direct-preference-optimization">DPO: Direct Preference Optimization</h3>
+<p>DPO (Rafailov et al., 2023) achieves RLHF quality without explicit RL training:</p>
+<pre><code>L_DPO = -E[log σ(β · log(π_θ(y_w|x)/π_ref(y_w|x)) - β · log(π_θ(y_l|x)/π_ref(y_l|x)))]
+</code></pre>
+<p>Where y_w = preferred response, y_l = less preferred response.</p>
+<pre><code class="language-python">from trl import DPOTrainer, DPOConfig
+
+dpo_config = DPOConfig(
+    beta=0.1,          # KL regularization strength
+    learning_rate=5e-7,
+    num_train_epochs=1,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=8,
+)
+
+# Dataset format: {&quot;prompt&quot;: ..., &quot;chosen&quot;: ..., &quot;rejected&quot;: ...}
+trainer = DPOTrainer(
+    model=model,
+    ref_model=ref_model,   # frozen reference model (SFT checkpoint)
+    args=dpo_config,
+    train_dataset=preference_dataset,
+    processing_class=tokenizer,   # `tokenizer=` in TRL releases before 0.12
+)
+trainer.train()
+</code></pre>
+<p><strong>DPO vs RLHF trade-offs:</strong></p>
+<ul>
+<li>DPO: simpler, stable, no RL infrastructure needed, often competitive quality</li>
+<li>RLHF: more flexible (can use live reward signal), better when reward model is very accurate</li>
+</ul>
+<hr />
+<h2 id="merging-adapters--model-management">Merging Adapters &amp; Model Management</h2>
+<h3 id="merging-lora-weights-back">Merging LoRA Weights Back</h3>
+<p>After training, you can merge LoRA weights into the base model for faster inference:</p>
+<pre><code class="language-python">from peft import PeftModel
+
+# Load base + adapter
+base_model = AutoModelForCausalLM.from_pretrained(&quot;mistralai/Mistral-7B-v0.1&quot;)
+model = PeftModel.from_pretrained(base_model, &quot;./qlora-output&quot;)
+
+# Merge and unload
+merged_model = model.merge_and_unload()
+merged_model.save_pretrained(&quot;./merged-mistral-7b-finetuned&quot;)
+tokenizer.save_pretrained(&quot;./merged-mistral-7b-finetuned&quot;)
+</code></pre>
+<h3 id="multi-adapter-serving">Multi-Adapter Serving</h3>
+<p>Keep base model loaded, swap adapters per request:</p>
+<pre><code class="language-python"># Load multiple adapters without merging
+model.load_adapter(&quot;./adapter-task-a&quot;, adapter_name=&quot;task_a&quot;)
+model.load_adapter(&quot;./adapter-task-b&quot;, adapter_name=&quot;task_b&quot;)
+
+# Switch at inference time
+model.set_adapter(&quot;task_a&quot;)
+output_a = model.generate(...)
+
+model.set_adapter(&quot;task_b&quot;)
+output_b = model.generate(...)
+</code></pre>
+<hr />
+<h2 id="hyperparameter-guidelines">Hyperparameter Guidelines</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Hyperparameter</th>
+<th>Typical Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LoRA rank (r)</td>
+<td>4-64</td>
+<td>Higher r = more capacity, more memory</td>
+</tr>
+<tr>
+<td>LoRA alpha</td>
+<td>r or 2×r</td>
+<td>Scales gradient updates</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>1e-4 to 3e-4</td>
+<td>Higher than full fine-tuning</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>4-32 (effective)</td>
+<td>Use gradient accumulation</td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>1-5</td>
+<td>Overfit risk increases with more epochs</td>
+</tr>
+<tr>
+<td>Dropout</td>
+<td>0.05-0.1</td>
+<td>Light regularization</td>
+</tr>
+<tr>
+<td>Warmup ratio</td>
+<td>0.03-0.05</td>
+<td>Warmup prevents early instability</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="common-interview-questions">Common Interview Questions</h2>
+<p><strong>Q: Why does LoRA work well even with rank=8?</strong>
+The adaptation needed to steer a pretrained model toward a task has low intrinsic rank: the gradient updates during fine-tuning lie in a low-dimensional subspace of the full parameter space. LoRA captures this efficiently.</p>
+<p><strong>Q: When would you use full fine-tuning over LoRA?</strong>
+When compute is available and the task requires fundamental behavioral shifts (e.g., changing the language a model operates in, major domain shift like scientific reasoning). For most task adaptation, LoRA is sufficient and preferred.</p>
+<p><strong>Q: How do you prevent catastrophic forgetting with LoRA?</strong>
+LoRA inherently reduces forgetting since the base weights are frozen. Additional strategies: include general-domain samples in your training data (replay), use regularization, keep rank low.</p>
+<p><strong>Q: What's the difference between QLoRA and quantization for inference?</strong>
+QLoRA uses quantization during <em>training</em> to reduce memory so you can fine-tune on consumer hardware. Inference quantization is for <em>deployment</em> speed/size. You can use both: fine-tune with QLoRA, then quantize the merged model again for inference (GPTQ, AWQ, GGUF).</p>
+<p><strong>Q: How would you evaluate if fine-tuning improved the model?</strong>
+Automated: task-specific metrics (accuracy, ROUGE, BLEU, code pass@k). LLM-as-judge: use a stronger model (GPT-4) to evaluate response quality on a held-out set. Human eval: for subjective quality. Monitor both capability gain <em>and</em> regression on general benchmarks (MT-Bench, MMLU).</p>
+<p><strong>Q: Explain gradient checkpointing trade-off.</strong>
+Gradient checkpointing saves GPU memory by not storing all intermediate activations during the forward pass. Instead, they're recomputed during backprop when needed. This trades roughly 20-40% extra training time (an extra forward pass) for a large cut in activation memory, which matters most when fine-tuning large models.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_computer_vision.html"><small>Previous</small>Computer Vision</a><a rel="next" class="next" href="intro_neural_network_training.html"><small>Next</small>NN Training &amp; Optimization</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_fine_tuning.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

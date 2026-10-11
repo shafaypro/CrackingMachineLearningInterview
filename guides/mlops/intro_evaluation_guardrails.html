@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluation and Guardrails for AI Systems Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on measuring AI system quality and preventing unsafe, unreliable, or low-quality behavior in production.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_evaluation_guardrails.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Evaluation and Guardrails for AI Systems Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on measuring AI system quality and preventing unsafe, unreliable, or low-quality behavior in production.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_evaluation_guardrails.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evaluation and Guardrails for AI Systems Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on measuring AI system quality and preventing unsafe, unreliable, or low-quality behavior in production.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Evaluation and Guardrails for AI Systems",
+   "description": "This guide focuses on measuring AI system quality and preventing unsafe, unreliable, or low-quality behavior in production.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_evaluation_guardrails.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Evaluation & Guardrails",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_evaluation_guardrails.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Evaluation &amp; Guardrails</span></nav>
+<p class="meta"><a href="../../#mlops/intro_evaluation_guardrails.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="evaluation-and-guardrails-for-ai-systems">Evaluation and Guardrails for AI Systems</h1>
+<p>This guide focuses on measuring AI system quality and preventing unsafe, unreliable, or low-quality behavior in production.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Evaluation answers &quot;How good is the system?&quot; Guardrails answer &quot;How do we stop bad behavior before it causes harm?&quot; Modern AI teams need both because model demos can look impressive while still failing badly under edge cases, hallucination pressure, or adversarial inputs.</p>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="llm-evaluation">LLM evaluation</h3>
+<p>Evaluation can be offline against labeled datasets, model-graded with rubric prompts, human-reviewed for nuanced tasks, or online through product metrics and experiments.</p>
+<h3 id="safety-and-moderation">Safety and moderation</h3>
+<p>Safety layers filter harmful, disallowed, or policy-violating inputs and outputs. In practice, moderation is often a separate subsystem, not just a prompt instruction.</p>
+<h3 id="testing-ai-systems">Testing AI systems</h3>
+<p>AI testing includes prompt regression tests, schema validation tests, adversarial test cases, and hallucination or refusal checks.</p>
+<h3 id="reliability">Reliability</h3>
+<p>Reliability means the system behaves acceptably across expected and unexpected inputs, not only on golden path demos.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="designing-eval-datasets">Designing eval datasets</h3>
+<p>A strong eval dataset includes representative real tasks, difficult edge cases, adversarial or failure-inducing inputs, and clear scoring criteria.</p>
+<h3 id="automated-testing">Automated testing</h3>
+<p>In practice, this means CI checks that compare outputs, validate formats, and fail fast on regressions.</p>
+<h3 id="red-teaming">Red-teaming</h3>
+<p>Red-teaming deliberately probes the system for policy bypasses, unsafe outputs, prompt injection, and hallucinations.</p>
+<h3 id="output-validation">Output validation</h3>
+<p>This includes JSON/schema validation, citation presence checks, allowed-action enforcement, and business-rule validation.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI Evals</td>
+<td>Framework for structured evaluation tasks</td>
+<td>Automated regression and benchmark runs</td>
+</tr>
+<tr>
+<td>LangSmith</td>
+<td>Trace inspection and eval workflows</td>
+<td>LLM app debugging and prompt evaluation</td>
+</tr>
+<tr>
+<td>Custom eval frameworks</td>
+<td>Business-specific scoring and datasets</td>
+<td>Domain-specific quality measurement</td>
+</tr>
+<tr>
+<td>Pydantic</td>
+<td>Structured output validation</td>
+<td>Guardrails for schemas and contracts</td>
+</tr>
+<tr>
+<td>Moderation APIs</td>
+<td>Safety classification for text/images</td>
+<td>Input and output risk filtering</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="eval-pipeline">Eval pipeline</h3>
+<ul>
+<li>Goal: Run repeatable quality checks for prompts, models, or RAG changes.</li>
+<li>Key components: dataset loader, scoring rubric, batch runner, result storage, regression thresholds.</li>
+<li>Suggested tech stack: Python, pandas, pytest, OpenAI Evals or custom harness.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="ai-safety-filter">AI safety filter</h3>
+<ul>
+<li>Goal: Block unsafe or policy-violating interactions before final output reaches the user.</li>
+<li>Key components: input moderation, output moderation, escalation paths, audit logs.</li>
+<li>Suggested tech stack: moderation API, FastAPI, Redis, Postgres.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="hallucination-detection-system">Hallucination detection system</h3>
+<ul>
+<li>Goal: Detect unsupported claims in generated answers.</li>
+<li>Key components: citation checks, retrieval overlap scoring, claim extraction, rule-based validation.</li>
+<li>Suggested tech stack: Python, RAG stack, evaluation framework.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="benchmark-suite">Benchmark suite</h3>
+<ul>
+<li>Goal: Compare multiple prompts or models on a stable internal benchmark.</li>
+<li>Key components: frozen test set, scoring dashboard, trend tracking, failure slices.</li>
+<li>Suggested tech stack: Python, Jupyter, MLflow or LangSmith.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">from pydantic import BaseModel, ValidationError
+
+class Answer(BaseModel):
+    final_answer: str
+    confidence: float
+    citations: list[str]
+
+def validate_output(payload: dict) -&gt; bool:
+    try:
+        Answer.model_validate(payload)
+        return True
+    except ValidationError:
+        return False
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">eval-pipeline/
+├── datasets/
+├── rubrics/
+├── src/
+│   ├── runner.py
+│   ├── scorers.py
+│   ├── validators.py
+│   └── reports.py
+├── tests/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-you-evaluate-a-system-whose-outputs-are-non-deterministic-and-open-ended">How do you evaluate a system whose outputs are non-deterministic and open-ended?</h4>
+<p>Convert &quot;is this good?&quot; into checkable claims, in layers:</p>
+<ul>
+<li><strong>Deterministic checks</strong> first: schema validity, required fields present, citation spans exist, no PII in output, length bounds. These are cheap, exact, and catch most regressions.</li>
+<li><strong>Reference-based metrics</strong> where a correct answer exists: exact match, F1 over extracted fields, or retrieval recall.</li>
+<li><strong>LLM-as-judge</strong> for subjective dimensions (helpfulness, faithfulness, tone), validated against human labels on a sample before you trust it.</li>
+<li><strong>Human review</strong> on a rotating sample and on everything the judge scores near its threshold.</li>
+</ul>
+<p>Then fix a <strong>regression suite</strong>: a versioned set of cases with expected properties, run on every prompt, model, retrieval, or tool change. Non-determinism is handled by running each case several times and tracking the pass <em>rate</em>, not a single pass/fail.</p>
+<h4 id="how-do-you-validate-an-llm-judge">How do you validate an LLM judge?</h4>
+<p>Treat it as a model you're deploying, because it is. Label a few hundred examples by hand, then measure the judge's agreement with those labels: Cohen's kappa or simple agreement rate, and especially agreement on the <em>disagreement cases</em>, since a judge that only agrees on obvious examples is useless.</p>
+<p>Then test for the known biases: <strong>position bias</strong> (swap the order of two compared answers and check the verdict flips at chance rate, not systematically), <strong>verbosity bias</strong> (longer answers scoring higher regardless of quality), <strong>self-preference</strong> (a judge favoring outputs from its own model family), and score compression (everything lands at 4/5). Use a rubric with concrete criteria rather than &quot;rate 1-10&quot;, and prefer pairwise comparison over absolute scoring: it's substantially more reliable.</p>
+<h4 id="what-guardrails-would-you-put-around-a-customer-facing-llm-feature">What guardrails would you put around a customer-facing LLM feature?</h4>
+<p>Input side: prompt-injection detection, PII detection and redaction before the text reaches the model, length and rate limits, and topic classification to reject out-of-scope requests early.</p>
+<p>Output side: schema validation for structured responses, a safety/moderation classifier, PII scanning on the way out (models can echo back what was retrieved), citation verification for grounded answers, and a claim-checker for high-stakes domains.</p>
+<p>Around both: a kill switch to disable the feature without a deploy, a fallback response for when a guardrail trips, per-user rate and spend limits, and full request/response logging with retention that legal has agreed to.</p>
+<p>The framing that matters: guardrails are a <strong>defense-in-depth system with a failure mode of its own</strong>. Over-blocking is a real cost: measure the false-positive rate of your guardrails, not just their catch rate, or you'll ship a feature that refuses legitimate requests.</p>
+<h4 id="how-do-you-red-team-an-ai-system-before-launch">How do you red-team an AI system before launch?</h4>
+<p>Systematically, against a threat model rather than by improvising. Enumerate what an attacker wants: extract the system prompt, exfiltrate other users' data, make the model take an unauthorized action through a tool, produce harmful content, or run up cost. Then attack each: direct and indirect prompt injection (including content the system retrieves, which is the underrated vector), jailbreak patterns, role-play framing, encoding tricks, and multi-turn escalation where each message is individually benign.</p>
+<p>Record every successful attack as a permanent regression test. The measure of a red-team exercise is not how many issues it found but whether the same attack class fails on the next release, which only happens if the findings become tests.</p>
+<h4 id="how-do-you-detect-hallucination-in-production-not-just-in-evals">How do you detect hallucination in production, not just in evals?</h4>
+<p>No single signal is sufficient, so combine cheap ones: <strong>groundedness checking</strong> (does each claim appear in the retrieved context, an NLI model or a judge call on a sample), <strong>self-consistency</strong> (sample the answer several times and flag high disagreement), <strong>citation validation</strong> (do the cited spans actually exist and support the claim), and <strong>user signals</strong> (thumbs-down, rephrasing, escalation to a human).</p>
+<p>For rate-limited cost, sample rather than checking everything: score 1-5% of traffic continuously and alert on the rate rather than individual cases. And monitor the abstention rate: a fall in &quot;I don't know&quot; responses often precedes a rise in confident fabrication.</p>
+<h4 id="what-do-you-do-when-evaluation-results-and-user-feedback-disagree">What do you do when evaluation results and user feedback disagree?</h4>
+<p>Trust the users and fix the eval. The disagreement means the eval set doesn't represent real traffic, usually because it was written by the team rather than sampled from production, so it under-represents ambiguous, adversarial, or multi-turn cases.</p>
+<p>The fix is a feedback loop: sample real failures, label them, and add them to the eval set, so the suite converges on reality over time. Also check for the mundane explanations first: the eval runs a different prompt version, different retrieval settings, or a different model than production.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vibes-based evaluation</td>
+<td>No way to detect regressions or compare versions</td>
+<td>A versioned regression suite run on every change</td>
+</tr>
+<tr>
+<td>Trusting an LLM judge without validation</td>
+<td>Position, verbosity, and self-preference biases go unmeasured</td>
+<td>Validate against human labels; use pairwise comparison</td>
+</tr>
+<tr>
+<td>Eval set written by the team, not sampled from traffic</td>
+<td>Misses ambiguous and adversarial real cases</td>
+<td>Continuously add labeled production failures</td>
+</tr>
+<tr>
+<td>Single run per eval case</td>
+<td>Non-determinism reads as a regression</td>
+<td>Multiple runs; track pass rate</td>
+</tr>
+<tr>
+<td>Measuring guardrail catch rate only</td>
+<td>Over-blocking silently destroys the user experience</td>
+<td>Track false-positive rate as an equal metric</td>
+</tr>
+<tr>
+<td>Red-team findings not converted to tests</td>
+<td>The same attack class returns next release</td>
+<td>Every successful attack becomes a regression case</td>
+</tr>
+<tr>
+<td>Guardrails only on input</td>
+<td>Models echo retrieved PII and unsupported claims outward</td>
+<td>Symmetric input and output checks</td>
+</tr>
+<tr>
+<td>No kill switch</td>
+<td>Disabling a broken feature requires a deploy</td>
+<td>Runtime feature flag with a safe fallback response</td>
+</tr>
+<tr>
+<td>Evaluating end to end only</td>
+<td>Cannot localize whether retrieval, prompt, or model regressed</td>
+<td>Stage-level metrics alongside end-to-end</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_llm_evaluation.html">LLM Evaluation</a></li>
+<li><a href="../ai_genai/intro_llmops.html">LLMOps</a></li>
+<li><a href="../ai_genai/intro_multi_model_orchestration.html">Multi-Model Orchestration</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_llm_evaluation.html"><small>Previous</small>LLM Evaluation</a><a rel="next" class="next" href="intro_ab_testing.html"><small>Next</small>A/B Testing</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_evaluation_guardrails.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

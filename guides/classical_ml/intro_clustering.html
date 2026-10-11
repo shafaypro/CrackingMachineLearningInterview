@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clustering Algorithms Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Clustering is an unsupervised learning task that groups similar data points together without labeled data. It&#x27;s used for customer segmentation, anomaly…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_clustering.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Clustering Algorithms Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Clustering is an unsupervised learning task that groups similar data points together without labeled data. It&#x27;s used for customer segmentation, anomaly…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_clustering.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Clustering Algorithms Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Clustering is an unsupervised learning task that groups similar data points together without labeled data. It&#x27;s used for customer segmentation, anomaly…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Clustering Algorithms",
+   "description": "Clustering is an unsupervised learning task that groups similar data points together without labeled data. It's used for customer segmentation, anomaly…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_clustering.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Clustering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_clustering.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Clustering</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_clustering.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="clustering-algorithms">Clustering Algorithms</h1>
+<p>Clustering is an unsupervised learning task that groups similar data points together without labeled data. It's used for customer segmentation, anomaly detection, document grouping, image compression, and exploratory data analysis.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#k-means">K-Means</a></li>
+<li><a href="#k-means">K-Means++</a></li>
+<li><a href="#dbscan">DBSCAN</a></li>
+<li><a href="#hierarchical-clustering">Hierarchical Clustering</a></li>
+<li><a href="#gaussian-mixture-models">Gaussian Mixture Models</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#choosing-the-right-algorithm">Choosing the Right Algorithm</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="k-means">K-Means</h2>
+<p>K-Means partitions n observations into k clusters by minimizing intra-cluster variance (within-cluster sum of squares).</p>
+<h3 id="algorithm">Algorithm</h3>
+<pre><code>1. Initialize k centroids randomly
+2. Assign each point to nearest centroid (Euclidean distance)
+3. Recompute centroids as mean of assigned points
+4. Repeat 2-3 until convergence (centroids stop moving)
+</code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="language-python">from sklearn.cluster import KMeans
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate sample data
+from sklearn.datasets import make_blobs
+X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.8, random_state=42)
+
+# Fit K-Means
+kmeans = KMeans(n_clusters=4, init='k-means++', n_init=10, max_iter=300, random_state=42)
+labels = kmeans.fit_predict(X)
+centroids = kmeans.cluster_centers_
+inertia = kmeans.inertia_
+
+print(f&quot;Inertia: {inertia:.2f}&quot;)
+print(f&quot;Cluster sizes: {np.bincount(labels)}&quot;)
+</code></pre>
+<h3 id="choosing-k-elbow-method">Choosing k: Elbow Method</h3>
+<pre><code class="language-python">inertias = []
+K_range = range(1, 11)
+
+for k in K_range:
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    km.fit(X)
+    inertias.append(km.inertia_)
+
+# Plot: look for the &quot;elbow&quot;, point where adding more k stops reducing inertia significantly
+plt.plot(K_range, inertias, 'bo-')
+plt.xlabel('Number of clusters k')
+plt.ylabel('Inertia')
+plt.title('Elbow Method')
+</code></pre>
+<h3 id="silhouette-score">Silhouette Score</h3>
+<pre><code class="language-python">from sklearn.metrics import silhouette_score
+
+silhouette_scores = []
+for k in range(2, 11):
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    labels = km.fit_predict(X)
+    score = silhouette_score(X, labels)
+    silhouette_scores.append(score)
+    print(f&quot;k={k}: silhouette={score:.3f}&quot;)
+
+# Higher silhouette = better separation and cohesion (range: -1 to 1)
+best_k = range(2, 11)[np.argmax(silhouette_scores)]
+print(f&quot;Best k by silhouette: {best_k}&quot;)
+</code></pre>
+<hr />
+<h2 id="k-means-1">K-Means++</h2>
+<p>Standard K-Means initializes centroids randomly, which can lead to poor convergence. K-Means++ uses a smarter initialization:</p>
+<pre><code>1. Choose first centroid uniformly at random
+2. For each subsequent centroid:
+   - Compute distance D(x) from each point to nearest chosen centroid
+   - Choose next centroid with probability proportional to D(x)²
+3. Proceed with standard K-Means
+</code></pre>
+<p>This gives O(log k) approximation guarantee. Use <code>init='k-means++'</code> in sklearn (default).</p>
+<hr />
+<h2 id="dbscan">DBSCAN</h2>
+<p>DBSCAN (Density-Based Spatial Clustering of Applications with Noise) finds clusters as dense regions separated by low-density regions. It can find <strong>arbitrarily shaped clusters</strong> and identifies <strong>outliers as noise</strong>.</p>
+<h3 id="key-concepts">Key Concepts</h3>
+<ul>
+<li><strong>eps (ε)</strong>: neighborhood radius</li>
+<li><strong>min_samples</strong>: minimum points within ε to form a core point</li>
+<li><strong>Core point</strong>: has ≥ min_samples within ε</li>
+<li><strong>Border point</strong>: within ε of a core point, but &lt; min_samples neighbors</li>
+<li><strong>Noise point</strong>: not within ε of any core point</li>
+</ul>
+<pre><code class="language-python">from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+# DBSCAN is sensitive to scale: always standardize
+X_scaled = StandardScaler().fit_transform(X)
+
+dbscan = DBSCAN(
+    eps=0.5,           # Neighborhood radius
+    min_samples=5,     # Minimum points to form a core point
+    metric='euclidean'
+)
+labels = dbscan.fit_predict(X_scaled)
+
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise = list(labels).count(-1)
+print(f&quot;Clusters: {n_clusters}, Noise points: {n_noise}&quot;)
+
+# Noise points have label = -1
+core_samples = dbscan.core_sample_indices_
+</code></pre>
+<h3 id="choosing-eps-with-k-distance-plot">Choosing eps with k-distance plot</h3>
+<pre><code class="language-python">from sklearn.neighbors import NearestNeighbors
+
+# Fit k-NN with k = min_samples
+nbrs = NearestNeighbors(n_neighbors=5).fit(X_scaled)
+distances, indices = nbrs.kneighbors(X_scaled)
+
+# Sort distances to k-th nearest neighbor
+kth_distances = np.sort(distances[:, -1])[::-1]
+
+# Plot: look for &quot;knee&quot;, that's a good eps value
+plt.plot(kth_distances)
+plt.xlabel('Points sorted by distance')
+plt.ylabel('5th nearest neighbor distance')
+plt.title('k-distance plot for eps selection')
+</code></pre>
+<hr />
+<h2 id="hierarchical-clustering">Hierarchical Clustering</h2>
+<p>Builds a tree (dendrogram) of clusters without requiring k in advance.</p>
+<p><strong>Agglomerative (bottom-up)</strong>: Start with each point as its own cluster; repeatedly merge the closest pair.</p>
+<p><strong>Divisive (top-down)</strong>: Start with one cluster; repeatedly split.</p>
+<h3 id="linkage-methods">Linkage Methods</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Distance Between Clusters</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single</strong></td>
+<td>Min distance between any two points</td>
+<td>Can create elongated &quot;chain&quot; clusters</td>
+</tr>
+<tr>
+<td><strong>Complete</strong></td>
+<td>Max distance between any two points</td>
+<td>Tends to create compact, similar-size clusters</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>Mean distance between all pairs</td>
+<td>Balance between single and complete</td>
+</tr>
+<tr>
+<td><strong>Ward</strong></td>
+<td>Minimizes total within-cluster variance</td>
+<td>Most commonly used; similar to K-Means</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+from sklearn.cluster import AgglomerativeClustering
+
+# Compute linkage matrix
+Z = linkage(X, method='ward')
+
+# Plot dendrogram
+plt.figure(figsize=(12, 6))
+dendrogram(Z, truncate_mode='lastp', p=20)
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('Sample index or (cluster size)')
+plt.ylabel('Distance')
+plt.axhline(y=15, color='r', linestyle='--', label='Cut threshold')
+
+# Extract flat clusters by cutting the dendrogram
+labels_hier = fcluster(Z, t=4, criterion='maxclust')  # cut to get 4 clusters
+
+# sklearn API
+agg = AgglomerativeClustering(n_clusters=4, linkage='ward')
+labels_agg = agg.fit_predict(X)
+</code></pre>
+<hr />
+<h2 id="gaussian-mixture-models">Gaussian Mixture Models</h2>
+<p>GMM assumes data is generated from a mixture of k Gaussian distributions. Unlike K-Means, it provides <strong>soft cluster assignments</strong> (probability of belonging to each cluster).</p>
+<p><strong>Expectation-Maximization (EM) Algorithm:</strong></p>
+<ol>
+<li><strong>E-step</strong>: Compute responsibility r(i,k) = P(cluster k | x_i) for each point</li>
+<li><strong>M-step</strong>: Update Gaussian parameters (mean, covariance, mixing weight) to maximize likelihood</li>
+<li>Repeat until convergence</li>
+</ol>
+<pre><code class="language-python">from sklearn.mixture import GaussianMixture
+
+gmm = GaussianMixture(
+    n_components=4,
+    covariance_type='full',    # 'full', 'tied', 'diag', 'spherical'
+    n_init=5,
+    random_state=42
+)
+gmm.fit(X)
+
+# Hard assignments
+labels_gmm = gmm.predict(X)
+
+# Soft assignments (probabilities)
+probs = gmm.predict_proba(X)  # shape: (n_samples, n_components)
+
+# Model selection: use BIC or AIC
+bic_scores = []
+for k in range(1, 10):
+    gm = GaussianMixture(n_components=k, random_state=42)
+    gm.fit(X)
+    bic_scores.append(gm.bic(X))
+best_k_gmm = np.argmin(bic_scores) + 1
+</code></pre>
+<hr />
+<h2 id="evaluation-metrics">Evaluation Metrics</h2>
+<h3 id="when-ground-truth-is-available">When Ground Truth is Available</h3>
+<pre><code class="language-python">from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
+
+# Adjusted Rand Index: -1 to 1 (1 = perfect match)
+ari = adjusted_rand_score(y_true, labels)
+
+# Normalized Mutual Information: 0 to 1 (1 = perfect)
+nmi = normalized_mutual_info_score(y_true, labels)
+</code></pre>
+<h3 id="when-ground-truth-is-not-available-most-common">When Ground Truth is NOT Available (most common)</h3>
+<pre><code class="language-python">from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+
+# Silhouette Score (-1 to 1, higher is better)
+# Per point: (b - a) / max(a, b), where a = mean intra-cluster distance
+# and b = mean distance to the nearest other cluster; averaged over points
+sil = silhouette_score(X, labels)
+
+# Davies-Bouldin Index (lower is better)
+# Ratio of within-cluster scatter to between-cluster separation
+db = davies_bouldin_score(X, labels)
+
+# Calinski-Harabasz Score (higher is better)
+# Ratio of between-cluster to within-cluster dispersion
+ch = calinski_harabasz_score(X, labels)
+
+print(f&quot;Silhouette: {sil:.3f}, Davies-Bouldin: {db:.3f}, Calinski-Harabasz: {ch:.1f}&quot;)
+</code></pre>
+<h3 id="metric-summary">Metric Summary</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Range</th>
+<th>Best Value</th>
+<th>Requires Labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inertia (K-Means)</td>
+<td>0 to ∞</td>
+<td>Lower</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Silhouette Score</td>
+<td>-1 to 1</td>
+<td>Higher (→1)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Davies-Bouldin</td>
+<td>0 to ∞</td>
+<td>Lower (→0)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Calinski-Harabasz</td>
+<td>0 to ∞</td>
+<td>Higher</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Adjusted Rand Index</td>
+<td>-1 to 1</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NMI</td>
+<td>0 to 1</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="choosing-the-right-algorithm">Choosing the Right Algorithm</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommended Algorithm</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Need k clusters, roughly spherical shapes</td>
+<td><strong>K-Means++</strong></td>
+<td>Fast, scalable, simple</td>
+</tr>
+<tr>
+<td>Arbitrary cluster shapes, outliers present</td>
+<td><strong>DBSCAN</strong></td>
+<td>No need for k, identifies noise</td>
+</tr>
+<tr>
+<td>Want soft probabilistic assignments</td>
+<td><strong>GMM</strong></td>
+<td>Probabilistic framework</td>
+</tr>
+<tr>
+<td>Want hierarchical structure, no k needed</td>
+<td><strong>Hierarchical (Ward)</strong></td>
+<td>Dendrogram visualization</td>
+</tr>
+<tr>
+<td>Very large datasets (millions of points)</td>
+<td><strong>Mini-Batch K-Means</strong></td>
+<td>Faster K-Means approximation</td>
+</tr>
+<tr>
+<td>High-dimensional sparse data (text)</td>
+<td><strong>K-Means on L2-normalized TF-IDF</strong></td>
+<td>Euclidean distance on unit vectors ranks pairs like cosine similarity</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from sklearn.cluster import MiniBatchKMeans
+
+# For large datasets
+mbk = MiniBatchKMeans(n_clusters=4, batch_size=1000, random_state=42)
+mbk.fit(X_large)
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What are the main limitations of K-Means?</strong></p>
+<ol>
+<li>Must specify k in advance</li>
+<li>Assumes spherical, equal-size clusters</li>
+<li>Sensitive to outliers (centroid pulled toward them)</li>
+<li>Sensitive to feature scale (always standardize)</li>
+<li>Non-deterministic (different runs may give different results: use n_init &gt; 1)</li>
+<li>Poor performance on non-convex cluster shapes</li>
+</ol>
+<p><strong>Q2: How does DBSCAN handle outliers differently from K-Means?</strong>
+K-Means assigns every point to a cluster: outliers get forced into the nearest cluster, distorting centroids. DBSCAN explicitly labels low-density points as noise (label = -1), effectively handling outliers without them affecting cluster shapes.</p>
+<p><strong>Q3: What is the difference between K-Means and GMM?</strong>
+K-Means makes hard cluster assignments (each point belongs to exactly one cluster) and assumes spherical clusters of equal size. GMM makes soft assignments (probabilities) and can model elliptical clusters of different sizes and orientations via full covariance matrices. GMM is a generalization of K-Means (K-Means is the limit of a GMM with equal, shared spherical covariances σ²I as σ → 0, which makes assignments hard).</p>
+<p><strong>Q4: When would you use hierarchical clustering over K-Means?</strong>
+When: (1) you don't know k upfront and want to explore the tree structure; (2) you need a hierarchy for downstream tasks (taxonomies, phylogenetics); (3) the dataset is small enough for the O(n² log n) cost; (4) you want the dendrogram for visualization and interpretability.</p>
+<p><strong>Q5: How do you evaluate clustering quality without ground truth labels?</strong>
+Use internal metrics: silhouette score (measures cohesion vs separation), Davies-Bouldin index (lower = better-separated clusters), Calinski-Harabasz score. Additionally: visualize with t-SNE/UMAP, inspect cluster statistics (size, centroid distance), run qualitative checks on sampled cluster members.</p>
+<p><strong>Q6: What preprocessing steps are essential for clustering?</strong></p>
+<ol>
+<li><strong>Standardize features</strong> (Z-score): K-Means and DBSCAN use distance metrics; unscaled features dominate</li>
+<li><strong>Handle missing values</strong>: impute before clustering</li>
+<li><strong>Dimensionality reduction</strong> (PCA, UMAP): reduces noise and curse of dimensionality</li>
+<li><strong>Remove obvious outliers</strong> before K-Means (but not before DBSCAN which handles them naturally)</li>
+</ol>
+<p><strong>Q7: What is the curse of dimensionality in clustering?</strong>
+In high dimensions, the distance between the nearest and farthest points converges: all points appear equidistant. This makes distance-based clustering (K-Means, DBSCAN) ineffective. Solutions: PCA before clustering, use cosine similarity instead of Euclidean, or use subspace clustering methods.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not standardizing features</td>
+<td>Scale dominates distance</td>
+<td><code>StandardScaler</code> before clustering</td>
+</tr>
+<tr>
+<td>Choosing k arbitrarily</td>
+<td>Suboptimal clustering</td>
+<td>Elbow + silhouette analysis</td>
+</tr>
+<tr>
+<td>Applying K-Means to non-spherical data</td>
+<td>Incorrect cluster shapes</td>
+<td>Use DBSCAN or GMM</td>
+</tr>
+<tr>
+<td>Not running K-Means multiple times</td>
+<td>Local optima</td>
+<td>Use <code>n_init=10</code> or more</td>
+</tr>
+<tr>
+<td>Using silhouette score as the only metric</td>
+<td>Single metric can mislead</td>
+<td>Use multiple metrics + visual inspection</td>
+</tr>
+<tr>
+<td>Clustering on raw text without vectorization</td>
+<td>Text is not numeric</td>
+<td>Use TF-IDF or embeddings first</td>
+</tr>
+<tr>
+<td>Ignoring cluster sizes</td>
+<td>One cluster with 99% of data</td>
+<td>Check <code>np.bincount(labels)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_dimensionality_reduction.html">Dimensionality Reduction</a></td>
+<td>PCA/UMAP often precedes clustering</td>
+</tr>
+<tr>
+<td><a href="intro_feature_engineering.html">Feature Engineering</a></td>
+<td>Feature prep is critical for clustering quality</td>
+</tr>
+<tr>
+<td><a href="../readme.html#classic-question-bank">Classic Question Bank</a></td>
+<td>KMeans vs KNN covered in main Q&amp;A</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>Clustering is an Intermediate (🟡) topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_nlp_fundamentals.html"><small>Previous</small>NLP Fundamentals</a><a rel="next" class="next" href="intro_dimensionality_reduction.html"><small>Next</small>Dimensionality Reduction</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_clustering.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

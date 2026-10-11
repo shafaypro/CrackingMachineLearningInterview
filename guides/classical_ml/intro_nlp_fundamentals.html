@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NLP Fundamentals Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Before transformers there was a whole discipline of turning text into features, and it hasn&#x27;t gone away: TF-IDF still beats a fine-tuned BERT on plenty of…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_nlp_fundamentals.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="NLP Fundamentals Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Before transformers there was a whole discipline of turning text into features, and it hasn&#x27;t gone away: TF-IDF still beats a fine-tuned BERT on plenty of…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_nlp_fundamentals.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP Fundamentals Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Before transformers there was a whole discipline of turning text into features, and it hasn&#x27;t gone away: TF-IDF still beats a fine-tuned BERT on plenty of…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "NLP Fundamentals",
+   "description": "Before transformers there was a whole discipline of turning text into features, and it hasn't gone away: TF-IDF still beats a fine-tuned BERT on plenty of…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_nlp_fundamentals.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "NLP Fundamentals",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_nlp_fundamentals.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">NLP Fundamentals</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_nlp_fundamentals.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="nlp-fundamentals">NLP Fundamentals</h1>
+<p>Before transformers there was a whole discipline of turning text into features, and it hasn't gone away: TF-IDF still beats a fine-tuned BERT on plenty of small-data classification problems, tokenization decisions still determine what an LLM can represent, and &quot;what's your baseline?&quot; is still the first question about any text model.</p>
+<p>This covers the classical foundation plus the tokenization and representation concepts that carry straight into modern systems.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-this-still-matters">Why This Still Matters</a></li>
+<li><a href="#text-preprocessing">Text Preprocessing</a></li>
+<li><a href="#tokenization">Tokenization</a></li>
+<li><a href="#bag-of-words-and-tf-idf">Bag of Words and TF-IDF</a></li>
+<li><a href="#word-embeddings">Word Embeddings</a></li>
+<li><a href="#from-static-to-contextual">From Static to Contextual</a></li>
+<li><a href="#text-classification">Text Classification</a></li>
+<li><a href="#named-entity-recognition">Named Entity Recognition</a></li>
+<li><a href="#topic-modeling">Topic Modeling</a></li>
+<li><a href="#text-similarity">Text Similarity</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#choosing-an-approach">Choosing an Approach</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-this-still-matters">Why This Still Matters</h2>
+<p>Three reasons interviewers ask about it:</p>
+<ol>
+<li><strong>Baselines.</strong> A TF-IDF + logistic regression baseline takes ten minutes and frequently gets within a few points of a fine-tuned transformer on domain classification. Skipping it makes any subsequent result uninterpretable.</li>
+<li><strong>Tokenization is upstream of everything.</strong> Vocabulary decisions determine what the model can represent, how much your prompt costs, and why some languages are 3× more expensive per character.</li>
+<li><strong>Small data.</strong> With 500 labeled examples, a transformer overfits and a linear model on n-grams doesn't.</li>
+</ol>
+<hr />
+<h2 id="text-preprocessing">Text Preprocessing</h2>
+<p>The classical pipeline, and knowing when <em>not</em> to apply each step:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+<th>Skip it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lowercasing</strong></td>
+<td><code>Apple</code> → <code>apple</code></td>
+<td>Case is signal (NER: <code>Apple</code> vs <code>apple</code>)</td>
+</tr>
+<tr>
+<td><strong>Punctuation removal</strong></td>
+<td>Strips <code>!?,.</code></td>
+<td>Sentiment (<code>!!!</code> matters), code</td>
+</tr>
+<tr>
+<td><strong>Stopword removal</strong></td>
+<td>Drops <code>the, is, at</code></td>
+<td>Using transformers; phrase matching (&quot;to be or not to be&quot;)</td>
+</tr>
+<tr>
+<td><strong>Stemming</strong></td>
+<td><code>running</code> → <code>run</code> (crude, rule-based)</td>
+<td>Precision matters: it produces non-words</td>
+</tr>
+<tr>
+<td><strong>Lemmatization</strong></td>
+<td><code>better</code> → <code>good</code> (dictionary-based)</td>
+<td>Speed matters: it's slower than stemming</td>
+</tr>
+<tr>
+<td><strong>Normalization</strong></td>
+<td>Unicode, accents, whitespace</td>
+<td>Rarely: nearly always worth doing</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Stemming vs lemmatization</strong> is a standard question: stemming chops suffixes with rules (fast, crude, <code>studies → studi</code>), lemmatization maps to a dictionary base form using part-of-speech (slower, correct, <code>studies → study</code>, <code>better → good</code>). Use lemmatization when the output is read by humans or precision matters; stemming when you're building a search index and speed dominates.</p>
+<p><strong>With modern transformers you generally skip all of it.</strong> Subword tokenizers were trained on raw text, so lowercasing or stripping punctuation moves your input off the distribution the model saw. Aggressive preprocessing actively <em>hurts</em> BERT-family models: a good thing to state, since candidates often apply 2010-era preprocessing to 2020s models out of habit.</p>
+<hr />
+<h2 id="tokenization">Tokenization</h2>
+<p>How text becomes model inputs, and the source of many practical surprises.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Example</th>
+<th>Vocabulary</th>
+<th>Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character</strong></td>
+<td><code>c,a,t</code></td>
+<td>~100</td>
+<td>Sequences far too long</td>
+</tr>
+<tr>
+<td><strong>Word</strong></td>
+<td><code>cat</code></td>
+<td>100k+</td>
+<td>Out-of-vocabulary words; huge embedding table</td>
+</tr>
+<tr>
+<td><strong>Subword</strong></td>
+<td><code>un,happi,ness</code></td>
+<td>30-100k</td>
+<td><strong>The standard</strong>: best of both</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Subword tokenization</strong> solves the out-of-vocabulary problem: any unseen word decomposes into known pieces, so nothing is ever <code>&lt;UNK&gt;</code>, while common words stay single tokens.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>How</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BPE</strong></td>
+<td>Iteratively merge the most frequent adjacent pair</td>
+<td>GPT family, Llama</td>
+</tr>
+<tr>
+<td><strong>WordPiece</strong></td>
+<td>Merge the pair that most increases likelihood</td>
+<td>BERT</td>
+</tr>
+<tr>
+<td><strong>Unigram</strong> (usually via SentencePiece)</td>
+<td>Start large, prune tokens by loss impact</td>
+<td>T5, ALBERT, XLNet</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from transformers import AutoTokenizer
+tok = AutoTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)
+
+tok.tokenize(&quot;tokenization&quot;)     # ['token', '##ization']: ## marks continuation
+tok.tokenize(&quot;antidisestablish&quot;) # splits into several known subwords
+</code></pre>
+<p><strong>Practical consequences worth naming in an interview:</strong></p>
+<ul>
+<li><strong>Token count ≠ word count.</strong> English averages ~1.3 tokens per word; code, JSON, and rare identifiers are far denser. Estimating cost or context limits from character counts is unreliable: use the actual tokenizer.</li>
+<li><strong>Non-English text costs more.</strong> Tokenizers trained mostly on English fragment other scripts heavily, so the same sentence in Thai or Hindi can cost several times more tokens. This is a real fairness and cost issue.</li>
+<li><strong>Numbers tokenize badly.</strong> <code>1234</code> may split into <code>12</code> + <code>34</code>, which is part of why LLMs are unreliable at arithmetic.</li>
+<li><strong>Trailing whitespace changes tokenization</strong>, which is why prompt formatting sometimes has surprising effects.</li>
+</ul>
+<hr />
+<h2 id="bag-of-words-and-tf-idf">Bag of Words and TF-IDF</h2>
+<p>Represent a document as a vector of term counts, discarding order.</p>
+<p><strong>TF-IDF</strong> weights terms by how often they appear in this document against how rare they are across the corpus:</p>
+<pre><code>tf-idf(t, d) = tf(t, d) · log(N / df(t))
+</code></pre>
+<p>The intuition: a term appearing often in <em>this</em> document but rarely elsewhere is distinctive. Terms appearing everywhere (&quot;the&quot;) get near-zero weight, which is why stopword removal is largely redundant when using TF-IDF.</p>
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+
+model = make_pipeline(
+    TfidfVectorizer(
+        ngram_range=(1, 2),     # unigrams + bigrams recovers some word order
+        min_df=2,               # ignore terms in fewer than 2 docs (noise)
+        max_df=0.9,             # ignore terms in &gt;90% of docs (uninformative)
+        sublinear_tf=True,      # 1+log(tf): dampens repeated-term dominance
+    ),
+    LogisticRegression(max_iter=1000, class_weight=&quot;balanced&quot;),
+)
+model.fit(train_texts, train_labels)
+</code></pre>
+<p><strong>This is the baseline to beat</strong>, and it's strong on domain-specific classification with limited data. It's also fully interpretable: you can read the coefficients and see which terms drive each class, which matters for stakeholder trust and debugging.</p>
+<p>Its limits: no word order beyond n-grams, no synonymy (<code>car</code> and <code>automobile</code> are unrelated dimensions), and high-dimensional sparse vectors.</p>
+<hr />
+<h2 id="word-embeddings">Word Embeddings</h2>
+<p><strong>Word2Vec</strong> learns dense vectors by predicting context. Two variants: <strong>skip-gram</strong> (predict context from the word; better for rare words) and <strong>CBOW</strong> (predict the word from context; faster). Negative sampling makes it tractable by replacing the full softmax with a handful of binary decisions.</p>
+<p>The famous property: <code>king - man + woman ≈ queen</code>. Vector arithmetic captures relational structure because the training objective places words in similar contexts near each other.</p>
+<p><strong>GloVe</strong> factorizes a global co-occurrence matrix instead of using local windows: different route, comparable result.</p>
+<p><strong>FastText</strong> represents words as bags of character n-grams, so it handles morphology and can embed <strong>unseen words</strong> by composing their n-grams. That makes it strong for morphologically rich languages and noisy user-generated text with typos.</p>
+<p><strong>The fatal limitation of all three</strong>: one vector per word, regardless of context. &quot;River <strong>bank</strong>&quot; and &quot;investment <strong>bank</strong>&quot; share an embedding, so the representation is an average of all senses. Fixing that is exactly what contextual models did.</p>
+<hr />
+<h2 id="from-static-to-contextual">From Static to Contextual</h2>
+<pre><code>Word2Vec (2013)  →  one vector per word, no context
+ELMo    (2018)   →  bidirectional LSTM, context-dependent vectors
+BERT    (2018)   →  transformer, deeply bidirectional, masked LM pretraining
+Sentence-BERT    →  fine-tuned so vector distance means semantic similarity
+</code></pre>
+<p><strong>Why raw BERT embeddings are bad for similarity</strong>: a favourite interview question: BERT is trained on masked-token prediction, not on making sentence vectors comparable. Mean-pooled BERT vectors occupy a narrow cone (anisotropy) where even unrelated sentences get high cosine similarity, so the numbers barely discriminate. Sentence-BERT fixes it by fine-tuning with a contrastive or triplet objective so distance actually corresponds to semantic difference. See <a href="../ai_genai/intro_embeddings.html">Embeddings</a>.</p>
+<hr />
+<h2 id="text-classification">Text Classification</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Data needed</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TF-IDF + linear model</strong></td>
+<td>100s</td>
+<td>Baseline; small data; interpretability required</td>
+</tr>
+<tr>
+<td><strong>FastText classifier</strong></td>
+<td>1000s</td>
+<td>Fast, strong, handles typos</td>
+</tr>
+<tr>
+<td><strong>Fine-tuned transformer</strong></td>
+<td>1000s-10,000s</td>
+<td>Best accuracy when data supports it</td>
+</tr>
+<tr>
+<td><strong>Zero/few-shot LLM</strong></td>
+<td><strong>0</strong></td>
+<td>No labels; rapid prototyping; rare classes</td>
+</tr>
+<tr>
+<td><strong>Embedding + classifier</strong></td>
+<td>100s</td>
+<td>Sentence embeddings + logistic regression: strong and cheap</td>
+</tr>
+</tbody>
+</table></div>
+<p>The last row is underrated and worth mentioning: encode with a good sentence embedding model, train logistic regression on the vectors. It needs no fine-tuning, trains in seconds, handles small data well, and often lands close to a fine-tuned transformer.</p>
+<p><strong>Class imbalance</strong> is the norm in real text data. Use <code>class_weight=&quot;balanced&quot;</code>, evaluate with macro-F1 or PR-AUC rather than accuracy, and be careful that rare classes have enough examples to be learnable at all.</p>
+<hr />
+<h2 id="named-entity-recognition">Named Entity Recognition</h2>
+<p>Sequence labeling (one tag per token) using the <strong>BIO scheme</strong>:</p>
+<pre><code>Tim    Cook   visited  Apple  Park   in  Cupertino
+B-PER  I-PER  O        B-ORG  I-ORG  O   B-LOC
+</code></pre>
+<p><code>B-</code> begins an entity, <code>I-</code> continues it, <code>O</code> is outside. The scheme exists so adjacent entities of the same type stay separable.</p>
+<p><strong>Evaluation must be entity-level, not token-level.</strong> Getting 2 of 3 tokens right in &quot;Tim Cook Jr&quot; is not 67% correct: the entity is wrong, full stop. Token-level F1 systematically overstates performance, and using it is a tell that someone hasn't shipped an NER system.</p>
+<p>Approaches, in historical order: CRF over hand-crafted features (still competitive on small data, and it enforces valid tag sequences), BiLSTM-CRF, and fine-tuned transformers with a token-classification head (the current default). For zero-shot or rare entity types, LLMs with structured output work well.</p>
+<hr />
+<h2 id="topic-modeling">Topic Modeling</h2>
+<p><strong>LDA</strong> models each document as a mixture of topics and each topic as a distribution over words. Unsupervised, and requires choosing the number of topics, usually by coherence score rather than perplexity, since perplexity correlates poorly with human judgments of topic quality.</p>
+<p><strong>Modern alternative</strong>: embed documents, cluster (HDBSCAN), then label each cluster with its distinctive terms, which is essentially what BERTopic does. It handles short text far better than LDA, which struggles when documents are tweets rather than articles.</p>
+<p>Topic models are exploratory tools. Topics are interpretations, not ground truth, and they shift with hyperparameters: worth saying rather than presenting them as discovered facts.</p>
+<hr />
+<h2 id="text-similarity">Text Similarity</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Type</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jaccard</strong></td>
+<td>Set overlap</td>
+<td>Deduplication, shingling</td>
+</tr>
+<tr>
+<td><strong>Edit (Levenshtein)</strong></td>
+<td>Character</td>
+<td>Typo correction, fuzzy name matching</td>
+</tr>
+<tr>
+<td><strong>Cosine on TF-IDF</strong></td>
+<td>Lexical</td>
+<td>Document similarity with shared vocabulary</td>
+</tr>
+<tr>
+<td><strong>Cosine on embeddings</strong></td>
+<td>Semantic</td>
+<td>Paraphrase, cross-vocabulary matching</td>
+</tr>
+<tr>
+<td><strong>Cross-encoder</strong></td>
+<td>Semantic, joint</td>
+<td>Highest accuracy, too slow for retrieval</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>MinHash + LSH</strong> is the scalable deduplication answer: exact pairwise Jaccard over <code>n</code> documents is <code>O(n²)</code>, which is infeasible at corpus scale. MinHash approximates Jaccard with small signatures, and LSH buckets likely-similar pairs so you only compare within buckets. This is how large corpora get deduplicated before pretraining, and naming it signals real-world scale experience.</p>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Metric</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>Macro-F1, PR-AUC</td>
+<td>Accuracy misleads on imbalanced text</td>
+</tr>
+<tr>
+<td>NER</td>
+<td><strong>Entity-level</strong> F1</td>
+<td>Token-level overstates</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td>Recall@k, NDCG, MRR</td>
+<td>Recall is the ceiling downstream</td>
+</tr>
+<tr>
+<td>Summarization</td>
+<td>ROUGE + human</td>
+<td>ROUGE measures overlap, not quality</td>
+</tr>
+<tr>
+<td>Translation</td>
+<td>BLEU, COMET + human</td>
+<td>BLEU correlates weakly with fluency</td>
+</tr>
+<tr>
+<td>Generation</td>
+<td>Task success, LLM judge + human</td>
+<td>No single automatic metric suffices</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>ROUGE and BLEU measure n-gram overlap with a reference</strong>, which means a correct paraphrase scores poorly and a fluent-but-wrong output can score well. They're useful for tracking regressions, not for deciding whether output is good. Say that when asked how to evaluate summarization: the expected answer includes human evaluation or a validated LLM judge.</p>
+<hr />
+<h2 id="choosing-an-approach">Choosing an Approach</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Any text task, first hour</td>
+<td><strong>TF-IDF + linear model</strong> as a baseline</td>
+</tr>
+<tr>
+<td>&lt; 1,000 labels</td>
+<td>Sentence embeddings + logistic regression</td>
+</tr>
+<tr>
+<td>Plenty of labels, accuracy matters</td>
+<td>Fine-tuned transformer</td>
+</tr>
+<tr>
+<td>No labels at all</td>
+<td>Zero/few-shot LLM, or embedding clustering</td>
+</tr>
+<tr>
+<td>Interpretability required</td>
+<td>TF-IDF + linear (readable coefficients)</td>
+</tr>
+<tr>
+<td>Noisy user text, typos</td>
+<td>FastText (character n-grams)</td>
+</tr>
+<tr>
+<td>Millions of docs, need speed</td>
+<td>FastText or a linear model on hashed features</td>
+</tr>
+<tr>
+<td>Semantic search</td>
+<td>Bi-encoder embeddings + reranker</td>
+</tr>
+<tr>
+<td>Deduplication at scale</td>
+<td>MinHash + LSH</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-start-with-tf-idf-when-transformers-exist">Why start with TF-IDF when transformers exist?</h4>
+<p>Because it's ten minutes of work and it makes every later result interpretable. Without a baseline, &quot;my model gets 0.89 F1&quot; means nothing: 0.89 could be worse than a linear model on n-grams, and you'd never know.</p>
+<p>It's also competitive in the situations that come up most: small labeled datasets where a transformer overfits, domain-specific vocabulary where pretrained semantics don't transfer, and tasks driven by distinctive keywords rather than nuanced meaning. Plus it trains in seconds, runs anywhere, and its coefficients are directly readable, which matters when a stakeholder asks why a document was classified a certain way.</p>
+<p>The framing I'd use: TF-IDF isn't the answer, it's the number the answer has to beat by enough to justify the added complexity in training, serving, and monitoring.</p>
+<h4 id="explain-subword-tokenization-and-why-it-replaced-word-level">Explain subword tokenization and why it replaced word-level.</h4>
+<p>Word-level tokenization has two fatal problems: any word not in the vocabulary becomes <code>&lt;UNK&gt;</code>, destroying information, and covering enough words requires an enormous embedding table.</p>
+<p>Subword tokenization splits rare words into known pieces while keeping common words whole. <code>tokenization</code> becomes <code>token</code> + <code>##ization</code>. Nothing is ever out-of-vocabulary because worst case you fall back to characters, morphology is partially captured for free, and vocabulary stays around 30-100k.</p>
+<p>BPE merges the most frequent adjacent pair iteratively; WordPiece merges the pair that most improves likelihood; Unigram starts large and prunes by loss impact. The practical consequences are worth knowing: token count doesn't track word count, non-English text costs substantially more tokens because tokenizers are English-dominant, numbers split awkwardly (part of why LLMs struggle with arithmetic), and trailing whitespace changes the tokenization.</p>
+<h4 id="why-are-word2vec-embeddings-insufficient-and-what-replaced-them">Why are Word2Vec embeddings insufficient, and what replaced them?</h4>
+<p>One vector per word, fixed regardless of context. &quot;River bank&quot; and &quot;investment bank&quot; get the identical vector, so it's an average over all senses of the word: the representation is systematically wrong for every polysemous word.</p>
+<p>Contextual models fixed this: ELMo with bidirectional LSTMs, then BERT with transformers, produce a <em>different</em> vector for each occurrence based on surrounding text. Same word, different sentence, different embedding.</p>
+<p>One caveat worth adding: raw BERT embeddings are poor for <em>similarity</em> comparisons despite being contextual, because BERT is trained on masked-token prediction rather than on making vectors comparable: mean-pooled BERT vectors sit in a narrow cone where even unrelated pairs score high cosine similarity. Sentence-BERT fine-tunes with a contrastive objective so distance actually means something.</p>
+<h4 id="how-do-you-evaluate-a-ner-model">How do you evaluate a NER model?</h4>
+<p><strong>Entity-level F1</strong>, not token-level. Predicting 3 of the 4 tokens in an entity span isn't partial credit: the extracted entity is wrong and downstream systems get bad data. Token-level metrics systematically overstate performance, sometimes dramatically for long entities.</p>
+<p>Concretely, a predicted entity counts as correct only if both its span boundaries and its type match the gold annotation exactly. <code>seqeval</code> implements this correctly; hand-rolled token accuracy generally doesn't.</p>
+<p>I'd also report per-entity-type F1, since aggregate F1 hides that <code>PERSON</code> works well and <code>PRODUCT</code> doesn't, and error-analyze the boundary cases specifically, because boundary errors and type errors have different fixes.</p>
+<h4 id="you-have-300-labeled-examples-for-a-text-classification-task-what-do-you-do">You have 300 labeled examples for a text classification task. What do you do?</h4>
+<p>Not fine-tune a transformer: it overfits at that size and the result won't be trustworthy.</p>
+<p>I'd try three things and compare with proper cross-validation, since with 300 examples a single split is far too noisy: <strong>TF-IDF plus regularized logistic regression</strong> as the baseline; <strong>sentence embeddings plus logistic regression</strong>, which is usually the strongest option at this scale because the embedding model brings pretrained semantics and only the classifier needs fitting; and a <strong>zero/few-shot LLM</strong>, which needs no labels at all and gives an immediate reference point.</p>
+<p>Alongside that I'd think about getting more data cheaply: LLM-assisted labeling with human verification, or active learning to prioritize which examples to label next. And I'd report results as mean ± std across folds, because at 300 examples the confidence interval is wide and a single number would be misleading.</p>
+<h4 id="how-would-you-deduplicate-100-million-documents">How would you deduplicate 100 million documents?</h4>
+<p>Exact pairwise comparison is <code>O(n²)</code>: 10¹⁶ comparisons, which is impossible.</p>
+<p><strong>MinHash plus LSH.</strong> MinHash produces a compact signature such that the probability two signatures agree equals their Jaccard similarity, so similarity is estimable from small fixed-size sketches. LSH then hashes signatures into buckets so that similar documents collide, and you only compare within buckets, turning it into roughly linear work.</p>
+<p>The parameters (number of bands and rows) tune the similarity threshold, trading false positives against false negatives, so you set them from what &quot;duplicate&quot; means for your use case.</p>
+<p>For exact duplicates, a content hash is far simpler and should be tried first. And for <em>semantic</em> near-duplicates (same meaning, different words) MinHash won't catch them; that needs embeddings plus ANN search, which is more expensive but a different notion of duplicate.</p>
+<h4 id="when-is-preprocessing-like-stopword-removal-and-stemming-harmful">When is preprocessing like stopword removal and stemming harmful?</h4>
+<p>Whenever you're using a pretrained transformer. Those models were trained on raw natural text with its punctuation, casing, and function words intact, so stripping them moves your input off the training distribution and degrades performance. Their tokenizers already handle morphology through subwords, so stemming is redundant and lossy.</p>
+<p>It's also harmful in specific classical settings: stopwords carry signal in sentiment (&quot;not good&quot;) and in phrase matching, casing carries signal in NER, and punctuation carries signal in sentiment and code.</p>
+<p>The general rule I'd give: preprocess to match how the representation was built. TF-IDF benefits from normalization because it treats tokens as independent symbols; transformers want raw text. Applying 2010-era preprocessing to a modern model is a common and costly habit.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No baseline before a transformer</td>
+<td>Results become uninterpretable</td>
+<td>TF-IDF + linear model first</td>
+</tr>
+<tr>
+<td>Heavy preprocessing before BERT</td>
+<td>Moves input off the pretraining distribution</td>
+<td>Feed raw text</td>
+</tr>
+<tr>
+<td>Fitting the vectorizer before splitting</td>
+<td>IDF computed on test data leaks</td>
+<td>Fit inside a <code>Pipeline</code> on train only</td>
+</tr>
+<tr>
+<td>Token-level NER metrics</td>
+<td>Overstates real performance</td>
+<td>Entity-level F1 (<code>seqeval</code>)</td>
+</tr>
+<tr>
+<td>Accuracy on imbalanced text</td>
+<td>Majority class dominates</td>
+<td>Macro-F1, PR-AUC</td>
+</tr>
+<tr>
+<td>Estimating tokens from character count</td>
+<td>Wrong for code, JSON, non-English</td>
+<td>Use the actual tokenizer</td>
+</tr>
+<tr>
+<td>Assuming equal token cost across languages</td>
+<td>Non-English can cost several times more</td>
+<td>Measure per language</td>
+</tr>
+<tr>
+<td>Raw BERT vectors for similarity</td>
+<td>Anisotropic; nearly everything scores high</td>
+<td>Sentence-BERT or a trained embedding model</td>
+</tr>
+<tr>
+<td>ROUGE/BLEU as the sole quality metric</td>
+<td>Measures overlap, not correctness or fluency</td>
+<td>Add human eval or a validated judge</td>
+</tr>
+<tr>
+<td>Single train/test split on small data</td>
+<td>Estimate is dominated by split noise</td>
+<td>Cross-validate; report mean ± std</td>
+</tr>
+<tr>
+<td>Treating LDA topics as ground truth</td>
+<td>Topics shift with hyperparameters</td>
+<td>Treat as exploratory; check coherence</td>
+</tr>
+<tr>
+<td><code>O(n²)</code> deduplication</td>
+<td>Infeasible at corpus scale (millions of documents)</td>
+<td>MinHash + LSH</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="../ai_genai/intro_embeddings.html">Embeddings</a></li>
+<li><a href="../ai_genai/intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="../deep_learning/intro_transformers.html">Transformers</a></li>
+<li><a href="../deep_learning/intro_sequence_models.html">Sequence Models</a></li>
+<li><a href="intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../system_design/search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="../frameworks/intro_huggingface.html">HuggingFace</a></li>
+<li><a href="./">Classical ML Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_anomaly_detection.html"><small>Previous</small>Anomaly Detection</a><a rel="next" class="next" href="intro_clustering.html"><small>Next</small>Clustering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_nlp_fundamentals.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

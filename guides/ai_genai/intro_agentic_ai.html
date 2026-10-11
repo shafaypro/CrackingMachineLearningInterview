@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic AI &amp; Multi-Agent Systems Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Agentic AI refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agentic_ai.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Agentic AI &amp; Multi-Agent Systems Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Agentic AI refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agentic_ai.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Agentic AI &amp; Multi-Agent Systems Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Agentic AI refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Agentic AI & Multi-Agent Systems",
+   "description": "Agentic AI refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agentic_ai.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Agentic AI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_agentic_ai.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Agentic AI</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_agentic_ai.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="agentic-ai--multi-agent-systems">Agentic AI &amp; Multi-Agent Systems</h1>
+<p><strong>Agentic AI</strong> refers to AI systems that autonomously plan, reason, use tools, and execute multi-step tasks to achieve goals: rather than just answering single questions.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-agentic-ai">What is Agentic AI?</a></li>
+<li><a href="#agent-anatomy">Agent Anatomy</a></li>
+<li><a href="#agent-patterns">Agent Patterns</a></li>
+<li><a href="#building-agents-with-claude">Building Agents with Claude</a></li>
+<li><a href="#multi-agent-systems">Multi-Agent Systems</a></li>
+<li><a href="#anthropic-agent-sdk">Anthropic Agent SDK</a></li>
+<li><a href="#agent-memory">Agent Memory</a></li>
+<li><a href="#agent-evaluation--safety">Agent Evaluation &amp; Safety</a></li>
+<li><a href="#real-world-examples">Real-World Examples</a></li>
+<li><a href="#2026-landscape">2026 Landscape</a></li>
+</ol>
+<hr />
+<h2 id="what-is-agentic-ai">What is Agentic AI?</h2>
+<h3 id="traditional-llm-vs-agent">Traditional LLM vs Agent</h3>
+<pre><code>Traditional LLM:
+User: &quot;Write a Python function to parse CSV&quot;
+Model: &lt;writes function&gt;   ← single step, done
+
+Agentic AI:
+User: &quot;Analyze our sales data and create a report&quot;
+Agent:
+  1. Search for sales data files
+  2. Load and inspect the data
+  3. Identify trends and anomalies
+  4. Generate visualizations
+  5. Write the report to a file
+  6. Send it via email  ← multi-step, autonomous
+</code></pre>
+<h3 id="why-agentic-ai-now">Why Agentic AI Now?</h3>
+<p>Three things converged in 2024-2026:</p>
+<ol>
+<li><strong>Large context windows</strong> (200K to 1M tokens): agents can hold entire codebases in mind</li>
+<li><strong>Reliable tool use</strong>: models accurately call functions with correct parameters</li>
+<li><strong>Better instruction following</strong>: models stay on task across many steps</li>
+</ol>
+<hr />
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>Every agent has 5 core components:</p>
+<pre><code>┌────────────────────────────────────────────────────┐
+│                      Agent                          │
+│                                                     │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────┐  │
+│  │  Brain   │  │  Tools   │  │     Memory       │  │
+│  │  (LLM)   │  │          │  │                  │  │
+│  │          │  │ - Search │  │ - Working (ctx)  │  │
+│  │ Reason   │  │ - Code   │  │ - Short-term     │  │
+│  │ Plan     │  │ - Files  │  │ - Long-term      │  │
+│  │ Decide   │  │ - APIs   │  │   (vector DB)    │  │
+│  └──────────┘  └──────────┘  └──────────────────┘  │
+│                                                     │
+│  ┌──────────────────┐  ┌──────────────────────────┐ │
+│  │   Perception     │  │        Action            │ │
+│  │ (input/context)  │  │ (executing tool calls)   │ │
+│  └──────────────────┘  └──────────────────────────┘ │
+└────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="agent-patterns">Agent Patterns</h2>
+<h3 id="1-react-reason--act">1. ReAct (Reason + Act)</h3>
+<p>The most common pattern. The agent alternates between reasoning and acting.</p>
+<pre><code>Thought: I need to find the top customers by revenue
+Action: run_sql(&quot;SELECT customer_id, SUM(amount) FROM orders GROUP BY 1 ORDER BY 2 DESC LIMIT 10&quot;)
+Observation: [{&quot;customer_id&quot;: &quot;C001&quot;, &quot;total&quot;: 50000}, ...]
+Thought: Now I need their names from the customers table
+Action: run_sql(&quot;SELECT name FROM customers WHERE id IN ('C001', 'C002', ...)&quot;)
+Observation: [{&quot;name&quot;: &quot;Acme Corp&quot;}, ...]
+Thought: I have enough data to write the report
+Action: write_file(&quot;report.md&quot;, &quot;# Top Customers Report\n...&quot;)
+Final Answer: Report written to report.md
+</code></pre>
+<h3 id="2-plan-and-execute">2. Plan-and-Execute</h3>
+<p>The agent creates a full plan first, then executes each step.</p>
+<pre><code>Plan:
+1. Query sales data for Q4
+2. Calculate MoM growth rates
+3. Identify top/bottom performers
+4. Generate charts
+5. Write executive summary
+
+Execute: [runs each step]
+</code></pre>
+<h3 id="3-reflection--self-critique">3. Reflection / Self-Critique</h3>
+<p>The agent evaluates its own output and improves it.</p>
+<pre><code>Draft response → Critique (is this correct? complete? safe?) → Revise → Final
+</code></pre>
+<h3 id="4-tool-augmented-generation">4. Tool-Augmented Generation</h3>
+<p>Agent decides when to call tools vs answer from memory.</p>
+<hr />
+<h2 id="building-agents-with-claude">Building Agents with Claude</h2>
+<h3 id="simple-agent-loop">Simple Agent Loop</h3>
+<pre><code class="language-python">import anthropic
+import json
+import subprocess
+import os
+
+client = anthropic.Anthropic()
+
+# Define tools
+tools = [
+    {
+        &quot;name&quot;: &quot;bash&quot;,
+        &quot;description&quot;: &quot;Execute a bash command and return stdout/stderr&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;command&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The bash command to run&quot;}
+            },
+            &quot;required&quot;: [&quot;command&quot;]
+        }
+    },
+    {
+        &quot;name&quot;: &quot;read_file&quot;,
+        &quot;description&quot;: &quot;Read the contents of a file&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}
+            },
+            &quot;required&quot;: [&quot;path&quot;]
+        }
+    },
+    {
+        &quot;name&quot;: &quot;write_file&quot;,
+        &quot;description&quot;: &quot;Write content to a file&quot;,
+        &quot;input_schema&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;},
+                &quot;content&quot;: {&quot;type&quot;: &quot;string&quot;}
+            },
+            &quot;required&quot;: [&quot;path&quot;, &quot;content&quot;]
+        }
+    }
+]
+
+def execute_tool(name: str, inputs: dict) -&gt; str:
+    if name == &quot;bash&quot;:
+        result = subprocess.run(
+            inputs[&quot;command&quot;],
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        return result.stdout + result.stderr
+
+    elif name == &quot;read_file&quot;:
+        try:
+            return open(inputs[&quot;path&quot;]).read()
+        except FileNotFoundError:
+            return f&quot;Error: File not found: {inputs['path']}&quot;
+
+    elif name == &quot;write_file&quot;:
+        with open(inputs[&quot;path&quot;], &quot;w&quot;) as f:
+            f.write(inputs[&quot;content&quot;])
+        return f&quot;File written: {inputs['path']}&quot;
+
+    return f&quot;Unknown tool: {name}&quot;
+
+def run_agent(task: str, max_iterations: int = 20) -&gt; str:
+    &quot;&quot;&quot;Run an agent loop until the task is complete or max iterations reached.&quot;&quot;&quot;
+
+    messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: task}]
+    system = &quot;&quot;&quot;You are an autonomous agent. Complete the given task using available tools.
+
+    Think step by step. Be thorough but efficient. When the task is complete, provide a clear final answer.&quot;&quot;&quot;
+
+    for iteration in range(max_iterations):
+        response = client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=4096,
+            system=system,
+            tools=tools,
+            messages=messages,
+        )
+
+        # Add assistant response to conversation
+        messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content})
+
+        if response.stop_reason == &quot;end_turn&quot;:
+            # Agent is done
+            for block in response.content:
+                if hasattr(block, &quot;text&quot;):
+                    return block.text
+
+        elif response.stop_reason == &quot;tool_use&quot;:
+            # Execute tool calls
+            tool_results = []
+            for block in response.content:
+                if block.type == &quot;tool_use&quot;:
+                    print(f&quot;[Agent] Tool: {block.name}({json.dumps(block.input)[:100]})&quot;)
+                    result = execute_tool(block.name, block.input)
+                    print(f&quot;[Agent] Result: {result[:200]}&quot;)
+                    tool_results.append({
+                        &quot;type&quot;: &quot;tool_result&quot;,
+                        &quot;tool_use_id&quot;: block.id,
+                        &quot;content&quot;: result
+                    })
+
+            messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: tool_results})
+
+    return &quot;Max iterations reached&quot;
+
+# Use the agent
+result = run_agent(&quot;&quot;&quot;
+Analyze the Python files in the current directory:
+1. Count the total number of functions
+2. Find the longest function
+3. List any TODO comments
+4. Write a summary to analysis_report.md
+&quot;&quot;&quot;)
+print(result)
+</code></pre>
+<hr />
+<h2 id="multi-agent-systems">Multi-Agent Systems</h2>
+<p>Complex tasks can be broken down across specialized agents.</p>
+<h3 id="orchestrator--subagents-pattern">Orchestrator + Subagents Pattern</h3>
+<pre><code class="language-python">import anthropic
+from concurrent.futures import ThreadPoolExecutor
+
+client = anthropic.Anthropic()
+
+def run_subagent(task: str, agent_role: str) -&gt; str:
+    &quot;&quot;&quot;Run a specialized subagent for a specific task.&quot;&quot;&quot;
+    response = client.messages.create(
+        model=&quot;claude-haiku-4-5-20251001&quot;,  # faster/cheaper for subagents
+        max_tokens=2048,
+        system=f&quot;You are a specialized {agent_role}. Complete the given task concisely.&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: task}]
+    )
+    return next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+def orchestrator(user_goal: str) -&gt; str:
+    &quot;&quot;&quot;Orchestrator breaks down goals and coordinates subagents.&quot;&quot;&quot;
+
+    # Step 1: Plan
+    plan_response = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=1024,
+        system=&quot;You are a planning agent. Break down the goal into 3-5 parallel subtasks.&quot;,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;Break this into parallel subtasks: {user_goal}\nReturn as JSON: {{\&quot;tasks\&quot;: [{{\&quot;role\&quot;: \&quot;...\&quot;, \&quot;task\&quot;: \&quot;...\&quot;}}]}}&quot;
+        }]
+    )
+
+    import json
+    plan = json.loads(next(b.text for b in plan_response.content if b.type == &quot;text&quot;))
+
+    # Step 2: Execute subtasks in parallel
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {
+            executor.submit(run_subagent, item[&quot;task&quot;], item[&quot;role&quot;]): item
+            for item in plan[&quot;tasks&quot;]
+        }
+        results = {}
+        for future, item in futures.items():
+            results[item[&quot;role&quot;]] = future.result()
+
+    # Step 3: Synthesize results
+    synthesis = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=2048,
+        system=&quot;You are a synthesis agent. Combine the work of multiple subagents into a coherent final answer.&quot;,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;Goal: {user_goal}\n\nSubagent results:\n{json.dumps(results, indent=2)}\n\nSynthesize a final answer.&quot;
+        }]
+    )
+
+    return next(b.text for b in synthesis.content if b.type == &quot;text&quot;)
+
+result = orchestrator(&quot;Create a competitive analysis of the top 3 cloud data warehouses&quot;)
+print(result)
+</code></pre>
+<h3 id="specialized-agent-roles">Specialized Agent Roles</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Agent Type</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Orchestrator</strong></td>
+<td>Plans, delegates, synthesizes</td>
+</tr>
+<tr>
+<td><strong>Researcher</strong></td>
+<td>Searches, reads, summarizes information</td>
+</tr>
+<tr>
+<td><strong>Coder</strong></td>
+<td>Writes, tests, debugs code</td>
+</tr>
+<tr>
+<td><strong>Critic</strong></td>
+<td>Reviews and identifies issues</td>
+</tr>
+<tr>
+<td><strong>Executor</strong></td>
+<td>Runs commands, calls APIs</td>
+</tr>
+<tr>
+<td><strong>Writer</strong></td>
+<td>Drafts documents, reports</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="anthropic-agent-sdk">Anthropic Agent SDK</h2>
+<p>The <strong>Claude Agent SDK</strong> packages the Claude Code harness as a library: the agent loop, context management, built-in tools (file read/write/edit, bash, search), MCP, subagents, hooks, and permissions. It is a separate package from the <code>anthropic</code> API SDK, and you host it yourself.</p>
+<pre><code class="language-python"># pip install claude-agent-sdk
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+async def main():
+    async for message in query(
+        prompt=&quot;Find the failing test in tests/ and fix it.&quot;,
+        options=ClaudeAgentOptions(allowed_tools=[&quot;Read&quot;, &quot;Edit&quot;, &quot;Bash&quot;]),
+    ):
+        print(message)
+
+asyncio.run(main())
+</code></pre>
+<p>Compare with the options around it: the raw Messages API with your own loop (above) gives full control; the API SDK's tool runner automates the loop for tools you define; Claude Managed Agents (beta) has Anthropic run the loop and host a per-session sandbox.</p>
+<h3 id="human-in-the-loop">Human-in-the-Loop</h3>
+<pre><code class="language-python">def agent_with_confirmation(task: str):
+    &quot;&quot;&quot;Agent that asks for confirmation before risky actions.&quot;&quot;&quot;
+
+    RISKY_TOOLS = {&quot;delete_file&quot;, &quot;run_database_migration&quot;, &quot;send_email&quot;}
+
+    messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: task}]
+
+    while True:
+        response = client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=4096,
+            tools=tools,
+            messages=messages,
+        )
+
+        messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content})
+
+        if response.stop_reason == &quot;end_turn&quot;:
+            return next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+        if response.stop_reason == &quot;tool_use&quot;:
+            tool_results = []
+            for block in response.content:
+                if block.type == &quot;tool_use&quot;:
+                    # Check if this needs confirmation
+                    if block.name in RISKY_TOOLS:
+                        print(f&quot;\n⚠️  Agent wants to call: {block.name}&quot;)
+                        print(f&quot;   Arguments: {block.input}&quot;)
+                        confirm = input(&quot;   Approve? [y/N]: &quot;)
+                        if confirm.lower() != &quot;y&quot;:
+                            tool_results.append({
+                                &quot;type&quot;: &quot;tool_result&quot;,
+                                &quot;tool_use_id&quot;: block.id,
+                                &quot;content&quot;: &quot;User declined this action&quot;,
+                                &quot;is_error&quot;: True
+                            })
+                            continue
+
+                    result = execute_tool(block.name, block.input)
+                    tool_results.append({
+                        &quot;type&quot;: &quot;tool_result&quot;,
+                        &quot;tool_use_id&quot;: block.id,
+                        &quot;content&quot;: result
+                    })
+
+            messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: tool_results})
+</code></pre>
+<hr />
+<h2 id="agent-memory">Agent Memory</h2>
+<h3 id="types-of-memory">Types of Memory</h3>
+<pre><code>1. Working Memory    = LLM context window (in-flight conversation)
+2. Episodic Memory   = Past interactions stored in DB + retrieved via search
+3. Semantic Memory   = Facts/knowledge in vector DB
+4. Procedural Memory = Skills encoded in system prompts or fine-tuned weights
+</code></pre>
+<h3 id="implementing-memory-with-vector-search">Implementing Memory with Vector Search</h3>
+<pre><code class="language-python">from anthropic import Anthropic
+import chromadb
+import uuid
+
+client = Anthropic()
+chroma = chromadb.Client()
+memory_collection = chroma.create_collection(&quot;agent_memory&quot;)
+
+def remember(text: str, metadata: dict = {}):
+    &quot;&quot;&quot;Store a memory.&quot;&quot;&quot;
+    memory_collection.add(
+        documents=[text],
+        metadatas=[metadata],
+        ids=[str(uuid.uuid4())]
+    )
+
+def recall(query: str, n: int = 5) -&gt; list[str]:
+    &quot;&quot;&quot;Retrieve relevant memories.&quot;&quot;&quot;
+    results = memory_collection.query(
+        query_texts=[query],
+        n_results=n
+    )
+    return results[&quot;documents&quot;][0]
+
+def agent_with_memory(user_message: str) -&gt; str:
+    # Recall relevant memories
+    memories = recall(user_message)
+    memory_context = &quot;\n&quot;.join(memories) if memories else &quot;No relevant memories.&quot;
+
+    response = client.messages.create(
+        model=&quot;claude-sonnet-5&quot;,
+        max_tokens=1024,
+        system=f&quot;&quot;&quot;You are a helpful assistant with memory.
+
+Relevant memories from past interactions:
+{memory_context}
+
+Use these memories to provide personalized, contextual responses.&quot;&quot;&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_message}]
+    )
+
+    reply = next(b.text for b in response.content if b.type == &quot;text&quot;)
+
+    # Store this interaction as a memory
+    remember(f&quot;User asked: {user_message}\nAssistant replied: {reply[:200]}&quot;)
+
+    return reply
+</code></pre>
+<hr />
+<h2 id="agent-evaluation--safety">Agent Evaluation &amp; Safety</h2>
+<h3 id="evaluation-metrics">Evaluation Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Task completion rate</strong></td>
+<td>% of tasks successfully completed</td>
+</tr>
+<tr>
+<td><strong>Step efficiency</strong></td>
+<td>Avg tool calls per task (lower = more efficient)</td>
+</tr>
+<tr>
+<td><strong>Error rate</strong></td>
+<td>% of tasks with incorrect outcomes</td>
+</tr>
+<tr>
+<td><strong>Safety rate</strong></td>
+<td>% of harmful actions rejected</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Time to complete task</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="safety-principles-for-agents">Safety Principles for Agents</h3>
+<ol>
+<li><strong>Minimal footprint</strong>: request only necessary permissions</li>
+<li><strong>Prefer reversible actions</strong>: delete → trash, not permanent delete</li>
+<li><strong>Confirm before irreversible actions</strong>: especially in production</li>
+<li><strong>Fail loudly</strong>: surface errors rather than silently continuing</li>
+<li><strong>Audit trail</strong>: log all tool calls and outcomes</li>
+<li><strong>Scope limiting</strong>: constrain what the agent can access</li>
+<li><strong>Injection detection</strong>: watch for prompt injection in tool results</li>
+</ol>
+<pre><code class="language-python"># Prompt injection guard
+def sanitize_tool_result(result: str) -&gt; str:
+    &quot;&quot;&quot;Detect and neutralize potential prompt injection in tool results.&quot;&quot;&quot;
+    injection_patterns = [
+        &quot;ignore previous instructions&quot;,
+        &quot;new instruction:&quot;,
+        &quot;system: you are now&quot;,
+        &quot;&lt;system&gt;&quot;,
+    ]
+    for pattern in injection_patterns:
+        if pattern.lower() in result.lower():
+            return f&quot;[SANITIZED: Potential injection detected in tool result]&quot;
+    return result
+</code></pre>
+<hr />
+<h2 id="real-world-examples">Real-World Examples</h2>
+<h3 id="data-engineering-agent">Data Engineering Agent</h3>
+<pre><code class="language-python">task = &quot;&quot;&quot;
+Our dbt pipeline failed last night. Please:
+1. Check the error logs in ./logs/dbt.log
+2. Identify which model failed and why
+3. Fix the SQL if it's a syntax error
+4. Run dbt test on the affected model
+5. Write a brief incident report
+&quot;&quot;&quot;
+result = run_agent(task)
+</code></pre>
+<h3 id="code-review-agent">Code Review Agent</h3>
+<pre><code class="language-python">task = &quot;&quot;&quot;
+Review the PR diff in ./changes.diff:
+1. Check for security vulnerabilities
+2. Check for performance issues
+3. Verify test coverage
+4. Post review comments in ./review.md
+&quot;&quot;&quot;
+</code></pre>
+<h3 id="research-agent">Research Agent</h3>
+<pre><code class="language-python">task = &quot;&quot;&quot;
+Research the current state of vector databases in 2026:
+1. List the top 5 vector databases with their features
+2. Compare performance benchmarks
+3. Summarize adoption trends
+4. Write a 2-page briefing document
+&quot;&quot;&quot;
+</code></pre>
+<hr />
+<h2 id="2026-landscape">2026 Landscape</h2>
+<h3 id="popular-agent-frameworks">Popular Agent Frameworks</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Language</th>
+<th>Key Feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Python</td>
+<td>Stateful multi-agent graphs</td>
+</tr>
+<tr>
+<td><strong>CrewAI</strong></td>
+<td>Python</td>
+<td>Role-based agent crews</td>
+</tr>
+<tr>
+<td><strong>n8n</strong></td>
+<td>TypeScript</td>
+<td>Visual workflow automation with AI integrations</td>
+</tr>
+<tr>
+<td><strong>AutoGen</strong></td>
+<td>Python</td>
+<td>Multi-agent conversations (Microsoft; its successor is Microsoft Agent Framework)</td>
+</tr>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>TypeScript</td>
+<td>Agentic coding assistant</td>
+</tr>
+<tr>
+<td><strong>Composio</strong></td>
+<td>Python</td>
+<td>250+ tool integrations for agents</td>
+</tr>
+<tr>
+<td><strong>Dify</strong></td>
+<td>Python</td>
+<td>Visual agent builder</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="production-agent-platforms">Production Agent Platforms</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amazon Bedrock Agents</strong></td>
+<td>Managed agent service on AWS</td>
+</tr>
+<tr>
+<td><strong>Google Vertex AI Agents</strong></td>
+<td>Managed agents on GCP</td>
+</tr>
+<tr>
+<td><strong>Azure AI Agents</strong></td>
+<td>Managed agents on Azure</td>
+</tr>
+<tr>
+<td><strong>Anthropic API</strong></td>
+<td>Build your own with Claude + tools</td>
+</tr>
+<tr>
+<td><strong>Claude Managed Agents</strong> (beta)</td>
+<td>Anthropic runs the agent loop and a per-session sandbox</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="2026-trends">2026 Trends</h3>
+<ul>
+<li><strong>Agentic loops are stable</strong>: ReAct and Plan-Execute patterns are production-proven</li>
+<li><strong>Multi-agent coordination</strong>: Orchestrator patterns replacing monolithic agents</li>
+<li><strong>Specialized models</strong>: Small models for subagent tasks, large models for orchestration</li>
+<li><strong>MCP standardization</strong>: Agents share tool servers via MCP</li>
+<li><strong>Evaluations matured</strong>: LLM-as-judge and automated evals are standard</li>
+<li><strong>Computer use</strong>: Agents that can operate UIs (browsers, desktops)</li>
+<li><strong>Long-horizon tasks</strong>: Agents running for hours/days on complex engineering tasks</li>
+</ul>
+<hr />
+<h2 id="production-agent-engineering">Production Agent Engineering</h2>
+<p>Building a demo agent is easy; making one reliable, cheap, and debuggable in
+production is the actual job. This section covers the decisions interviewers
+probe most.</p>
+<h3 id="should-you-even-build-an-agent">Should You Even Build an Agent?</h3>
+<p>Before reaching for an agent, check four criteria. If any answer is &quot;no,&quot; use a
+simpler tier: a single LLM call or a code-orchestrated <strong>workflow</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Is the task multi-step and hard to fully specify up front?</td>
+</tr>
+<tr>
+<td><strong>Value</strong></td>
+<td>Does the outcome justify higher cost and latency?</td>
+</tr>
+<tr>
+<td><strong>Viability</strong></td>
+<td>Is the model actually capable at this task type?</td>
+</tr>
+<tr>
+<td><strong>Cost of error</strong></td>
+<td>Can mistakes be caught and recovered (tests, review, rollback)?</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Rule of thumb:</strong> Single call → classification/extraction/Q&amp;A. Workflow →
+multi-step pipeline with logic <em>you</em> control. Agent → open-ended task where the
+model must decide its own trajectory.</p>
+</blockquote>
+<h3 id="designing-the-tool-surface">Designing the Tool Surface</h3>
+<p>The shape of your tools determines what your harness can do. A <strong>bash tool</strong> gives
+the model maximum flexibility but hands the harness only an opaque command string. A
+<strong>dedicated tool</strong> (<code>send_email</code>, <code>edit_file</code>) gives the harness a typed, named
+hook it can gate, validate, render, or run in parallel.</p>
+<p><strong>Promote an action from bash to a dedicated tool when you need to:</strong></p>
+<ul>
+<li><strong>Gate it</strong>: hard-to-reverse actions (sending messages, deleting data, external
+API writes) should be confirmable. <code>send_email</code> is easy to gate; <code>bash -c &quot;curl -X POST...&quot;</code> is not.</li>
+<li><strong>Enforce invariants</strong>: a dedicated <code>edit</code> tool can reject a write if the file
+changed since the model last read it.</li>
+<li><strong>Render it</strong>: some actions deserve custom UI (an approval modal, a diff view).</li>
+<li><strong>Parallelize it</strong>: mark read-only tools (<code>grep</code>, <code>glob</code>) parallel-safe; the
+harness can't tell a safe <code>grep</code> from an unsafe <code>git push</code> inside bash.</li>
+</ul>
+<p><strong>Tool definition best practices:</strong> clear names, descriptions that say <em>when</em> to
+call the tool (not just what it does), <code>enum</code> for fixed-value params, and only
+truly-required fields in <code>required</code>. On recent models that call tools more
+conservatively, an explicit &quot;Call this when…&quot; trigger in the description measurably
+raises the should-call rate.</p>
+<h3 id="context-management-for-long-running-agents">Context Management for Long-Running Agents</h3>
+<p>Agents accumulate context across many turns and will blow the context window if
+unmanaged. Three complementary strategies:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>What it does</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Context editing</strong></td>
+<td>Prunes stale tool results / thinking blocks</td>
+<td>Old tool outputs are no longer relevant</td>
+</tr>
+<tr>
+<td><strong>Compaction</strong></td>
+<td>Summarizes earlier history into a compact block</td>
+<td>Conversation approaches the window limit</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>Persists state to files/DB across sessions</td>
+<td>State must survive process restarts</td>
+</tr>
+</tbody>
+</table></div>
+<p>Many long-horizon agents use all three. Compaction summarizes <em>within</em> a session;
+memory persists <em>across</em> sessions.</p>
+<p><strong>Prompt caching for agents</strong>: caching is a prefix match, so:</p>
+<ul>
+<li>Keep the system prompt and tool list <strong>frozen</strong> (don't interpolate timestamps,
+don't reorder tools): any change at the front invalidates everything after it.</li>
+<li>To change behavior mid-run, append an instruction as a message rather than
+editing the system prompt.</li>
+<li>To use a cheaper model for a sub-task, spawn a <strong>subagent</strong> instead of swapping
+the model mid-conversation (a model switch invalidates the cache).</li>
+</ul>
+<h3 id="managed-vs-self-hosted-agents">Managed vs. Self-Hosted Agents</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Self-hosted loop</strong> (your code runs the loop)</th>
+<th><strong>Managed agents</strong> (provider runs the loop)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control</td>
+<td>Maximum: custom logging, approval gates</td>
+<td>Provider orchestrates; you stream events</td>
+</tr>
+<tr>
+<td>Tool execution</td>
+<td>Your infrastructure</td>
+<td>Provider-hosted container (or your own)</td>
+</tr>
+<tr>
+<td>State</td>
+<td>You manage</td>
+<td>Persisted, versioned agent configs + sessions</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Custom runtimes, on-prem, fine-grained control</td>
+<td>Stateful agents, file mounts, fast time-to-prod</td>
+</tr>
+</tbody>
+</table></div>
+<p>Anthropic's <strong>Managed Agents</strong> is one example of the managed pattern: you create a
+persisted, versioned Agent config (model, system prompt, tools), then start
+Sessions that reference it; the provider runs the loop and hosts a per-session
+container where tools execute.</p>
+<h3 id="evaluating-agents">Evaluating Agents</h3>
+<p>Don't evaluate agents only on final-answer quality: evaluate the <strong>trajectory</strong>:</p>
+<ul>
+<li><strong>Task success rate</strong>: did it achieve the goal? (the headline metric)</li>
+<li><strong>Trajectory quality</strong>: were the tool calls sensible, or did it flail?</li>
+<li><strong>Efficiency</strong>: number of steps, tokens, and tool calls per task.</li>
+<li><strong>Failure analysis</strong>: categorize <em>why</em> tasks fail (wrong tool, bad parse, loop).</li>
+</ul>
+<p>Maintain a <strong>task suite</strong> the agent must pass on every change, and use
+LLM-as-judge for graded rubrics. See <a href="../mlops/intro_llm_evaluation.html">LLM Evaluation</a>.</p>
+<h3 id="cost--latency-optimization">Cost &amp; Latency Optimization</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Right-size the model</strong></td>
+<td>Use a smaller model (e.g. Haiku-tier) for routing/subagents, a larger one (Opus-tier) for hard reasoning</td>
+</tr>
+<tr>
+<td><strong>Prompt caching</strong></td>
+<td>Cache the stable system prompt + tools (~10× cheaper on cache reads)</td>
+</tr>
+<tr>
+<td><strong>Effort/thinking controls</strong></td>
+<td>Lower the reasoning effort for routine steps; raise it for hard ones</td>
+</tr>
+<tr>
+<td><strong>Parallel tool calls</strong></td>
+<td>Execute independent tools concurrently, return all results in one turn</td>
+</tr>
+<tr>
+<td><strong>Cap the loop</strong></td>
+<td>Set a max-steps / token budget so a runaway agent fails gracefully</td>
+</tr>
+<tr>
+<td><strong>Batch offline work</strong></td>
+<td>Use batch APIs (≈50% cheaper) for non-latency-sensitive jobs</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="failure-modes--guardrails">Failure Modes &amp; Guardrails</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Failure mode</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Infinite / repetitive loops</td>
+<td>Max-step cap; detect repeated states</td>
+</tr>
+<tr>
+<td>Hallucinated tool arguments</td>
+<td>Strict schemas (<code>additionalProperties: false</code>), validate before executing</td>
+</tr>
+<tr>
+<td>Destructive actions</td>
+<td>Human-in-the-loop approval for irreversible tools</td>
+</tr>
+<tr>
+<td>Prompt injection via tool output</td>
+<td>Treat tool/retrieved content as untrusted; don't let it override system instructions</td>
+</tr>
+<tr>
+<td>Silent quality drift</td>
+<td>Continuous evals + tracing on every tool call</td>
+</tr>
+<tr>
+<td>Cost blowout</td>
+<td>Token/step budgets; alerting on per-task spend</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="when-should-you-not-build-an-agent">When should you NOT build an agent?</h4>
+<p>When the task is single-step or fully specifiable: a single call or a code-orchestrated workflow is cheaper, faster, and more reliable.</p>
+<h4 id="bash-tool-vs-dedicated-tools-trade-offs">Bash tool vs dedicated tools: trade-offs?</h4>
+<p>Bash = max capability, opaque to the harness; dedicated tools = gateable, validatable, parallelizable, but you must build each one. Promote to dedicated when you need to gate/render/parallelize.</p>
+<h4 id="how-do-you-keep-a-long-running-agent-within-the-context-window">How do you keep a long-running agent within the context window?</h4>
+<p>Context editing (prune), compaction (summarize), and memory (persist across sessions).</p>
+<h4 id="how-do-you-evaluate-an-agent">How do you evaluate an agent?</h4>
+<p>Task success rate + trajectory quality + efficiency, on a fixed task suite, often with LLM-as-judge.</p>
+<h4 id="how-do-you-defend-against-prompt-injection-in-an-agentic-rag-system">How do you defend against prompt injection in an agentic RAG system?</h4>
+<p>Treat retrieved/tool content as untrusted data, never as instructions; separate the system/operator channel; validate and sandbox tool execution.</p>
+<h4 id="how-do-you-cut-agent-cost-without-hurting-quality">How do you cut agent cost without hurting quality?</h4>
+<p>Right-size models per sub-task, prompt-cache the stable prefix, lower effort on routine steps, parallelize tool calls, and batch offline work.</p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_rag.html">RAG</a></td>
+<td>Agentic RAG combines agents with retrieval</td>
+</tr>
+<tr>
+<td><a href="intro_n8n.html">n8n</a></td>
+<td>n8n is useful when agent workflows need triggers, approvals, and SaaS integrations</td>
+</tr>
+<tr>
+<td><a href="intro_mcp.html">MCP</a></td>
+<td>Model Context Protocol is the standard tool interface for agents</td>
+</tr>
+<tr>
+<td><a href="intro_langchain.html">LangChain</a></td>
+<td>LangGraph is the leading framework for agentic workflows</td>
+</tr>
+<tr>
+<td><a href="intro_llmops.html">LLMOps</a></td>
+<td>Monitoring and evaluating agent reliability in production</td>
+</tr>
+<tr>
+<td><a href="intro_anthropic.html">Anthropic Overview</a></td>
+<td>Claude's tool use and extended thinking for agents</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_llmops.html"><small>Previous</small>LLMOps</a><a rel="next" class="next" href="intro_agent_tool_use.html"><small>Next</small>Agent Tool Use</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_agentic_ai.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

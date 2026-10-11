@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Types of Data Processing Pipelines Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Data processing pipelines sit on a spectrum from batch (high latency, low engineering complexity, strong data quality) to streaming (sub-second latency…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_data_processing_pipelines.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Types of Data Processing Pipelines Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Data processing pipelines sit on a spectrum from batch (high latency, low engineering complexity, strong data quality) to streaming (sub-second latency…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_data_processing_pipelines.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Types of Data Processing Pipelines Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Data processing pipelines sit on a spectrum from batch (high latency, low engineering complexity, strong data quality) to streaming (sub-second latency…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Types of Data Processing Pipelines",
+   "description": "Data processing pipelines sit on a spectrum from batch (high latency, low engineering complexity, strong data quality) to streaming (sub-second latency…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_data_processing_pipelines.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Data Processing Pipelines",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_data_processing_pipelines.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Data Processing Pipelines</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_data_processing_pipelines.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="types-of-data-processing-pipelines">Types of Data Processing Pipelines</h1>
+<p><strong>Data processing pipelines</strong> sit on a spectrum from <strong>batch</strong> (high latency, low engineering complexity, strong data quality) to <strong>streaming</strong> (sub-second latency, high engineering complexity, hardest to get right). Choosing the correct point on that spectrum is one of the most common (and most revealing) data engineering interview questions.</p>
+<blockquote>
+<p>The single most important idea: <strong>latency and engineering complexity trade off against each other.</strong> You do not pick &quot;real-time&quot; because it sounds modern; you pick the <em>highest-latency</em> option that still meets the business requirement, because it is cheaper, simpler, and easier to make correct.</p>
+</blockquote>
+<hr />
+<h2 id="the-latency--complexity-spectrum">The Latency ↔ Complexity Spectrum</h2>
+<pre><code>  LOWER LATENCY  ───────────────────────────────────────────►  (faster results)
+  HIGHER COMPLEXITY ────────────────────────────────────────►  (harder to build)
+
+  BATCH        MICROBATCH      NEAR REAL-TIME     REAL-TIME        STREAMING
+  hours          hours           2-5 min          ~seconds         ms-seconds
+  ┌────────┐   ┌──────────┐    ┌────────────┐    ┌──────────┐    ┌──────────┐
+  │ once   │   │ assembly │    │ rapid batch│    │ conveyor │    │  river   │
+  │ a day  │   │  line    │    │  assembly  │    │  belt    │    │ (always  │
+  │        │   │          │    │            │    │          │    │ flowing) │
+  └────────┘   └──────────┘    └────────────┘    └──────────┘    └──────────┘
+  Strongest DQ ◄──────────────────────────────────────────►  Weakest DQ
+                                                              (state is hard)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pipeline</th>
+<th>Typical latency</th>
+<th>Processing model</th>
+<th>Data quality (DQ)</th>
+<th>Eng. complexity</th>
+<th>Primary tech</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Batch</strong></td>
+<td>4-6 hours (daily)</td>
+<td>Full dataset, partition-based</td>
+<td>⭐⭐⭐⭐⭐ Strongest</td>
+<td>⭐ Lowest</td>
+<td>Spark</td>
+</tr>
+<tr>
+<td><strong>Microbatch</strong></td>
+<td>4-6 hours / shorter windows</td>
+<td>Larger scheduled batches</td>
+<td>⭐⭐⭐⭐ Strong</td>
+<td>⭐⭐ Low</td>
+<td>Spark, Spark Structured Streaming</td>
+</tr>
+<tr>
+<td><strong>Near real-time</strong></td>
+<td>2-5 minutes</td>
+<td>Small micro-batches</td>
+<td>⭐⭐⭐ Good</td>
+<td>⭐⭐⭐ Medium</td>
+<td>Spark Structured Streaming</td>
+</tr>
+<tr>
+<td><strong>Real-time</strong></td>
+<td>seconds (100ms-2s)</td>
+<td>Event-driven w/ inherent latency</td>
+<td>⭐⭐ Harder</td>
+<td>⭐⭐⭐⭐ High</td>
+<td>Flink, Kafka</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>ms-seconds</td>
+<td>Event-by-event, continuous</td>
+<td>⭐⭐ Hardest</td>
+<td>⭐⭐⭐⭐⭐ Highest</td>
+<td>Kafka, Flink</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><em>Inspired by the &quot;Types of Data Processing Pipelines&quot; framing from Zach Wilson / Zach Morris' Data Engineering Bootcamp. Expanded here into an interview-prep guide.</em></p>
+</blockquote>
+<hr />
+<h2 id="1-batch-processing">1. Batch Processing</h2>
+<blockquote>
+<p><strong>Analogy:</strong> a factory that processes all of the day's work at once.</p>
+</blockquote>
+<p>Data is collected over a window (usually a day) and processed together in a single scheduled run. This is the workhorse of analytics and the default you should reach for unless requirements force you faster.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Processed in scheduled intervals (cron / Airflow DAG)</li>
+<li>Full dataset, partition-based processing</li>
+<li>Schedule-driven execution</li>
+<li>Strong data quality (DQ) capabilities: you have the whole dataset, so you can validate, dedupe, and reconcile</li>
+</ul>
+<p><strong>Latency components</strong></p>
+<ul>
+<li>Job scheduling: minutes</li>
+<li>Full dataset processing: hours</li>
+<li>Typical total: <strong>4-6 hours daily</strong></li>
+<li>Usually runs at midnight UTC (after the day closes)</li>
+</ul>
+<p><strong>Use when</strong></p>
+<ul>
+<li>Daily/periodic refresh is acceptable (dashboards, reports, ML training data)</li>
+<li>Complex data quality checks are required</li>
+<li>You want to optimize resource cost (run big clusters once, then shut down)</li>
+</ul>
+<p><strong>🚫 Avoid when</strong></p>
+<ul>
+<li>You need intraday or real-time data</li>
+<li>The use case is a customer-facing live analytics surface</li>
+</ul>
+<p><strong>Tech:</strong> Apache Spark, dbt, Airflow-orchestrated SQL.</p>
+<hr />
+<h2 id="2-microbatch-processing">2. Microbatch Processing</h2>
+<blockquote>
+<p><strong>Analogy:</strong> a traditional assembly line with larger batch sizes.</p>
+</blockquote>
+<p>Microbatch shrinks the batch window but keeps the batch <em>mental model</em>. The tech stack overlaps heavily with near real-time, which is why teams often graduate from microbatch to near real-time without re-platforming.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Processed in shorter scheduled intervals</li>
+<li>Larger batch windows (vs near real-time)</li>
+<li>Better suited for DQ checks (still operating on a bounded set)</li>
+<li>Similar tech stack to near real-time</li>
+</ul>
+<p><strong>Latency components</strong></p>
+<ul>
+<li>Job scheduling: minutes</li>
+<li>Full dataset processing: hours</li>
+<li>Typical total: <strong>4-6 hours</strong></li>
+<li>Usually runs midnight UTC</li>
+</ul>
+<p><strong>Use when</strong></p>
+<ul>
+<li>Robust DQ checks are needed</li>
+<li>You have complex event correlation</li>
+<li>High data volume processing where bounded batches are easier to reason about</li>
+</ul>
+<p><strong>🚫 Avoid when</strong></p>
+<ul>
+<li>You have real-time alerting needs</li>
+<li>Transformations are simple (the batch overhead isn't worth it)</li>
+</ul>
+<p><strong>Tech:</strong> Apache Spark, Spark Structured Streaming (in fixed/trigger-interval mode).</p>
+<hr />
+<h2 id="3-near-real-time-processing">3. Near Real-Time Processing</h2>
+<blockquote>
+<p><strong>Analogy:</strong> a rapid batch assembly line.</p>
+</blockquote>
+<p>The bridge between batch and streaming. You process small batches every few minutes: fast enough for &quot;fresh&quot; dashboards and operational use cases, but still bounded enough to run quality checks.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Processed in small batches every few minutes</li>
+<li>Small batch collection windows</li>
+<li>Micro-batch processing model</li>
+<li>Better DQ capability vs pure streaming</li>
+</ul>
+<p><strong>Latency components</strong></p>
+<ul>
+<li>Collection window: 2-5 min</li>
+<li>Processing time: variable</li>
+<li>Writing time: depends on the sink</li>
+</ul>
+<p><strong>Use when</strong></p>
+<ul>
+<li>You need to compute throughout the day (not just at midnight)</li>
+<li>Transformations are complex but a few minutes of delay is fine</li>
+</ul>
+<p><strong>🚫 Avoid when</strong></p>
+<ul>
+<li>You have millisecond-latency requirements</li>
+<li>The scenario is a simple pass-through (just use streaming or batch)</li>
+</ul>
+<p><strong>Tech:</strong> Spark Structured Streaming (micro-batch mode).</p>
+<hr />
+<h2 id="4-real-time-processing">4. Real-Time Processing</h2>
+<blockquote>
+<p><strong>Analogy:</strong> a fast conveyor belt with minimal stops.</p>
+</blockquote>
+<p>True event-driven processing with low (but not zero) latency. Once you cross into real-time, <strong>state management</strong> becomes a first-class engineering problem (windowing, late data, exactly-once semantics).</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Instant processing with inherent latencies (network + compute)</li>
+<li>Near-immediate processing</li>
+<li>Event-time processing (not just arrival-time)</li>
+<li>State management requirements</li>
+</ul>
+<p><strong>Latency components</strong></p>
+<ul>
+<li>Network time: 100-200 ms</li>
+<li>Processing overhead: 1-2 sec</li>
+<li>Total: seconds (end-to-end can stretch to minutes under load)</li>
+</ul>
+<p><strong>Use when</strong></p>
+<ul>
+<li>Customer-facing applications</li>
+<li>Critical business operations that react to events</li>
+</ul>
+<p><strong>🚫 Avoid when</strong></p>
+<ul>
+<li>You have complex DQ needs (hard to validate a never-ending stream)</li>
+<li>Limited team expertise (real-time is operationally demanding)</li>
+<li>Heavy transformations that are cheaper in batch</li>
+</ul>
+<p><strong>Tech:</strong> Apache Flink, Kafka (often Kafka Streams or Flink on Kafka).</p>
+<hr />
+<h2 id="5-streaming-processing">5. Streaming Processing</h2>
+<blockquote>
+<p><strong>Analogy:</strong> a river, water keeps flowing continuously.</p>
+</blockquote>
+<p>The lowest-latency end of the spectrum: each event is processed the moment it is generated. This is the most powerful and the most expensive to operate. Native <strong>watermarking</strong> and continuous state are what separate real streaming engines from microbatch dressed up as streaming.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Immediate processing upon generation</li>
+<li>Event-by-event processing</li>
+<li>Continuous state management</li>
+<li>Native watermarking support (handling out-of-order / late events)</li>
+</ul>
+<p><strong>Latency components</strong></p>
+<ul>
+<li>Event capture: ~150 ms</li>
+<li>Flink processing: ~100 ms to 2 sec</li>
+<li>Sink writing: variable, based on destination</li>
+</ul>
+<p><strong>Use when</strong></p>
+<ul>
+<li>Critical real-time decisions</li>
+<li>Fraud / security monitoring</li>
+<li>Customer-facing real-time features (live personalization, live dashboards)</li>
+</ul>
+<p><strong>🚫 Avoid when</strong></p>
+<ul>
+<li>You have large state and/or complex DQ requirements that are cheaper to satisfy in batch</li>
+</ul>
+<p><strong>Tech:</strong> Apache Kafka, Apache Flink.</p>
+<hr />
+<h2 id="when-to-use-what-decision-framework">When to Use What, Decision Framework</h2>
+<p>This is the question interviewers actually care about. Walk the requirement <em>down</em> the spectrum and stop at the first row that satisfies the business need.</p>
+<pre><code>Q1: Does a human or system act on this data in &lt; 1 second?
+      ├─ YES → STREAMING / REAL-TIME  (fraud, alerting, live UX)
+      └─ NO  → continue
+Q2: Do you need fresh data multiple times per hour (intraday)?
+      ├─ YES → NEAR REAL-TIME  (operational dashboards, ops monitoring)
+      └─ NO  → continue
+Q3: Is a once-or-twice-a-day refresh acceptable?
+      ├─ YES → BATCH / MICROBATCH  (reporting, ML training, reconciliation)
+      └─ NO  → re-examine the requirement: &quot;real-time&quot; is often a want, not a need
+</code></pre>
+<h3 id="decision-cheat-sheet">Decision cheat-sheet</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>If the requirement is…</th>
+<th>Choose</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily report / dashboard</td>
+<td><strong>Batch</strong></td>
+<td>Cheapest, strongest DQ, simplest to operate</td>
+</tr>
+<tr>
+<td>ML feature/training tables</td>
+<td><strong>Batch / Microbatch</strong></td>
+<td>Reproducibility &amp; full-dataset validation matter more than freshness</td>
+</tr>
+<tr>
+<td>Heavy DQ on high volume</td>
+<td><strong>Microbatch</strong></td>
+<td>Bounded sets are easy to validate; cost-efficient</td>
+</tr>
+<tr>
+<td>&quot;Fresh-ish&quot; ops dashboard (minutes)</td>
+<td><strong>Near real-time</strong></td>
+<td>Intraday freshness without streaming complexity</td>
+</tr>
+<tr>
+<td>Customer-facing reaction (seconds)</td>
+<td><strong>Real-time</strong></td>
+<td>Event-driven, low latency, manageable state</td>
+</tr>
+<tr>
+<td>Fraud / security / live personalization</td>
+<td><strong>Streaming</strong></td>
+<td>Per-event, lowest latency, continuous state</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="the-trade-offs-you-must-mention-in-an-interview">The trade-offs you must mention in an interview</h3>
+<ol>
+<li><strong>Latency vs cost &amp; complexity</strong>: every step toward real-time multiplies operational burden (24/7 on-call, state stores, backpressure, exactly-once).</li>
+<li><strong>Data quality</strong>: batch sees the whole dataset and can validate/reconcile; streaming sees one event at a time, so DQ is far harder. Late and out-of-order data become real problems.</li>
+<li><strong>Reprocessing / backfills</strong>: trivial in batch (re-run the job), painful in streaming (replay from Kafka offsets, rebuild state).</li>
+<li><strong>State management</strong>: bounded in batch, unbounded and continuous in streaming (windows, watermarks, checkpointing).</li>
+<li><strong>Team expertise &amp; on-call</strong>: a real-time system is only as good as the team's ability to operate it at 3am.</li>
+</ol>
+<blockquote>
+<p><strong>Interview soundbite:</strong> <em>&quot;Pick the highest-latency pipeline that still meets the SLA. Latency is a cost you pay in engineering complexity, data-quality risk, and on-call burden, so only buy as much of it as the business actually needs.&quot;</em></p>
+</blockquote>
+<hr />
+<h2 id="tech-stack-quick-reference">Tech Stack Quick Reference</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Best fit</th>
+<th>Processing model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Apache Spark</strong></td>
+<td>Batch, Microbatch</td>
+<td>Distributed batch</td>
+<td>Industry standard for large-scale ETL &amp; ML data prep</td>
+</tr>
+<tr>
+<td><strong>Spark Structured Streaming</strong></td>
+<td>Microbatch, Near real-time</td>
+<td>Micro-batch (trigger intervals); also has an experimental low-latency continuous mode</td>
+<td>Same Spark API/tech stack: easy graduation path from batch</td>
+</tr>
+<tr>
+<td><strong>Apache Flink</strong></td>
+<td>Real-time, Streaming</td>
+<td>True event-at-a-time</td>
+<td>Strong state management, event-time, watermarks, exactly-once</td>
+</tr>
+<tr>
+<td><strong>Apache Kafka</strong></td>
+<td>Real-time, Streaming transport</td>
+<td>Distributed log / Kafka Streams</td>
+<td>The backbone for moving events; replayable via offsets</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Mental model:</strong> <em>Spark for bounded data, Flink for unbounded data, Kafka to move events between them.</em></p>
+<hr />
+<h2 id="interview-questions--answers">Interview Questions &amp; Answers</h2>
+<p><strong>Q: What's the difference between microbatch and streaming?</strong>
+Microbatch groups events into small bounded batches processed on a trigger interval (seconds to minutes): Spark Structured Streaming's default. Streaming processes each event individually, continuously, with no batch boundary (Flink). Microbatch trades a little latency for simpler DQ and a familiar batch mental model; streaming buys lower latency at the cost of harder state management.</p>
+<p><strong>Q: Why not just use real-time/streaming for everything?</strong>
+Because latency is expensive. Streaming adds 24/7 operations, continuous state stores, backpressure handling, exactly-once semantics, harder data-quality validation, and painful reprocessing. If a daily batch meets the SLA, streaming is wasted cost and added risk. Choose the highest-latency option that meets the requirement.</p>
+<p><strong>Q: When would you pick batch over streaming even though streaming is &quot;better&quot;?</strong>
+When the consumer doesn't need sub-hour freshness (reports, ML training, financial reconciliation), when you need strong data-quality guarantees over the full dataset, when you want cheap reprocessing/backfills, or when the team can't operate a streaming system reliably.</p>
+<p><strong>Q: What is near real-time and when is it the right choice?</strong>
+Small micro-batches every 2-5 minutes: the bridge between batch and streaming. Pick it when you need intraday freshness (operational dashboards, monitoring) and complex transformations, but millisecond latency isn't required and you still want decent DQ. It avoids streaming's complexity while beating batch's staleness.</p>
+<p><strong>Q: What makes data quality harder in streaming than in batch?</strong>
+Batch sees the entire bounded dataset, so it can dedupe, validate against totals, and reconcile. Streaming sees one event at a time with no end, so you must handle out-of-order and late-arriving events (via watermarks), maintain correct windowed state, and accept that some checks (e.g., &quot;does today's total reconcile?&quot;) simply can't be done until the window closes.</p>
+<p><strong>Q: What are watermarks and why do they matter?</strong>
+A watermark is the engine's notion of &quot;event-time progress&quot;: a threshold that says <em>&quot;I don't expect events older than this anymore.&quot;</em> It lets a streaming system decide when a window is complete and it's safe to emit results and drop state, while still tolerating bounded lateness. Without watermarks, windows never close and state grows unbounded.</p>
+<p><strong>Q: Spark vs Flink, when do you choose each?</strong>
+Spark (incl. Structured Streaming) excels at batch and micro-batch over bounded data with a unified batch/stream API: the natural choice if you're already a Spark shop and need microbatch/near-real-time. Flink is a true event-at-a-time engine with superior state management, event-time processing, and exactly-once: choose it for genuine low-latency streaming and complex stateful operations.</p>
+<p><strong>Q: How do you handle late-arriving data?</strong>
+In <strong>batch</strong>, late data is just picked up in the next scheduled run (or a targeted backfill of the affected partition). In <strong>streaming</strong>, you define an allowed-lateness window with watermarks: events within the watermark update their window; events beyond it are dropped or routed to a side output for separate handling.</p>
+<p><strong>Q: A stakeholder says &quot;we need this in real-time.&quot; How do you respond?</strong>
+Clarify the <em>actual</em> requirement: who/what consumes the data, what decision it drives, and the real freshness SLA. &quot;Real-time&quot; is frequently a want, not a need. Quantify the cost difference, then recommend the highest-latency tier that meets the genuine SLA, often near real-time or microbatch rather than full streaming.</p>
+<hr />
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Pipelines form a spectrum: <strong>Batch → Microbatch → Near real-time → Real-time → Streaming</strong>, trading <strong>latency</strong> for <strong>engineering complexity</strong> and <strong>data-quality difficulty</strong>.</li>
+<li><strong>Default to batch.</strong> Move faster only when the business SLA requires it.</li>
+<li><strong>Spark</strong> owns bounded/batch; <strong>Flink</strong> owns unbounded/streaming; <strong>Kafka</strong> moves the events.</li>
+<li>The interview win is articulating the <strong>trade-offs</strong> (cost, DQ, reprocessing, state, on-call), not naming the lowest-latency tool.</li>
+</ul>
+<hr />
+<h3 id="related-guides">Related Guides</h3>
+<ul>
+<li><a href="intro_apache_spark.html">Apache Spark</a></li>
+<li><a href="intro_apache_kafka.html">Apache Kafka</a></li>
+<li><a href="intro_apache_airflow.html">Apache Airflow</a></li>
+<li><a href="data-architecture.html">Data Architecture</a></li>
+<li><a href="data-modeling.html">Data Modeling</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="data-architecture.html"><small>Previous</small>Data Architecture</a><a rel="next" class="next" href="intro_sql_optimization.html"><small>Next</small>SQL Query Optimization</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_data_processing_pipelines.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

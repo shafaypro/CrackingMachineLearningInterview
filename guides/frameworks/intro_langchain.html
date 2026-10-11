@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LangChain Guide | Cracking ML Interviews</title>
+<meta name="description" content="LangChain Guide: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_langchain.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LangChain Guide | Cracking ML Interviews">
+<meta property="og:description" content="LangChain Guide: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_langchain.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LangChain Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="LangChain Guide: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LangChain Guide",
+   "description": "LangChain Guide: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_langchain.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LangChain (LCEL & Advanced)",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_langchain.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">LangChain (LCEL &amp; Advanced)</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_langchain.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="langchain-guide">LangChain Guide</h1>
+<blockquote>
+<p><strong>Note:</strong> A fuller LangChain introduction is available at <a href="../ai_genai/intro_langchain.html"><code>ai_genai/intro_langchain.md</code></a>. This file covers additional advanced topics: LangChain Expression Language (LCEL), LangSmith, LangGraph, and chains vs agents vs tools.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#langchain-expression-language-lcel">LangChain Expression Language (LCEL)</a></li>
+<li><a href="#langsmith-observability">LangSmith: Observability</a></li>
+<li><a href="#langgraph-stateful-agents">LangGraph: Stateful Agents</a></li>
+<li><a href="#chains-vs-agents-vs-tools">Chains vs Agents vs Tools</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="langchain-expression-language-lcel">LangChain Expression Language (LCEL)</h2>
+<p>LCEL is a declarative way to compose LangChain components using the pipe (<code>|</code>) operator. It provides streaming, async, batching, and retries out of the box.</p>
+<pre><code class="language-bash">pip install langchain langchain-openai langchain-chroma
+</code></pre>
+<h3 id="basic-lcel-chain">Basic LCEL Chain</h3>
+<pre><code class="language-python">from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+# Components
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;, temperature=0.7)
+prompt = ChatPromptTemplate.from_template(&quot;Explain {topic} in one sentence.&quot;)
+parser = StrOutputParser()
+
+# Compose with | operator
+chain = prompt | model | parser
+
+# Invoke
+result = chain.invoke({&quot;topic&quot;: &quot;gradient descent&quot;})
+print(result)
+
+# Stream
+for chunk in chain.stream({&quot;topic&quot;: &quot;backpropagation&quot;}):
+    print(chunk, end=&quot;&quot;, flush=True)
+
+# Batch (process multiple inputs efficiently)
+results = chain.batch([
+    {&quot;topic&quot;: &quot;gradient descent&quot;},
+    {&quot;topic&quot;: &quot;backpropagation&quot;},
+    {&quot;topic&quot;: &quot;regularization&quot;}
+])
+</code></pre>
+<h3 id="lcel-with-retriever-rag">LCEL with Retriever (RAG)</h3>
+<pre><code class="language-python">from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_chroma import Chroma  # langchain_community.vectorstores.Chroma is deprecated
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableParallel
+
+# Setup retriever
+embeddings = OpenAIEmbeddings()
+vectorstore = Chroma.from_texts(
+    texts=[&quot;LLMs are trained on large datasets&quot;, &quot;RLHF aligns models with human preferences&quot;],
+    embedding=embeddings
+)
+retriever = vectorstore.as_retriever()
+
+# RAG prompt
+prompt = ChatPromptTemplate.from_template(&quot;&quot;&quot;
+Answer the question based only on the following context:
+
+Context: {context}
+
+Question: {question}
+
+Answer:&quot;&quot;&quot;)
+
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;)
+
+def format_docs(docs):
+    return &quot;\n\n&quot;.join(doc.page_content for doc in docs)
+
+# RAG chain with LCEL
+rag_chain = (
+    RunnableParallel({&quot;context&quot;: retriever | format_docs, &quot;question&quot;: RunnablePassthrough()})
+    | prompt
+    | model
+    | StrOutputParser()
+)
+
+answer = rag_chain.invoke(&quot;How are LLMs aligned?&quot;)
+print(answer)
+</code></pre>
+<h3 id="lcel-with-structured-output">LCEL with Structured Output</h3>
+<pre><code class="language-python">from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from pydantic import BaseModel, Field
+
+class MovieReview(BaseModel):
+    title: str = Field(description=&quot;Movie title&quot;)
+    rating: int = Field(description=&quot;Rating from 1-10&quot;, ge=1, le=10)
+    summary: str = Field(description=&quot;Brief summary&quot;)
+    sentiment: str = Field(description=&quot;positive, negative, or neutral&quot;)
+
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;)
+structured_model = model.with_structured_output(MovieReview)
+
+prompt = ChatPromptTemplate.from_template(&quot;Review this movie: {movie}&quot;)
+chain = prompt | structured_model
+
+review = chain.invoke({&quot;movie&quot;: &quot;Inception&quot;})
+print(type(review))       # &lt;class 'MovieReview'&gt;
+print(review.rating)      # 9
+print(review.sentiment)   # positive
+</code></pre>
+<h3 id="custom-runnables">Custom Runnables</h3>
+<pre><code class="language-python">from langchain_core.runnables import RunnableLambda
+
+# Wrap any Python function as a runnable
+def preprocess(text: str) -&gt; str:
+    return text.strip().lower()
+
+def postprocess(text: str) -&gt; dict:
+    return {&quot;result&quot;: text, &quot;length&quot;: len(text)}
+
+chain = (
+    RunnableLambda(preprocess)
+    | prompt
+    | model
+    | StrOutputParser()
+    | RunnableLambda(postprocess)
+)
+</code></pre>
+<hr />
+<h2 id="langsmith-observability">LangSmith: Observability</h2>
+<p>LangSmith is the observability platform for LangChain applications: trace all LLM calls, inputs, outputs, and costs.</p>
+<h3 id="setup">Setup</h3>
+<pre><code class="language-bash">pip install langsmith
+</code></pre>
+<pre><code class="language-python">import os
+
+# Current LANGSMITH_* names; the older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY
+# names are still read for backward compatibility
+os.environ[&quot;LANGSMITH_TRACING&quot;] = &quot;true&quot;
+os.environ[&quot;LANGSMITH_ENDPOINT&quot;] = &quot;https://api.smith.langchain.com&quot;
+os.environ[&quot;LANGSMITH_API_KEY&quot;] = &quot;your_langsmith_api_key&quot;
+os.environ[&quot;LANGSMITH_PROJECT&quot;] = &quot;my-project-name&quot;
+
+# Now all LangChain calls are automatically traced
+from langchain_openai import ChatOpenAI
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;)
+response = model.invoke(&quot;What is RAG?&quot;)  # Auto-traced to LangSmith
+</code></pre>
+<h3 id="manual-tracing">Manual Tracing</h3>
+<pre><code class="language-python">from langsmith import traceable
+
+@traceable(name=&quot;my-custom-function&quot;)
+def process_query(query: str) -&gt; str:
+    # LangSmith traces this automatically
+    result = my_chain.invoke(query)
+    return result
+
+# Evaluate with LangSmith
+from langsmith.evaluation import evaluate
+
+def correctness_evaluator(run, example):
+    prediction = run.outputs[&quot;output&quot;]
+    expected = example.outputs[&quot;answer&quot;]
+    score = 1.0 if expected.lower() in prediction.lower() else 0.0
+    return {&quot;score&quot;: score}
+
+results = evaluate(
+    target=lambda x: chain.invoke(x),
+    data=&quot;my-dataset-name&quot;,
+    evaluators=[correctness_evaluator],
+    experiment_prefix=&quot;gpt4o-mini-test&quot;
+)
+</code></pre>
+<hr />
+<h2 id="langgraph-stateful-agents">LangGraph: Stateful Agents</h2>
+<p>LangGraph is a framework for building stateful, multi-step AI workflows as directed graphs.</p>
+<pre><code class="language-bash">pip install langgraph
+</code></pre>
+<h3 id="simple-agent-graph">Simple Agent Graph</h3>
+<pre><code class="language-python">from langgraph.graph import StateGraph, END
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, AIMessage
+from typing import TypedDict, Annotated, Sequence
+import operator
+
+# Define state
+class AgentState(TypedDict):
+    messages: Annotated[list, operator.add]
+    next_step: str
+
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;)
+
+# Define nodes
+def call_model(state: AgentState) -&gt; AgentState:
+    messages = state[&quot;messages&quot;]
+    response = model.invoke(messages)
+    return {&quot;messages&quot;: [response]}
+
+def should_continue(state: AgentState) -&gt; str:
+    last_message = state[&quot;messages&quot;][-1]
+    # Check if we should call a tool or end
+    if hasattr(last_message, &quot;tool_calls&quot;) and last_message.tool_calls:
+        return &quot;tool&quot;
+    return END
+
+def call_tool(state: AgentState) -&gt; AgentState:
+    # Execute the tool call
+    tool_result = &quot;Tool result here&quot;
+    return {&quot;messages&quot;: [HumanMessage(content=tool_result)]}
+
+# Build graph
+workflow = StateGraph(AgentState)
+
+workflow.add_node(&quot;agent&quot;, call_model)
+workflow.add_node(&quot;tool&quot;, call_tool)
+
+workflow.set_entry_point(&quot;agent&quot;)
+workflow.add_conditional_edges(&quot;agent&quot;, should_continue)
+workflow.add_edge(&quot;tool&quot;, &quot;agent&quot;)
+
+app = workflow.compile()
+
+# Run
+result = app.invoke({
+    &quot;messages&quot;: [HumanMessage(content=&quot;What is the weather in London?&quot;)]
+})
+</code></pre>
+<h3 id="react-agent-with-tools">ReAct Agent with Tools</h3>
+<pre><code class="language-python"># LangChain 1.0 deprecates langgraph.prebuilt.create_react_agent in favor of
+# langchain.agents.create_agent (which runs on LangGraph under the hood).
+from langchain.agents import create_agent
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
+from langchain_core.tools import tool
+
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;Search the web for information.&quot;&quot;&quot;
+    # Implement actual search here
+    return f&quot;Search results for: {query}&quot;
+
+@tool
+def calculate(expression: str) -&gt; str:
+    &quot;&quot;&quot;Calculate a mathematical expression.&quot;&quot;&quot;
+    try:
+        return str(eval(expression))
+    except Exception as e:
+        return f&quot;Error: {e}&quot;
+
+model = ChatOpenAI(model=&quot;gpt-4o-mini&quot;)
+tools = [search_web, calculate]
+
+agent = create_agent(model, tools=tools)
+
+result = agent.invoke({
+    &quot;messages&quot;: [HumanMessage(content=&quot;What is 25 * 37 + 100?&quot;)]
+})
+
+for message in result[&quot;messages&quot;]:
+    print(f&quot;{type(message).__name__}: {message.content}&quot;)
+</code></pre>
+<hr />
+<h2 id="chains-vs-agents-vs-tools">Chains vs Agents vs Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chain</strong></td>
+<td>Fixed sequence of steps, deterministic</td>
+<td>Known, repeatable workflows (RAG, summarization)</td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>LLM decides what to do next, dynamic</td>
+<td>Open-ended tasks requiring reasoning and tool use</td>
+</tr>
+<tr>
+<td><strong>Tool</strong></td>
+<td>A callable function the LLM can invoke</td>
+<td>Extending LLM capabilities (search, code execution, API calls)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="when-to-use-chains">When to Use Chains</h3>
+<pre><code class="language-python"># Chain: fixed pipeline, always does the same steps
+chain = prompt | model | parser | postprocess
+result = chain.invoke(input)  # Predictable, fast, no surprises
+</code></pre>
+<p>Best for: summarization, translation, extraction, classification: tasks with a known input-output pattern.</p>
+<h3 id="when-to-use-agents">When to Use Agents</h3>
+<pre><code class="language-python"># Agent: LLM decides which tools to call and in what order
+agent = create_agent(model, tools=[search, calculator, database_lookup])
+result = agent.invoke({&quot;messages&quot;: [HumanMessage(&quot;Research X and compute Y&quot;)]})
+</code></pre>
+<p>Best for: research tasks, multi-step problem solving, tasks where you don't know in advance what operations are needed.</p>
+<h3 id="tool-design-best-practices">Tool Design Best Practices</h3>
+<pre><code class="language-python">from langchain_core.tools import tool
+from pydantic import BaseModel, Field
+
+class SearchInput(BaseModel):
+    query: str = Field(description=&quot;The search query&quot;)
+    max_results: int = Field(default=5, description=&quot;Maximum number of results&quot;)
+
+@tool(&quot;web_search&quot;, args_schema=SearchInput)
+def web_search(query: str, max_results: int = 5) -&gt; str:
+    &quot;&quot;&quot;
+    Search the web for current information.
+    Use this when you need up-to-date information or facts you don't know.
+    &quot;&quot;&quot;
+    # Implementation here
+    return f&quot;Results for {query}&quot;
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is LCEL and what are its advantages over traditional LangChain chains?</strong> 🟡 Intermediate</p>
+<p>LCEL (LangChain Expression Language) is a declarative composition syntax using the <code>|</code> pipe operator. Advantages: automatic streaming support, async execution, batch processing, built-in retry logic, and easy serialization. Traditional chains (like <code>LLMChain</code>) were imperative and verbose. LCEL makes composition more Pythonic and provides these features with no additional code.</p>
+<hr />
+<p><strong>Q2: What is the difference between a LangChain chain and a LangGraph agent?</strong> 🟡 Intermediate</p>
+<p>A LangChain chain is a fixed, linear (or branching but predetermined) sequence of operations: the flow is defined at build time. A LangGraph agent is a directed graph where the LLM decides at runtime which node to execute next based on its state. LangGraph supports cycles (retry loops, multi-step reasoning), persistent state, and conditional branching driven by LLM reasoning. Use chains for predictable workflows, LangGraph for dynamic multi-step tasks.</p>
+<hr />
+<p><strong>Q3: What is LangSmith and why would you use it in production?</strong> 🟡 Intermediate</p>
+<p>LangSmith is an observability platform for LangChain applications. It traces every LLM call (inputs, outputs, tokens, latency, cost), enables debugging of complex chains and agents, supports dataset creation for evaluation, and allows A/B testing of prompts. In production, it's essential for: debugging unexpected model outputs, monitoring LLM costs and latency, and running regression tests on prompt changes.</p>
+<hr />
+<p><strong>Q4: When would you choose LangChain over LlamaIndex?</strong> 🟡 Intermediate</p>
+<p>Choose <strong>LangChain</strong> when building general LLM applications, agents with multiple tools, complex chains combining different AI services, or workflows beyond document Q&amp;A.</p>
+<p>Choose <strong>LlamaIndex</strong> when the primary use case is document indexing, retrieval, and Q&amp;A over large knowledge bases. LlamaIndex has superior document loaders, chunking strategies, index types, and retrieval algorithms for RAG.</p>
+<p>Many production systems use both: LlamaIndex for the retrieval layer and LangChain for orchestration.</p>
+<hr />
+<p><strong>Q5: What are the key design considerations when building a LangGraph multi-agent system?</strong> 🔴 Advanced</p>
+<ol>
+<li><strong>State management:</strong> Define a clear TypedDict state schema that all agents read from and write to</li>
+<li><strong>Message passing:</strong> Use message queues in state to pass context between agents</li>
+<li><strong>Routing logic:</strong> Implement clear conditional edges using deterministic routing functions</li>
+<li><strong>Tool isolation:</strong> Each agent should have a specific set of tools; avoid overlap</li>
+<li><strong>Error handling:</strong> Add retry nodes and error state transitions</li>
+<li><strong>Human-in-the-loop:</strong> Add interrupt_before/interrupt_after for human approval steps</li>
+<li><strong>Observability:</strong> Use LangSmith tracing to debug multi-agent flows</li>
+</ol>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://python.langchain.com/docs/">LangChain Documentation</a></li>
+<li><a href="https://python.langchain.com/docs/expression_language/">LCEL Documentation</a></li>
+<li><a href="https://docs.smith.langchain.com/">LangSmith Documentation</a></li>
+<li><a href="https://langchain-ai.github.io/langgraph/">LangGraph Documentation</a></li>
+<li><a href="https://github.com/langchain-ai/langchain">LangChain GitHub</a></li>
+<li><a href="../ai_genai/intro_langchain.html">Also see: ai_genai/intro_langchain.md</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_pytorch.html"><small>Previous</small>PyTorch</a><a rel="next" class="next" href="intro_huggingface.html"><small>Next</small>HuggingFace</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_langchain.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

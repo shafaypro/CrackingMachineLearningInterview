@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FastAPI: Production-Grade AI Backend Engineering | Cracking ML Interviews</title>
+<meta name="description" content="FastAPI: Production-Grade AI Backend Engineering: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_fastapi.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="FastAPI: Production-Grade AI Backend Engineering | Cracking ML Interviews">
+<meta property="og:description" content="FastAPI: Production-Grade AI Backend Engineering: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_fastapi.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FastAPI: Production-Grade AI Backend Engineering | Cracking ML Interviews">
+<meta name="twitter:description" content="FastAPI: Production-Grade AI Backend Engineering: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "FastAPI: Production-Grade AI Backend Engineering",
+   "description": "FastAPI: Production-Grade AI Backend Engineering: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_fastapi.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "FastAPI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_fastapi.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">FastAPI</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_fastapi.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="fastapi-production-grade-ai-backend-engineering">FastAPI: Production-Grade AI Backend Engineering</h1>
+<h2 id="why-fastapi-for-ai-systems">Why FastAPI for AI Systems?</h2>
+<p>FastAPI is the de facto standard for building AI/LLM API backends in 2026 because:</p>
+<ul>
+<li><strong>Async-first</strong>: Native <code>asyncio</code> support for concurrent LLM calls</li>
+<li><strong>Automatic OpenAPI docs</strong>: Zero-config Swagger UI</li>
+<li><strong>Pydantic integration</strong>: Input validation and output schema enforcement</li>
+<li><strong>Performance</strong>: On par with Node.js and Go for I/O-bound workloads</li>
+<li><strong>Type safety</strong>: Full type hints enable better IDE support and fewer runtime bugs</li>
+</ul>
+<hr />
+<h2 id="production-llm-api-complete-example">Production LLM API: Complete Example</h2>
+<pre><code class="language-python">from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, Field
+from anthropic import AsyncAnthropic
+import asyncio
+import time
+import logging
+from contextlib import asynccontextmanager
+
+logger = logging.getLogger(__name__)
+
+# Lifespan: manage startup/shutdown resources
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    app.state.anthropic_client = AsyncAnthropic()
+    logger.info(&quot;Anthropic client initialized&quot;)
+    yield
+    # Shutdown
+    await app.state.anthropic_client.close()
+    logger.info(&quot;Anthropic client closed&quot;)
+
+app = FastAPI(
+    title=&quot;ML Interview Prep API&quot;,
+    version=&quot;2.0.0&quot;,
+    lifespan=lifespan
+)
+
+# ─── Request / Response Models ───────────────────────────────
+
+class ChatRequest(BaseModel):
+    question: str = Field(..., min_length=1, max_length=4000)
+    model: str = Field(default=&quot;claude-sonnet-5&quot;)
+    # Headroom for adaptive thinking, which counts toward max_tokens. No temperature
+    # field: Claude Sonnet 5 and Opus 4.7+ reject non-default sampling parameters.
+    max_tokens: int = Field(default=4096, ge=1, le=16000)
+    stream: bool = False
+
+class ChatResponse(BaseModel):
+    answer: str
+    model: str
+    input_tokens: int
+    output_tokens: int
+    latency_ms: float
+
+# ─── Non-streaming endpoint ───────────────────────────────────
+
+@app.post(&quot;/chat&quot;, response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    client: AsyncAnthropic = app.state.anthropic_client
+    start = time.time()
+
+    try:
+        message = await client.messages.create(
+            model=request.model,
+            max_tokens=request.max_tokens,
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: request.question}]
+        )
+    except Exception as e:
+        logger.error(f&quot;LLM call failed: {e}&quot;)
+        raise HTTPException(status_code=502, detail=f&quot;LLM error: {str(e)}&quot;)
+
+    latency_ms = (time.time() - start) * 1000
+
+    return ChatResponse(
+        # Join text blocks: with thinking on, content[0] can be a thinking block
+        answer=&quot;&quot;.join(b.text for b in message.content if b.type == &quot;text&quot;),
+        model=message.model,
+        input_tokens=message.usage.input_tokens,
+        output_tokens=message.usage.output_tokens,
+        latency_ms=latency_ms
+    )
+</code></pre>
+<hr />
+<h2 id="streaming-responses-sse">Streaming Responses (SSE)</h2>
+<pre><code class="language-python">from fastapi.responses import StreamingResponse
+import json
+
+@app.post(&quot;/chat/stream&quot;)
+async def chat_stream(request: ChatRequest):
+    client: AsyncAnthropic = app.state.anthropic_client
+
+    async def generate_tokens():
+        try:
+            async with client.messages.stream(
+                model=request.model,
+                max_tokens=request.max_tokens,
+                messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: request.question}]
+            ) as stream:
+                async for text in stream.text_stream:
+                    # Server-Sent Events format
+                    yield f&quot;data: {json.dumps({'token': text})}\n\n&quot;
+
+                # Send final usage stats
+                final_message = await stream.get_final_message()
+                yield f&quot;data: {json.dumps({'done': True, 'usage': {'input': final_message.usage.input_tokens, 'output': final_message.usage.output_tokens}})}\n\n&quot;
+
+        except Exception as e:
+            yield f&quot;data: {json.dumps({'error': str(e)})}\n\n&quot;
+
+    return StreamingResponse(
+        generate_tokens(),
+        media_type=&quot;text/event-stream&quot;,
+        headers={
+            &quot;Cache-Control&quot;: &quot;no-cache&quot;,
+            &quot;X-Accel-Buffering&quot;: &quot;no&quot;  # Disable nginx buffering
+        }
+    )
+</code></pre>
+<h3 id="websocket-streaming-alternative">WebSocket Streaming Alternative</h3>
+<pre><code class="language-python">from fastapi import WebSocket, WebSocketDisconnect
+
+@app.websocket(&quot;/chat/ws&quot;)
+async def websocket_chat(websocket: WebSocket):
+    await websocket.accept()
+    client: AsyncAnthropic = app.state.anthropic_client
+
+    try:
+        while True:
+            data = await websocket.receive_json()
+            question = data.get(&quot;question&quot;, &quot;&quot;)
+
+            async with client.messages.stream(
+                model=&quot;claude-sonnet-5&quot;,
+                max_tokens=4096,
+                messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: question}]
+            ) as stream:
+                async for text in stream.text_stream:
+                    await websocket.send_json({&quot;token&quot;: text})
+
+            await websocket.send_json({&quot;done&quot;: True})
+
+    except WebSocketDisconnect:
+        logger.info(&quot;WebSocket disconnected&quot;)
+</code></pre>
+<hr />
+<h2 id="async-patterns--concurrency-control">Async Patterns &amp; Concurrency Control</h2>
+<h3 id="async-llm-calls-parallel">Async LLM Calls (Parallel)</h3>
+<pre><code class="language-python">import asyncio
+from anthropic import AsyncAnthropic
+
+async def batch_evaluate(questions: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Evaluate multiple questions in parallel&quot;&quot;&quot;
+    client = AsyncAnthropic()
+
+    async def evaluate_one(question: str) -&gt; str:
+        msg = await client.messages.create(
+            model=&quot;claude-haiku-4-5&quot;,  # Use cheaper model for batch
+            max_tokens=512,
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: question}]
+        )
+        return msg.content[0].text
+
+    # Run all in parallel (respects asyncio event loop)
+    results = await asyncio.gather(*[
+        evaluate_one(q) for q in questions
+    ], return_exceptions=True)
+
+    return [
+        r if not isinstance(r, Exception) else f&quot;Error: {r}&quot;
+        for r in results
+    ]
+
+@app.post(&quot;/batch-evaluate&quot;)
+async def batch_evaluate_endpoint(questions: list[str]):
+    if len(questions) &gt; 20:
+        raise HTTPException(status_code=400, detail=&quot;Max 20 questions per batch&quot;)
+    return await batch_evaluate(questions)
+</code></pre>
+<h3 id="semaphore-for-concurrency-control">Semaphore for Concurrency Control</h3>
+<pre><code class="language-python">import asyncio
+
+# Limit concurrent LLM calls to avoid rate limits
+MAX_CONCURRENT_LLM_CALLS = 5
+semaphore = asyncio.Semaphore(MAX_CONCURRENT_LLM_CALLS)
+
+async def rate_limited_llm_call(prompt: str) -&gt; str:
+    async with semaphore:  # Only 5 calls active at once
+        client = AsyncAnthropic()
+        msg = await client.messages.create(
+            model=&quot;claude-sonnet-5&quot;,
+            max_tokens=4096,
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
+        )
+        return &quot;&quot;.join(b.text for b in msg.content if b.type == &quot;text&quot;)
+</code></pre>
+<hr />
+<h2 id="rate-limiting--token-management">Rate Limiting &amp; Token Management</h2>
+<pre><code class="language-python">from fastapi import Request
+from fastapi.responses import JSONResponse
+from collections import defaultdict
+import time
+
+# Simple in-memory rate limiter (use Redis in production)
+class TokenBucketRateLimiter:
+    def __init__(self, rate: float, capacity: float):
+        self.rate = rate          # Tokens added per second
+        self.capacity = capacity  # Max tokens
+        self.tokens: dict = defaultdict(lambda: capacity)
+        self.last_time: dict = defaultdict(time.time)
+
+    def is_allowed(self, key: str) -&gt; bool:
+        now = time.time()
+        elapsed = now - self.last_time[key]
+        self.tokens[key] = min(
+            self.capacity,
+            self.tokens[key] + elapsed * self.rate
+        )
+        self.last_time[key] = now
+
+        if self.tokens[key] &gt;= 1:
+            self.tokens[key] -= 1
+            return True
+        return False
+
+limiter = TokenBucketRateLimiter(rate=2.0, capacity=10)  # 2 req/sec, burst 10
+
+def get_client_id(request: Request) -&gt; str:
+    return request.client.host  # Use API key in production
+
+@app.middleware(&quot;http&quot;)
+async def rate_limit_middleware(request: Request, call_next):
+    if request.url.path.startswith(&quot;/chat&quot;):
+        client_id = get_client_id(request)
+        if not limiter.is_allowed(client_id):
+            # Return a response here: an HTTPException raised inside middleware
+            # bypasses FastAPI's exception handlers and surfaces as a 500
+            return JSONResponse(
+                status_code=429,
+                content={&quot;detail&quot;: &quot;Rate limit exceeded&quot;},
+                headers={&quot;Retry-After&quot;: &quot;1&quot;}
+            )
+    return await call_next(request)
+</code></pre>
+<h3 id="llm-token-budget-management">LLM Token Budget Management</h3>
+<pre><code class="language-python">class TokenBudgetManager:
+    def __init__(self, model: str = &quot;claude-sonnet-5&quot;, max_budget: int = 100000):
+        self.budget = max_budget
+        self.used = 0
+
+    def check_budget(self, estimated_tokens: int) -&gt; bool:
+        return (self.used + estimated_tokens) &lt;= self.budget
+
+    def consume(self, tokens: int):
+        self.used += tokens
+
+    def remaining(self) -&gt; int:
+        return self.budget - self.used
+
+def estimate_tokens(text: str) -&gt; int:
+    &quot;&quot;&quot;Rough estimate: 1 token ≈ 4 characters of English text.
+    For exact counts use the provider's token counting endpoint
+    (tiktoken only matches OpenAI tokenizers, not Claude's).&quot;&quot;&quot;
+    return len(text) // 4
+</code></pre>
+<hr />
+<h2 id="observability-logging-tracing-metrics">Observability: Logging, Tracing, Metrics</h2>
+<pre><code class="language-python">import structlog
+import time
+from fastapi import Request, Response
+from opentelemetry import trace
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from prometheus_client import Counter, Histogram, generate_latest
+
+# Structured logging
+log = structlog.get_logger()
+
+# Prometheus metrics
+llm_requests_total = Counter(
+    &quot;llm_requests_total&quot;, &quot;Total LLM requests&quot;,
+    labelnames=[&quot;model&quot;, &quot;status&quot;]
+)
+llm_latency_seconds = Histogram(
+    &quot;llm_latency_seconds&quot;, &quot;LLM request latency&quot;,
+    labelnames=[&quot;model&quot;],
+    buckets=[0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0]
+)
+llm_tokens_total = Counter(
+    &quot;llm_tokens_total&quot;, &quot;Total tokens used&quot;,
+    labelnames=[&quot;model&quot;, &quot;type&quot;]
+)
+
+# Auto-instrument FastAPI with OpenTelemetry
+FastAPIInstrumentor.instrument_app(app)
+
+@app.post(&quot;/chat&quot;, response_model=ChatResponse)
+async def chat(request: ChatRequest, req: Request):
+    tracer = trace.get_tracer(__name__)
+    start = time.time()
+
+    with tracer.start_as_current_span(&quot;llm_call&quot;) as span:
+        span.set_attribute(&quot;model&quot;, request.model)
+        span.set_attribute(&quot;question_length&quot;, len(request.question))
+
+        try:
+            message = await call_llm(request)
+            latency = time.time() - start
+
+            # Metrics
+            llm_requests_total.labels(model=request.model, status=&quot;success&quot;).inc()
+            llm_latency_seconds.labels(model=request.model).observe(latency)
+            llm_tokens_total.labels(model=request.model, type=&quot;input&quot;).inc(message.usage.input_tokens)
+            llm_tokens_total.labels(model=request.model, type=&quot;output&quot;).inc(message.usage.output_tokens)
+
+            # Structured log
+            log.info(&quot;llm_request_completed&quot;,
+                model=request.model,
+                latency_ms=latency * 1000,
+                input_tokens=message.usage.input_tokens,
+                output_tokens=message.usage.output_tokens
+            )
+
+            return ChatResponse(...)
+
+        except Exception as e:
+            llm_requests_total.labels(model=request.model, status=&quot;error&quot;).inc()
+            log.error(&quot;llm_request_failed&quot;, error=str(e), model=request.model)
+            raise
+
+@app.get(&quot;/metrics&quot;)
+async def metrics():
+    return Response(generate_latest(), media_type=&quot;text/plain&quot;)
+</code></pre>
+<hr />
+<h2 id="api-gateway-for-llm-routing">API Gateway for LLM Routing</h2>
+<pre><code class="language-python">from fastapi import FastAPI
+from typing import Literal
+
+MODEL_ROUTING = {
+    &quot;fast&quot;: &quot;claude-haiku-4-5&quot;,       # &lt; 500ms, simple tasks
+    &quot;balanced&quot;: &quot;claude-sonnet-5&quot;,     # 1-3s, most tasks
+    &quot;powerful&quot;: &quot;claude-opus-5-5&quot;,     # 3-10s, complex reasoning
+}
+
+def route_to_model(task_complexity: Literal[&quot;fast&quot;, &quot;balanced&quot;, &quot;powerful&quot;],
+                   prompt_length: int) -&gt; str:
+    # Override: very long prompts need larger context window
+    if prompt_length &gt; 50000:
+        return &quot;claude-opus-5-5&quot;  # Stronger long-context reasoning (Haiku 4.5 has a 200K window)
+    return MODEL_ROUTING[task_complexity]
+
+@app.post(&quot;/smart-chat&quot;)
+async def smart_chat(request: ChatRequest, complexity: str = &quot;balanced&quot;):
+    model = route_to_model(complexity, len(request.question))
+    # Fallback chain: if Anthropic fails, try OpenAI
+    try:
+        return await call_anthropic(request, model=model)
+    except Exception:
+        logger.warning(&quot;Falling back to OpenAI&quot;)
+        return await call_openai(request)
+</code></pre>
+<hr />
+<h2 id="example-agent-backend-service">Example: Agent Backend Service</h2>
+<pre><code class="language-python">from fastapi import FastAPI, BackgroundTasks
+from langgraph.graph import StateGraph
+import uuid
+
+# Store for async agent jobs
+job_store: dict[str, dict] = {}
+
+@app.post(&quot;/agent/run&quot;)
+async def run_agent(question: str, background_tasks: BackgroundTasks):
+    &quot;&quot;&quot;Start an agent task asynchronously&quot;&quot;&quot;
+    job_id = str(uuid.uuid4())
+    job_store[job_id] = {&quot;status&quot;: &quot;running&quot;, &quot;result&quot;: None}
+
+    async def run():
+        try:
+            result = await agent_graph.ainvoke({
+                &quot;messages&quot;: [(&quot;human&quot;, question)]
+            })
+            job_store[job_id] = {&quot;status&quot;: &quot;done&quot;, &quot;result&quot;: result}
+        except Exception as e:
+            job_store[job_id] = {&quot;status&quot;: &quot;failed&quot;, &quot;error&quot;: str(e)}
+
+    background_tasks.add_task(run)
+    return {&quot;job_id&quot;: job_id, &quot;status&quot;: &quot;running&quot;}
+
+@app.get(&quot;/agent/status/{job_id}&quot;)
+async def get_agent_status(job_id: str):
+    &quot;&quot;&quot;Poll for agent result&quot;&quot;&quot;
+    if job_id not in job_store:
+        raise HTTPException(status_code=404, detail=&quot;Job not found&quot;)
+    return job_store[job_id]
+
+@app.get(&quot;/agent/stream/{job_id}&quot;)
+async def stream_agent_progress(job_id: str):
+    &quot;&quot;&quot;SSE stream of agent node updates&quot;&quot;&quot;
+    async def generate():
+        async for chunk in agent_graph.astream({&quot;messages&quot;: [...]}, stream_mode=&quot;updates&quot;):
+            yield f&quot;data: {json.dumps(chunk)}\n\n&quot;
+        yield &quot;data: {\&quot;done\&quot;: true}\n\n&quot;
+
+    return StreamingResponse(generate(), media_type=&quot;text/event-stream&quot;)
+</code></pre>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q: Why use FastAPI for LLM backends instead of Flask or Django?</strong></p>
+<blockquote>
+<p>FastAPI's async support is critical: LLM calls are I/O-bound and take 1-30 seconds. With Flask's synchronous model, each request blocks a thread. FastAPI with asyncio handles hundreds of concurrent requests with minimal threads. Also: automatic Pydantic validation, OpenAPI docs, and better performance.</p>
+</blockquote>
+<p><strong>Q: How do you implement streaming LLM responses in FastAPI?</strong></p>
+<blockquote>
+<p>Use <code>StreamingResponse</code> with an async generator that yields Server-Sent Events (SSE). The LLM client streams tokens; the generator yields each token formatted as <code>data: {...}\n\n</code>. Set <code>Cache-Control: no-cache</code> and disable nginx buffering (<code>X-Accel-Buffering: no</code>).</p>
+</blockquote>
+<p><strong>Q: How do you handle rate limiting for an LLM API?</strong></p>
+<blockquote>
+<p>Token bucket algorithm per client (API key or IP). In production: use Redis for distributed rate limiting (not in-memory). Track both request rate (e.g., 60 RPM) and token rate (e.g., 100K TPM). Return 429 with <code>Retry-After</code> header. Use leaky bucket for smoother limiting.</p>
+</blockquote>
+<p><strong>Q: How would you design a fault-tolerant LLM backend?</strong></p>
+<blockquote>
+<p>Retry with exponential backoff for 429/503 errors. Fallback chain: primary model → cheaper model → cached response. Circuit breaker to stop hammering a failing provider. Async queue for non-real-time requests. Structured logging + metrics for all calls. Health checks on LLM provider before serving traffic.</p>
+</blockquote>
+<p><strong>Q: What's the difference between SSE and WebSockets for LLM streaming?</strong></p>
+<blockquote>
+<p>SSE is one-directional (server → client), uses HTTP, works through proxies, auto-reconnects, simpler. WebSocket is bidirectional, requires a persistent connection, better for real-time chat (send new messages while receiving). For LLM streaming: SSE is usually sufficient and simpler; WebSocket when you need streaming + mid-stream user interruption.</p>
+</blockquote>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_unsloth.html"><small>Previous</small>Unsloth</a><a rel="next" class="next" href="intro_pydantic.html"><small>Next</small>Pydantic</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_fastapi.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

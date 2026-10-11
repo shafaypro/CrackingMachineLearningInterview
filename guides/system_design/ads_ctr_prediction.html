@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ads CTR Prediction and Ranking System Design | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design an ads click-through-rate prediction system&quot; looks like a binary classification problem, and candidates who treat it as one tend to do badly. The…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/ads_ctr_prediction.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Ads CTR Prediction and Ranking System Design | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design an ads click-through-rate prediction system&quot; looks like a binary classification problem, and candidates who treat it as one tend to do badly. The…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/ads_ctr_prediction.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ads CTR Prediction and Ranking System Design | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design an ads click-through-rate prediction system&quot; looks like a binary classification problem, and candidates who treat it as one tend to do badly. The…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Ads CTR Prediction and Ranking System Design",
+   "description": "\"Design an ads click-through-rate prediction system\" looks like a binary classification problem, and candidates who treat it as one tend to do badly. The…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/ads_ctr_prediction.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Ads CTR Prediction",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/ads_ctr_prediction.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Ads CTR Prediction</span></nav>
+<p class="meta"><a href="../../#system_design/ads_ctr_prediction.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="ads-ctr-prediction-and-ranking-system-design">Ads CTR Prediction and Ranking System Design</h1>
+<p>&quot;Design an ads click-through-rate prediction system&quot; looks like a binary classification problem, and candidates who treat it as one tend to do badly. The model's output is not a ranking score. It is a probability that goes into an auction and sets what advertisers pay. That one fact explains most of the design: calibration is mandatory, log loss beats AUC, negative downsampling has to be corrected, and the feedback loops are about money as well as relevance.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#business-objective-and-auction-basics">Business Objective and Auction Basics</a></li>
+<li><a href="#the-ads-funnel">The Ads Funnel</a></li>
+<li><a href="#labels-and-delayed-feedback">Labels and Delayed Feedback</a></li>
+<li><a href="#position-bias">Position Bias</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#model-progression">Model Progression</a></li>
+<li><a href="#calibration">Calibration</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#training-at-scale">Training at Scale</a></li>
+<li><a href="#serving-architecture">Serving Architecture</a></li>
+<li><a href="#capacity-and-cost">Capacity and Cost</a></li>
+<li><a href="#exploration-and-cold-start">Exploration and Cold Start</a></li>
+<li><a href="#feedback-loops-and-failure-modes">Feedback Loops and Failure Modes</a></li>
+<li><a href="#privacy">Privacy</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p>Ads prompts are underspecified on purpose. Establish these before drawing any boxes.</p>
+<p><strong>What surface?</strong> Search ads (there is a query, so intent is explicit), feed or social ads (no query, so intent comes from user history), or display ads on third-party sites (often bought through an external exchange). The surface decides the strongest features and whether you run the auction or bid into someone else's.</p>
+<p><strong>How do advertisers pay?</strong> Cost per click (CPC), cost per thousand impressions (CPM), or cost per action/conversion (CPA). This decides which probabilities the system must predict. CPC needs pCTR; CPA needs pCTR × pCVR.</p>
+<p><strong>Who runs the auction?</strong> If you own it, you choose the auction rules and the pricing. If you are a bidder on an exchange, you need a bidding strategy and possibly bid shading.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Ad requests per second, peak and average</li>
+<li>Number of active ads and advertisers (this sizes the candidate pool)</li>
+<li>Latency budget: the whole ad response usually has to fit inside the page's latency, so scoring gets a slice, typically in the 10 to 50 ms range</li>
+<li>How fast a new campaign must start serving, and how fast budget changes take effect</li>
+</ul>
+<p><strong>Constraints:</strong> advertiser targeting rules, policy and brand-safety filters, frequency caps, regulatory limits on sensitive categories, and what user data can be used at all.</p>
+<p>For the rest of this guide, assume a concrete brief: <strong>ads in a social feed, 500k ad requests/sec at peak, ~10M active ads, CPC and CPA billing, we run a second-price-style auction, p99 of 30 ms for the full ranking stack, new campaigns eligible within minutes.</strong> These are working assumptions for the exercise, not industry figures.</p>
+<h3 id="non-functional-requirements">Non-Functional Requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scoring latency (p99)</td>
+<td>~30 ms for retrieval + ranking + auction</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>500k requests/sec peak</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Ads failing open (show no ad) is acceptable; wrong charges are not</td>
+</tr>
+<tr>
+<td>Calibration</td>
+<td>Predicted clicks within a few percent of observed, per segment</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="business-objective-and-auction-basics">Business Objective and Auction Basics</h2>
+<h3 id="what-are-we-maximizing">What are we maximizing?</h3>
+<p>Three parties have to be served at once:</p>
+<ul>
+<li><strong>The platform:</strong> revenue, long term, not just today's.</li>
+<li><strong>Advertisers:</strong> return on ad spend. If ads don't convert, budgets shrink.</li>
+<li><strong>Users:</strong> relevance and experience. Bad ads drive users away, which cuts future inventory.</li>
+</ul>
+<p>The standard ranking score is <strong>expected value per impression</strong>, usually expressed as eCPM (effective cost per mille, i.e. value per 1000 impressions):</p>
+<pre><code>CPM bid:   eCPM = bid_cpm
+CPC bid:   eCPM = bid_cpc × pCTR × 1000
+CPA bid:   eCPM = bid_cpa × pCTR × pCVR × 1000
+</code></pre>
+<p>This puts advertisers who pay by different events on one comparable scale. Many systems add a quality or user-experience term, for example a penalty for predicted hides or negative feedback:</p>
+<pre><code>score = eCPM + λ · (predicted user value) − μ · (predicted negative feedback)
+</code></pre>
+<p>The weights λ and μ are business decisions, tuned by long-running experiments. They are not learned by the CTR model.</p>
+<h3 id="auction-types">Auction types</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Auction</th>
+<th>Winner pays</th>
+<th>Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First-price</strong></td>
+<td>Their own bid</td>
+<td>Simple, transparent; bidders have an incentive to shade bids below true value</td>
+</tr>
+<tr>
+<td><strong>Second-price (Vickrey, single slot)</strong></td>
+<td>Second-highest bid</td>
+<td>Truthful bidding is a dominant strategy for a single item</td>
+</tr>
+<tr>
+<td><strong>Generalized second price (GSP)</strong></td>
+<td>Minimum needed to keep their slot</td>
+<td>Multi-slot extension; not strictly truthful, but widely used for search ads</td>
+</tr>
+<tr>
+<td><strong>VCG</strong></td>
+<td>Externality imposed on others</td>
+<td>Truthful for multiple slots; harder to explain and compute</td>
+</tr>
+</tbody>
+</table></div>
+<p>In a quality-weighted GSP with CPC bids, ads are sorted by <code>bid × pCTR</code>, and ad <em>i</em> pays per click just enough to beat the ad below it:</p>
+<pre><code>price_per_click_i = (bid_{i+1} × pCTR_{i+1}) / pCTR_i
+</code></pre>
+<p><strong>This is why calibration is not optional.</strong> pCTR appears in the ranking <em>and</em> in the price. If pCTR is inflated for one advertiser, they win auctions they shouldn't and are charged the wrong amount. A model with great AUC and bad calibration still ranks well within one advertiser's ads, but it misprices the whole marketplace.</p>
+<p>Display ad exchanges moved largely to first-price auctions (partly because of header bidding), so bidders there use <strong>bid shading</strong>: learning how far below their value they can bid and still win. For an interview, it is enough to know both exist and that the CTR model's job is the same in both. It supplies a calibrated probability.</p>
+<hr />
+<h2 id="the-ads-funnel">The Ads Funnel</h2>
+<p>The same cost-versus-accuracy logic as search: cheap models over many candidates, expensive models over few.</p>
+<pre><code>Ad request (user, context, placement)
+  │
+  ▼
+┌──────────────────────────┐   10M ──► ~10k
+│ Targeting &amp; retrieval    │  inverted index on targeting rules (geo, age,
+└────────────┬─────────────┘  interests) + embedding ANN; budget/policy filters
+             ▼
+┌──────────────────────────┐   10k ──► ~500
+│ Lightweight ranking      │  two-tower or small model, cheap features,
+└────────────┬─────────────┘  approximate eCPM
+             ▼
+┌──────────────────────────┐   500 ──► ~50
+│ Heavy ranking            │  deep CTR/CVR model, full feature set,
+└────────────┬─────────────┘  calibrated pCTR, pCVR, p(negative feedback)
+             ▼
+┌──────────────────────────┐
+│ Auction                  │  score = bid × pCTR (× pCVR) + quality terms
+└────────────┬─────────────┘  reserve prices, pricing rule, slot allocation
+             ▼
+┌──────────────────────────┐
+│ Pacing &amp; budget control  │  throttle or scale bids so budgets last the day
+└────────────┬─────────────┘  frequency caps, advertiser diversity
+             ▼
+        Served ad(s) ──► impression / click / conversion logs
+</code></pre>
+<p><strong>Targeting is a hard filter.</strong> An advertiser who targeted &quot;US, 25 to 34&quot; must never be shown to someone outside that group, however high the pCTR. Apply targeting inside retrieval, not after ranking.</p>
+<p><strong>Budget and pacing interact with ranking.</strong> An advertiser who spends their whole daily budget by 9 a.m. misses the evening audience and is unhappy even with a high ROI. Pacing usually works in one of two ways:</p>
+<ul>
+<li><strong>Probabilistic throttling:</strong> the ad takes part in only a fraction of eligible auctions, and that fraction is adjusted to track a target spend curve.</li>
+<li><strong>Bid multipliers:</strong> effective bids are scaled down while spend runs ahead of plan, often by a feedback controller such as PID. This is a separate control loop reading near-real-time spend, not part of the CTR model.</li>
+</ul>
+<hr />
+<h2 id="labels-and-delayed-feedback">Labels and Delayed Feedback</h2>
+<h3 id="click-labels">Click labels</h3>
+<p>An impression becomes a positive if a click occurs within an <strong>attribution window</strong>, which for clicks is short (seconds to minutes). The label pipeline joins impression logs to click logs by impression ID. Issues that come up:</p>
+<ul>
+<li><strong>Invalid traffic:</strong> bot clicks and accidental clicks (for example, clicks within milliseconds of render) should be filtered, or the model learns to predict fraud.</li>
+<li><strong>Late joins:</strong> a click that arrives after the impression was already written as a negative. The streaming join needs a waiting window, and it must decide what to do with events that arrive after it closes.</li>
+<li><strong>Impression definition:</strong> &quot;served&quot; is not &quot;viewed.&quot; Training on served-but-never-viewed impressions adds noise. Many systems use a viewability threshold.</li>
+</ul>
+<h3 id="conversion-labels-and-delay">Conversion labels and delay</h3>
+<p>Conversions (purchase, install, signup) can happen hours or days after the click, and attribution windows are often measured in days. That creates a real tension:</p>
+<ul>
+<li><strong>Wait for the full window:</strong> labels are correct but the model trains on stale data, which hurts in a fast-moving marketplace.</li>
+<li><strong>Train immediately:</strong> fresh data, but recent clicks that will later convert are labeled negative. The model underpredicts CVR, most of all for new campaigns.</li>
+</ul>
+<p>Practical approaches:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fixed wait window</strong></td>
+<td>Only train on clicks older than <em>k</em> hours; accept some label noise beyond <em>k</em></td>
+</tr>
+<tr>
+<td><strong>Fake negative + correction</strong></td>
+<td>Ingest as negative immediately, re-ingest as positive when conversion arrives; correct the resulting bias with importance weights</td>
+</tr>
+<tr>
+<td><strong>Delay modeling</strong></td>
+<td>Jointly model P(convert) and the delay distribution, so an unconverted recent click counts as &quot;not yet,&quot; not &quot;never&quot;</td>
+</tr>
+<tr>
+<td><strong>Multi-horizon labels</strong></td>
+<td>Predict conversion within 1h, 1d, 7d as separate heads; short heads train fresh, long heads train late</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fraud detection has the same structure with chargebacks, but here freshness matters more, so fixed wait windows are rarely enough on their own.</p>
+<hr />
+<h2 id="position-bias">Position Bias</h2>
+<p>Ads in the top slot get more clicks regardless of quality. If position is ignored, the model learns &quot;ads that were placed high are good.&quot; That entrenches whatever the previous model preferred.</p>
+<p>The problem has a specific twist for ads: at serving time the model is scoring ads <strong>before</strong> positions are assigned, since the auction assigns them. So you cannot feed the true position as an input at inference.</p>
+<p>Common fixes:</p>
+<ol>
+<li><strong>Position as a training-only feature.</strong> Include position (and slot type, device) as input during training. At serving, set it to a fixed reference value, such as position 1, for all candidates. The model learns to attribute part of the CTR to position, so the remaining signal is closer to intrinsic attractiveness.</li>
+<li><strong>Separate bias tower.</strong> A shallow tower takes only position/context features and outputs a logit that is added to the main model's logit during training, then dropped at serving. This keeps position from interacting with content features in ways that won't be available later.</li>
+<li><strong>Inverse propensity weighting.</strong> Estimate examination probability per position, from randomized swaps on a small slice of traffic, and reweight training examples.</li>
+<li><strong>Factorization at pricing time.</strong> Model pCTR(ad, position) ≈ pCTR(ad) × P(examine | position). The auction then uses the position-specific estimate for each slot.</li>
+</ol>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class CTRWithPositionTower(nn.Module):
+    &quot;&quot;&quot;Main tower learns ad/user relevance; bias tower absorbs position effects.&quot;&quot;&quot;
+    def __init__(self, main_tower: nn.Module, n_positions: int):
+        super().__init__()
+        self.main = main_tower
+        self.position_bias = nn.Embedding(n_positions, 1)
+
+    def forward(self, features, position=None):
+        logit = self.main(features)
+        if self.training and position is not None:
+            logit = logit + self.position_bias(position).squeeze(-1)
+        return logit                  # at serving: no position term
+</code></pre>
+<hr />
+<h2 id="features">Features</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User</strong></td>
+<td>User ID embedding, demographics (where permitted), interest categories, historical CTR, recent engagement sequence</td>
+</tr>
+<tr>
+<td><strong>Ad</strong></td>
+<td>Ad ID, campaign ID, advertiser ID embeddings, creative type, text/image embeddings, landing page category, ad age</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Placement, device, OS, time of day, day of week, connection type, page/query content</td>
+</tr>
+<tr>
+<td><strong>Cross (user × ad)</strong></td>
+<td>User's historical CTR on this advertiser/category, user interest × ad category, query × ad keyword match</td>
+</tr>
+<tr>
+<td><strong>Counters</strong></td>
+<td>Smoothed CTR per ad, per advertiser, per (placement, ad category) over several windows</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="high-cardinality-ids">High-cardinality IDs</h3>
+<p>User, ad, advertiser, and keyword IDs are the most predictive features and the hardest to handle: millions to billions of values, most seen rarely.</p>
+<p><strong>Hashing trick.</strong> Map each (feature name, value) pair to one of <em>M</em> buckets. There's no vocabulary to maintain, new IDs work immediately, and memory is fixed. The cost is collisions, which are usually fine when <em>M</em> is large compared with the number of active values.</p>
+<pre><code class="language-python">import mmh3   # MurmurHash3
+
+def hashed_index(field: str, value: str, n_buckets: int = 2**24) -&gt; int:
+    &quot;&quot;&quot;Stable hash of field:value into a fixed-size index space.&quot;&quot;&quot;
+    return mmh3.hash(f&quot;{field}={value}&quot;, signed=False) % n_buckets
+
+def cross(field_a, val_a, field_b, val_b, n_buckets=2**24):
+    &quot;&quot;&quot;Hashed feature cross, e.g. user_country x ad_category.&quot;&quot;&quot;
+    return hashed_index(f&quot;{field_a}_x_{field_b}&quot;, f&quot;{val_a}|{val_b}&quot;, n_buckets)
+</code></pre>
+<p><strong>Embeddings.</strong> In deep models each hashed ID indexes a row in a learned embedding table. The embedding tables are usually most of the model's parameters and memory, far more than the dense layers.</p>
+<p><strong>Smoothed counters.</strong> Raw CTR for a new ad with 1 click in 2 impressions is 50%, which is meaningless. Use a Bayesian-smoothed rate: <code>(clicks + α) / (impressions + α + β)</code>, where the prior comes from the ad's category or advertiser. Compute counters <strong>point in time</strong>, so a training example only sees counts from before its impression. Otherwise the label leaks into the feature.</p>
+<hr />
+<h2 id="model-progression">Model Progression</h2>
+<p>Walking through the history shows you understand <em>why</em> each step was taken. That's more useful in an interview than naming the newest architecture.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>What it adds</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Logistic regression + hashed crosses</strong></td>
+<td>Fast, calibrates well, scales to billions of sparse features; online-learnable (e.g. FTRL)</td>
+<td>Every useful interaction must be hand-crafted as a cross</td>
+</tr>
+<tr>
+<td><strong>GBDT + LR</strong></td>
+<td>Trees learn nonlinear feature combinations; each tree's leaf index becomes a sparse feature for LR</td>
+<td>Trees are retrained in batch; poor with very high-cardinality IDs</td>
+</tr>
+<tr>
+<td><strong>FM (factorization machines)</strong></td>
+<td>Learns every pairwise interaction via dot products of latent vectors; generalizes to unseen pairs</td>
+<td>Only pairwise; one latent vector per feature for all interactions</td>
+</tr>
+<tr>
+<td><strong>FFM (field-aware FM)</strong></td>
+<td>Separate latent vector per (feature, other field)</td>
+<td>Parameter count grows with number of fields</td>
+</tr>
+<tr>
+<td><strong>Wide &amp; Deep</strong></td>
+<td>Wide linear part memorizes crosses; deep MLP over embeddings generalizes</td>
+<td>Wide part still needs manual crosses</td>
+</tr>
+<tr>
+<td><strong>DeepFM</strong></td>
+<td>Replaces the wide part with an FM sharing embeddings with the deep part</td>
+<td>Interactions beyond pairwise left to the MLP</td>
+</tr>
+<tr>
+<td><strong>DCN / DCN-v2</strong></td>
+<td>Explicit cross layers learn bounded-degree interactions efficiently</td>
+<td>Tuning cross depth and rank</td>
+</tr>
+<tr>
+<td><strong>Multi-task (MMoE, shared-bottom, ESMM)</strong></td>
+<td>Predicts CTR, CVR, negative feedback jointly; shares representation, handles sparse CVR labels</td>
+<td>Task conflicts; more complex calibration per head</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="factorization-machines">Factorization machines</h3>
+<pre><code>ŷ = w₀ + Σᵢ wᵢ xᵢ + Σᵢ Σ_{j&gt;i} ⟨vᵢ, vⱼ⟩ xᵢ xⱼ
+</code></pre>
+<p>The pairwise term can be computed in O(k·n) rather than O(k·n²) using the identity <code>Σ_{i&lt;j} ⟨vᵢ,vⱼ⟩xᵢxⱼ = ½ Σ_f [(Σᵢ v_{i,f} xᵢ)² − Σᵢ v_{i,f}² xᵢ²]</code>. Because the interaction weight is a dot product of learned vectors, the model can score a (user segment, ad category) pair it has never seen together, provided it has seen each one with other partners.</p>
+<h3 id="dcn-cross-layer">DCN cross layer</h3>
+<pre><code>x_{l+1} = x₀ ⊙ (W_l x_l + b_l) + x_l          (DCN-v2 form)
+</code></pre>
+<p>Each layer raises the polynomial degree of interactions by one, and the residual connection keeps lower-order terms. Stacking a few cross layers next to (or before) an MLP is a strong default for heavy ranking.</p>
+<h3 id="multi-task-ctr--cvr">Multi-task: CTR + CVR</h3>
+<p>CVR has two problems. Its labels are rare, and it is only observed on clicked impressions, while at serving it has to be predicted for all impressions (sample selection bias). Two common patterns:</p>
+<ul>
+<li><strong>ESMM-style:</strong> train pCTR on all impressions and pCTCVR = pCTR × pCVR on all impressions, with pCVR as an intermediate that is never directly supervised on the biased click-only set.</li>
+<li><strong>MMoE:</strong> several shared expert networks, and a per-task softmax gate over experts. Tasks that disagree can use different experts instead of fighting over one shared bottom.</li>
+</ul>
+<pre><code class="language-python">class MMoE(nn.Module):
+    def __init__(self, input_dim, n_experts=4, expert_dim=128, tasks=(&quot;ctr&quot;, &quot;cvr&quot;)):
+        super().__init__()
+        self.experts = nn.ModuleList([
+            nn.Sequential(nn.Linear(input_dim, expert_dim), nn.ReLU())
+            for _ in range(n_experts)
+        ])
+        self.gates = nn.ModuleDict({t: nn.Linear(input_dim, n_experts) for t in tasks})
+        self.towers = nn.ModuleDict({t: nn.Linear(expert_dim, 1) for t in tasks})
+
+    def forward(self, x):
+        expert_out = torch.stack([e(x) for e in self.experts], dim=1)   # (B, E, D)
+        logits = {}
+        for task, gate in self.gates.items():
+            w = torch.softmax(gate(x), dim=-1).unsqueeze(-1)            # (B, E, 1)
+            logits[task] = self.towers[task]((w * expert_out).sum(1)).squeeze(-1)
+        return logits   # per-task logits; each needs its own calibration
+</code></pre>
+<hr />
+<h2 id="calibration">Calibration</h2>
+<h3 id="why-its-mandatory">Why it's mandatory</h3>
+<p>In most classification problems a monotone transform of the score changes nothing, because only the ranking matters. In ads, the absolute value of pCTR is multiplied by bids from <em>different advertisers</em> and used to set <em>prices</em>. If the model is systematically 20% high for mobile video ads, those ads win auctions they should lose and pay prices computed from the wrong probability. The auction stops allocating slots to the ads that are actually most valuable.</p>
+<p>The calibration check:</p>
+<pre><code>calibration ratio = Σ predicted pCTR / Σ observed clicks      (target ≈ 1.0)
+</code></pre>
+<p>Check it overall <strong>and per segment</strong>: by advertiser, placement, device, ad age, and pCTR bucket. A model can be perfectly calibrated overall while being 30% off for new ads.</p>
+<h3 id="negative-downsampling-correction">Negative downsampling correction</h3>
+<p>Click-through rates are low, so negatives are usually downsampled to cut training cost. If negatives are kept at rate <em>w</em> (e.g. <em>w</em> = 0.1 keeps 10%), the model's predicted odds are inflated by a factor of 1/<em>w</em>. Undo it at serving:</p>
+<pre><code>p = p' / (p' + (1 − p') / w)
+</code></pre>
+<p>where p' is the model's raw prediction and p is the corrected probability. For example, p' = 0.10 with w = 0.1 gives p = 0.1 / (0.1 + 9) ≈ 0.011.</p>
+<pre><code class="language-python">def correct_downsampling(p_prime: float, w: float) -&gt; float:
+    &quot;&quot;&quot;Undo negative downsampling at rate w (fraction of negatives kept).&quot;&quot;&quot;
+    return p_prime / (p_prime + (1.0 - p_prime) / w)
+</code></pre>
+<p>Forgetting this correction is a classic bug: offline AUC is unchanged, while the eCPM of every CPC- or CPA-bid ad is inflated by roughly 1/<em>w</em> for low-CTR ads. Those ads then beat CPM-bid ads and clear reserve prices they shouldn't.</p>
+<h3 id="post-hoc-calibration">Post-hoc calibration</h3>
+<p>Even without downsampling, deep models trained with regularization, early stopping, or multi-task losses drift from calibration. Fit a calibrator on recent held-out data:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>How</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platt scaling</strong></td>
+<td>Fit <code>σ(a·logit + b)</code></td>
+<td>Few parameters, stable, good when miscalibration is a smooth shift</td>
+</tr>
+<tr>
+<td><strong>Isotonic regression</strong></td>
+<td>Monotone piecewise-constant map</td>
+<td>Flexible; needs more data; can overfit in sparse regions</td>
+</tr>
+<tr>
+<td><strong>Per-segment calibration</strong></td>
+<td>Separate Platt/isotonic per placement or device</td>
+<td>When miscalibration differs by segment</td>
+</tr>
+<tr>
+<td><strong>Calibration layer in model</strong></td>
+<td>Learned per-segment bias on the logit, trained continuously</td>
+<td>When the model is updated online</td>
+</tr>
+</tbody>
+</table></div>
+<p>Refresh calibrators as often as the model, since calibration drifts faster than ranking quality.</p>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Log loss</strong></td>
+<td>Primary. Penalizes both poor ranking and poor calibration</td>
+</tr>
+<tr>
+<td><strong>Normalized entropy (NE)</strong></td>
+<td>Log loss divided by the entropy of the background CTR. Below 1.0 means better than predicting the average; comparable across datasets with different base rates</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td>Ranking quality only; insensitive to calibration. Useful as a secondary check</td>
+</tr>
+<tr>
+<td><strong>Calibration ratio</strong></td>
+<td>Σ predicted / Σ observed, overall and per segment</td>
+</tr>
+<tr>
+<td><strong>Reliability diagram</strong></td>
+<td>Predicted vs observed CTR by pCTR bucket</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+
+def normalized_entropy(y, p, eps=1e-12):
+    p = np.clip(p, eps, 1 - eps)
+    log_loss = -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
+    ctr = y.mean()
+    background = -(ctr * np.log(ctr) + (1 - ctr) * np.log(1 - ctr))
+    return log_loss / background
+</code></pre>
+<p>Evaluate on a <strong>time-based split</strong>: train on days 1 to N, test on day N+1. Random splits leak future counters and trends into training and overstate gains.</p>
+<h3 id="online">Online</h3>
+<p>Offline log loss does not guarantee online gains. The auction, pacing, and advertiser behavior all react to the new model. Always A/B test.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform</strong></td>
+<td>Revenue per thousand requests, auction clearing price, fill rate</td>
+</tr>
+<tr>
+<td><strong>Advertiser</strong></td>
+<td>Cost per conversion, conversion rate, ROI, advertiser retention and spend growth</td>
+</tr>
+<tr>
+<td><strong>User (guardrails)</strong></td>
+<td>Ad hide/report rate, session length, long-term engagement, ad load tolerance</td>
+</tr>
+<tr>
+<td><strong>Model health</strong></td>
+<td>Online calibration ratio, pCTR distribution, latency</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Marketplace experiments are tricky.</strong> If treatment and control share advertiser budgets, a model that makes treatment spend faster drains the budget that control would have used, and treatment looks better than it is. Mitigations: budget-split experiments (each arm gets its own slice of each advertiser's budget) or advertiser-level randomization. Also watch long-term user metrics. Showing more clickable but lower-quality ads can raise revenue for weeks while slowly eroding engagement.</p>
+<hr />
+<h2 id="training-at-scale">Training at Scale</h2>
+<h3 id="data">Data</h3>
+<pre><code>Impression logs ─┐
+Click logs ──────┼──► Streaming join (impression_id, wait window) ──► Labeled examples
+Conversion logs ─┘                                                        │
+                                                   Feature snapshot at impression time
+                                                                          ▼
+                                     Downsample negatives (rate w, logged per example)
+                                                                          ▼
+                                       Continuous trainer ──► Model checkpoints
+</code></pre>
+<p>Log the <strong>features as served</strong> at impression time, rather than recomputing them later from tables. That guarantees training and serving see the same values and removes a big source of training/serving skew.</p>
+<h3 id="freshness-and-continuous-learning">Freshness and continuous learning</h3>
+<p>Ad inventory changes constantly: new campaigns, new creatives, seasonal events, sudden trends. A model trained once a week falls noticeably behind. The usual pattern:</p>
+<ul>
+<li><strong>Periodic full retrain</strong> (e.g. daily or weekly) on a long window, to reset and allow architecture changes.</li>
+<li><strong>Incremental / online updates</strong> from the full model, on streaming data every few minutes to hours, pushed to serving as new checkpoints.</li>
+<li><strong>Embedding tables updated most often</strong>, since new ad and user IDs appear continuously. Dense layers can be updated less often.</li>
+</ul>
+<p>Risks with continuous training: a bad data batch (a logging bug, a bot attack) can poison the live model within minutes. Guard with automated validation before each push (log loss on a fresh holdout, calibration ratio, prediction distribution checks) and keep fast rollback to the previous checkpoint.</p>
+<h3 id="embedding-tables">Embedding tables</h3>
+<p>With hashed IDs, the tables can reach hundreds of GB. Common techniques:</p>
+<ul>
+<li>Shard embedding tables across parameter servers or across GPUs (model parallel), while dense layers are data-parallel.</li>
+<li>Use lower dimensions for low-frequency features, and mixed or reduced precision for storage.</li>
+<li>Evict or merge rows for IDs that haven't appeared recently.</li>
+</ul>
+<hr />
+<h2 id="serving-architecture">Serving Architecture</h2>
+<pre><code>                         ADS CTR PREDICTION AND RANKING
+═══════════════════════════════════════════════════════════════════════════
+
+ Client ──► Ad Server ──┬──► Targeting / Retrieval ──► Candidate ads (~10k)
+                        │        (inverted index, ANN, budget &amp; policy filter)
+                        │                     │
+                        │                     ▼
+                        │          Lightweight Ranker (~500)
+                        │                     │
+                        │                     ▼
+                        ├──► Feature Store ─► Heavy Ranker (GPU/CPU, batched)
+                        │    (user, ad,        pCTR, pCVR, p(neg)  ──► Calibrator
+                        │     counters)                                    │
+                        │                                                  ▼
+                        ├──► Pacing Service ──────────────────────►  Auction
+                        │    (bid multipliers,                    (score, price,
+                        │     throttle rates)                      slot allocation)
+                        │                                                  │
+                        ▼                                                  ▼
+                    Response ◄───────────────────────────────── Winning ad(s)
+                        │
+                        ▼
+        Impression / click / conversion events ──► Kafka ──► Label join
+                                                                 │
+                                                                 ▼
+                                      Continuous training ──► Validation ──► Model push
+                                                                 │
+                                                        Budget / spend aggregator
+                                                        (feeds Pacing Service)
+
+═══════════════════════════════════════════════════════════════════════════
+</code></pre>
+<p><strong>Feature store.</strong> User features are fetched once per request. Ad features are fetched once per candidate, but ads are shared across many requests, so they can be cached locally on ranking servers with short TTLs. Real-time counters (last-hour CTR, spend so far) come from a streaming aggregator backed by a low-latency key-value store.</p>
+<p><strong>Model latency.</strong> Batch all candidates for a request into one inference call. Precompute what doesn't depend on the user: ad-side tower outputs in a two-tower light ranker can be cached per ad. Use quantization or distillation to fit the heavy ranker in budget.</p>
+<p><strong>Caching.</strong> User embeddings can be cached for seconds to minutes within a session. Full-score caching is rarely safe, since pCTR depends on context and bids change constantly.</p>
+<p><strong>Fallbacks.</strong> If the heavy ranker times out, fall back to light-ranker scores with a conservative calibration, or show no ad. Never charge advertisers based on a stale or defaulted pCTR without logging it.</p>
+<hr />
+<h2 id="capacity-and-cost">Capacity and Cost</h2>
+<p>Say these estimates out loud; interviewers look for this.</p>
+<pre><code>Heavy-ranker inference:
+  500k req/s × 500 candidates = 250M ad scorings/s at peak
+  → Too many for per-candidate calls; batch per request, then
+    batch requests on GPU. The light ranker's cut from 10k to 500
+    exists precisely to keep this number affordable.
+
+Embedding memory (hashed, illustrative):
+  User table:  1B rows × 64 dims × 4 B  ≈ 256 GB
+  Ad table:    100M rows × 64 dims × 4 B ≈ 26 GB
+  → Shard across parameter servers; fp16 halves it; frequency
+    thresholds and eviction cut it further.
+
+Training data:
+  500k req/s × ~1 ad each × 86,400 s ≈ 43B impressions/day
+  → Downsample negatives to w = 0.05-0.1 → a few billion examples/day
+</code></pre>
+<hr />
+<h2 id="exploration-and-cold-start">Exploration and Cold Start</h2>
+<p>A new ad has no click history, so its ID embedding is untrained and its counters are empty. If the model is conservative it scores low, gets no impressions, and never gathers the data it needs to prove itself.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>How it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Content features</strong></td>
+<td>Creative text/image embeddings, advertiser history, landing page category give a meaningful prior from the start</td>
+</tr>
+<tr>
+<td><strong>Hierarchical priors</strong></td>
+<td>Back off from ad → campaign → advertiser → category for counters and embeddings</td>
+</tr>
+<tr>
+<td><strong>Exploration budget</strong></td>
+<td>Reserve a small share of impressions for under-explored ads</td>
+</tr>
+<tr>
+<td><strong>Bandit-style boosts</strong></td>
+<td>Add an uncertainty bonus (UCB) or sample pCTR from a posterior (Thompson sampling) for ads with few impressions</td>
+</tr>
+<tr>
+<td><strong>New-ad calibration</strong></td>
+<td>Track calibration specifically for ads &lt; N impressions; new ads are often systematically mispredicted</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+
+def thompson_pctr(clicks, impressions, prior_ctr, prior_strength=100):
+    &quot;&quot;&quot;Sample pCTR from a Beta posterior centered on a category prior.&quot;&quot;&quot;
+    alpha = prior_ctr * prior_strength + clicks
+    beta = (1 - prior_ctr) * prior_strength + (impressions - clicks)
+    return np.random.beta(alpha, beta)
+</code></pre>
+<p>Exploration costs revenue in the short term, and in a paid auction there is a fairness question: who pays for the exploration? A common answer is to boost <em>ranking</em> for exploration without inflating the <em>price</em> charged. That means computing the price from an unboosted pCTR.</p>
+<hr />
+<h2 id="feedback-loops-and-failure-modes">Feedback Loops and Failure Modes</h2>
+<p>The model decides what gets shown, and what gets shown becomes the training data. That loop creates most of the long-term failure modes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Cause</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rich-get-richer</strong></td>
+<td>Ads with more impressions have better-trained embeddings and win more</td>
+<td>Exploration, uncertainty-aware scoring, content features</td>
+</tr>
+<tr>
+<td><strong>Position entrenchment</strong></td>
+<td>Top-slot ads look better because they are in the top slot</td>
+<td>Position debiasing; randomized swaps on a small slice</td>
+</tr>
+<tr>
+<td><strong>Calibration drift</strong></td>
+<td>Seasonality, new placements, downsampling rate change</td>
+<td>Per-segment calibration monitoring, frequent calibrator refresh</td>
+</tr>
+<tr>
+<td><strong>Clickbait creatives</strong></td>
+<td>High CTR but low conversion and poor user experience</td>
+<td>Optimize eCPM with CVR and negative-feedback terms, not CTR alone</td>
+</tr>
+<tr>
+<td><strong>Advertiser gaming</strong></td>
+<td>Advertisers adapt creatives and bids to the model</td>
+<td>Policy review, quality scores, monitoring sudden score shifts</td>
+</tr>
+<tr>
+<td><strong>Bot / invalid clicks</strong></td>
+<td>Fraudulent clicks in training labels</td>
+<td>Invalid traffic filtering before label join; refund invalid clicks</td>
+</tr>
+<tr>
+<td><strong>Poisoned online update</strong></td>
+<td>Logging bug or attack enters continuous training</td>
+<td>Pre-push validation, holdout checks, instant rollback</td>
+</tr>
+<tr>
+<td><strong>Budget-exhaustion bias</strong></td>
+<td>Budget-capped ads disappear from logs late in the day</td>
+<td>Account for pacing when analyzing data; log eligibility, not only wins</td>
+</tr>
+<tr>
+<td><strong>Training/serving skew</strong></td>
+<td>Features recomputed differently offline</td>
+<td>Log served features; train on logged snapshots</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="privacy">Privacy</h2>
+<p>Ads systems depend heavily on cross-context user data, and that data is getting harder to use. At a general level:</p>
+<ul>
+<li><strong>Third-party cookies</strong> are blocked by default in some browsers, and support in others has been subject to changing plans. Cross-site tracking for targeting and conversion measurement is less reliable than it used to be.</li>
+<li><strong>Mobile platforms</strong> increasingly require user opt-in before an app can track across other companies' apps and sites, which reduces device-level conversion data.</li>
+<li><strong>Regulation</strong> (for example GDPR in the EU and state privacy laws in the US) restricts processing of personal data, requires consent in many cases, and limits use of sensitive categories for targeting.</li>
+</ul>
+<p>Design consequences:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fewer user-level conversion signals</td>
+<td>Aggregated or delayed conversion reporting; models trained on coarser, noisier labels; conversion modeling to fill gaps</td>
+</tr>
+<tr>
+<td>Less cross-site user history</td>
+<td>Rely more on first-party and contextual signals (page content, placement, query)</td>
+</tr>
+<tr>
+<td>Aggregated, noised measurement APIs</td>
+<td>Calibration and evaluation must tolerate noise and aggregation; avoid per-user metrics</td>
+</tr>
+<tr>
+<td>Consent varies by user</td>
+<td>Features must handle missing values explicitly; do not let consent status leak into targeting in discriminatory ways</td>
+</tr>
+</tbody>
+</table></div>
+<p>Privacy-preserving techniques that come up: on-device inference or learning, differential privacy noise on aggregated reports, k-anonymity thresholds on audience size, and data retention limits. In an interview it is enough to show that you know the signal is shrinking and that the model and measurement must be designed to handle it.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-does-calibration-matter-so-much-more-here-than-in-other-classifiers">Why does calibration matter so much more here than in other classifiers?</h4>
+<p>Because pCTR is not just used to sort. It is multiplied by bids from different advertisers and used to compute prices. If the model ranks perfectly within each advertiser's ads but is 20% high for one advertiser, that advertiser wins auctions it should lose and the prices are wrong. Advertisers lose money, competitors lose inventory, and the platform's revenue estimate is off.</p>
+<p>That is why log loss (which penalizes miscalibration) is the primary offline metric and AUC is secondary, and why the calibration ratio is monitored per segment in production. It is also why negative downsampling has to be corrected with <code>p = p' / (p' + (1 − p') / w)</code> before scores reach the auction.</p>
+<h4 id="you-downsampled-negatives-to-10-what-changes">You downsampled negatives to 10%. What changes?</h4>
+<p>Training is about ten times cheaper and positives get more weight. But the model's predicted odds are now inflated by a factor of 1/w = 10. Ranking within a request is unaffected, since the transform is monotone. Everything that uses absolute probability is broken: the auction, pricing, pacing, and budget forecasts.</p>
+<p>Fix it by applying the correction formula at serving, or equivalently by adding log(w) to the logit. Log the sampling rate with each training example so the correction stays right if the rate changes. Then check calibration ratio on unsampled held-out traffic to confirm it is close to 1.0.</p>
+<h4 id="why-log-loss-or-normalized-entropy-rather-than-auc-as-the-main-metric">Why log loss or normalized entropy rather than AUC as the main metric?</h4>
+<p>AUC measures only whether positives score above negatives. It does not change if you double every prediction. Log loss penalizes both mis-ranking and miscalibration, which matches how the scores are used.</p>
+<p>Normalized entropy divides log loss by the entropy of a model that always predicts the average CTR. That makes numbers comparable across datasets or time periods with different base CTRs, which raw log loss is not. A 1% NE improvement means the same thing on a 0.5% CTR placement and a 3% CTR placement.</p>
+<h4 id="how-do-you-handle-position-bias-when-the-position-isnt-known-at-scoring-time">How do you handle position bias when the position isn't known at scoring time?</h4>
+<p>The model scores before the auction assigns positions, so the true position can't be an input at serving. Instead, use position as a training-only feature, usually through a separate shallow tower whose logit is added to the main model's during training and dropped at serving. The main model learns relevance with the position effect factored out.</p>
+<p>If the auction needs per-slot estimates, factor pCTR(ad, slot) into pCTR(ad) × P(examine | slot), where the examination curve is measured from a small slice of randomized-position traffic. That also gives an unbiased way to validate the correction.</p>
+<h4 id="how-would-you-predict-conversions-when-they-arrive-days-after-the-click">How would you predict conversions when they arrive days after the click?</h4>
+<p>Separate the problem into pCTR (fast labels) and pCVR (slow labels), ideally in a multi-task model. For pCVR, pick between freshness and label accuracy. Options: wait a fixed window before training, ingest clicks as negatives immediately and then correct with importance weights when conversions arrive, or model the delay distribution explicitly so recent unconverted clicks are treated as uncertain.</p>
+<p>CVR labels also exist only for clicked impressions, while serving predicts over all impressions. ESMM-style training (supervising pCTR × pCVR on the full impression space) or a shared multi-task model addresses that sample selection bias.</p>
+<h4 id="a-new-advertiser-launches-how-do-they-get-impressions">A new advertiser launches. How do they get impressions?</h4>
+<p>Their ad has no history, so ID-based features are empty and the model will tend to underpredict. First, give the model content features that exist from the start: creative embeddings, landing page category, advertiser vertical. Next, back off counters hierarchically to the campaign, advertiser, and category level. Finally, add explicit exploration, either a reserved impression budget or an uncertainty bonus via UCB or Thompson sampling, until enough impressions accumulate.</p>
+<p>Apply the exploration bonus to ranking, not pricing, so the advertiser isn't charged for the platform's exploration. Monitor calibration specifically for low-impression ads, since that's where errors concentrate.</p>
+<h4 id="offline-log-loss-improved-but-the-online-ab-test-shows-flat-revenue-what-do-you-check">Offline log loss improved, but the online A/B test shows flat revenue. What do you check?</h4>
+<p>First, <strong>calibration online</strong>, per segment. A model can improve log loss mostly on segments that don't matter for revenue while getting slightly worse on high-bid segments. Second, <strong>the experiment itself</strong>: if arms share advertiser budgets, budget-constrained advertisers cap how much revenue can move, and spillover between arms can mask or fake an effect. Third, <strong>auction dynamics</strong>: better predictions can lower clearing prices by separating ads more clearly, which is good for advertisers even if short-term revenue is flat. Check advertiser metrics like cost per conversion.</p>
+<p>Finally, check <strong>training/serving skew</strong>: features that differ between the logged training snapshot and live serving, or a calibrator that wasn't refreshed with the new model.</p>
+<h4 id="how-often-would-you-retrain-and-how-do-you-keep-continuous-training-safe">How often would you retrain, and how do you keep continuous training safe?</h4>
+<p>Ads data shifts quickly, so a combination works best. A periodic full retrain on a long window, plus incremental updates every few minutes to hours on streaming data, with embedding tables updated most frequently.</p>
+<p>For safety, every checkpoint must pass automated gates before it is pushed: log loss and NE on a very recent holdout, calibration ratio overall and per major segment, and prediction distribution checks against the current model. Keep the last known-good checkpoint ready for instant rollback. Alert on sudden shifts in average pCTR or spend rate, which are often the first sign of a logging bug or a click-fraud attack in the training stream.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Optimizing AUC only</td>
+<td>Ignores calibration, which sets auction prices</td>
+<td>Log loss / NE as primary; calibration ratio per segment</td>
+</tr>
+<tr>
+<td>Forgetting downsampling correction</td>
+<td>Every absolute probability is inflated by ~1/w</td>
+<td><code>p = p' / (p' + (1 − p')/w)</code> at serving; log w per example</td>
+</tr>
+<tr>
+<td>Ranking by pCTR instead of eCPM</td>
+<td>Ignores bids and conversion value</td>
+<td>Rank by bid × pCTR (× pCVR) plus quality terms</td>
+</tr>
+<tr>
+<td>Ignoring position bias</td>
+<td>Model reproduces the previous ranker</td>
+<td>Position as training-only feature; randomized calibration slice</td>
+</tr>
+<tr>
+<td>Random train/test split</td>
+<td>Leaks future counters and trends</td>
+<td>Time-based split: train on the past, test on the next day</td>
+</tr>
+<tr>
+<td>Non-point-in-time counters</td>
+<td>Label leaks into features</td>
+<td>Compute counters from data strictly before each impression</td>
+</tr>
+<tr>
+<td>Training on CVR only for clicked impressions</td>
+<td>Sample selection bias at serving</td>
+<td>ESMM-style or multi-task over all impressions</td>
+</tr>
+<tr>
+<td>Treating clicks as the only objective</td>
+<td>Rewards clickbait; hurts conversions and users</td>
+<td>Multi-objective score with CVR and negative-feedback terms</td>
+</tr>
+<tr>
+<td>No exploration for new ads</td>
+<td>Cold-start ads never get impressions</td>
+<td>Content features, hierarchical priors, bandit boosts</td>
+</tr>
+<tr>
+<td>Shared-budget A/B tests</td>
+<td>Arms interfere through budgets; biased results</td>
+<td>Budget-split or advertiser-level randomization</td>
+</tr>
+<tr>
+<td>Unguarded continuous training</td>
+<td>Bad data reaches production in minutes</td>
+<td>Pre-push validation gates, instant rollback</td>
+</tr>
+<tr>
+<td>Applying targeting after ranking</td>
+<td>Wasted compute; risk of violating targeting</td>
+<td>Enforce targeting and policy in retrieval</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="fraud_detection.html">Fraud Detection System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../classical_ml/intro_feature_engineering.html">Feature Engineering</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="../classical_ml/intro_causal_inference.html">Causal Inference and Uplift</a></li>
+<li><a href="../ai_genai/intro_embeddings.html">Embeddings</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="../mlops/intro_feature_store.html">Feature Store</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_responsible_ai_fairness.html">Responsible AI and Fairness</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="fraud_detection.html"><small>Previous</small>Fraud Detection</a><a rel="next" class="next" href="content_moderation_system.html"><small>Next</small>Content Moderation</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/ads_ctr_prediction.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

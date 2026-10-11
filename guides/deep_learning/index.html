@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Deep Learning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Deep Learning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Deep Learning",
+   "description": "A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Overview",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Overview</span></nav>
+<p class="meta"><a href="../../#deep_learning/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="deep-learning">Deep Learning</h1>
+<p>A reference for deep learning fundamentals, architectures, training techniques, and regularization methods.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#neural-network-fundamentals">Neural Network Fundamentals</a></li>
+<li><a href="#activation-functions">Activation Functions</a></li>
+<li><a href="#training">Training: Forward Pass, Backpropagation, Optimization</a></li>
+<li><a href="#regularization-techniques">Regularization Techniques</a></li>
+<li><a href="#architecture-overview">Architecture Overview</a></li>
+<li><a href="#transfer-learning-and-fine-tuning">Transfer Learning and Fine-Tuning</a></li>
+<li><a href="#loss-functions">Loss Functions</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="neural-network-fundamentals">Neural Network Fundamentals</h2>
+<h3 id="neurons-and-layers">Neurons and Layers</h3>
+<p>A neuron computes a weighted sum of inputs, adds a bias, and applies an activation function:</p>
+<pre><code>z = w₁x₁ + w₂x₂ + ... + wₙxₙ + b = W·x + b
+output = activation(z)
+</code></pre>
+<p><strong>Layer types:</strong></p>
+<ul>
+<li><strong>Input layer:</strong> Receives raw features</li>
+<li><strong>Hidden layers:</strong> Learn intermediate representations</li>
+<li><strong>Output layer:</strong> Produces final predictions</li>
+</ul>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class NeuralNetwork(nn.Module):
+    def __init__(self, input_size, hidden_sizes, output_size):
+        super().__init__()
+
+        layers = []
+        prev_size = input_size
+        for hidden_size in hidden_sizes:
+            layers.extend([
+                nn.Linear(prev_size, hidden_size),
+                nn.BatchNorm1d(hidden_size),
+                nn.ReLU(),
+                nn.Dropout(0.3)
+            ])
+            prev_size = hidden_size
+        layers.append(nn.Linear(prev_size, output_size))
+
+        self.network = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.network(x)
+</code></pre>
+<h3 id="universal-approximation-theorem">Universal Approximation Theorem</h3>
+<p>A neural network with a single hidden layer containing enough neurons can approximate any continuous function on a compact domain to arbitrary accuracy. This is why neural networks are such powerful function approximators.</p>
+<hr />
+<h2 id="activation-functions">Activation Functions</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Formula</th>
+<th>Range</th>
+<th>Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sigmoid</td>
+<td>1/(1+e^(-x))</td>
+<td>(0, 1)</td>
+<td>Saturates → vanishing gradient</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td>(eˣ - e^(-x))/(eˣ + e^(-x))</td>
+<td>(-1, 1)</td>
+<td>Zero-centered, still saturates</td>
+</tr>
+<tr>
+<td>ReLU</td>
+<td>max(0, x)</td>
+<td>[0, ∞)</td>
+<td>Fast, no vanishing gradient for x&gt;0</td>
+</tr>
+<tr>
+<td>Leaky ReLU</td>
+<td>max(0.01x, x)</td>
+<td>(-∞, ∞)</td>
+<td>Fixes dying ReLU problem</td>
+</tr>
+<tr>
+<td>GELU</td>
+<td>x·Φ(x)</td>
+<td>(-∞, ∞)</td>
+<td>Used in Transformers, smooth</td>
+</tr>
+<tr>
+<td>SiLU/Swish</td>
+<td>x·σ(x)</td>
+<td>(-∞, ∞)</td>
+<td>Smooth, used in modern architectures</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>eˣⁱ / Σeˣʲ</td>
+<td>(0, 1), sums to 1</td>
+<td>Multi-class output layer</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+x = torch.tensor([-2.0, -1.0, 0.0, 1.0, 2.0])
+
+print(F.sigmoid(x))   # 0.12, 0.27, 0.50, 0.73, 0.88
+print(F.tanh(x))      # -0.96, -0.76, 0.0, 0.76, 0.96
+print(F.relu(x))      # 0, 0, 0, 1, 2
+print(F.leaky_relu(x, 0.01))  # -0.02, -0.01, 0, 1, 2
+print(F.gelu(x))      # -0.046, -0.16, 0, 0.84, 1.95
+print(F.softmax(x, dim=0))  # Probabilities summing to 1
+</code></pre>
+<hr />
+<h2 id="training">Training</h2>
+<h3 id="forward-pass">Forward Pass</h3>
+<p>Data flows through the network layer by layer, applying weights, biases, and activations.</p>
+<pre><code>Input x → Layer 1 → Layer 2 → ... → Output ŷ
+Loss L = loss_function(ŷ, y)
+</code></pre>
+<h3 id="backpropagation">Backpropagation</h3>
+<p>Computes gradients of the loss with respect to each parameter using the chain rule.</p>
+<pre><code>∂L/∂W₁ = ∂L/∂ŷ · ∂ŷ/∂h₂ · ∂h₂/∂h₁ · ∂h₁/∂W₁
+
+Chain rule example (2-layer network):
+∂L/∂W₁ = (∂L/∂a₂) · (∂a₂/∂z₂) · (∂z₂/∂a₁) · (∂a₁/∂z₁) · (∂z₁/∂W₁)
+</code></pre>
+<h3 id="gradient-descent-variants">Gradient Descent Variants</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Optimizer</th>
+<th>Update Rule</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SGD</td>
+<td>w ← w - η∇L</td>
+<td>Simple, memory efficient</td>
+<td>Noisy, slow convergence</td>
+</tr>
+<tr>
+<td>SGD + Momentum</td>
+<td>v ← βv + ∇L; w ← w - ηv</td>
+<td>Faster convergence</td>
+<td>Learning rate tuning</td>
+</tr>
+<tr>
+<td>AdaGrad</td>
+<td>w ← w - η/√(G+ε)·∇L</td>
+<td>Adaptive per-param LR</td>
+<td>LR decreases monotonically</td>
+</tr>
+<tr>
+<td>RMSProp</td>
+<td>w ← w - η/√(E[g²]+ε)·∇L</td>
+<td>Fixes AdaGrad issue</td>
+<td>No bias correction</td>
+</tr>
+<tr>
+<td>Adam</td>
+<td>Combines momentum + RMSProp</td>
+<td>Fast, robust default</td>
+<td>Memory usage, can overfit</td>
+</tr>
+<tr>
+<td>AdamW</td>
+<td>Adam + weight decay</td>
+<td>Best default for deep learning</td>
+<td>Slightly more memory</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import torch.optim as optim
+
+# Common optimizers
+model = NeuralNetwork(784, [256, 128], 10)
+
+sgd = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
+adam = optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999))
+adamw = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
+
+# Learning rate schedulers
+scheduler = optim.lr_scheduler.CosineAnnealingLR(adam, T_max=100)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(adam, patience=5, factor=0.5)
+scheduler = optim.lr_scheduler.OneCycleLR(adam, max_lr=0.01, total_steps=1000)
+</code></pre>
+<hr />
+<h2 id="regularization-techniques">Regularization Techniques</h2>
+<h3 id="dropout">Dropout</h3>
+<p>Randomly sets a fraction of neurons to zero during training, preventing co-adaptation.</p>
+<pre><code class="language-python"># During training: randomly zero with probability p
+# During inference: scale by (1-p), or use inverted dropout (PyTorch default)
+
+dropout = nn.Dropout(p=0.5)  # 50% dropout
+# Standard: 0.1-0.5 for hidden layers, 0.0-0.1 for output
+</code></pre>
+<p><strong>Why it works:</strong> Forces the network to learn redundant representations. Acts like an ensemble of 2^n subnetworks.</p>
+<h3 id="batch-normalization">Batch Normalization</h3>
+<p>Normalizes layer inputs to have zero mean and unit variance within each mini-batch.</p>
+<pre><code class="language-python"># Applied between linear layer and activation
+nn.Sequential(
+    nn.Linear(256, 128),
+    nn.BatchNorm1d(128),   # Normalize across batch dimension
+    nn.ReLU()
+)
+
+# For images
+nn.Conv2d(64, 128, 3, padding=1)
+nn.BatchNorm2d(128)   # Normalize across spatial and batch dimensions
+nn.ReLU()
+</code></pre>
+<p><strong>Why it works:</strong> Reduces internal covariate shift, allows higher learning rates, acts as regularizer, reduces sensitivity to initialization.</p>
+<h3 id="layer-normalization">Layer Normalization</h3>
+<p>Normalizes across the feature dimension (not batch). Used in Transformers.</p>
+<pre><code class="language-python"># Preferred in Transformers and RNNs where batch size varies
+nn.LayerNorm(normalized_shape=512)
+</code></pre>
+<h3 id="weight-decay-l2-regularization">Weight Decay (L2 Regularization)</h3>
+<pre><code class="language-python"># Add L2 penalty to weights via optimizer
+optimizer = optim.AdamW(
+    model.parameters(),
+    lr=1e-3,
+    weight_decay=0.01  # L2 regularization coefficient
+)
+</code></pre>
+<h3 id="early-stopping">Early Stopping</h3>
+<pre><code class="language-python">class EarlyStopping:
+    def __init__(self, patience=7, min_delta=1e-4):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_loss = float('inf')
+
+    def __call__(self, val_loss):
+        if val_loss &lt; self.best_loss - self.min_delta:
+            self.best_loss = val_loss
+            self.counter = 0
+        else:
+            self.counter += 1
+        return self.counter &gt;= self.patience
+</code></pre>
+<h3 id="gradient-clipping">Gradient Clipping</h3>
+<pre><code class="language-python"># Prevent exploding gradients
+torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+</code></pre>
+<hr />
+<h2 id="architecture-overview">Architecture Overview</h2>
+<h3 id="convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</h3>
+<p>Process spatial data (images, time series) using local filters.</p>
+<pre><code>Input Image → [Conv → BN → ReLU → Pool] × N → Flatten → FC → Output
+
+Key layers:
+- Conv2d: Learn local features using learned filters
+- MaxPool2d: Spatial downsampling, translation invariance
+- BatchNorm2d: Stabilize training
+- Global Average Pooling: Reduce spatial dims without flatten
+
+Famous architectures: AlexNet, VGG, ResNet, EfficientNet, ConvNeXt
+</code></pre>
+<pre><code class="language-python"># ResNet-style block with skip connection
+class ResBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.conv1 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn1 = nn.BatchNorm2d(channels)
+        self.conv2 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn2 = nn.BatchNorm2d(channels)
+
+    def forward(self, x):
+        residual = x
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += residual  # Skip connection
+        return F.relu(out)
+</code></pre>
+<h3 id="recurrent-neural-networks-rnns-and-lstms">Recurrent Neural Networks (RNNs) and LSTMs</h3>
+<p>Process sequential data with memory of previous steps.</p>
+<pre><code>RNN: hₜ = tanh(Wₓxₜ + Wₕhₜ₋₁ + b)
+LSTM adds: forget gate, input gate, output gate, cell state
+GRU: Simpler version of LSTM with update and reset gates
+
+Problems with vanilla RNNs:
+- Vanishing gradients over long sequences
+- Can't capture long-range dependencies
+</code></pre>
+<pre><code class="language-python"># LSTM for sequence classification
+class LSTMClassifier(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True, bidirectional=True)
+        self.fc = nn.Linear(hidden_dim * 2, num_classes)
+        self.dropout = nn.Dropout(0.3)
+
+    def forward(self, x):
+        embedded = self.dropout(self.embedding(x))
+        output, (hidden, cell) = self.lstm(embedded)
+        # Concat final hidden states from both directions
+        hidden = torch.cat((hidden[-2], hidden[-1]), dim=1)
+        return self.fc(self.dropout(hidden))
+</code></pre>
+<h3 id="transformers">Transformers</h3>
+<p>See <a href="intro_transformers.html">Transformers</a> for detailed coverage.</p>
+<ul>
+<li><strong>BERT (encoder-only):</strong> Bidirectional context, great for classification, NER, QA</li>
+<li><strong>GPT (decoder-only):</strong> Autoregressive generation, text completion</li>
+<li><strong>T5/BART (encoder-decoder):</strong> Seq2Seq, translation, summarization</li>
+</ul>
+<h3 id="fine-tuning-llms-lora--qlora--peft">Fine-Tuning LLMs (LoRA / QLoRA / PEFT)</h3>
+<p>See <a href="intro_fine_tuning.html">Fine-Tuning Guide</a> for detailed coverage.</p>
+<ul>
+<li><strong>LoRA</strong>: low-rank adaptation, trains only A·B matrices, &lt;1% of parameters</li>
+<li><strong>QLoRA</strong>: NF4 quantization + LoRA, fine-tune 7B models on a single GPU</li>
+<li><strong>Instruction tuning</strong>: teach models to follow natural language instructions</li>
+<li><strong>DPO</strong>: preference optimization without RL infrastructure</li>
+</ul>
+<h3 id="computer-vision">Computer Vision</h3>
+<p>See <a href="intro_computer_vision.html">Computer Vision Guide</a> for detailed coverage.</p>
+<ul>
+<li><strong>CNNs</strong>: convolutions, residual blocks, receptive fields</li>
+<li><strong>Architectures</strong>: ResNet, EfficientNet, MobileNet, ViT</li>
+<li><strong>Object detection</strong>: Faster R-CNN, YOLO, mAP, NMS, IoU</li>
+<li><strong>Segmentation</strong>: U-Net, semantic vs instance</li>
+<li><strong>Augmentation</strong>: CutMix, MixUp, RandAugment</li>
+</ul>
+<h3 id="diffusion-models">Diffusion Models</h3>
+<p>Generative models that learn to reverse a gradual noising process.</p>
+<pre><code>Forward process: x₀ → x₁ → ... → xₜ (add Gaussian noise)
+Reverse process: xₜ → xₜ₋₁ → ... → x₀ (learned denoising)
+</code></pre>
+<p>Used in: Stable Diffusion (images), DALL-E 3, AudioLDM (audio), protein generation.</p>
+<hr />
+<h2 id="transfer-learning-and-fine-tuning">Transfer Learning and Fine-Tuning</h2>
+<h3 id="approaches">Approaches</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>When to Use</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Feature extraction</td>
+<td>Small dataset, similar domain</td>
+<td>ResNet features for medical images</td>
+</tr>
+<tr>
+<td>Fine-tuning last layers</td>
+<td>Moderate dataset, similar domain</td>
+<td>BERT for text classification</td>
+</tr>
+<tr>
+<td>Full fine-tuning</td>
+<td>Large dataset, sufficient compute</td>
+<td>GPT for domain-specific generation</td>
+</tr>
+<tr>
+<td>Few-shot prompting</td>
+<td>Very small dataset</td>
+<td>Prompt engineering with LLMs</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import torchvision.models as models
+
+# Load pretrained model
+resnet = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)  # `pretrained=True` is deprecated
+
+# Option 1: Feature extraction, freeze all but classifier
+for param in resnet.parameters():
+    param.requires_grad = False
+
+# Replace classifier head for new task
+num_features = resnet.fc.in_features
+resnet.fc = nn.Linear(num_features, num_classes)
+# Only resnet.fc parameters will be updated
+
+# Option 2: Fine-tune last few layers
+for param in resnet.layer4.parameters():
+    param.requires_grad = True
+for param in resnet.fc.parameters():
+    param.requires_grad = True
+
+# Different learning rates for different layers
+optimizer = optim.AdamW([
+    {&quot;params&quot;: resnet.layer4.parameters(), &quot;lr&quot;: 1e-4},
+    {&quot;params&quot;: resnet.fc.parameters(), &quot;lr&quot;: 1e-3}
+])
+</code></pre>
+<hr />
+<h2 id="loss-functions">Loss Functions</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loss</th>
+<th>Use Case</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MSE</td>
+<td>Regression</td>
+<td><code>(1/n)Σ(y - ŷ)²</code></td>
+</tr>
+<tr>
+<td>MAE</td>
+<td>Regression (outlier robust)</td>
+<td><code>(1/n)Σ|y - ŷ|</code></td>
+</tr>
+<tr>
+<td>Binary Cross-Entropy</td>
+<td>Binary classification</td>
+<td><code>-[y·log(ŷ) + (1-y)·log(1-ŷ)]</code></td>
+</tr>
+<tr>
+<td>Categorical Cross-Entropy</td>
+<td>Multi-class classification</td>
+<td><code>-Σ yᵢ·log(ŷᵢ)</code></td>
+</tr>
+<tr>
+<td>Hinge Loss</td>
+<td>SVM, margin-based</td>
+<td><code>max(0, 1 - y·ŷ)</code></td>
+</tr>
+<tr>
+<td>KL Divergence</td>
+<td>Distribution matching</td>
+<td><code>Σ P·log(P/Q)</code></td>
+</tr>
+<tr>
+<td>Contrastive / Triplet</td>
+<td>Embeddings, metric learning</td>
+<td><code>max(0, d(a,p) - d(a,n) + margin)</code></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import torch.nn as nn
+
+criterion_mse = nn.MSELoss()
+criterion_mae = nn.L1Loss()
+criterion_bce = nn.BCEWithLogitsLoss()   # More stable than BCELoss
+criterion_ce = nn.CrossEntropyLoss()     # Includes softmax
+criterion_ce_weighted = nn.CrossEntropyLoss(weight=class_weights)  # For imbalance
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the vanishing gradient problem and how do we solve it?</strong> 🟡 Intermediate</p>
+<p>During backpropagation through deep networks, gradients are multiplied by the derivative of each activation function. Sigmoid/tanh derivatives are &lt; 1, so gradients shrink exponentially through layers, preventing early layers from learning. Solutions: (1) ReLU activations (gradient = 1 for positive inputs), (2) residual/skip connections (gradient flows directly), (3) batch normalization (normalizes inputs, prevents saturation), (4) careful initialization (Xavier/He), (5) gradient clipping.</p>
+<hr />
+<p><strong>Q2: Explain backpropagation using the chain rule.</strong> 🔴 Advanced</p>
+<p>Backprop computes <code>∂L/∂w</code> for all parameters. For a 2-layer network: <code>L = loss(output, y)</code>, <code>output = σ(W₂·h)</code>, <code>h = σ(W₁·x)</code>.</p>
+<p>Chain rule: <code>∂L/∂W₁ = ∂L/∂output · ∂output/∂h · ∂h/∂W₁</code></p>
+<p>Each term is computed locally: <code>∂L/∂output</code> from the loss, <code>∂output/∂h = W₂ · σ'(W₂·h)</code>, <code>∂h/∂W₁ = σ'(W₁·x) · xᵀ</code>. PyTorch's autograd engine records operations during the forward pass (computational graph) and traverses it in reverse for backprop.</p>
+<hr />
+<p><strong>Q3: What is batch normalization and why does it help?</strong> 🟡 Intermediate</p>
+<p>Batch normalization normalizes a layer's inputs to zero mean and unit variance within each mini-batch: <code>x̂ = (x - μB) / √(σB² + ε)</code>, then scales and shifts with learned parameters γ and β: <code>y = γx̂ + β</code>. Benefits: reduces internal covariate shift (distribution of layer inputs changing during training), allows higher learning rates, acts as a regularizer (noise from batch statistics), reduces sensitivity to weight initialization. At inference, uses running mean/variance computed during training.</p>
+<hr />
+<p><strong>Q4: What is the difference between BatchNorm and LayerNorm?</strong> 🟡 Intermediate</p>
+<p>BatchNorm normalizes across the batch dimension (computes statistics over the batch for each feature). LayerNorm normalizes across the feature dimension (computes statistics over all features for each sample). BatchNorm requires a minimum batch size to compute stable statistics and has issues with very small batches. LayerNorm works per sample, so it's batch-size independent and preferred for Transformers (variable-length sequences), RNNs, and online learning.</p>
+<hr />
+<p><strong>Q5: What is dropout and does it help at inference time?</strong> 🟢 Beginner</p>
+<p>Dropout randomly sets a fraction p of neurons to zero during training. This prevents neurons from co-adapting and forces learning of redundant representations. At inference, dropout is disabled (model.eval() in PyTorch) and all neurons are active. To compensate for the increased scale (all neurons active vs fraction during training), activations are scaled by 1/(1-p) during training (inverted dropout, PyTorch default).</p>
+<hr />
+<p><strong>Q6: What are residual connections and why are they important?</strong> 🟡 Intermediate</p>
+<p>Residual connections (skip connections) add the input of a block directly to its output: <code>output = F(x) + x</code>. Key benefits: (1) gradients flow directly through the skip connection, addressing vanishing gradients in very deep networks, (2) the block only needs to learn the residual <code>F(x)</code> (what to add to x), which is often small and easier to learn, (3) enable training of very deep networks (100+ layers). Introduced in ResNet (2015) and fundamental to Transformers (residual around each attention and FFN block).</p>
+<hr />
+<p><strong>Q7: Explain the attention mechanism in neural networks.</strong> 🔴 Advanced</p>
+<p>Attention computes a weighted sum of values where weights are based on similarity between a query and keys.</p>
+<pre><code>Attention(Q, K, V) = softmax(QKᵀ / √dₖ) · V
+
+1. Q, K, V are linear projections of the input
+2. QKᵀ computes similarity scores between queries and keys
+3. Scale by √dₖ to prevent vanishing gradients
+4. Softmax converts to probabilities
+5. Multiply by V to get the attended representation
+</code></pre>
+<p>Self-attention: Q, K, V all come from the same sequence (captures relationships within the sequence). Cross-attention: Q from one sequence (decoder), K and V from another (encoder output).</p>
+<hr />
+<p><strong>Q8: What is the difference between CNNs and Transformers for image tasks?</strong> 🔴 Advanced</p>
+<p>CNNs use local convolutional filters: effective for capturing local patterns and translation equivariance. They process images hierarchically (local → global). Transformers use self-attention: each patch can attend to every other patch from the start, capturing long-range dependencies. ViT (Vision Transformer) splits images into patches and processes them as a sequence. Transformers need more data than CNNs to learn useful representations but scale better. Modern architectures (ConvNeXt, Swin Transformer) blend both approaches.</p>
+<hr />
+<p><strong>Q9: What is the exploding gradient problem and how do you prevent it?</strong> 🟡 Intermediate</p>
+<p>Exploding gradients occur when gradient values grow exponentially through deep layers, causing extremely large weight updates that destabilize training (NaN losses). Common in RNNs. Solutions: (1) gradient clipping: cap gradients at a maximum norm, (2) weight initialization, use Xavier/He initialization, (3) batch normalization, normalizes activations, preventing extreme values, (4) LSTM/GRU: gating mechanisms limit gradient flow, (5) residual connections, provide gradient highways.</p>
+<hr />
+<p><strong>Q10: What is the difference between fine-tuning and training from scratch?</strong> 🟢 Beginner</p>
+<p>Training from scratch initializes weights randomly and trains on a dataset from nothing: requires large datasets and significant compute. Fine-tuning starts from pretrained weights (learned on a large dataset) and continues training on a task-specific dataset: requires much less data and compute. Fine-tuning uses transfer learning: knowledge from the pretraining task generalizes to the new task. For most practical NLP and vision tasks, fine-tuning a pretrained model outperforms training from scratch.</p>
+<hr />
+<p><strong>Q11: What is the dying ReLU problem?</strong> 🟡 Intermediate</p>
+<p>A ReLU neuron &quot;dies&quot; when its input is always negative: gradient is 0, so the neuron never updates and permanently outputs 0. Causes: high learning rates causing large negative weight updates, poor initialization, gradient flow issues. Solutions: Leaky ReLU (small negative slope for x&lt;0), ELU, GELU/SiLU (smooth, always non-zero gradient), careful learning rate tuning, good initialization.</p>
+<hr />
+<p><strong>Q12: Compare the Adam and SGD optimizers.</strong> 🔴 Advanced</p>
+<p><strong>SGD with momentum:</strong> Updates based on gradient with velocity accumulation. Simple, generalizes well in some domains. Requires careful learning rate tuning. Often finds wider minima (better generalization).</p>
+<p><strong>Adam:</strong> Maintains adaptive learning rates per parameter using first moment (mean) and second moment (variance of gradients). Converges faster, less sensitive to learning rate. Can overfit more easily, may converge to sharp minima with worse generalization. Weight decay in Adam should use AdamW (decoupled) for correct regularization. In practice: Adam/AdamW for transformers and NLP, SGD+momentum often used in CV tasks.</p>
+<hr />
+<p><strong>Q13: What is the universal approximation theorem and what are its limitations?</strong> 🔴 Advanced</p>
+<p>The theorem states that a feedforward neural network with a single hidden layer containing a finite number of neurons can approximate any continuous function on a compact subset of Rⁿ to arbitrary precision, given a non-polynomial activation function.</p>
+<p>Limitations: (1) &quot;sufficient neurons&quot; can be exponential in input dimensions, (2) says nothing about how to find the weights (optimization), (3) doesn't address generalization (approximating training data ≠ generalizing to new data), (4) approximating a function and actually learning it from finite noisy data are different problems.</p>
+<hr />
+<p><strong>Q14: What is gradient checkpointing?</strong> 🔴 Advanced</p>
+<p>Gradient checkpointing trades compute for memory. Normally, all intermediate activations are stored during the forward pass for use in backpropagation: memory grows linearly with depth. With gradient checkpointing, only a subset of activations are stored (checkpoints); others are recomputed from the nearest checkpoint during backpropagation. This reduces memory from O(n) to O(√n) at the cost of ~30% more compute. Essential for training large models on memory-constrained hardware.</p>
+<hr />
+<p><strong>Q15: What are the key differences between encoder-only, decoder-only, and encoder-decoder transformer architectures?</strong> 🟡 Intermediate</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Examples</th>
+<th>Self-Attention</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encoder-only</td>
+<td>BERT, RoBERTa</td>
+<td>Bidirectional (all tokens attend to all)</td>
+<td>Classification, NER, QA</td>
+</tr>
+<tr>
+<td>Decoder-only</td>
+<td>GPT, Llama, Gemma</td>
+<td>Causal (tokens only attend to past)</td>
+<td>Text generation, chat</td>
+</tr>
+<tr>
+<td>Encoder-Decoder</td>
+<td>T5, BART, Whisper</td>
+<td>Encoder: bidirectional; Decoder: causal + cross-attention</td>
+<td>Translation, summarization, speech</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<p><strong>Q16: What is knowledge distillation?</strong> 🔴 Advanced</p>
+<p>Knowledge distillation trains a small &quot;student&quot; model to mimic a large &quot;teacher&quot; model. The student learns from soft probability distributions (temperature-scaled logits) output by the teacher rather than just hard labels. Soft targets carry richer information about class relationships (e.g., &quot;30% likely class A, 20% likely class B&quot;). This allows small models to achieve performance close to large models, enabling deployment on constrained hardware. Example: DistilBERT (about 40% fewer parameters than BERT-base, 66M vs 110M, while retaining about 97% of its GLUE performance).</p>
+<hr />
+<p><strong>Q17: What is a hyperparameter and how do you tune them?</strong> 🟢 Beginner</p>
+<p>Hyperparameters are configuration values set before training that control the learning process (not learned from data). Examples: learning rate, batch size, number of layers, dropout rate, weight decay. Tuning methods: (1) grid search: exhaustive search over specified values, (2) random search, randomly sample combinations, often more efficient, (3) Bayesian optimization, use probabilistic model to select promising hyperparameters, (4) population-based training, evolve hyperparameters during training. Tools: Optuna, W&amp;B Sweeps, Ray Tune.</p>
+<hr />
+<p><strong>Q18: What is a variational autoencoder (VAE)?</strong> 🔴 Advanced</p>
+<p>A VAE is a generative model that learns a latent distribution rather than discrete encodings. The encoder maps input to a mean μ and variance σ of a Gaussian distribution. The decoder samples from z ~ N(μ, σ²) and reconstructs the input. Loss = reconstruction loss + KL divergence (pushes latent distribution toward N(0, I)). The reparameterization trick (z = μ + σ·ε, ε ~ N(0,1)) enables gradient flow through the sampling step. VAEs enable smooth latent space interpolation and new sample generation.</p>
+<hr />
+<p><strong>Q19: What is the difference between discriminative and generative models?</strong> 🟡 Intermediate</p>
+<p><strong>Discriminative models</strong> learn the conditional probability P(Y|X): the boundary between classes. Examples: logistic regression, SVM, BERT for classification. Generally better at classification when trained on sufficient labeled data.</p>
+<p><strong>Generative models</strong> learn the joint distribution P(X, Y) or just P(X). Can generate new samples from the learned distribution. Examples: Naive Bayes, VAE, GAN, diffusion models. Useful when you need to generate data, with limited labeled data (using P(X) as prior), or for understanding data structure.</p>
+<hr />
+<p><strong>Q20: What is gradient accumulation and when would you use it?</strong> 🟡 Intermediate</p>
+<p>Gradient accumulation delays optimizer updates for multiple forward/backward passes, effectively increasing the batch size without increasing memory. Instead of updating after each batch, gradients are accumulated over N mini-batches, then an optimizer step is taken. Use when: memory constraints prevent large batch training, but the optimization benefits from large batches (stability, better generalization). Common in LLM fine-tuning: <code>per_device_batch_size=4, gradient_accumulation_steps=8</code> → effective batch size 32.</p>
+<hr />
+<h2 id="guides-in-this-track">Guides in This Track</h2>
+<p>Every guide in <code>deep_learning/</code>. Start with the overview above, then work through these.</p>
+<ul>
+<li><a href="intro_applied_deep_learning.html">Applied Deep Learning Roadmap</a></li>
+<li><a href="intro_computer_vision.html">Computer Vision for ML Interviews</a></li>
+<li><a href="intro_distributed_training.html">Distributed Training: Data, Tensor, and Pipeline Parallelism</a></li>
+<li><a href="intro_fine_tuning.html">Fine-Tuning Large Language Models: LoRA, QLoRA &amp; PEFT</a></li>
+<li><a href="intro_generative_models.html">Generative Models: VAEs, GANs, and Diffusion</a></li>
+<li><a href="intro_graph_neural_networks.html">Graph Neural Networks</a></li>
+<li><a href="intro_model_compression.html">Model Compression: Distillation, Pruning, and Quantization</a></li>
+<li><a href="intro_neural_network_training.html">Neural Network Training: Optimization and Regularization</a></li>
+<li><a href="intro_reinforcement_learning.html">Reinforcement Learning: MDPs, Q-Learning, Bandits, PPO, and RLHF</a></li>
+<li><a href="intro_sequence_models.html">Sequence Models: RNNs, LSTMs, GRUs, and Seq2Seq</a></li>
+<li><a href="intro_speech_audio.html">Speech and Audio: ASR, TTS, Speaker Models, and Voice Agents</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.deeplearningbook.org/">Deep Learning: Ian Goodfellow, Yoshua Bengio, Aaron Courville (free online)</a></li>
+<li><a href="https://d2l.ai/">Dive into Deep Learning: d2l.ai</a></li>
+<li><a href="https://pytorch.org/docs/">PyTorch Documentation</a></li>
+<li><a href="http://cs231n.stanford.edu/">CS231n: Convolutional Neural Networks for Visual Recognition</a></li>
+<li><a href="http://web.stanford.edu/class/cs224n/">CS224n: Natural Language Processing with Deep Learning</a></li>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need: Vaswani et al. (2017)</a></li>
+<li><a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition: He et al. (2015)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_applied_deep_learning.html"><small>Next</small>Applied Deep Learning</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LangChain &amp; LangGraph Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="LangChain is the most widely used framework for building LLM-powered applications. LangGraph is its stateful, graph-based extension for building complex…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langchain.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LangChain &amp; LangGraph Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="LangChain is the most widely used framework for building LLM-powered applications. LangGraph is its stateful, graph-based extension for building complex…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langchain.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LangChain &amp; LangGraph Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="LangChain is the most widely used framework for building LLM-powered applications. LangGraph is its stateful, graph-based extension for building complex…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LangChain & LangGraph",
+   "description": "LangChain is the most widely used framework for building LLM-powered applications. LangGraph is its stateful, graph-based extension for building complex…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langchain.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LangChain",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_langchain.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LangChain</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_langchain.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="langchain--langgraph">LangChain &amp; LangGraph</h1>
+<p><strong>LangChain</strong> is the most widely used framework for building LLM-powered applications. <strong>LangGraph</strong> is its stateful, graph-based extension for building complex agents and multi-agent workflows.</p>
+<hr />
+<h2 id="langchain-overview">LangChain Overview</h2>
+<p>LangChain provides:</p>
+<ul>
+<li><strong>Integrations</strong>: 200+ LLM providers, vector DBs, document loaders, tools</li>
+<li><strong>LCEL</strong> (LangChain Expression Language): compose chains declaratively</li>
+<li><strong>Agents</strong>: ReAct, tool-calling, and custom agent loops</li>
+<li><strong>Memory</strong>: conversation history management</li>
+<li><strong>LangSmith</strong>: observability and evaluation platform</li>
+</ul>
+<pre><code class="language-bash">pip install langchain langchain-anthropic langchain-community langchain-text-splitters
+</code></pre>
+<blockquote>
+<p><strong>Version note:</strong> LangChain 1.0 (late 2025) slimmed the <code>langchain</code> package down to the core building blocks and the new <code>create_agent</code> API. Legacy pieces such as <code>LLMChain</code>, <code>ConversationChain</code>, <code>AgentExecutor</code>, and the <code>langchain.memory</code> classes moved to the separate <code>langchain-classic</code> package. New code should use LCEL, <code>create_agent</code>, and LangGraph.</p>
+</blockquote>
+<hr />
+<h2 id="lcel-langchain-expression-language">LCEL: LangChain Expression Language</h2>
+<p>LCEL uses the <code>|</code> pipe operator to compose chains:</p>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+# Simple chain: prompt → LLM → parse
+chain = (
+    ChatPromptTemplate.from_template(&quot;Explain {topic} in simple terms.&quot;)
+    | llm
+    | StrOutputParser()
+)
+
+result = chain.invoke({&quot;topic&quot;: &quot;vector databases&quot;})
+print(result)
+
+# Streaming
+for chunk in chain.stream({&quot;topic&quot;: &quot;Kubernetes&quot;}):
+    print(chunk, end=&quot;&quot;, flush=True)
+
+# Batch
+results = chain.batch([
+    {&quot;topic&quot;: &quot;Docker&quot;},
+    {&quot;topic&quot;: &quot;Terraform&quot;},
+    {&quot;topic&quot;: &quot;dbt&quot;},
+])
+</code></pre>
+<hr />
+<h2 id="rag-chain">RAG Chain</h2>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain_chroma import Chroma                    # pip install langchain-chroma
+from langchain_huggingface import HuggingFaceEmbeddings  # pip install langchain-huggingface
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
+
+# Setup
+embeddings = HuggingFaceEmbeddings(model_name=&quot;all-MiniLM-L6-v2&quot;)
+vectorstore = Chroma(persist_directory=&quot;./db&quot;, embedding_function=embeddings)
+retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;: 5})
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+prompt = ChatPromptTemplate.from_template(&quot;&quot;&quot;
+Answer the question based on the context below.
+
+Context:
+{context}
+
+Question: {question}
+&quot;&quot;&quot;)
+
+def format_docs(docs):
+    return &quot;\n\n&quot;.join(doc.page_content for doc in docs)
+
+# RAG chain
+rag_chain = (
+    {&quot;context&quot;: retriever | format_docs, &quot;question&quot;: RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+answer = rag_chain.invoke(&quot;What is dbt used for?&quot;)
+print(answer)
+</code></pre>
+<hr />
+<h2 id="document-loaders--text-splitters">Document Loaders &amp; Text Splitters</h2>
+<pre><code class="language-python">from langchain_community.document_loaders import (
+    PyPDFLoader, WebBaseLoader, DirectoryLoader,
+    GitLoader, NotionDirectoryLoader
+)
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Load PDF
+loader = PyPDFLoader(&quot;report.pdf&quot;)
+docs = loader.load()
+
+# Load all .md files in a directory
+loader = DirectoryLoader(&quot;./docs&quot;, glob=&quot;**/*.md&quot;)
+docs = loader.load()
+
+# Load webpage
+loader = WebBaseLoader(&quot;https://docs.dbt.dev/docs/introduction&quot;)
+docs = loader.load()
+
+# Split
+splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+chunks = splitter.split_documents(docs)
+
+# Add to vector store
+vectorstore = Chroma.from_documents(chunks, embeddings, persist_directory=&quot;./db&quot;)
+</code></pre>
+<hr />
+<h2 id="agents-in-langchain">Agents in LangChain</h2>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain_core.tools import tool
+from langchain.agents import create_agent  # LangChain 1.0+
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+# Define tools with @tool decorator
+@tool
+def get_weather(location: str) -&gt; str:
+    &quot;&quot;&quot;Get current weather for a location.&quot;&quot;&quot;
+    return f&quot;The weather in {location} is 22°C and sunny.&quot;
+
+@tool
+def run_sql(query: str) -&gt; str:
+    &quot;&quot;&quot;Execute a SQL query and return results.&quot;&quot;&quot;
+    # Real implementation would query your DB
+    return '[{&quot;user_count&quot;: 1234}]'
+
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;Search the web for current information.&quot;&quot;&quot;
+    return f&quot;Search results for: {query}&quot;
+
+tools = [get_weather, run_sql, search_web]
+
+# Create agent (runs the tool-calling loop on LangGraph under the hood)
+agent = create_agent(
+    model=llm,
+    tools=tools,
+    system_prompt=&quot;You are a helpful data analyst assistant.&quot;,
+)
+
+result = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;How many users do we have and what's the weather in NYC?&quot;}]}
+)
+# Claude Sonnet 5 thinks by default, so .content can be a list of blocks
+# (thinking + text). .text joins just the text blocks.
+print(result[&quot;messages&quot;][-1].text)
+
+# Pre-1.0 code used create_tool_calling_agent + AgentExecutor; those now live in langchain-classic.
+</code></pre>
+<hr />
+<h2 id="langgraph-stateful-agent-graphs">LangGraph: Stateful Agent Graphs</h2>
+<p>LangGraph is the evolution beyond simple chains. It models workflows as <strong>graphs</strong> with nodes (LLM calls, tools) and edges (conditional routing, loops).</p>
+<pre><code class="language-bash">pip install langgraph
+</code></pre>
+<h3 id="basic-graph">Basic Graph</h3>
+<pre><code class="language-python">from typing import TypedDict, Annotated
+from langgraph.graph import StateGraph, END
+from langgraph.graph.message import add_messages
+from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import BaseMessage, ToolMessage
+import json
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+# State schema
+class AgentState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+
+# Bind tools to LLM
+llm_with_tools = llm.bind_tools([get_weather, run_sql])
+
+# Node: call the LLM
+def call_llm(state: AgentState) -&gt; AgentState:
+    response = llm_with_tools.invoke(state[&quot;messages&quot;])
+    return {&quot;messages&quot;: [response]}
+
+# Node: execute tool calls
+def execute_tools(state: AgentState) -&gt; AgentState:
+    last_message = state[&quot;messages&quot;][-1]
+    tool_results = []
+
+    for tool_call in last_message.tool_calls:
+        # Find and execute the tool
+        tool_map = {&quot;get_weather&quot;: get_weather, &quot;run_sql&quot;: run_sql}
+        result = tool_map[tool_call[&quot;name&quot;]].invoke(tool_call[&quot;args&quot;])
+
+        tool_results.append(ToolMessage(
+            content=str(result),
+            tool_call_id=tool_call[&quot;id&quot;]
+        ))
+
+    return {&quot;messages&quot;: tool_results}
+
+# Routing: should we call tools or end?
+def should_continue(state: AgentState) -&gt; str:
+    last_message = state[&quot;messages&quot;][-1]
+    if last_message.tool_calls:
+        return &quot;tools&quot;   # must match the node name registered below
+    return END
+
+# Build the graph
+graph = StateGraph(AgentState)
+graph.add_node(&quot;agent&quot;, call_llm)
+graph.add_node(&quot;tools&quot;, execute_tools)
+
+graph.set_entry_point(&quot;agent&quot;)
+graph.add_conditional_edges(&quot;agent&quot;, should_continue)
+graph.add_edge(&quot;tools&quot;, &quot;agent&quot;)   # loop back after tool execution
+
+app = graph.compile()
+
+# Run
+result = app.invoke({&quot;messages&quot;: [(&quot;user&quot;, &quot;What's our user count and NYC weather?&quot;)]})
+print(result[&quot;messages&quot;][-1].text)
+</code></pre>
+<hr />
+<h3 id="multi-agent-graph">Multi-Agent Graph</h3>
+<pre><code class="language-python">from langgraph.graph import StateGraph, END
+from typing import TypedDict, List
+
+class ResearchState(TypedDict):
+    task: str
+    research: str
+    draft: str
+    review: str
+    final: str
+
+# Specialized agents
+def researcher(state: ResearchState) -&gt; ResearchState:
+    &quot;&quot;&quot;Searches and collects information.&quot;&quot;&quot;
+    response = llm.invoke(f&quot;Research: {state['task']}&quot;)
+    return {&quot;research&quot;: response.text}
+
+def writer(state: ResearchState) -&gt; ResearchState:
+    &quot;&quot;&quot;Writes a draft based on research.&quot;&quot;&quot;
+    response = llm.invoke(f&quot;Write a report based on:\n{state['research']}&quot;)
+    return {&quot;draft&quot;: response.text}
+
+def reviewer(state: ResearchState) -&gt; ResearchState:
+    &quot;&quot;&quot;Reviews and improves the draft.&quot;&quot;&quot;
+    response = llm.invoke(f&quot;Review and improve:\n{state['draft']}&quot;)
+    return {&quot;review&quot;: response.text, &quot;final&quot;: response.text}
+
+# Linear pipeline
+workflow = StateGraph(ResearchState)
+workflow.add_node(&quot;researcher&quot;, researcher)
+workflow.add_node(&quot;writer&quot;, writer)
+workflow.add_node(&quot;reviewer&quot;, reviewer)
+
+workflow.set_entry_point(&quot;researcher&quot;)
+workflow.add_edge(&quot;researcher&quot;, &quot;writer&quot;)
+workflow.add_edge(&quot;writer&quot;, &quot;reviewer&quot;)
+workflow.add_edge(&quot;reviewer&quot;, END)
+
+pipeline = workflow.compile()
+result = pipeline.invoke({&quot;task&quot;: &quot;Current state of vector databases&quot;})
+print(result[&quot;final&quot;])
+</code></pre>
+<hr />
+<h2 id="langsmith-observability">LangSmith (Observability)</h2>
+<pre><code class="language-python">import os
+os.environ[&quot;LANGSMITH_TRACING&quot;] = &quot;true&quot;
+os.environ[&quot;LANGSMITH_API_KEY&quot;] = &quot;lsv2_...&quot;
+os.environ[&quot;LANGSMITH_PROJECT&quot;] = &quot;my-rag-app&quot;
+# Older LANGCHAIN_TRACING_V2 / LANGCHAIN_API_KEY / LANGCHAIN_PROJECT names are still read for backward compatibility
+
+# All LangChain calls are now traced automatically in LangSmith
+# → View traces, latency, token usage, errors at smith.langchain.com
+</code></pre>
+<hr />
+<h2 id="memory-management">Memory Management</h2>
+<p>The classic memory classes below are <strong>legacy</strong>: in LangChain 1.0 they live in <code>langchain-classic</code> (<code>pip install langchain-classic</code>, import from <code>langchain_classic</code>). You will still see them in older codebases and interviews, but new code should keep history in LangGraph state with a checkpointer (next section).</p>
+<pre><code class="language-python"># Legacy API (pre-1.0 imports were langchain.memory / langchain.chains)
+from langchain_classic.memory import ConversationBufferMemory, ConversationSummaryMemory
+from langchain_anthropic import ChatAnthropic
+from langchain_classic.chains import ConversationChain
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+# Buffer memory: keeps all messages (good for short conversations)
+memory = ConversationBufferMemory()
+
+# Summary memory: summarizes older history (good for long conversations)
+memory_summary = ConversationSummaryMemory(llm=llm)
+
+chain = ConversationChain(llm=llm, memory=memory)
+response1 = chain.invoke({&quot;input&quot;: &quot;My name is Alex.&quot;})
+response2 = chain.invoke({&quot;input&quot;: &quot;What's my name?&quot;})   # Correctly recalls &quot;Alex&quot;
+print(response2[&quot;response&quot;])
+</code></pre>
+<h3 id="langgraph-persistence-production-memory">LangGraph Persistence (Production Memory)</h3>
+<pre><code class="language-python"># pip install langgraph-checkpoint-sqlite
+from langgraph.checkpoint.sqlite import SqliteSaver
+
+# Persist state between runs with a checkpointer
+# (from_conn_string is a context manager in current releases)
+with SqliteSaver.from_conn_string(&quot;./memory.db&quot;) as memory_saver:
+    app = graph.compile(checkpointer=memory_saver)
+
+    # Thread-based sessions (each thread_id = one conversation)
+    config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;user-123&quot;}}
+    result = app.invoke({&quot;messages&quot;: [(&quot;user&quot;, &quot;Hello!&quot;)]}, config=config)
+</code></pre>
+<hr />
+<h2 id="output-parsers--structured-output">Output Parsers &amp; Structured Output</h2>
+<pre><code class="language-python">from langchain_core.output_parsers import JsonOutputParser
+from pydantic import BaseModel, Field  # langchain_core.pydantic_v1 is deprecated; use Pydantic v2 directly
+from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+
+# Define your schema
+class ProductReview(BaseModel):
+    sentiment: str = Field(description=&quot;positive, negative, or neutral&quot;)
+    score: int = Field(description=&quot;Score from 1-10&quot;)
+    summary: str = Field(description=&quot;One-sentence summary&quot;)
+    key_points: list[str] = Field(description=&quot;List of key points&quot;)
+
+llm = ChatAnthropic(model=&quot;claude-sonnet-5&quot;)
+
+# Structured output via Pydantic
+structured_llm = llm.with_structured_output(ProductReview)
+
+prompt = ChatPromptTemplate.from_template(&quot;Analyze this review: {review}&quot;)
+chain = prompt | structured_llm
+
+result = chain.invoke({&quot;review&quot;: &quot;Great product but shipping was slow.&quot;})
+print(result.sentiment)   # &quot;positive&quot;
+print(result.score)       # e.g. 7
+</code></pre>
+<hr />
+<h2 id="few-shot-prompting">Few-Shot Prompting</h2>
+<pre><code class="language-python">from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
+
+examples = [
+    {&quot;input&quot;: &quot;What is 2+2?&quot;, &quot;output&quot;: &quot;4&quot;},
+    {&quot;input&quot;: &quot;What is 3*5?&quot;, &quot;output&quot;: &quot;15&quot;},
+]
+
+example_prompt = ChatPromptTemplate.from_messages([
+    (&quot;human&quot;, &quot;{input}&quot;),
+    (&quot;ai&quot;, &quot;{output}&quot;),
+])
+
+few_shot_prompt = FewShotChatMessagePromptTemplate(
+    examples=examples,
+    example_prompt=example_prompt,
+)
+
+final_prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;You are a math assistant.&quot;),
+    few_shot_prompt,
+    (&quot;human&quot;, &quot;{input}&quot;),
+])
+
+chain = final_prompt | llm
+result = chain.invoke({&quot;input&quot;: &quot;What is 7+8?&quot;})
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is LCEL and why was it introduced?</strong>
+LCEL (LangChain Expression Language) is a declarative way to compose chains using the <code>|</code> pipe operator. It was introduced to replace the older <code>LLMChain</code>/<code>SequentialChain</code> classes. Benefits: built-in streaming, async support, batch processing, and easier observability via LangSmith.</p>
+<p><strong>Q2: What is the difference between LangChain and LangGraph?</strong>
+LangChain provides components and LCEL for building linear chains (prompt → LLM → parser). LangGraph is built on top of LangChain to support <strong>stateful, cyclic workflows</strong> (agents with loops, conditional branching, multi-agent coordination). Use LangChain for simple RAG pipelines; use LangGraph for agents that need to loop, branch, or maintain complex state.</p>
+<p><strong>Q3: How does LangGraph handle state persistence across sessions?</strong>
+LangGraph uses <strong>checkpointers</strong> (e.g., <code>SqliteSaver</code>, <code>PostgresSaver</code>, <code>RedisSaver</code>) to persist graph state between invocations. Each conversation is identified by a <code>thread_id</code> in the config. This enables resuming interrupted workflows and multi-turn conversations without loading full history each time.</p>
+<p><strong>Q4: How would you implement a ReAct agent in LangChain?</strong>
+In LangChain 1.0+, use <code>create_agent(model, tools, system_prompt=...)</code> with a model that supports tool calling (Claude, GPT, Gemini, etc.); it runs the ReAct loop on LangGraph. Older code used <code>create_tool_calling_agent</code> + <code>AgentExecutor</code>, now in <code>langchain-classic</code>. For more control, use LangGraph to manually implement the ReAct loop: call LLM → check for tool calls → execute tools → feed results back → repeat until no more tool calls.</p>
+<p><strong>Q5: What are the main memory types in LangChain and when would you use each?</strong>
+The first three are the classic memory classes (legacy since LangChain 1.0, now in <code>langchain-classic</code>); they still come up in interviews.</p>
+<ul>
+<li><code>ConversationBufferMemory</code>: stores all messages verbatim. Use for short conversations.</li>
+<li><code>ConversationSummaryMemory</code>: summarizes older turns using an LLM. Use for long sessions where context window is a concern.</li>
+<li><code>ConversationBufferWindowMemory</code>: keeps the last N messages. Simple and predictable.</li>
+<li><strong>LangGraph checkpointing</strong>: best for production: persists full graph state (not just messages) to a database, enabling true session continuity.</li>
+</ul>
+<p><strong>Q6: What is LangSmith and how do you use it?</strong>
+LangSmith is LangChain's observability platform. You enable it by setting <code>LANGSMITH_TRACING=true</code> and <code>LANGSMITH_API_KEY</code> (the older <code>LANGCHAIN_TRACING_V2</code> / <code>LANGCHAIN_API_KEY</code> names still work). It automatically captures every LangChain call (LLM inputs/outputs, tool calls, chain steps, latency, token usage). It also provides an evaluation framework to run evals on datasets and compare prompt/model versions.</p>
+<p><strong>Q7: When would you choose LangChain over calling the Anthropic API directly?</strong>
+Use LangChain when: you need many integrations quickly (vector DBs, document loaders), want LCEL's streaming/batch/async built-in, need agent orchestration (LangGraph), or want LangSmith tracing. Use the raw API when: you need maximum control, minimum dependencies, or you're building a production system where simplicity is more important than framework features.</p>
+<p><strong>Q8: How does LangChain's <code>RunnablePassthrough</code> work?</strong>
+<code>RunnablePassthrough</code> passes input through unchanged. It's useful in parallel chains where you need to pass the original query alongside retrieved context:</p>
+<pre><code class="language-python">chain = (
+    {&quot;context&quot;: retriever | format_docs, &quot;question&quot;: RunnablePassthrough()}
+    | prompt | llm | StrOutputParser()
+)
+</code></pre>
+<p>Here the <code>question</code> key gets the raw user input while <code>context</code> gets the retrieved documents.</p>
+<p><strong>Q9: How would you handle errors and retries in LangChain?</strong>
+Use <code>.with_retry()</code> on any runnable:</p>
+<pre><code class="language-python">llm_with_retry = llm.with_retry(stop_after_attempt=3, wait_exponential_jitter=True)
+</code></pre>
+<p>For structured handling use <code>.with_fallbacks()</code> to specify backup models/chains when the primary fails.</p>
+<p><strong>Q10: What are the main challenges with LangChain in production?</strong></p>
+<ol>
+<li><strong>Version instability</strong>: the library moves fast; pin versions carefully</li>
+<li><strong>Debugging complexity</strong>: deep chains can be hard to trace without LangSmith</li>
+<li><strong>Over-abstraction</strong>: sometimes easier to call APIs directly for simple use cases</li>
+<li><strong>Memory management</strong>: default in-memory state is not suitable for multi-user production; need external checkpointing</li>
+</ol>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not pinning versions</td>
+<td>LangChain changes APIs frequently</td>
+<td>Pin <code>langchain==x.y.z</code> in requirements</td>
+</tr>
+<tr>
+<td>Using <code>LLMChain</code> (deprecated)</td>
+<td>Old API, less features</td>
+<td>Use LCEL: <code>prompt | llm | parser</code></td>
+</tr>
+<tr>
+<td>Buffer memory in production</td>
+<td>State lost on restart; not scalable</td>
+<td>Use LangGraph + checkpointer (SQLite/Postgres)</td>
+</tr>
+<tr>
+<td>Ignoring streaming</td>
+<td>Users see long waits</td>
+<td>Use <code>.stream()</code> for real-time responses</td>
+</tr>
+<tr>
+<td>No observability</td>
+<td>Hard to debug issues</td>
+<td>Enable LangSmith from day one</td>
+</tr>
+<tr>
+<td>Sync in async apps</td>
+<td>Blocks event loop</td>
+<td>Use <code>.ainvoke()</code>, <code>.astream()</code> for async</td>
+</tr>
+<tr>
+<td>Over-engineering simple tasks</td>
+<td>Adding LangChain for a single LLM call</td>
+<td>Use raw API for simple use cases</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="langchain-vs-llamaindex-vs-raw-api">LangChain vs LlamaIndex vs Raw API</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>LangChain</th>
+<th>LlamaIndex</th>
+<th>Raw Anthropic API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAG pipelines</td>
+<td>✓</td>
+<td>✓ (more specialized)</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Agent loops</td>
+<td>✓ (LangGraph)</td>
+<td>✓</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Integrations</td>
+<td>200+</td>
+<td>100+</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Learning curve</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Flexibility</td>
+<td>High</td>
+<td>Medium</td>
+<td>Highest</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>LangSmith</td>
+<td>LlamaTrace</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Full-stack LLM apps</td>
+<td>RAG/knowledge apps</td>
+<td>Simple, custom apps</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_rag.html">RAG</a></td>
+<td>LangChain is the most common framework for building RAG pipelines</td>
+</tr>
+<tr>
+<td><a href="intro_vector_databases.html">Vector Databases</a></td>
+<td>LangChain integrates with Pinecone, Chroma, Weaviate, etc.</td>
+</tr>
+<tr>
+<td><a href="intro_agentic_ai.html">Agentic AI</a></td>
+<td>LangGraph is LangChain's agent orchestration layer</td>
+</tr>
+<tr>
+<td><a href="intro_llmops.html">LLMOps</a></td>
+<td>LangSmith provides tracing and evaluation for LangChain apps</td>
+</tr>
+<tr>
+<td><a href="intro_anthropic.html">Anthropic Overview</a></td>
+<td><code>langchain-anthropic</code> is the first-class Claude integration</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_mcp.html"><small>Previous</small>MCP Protocol</a><a rel="next" class="next" href="intro_langgraph.html"><small>Next</small>LangGraph</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_langchain.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

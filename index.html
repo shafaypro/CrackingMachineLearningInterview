@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Cracking ML Interviews: 2026 Study Hub</title>
   <meta name="description" content="A hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps and DevOps interview preparation, from fundamentals to production systems." />
+  <link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Cracking ML Interviews" />
+  <meta property="og:title" content="Cracking ML Interviews: 2026 Study Hub" />
+  <meta property="og:description" content="A hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps and DevOps interview preparation, from fundamentals to production systems." />
+  <meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Cracking ML Interviews: 2026 Study Hub" />
+  <meta name="twitter:description" content="A hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps and DevOps interview preparation, from fundamentals to production systems." />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "WebSite", "name": "Cracking ML Interviews",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/", "description": "A hands-on study hub for Machine Learning, AI, GenAI, Data Engineering, MLOps and DevOps interview preparation, from fundamentals to production systems.",
+   "sameAs": ["https://github.com/shafaypro/CrackingMachineLearningInterview"]}
+  </script>
   <meta name="theme-color" content="#07080f" id="meta-theme-color" />
   <meta name="color-scheme" content="dark light" />
 
@@ -272,6 +286,7 @@
       border: 1px solid var(--border); padding: 8px 10px; gap: 7px;
     }
     .nav-quick a span[aria-hidden] { font-size: .95rem; }
+    .nav-quick a.wide { grid-column: 1 / -1; }
 
     .phase-label {
       font-size: .68rem; font-weight: 700; letter-spacing: .12em;
@@ -875,6 +890,7 @@
       <div class="nav-quick">
         <a href="flashcards.html"><span aria-hidden="true">🃏</span> Flashcards</a>
         <a href="practice.html"><span aria-hidden="true">🎯</span> Practice drills</a>
+        <a class="wide" href="guides/"><span aria-hidden="true">📚</span> All guides as pages</a>
       </div>
       <div id="nav-tree"></div>
     </nav>
@@ -1236,13 +1252,17 @@ const TRACKS = [
   {
     id: 'cloud_ml', phase: 'production', icon: '☁️', color: '#facc15',
     title: 'Cloud ML Platforms',
-    desc: 'AWS SageMaker, GCP Vertex AI, and Azure ML: comparison and interview prep.',
+    desc: 'AWS, GCP and Azure for ML engineers: SageMaker, Vertex AI, Azure ML, core cloud services and a cross-cloud service map.',
     files: [
       { label: 'Overview', path: 'cloud_ml/README.md' },
       { label: 'Cloud ML Platforms', path: 'cloud_ml/intro_cloud_ml_platforms.md' },
       { label: 'AWS SageMaker', path: 'cloud_ml/intro_sagemaker.md' },
       { label: 'Google Vertex AI', path: 'cloud_ml/intro_vertex_ai.md' },
       { label: 'Azure Machine Learning', path: 'cloud_ml/intro_azure_ml.md' },
+      { label: 'AWS for ML Engineers', path: 'cloud_ml/aws_for_ml_engineers.md' },
+      { label: 'GCP for ML Engineers', path: 'cloud_ml/gcp_for_ml_engineers.md' },
+      { label: 'Azure for ML Engineers', path: 'cloud_ml/azure_for_ml_engineers.md' },
+      { label: 'AWS vs GCP vs Azure Mapping', path: 'cloud_ml/cloud_service_mapping.md' },
     ]
   },
   {

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD for Machine Learning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Shipping a model is not shipping code. A traditional pipeline validates one artifact (the binary) against tests that are deterministic and fast. An ML…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_cicd_for_ml.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="CI/CD for Machine Learning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Shipping a model is not shipping code. A traditional pipeline validates one artifact (the binary) against tests that are deterministic and fast. An ML…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_cicd_for_ml.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CI/CD for Machine Learning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Shipping a model is not shipping code. A traditional pipeline validates one artifact (the binary) against tests that are deterministic and fast. An ML…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "CI/CD for Machine Learning",
+   "description": "Shipping a model is not shipping code. A traditional pipeline validates one artifact (the binary) against tests that are deterministic and fast. An ML…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_cicd_for_ml.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "CI/CD for ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_cicd_for_ml.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">CI/CD for ML</span></nav>
+<p class="meta"><a href="../../#mlops/intro_cicd_for_ml.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 5 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="cicd-for-machine-learning">CI/CD for Machine Learning</h1>
+<p>Shipping a model is not shipping code. A traditional pipeline validates one artifact (the binary) against tests that are deterministic and fast. An ML pipeline has three coupled artifacts (code, data, model), tests that are statistical rather than binary, and a deploy whose correctness cannot be fully established before real traffic touches it. This guide covers the pipeline, the testing pyramid, the model registry and promotion gates, deployment strategies, and rollback.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-ml-cicd-is-different">Why ML CI/CD Is Different</a></li>
+<li><a href="#the-pipeline-end-to-end">The Pipeline End to End</a></li>
+<li><a href="#the-ml-testing-pyramid">The ML Testing Pyramid</a></li>
+<li><a href="#model-registry-and-promotion-gates">Model Registry and Promotion Gates</a></li>
+<li><a href="#deployment-strategies">Deployment Strategies</a></li>
+<li><a href="#rollback">Rollback</a></li>
+<li><a href="#continuous-training">Continuous Training</a></li>
+<li><a href="#reproducibility-requirements">Reproducibility Requirements</a></li>
+<li><a href="#a-worked-github-actions-pipeline">A Worked GitHub Actions Pipeline</a></li>
+<li><a href="#maturity-levels">Maturity Levels</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-ml-cicd-is-different">Why ML CI/CD Is Different</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Traditional software</th>
+<th>Machine learning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Versioned artifacts</td>
+<td>Code</td>
+<td>Code <strong>+ data + model + features</strong></td>
+</tr>
+<tr>
+<td>Test outcome</td>
+<td>Pass / fail, deterministic</td>
+<td>Statistical: &quot;AUC ≥ 0.82&quot;, threshold-dependent</td>
+</tr>
+<tr>
+<td>CI duration</td>
+<td>Seconds to minutes</td>
+<td>Minutes to hours (training)</td>
+</tr>
+<tr>
+<td>Correct at deploy time?</td>
+<td>Provable by tests</td>
+<td>Only observable under real traffic</td>
+</tr>
+<tr>
+<td>Degrades while idle?</td>
+<td>No</td>
+<td><strong>Yes</strong>: data drift moves the world under a static model</td>
+</tr>
+<tr>
+<td>Rollback unit</td>
+<td>Previous binary</td>
+<td>Previous model <strong>and</strong> its feature pipeline</td>
+</tr>
+<tr>
+<td>Triggers</td>
+<td>Code commit</td>
+<td>Code commit, <strong>new data</strong>, drift alert, schedule</td>
+</tr>
+</tbody>
+</table></div>
+<p>The two rows that generate most interview follow-ups: models degrade without anyone touching them, so the pipeline needs triggers other than commits; and a rollback must revert the model <em>together with</em> the feature transformations it expects, or you get a fresh skew bug on top of the original problem.</p>
+<hr />
+<h2 id="the-pipeline-end-to-end">The Pipeline End to End</h2>
+<pre><code>   commit / new data / drift alert / schedule
+              │
+              ▼
+   ┌──────────────────────┐
+   │ CI: code + data      │  lint, unit tests, schema + distribution checks
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Train                │  pinned data version, seeded, tracked
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Evaluate             │  holdout + slices + baseline comparison
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Register (staging)   │  model + metrics + lineage + signature
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Gates                │  quality, fairness, latency, size, skew check
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Deploy: shadow →     │  progressive exposure with automated rollback
+   │ canary → full        │
+   └──────────┬───────────┘
+              ▼
+   ┌──────────────────────┐
+   │ Monitor              │  performance, drift, latency → feeds triggers
+   └──────────────────────┘
+</code></pre>
+<p>The loop closing back on triggers is the part that distinguishes an ML pipeline from a code pipeline. Monitoring is not a dashboard at the end; it is an input to the next run.</p>
+<hr />
+<h2 id="the-ml-testing-pyramid">The ML Testing Pyramid</h2>
+<p>Fast and cheap at the bottom, slow and expensive at the top. Run the bottom on every commit.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tests</th>
+<th>Runtime</th>
+<th>Runs on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code</strong></td>
+<td>Unit tests on transforms, feature functions, serving handlers</td>
+<td>Seconds</td>
+<td>Every commit</td>
+</tr>
+<tr>
+<td><strong>Data</strong></td>
+<td>Schema, nullability, ranges, cardinality, volume, freshness, distribution vs baseline</td>
+<td>Seconds-minutes</td>
+<td>Every commit + every pipeline run</td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td>Trains without error, beats a baseline, meets thresholds overall <strong>and per slice</strong>, behavioral tests</td>
+<td>Minutes-hours</td>
+<td>Every model change</td>
+</tr>
+<tr>
+<td><strong>Integration</strong></td>
+<td>Feature pipeline → model → API contract; train/serve parity</td>
+<td>Minutes</td>
+<td>Pre-deploy</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>Smoke test, latency under load, shadow comparison</td>
+<td>Minutes</td>
+<td>Every deploy</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="data-tests">Data tests</h3>
+<pre><code class="language-python">import pandas as pd
+
+def validate_training_data(df: pd.DataFrame, baseline_stats: dict) -&gt; list[str]:
+    &quot;&quot;&quot;Return a list of failures. Empty list means the data is safe to train on.&quot;&quot;&quot;
+    failures = []
+
+    expected = {&quot;user_id&quot;: &quot;int64&quot;, &quot;amount&quot;: &quot;float64&quot;, &quot;category&quot;: &quot;object&quot;}
+    for col, dtype in expected.items():
+        if col not in df.columns:
+            failures.append(f&quot;missing column: {col}&quot;)
+        elif str(df[col].dtype) != dtype:
+            failures.append(f&quot;{col}: expected {dtype}, got {df[col].dtype}&quot;)
+
+    if len(df) &lt; baseline_stats[&quot;min_rows&quot;]:
+        failures.append(f&quot;row count {len(df)} below floor {baseline_stats['min_rows']}&quot;)
+
+    for col, max_null in baseline_stats[&quot;max_null_rate&quot;].items():
+        rate = df[col].isna().mean()
+        if rate &gt; max_null:
+            failures.append(f&quot;{col}: null rate {rate:.3f} exceeds {max_null}&quot;)
+
+    # Distribution shift on numeric features: catches semantic changes that pass schema checks
+    for col, ref in baseline_stats[&quot;psi_reference&quot;].items():
+        psi = population_stability_index(df[col], ref)
+        if psi &gt; 0.25:
+            failures.append(f&quot;{col}: PSI {psi:.3f} indicates significant shift&quot;)
+
+    return failures
+</code></pre>
+<p>A partial load is the sneakiest failure here: the schema is valid, every value is plausible, and only the row count reveals that half the data is missing. Compare volume against the same weekday historically, not a fixed constant, or seasonality generates constant false alarms.</p>
+<h3 id="model-tests-beyond-an-aggregate-metric">Model tests beyond an aggregate metric</h3>
+<p>An aggregate threshold hides the failure that matters. Three additions:</p>
+<pre><code class="language-python">def evaluate_model(model, X_test, y_test, slices, baseline_metrics, thresholds):
+    results = {&quot;overall&quot;: roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])}
+
+    # 1. Per-slice metrics: an overall gain can mask a large regression on a segment
+    for name, mask in slices.items():
+        if mask.sum() &gt;= 100:                       # ignore slices too small to be meaningful
+            results[name] = roc_auc_score(y_test[mask], model.predict_proba(X_test[mask])[:, 1])
+
+    # 2. Never ship a regression against what is already in production
+    regressions = [k for k, v in results.items()
+                   if k in baseline_metrics and v &lt; baseline_metrics[k] - thresholds[&quot;tolerance&quot;]]
+
+    # 3. Behavioral tests: invariances and directional expectations, not just accuracy
+    behavioral = run_behavioral_tests(model)        # e.g. raising income must not raise default risk
+    return results, regressions, behavioral
+</code></pre>
+<p><strong>Behavioral tests</strong> are the ML analogue of unit tests: assert an invariance (prediction unchanged when an irrelevant field changes), a directional expectation (raising a known-protective feature moves the score the right way), or a minimum-functionality case (an obvious fraud pattern is caught). They catch classes of bug that any aggregate metric passes straight over.</p>
+<hr />
+<h2 id="model-registry-and-promotion-gates">Model Registry and Promotion Gates</h2>
+<p>The registry is the system of record: a versioned model binary plus everything needed to trust, reproduce, and roll it back.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stored with every version</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model artifact + framework version</td>
+<td>Reproduce the runtime</td>
+</tr>
+<tr>
+<td>Training data version / snapshot ID</td>
+<td>Reproduce the inputs</td>
+</tr>
+<tr>
+<td>Code commit SHA</td>
+<td>Reproduce the logic</td>
+</tr>
+<tr>
+<td>Hyperparameters + random seeds</td>
+<td>Reproduce the run</td>
+</tr>
+<tr>
+<td>Evaluation metrics, overall and per slice</td>
+<td>Compare against candidates and production</td>
+</tr>
+<tr>
+<td>Input/output signature and schema</td>
+<td>Validate at serving; detect contract breaks</td>
+</tr>
+<tr>
+<td>Feature pipeline version</td>
+<td><strong>Roll back together with the model</strong></td>
+</tr>
+<tr>
+<td>Alias (e.g. <code>challenger</code> / <code>champion</code>) or status tag</td>
+<td>Drive promotion</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import mlflow
+
+with mlflow.start_run() as run:
+    mlflow.log_params({&quot;max_depth&quot;: 6, &quot;learning_rate&quot;: 0.05, &quot;seed&quot;: 42})
+    mlflow.log_metrics({&quot;auc&quot;: auc, &quot;pr_auc&quot;: pr_auc, **slice_metrics})
+    mlflow.log_dict({&quot;data_version&quot;: data_version, &quot;feature_pipeline&quot;: fp_version}, &quot;lineage.json&quot;)
+    model_info = mlflow.sklearn.log_model(
+        model, name=&quot;model&quot;, signature=signature, registered_model_name=&quot;churn&quot;
+    )
+
+client = mlflow.MlflowClient()
+if passes_all_gates(metrics, baseline):
+    # Aliases replace the deprecated Staging/Production stages
+    client.set_registered_model_alias(&quot;churn&quot;, &quot;challenger&quot;, model_info.registered_model_version)
+</code></pre>
+<p><strong>Promotion gates</strong>: every one automated, and every one able to block:</p>
+<ol>
+<li><strong>Quality</strong>: beats the production model on the primary metric, and does not regress any tracked slice beyond tolerance.</li>
+<li><strong>Baseline sanity</strong>: beats a trivial baseline (majority class, last value, simple heuristic). A model that cannot is not worth operating.</li>
+<li><strong>Fairness</strong>: metric parity across protected segments within policy.</li>
+<li><strong>Operational</strong>: p99 inference latency, memory footprint, artifact size within limits.</li>
+<li><strong>Skew check</strong>: features computed by the serving path match the training path for the same entities.</li>
+<li><strong>Reproducibility</strong>: lineage is complete: a missing data version fails the gate.</li>
+</ol>
+<p>Automate the gates; keep a human approval for the final production transition in regulated or high-stakes settings. The gates are what make that approval a review rather than a rubber stamp.</p>
+<hr />
+<h2 id="deployment-strategies">Deployment Strategies</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Mechanism</th>
+<th>Risk</th>
+<th>Cost</th>
+<th>Gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recreate</strong></td>
+<td>Stop old, start new</td>
+<td>High</td>
+<td>Low</td>
+<td>Nothing: downtime and no fallback</td>
+</tr>
+<tr>
+<td><strong>Blue/green</strong></td>
+<td>Two full environments, flip traffic</td>
+<td>Low</td>
+<td>2x infra</td>
+<td>Instant rollback</td>
+</tr>
+<tr>
+<td><strong>Canary</strong></td>
+<td>1% → 5% → 25% → 100%, watching metrics</td>
+<td>Low</td>
+<td>Low</td>
+<td>Graduated real-traffic exposure</td>
+</tr>
+<tr>
+<td><strong>Shadow</strong></td>
+<td>New model scores real traffic; output discarded</td>
+<td><strong>None</strong></td>
+<td>Extra compute</td>
+<td>Real-traffic validation with zero user risk</td>
+</tr>
+<tr>
+<td><strong>A/B test</strong></td>
+<td>Random split, measure business metrics</td>
+<td>Medium</td>
+<td>Low</td>
+<td>Causal read on the business outcome</td>
+</tr>
+<tr>
+<td><strong>Multi-armed bandit</strong></td>
+<td>Adaptive traffic to the better arm</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Faster convergence, less regret</td>
+</tr>
+</tbody>
+</table></div>
+<p>The sequence that works for a meaningful model change is <strong>shadow → canary → A/B → full</strong>:</p>
+<ul>
+<li><strong>Shadow</strong> first, because it is the only step that validates on real production traffic at zero user risk. It catches the failures offline evaluation cannot: train/serve skew, latency under real load, unexpected input distributions, and serialization or dependency problems. Compare prediction distributions, not just aggregate metrics.</li>
+<li><strong>Canary</strong> next, to expose a small slice of users with automated rollback wired to guardrail metrics.</li>
+<li><strong>A/B</strong> if the question is whether the model improves a <em>business</em> outcome, which offline metrics only proxy.</li>
+</ul>
+<pre><code class="language-yaml"># Canary with automated rollback (Argo Rollouts style)
+strategy:
+  canary:
+    steps:
+      - setWeight: 5
+      - pause: {duration: 15m}
+      - analysis:
+          templates: [{templateName: model-health}]   # error rate, p99 latency, prediction drift
+      - setWeight: 25
+      - pause: {duration: 1h}
+      - analysis:
+          templates: [{templateName: model-health}]
+      - setWeight: 100
+</code></pre>
+<hr />
+<h2 id="rollback">Rollback</h2>
+<p>Rollback must be <strong>fast, tested, and complete</strong>.</p>
+<ul>
+<li><strong>Fast</strong>: a config or traffic-weight change, not a rebuild. Keep the previous version warm: a rollback that requires a 20-minute container build is not a rollback, it is an outage with a plan.</li>
+<li><strong>Tested</strong>: rehearse it. An untested rollback path fails exactly when you need it.</li>
+<li><strong>Complete</strong>: revert the model <strong>and</strong> its feature pipeline, preprocessing, and configuration together. Reverting only the model artifact while the new feature transformations remain live produces a skew bug that is harder to diagnose than the original problem. This is why the registry stores the feature pipeline version alongside the model.</li>
+</ul>
+<p>Automate the trigger where the signal is unambiguous: error rate above threshold, p99 latency breach, prediction distribution shift beyond a bound, or a guardrail business metric dropping. Keep a manual kill switch regardless, since not every failure is one a rule anticipated.</p>
+<hr />
+<h2 id="continuous-training">Continuous Training</h2>
+<p>Retraining is triggered by one of four things, and choosing among them is a real design decision:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>When it fits</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scheduled</strong></td>
+<td>Steady, predictable drift</td>
+<td>Retrains when nothing changed; wastes compute</td>
+</tr>
+<tr>
+<td><strong>Performance-based</strong></td>
+<td>Labels arrive fast enough to measure degradation</td>
+<td>Useless when labels are delayed weeks</td>
+</tr>
+<tr>
+<td><strong>Drift-based</strong></td>
+<td>Input distribution shift is measurable immediately</td>
+<td>Drift does not always mean degradation: verify before acting</td>
+</tr>
+<tr>
+<td><strong>Data-volume</strong></td>
+<td>Enough new labeled data has accumulated</td>
+<td>Can retrain on a non-representative recent slice</td>
+</tr>
+</tbody>
+</table></div>
+<p>Whatever the trigger, an automatically retrained model <strong>goes through the same gates as a manual one</strong>. Auto-retrain plus auto-deploy without gates is how a corrupted upstream table silently becomes a production model. The retraining pipeline should also guard against feedback loops: if the model's own decisions shape which labels you observe (only approved loans get repayment outcomes), naive retraining amplifies its existing bias.</p>
+<hr />
+<h2 id="reproducibility-requirements">Reproducibility Requirements</h2>
+<p>An interviewer's favorite probe: <em>can you reproduce the model that is in production right now?</em></p>
+<p>Requirements: pinned data snapshot or table version (time-travel via Delta/Iceberg, or an immutable partition); pinned code commit; pinned dependency versions (a lockfile, not a range: a minor scikit-learn bump can change defaults); seeded RNGs for Python, NumPy, and the framework; recorded hardware and framework versions where GPU nondeterminism matters; and the environment captured as a container image digest, not a tag.</p>
+<p>Bitwise reproducibility on GPU requires deterministic kernels and costs throughput, so the practical standard is <em>statistical</em> reproducibility (retraining yields a model within a small tolerance on the eval set) with full lineage recorded. Say which one you mean; conflating them is a common slip.</p>
+<hr />
+<h2 id="a-worked-github-actions-pipeline">A Worked GitHub Actions Pipeline</h2>
+<pre><code class="language-yaml">name: ML Pipeline
+
+on:
+  push: {branches: [main]}
+  schedule: [{cron: '0 2 * * 1'}]          # weekly retrain
+  workflow_dispatch:                        # manual + drift-alert webhook
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: pip}
+      - run: pip install -r requirements-lock.txt   # locked, not ranged
+      - run: ruff check . &amp;&amp; mypy src/
+      - run: pytest tests/unit tests/data -v        # fast layers on every commit
+
+  train:
+    needs: test
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m src.train --config configs/prod.yaml --seed 42
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
+      - run: python -m src.evaluate --run-id &quot;$MLFLOW_RUN_ID&quot; --compare-to production
+      # evaluate exits non-zero if any gate fails, which fails the job
+
+  deploy_staging:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - run: python -m src.promote --alias challenger
+      - run: python -m src.deploy --env staging --mode shadow --duration 24h
+      - run: python -m src.compare_shadow --fail-on-divergence
+
+  deploy_production:
+    needs: deploy_staging
+    runs-on: ubuntu-latest
+    environment: production        # requires human approval in GitHub
+    steps:
+      - run: python -m src.deploy --env prod --strategy canary --auto-rollback
+</code></pre>
+<p>Two details worth calling out in an interview: training runs on a <strong>self-hosted GPU runner</strong> because hosted runners lack GPUs and time out; and the <code>environment: production</code> key is what inserts a human approval gate without scripting one.</p>
+<hr />
+<h2 id="maturity-levels">Maturity Levels</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Training</th>
+<th>Deployment</th>
+<th>Retraining</th>
+<th>Typical signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0: Manual</strong></td>
+<td>Notebook</td>
+<td>Manual copy</td>
+<td>Ad hoc, when someone notices</td>
+<td>No versioning; &quot;it works on my machine&quot;</td>
+</tr>
+<tr>
+<td><strong>1: Automated training</strong></td>
+<td>Pipeline script</td>
+<td>Manual</td>
+<td>Scheduled</td>
+<td>Experiments tracked; deploys still hand-run</td>
+</tr>
+<tr>
+<td><strong>2: Automated deployment</strong></td>
+<td>Pipeline</td>
+<td>CI/CD with gates</td>
+<td>Triggered</td>
+<td>Registry, gates, canary, rollback</td>
+</tr>
+<tr>
+<td><strong>3: Full CT/CD</strong></td>
+<td>Pipeline</td>
+<td>Automated</td>
+<td>Drift/performance-triggered</td>
+<td>Monitoring feeds retraining automatically</td>
+</tr>
+</tbody>
+</table></div>
+<p>Most teams sit at level 1 and benefit most from reaching level 2: the registry, gates, and a tested rollback. Level 3 pays off only with high data velocity and reliable, fast labels; adopting it earlier mostly automates the propagation of mistakes.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-does-cicd-for-ml-differ-from-cicd-for-regular-software">How does CI/CD for ML differ from CI/CD for regular software?</h4>
+<p>Three structural differences. First, there are <strong>three coupled artifacts</strong> (code, data, and model), so versioning one is insufficient; reproducing a production model requires the data snapshot and feature pipeline version too. Second, <strong>tests are statistical</strong>: instead of assert-equals you have &quot;AUC at least 0.82 and no slice regressing more than 2 points,&quot; which means defining thresholds and tolerating variance. Third, <strong>models decay without any change</strong>: data drift degrades a static model, so the pipeline needs triggers beyond commits: schedules, drift alerts, and performance thresholds.</p>
+<p>There is also a validation gap: you cannot fully establish a model is correct before real traffic touches it, which is why shadow and canary deployment matter far more here than for a typical service.</p>
+<h4 id="what-gates-would-you-put-between-training-and-production">What gates would you put between training and production?</h4>
+<p>Automated, and each able to block: (1) the candidate beats the current production model on the primary metric; (2) no tracked slice regresses beyond tolerance, an overall gain can hide a large regression on a segment; (3) it beats a trivial baseline, because a model that cannot is not worth the operational cost; (4) fairness metrics across protected segments stay within policy; (5) operational limits, p99 latency, memory, artifact size; (6) a train/serve skew check comparing features from both paths for the same entities; (7) complete lineage, so a missing data version fails the gate.</p>
+<p>In regulated or high-stakes settings I'd keep a human approval for the final production transition, but the automated gates are what turn that approval into a real review rather than a formality.</p>
+<h4 id="explain-shadow-deployment-and-why-its-valuable">Explain shadow deployment and why it's valuable.</h4>
+<p>The new model receives a copy of real production traffic and produces predictions that are logged but never returned to users; the existing model continues serving. It is the only validation step with zero user risk.</p>
+<p>Its value is catching what offline evaluation structurally cannot: <strong>train/serve skew</strong>, features computed differently in the serving path; <strong>latency under real load</strong> rather than benchmark conditions; <strong>real input distributions</strong>, including the malformed and edge-case requests that never appear in a clean test set; and <strong>serialization or dependency failures</strong> in the production runtime.</p>
+<p>I'd compare prediction <em>distributions</em> between old and new, not just aggregate metrics: a shifted distribution with similar aggregate accuracy is a strong signal something is wrong. The cost is running inference twice, which is why it is usually time-boxed rather than permanent.</p>
+<h4 id="your-newly-deployed-model-is-degrading-walk-me-through-the-rollback">Your newly deployed model is degrading. Walk me through the rollback.</h4>
+<p>First <strong>stop the bleeding</strong>: shift traffic back to the previous version by config or weight change, seconds, not a rebuild. This is why the previous version stays warm.</p>
+<p>Always revert <strong>the model and its feature pipeline together</strong>. Reverting only the artifact while new feature transformations stay live creates a skew bug on top of the original failure, and it is much harder to diagnose. The registry stores the feature pipeline version with the model precisely so this is one atomic action.</p>
+<p>Then <strong>diagnose</strong> with the traffic already safe: compare input distributions before and after, check whether an upstream schema changed, look at per-slice metrics to see whether degradation is uniform or concentrated in a segment, and check whether the deployed artifact matches what passed the gates. Finally, <strong>close the loop</strong>: add whatever would have caught this as a gate or monitor, since the same class of failure otherwise recurs.</p>
+<h4 id="when-should-retraining-be-automatic-and-when-should-a-human-be-in-the-loop">When should retraining be automatic, and when should a human be in the loop?</h4>
+<p>Automatic retraining fits when data velocity is high, labels arrive quickly and reliably, drift is a routine and well-understood phenomenon, and the gates are strong enough to catch a bad model. Recommendation and demand forecasting typically qualify.</p>
+<p>Keep a human in the loop when labels are delayed or noisy (you would be retraining on a signal you cannot yet verify), in regulated domains requiring documented review, when the model's own decisions shape future labels (a feedback loop where naive retraining amplifies existing bias), and when the cost of a bad model is severe relative to the cost of staleness.</p>
+<p>The invariant either way: an automatically retrained model passes the <strong>same gates</strong> as a manual one. Auto-retrain with auto-deploy and no gates is how a corrupted upstream table becomes a production model overnight.</p>
+<h4 id="how-do-you-version-data-alongside-code">How do you version data alongside code?</h4>
+<p>Layered. <strong>Immutable raw data</strong>, append-only and partitioned by ingest date, never mutated: this is the foundation, and mutating raw data destroys reproducibility permanently. <strong>Versioned table formats</strong> (Delta Lake, Iceberg) for curated tables, so &quot;train on the data as of March 1&quot; is a time-travel query rather than an archaeology project. <strong>Snapshot references recorded in the model artifact</strong>, so every training run records exactly which table versions, feature definitions, and code commit produced it. DVC or LakeFS cover file-based assets where table formats do not apply.</p>
+<p>The test of whether it actually works: can you reproduce a model trained six months ago from its recorded metadata alone, without asking anyone what they ran?</p>
+<h4 id="why-arent-aggregate-metrics-enough-as-a-promotion-gate">Why aren't aggregate metrics enough as a promotion gate?</h4>
+<p>Because they average away the failures that matter. A model can improve overall AUC by 2 points while regressing badly on a segment (a minority language, a small region, new users), and the aggregate never shows it, especially when that segment is a small share of the data. That is both a quality failure and, for protected attributes, a fairness one.</p>
+<p>So I'd gate on per-slice metrics with a regression tolerance, on comparison against the current production model rather than an absolute threshold, and on <strong>behavioral tests</strong>: invariances and directional expectations that assert properties rather than accuracy. Those catch bug classes any aggregate metric passes straight over, like a model that becomes sensitive to a field that should be irrelevant.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Versioning code but not data</td>
+<td>Production models cannot be reproduced</td>
+<td>Pin data snapshots; record versions in the artifact</td>
+</tr>
+<tr>
+<td>Rolling back the model but not the feature pipeline</td>
+<td>Creates a skew bug on top of the original failure</td>
+<td>Store and revert them together</td>
+</tr>
+<tr>
+<td>Aggregate metrics as the only gate</td>
+<td>Hides large regressions on a segment</td>
+<td>Per-slice gates with regression tolerance</td>
+</tr>
+<tr>
+<td>Auto-retrain with auto-deploy and no gates</td>
+<td>A corrupted upstream table becomes a production model</td>
+<td>Same gates for automated and manual runs</td>
+</tr>
+<tr>
+<td>Dependency ranges instead of a lockfile</td>
+<td>A minor library bump silently changes model behavior</td>
+<td>Lockfile + container image digest</td>
+</tr>
+<tr>
+<td>Rollback path never rehearsed</td>
+<td>It fails exactly when it is needed</td>
+<td>Test rollback as part of the deploy pipeline</td>
+</tr>
+<tr>
+<td>Cold previous version</td>
+<td>&quot;Rollback&quot; becomes a 20-minute rebuild</td>
+<td>Keep the previous version warm</td>
+</tr>
+<tr>
+<td>Fixed row-count thresholds for data checks</td>
+<td>Weekly seasonality causes constant false alarms</td>
+<td>Compare against the same weekday historically</td>
+</tr>
+<tr>
+<td>Training on hosted CI runners</td>
+<td>No GPU, and jobs time out</td>
+<td>Self-hosted GPU runners for the training job</td>
+</tr>
+<tr>
+<td>Deploying straight to 100%</td>
+<td>No safe way to observe a regression</td>
+<td>Shadow, then canary with automated rollback</td>
+</tr>
+<tr>
+<td>Treating drift as automatically requiring retraining</td>
+<td>Drift does not always mean degradation</td>
+<td>Verify performance impact before triggering</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">MLOps Overview</a></li>
+<li><a href="intro_mlflow.html">MLflow</a></li>
+<li><a href="intro_model_serving.html">Model Serving</a></li>
+<li><a href="intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="intro_data_quality.html">Data Quality</a></li>
+<li><a href="intro_ab_testing.html">A/B Testing</a></li>
+<li><a href="intro_feature_stores.html">Feature Stores</a></li>
+<li><a href="../devops/intro_github_actions.html">GitHub Actions</a></li>
+<li><a href="../devops/intro_docker.html">Docker</a></li>
+<li><a href="../devops/intro_kubernetes.html">Kubernetes</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_llmops_mlops_engineering.html"><small>Previous</small>LLMOps / MLOps Engineering</a><a rel="next" class="next" href="intro_mlflow.html"><small>Next</small>MLflow</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_cicd_for_ml.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hugging Face Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_huggingface.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Hugging Face Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_huggingface.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hugging Face Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Hugging Face Guide",
+   "description": "A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_huggingface.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "HuggingFace",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_huggingface.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">HuggingFace</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_huggingface.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="hugging-face-guide">Hugging Face Guide</h1>
+<p>A guide to the Hugging Face ecosystem: the go-to platform for open-source AI models, datasets, and tools.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#transformers-library-overview">Transformers Library Overview</a></li>
+<li><a href="#loading-models-and-tokenizers">Loading Models and Tokenizers</a></li>
+<li><a href="#pipeline-api">Pipeline API</a></li>
+<li><a href="#datasets-library">Datasets Library</a></li>
+<li><a href="#peft-parameter-efficient-fine-tuning">PEFT: Parameter-Efficient Fine-Tuning</a></li>
+<li><a href="#model-hub">Model Hub</a></li>
+<li><a href="#spaces-and-gradio">Spaces and Gradio</a></li>
+<li><a href="#inference-endpoints">Inference Endpoints</a></li>
+<li><a href="#autotrain">AutoTrain</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="transformers-library-overview">Transformers Library Overview</h2>
+<p>The <code>transformers</code> library provides thousands of pretrained models for NLP, vision, and audio tasks.</p>
+<pre><code class="language-bash">pip install transformers accelerate datasets peft
+</code></pre>
+<p><strong>Core classes:</strong></p>
+<ul>
+<li><code>AutoModel</code>, <code>AutoModelForCausalLM</code>, <code>AutoModelForSequenceClassification</code></li>
+<li><code>AutoTokenizer</code>, <code>AutoProcessor</code></li>
+<li><code>pipeline</code>: high-level API for inference</li>
+<li><code>Trainer</code>, <code>TrainingArguments</code>: for fine-tuning</li>
+</ul>
+<hr />
+<h2 id="loading-models-and-tokenizers">Loading Models and Tokenizers</h2>
+<pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+model_name = &quot;meta-llama/Llama-3.1-8B-Instruct&quot;
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+# Load model with 4-bit quantization (requires bitsandbytes)
+from transformers import BitsAndBytesConfig
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type=&quot;nf4&quot;,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map=&quot;auto&quot;,  # Automatically distribute across available GPUs
+)
+
+# Simple generation
+inputs = tokenizer(&quot;What is machine learning?&quot;, return_tensors=&quot;pt&quot;).to(model.device)
+with torch.no_grad():
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=200,
+        temperature=0.7,
+        do_sample=True,
+        top_p=0.9
+    )
+response = tokenizer.decode(outputs[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+print(response)
+</code></pre>
+<h3 id="chat-with-chat-template">Chat with Chat Template</h3>
+<pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+model_name = &quot;meta-llama/Llama-3.2-3B-Instruct&quot;
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name, torch_dtype=torch.float16, device_map=&quot;auto&quot;
+)
+
+messages = [
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful ML tutor.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain gradient descent.&quot;}
+]
+
+# Apply chat template
+input_ids = tokenizer.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    return_tensors=&quot;pt&quot;
+).to(model.device)
+
+outputs = model.generate(
+    input_ids,
+    max_new_tokens=512,
+    temperature=0.7,
+    do_sample=True,
+    eos_token_id=tokenizer.eos_token_id
+)
+
+response = tokenizer.decode(
+    outputs[0][input_ids.shape[1]:],
+    skip_special_tokens=True
+)
+print(response)
+</code></pre>
+<hr />
+<h2 id="pipeline-api">Pipeline API</h2>
+<p>The <code>pipeline</code> function is the simplest way to use models for inference.</p>
+<pre><code class="language-python">from transformers import pipeline
+
+# Text generation
+generator = pipeline(
+    &quot;text-generation&quot;,
+    model=&quot;gpt2&quot;,
+    device=0  # GPU 0, or -1 for CPU
+)
+result = generator(&quot;Machine learning is&quot;, max_length=100, num_return_sequences=2)
+print(result)
+
+# Text classification (sentiment)
+classifier = pipeline(
+    &quot;text-classification&quot;,
+    model=&quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+)
+result = classifier([&quot;I love this product!&quot;, &quot;This is terrible.&quot;])
+print(result)  # [{'label': 'POSITIVE', 'score': 0.99}, {'label': 'NEGATIVE', 'score': 0.98}]
+
+# Named Entity Recognition
+ner = pipeline(&quot;ner&quot;, model=&quot;dbmdz/bert-large-cased-finetuned-conll03-english&quot;)
+result = ner(&quot;Elon Musk founded Tesla in California.&quot;)
+print(result)
+
+# Question answering
+qa = pipeline(&quot;question-answering&quot;, model=&quot;deepset/roberta-base-squad2&quot;)
+result = qa(
+    question=&quot;What is gradient descent?&quot;,
+    context=&quot;Gradient descent is an optimization algorithm used to minimize a loss function...&quot;
+)
+print(result)
+
+# Summarization
+summarizer = pipeline(&quot;summarization&quot;, model=&quot;facebook/bart-large-cnn&quot;)
+result = summarizer(&quot;Long article text here...&quot;, max_length=100, min_length=30)
+print(result)
+
+# Translation
+translator = pipeline(&quot;translation&quot;, model=&quot;Helsinki-NLP/opus-mt-en-fr&quot;)
+result = translator(&quot;Hello, how are you?&quot;)
+print(result)  # [{'translation_text': 'Bonjour, comment allez-vous?'}]
+
+# Zero-shot classification (no fine-tuning needed)
+zero_shot = pipeline(&quot;zero-shot-classification&quot;, model=&quot;facebook/bart-large-mnli&quot;)
+result = zero_shot(
+    &quot;I need to debug my Python code&quot;,
+    candidate_labels=[&quot;programming&quot;, &quot;cooking&quot;, &quot;sports&quot;, &quot;music&quot;]
+)
+print(result)
+
+# Image classification
+img_classifier = pipeline(&quot;image-classification&quot;, model=&quot;google/vit-base-patch16-224&quot;)
+result = img_classifier(&quot;image.jpg&quot;)
+print(result)
+
+# Automatic speech recognition
+asr = pipeline(&quot;automatic-speech-recognition&quot;, model=&quot;openai/whisper-small&quot;)
+result = asr(&quot;audio.mp3&quot;)
+print(result[&quot;text&quot;])
+</code></pre>
+<hr />
+<h2 id="datasets-library">Datasets Library</h2>
+<pre><code class="language-python">from datasets import load_dataset, load_from_disk, Dataset
+import pandas as pd
+
+# Load a dataset from HF Hub
+dataset = load_dataset(&quot;imdb&quot;)
+print(dataset)
+# DatasetDict({'train': Dataset({features: ['text', 'label'], num_rows: 25000}), ...})
+
+# Access splits
+train_data = dataset[&quot;train&quot;]
+test_data = dataset[&quot;test&quot;]
+
+# Access examples
+print(train_data[0])
+print(train_data[:5][&quot;text&quot;])
+
+# Filter
+positive_only = train_data.filter(lambda x: x[&quot;label&quot;] == 1)
+
+# Map (transform)
+def tokenize(examples, tokenizer):
+    return tokenizer(examples[&quot;text&quot;], truncation=True, padding=&quot;max_length&quot;, max_length=512)
+
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)
+
+tokenized = train_data.map(
+    lambda x: tokenize(x, tokenizer),
+    batched=True,
+    remove_columns=[&quot;text&quot;]
+)
+
+# Create from Pandas DataFrame
+df = pd.DataFrame({&quot;text&quot;: [&quot;Sample 1&quot;, &quot;Sample 2&quot;], &quot;label&quot;: [0, 1]})
+custom_dataset = Dataset.from_pandas(df)
+
+# Save and load locally
+tokenized.save_to_disk(&quot;./tokenized_imdb&quot;)
+loaded = load_from_disk(&quot;./tokenized_imdb&quot;)
+
+# Push to Hub
+custom_dataset.push_to_hub(&quot;username/my-dataset&quot;, private=True)
+</code></pre>
+<hr />
+<h2 id="peft-parameter-efficient-fine-tuning">PEFT: Parameter-Efficient Fine-Tuning</h2>
+<p>PEFT allows fine-tuning large models with minimal trainable parameters.</p>
+<pre><code class="language-bash">pip install peft
+</code></pre>
+<h3 id="lora-fine-tuning">LoRA Fine-Tuning</h3>
+<pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer
+from peft import LoraConfig, get_peft_model, TaskType
+from datasets import load_dataset
+import torch
+
+# Load base model
+model_name = &quot;mistralai/Mistral-7B-v0.1&quot;
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    # Passing load_in_4bit=True directly to from_pretrained is deprecated;
+    # use a BitsAndBytesConfig via quantization_config instead
+    quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16),
+    device_map=&quot;auto&quot;
+)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# LoRA configuration
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=16,                    # LoRA rank
+    lora_alpha=32,           # LoRA scaling factor
+    target_modules=[         # Modules to apply LoRA to
+        &quot;q_proj&quot;, &quot;k_proj&quot;, &quot;v_proj&quot;, &quot;o_proj&quot;,
+        &quot;gate_proj&quot;, &quot;up_proj&quot;, &quot;down_proj&quot;
+    ],
+    lora_dropout=0.05,
+    bias=&quot;none&quot;,
+)
+
+# Apply LoRA to model
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# trainable params: 41,943,040 || all params: 3,793,516,544 || trainable%: 1.1057
+
+# Training arguments
+training_args = TrainingArguments(
+    output_dir=&quot;./lora-mistral&quot;,
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    fp16=True,
+    logging_steps=10,
+    save_strategy=&quot;epoch&quot;,
+    report_to=&quot;mlflow&quot;
+)
+
+# Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_train,
+    data_collator=data_collator
+)
+
+trainer.train()
+model.save_pretrained(&quot;./lora-adapter&quot;)
+</code></pre>
+<h3 id="qlora-quantized-lora">QLoRA (Quantized LoRA)</h3>
+<pre><code class="language-python">from transformers import BitsAndBytesConfig
+from peft import prepare_model_for_kbit_training
+
+# 4-bit quantization config
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type=&quot;nf4&quot;,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map=&quot;auto&quot;
+)
+
+# Prepare for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Apply LoRA on top of quantized model: this is QLoRA
+model = get_peft_model(model, lora_config)
+</code></pre>
+<h3 id="loading-a-lora-adapter">Loading a LoRA Adapter</h3>
+<pre><code class="language-python">from peft import PeftModel
+from transformers import AutoModelForCausalLM
+
+# Load base model
+base_model = AutoModelForCausalLM.from_pretrained(
+    &quot;mistralai/Mistral-7B-v0.1&quot;,
+    torch_dtype=torch.float16,
+    device_map=&quot;auto&quot;
+)
+
+# Load LoRA adapter on top
+model = PeftModel.from_pretrained(base_model, &quot;./lora-adapter&quot;)
+
+# Optional: merge adapter into base model (faster inference, no PEFT overhead)
+merged_model = model.merge_and_unload()
+merged_model.save_pretrained(&quot;./merged-model&quot;)
+</code></pre>
+<hr />
+<h2 id="model-hub">Model Hub</h2>
+<p>The Hugging Face Hub hosts well over a million models, plus hundreds of thousands of datasets and Spaces.</p>
+<pre><code class="language-python">from huggingface_hub import HfApi, login, hf_hub_download
+
+# Authenticate
+login(token=&quot;hf_your_token_here&quot;)  # Or set HF_TOKEN environment variable
+
+api = HfApi()
+
+# Search models
+models = api.list_models(
+    filter=&quot;text-classification&quot;,
+    sort=&quot;downloads&quot;,
+    direction=-1,  # Descending
+    limit=10
+)
+for model in models:
+    print(model.id, model.downloads)
+
+# Upload a model
+api.upload_folder(
+    folder_path=&quot;./my-model&quot;,
+    repo_id=&quot;username/my-model&quot;,
+    repo_type=&quot;model&quot;
+)
+
+# Download specific files
+model_path = hf_hub_download(
+    repo_id=&quot;google/gemma-2-9b-it&quot;,
+    filename=&quot;config.json&quot;
+)
+
+# Push model from Transformers
+model.push_to_hub(&quot;username/my-finetuned-model&quot;, private=True)
+tokenizer.push_to_hub(&quot;username/my-finetuned-model&quot;)
+</code></pre>
+<hr />
+<h2 id="spaces-and-gradio">Spaces and Gradio</h2>
+<p>Hugging Face Spaces let you deploy ML demos instantly.</p>
+<pre><code class="language-python"># app.py: Deploy this as a HF Space
+import gradio as gr
+from transformers import pipeline
+
+# Load model
+classifier = pipeline(
+    &quot;text-classification&quot;,
+    model=&quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+)
+
+def classify_sentiment(text: str) -&gt; str:
+    result = classifier(text)[0]
+    return f&quot;{result['label']} (confidence: {result['score']:.2%})&quot;
+
+# Create Gradio interface
+demo = gr.Interface(
+    fn=classify_sentiment,
+    inputs=gr.Textbox(label=&quot;Enter text&quot;, placeholder=&quot;Type something here...&quot;),
+    outputs=gr.Label(label=&quot;Sentiment&quot;),
+    title=&quot;Sentiment Classifier&quot;,
+    description=&quot;Classify text sentiment using DistilBERT&quot;,
+    examples=[
+        [&quot;I love this product!&quot;],
+        [&quot;This is terrible service.&quot;],
+        [&quot;The movie was okay, nothing special.&quot;]
+    ]
+)
+
+if __name__ == &quot;__main__&quot;:
+    demo.launch()
+</code></pre>
+<hr />
+<h2 id="inference-endpoints">Inference Endpoints</h2>
+<p>Hugging Face Inference Endpoints lets you deploy models on managed infrastructure.</p>
+<pre><code class="language-python">from huggingface_hub import InferenceClient
+
+# Serverless inference via HF Inference Providers (small free monthly credit).
+# Which models are served changes over time; check the model page first.
+client = InferenceClient(
+    model=&quot;mistralai/Mistral-7B-Instruct-v0.3&quot;,
+    token=&quot;hf_your_token&quot;
+)
+
+# Text generation
+response = client.text_generation(
+    &quot;Explain gradient descent in simple terms:&quot;,
+    max_new_tokens=200,
+    temperature=0.7
+)
+print(response)
+
+# Chat completion
+messages = [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is backpropagation?&quot;}
+]
+response = client.chat_completion(messages, max_tokens=300)
+print(response.choices[0].message.content)
+
+# Embeddings
+embedding = client.feature_extraction(&quot;Machine learning is fascinating&quot;)
+print(f&quot;Embedding dimensions: {len(embedding[0])}&quot;)
+
+# Image classification
+from PIL import Image
+result = client.image_classification(&quot;cat.jpg&quot;)
+print(result)
+</code></pre>
+<hr />
+<h2 id="autotrain">AutoTrain</h2>
+<p>AutoTrain allows fine-tuning models with no-code or minimal code.</p>
+<pre><code class="language-bash">pip install autotrain-advanced
+
+# Fine-tune LLM on a CSV dataset
+autotrain llm \
+  --train \
+  --model meta-llama/Llama-3.2-3B-Instruct \
+  --data-path ./data/ \
+  --text-column text \
+  --train-split train \
+  --epochs 3 \
+  --batch-size 4 \
+  --lr 2e-4 \
+  --use-peft \
+  --lora-r 16 \
+  --lora-alpha 32 \
+  --quantization int4 \
+  --project-name my-fine-tuned-llm \
+  --push-to-hub \
+  --hf-token $HF_TOKEN
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between AutoModel and AutoModelForCausalLM?</strong> 🟢 Beginner</p>
+<p><code>AutoModel</code> loads the base model without a task-specific head. <code>AutoModelForCausalLM</code> adds a language modeling head for text generation (next-token prediction). Similarly, <code>AutoModelForSequenceClassification</code> adds a classification head. The <code>Auto</code> prefix means the class automatically detects the correct architecture from the model name.</p>
+<hr />
+<p><strong>Q2: What is LoRA and how does it reduce training cost?</strong> 🟡 Intermediate</p>
+<p>LoRA (Low-Rank Adaptation) adds small trainable matrices to specific weight matrices in the model. Instead of updating all parameters (e.g., 7 billion), LoRA adds two small matrices A (d×r) and B (r×d) where r &lt;&lt; d. During training, only A and B are updated (rank r). Typical trainable parameter reduction: from 100% to 0.1-1%. This allows fine-tuning LLMs on a single GPU that couldn't hold the full model in training mode.</p>
+<hr />
+<p><strong>Q3: What is the difference between LoRA and QLoRA?</strong> 🟡 Intermediate</p>
+<p>LoRA applies low-rank adapters to the full-precision model. QLoRA (Quantized LoRA) first quantizes the base model to 4-bit precision using NF4 quantization (reducing memory by ~75%), then applies LoRA adapters on top. QLoRA makes it possible to fine-tune a 65B parameter model on a single 48GB GPU. The QLoRA paper reports quality close to 16-bit fine-tuning; in practice any gap is small relative to the memory savings.</p>
+<hr />
+<p><strong>Q4: What does <code>device_map=&quot;auto&quot;</code> do?</strong> 🟡 Intermediate</p>
+<p><code>device_map=&quot;auto&quot;</code> tells the <code>accelerate</code> library to automatically distribute model layers across available hardware (multiple GPUs, CPU, disk). It reads the model's architecture, available device memory, and creates an optimal distribution plan. For models too large for a single GPU, this enables inference across multiple GPUs or even offloading some layers to CPU/disk.</p>
+<hr />
+<p><strong>Q5: What is the Hugging Face pipeline API and when would you use it?</strong> 🟢 Beginner</p>
+<p>The <code>pipeline</code> function is a high-level, task-oriented API that handles model loading, preprocessing, inference, and postprocessing in one call. Use it for quick prototyping, demos, and production use cases where the task is standard (classification, NER, summarization, generation). For custom preprocessing, batching control, or performance optimization, drop down to the model/tokenizer level directly.</p>
+<hr />
+<p><strong>Q6: How do you prevent gradient issues when fine-tuning with PEFT?</strong> 🔴 Advanced</p>
+<ol>
+<li>Call <code>prepare_model_for_kbit_training(model)</code> when using 4-bit/8-bit quantization: it handles gradient checkpointing, casting, and disabling quantized layer grads</li>
+<li>Ensure LoRA target modules include all attention projection matrices</li>
+<li>Set <code>lora_dropout</code> to regularize training</li>
+<li>Use gradient clipping (<code>max_grad_norm=1.0</code> in <code>TrainingArguments</code>)</li>
+<li>Enable <code>gradient_checkpointing=True</code> to trade compute for memory</li>
+<li>Use mixed precision (<code>torch.amp</code> under the hood) via <code>fp16=True</code> or <code>bf16=True</code></li>
+</ol>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://huggingface.co/docs">Hugging Face Documentation</a></li>
+<li><a href="https://github.com/huggingface/transformers">Transformers GitHub</a></li>
+<li><a href="https://huggingface.co/docs/peft">PEFT Documentation</a></li>
+<li><a href="https://huggingface.co/docs/datasets">Datasets Documentation</a></li>
+<li><a href="https://arxiv.org/abs/2305.14314">QLoRA Paper: Dettmers et al. (2023)</a></li>
+<li><a href="https://arxiv.org/abs/2106.09685">LoRA Paper: Hu et al. (2021)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_langchain.html"><small>Previous</small>LangChain (LCEL &amp; Advanced)</a><a rel="next" class="next" href="intro_ollama.html"><small>Next</small>Ollama</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_huggingface.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

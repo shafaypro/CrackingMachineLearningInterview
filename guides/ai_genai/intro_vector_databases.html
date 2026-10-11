@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vector Databases Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Vector databases store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Vector Databases Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Vector databases store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vector Databases Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Vector databases store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Vector Databases",
+   "description": "Vector databases store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Vector Databases",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_vector_databases.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">Vector Databases</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_vector_databases.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="vector-databases">Vector Databases</h1>
+<p><strong>Vector databases</strong> store and search high-dimensional vector embeddings: the mathematical representations of text, images, audio, and code produced by AI models. They're foundational to RAG, semantic search, recommendation systems, and AI applications.</p>
+<hr />
+<h2 id="what-is-a-vector-database">What is a Vector Database?</h2>
+<p>Traditional databases store structured data and search by exact match or range:</p>
+<pre><code class="language-sql">SELECT * FROM products WHERE price &lt; 100;   -- exact/range
+</code></pre>
+<p>Vector databases store <strong>embeddings</strong> and search by <strong>similarity</strong> (nearest neighbors):</p>
+<pre><code class="language-python"># Find the 5 most semantically similar documents to a query
+results = collection.query(query_embedding=embed(&quot;AI safety&quot;), n_results=5)
+</code></pre>
+<h3 id="how-embeddings-work">How Embeddings Work</h3>
+<pre><code>Text → Embedding Model → Vector [0.23, -0.15, 0.87, ..., 0.04]  (1536 dimensions)
+                                        ↑
+                              Encodes semantic meaning
+                              Similar texts → similar vectors
+                              Cosine similarity measures closeness
+</code></pre>
+<hr />
+<h2 id="similarity-metrics">Similarity Metrics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cosine similarity</strong></td>
+<td>cos(θ) between vectors</td>
+<td>Text, normalized embeddings</td>
+</tr>
+<tr>
+<td><strong>Euclidean distance</strong></td>
+<td>L2 distance</td>
+<td>Image features, dense vectors</td>
+</tr>
+<tr>
+<td><strong>Dot product</strong></td>
+<td>u · v</td>
+<td>When vectors are normalized</td>
+</tr>
+<tr>
+<td><strong>Manhattan distance</strong></td>
+<td>L1 distance</td>
+<td>Sparse vectors</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="ann-algorithms">ANN Algorithms</h2>
+<p>Exact nearest neighbor search is O(n): too slow at scale. Vector DBs use <strong>Approximate Nearest Neighbor (ANN)</strong> algorithms:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Description</th>
+<th>DB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HNSW</strong></td>
+<td>Hierarchical Navigable Small World: graph-based, fast queries</td>
+<td>Most DBs</td>
+</tr>
+<tr>
+<td><strong>IVF</strong></td>
+<td>Inverted File Index: cluster-based, efficient for large datasets</td>
+<td>Faiss, pgvector</td>
+</tr>
+<tr>
+<td><strong>ScaNN</strong></td>
+<td>Google's ANN library</td>
+<td>Vertex AI</td>
+</tr>
+<tr>
+<td><strong>DiskANN</strong></td>
+<td>Disk-based ANN for billion-scale</td>
+<td>Azure, Qdrant</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="top-vector-databases-in-2026">Top Vector Databases in 2026</h2>
+<h3 id="1-pinecone-managed-cloud-native">1. Pinecone (Managed, Cloud-native)</h3>
+<pre><code class="language-python">from pinecone import Pinecone, ServerlessSpec
+
+pc = Pinecone(api_key=&quot;...&quot;)
+
+# Create index
+pc.create_index(
+    name=&quot;my-index&quot;,
+    dimension=1024,          # match your embedding model
+    metric=&quot;cosine&quot;,
+    spec=ServerlessSpec(cloud=&quot;aws&quot;, region=&quot;us-east-1&quot;)
+)
+
+index = pc.Index(&quot;my-index&quot;)
+
+# Upsert vectors
+index.upsert(vectors=[
+    {&quot;id&quot;: &quot;doc-1&quot;, &quot;values&quot;: [0.1, 0.2, ...], &quot;metadata&quot;: {&quot;text&quot;: &quot;...&quot;, &quot;source&quot;: &quot;report.pdf&quot;}},
+    {&quot;id&quot;: &quot;doc-2&quot;, &quot;values&quot;: [0.3, 0.4, ...], &quot;metadata&quot;: {&quot;text&quot;: &quot;...&quot;, &quot;source&quot;: &quot;wiki.md&quot;}},
+])
+
+# Query
+results = index.query(
+    vector=query_embedding,
+    top_k=5,
+    include_metadata=True,
+    filter={&quot;source&quot;: {&quot;$eq&quot;: &quot;report.pdf&quot;}}  # metadata filtering
+)
+
+for match in results.matches:
+    print(f&quot;Score: {match.score:.3f} | {match.metadata['text'][:100]}&quot;)
+</code></pre>
+<p><strong>Pros:</strong> Fully managed, scales to billions, fast. <strong>Cons:</strong> Paid, vendor lock-in.</p>
+<hr />
+<h3 id="2-weaviate-open-source-hybrid-search-built-in">2. Weaviate (Open-source, Hybrid Search Built-in)</h3>
+<pre><code class="language-python">import weaviate
+import weaviate.classes as wvc
+
+client = weaviate.connect_to_local()   # or connect_to_weaviate_cloud()
+
+# Create collection (schema)
+client.collections.create(
+    name=&quot;Document&quot;,
+    vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(),
+    generative_config=wvc.config.Configure.Generative.anthropic(),
+    properties=[
+        wvc.config.Property(name=&quot;text&quot;, data_type=wvc.config.DataType.TEXT),
+        wvc.config.Property(name=&quot;source&quot;, data_type=wvc.config.DataType.TEXT),
+        wvc.config.Property(name=&quot;date&quot;, data_type=wvc.config.DataType.DATE),
+    ]
+)
+
+collection = client.collections.get(&quot;Document&quot;)
+
+# Insert objects
+collection.data.insert_many([
+    {&quot;text&quot;: &quot;dbt is a transformation tool&quot;, &quot;source&quot;: &quot;docs.md&quot;},
+    {&quot;text&quot;: &quot;Kubernetes orchestrates containers&quot;, &quot;source&quot;: &quot;k8s.md&quot;},
+])
+
+# Semantic search
+results = collection.query.near_text(
+    query=&quot;data transformation&quot;,
+    limit=3,
+    return_metadata=wvc.query.MetadataQuery(score=True)
+)
+
+# Hybrid search (BM25 + vector)
+results = collection.query.hybrid(
+    query=&quot;data transformation&quot;,
+    limit=5,
+    alpha=0.75    # 0 = pure BM25, 1 = pure vector
+)
+
+# Generative search (RAG built-in!)
+results = collection.generate.near_text(
+    query=&quot;data transformation tools&quot;,
+    limit=3,
+    grouped_task=&quot;Summarize these documents in 2 sentences.&quot;
+)
+print(results.generated)
+</code></pre>
+<p><strong>Pros:</strong> Hybrid search out-of-box, built-in RAG, GraphQL API. <strong>Cons:</strong> Complex setup.</p>
+<hr />
+<h3 id="3-chroma-developer-friendly-local-first">3. Chroma (Developer-friendly, Local-first)</h3>
+<pre><code class="language-python">import chromadb
+from chromadb.utils import embedding_functions
+
+# In-memory (development)
+client = chromadb.Client()
+
+# Persistent (production-lite)
+client = chromadb.PersistentClient(path=&quot;./chroma_db&quot;)
+
+# Remote (server mode)
+client = chromadb.HttpClient(host=&quot;localhost&quot;, port=8000)
+
+# Create collection with embedding function
+embedding_fn = embedding_functions.OpenAIEmbeddingFunction(
+    api_key=&quot;...&quot;,
+    model_name=&quot;text-embedding-3-small&quot;
+)
+
+collection = client.get_or_create_collection(
+    name=&quot;my_docs&quot;,
+    embedding_function=embedding_fn,
+    metadata={&quot;hnsw:space&quot;: &quot;cosine&quot;}
+)
+
+# Add documents (Chroma auto-embeds if you pass documents)
+collection.add(
+    documents=[&quot;dbt transforms data&quot;, &quot;Kubernetes runs containers&quot;],
+    ids=[&quot;doc-1&quot;, &quot;doc-2&quot;],
+    metadatas=[{&quot;type&quot;: &quot;data_eng&quot;}, {&quot;type&quot;: &quot;devops&quot;}]
+)
+
+# Query
+results = collection.query(
+    query_texts=[&quot;data transformation&quot;],   # auto-embeds
+    n_results=3,
+    where={&quot;type&quot;: &quot;data_eng&quot;},            # metadata filter
+    include=[&quot;documents&quot;, &quot;distances&quot;, &quot;metadatas&quot;]
+)
+
+# Or query with pre-computed embedding
+results = collection.query(
+    query_embeddings=[my_vector],
+    n_results=5
+)
+</code></pre>
+<p><strong>Pros:</strong> Simple, local, great for development. <strong>Cons:</strong> Not for billion-scale production.</p>
+<hr />
+<h3 id="4-pgvector-postgresql-extension">4. pgvector (PostgreSQL Extension)</h3>
+<p>Use your existing Postgres as a vector database. Best choice if you're already on Postgres.</p>
+<pre><code class="language-sql">-- Install extension
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Create table with vector column
+CREATE TABLE documents (
+    id        BIGSERIAL PRIMARY KEY,
+    content   TEXT,
+    source    TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    embedding vector(1536)    -- dimension matches your model
+);
+
+-- Create index for fast ANN search
+CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops)
+WITH (m = 16, ef_construction = 64);
+-- OR
+CREATE INDEX ON documents USING ivfflat (embedding vector_l2_ops)
+WITH (lists = 100);
+
+-- Insert with embedding
+INSERT INTO documents (content, source, embedding)
+VALUES ('dbt transforms data', 'docs.md', '[0.1, 0.2, ...]'::vector);
+
+-- Semantic search (cosine similarity)
+SELECT content, source, 1 - (embedding &lt;=&gt; query_embedding) AS similarity
+FROM documents
+ORDER BY embedding &lt;=&gt; '[0.1, 0.2, ...]'::vector
+LIMIT 5;
+-- &lt;=&gt; cosine distance, &lt;-&gt; L2 distance, &lt;#&gt; negative dot product
+
+-- Hybrid search: combine with full-text search
+SELECT content, source,
+    ts_rank(to_tsvector(content), query) AS text_rank,
+    1 - (embedding &lt;=&gt; $1) AS vector_rank
+FROM documents, plainto_tsquery('data transformation') query
+WHERE to_tsvector(content) @@ query
+   OR embedding &lt;=&gt; $1 &lt; 0.3
+ORDER BY vector_rank + text_rank DESC
+LIMIT 10;
+</code></pre>
+<pre><code class="language-python"># Python with pgvector
+from pgvector.psycopg import register_vector
+import psycopg
+import numpy as np
+
+conn = psycopg.connect(&quot;postgresql://localhost/mydb&quot;)
+register_vector(conn)
+
+# Insert
+embedding = np.array([0.1, 0.2, ...])
+conn.execute(
+    &quot;INSERT INTO documents (content, embedding) VALUES (%s, %s)&quot;,
+    (&quot;my document&quot;, embedding)
+)
+
+# Query
+results = conn.execute(
+    &quot;SELECT content, 1-(embedding&lt;=&gt;%s) as sim FROM documents ORDER BY embedding&lt;=&gt;%s LIMIT 5&quot;,
+    (embedding, embedding)
+).fetchall()
+</code></pre>
+<p><strong>Pros:</strong> No new infrastructure, ACID, full SQL power, free. <strong>Cons:</strong> Not built for vector-first workloads.</p>
+<hr />
+<h3 id="5-qdrant-performance-focused-rust-based">5. Qdrant (Performance-focused, Rust-based)</h3>
+<pre><code class="language-python">from qdrant_client import QdrantClient
+from qdrant_client.models import (
+    Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue
+)
+
+client = QdrantClient(&quot;:memory:&quot;)                          # in-memory
+# client = QdrantClient(&quot;localhost&quot;, port=6333)           # local server
+# client = QdrantClient(url=&quot;https://...&quot;, api_key=&quot;...&quot;) # cloud
+
+# Create collection
+client.create_collection(
+    collection_name=&quot;docs&quot;,
+    vectors_config=VectorParams(size=1024, distance=Distance.COSINE),
+)
+
+# Insert points
+client.upsert(
+    collection_name=&quot;docs&quot;,
+    points=[
+        PointStruct(
+            id=1,
+            vector=[0.1, 0.2, ...],
+            payload={&quot;text&quot;: &quot;dbt guide&quot;, &quot;category&quot;: &quot;data_eng&quot;}
+        ),
+    ]
+)
+
+# Search
+results = client.search(
+    collection_name=&quot;docs&quot;,
+    query_vector=query_embedding,
+    limit=5,
+    query_filter=Filter(
+        must=[FieldCondition(key=&quot;category&quot;, match=MatchValue(value=&quot;data_eng&quot;))]
+    )
+)
+
+for hit in results:
+    print(f&quot;Score: {hit.score:.3f} | {hit.payload['text']}&quot;)
+</code></pre>
+<p><strong>Pros:</strong> High performance, payload filtering, sparse vector support. <strong>Cons:</strong> Self-hosted complexity.</p>
+<hr />
+<h2 id="choosing-a-vector-database">Choosing a Vector Database</h2>
+<pre><code>Are you already on PostgreSQL?  → pgvector
+Need simplest dev setup?        → Chroma
+Need managed cloud service?     → Pinecone
+Need hybrid search?             → Weaviate
+Need billion-scale + speed?     → Qdrant or Pinecone
+Enterprise / AWS integration?   → OpenSearch (k-NN), RDS pgvector
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>DB</th>
+<th>Open Source</th>
+<th>Managed Cloud</th>
+<th>Hybrid Search</th>
+<th>Scale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pinecone</td>
+<td>✗</td>
+<td>✓</td>
+<td>Limited</td>
+<td>Billions</td>
+</tr>
+<tr>
+<td>Weaviate</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ (built-in)</td>
+<td>Hundreds of millions</td>
+</tr>
+<tr>
+<td>Chroma</td>
+<td>✓</td>
+<td>Limited</td>
+<td>✗</td>
+<td>Millions</td>
+</tr>
+<tr>
+<td>pgvector</td>
+<td>✓</td>
+<td>✓ (Supabase, Neon)</td>
+<td>Manual</td>
+<td>Millions</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>Billions</td>
+</tr>
+<tr>
+<td>Milvus</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>Billions</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="embedding-models-in-2026">Embedding Models in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Provider</th>
+<th>Dimensions</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>voyage-3</code></td>
+<td>Voyage AI (Anthropic)</td>
+<td>1024</td>
+<td>General retrieval</td>
+</tr>
+<tr>
+<td><code>voyage-code-3</code></td>
+<td>Voyage AI</td>
+<td>1024</td>
+<td>Code search</td>
+</tr>
+<tr>
+<td><code>voyage-finance-2</code></td>
+<td>Voyage AI</td>
+<td>1024</td>
+<td>Financial docs</td>
+</tr>
+<tr>
+<td><code>text-embedding-3-large</code></td>
+<td>OpenAI</td>
+<td>3072</td>
+<td>General, multilingual</td>
+</tr>
+<tr>
+<td><code>text-embedding-3-small</code></td>
+<td>OpenAI</td>
+<td>1536</td>
+<td>Fast/cheap</td>
+</tr>
+<tr>
+<td><code>embed-v3.0</code></td>
+<td>Cohere</td>
+<td>1024</td>
+<td>Multilingual</td>
+</tr>
+<tr>
+<td><code>all-MiniLM-L6-v2</code></td>
+<td>Sentence Transformers</td>
+<td>384</td>
+<td>Local, fast</td>
+</tr>
+<tr>
+<td><code>nomic-embed-text</code></td>
+<td>Nomic</td>
+<td>768</td>
+<td>Open-source, local</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="production-patterns">Production Patterns</h2>
+<h3 id="metadata-filtering">Metadata Filtering</h3>
+<p>Always filter by metadata before vector search for efficiency:</p>
+<pre><code class="language-python"># Pinecone
+results = index.query(
+    vector=embedding,
+    top_k=10,
+    filter={
+        &quot;department&quot;: {&quot;$eq&quot;: &quot;engineering&quot;},
+        &quot;date&quot;: {&quot;$gte&quot;: &quot;2025-01-01&quot;},
+        &quot;doc_type&quot;: {&quot;$in&quot;: [&quot;runbook&quot;, &quot;architecture&quot;]}
+    }
+)
+</code></pre>
+<h3 id="chunking-strategy">Chunking Strategy</h3>
+<pre><code class="language-python"># Rule of thumb:
+# chunk_size=512    → precise retrieval, less context
+# chunk_size=1024   → balanced (recommended)
+# chunk_size=2048   → more context, less precise
+# chunk_overlap=10-20% of chunk_size
+</code></pre>
+<h3 id="namespacetenant-isolation">Namespace/Tenant Isolation</h3>
+<pre><code class="language-python"># Pinecone namespaces (per-customer isolation)
+index.upsert(vectors=[...], namespace=&quot;customer-123&quot;)
+results = index.query(vector=emb, namespace=&quot;customer-123&quot;)
+
+# Chroma collections (one per tenant)
+collection = client.get_or_create_collection(f&quot;tenant_{customer_id}&quot;)
+</code></pre>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_rag.html">RAG</a></td>
+<td>RAG pipelines rely on vector DBs for retrieval</td>
+</tr>
+<tr>
+<td><a href="intro_llmops.html">LLMOps</a></td>
+<td>Monitoring embedding drift and vector DB performance</td>
+</tr>
+<tr>
+<td><a href="intro_agentic_ai.html">Agentic AI</a></td>
+<td>Agents query vector DBs as memory and knowledge stores</td>
+</tr>
+<tr>
+<td><a href="intro_langchain.html">LangChain</a></td>
+<td>LangChain integrates with all major vector databases</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_rag_engineering.html"><small>Previous</small>RAG Engineering</a><a rel="next" class="next" href="intro_vector_databases_advanced.html"><small>Next</small>Vector Databases (Advanced)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_vector_databases.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

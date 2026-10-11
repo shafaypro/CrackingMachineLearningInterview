@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classical Machine Learning Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Classical Machine Learning Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Classical Machine Learning Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Classical Machine Learning",
+   "description": "A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Overview",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Overview</span></nav>
+<p class="meta"><a href="../../#classical_ml/README.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="classical-machine-learning">Classical Machine Learning</h1>
+<p>A reference for classical ML algorithms, evaluation metrics, and fundamental concepts.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#algorithm-comparison-table">Algorithm Comparison Table</a></li>
+<li><a href="#supervised-learning-algorithms">Supervised Learning Algorithms</a></li>
+<li><a href="#unsupervised-learning-algorithms">Unsupervised Learning Algorithms</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#feature-engineering-techniques">Feature Engineering Techniques</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="algorithm-comparison-table">Algorithm Comparison Table</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Type</th>
+<th>Pros</th>
+<th>Cons</th>
+<th>Best Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear Regression</td>
+<td>Supervised / Regression</td>
+<td>Fast, interpretable, no hyperparams</td>
+<td>Assumes linearity, sensitive to outliers</td>
+<td>Continuous target, few features</td>
+</tr>
+<tr>
+<td>Logistic Regression</td>
+<td>Supervised / Classification</td>
+<td>Fast, interpretable, probabilistic output</td>
+<td>Assumes linearity, poor with non-linear data</td>
+<td>Binary classification, baselines</td>
+</tr>
+<tr>
+<td>Decision Tree</td>
+<td>Supervised / Both</td>
+<td>Interpretable, handles non-linearity</td>
+<td>Overfits, unstable</td>
+<td>Explainable ML, rule extraction</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>Supervised / Both</td>
+<td>Robust, handles missing data, feature importance</td>
+<td>Slow inference, large memory</td>
+<td>Tabular data, general purpose</td>
+</tr>
+<tr>
+<td>Gradient Boosting (XGBoost/LightGBM/CatBoost)</td>
+<td>Supervised / Both</td>
+<td>Usually the most accurate on tabular data</td>
+<td>Hyperparameter tuning needed</td>
+<td>Kaggle, tabular competitions</td>
+</tr>
+<tr>
+<td>SVM</td>
+<td>Supervised / Both</td>
+<td>Effective in high-dim spaces, kernel trick</td>
+<td>Slow on large data, no probability by default</td>
+<td>Text classification, small datasets</td>
+</tr>
+<tr>
+<td>K-Nearest Neighbors</td>
+<td>Supervised / Both</td>
+<td>Simple, no training, non-parametric</td>
+<td>Slow inference, high memory, curse of dimensionality</td>
+<td>Small datasets, recommendation</td>
+</tr>
+<tr>
+<td>Naive Bayes</td>
+<td>Supervised / Classification</td>
+<td>Very fast, works well with small data</td>
+<td>Strong independence assumption</td>
+<td>Text classification, spam detection</td>
+</tr>
+<tr>
+<td>K-Means</td>
+<td>Unsupervised / Clustering</td>
+<td>Simple, scalable</td>
+<td>Requires k, assumes spherical clusters</td>
+<td>Customer segmentation, quantization</td>
+</tr>
+<tr>
+<td>DBSCAN</td>
+<td>Unsupervised / Clustering</td>
+<td>No k needed, finds arbitrary shapes, handles noise</td>
+<td>Sensitive to epsilon parameter</td>
+<td>Anomaly detection, spatial data</td>
+</tr>
+<tr>
+<td>Hierarchical Clustering</td>
+<td>Unsupervised / Clustering</td>
+<td>No k needed, dendrogram</td>
+<td>O(n²) memory, O(n² log n) time or worse</td>
+<td>Small datasets, biology</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>Unsupervised / Dim reduction</td>
+<td>Linear, fast, interpretable</td>
+<td>Linear only, loses non-linear structure</td>
+<td>Feature reduction, preprocessing</td>
+</tr>
+<tr>
+<td>t-SNE</td>
+<td>Unsupervised / Dim reduction</td>
+<td>Preserves local structure, great visualization</td>
+<td>Slow, non-parametric, not for new data</td>
+<td>Visualization of embeddings</td>
+</tr>
+<tr>
+<td>UMAP</td>
+<td>Unsupervised / Dim reduction</td>
+<td>Faster than t-SNE, preserves global + local</td>
+<td>Non-deterministic</td>
+<td>Visualization, preprocessing</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="supervised-learning-algorithms">Supervised Learning Algorithms</h2>
+<h3 id="linear-regression">Linear Regression</h3>
+<p>Models a linear relationship between features and a continuous target.</p>
+<pre><code>ŷ = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ
+Loss: MSE = (1/n) Σ(yᵢ - ŷᵢ)²
+Optimization: Normal equation or Gradient Descent
+</code></pre>
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+print(f&quot;MSE: {mean_squared_error(y_test, y_pred):.4f}&quot;)
+print(f&quot;R²: {r2_score(y_test, y_pred):.4f}&quot;)
+print(f&quot;Coefficients: {model.coef_}&quot;)
+</code></pre>
+<h3 id="logistic-regression">Logistic Regression</h3>
+<p>Classification using the sigmoid function to predict probabilities.</p>
+<pre><code>P(y=1|x) = σ(β₀ + β₁x₁ + ... + βₙxₙ)
+σ(z) = 1 / (1 + e^(-z))
+Loss: Binary Cross-Entropy = -[y·log(ŷ) + (1-y)·log(1-ŷ)]
+</code></pre>
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(C=1.0, max_iter=1000, random_state=42)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+y_prob = model.predict_proba(X_test)[:, 1]  # Probability of class 1
+</code></pre>
+<h3 id="decision-trees">Decision Trees</h3>
+<p>Recursively splits data using the feature that maximizes information gain or minimizes Gini impurity.</p>
+<pre><code>Gini Impurity: G = 1 - Σ pᵢ²
+Entropy: H = -Σ pᵢ · log₂(pᵢ)
+Information Gain = H(parent) - weighted average H(children)
+</code></pre>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier, export_text
+
+model = DecisionTreeClassifier(
+    max_depth=5,           # Prevent overfitting
+    min_samples_leaf=10,   # Minimum samples per leaf
+    criterion=&quot;gini&quot;,      # or &quot;entropy&quot;
+    random_state=42
+)
+model.fit(X_train, y_train)
+print(export_text(model, feature_names=feature_names))
+</code></pre>
+<h3 id="random-forest">Random Forest</h3>
+<p>Ensemble of decision trees trained on bootstrap samples with random feature subsets.</p>
+<pre><code>Output = mode(tree₁(x), tree₂(x), ..., treeN(x))  # Classification
+Output = mean(tree₁(x), tree₂(x), ..., treeN(x))  # Regression
+</code></pre>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_leaf=5,
+    max_features=&quot;sqrt&quot;,   # Standard for classification
+    random_state=42,
+    n_jobs=-1              # Use all CPU cores
+)
+model.fit(X_train, y_train)
+
+# Feature importance
+importance = pd.DataFrame({
+    &quot;feature&quot;: feature_names,
+    &quot;importance&quot;: model.feature_importances_
+}).sort_values(&quot;importance&quot;, ascending=False)
+print(importance.head(10))
+</code></pre>
+<h3 id="xgboost--lightgbm--catboost">XGBoost / LightGBM / CatBoost</h3>
+<p>Gradient boosting frameworks, typically the best for tabular data.</p>
+<pre><code class="language-python">import xgboost as xgb
+import lightgbm as lgb
+from catboost import CatBoostClassifier
+
+# XGBoost
+xgb_model = xgb.XGBClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    eval_metric=&quot;logloss&quot;,
+    early_stopping_rounds=50,   # constructor argument since XGBoost 1.6; the fit() argument was removed later
+    random_state=42
+)
+xgb_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=100)
+
+# LightGBM (faster, better for large datasets)
+lgb_model = lgb.LGBMClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    num_leaves=31,
+    random_state=42
+)
+lgb_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50)])
+
+# CatBoost (best for categorical features without encoding)
+cat_model = CatBoostClassifier(
+    iterations=500,
+    learning_rate=0.05,
+    cat_features=categorical_feature_indices,  # No encoding needed!
+    random_seed=42
+)
+cat_model.fit(X_train, y_train, eval_set=(X_val, y_val), early_stopping_rounds=50)
+</code></pre>
+<h3 id="support-vector-machine-svm">Support Vector Machine (SVM)</h3>
+<p>Finds the maximum-margin hyperplane separating classes.</p>
+<pre><code>Objective: Maximize 2/||w|| (margin)
+Subject to: yᵢ(w·xᵢ + b) ≥ 1 for all i
+Kernel trick: K(xᵢ, xⱼ) = φ(xᵢ)·φ(xⱼ)
+</code></pre>
+<pre><code class="language-python">from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+# SVM requires feature scaling!
+pipeline = Pipeline([
+    (&quot;scaler&quot;, StandardScaler()),
+    (&quot;svm&quot;, SVC(
+        kernel=&quot;rbf&quot;,
+        C=1.0,               # Regularization
+        gamma=&quot;scale&quot;,       # Kernel coefficient
+    ))
+])
+pipeline.fit(X_train, y_train)
+# For probabilities, wrap the pipeline in CalibratedClassifierCV(..., ensemble=False);
+# SVC(probability=True) is deprecated as of scikit-learn 1.9
+</code></pre>
+<hr />
+<h2 id="unsupervised-learning-algorithms">Unsupervised Learning Algorithms</h2>
+<h3 id="k-means-clustering">K-Means Clustering</h3>
+<p>Partitions data into k clusters by minimizing within-cluster variance.</p>
+<pre><code>Algorithm:
+1. Initialize k centroids randomly
+2. Assign each point to nearest centroid
+3. Update centroids to cluster means
+4. Repeat until convergence
+
+Objective: minimize Σ Σ ||xᵢ - μₖ||² for all clusters k
+</code></pre>
+<pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+
+# Find optimal k using elbow method
+inertias = []
+k_range = range(2, 11)
+
+for k in k_range:
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    km.fit(X)
+    inertias.append(km.inertia_)
+
+plt.plot(k_range, inertias, &quot;bx-&quot;)
+plt.xlabel(&quot;k&quot;); plt.ylabel(&quot;Inertia&quot;); plt.title(&quot;Elbow Method&quot;)
+plt.show()
+
+# Silhouette score to evaluate clustering
+km = KMeans(n_clusters=5, random_state=42)
+labels = km.fit_predict(X)
+score = silhouette_score(X, labels)
+print(f&quot;Silhouette Score: {score:.4f}&quot;)  # Range: -1 to 1, higher is better
+</code></pre>
+<h3 id="dbscan">DBSCAN</h3>
+<p>Density-based clustering: finds clusters of arbitrary shape and identifies noise.</p>
+<pre><code>Parameters:
+- epsilon (ε): neighborhood radius
+- min_samples: minimum points to form a dense region
+
+Point types:
+- Core point: ≥ min_samples neighbors within ε
+- Border point: &lt; min_samples neighbors, but within ε of core point
+- Noise point: not core or border
+</code></pre>
+<pre><code class="language-python">from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+X_scaled = StandardScaler().fit_transform(X)
+
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(X_scaled)
+
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise = list(labels).count(-1)
+print(f&quot;Clusters: {n_clusters}, Noise points: {n_noise}&quot;)
+</code></pre>
+<h3 id="pca">PCA</h3>
+<p>Finds directions of maximum variance in the data.</p>
+<pre><code class="language-python">from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+# Standardize first
+X_scaled = StandardScaler().fit_transform(X)
+
+# PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+print(f&quot;Explained variance ratio: {pca.explained_variance_ratio_}&quot;)
+print(f&quot;Total variance explained: {pca.explained_variance_ratio_.sum():.4f}&quot;)
+
+# Find optimal components
+pca_full = PCA()
+pca_full.fit(X_scaled)
+cumsum = pca_full.explained_variance_ratio_.cumsum()
+n_components_95 = (cumsum &lt; 0.95).sum() + 1
+print(f&quot;Components for 95% variance: {n_components_95}&quot;)
+</code></pre>
+<hr />
+<h2 id="evaluation-metrics">Evaluation Metrics</h2>
+<h3 id="classification-metrics">Classification Metrics</h3>
+<pre><code class="language-python">from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_auc_score, confusion_matrix, classification_report
+)
+
+# Accuracy
+acc = accuracy_score(y_true, y_pred)
+
+# Precision: TP / (TP + FP), how many predicted positives are actually positive
+precision = precision_score(y_true, y_pred, average=&quot;binary&quot;)
+
+# Recall (Sensitivity): TP / (TP + FN), how many actual positives were detected
+recall = recall_score(y_true, y_pred, average=&quot;binary&quot;)
+
+# F1 Score: harmonic mean of precision and recall
+f1 = f1_score(y_true, y_pred, average=&quot;binary&quot;)
+
+# AUC-ROC: Area Under the ROC Curve
+auc = roc_auc_score(y_true, y_prob)  # y_prob is probability of positive class
+
+# Confusion Matrix
+cm = confusion_matrix(y_true, y_pred)
+print(classification_report(y_true, y_pred, target_names=class_names))
+</code></pre>
+<h3 id="regression-metrics">Regression Metrics</h3>
+<pre><code class="language-python">from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
+
+mae = mean_absolute_error(y_true, y_pred)
+mse = mean_squared_error(y_true, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_true, y_pred)
+
+# MAPE (Mean Absolute Percentage Error)
+mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+</code></pre>
+<h3 id="metric-selection-guide">Metric Selection Guide</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommended Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Balanced classification</td>
+<td>Accuracy, F1</td>
+</tr>
+<tr>
+<td>Imbalanced classification (e.g., fraud)</td>
+<td>PR-AUC, F1, recall at a fixed precision (ROC-AUC can look optimistic)</td>
+</tr>
+<tr>
+<td>When FP costly (e.g., spam filter)</td>
+<td>Precision</td>
+</tr>
+<tr>
+<td>When FN costly (e.g., cancer detection)</td>
+<td>Recall</td>
+</tr>
+<tr>
+<td>Regression (general)</td>
+<td>RMSE, MAE, R²</td>
+</tr>
+<tr>
+<td>Regression (outlier-sensitive)</td>
+<td>RMSE</td>
+</tr>
+<tr>
+<td>Regression (outlier-robust)</td>
+<td>MAE</td>
+</tr>
+<tr>
+<td>Ranking/recommendations</td>
+<td>NDCG, MAP</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="feature-engineering-techniques">Feature Engineering Techniques</h2>
+<h3 id="handling-missing-values">Handling Missing Values</h3>
+<pre><code class="language-python">from sklearn.impute import SimpleImputer, KNNImputer
+
+# Mean/median imputation
+imputer = SimpleImputer(strategy=&quot;mean&quot;)  # or &quot;median&quot;, &quot;most_frequent&quot;
+X_imputed = imputer.fit_transform(X)
+
+# KNN imputation (uses similar samples)
+knn_imputer = KNNImputer(n_neighbors=5)
+X_knn = knn_imputer.fit_transform(X)
+
+# Missing indicator
+import pandas as pd
+df[&quot;income_missing&quot;] = df[&quot;income&quot;].isna().astype(int)
+</code></pre>
+<h3 id="encoding-categorical-variables">Encoding Categorical Variables</h3>
+<pre><code class="language-python">from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder
+
+# LabelEncoder is meant for the target y; for feature columns use OrdinalEncoder
+le = LabelEncoder()
+df[&quot;category_encoded&quot;] = le.fit_transform(df[&quot;category&quot;])
+
+# One-hot encoding (linear models)
+ohe = OneHotEncoder(sparse_output=False, handle_unknown=&quot;ignore&quot;)
+X_encoded = ohe.fit_transform(df[[&quot;category&quot;]])
+
+# Target encoding (powerful but risks leakage: use cross-val)
+from category_encoders import TargetEncoder
+te = TargetEncoder()
+X_te = te.fit_transform(X_train[&quot;category&quot;], y_train)
+</code></pre>
+<h3 id="feature-scaling">Feature Scaling</h3>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+
+# StandardScaler: zero mean, unit variance, required for SVM, logistic regression, KNN
+ss = StandardScaler()
+X_std = ss.fit_transform(X_train)
+
+# MinMaxScaler: scales to [0,1], required for neural networks sometimes
+mm = MinMaxScaler()
+X_mm = mm.fit_transform(X_train)
+
+# RobustScaler: uses median and IQR, robust to outliers
+rs = RobustScaler()
+X_rs = rs.fit_transform(X_train)
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the bias-variance tradeoff?</strong> 🟢 Beginner</p>
+<p>Bias is the error from wrong assumptions in the model (underfitting). Variance is the error from sensitivity to small fluctuations in training data (overfitting). High bias models (linear regression on non-linear data) have consistent but systematically wrong predictions. High variance models (deep decision trees) fit training data perfectly but generalize poorly. The goal is to find the sweet spot using cross-validation, regularization, and ensemble methods.</p>
+<hr />
+<p><strong>Q2: When would you use Random Forest vs XGBoost?</strong> 🟡 Intermediate</p>
+<p><strong>Random Forest:</strong> Better default performance out-of-the-box, less sensitive to hyperparameters, parallelizable, good for noisy datasets. Use when you need a strong baseline quickly.</p>
+<p><strong>XGBoost/LightGBM/CatBoost:</strong> Higher peak performance, handles class imbalance better, built-in regularization, early stopping. Use when you need maximum performance and are willing to tune hyperparameters. LightGBM is faster than XGBoost on large datasets due to histogram-based splitting.</p>
+<hr />
+<p><strong>Q3: Explain the difference between bagging and boosting.</strong> 🟡 Intermediate</p>
+<p><strong>Bagging (Bootstrap Aggregating):</strong> Trains multiple independent models on random bootstrap samples of training data, then averages/votes their predictions. Reduces variance. Example: Random Forest. Models are trained in parallel.</p>
+<p><strong>Boosting:</strong> Trains models sequentially, where each model focuses on the errors of the previous one. Reduces bias and variance. Example: XGBoost, AdaBoost, Gradient Boosting. Models are trained sequentially and cannot be parallelized across rounds.</p>
+<hr />
+<p><strong>Q4: How does gradient boosting work?</strong> 🔴 Advanced</p>
+<p>Gradient boosting fits an ensemble of weak learners (usually shallow decision trees) sequentially. At each step, it fits a new tree to the <strong>negative gradient of the loss function</strong> with respect to the current ensemble's predictions. For MSE loss, this gradient equals the residuals (actual − predicted). Each new tree corrects the errors of all previous trees. A learning rate scales each tree's contribution, preventing overfitting.</p>
+<pre><code>F₀(x) = argmin Σ L(yᵢ, γ)   (initial prediction)
+Fₘ(x) = Fₘ₋₁(x) + η · hₘ(x) (add scaled tree)
+where hₘ is fit to -∂L/∂Fₘ₋₁ (negative gradient)
+</code></pre>
+<hr />
+<p><strong>Q5: What is the kernel trick in SVM?</strong> 🔴 Advanced</p>
+<p>The kernel trick allows SVMs to find non-linear decision boundaries without explicitly computing high-dimensional feature transformations. Instead of mapping x to φ(x) and computing φ(xᵢ)·φ(xⱼ), the SVM only needs K(xᵢ, xⱼ) = φ(xᵢ)·φ(xⱼ) (the dot product in the transformed space). This can be computed efficiently even when φ maps to infinite-dimensional space. Common kernels: RBF/Gaussian, polynomial, sigmoid.</p>
+<hr />
+<p><strong>Q6: How do you handle class imbalance?</strong> 🟡 Intermediate</p>
+<ol>
+<li><strong>Resampling:</strong> Oversample minority class (SMOTE, synthetic minority oversampling) or undersample majority class</li>
+<li><strong>Class weights:</strong> Set <code>class_weight=&quot;balanced&quot;</code> in sklearn to give higher penalty to minority class errors</li>
+<li><strong>Threshold adjustment:</strong> Lower the classification threshold to increase recall for minority class</li>
+<li><strong>Evaluation:</strong> Use F1-score, AUC-ROC, precision-recall curves instead of accuracy</li>
+<li><strong>Collect more data:</strong> Get more minority class examples</li>
+<li><strong>Algorithm choice:</strong> Gradient-boosted trees with class weights are a strong default, but no algorithm removes the need for the right metric and threshold</li>
+</ol>
+<hr />
+<p><strong>Q7: What is regularization and when do you need it?</strong> 🟢 Beginner</p>
+<p>Regularization adds a penalty for model complexity to the loss function to prevent overfitting. L1 (Lasso) adds <code>λ·|w|</code>: drives some weights to exactly zero, performing feature selection. L2 (Ridge) adds <code>λ·||w||²</code>: shrinks weights proportionally toward zero, keeps all features. Elastic Net combines both. You need regularization when: training accuracy &gt;&gt; validation accuracy (overfitting), when you have many features relative to samples, or when features are highly correlated.</p>
+<hr />
+<p><strong>Q8: Explain PCA, how does it work and what are its limitations?</strong> 🟡 Intermediate</p>
+<p>PCA finds orthogonal directions (principal components) of maximum variance in the data. It computes the covariance matrix, finds its eigenvectors (principal components) and eigenvalues (variance captured). Projects data onto the top k eigenvectors.</p>
+<p>Limitations: (1) Linear only: cannot capture non-linear structure, (2) assumes the directions of maximum variance are the most informative (not always true for classification), (3) loses interpretability, principal components are linear combinations of all features, (4) sensitive to feature scale, requires standardization first.</p>
+<hr />
+<p><strong>Q9: What is cross-validation and why do we use it?</strong> 🟢 Beginner</p>
+<p>Cross-validation is a model evaluation technique that trains and tests on different subsets of data to estimate generalization performance. K-fold CV splits data into k folds, trains on k-1, tests on 1, repeating k times. We use it because: single train-test split gives noisy estimates (depends on the specific split), CV uses all data for both training and testing, and it helps with hyperparameter tuning without overfitting to the test set.</p>
+<hr />
+<p><strong>Q10: What is the curse of dimensionality?</strong> 🟡 Intermediate</p>
+<p>As dimensionality increases, the volume of the feature space grows exponentially. Key effects: (1) distances between points become increasingly similar (all points equidistant), making KNN-type methods fail, (2) exponentially more data needed to maintain sample density, (3) models overfit with many features relative to samples. Solutions: dimensionality reduction (PCA, UMAP), feature selection, regularization.</p>
+<hr />
+<p><strong>Q11: What is SMOTE and when would you use it?</strong> 🟡 Intermediate</p>
+<p>SMOTE (Synthetic Minority Oversampling Technique) creates synthetic minority class examples by interpolating between existing minority examples and their k-nearest neighbors. Unlike random oversampling (which duplicates), SMOTE creates new synthetic examples along the line segments connecting minority class points. Use it for classification problems with significant class imbalance (e.g., 1:10 or worse) when you want to avoid losing majority class information through undersampling. Apply SMOTE only on the training set, never the test set.</p>
+<hr />
+<p><strong>Q12: How does KNN work and what are its trade-offs?</strong> 🟢 Beginner</p>
+<p>KNN classifies a new point by finding its k nearest training examples (by distance) and voting on the class. No training phase: just stores training data. Advantages: simple, no assumptions about data distribution, naturally handles multi-class. Disadvantages: O(n) inference (must compare to all training points), fails with high-dimensional data (curse of dimensionality), sensitive to feature scale (requires normalization), high memory.</p>
+<hr />
+<p><strong>Q13: What is the difference between Gini impurity and entropy for decision trees?</strong> 🟡 Intermediate</p>
+<p>Both measure node impurity (how mixed the classes are). Gini impurity: <code>1 - Σpᵢ²</code>, computationally cheaper (no log). Entropy: <code>-Σpᵢlog₂(pᵢ)</code>, information-theoretic measure. In practice, they give very similar results. Gini tends to isolate the most frequent class into its own branch; entropy tends to produce more balanced trees. Default in sklearn is Gini. The difference in model quality is negligible: choose based on computational preference.</p>
+<hr />
+<p><strong>Q14: What is L1 vs L2 regularization and which would you use for feature selection?</strong> 🟡 Intermediate</p>
+<p>L1 (Lasso) penalty: <code>λ·Σ|wᵢ|</code>: drives less important feature weights to exactly zero, performing automatic feature selection. L2 (Ridge) penalty: <code>λ·Σwᵢ²</code>: shrinks all weights toward zero but rarely to exactly zero. Use L1 when you believe many features are irrelevant (want sparse models), use L2 when you believe all features are somewhat relevant (want stable coefficients). Elastic Net combines both: <code>λ₁·Σ|wᵢ| + λ₂·Σwᵢ²</code>.</p>
+<hr />
+<p><strong>Q15: What is the difference between supervised and unsupervised learning?</strong> 🟢 Beginner</p>
+<p>Supervised learning trains on labeled data (inputs + known outputs) to learn a mapping function. Examples: classification, regression. Unsupervised learning finds patterns in unlabeled data without predefined outputs. Examples: clustering, dimensionality reduction, anomaly detection. Semi-supervised learning uses a small labeled dataset alongside a large unlabeled dataset.</p>
+<hr />
+<p><strong>Q16: When would you choose DBSCAN over K-Means?</strong> 🟡 Intermediate</p>
+<p>Choose DBSCAN when: (1) clusters have arbitrary shapes (not spherical), (2) you don't know the number of clusters k, (3) you need outlier/noise detection, (4) cluster densities vary significantly. Use K-Means when: (1) clusters are roughly spherical, (2) you know k or can determine it via elbow method, (3) dataset is very large (K-Means scales to millions of points), (4) you need a simple, interpretable solution.</p>
+<hr />
+<p><strong>Q17: What is the difference between Type I and Type II errors?</strong> 🟢 Beginner</p>
+<p><strong>Type I error (False Positive):</strong> Predicted positive, actually negative. Example: flagging a legitimate email as spam. <strong>Type II error (False Negative):</strong> Predicted negative, actually positive. Example: missing a fraudulent transaction. The tradeoff is controlled via the decision threshold. For fraud detection, minimize FN (Type II): missing fraud is more costly. For spam filtering, minimize FP (Type I): blocking legitimate emails is costly.</p>
+<hr />
+<p><strong>Q18: What is feature importance in tree-based models?</strong> 🟡 Intermediate</p>
+<p>Feature importance measures how much each feature contributes to reducing impurity across all splits in all trees. Computed as the total reduction in Gini/entropy across all splits on that feature, each weighted by the fraction of samples reaching that node, then averaged over trees and normalized. Limitations: (1) biased toward high-cardinality features, (2) correlated features split importance between them, (3) not causal. More reliable alternatives: permutation importance, SHAP values.</p>
+<hr />
+<p><strong>Q19: Explain the Random Forest algorithm step by step.</strong> 🟡 Intermediate</p>
+<ol>
+<li>Draw n bootstrap samples (with replacement) from training data</li>
+<li>For each bootstrap sample, train a decision tree with a twist: at each split, consider only a random subset of features (typically sqrt(features) for classification, features/3 for regression)</li>
+<li>Grow each tree to maximum depth (no pruning)</li>
+<li>For prediction: classify by majority vote (classification) or average (regression) across all trees</li>
+</ol>
+<p>Key ideas: bootstrap sampling creates diversity, random feature subsets prevent correlated trees, combining decorrelated trees reduces variance with only a small increase in bias.</p>
+<hr />
+<p><strong>Q20: What is the difference between accuracy and F1 score, and when should you prefer F1?</strong> 🟢 Beginner</p>
+<p>Accuracy = (TP + TN) / Total: works well for balanced classes. F1 = 2·(Precision·Recall)/(Precision+Recall): balances precision and recall. Prefer F1 (or precision-recall separately) when: (1) classes are imbalanced (a model predicting all-majority gets high accuracy but F1≈0), (2) the cost of FP and FN differ, (3) the business cares about detection rate (recall) or precision of alerts. Example: 1% fraud rate: a model predicting no-fraud gets 99% accuracy but 0% F1.</p>
+<hr />
+<hr />
+<h2 id="statistics--probability">Statistics &amp; Probability</h2>
+<p>See <a href="intro_statistics_probability.html">Statistics &amp; Probability Guide</a> for detailed coverage.</p>
+<ul>
+<li><strong>Hypothesis testing</strong>: t-test, chi-square, ANOVA, multiple comparisons correction</li>
+<li><strong>Probability distributions</strong>: Normal, Binomial, Poisson, Beta and when to use each</li>
+<li><strong>Bayesian statistics</strong>: Bayes' theorem, MLE vs MAP, priors and posteriors</li>
+<li><strong>Confidence intervals</strong>: frequentist CI vs Bayesian credible intervals, bootstrap CI</li>
+<li><strong>Correlation</strong>: Pearson vs Spearman, covariance, correlation ≠ causation</li>
+</ul>
+<hr />
+<h2 id="guides-in-this-track">Guides in This Track</h2>
+<p>Every guide in <code>classical_ml/</code>. Start with the overview above, then work through these.</p>
+<ul>
+<li><a href="intro_anomaly_detection.html">Anomaly Detection</a></li>
+<li><a href="intro_causal_inference.html">Causal Inference and Uplift Modeling</a></li>
+<li><a href="intro_clustering.html">Clustering Algorithms</a></li>
+<li><a href="intro_dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li><a href="intro_ensemble_methods.html">Ensemble Methods and Gradient Boosting</a></li>
+<li><a href="intro_feature_engineering.html">Feature Engineering &amp; Selection</a></li>
+<li><a href="intro_math_for_ml.html">Math for ML: Linear Algebra, Calculus, and Optimization</a></li>
+<li><a href="intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="intro_nlp_fundamentals.html">NLP Fundamentals</a></li>
+<li><a href="intro_recommender_systems.html">Recommender Systems</a></li>
+<li><a href="intro_statistics_probability.html">Statistics &amp; Probability for ML Interviews</a></li>
+<li><a href="intro_time_series.html">Time Series Analysis &amp; Forecasting</a></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://scikit-learn.org/stable/">Scikit-learn Documentation</a></li>
+<li><a href="https://xgboost.readthedocs.io/">XGBoost Documentation</a></li>
+<li><a href="https://lightgbm.readthedocs.io/">LightGBM Documentation</a></li>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning: Hastie, Tibshirani, Friedman</a></li>
+<li><a href="https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/">Pattern Recognition and Machine Learning: Bishop</a></li>
+<li><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/">Hands-On Machine Learning: Aurélien Géron (O'Reilly)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><span></span><a rel="next" class="next" href="intro_math_for_ml.html"><small>Next</small>Math for ML</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/README.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>n8n - AI Workflow Automation Guide | Cracking ML Interviews</title>
+<meta name="description" content="n8n - AI Workflow Automation Guide: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_n8n.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="n8n - AI Workflow Automation Guide | Cracking ML Interviews">
+<meta property="og:description" content="n8n - AI Workflow Automation Guide: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_n8n.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="n8n - AI Workflow Automation Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="n8n - AI Workflow Automation Guide: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "n8n - AI Workflow Automation Guide",
+   "description": "n8n - AI Workflow Automation Guide: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_n8n.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "n8n",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_n8n.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">n8n</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_n8n.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="n8n---ai-workflow-automation-guide">n8n - AI Workflow Automation Guide</h1>
+<h2 id="what-is-n8n">What is n8n?</h2>
+<p><strong>n8n</strong> is a workflow automation platform that lets you connect APIs, databases, webhooks, queues, and AI services using a visual node-based editor.</p>
+<p>It is especially useful when you need to:</p>
+<ul>
+<li>automate repetitive business workflows,</li>
+<li>connect LLMs to external systems,</li>
+<li>build human approval flows,</li>
+<li>trigger AI jobs from forms, Slack, email, or webhooks,</li>
+<li>ship internal AI tooling without writing a full orchestration backend first.</li>
+</ul>
+<p>In interviews, n8n usually comes up as a <strong>low-code workflow orchestrator</strong> that sits between product automation tools and code-first agent frameworks.</p>
+<hr />
+<h2 id="core-mental-model">Core Mental Model</h2>
+<p>Think of n8n as:</p>
+<pre><code class="language-text">Trigger -&gt; Workflow -&gt; Nodes -&gt; External Systems -&gt; Output / Next Action
+</code></pre>
+<p>Each workflow is a graph of nodes:</p>
+<ul>
+<li><strong>Trigger nodes</strong> start execution.</li>
+<li><strong>Action nodes</strong> call APIs or perform logic.</li>
+<li><strong>AI nodes</strong> invoke models, prompts, tools, or memory-backed flows.</li>
+<li><strong>Logic nodes</strong> branch, merge, filter, retry, and transform data.</li>
+<li><strong>Human review steps</strong> pause or redirect execution when needed.</li>
+</ul>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>The end-to-end automation graph</td>
+</tr>
+<tr>
+<td><strong>Node</strong></td>
+<td>One unit of work such as HTTP request, database query, AI call, or condition</td>
+</tr>
+<tr>
+<td><strong>Trigger</strong></td>
+<td>Event that starts the workflow: webhook, cron, Slack message, form submit, queue event</td>
+</tr>
+<tr>
+<td><strong>Execution</strong></td>
+<td>A single run of a workflow</td>
+</tr>
+<tr>
+<td><strong>Credential</strong></td>
+<td>Stored auth for external services</td>
+</tr>
+<tr>
+<td><strong>Expression</strong></td>
+<td>Dynamic values computed from previous nodes</td>
+</tr>
+<tr>
+<td><strong>Webhook</strong></td>
+<td>HTTP endpoint that can start a flow or receive callbacks</td>
+</tr>
+<tr>
+<td><strong>Queue mode</strong></td>
+<td>Scaled execution model using workers and a queue backend</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="where-n8n-fits-in-an-ai-stack">Where n8n Fits in an AI Stack</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Typical Tools</th>
+<th>n8n's role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI / event source</td>
+<td>Slack, forms, email, CRM, webhook</td>
+<td>Receives triggers and routes work</td>
+</tr>
+<tr>
+<td>AI orchestration</td>
+<td>LangGraph, custom Python, MCP tools, prompt pipelines</td>
+<td>Can call these systems or host lightweight orchestration directly</td>
+</tr>
+<tr>
+<td>Data / storage</td>
+<td>Postgres, Redis, S3, vector DBs</td>
+<td>Reads and writes operational context</td>
+</tr>
+<tr>
+<td>Human review</td>
+<td>Slack approvals, dashboards, ticketing systems</td>
+<td>Inserts approval and escalation steps</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>Email, CRM updates, issue trackers, chatops</td>
+<td>Pushes outputs into business systems</td>
+</tr>
+</tbody>
+</table></div>
+<p>The practical takeaway:</p>
+<ul>
+<li>Use <strong>n8n</strong> when workflow automation and integration breadth matter.</li>
+<li>Use <strong>LangGraph</strong> or code-first orchestration when complex state machines, custom control flow, or deep engineering control matter.</li>
+<li>Use both together when you want visual business automation around a code-first agent core.</li>
+</ul>
+<hr />
+<h2 id="common-ai-use-cases">Common AI Use Cases</h2>
+<h3 id="1-lead-enrichment-workflow">1. Lead enrichment workflow</h3>
+<pre><code class="language-text">Webhook -&gt; Validate payload -&gt; Search CRM -&gt; Call LLM for summary
+        -&gt; Enrich from external APIs -&gt; Score lead -&gt; Route to sales rep
+        -&gt; Notify Slack
+</code></pre>
+<h3 id="2-support-ticket-triage">2. Support ticket triage</h3>
+<pre><code class="language-text">Zendesk trigger -&gt; Classify urgency -&gt; Retrieve KB context
+                 -&gt; Draft response -&gt; Human approval for high-risk tickets
+                 -&gt; Post reply -&gt; Log metrics
+</code></pre>
+<h3 id="3-content-operations">3. Content operations</h3>
+<pre><code class="language-text">Notion page created -&gt; Generate summary -&gt; Create social draft
+                     -&gt; Human review -&gt; Publish -&gt; Update tracking sheet
+</code></pre>
+<h3 id="4-internal-ai-assistant-back-office">4. Internal AI assistant back office</h3>
+<pre><code class="language-text">User request -&gt; n8n webhook -&gt; auth check -&gt; call agent backend
+             -&gt; save transcript -&gt; create follow-up tasks -&gt; notify channel
+</code></pre>
+<hr />
+<h2 id="n8n-vs-other-workflow-tools">n8n vs Other Workflow Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Best For</th>
+<th>Strength</th>
+<th>Weakness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>n8n</strong></td>
+<td>AI-enabled business workflows and app integrations</td>
+<td>Visual builder plus custom logic flexibility</td>
+<td>Very complex stateful reasoning is still easier in code</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Stateful AI agents and multi-step reasoning</td>
+<td>Explicit control over loops, branches, and memory</td>
+<td>More engineering effort</td>
+</tr>
+<tr>
+<td><strong>Apache Airflow</strong></td>
+<td>Scheduled data and batch pipelines</td>
+<td>Strong DAG-based scheduling for data workloads</td>
+<td>Less natural for app automation and human-facing triggers</td>
+</tr>
+<tr>
+<td><strong>Zapier</strong></td>
+<td>Simple SaaS automation</td>
+<td>Fastest for non-technical teams</td>
+<td>Less engineering control</td>
+</tr>
+<tr>
+<td><strong>Temporal</strong></td>
+<td>Long-running durable workflows</td>
+<td>Strong execution guarantees and recovery</td>
+<td>Heavier engineering and ops overhead</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="example-ai-ticket-triage-in-n8n">Example: AI Ticket Triage in n8n</h2>
+<h3 id="flow">Flow</h3>
+<pre><code class="language-text">Zendesk Trigger
+  -&gt; Normalize ticket text
+  -&gt; Classify issue type with LLM
+  -&gt; Retrieve relevant FAQ / docs
+  -&gt; Draft response
+  -&gt; IF priority = high
+       -&gt; Slack approval
+     ELSE
+       -&gt; Send draft automatically
+  -&gt; Write audit log to database
+</code></pre>
+<h3 id="what-interviewers-care-about">What interviewers care about</h3>
+<ul>
+<li>where the trigger comes from,</li>
+<li>how credentials are managed,</li>
+<li>how you prevent duplicate processing,</li>
+<li>where human approval is required,</li>
+<li>how you monitor failures and retries,</li>
+<li>whether the LLM is allowed to act directly or only suggest actions.</li>
+</ul>
+<hr />
+<h2 id="production-design-considerations">Production Design Considerations</h2>
+<h3 id="1-idempotency">1. Idempotency</h3>
+<p>If the same webhook arrives twice, the workflow should not create duplicate tickets, emails, or downstream actions.</p>
+<p>Use:</p>
+<ul>
+<li>event IDs,</li>
+<li>database dedupe keys,</li>
+<li>&quot;upsert&quot; style writes,</li>
+<li>replay-safe workflow design.</li>
+</ul>
+<h3 id="2-human-in-the-loop">2. Human-in-the-loop</h3>
+<p>Do not fully automate high-risk actions such as:</p>
+<ul>
+<li>deleting records,</li>
+<li>issuing refunds,</li>
+<li>sending legal or compliance responses,</li>
+<li>changing production infrastructure.</li>
+</ul>
+<p>Insert approval checkpoints through Slack, email, or an internal review queue.</p>
+<h3 id="3-error-handling">3. Error handling</h3>
+<p>Workflows should define:</p>
+<ul>
+<li>retry policy,</li>
+<li>timeout behavior,</li>
+<li>dead-letter or failure queue pattern,</li>
+<li>notification path for operators.</li>
+</ul>
+<h3 id="4-secrets-and-credentials">4. Secrets and credentials</h3>
+<p>Keep credentials in the platform credential store, not inline in nodes or prompts.</p>
+<h3 id="5-auditability">5. Auditability</h3>
+<p>For AI-assisted business flows, log:</p>
+<ul>
+<li>input payload,</li>
+<li>prompt or task version,</li>
+<li>model output,</li>
+<li>human approvals,</li>
+<li>downstream actions taken.</li>
+</ul>
+<h3 id="6-separation-of-concerns">6. Separation of concerns</h3>
+<p>n8n should often coordinate the workflow while heavier reasoning or proprietary logic runs in:</p>
+<ul>
+<li>a Python backend,</li>
+<li>a FastAPI service,</li>
+<li>a LangGraph agent service,</li>
+<li>or internal tools exposed via API.</li>
+</ul>
+<hr />
+<h2 id="when-to-use-n8n">When to Use n8n</h2>
+<p><strong>Use n8n when:</strong></p>
+<ul>
+<li>you need many SaaS integrations quickly,</li>
+<li>business teams need visibility into the automation,</li>
+<li>workflows are event-driven and operational,</li>
+<li>you want fast iteration on AI-enhanced internal tools,</li>
+<li>human approval and routing are part of the process.</li>
+</ul>
+<p><strong>Avoid using n8n alone when:</strong></p>
+<ul>
+<li>the workflow needs advanced graph-state control,</li>
+<li>you need long-running agent memory with custom recovery logic,</li>
+<li>you require deep custom testing around reasoning loops,</li>
+<li>the critical path depends on complex code-first orchestration.</li>
+</ul>
+<p>In those cases, use n8n as the outer automation layer and call a code-first backend.</p>
+<hr />
+<h2 id="interview-questions">Interview Questions</h2>
+<p><strong>Q1: What is n8n and how is it different from LangGraph?</strong></p>
+<blockquote>
+<p>n8n is a node-based workflow automation platform focused on integrating business systems, triggers, approvals, and API calls. LangGraph is a code-first framework for stateful AI agent orchestration. n8n is better for operational automation; LangGraph is better for complex reasoning workflows.</p>
+</blockquote>
+<p><strong>Q2: When would you choose n8n over Airflow?</strong></p>
+<blockquote>
+<p>Choose n8n for event-driven application workflows, SaaS integrations, webhooks, approvals, and AI-powered back-office automation. Choose Airflow for scheduled data pipelines, batch jobs, and data platform orchestration.</p>
+</blockquote>
+<p><strong>Q3: What are the risks of using n8n in AI workflows?</strong></p>
+<blockquote>
+<p>The main risks are poor idempotency, hidden credential sprawl, weak approval boundaries, limited testing of complex logic, and letting the LLM trigger unsafe downstream actions. Mitigate with dedupe keys, credential isolation, approval gates, and service-layer validation.</p>
+</blockquote>
+<p><strong>Q4: How would you productionize an n8n workflow?</strong></p>
+<blockquote>
+<p>Add queue-based execution, structured logging, retries, alerting, API-level validation, approval checkpoints, external state storage, and clear ownership for secrets and deployments.</p>
+</blockquote>
+<p><strong>Q5: Can n8n be part of an agent architecture?</strong></p>
+<blockquote>
+<p>Yes. It often works well as the outer orchestration layer that handles triggers, routing, notifications, approvals, and integration steps, while a code-first agent backend handles planning, tool selection, and reasoning.</p>
+</blockquote>
+<p><strong>Q6: What is the main tradeoff of low-code AI orchestration?</strong></p>
+<blockquote>
+<p>Speed and integration breadth improve, but very complex control flow, fine-grained testing, and custom runtime behavior are easier to manage in code.</p>
+</blockquote>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_agentic_ai.html">Agentic AI</a></td>
+<td>n8n can orchestrate AI agents and approval flows</td>
+</tr>
+<tr>
+<td><a href="intro_agent_tool_use.html">Agent Systems &amp; Tool Use</a></td>
+<td>n8n is often used to wrap tool-enabled AI workflows</td>
+</tr>
+<tr>
+<td><a href="intro_langgraph.html">LangGraph</a></td>
+<td>Strong comparison point for code-first orchestration</td>
+</tr>
+<tr>
+<td><a href="intro_mcp.html">MCP</a></td>
+<td>MCP tools can sit behind APIs that n8n workflows call</td>
+</tr>
+<tr>
+<td><a href="../data_engineering/intro_apache_airflow.html">Apache Airflow</a></td>
+<td>Useful contrast between app automation and data orchestration</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://n8n.io/">n8n official site</a></li>
+<li><a href="https://docs.n8n.io/">n8n documentation</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_multimodal_ai.html"><small>Previous</small>Multimodal AI</a><a rel="next" class="next" href="intro_n8n_advanced.html"><small>Next</small>n8n (Advanced)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_n8n.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

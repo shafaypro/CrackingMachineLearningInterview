@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Inference Optimization Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Training an LLM is a one-time cost; serving it is a bill that arrives every month. This is now one of the most-asked areas in AI engineering interviews…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_inference_optimization.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="LLM Inference Optimization Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Training an LLM is a one-time cost; serving it is a bill that arrives every month. This is now one of the most-asked areas in AI engineering interviews…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_inference_optimization.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLM Inference Optimization Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Training an LLM is a one-time cost; serving it is a bill that arrives every month. This is now one of the most-asked areas in AI engineering interviews…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "LLM Inference Optimization",
+   "description": "Training an LLM is a one-time cost; serving it is a bill that arrives every month. This is now one of the most-asked areas in AI engineering interviews…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_inference_optimization.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI & GenAI",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ai--genai"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "LLM Inference Optimization",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/ai_genai/intro_llm_inference_optimization.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ai--genai">AI &amp; GenAI</a> <span aria-hidden="true">/</span> <span aria-current="page">LLM Inference Optimization</span></nav>
+<p class="meta"><a href="../../#ai_genai/intro_llm_inference_optimization.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="llm-inference-optimization">LLM Inference Optimization</h1>
+<p>Training an LLM is a one-time cost; serving it is a bill that arrives every month. This is now one of the most-asked areas in AI engineering interviews, because it is where most production LLM budgets and latency SLOs are won or lost. This guide covers the two-phase nature of inference, KV caching, batching, quantization, speculative decoding, and how to reason about latency and cost.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#the-two-phases-of-inference">The Two Phases of Inference</a></li>
+<li><a href="#latency-metrics-that-matter">Latency Metrics That Matter</a></li>
+<li><a href="#kv-cache">KV Cache</a></li>
+<li><a href="#batching-strategies">Batching Strategies</a></li>
+<li><a href="#attention-kernel-optimizations">Attention Kernel Optimizations</a></li>
+<li><a href="#quantization">Quantization</a></li>
+<li><a href="#speculative-decoding">Speculative Decoding</a></li>
+<li><a href="#serving-frameworks">Serving Frameworks</a></li>
+<li><a href="#cost-modeling">Cost Modeling</a></li>
+<li><a href="#application-level-optimizations">Application-Level Optimizations</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="the-two-phases-of-inference">The Two Phases of Inference</h2>
+<p>Autoregressive generation has two phases with completely different hardware characteristics. Almost every optimization exists because of this split, and saying so is the fastest way to show you understand the area.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What happens</th>
+<th>Bottleneck</th>
+<th>Parallelism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prefill</strong></td>
+<td>Process the whole prompt in one forward pass</td>
+<td><strong>Compute-bound</strong> (large matmuls)</td>
+<td>All prompt tokens at once</td>
+</tr>
+<tr>
+<td><strong>Decode</strong></td>
+<td>Generate one token at a time</td>
+<td><strong>Memory-bandwidth-bound</strong></td>
+<td>One token per step, per sequence</td>
+</tr>
+</tbody>
+</table></div>
+<p>During decode, generating a single token requires reading <em>every model weight</em> from HBM to compute one small matrix-vector product. For a 13B model in fp16, that's ~26 GB read per token. On an A100 with ~2 TB/s bandwidth, the floor is ~13 ms/token regardless of how fast the GPU's FLOPs are: the arithmetic intensity is terrible.</p>
+<p>This single fact explains the field:</p>
+<ul>
+<li><strong>Batching helps enormously in decode</strong>: the weights are read once and amortized across all sequences in the batch, so throughput scales nearly linearly until compute finally binds.</li>
+<li><strong>Quantization helps decode directly</strong>: half the bytes to read is roughly half the time per token.</li>
+<li><strong>Speculative decoding helps</strong>: it verifies several tokens in one weight-read pass.</li>
+<li><strong>More FLOPs alone barely helps decode</strong>: which is why raw TFLOPs is a misleading spec for a serving GPU.</li>
+</ul>
+<hr />
+<h2 id="latency-metrics-that-matter">Latency Metrics That Matter</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Definition</th>
+<th>Driven by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TTFT</strong> (time to first token)</td>
+<td>Request arrival → first token emitted</td>
+<td>Prefill: prompt length, queueing, batch scheduling</td>
+</tr>
+<tr>
+<td><strong>TPOT / ITL</strong> (time per output token)</td>
+<td>Steady-state inter-token latency</td>
+<td>Decode: memory bandwidth, batch size</td>
+</tr>
+<tr>
+<td><strong>End-to-end latency</strong></td>
+<td><code>TTFT + TPOT × output_tokens</code></td>
+<td>Both</td>
+</tr>
+<tr>
+<td><strong>Throughput</strong></td>
+<td>Tokens/sec across all requests</td>
+<td>Batch size, GPU utilization</td>
+</tr>
+<tr>
+<td><strong>Goodput</strong></td>
+<td>Throughput of requests that met their SLO</td>
+<td>The number that actually matters</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>Total latency = TTFT + (output_tokens - 1) × TPOT
+</code></pre>
+<p>For a chat UI, TTFT dominates perceived responsiveness: stream tokens and users tolerate a slower TPOT as long as text appears quickly. For a batch summarization job, only throughput matters and you should push batch size until TTFT is awful, because nobody is waiting.</p>
+<p><strong>There is a fundamental throughput/latency tradeoff.</strong> Larger batches raise throughput and raise per-request latency. Serving one model to both an interactive chat product and an offline pipeline from the same endpoint is usually a mistake: run separate deployments with different batch configurations.</p>
+<hr />
+<h2 id="kv-cache">KV Cache</h2>
+<p>In attention, each new token attends to all previous tokens. Recomputing keys and values for the whole prefix at every step would be <code>O(n²)</code> work per sequence. The KV cache stores them instead, making each decode step <code>O(n)</code>.</p>
+<pre><code>KV cache bytes = 2 (K and V)
+              × num_layers
+              × num_kv_heads × head_dim
+              × sequence_length
+              × batch_size
+              × bytes_per_element
+</code></pre>
+<p>Worked example: Llama-3-8B (32 layers, 8 KV heads via GQA, head_dim 128) in fp16, 8k context:</p>
+<pre><code>2 × 32 × 8 × 128 × 8192 × 2 bytes ≈ 1.07 GB per sequence
+</code></pre>
+<p>At batch size 32 that's <strong>34 GB of KV cache</strong>: larger than the 16 GB of model weights. On long-context workloads the KV cache, not the model, is what limits how many concurrent requests fit on a GPU.</p>
+<h3 id="reducing-kv-cache-size">Reducing KV cache size</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Mechanism</th>
+<th>Saving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MQA</strong> (multi-query attention)</td>
+<td>All query heads share one K/V head</td>
+<td><code>num_heads</code>x smaller</td>
+</tr>
+<tr>
+<td><strong>GQA</strong> (grouped-query attention)</td>
+<td>Heads share K/V in groups</td>
+<td>4-8x, with better quality than MQA</td>
+</tr>
+<tr>
+<td><strong>MLA</strong> (multi-head latent attention)</td>
+<td>Compress K/V to a low-rank latent</td>
+<td>Large; used by DeepSeek models</td>
+</tr>
+<tr>
+<td><strong>KV cache quantization</strong></td>
+<td>Store cache in int8/fp8</td>
+<td>2-4x</td>
+</tr>
+<tr>
+<td><strong>PagedAttention</strong></td>
+<td>Non-contiguous paged allocation</td>
+<td>Eliminates fragmentation waste (~2x effective)</td>
+</tr>
+<tr>
+<td><strong>Sliding window / eviction</strong></td>
+<td>Keep only recent + sink tokens</td>
+<td>Bounded memory, some quality loss</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>PagedAttention</strong> (vLLM's core contribution) is worth explaining precisely: naive serving preallocates a contiguous buffer sized to the maximum possible sequence length for every request, so a request that generates 100 tokens with a 4096 reservation wastes 97% of its allocation. PagedAttention borrows OS virtual memory: the cache is split into fixed-size blocks allocated on demand and tracked through a block table. Fragmentation drops to near zero, and identical prefixes can share blocks via copy-on-write, which is what makes prefix caching for shared system prompts nearly free.</p>
+<hr />
+<h2 id="batching-strategies">Batching Strategies</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How it works</th>
+<th>Problem it has</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No batching</strong></td>
+<td>One request at a time</td>
+<td>Wastes almost all GPU throughput</td>
+</tr>
+<tr>
+<td><strong>Static batching</strong></td>
+<td>Wait for N requests, run them together</td>
+<td>Whole batch waits for the longest generation</td>
+</tr>
+<tr>
+<td><strong>Dynamic batching</strong></td>
+<td>Batch what has arrived within a time window</td>
+<td>Still blocks on the longest sequence</td>
+</tr>
+<tr>
+<td><strong>Continuous / in-flight batching</strong></td>
+<td>Evict finished sequences and admit new ones every step</td>
+<td>The standard; 10-20x throughput over static</td>
+</tr>
+</tbody>
+</table></div>
+<p>Continuous batching matters because generation lengths in a real workload vary by 100x. With static batching, a batch of 32 where one request generates 2,000 tokens and the rest generate 20 keeps 31 slots idle for the whole run. Continuous batching frees each slot the moment its sequence emits EOS and immediately admits a queued request. This is the single largest throughput win available in LLM serving, and it is why vLLM/TGI/TensorRT-LLM exist rather than a plain <code>model.generate()</code> loop.</p>
+<p><strong>Chunked prefill</strong> solves a related problem: a long prompt's prefill pass occupies the GPU and stalls every decoding request behind it, spiking their inter-token latency. Splitting prefill into chunks interleaved with decode steps smooths TPOT at a small cost to TTFT.</p>
+<hr />
+<h2 id="attention-kernel-optimizations">Attention Kernel Optimizations</h2>
+<p><strong>FlashAttention</strong> does not change the math; it changes the memory traffic. Standard attention materializes the <code>n × n</code> score matrix in HBM, so memory traffic is <code>O(n²)</code>. FlashAttention tiles the computation in SRAM and uses the online-softmax trick to never write the full matrix out, making traffic <code>O(n²/M)</code> for SRAM size <code>M</code>. The result is 2-4x faster attention and memory that scales linearly in sequence length, which is what made long-context training and inference practical at all.</p>
+<p><strong>PagedAttention</strong> (memory allocation) and <strong>FlashAttention</strong> (kernel efficiency) are complementary and both used in modern servers. A common interview slip is treating them as alternatives.</p>
+<p>Other kernel-level levers: CUDA graphs to remove per-step launch overhead (significant when each decode step is only a few milliseconds), fused kernels for the norm+attention+MLP sequence, and tensor parallelism to split a model that doesn't fit on one GPU (with the caveat that it adds an all-reduce on every layer, so it only pays off across fast interconnect like NVLink).</p>
+<hr />
+<h2 id="quantization">Quantization</h2>
+<p>Quantization reduces the numerical precision of weights and sometimes activations. Since decode is memory-bandwidth-bound, fewer bytes per weight translates almost directly into faster generation.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Bits</th>
+<th>Type</th>
+<th>Quality impact</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>fp16 / bf16</strong></td>
+<td>16</td>
+<td>Baseline</td>
+<td>-</td>
+<td>Standard serving precision</td>
+</tr>
+<tr>
+<td><strong>fp8</strong></td>
+<td>8</td>
+<td>Post-training</td>
+<td>Very small</td>
+<td>H100+ native support</td>
+</tr>
+<tr>
+<td><strong>INT8 (SmoothQuant, LLM.int8)</strong></td>
+<td>8</td>
+<td>Post-training</td>
+<td>Small</td>
+<td>Handles outlier activation channels</td>
+</tr>
+<tr>
+<td><strong>GPTQ</strong></td>
+<td>4</td>
+<td>Post-training, calibrated</td>
+<td>Small-moderate</td>
+<td>Layer-wise second-order error correction</td>
+</tr>
+<tr>
+<td><strong>AWQ</strong></td>
+<td>4</td>
+<td>Post-training, activation-aware</td>
+<td>Small</td>
+<td>Protects salient weight channels; fast kernels</td>
+</tr>
+<tr>
+<td><strong>GGUF (llama.cpp)</strong></td>
+<td>2-8</td>
+<td>Post-training</td>
+<td>Varies by level</td>
+<td>The CPU/edge standard</td>
+</tr>
+<tr>
+<td><strong>QLoRA (NF4)</strong></td>
+<td>4</td>
+<td>Training-time</td>
+<td>Small</td>
+<td>For fine-tuning, not primarily serving</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rules of thumb worth stating in an interview: 8-bit is essentially free in quality terms and should be the default. 4-bit costs a small but measurable amount of quality, usually acceptable, and worth it when it lets you fit a larger model on the same GPU. Below 4-bit, degradation becomes obvious on reasoning tasks.</p>
+<p><strong>A larger 4-bit model usually beats a smaller fp16 model of the same memory footprint.</strong> A 4-bit 70B model (~35 GB) generally outperforms an fp16 13B (~26 GB) on quality. That framing (quantization as a way to buy a bigger model rather than as a way to shrink a fixed one) is the answer interviewers are looking for.</p>
+<p><strong>Verify quality yourself.</strong> Perplexity barely moves under quantization while task accuracy can drop noticeably, especially on structured output, tool calling, and multi-step reasoning. Run your own eval set on the quantized model before shipping.</p>
+<hr />
+<h2 id="speculative-decoding">Speculative Decoding</h2>
+<p>A small, fast <strong>draft model</strong> proposes <code>k</code> tokens; the large <strong>target model</strong> verifies all <code>k</code> in a single forward pass. Accepted tokens are kept, and the first rejection resamples from a corrected distribution.</p>
+<p>Why it works: verifying <code>k</code> tokens costs almost the same as generating 1, because decode is memory-bandwidth-bound: you read the weights once either way. The speedup is roughly the mean number of accepted tokens per verification step, typically 2-3x on predictable text.</p>
+<pre><code>Expected speedup ≈ (1 - α^(k+1)) / ((1 - α)(1 + c·k))
+   α = draft acceptance rate,  c = draft cost relative to target
+</code></pre>
+<p>Key properties:</p>
+<ul>
+<li><strong>Output distribution is provably unchanged</strong> with the standard rejection-sampling acceptance rule. This is the key point: it is not an approximation and does not trade quality for speed.</li>
+<li>Acceptance rate matters most. A draft model too weak gets rejected constantly and you pay its cost for nothing; too strong and it's expensive to run.</li>
+<li>Variants that avoid a separate draft model: <strong>Medusa</strong> (extra prediction heads on the target model), <strong>EAGLE</strong> (feature-level drafting), <strong>n-gram / prompt lookup decoding</strong> (draft by copying from the prompt, remarkably effective for summarization, RAG, and code editing where output copies input heavily).</li>
+</ul>
+<p>Speculative decoding improves <strong>latency at low batch sizes</strong>. At high batch sizes the GPU is already compute-saturated and there is no spare capacity to spend on verification, so gains shrink or vanish: a nuance worth mentioning.</p>
+<hr />
+<h2 id="serving-frameworks">Serving Frameworks</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Strengths</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>PagedAttention, continuous batching, wide model support, OpenAI-compatible API</td>
+<td>The default self-hosted choice</td>
+</tr>
+<tr>
+<td><strong>TensorRT-LLM</strong></td>
+<td>Fastest on NVIDIA with compiled kernels; FP8 support</td>
+<td>Maximum performance, willing to pay in build complexity</td>
+</tr>
+<tr>
+<td><strong>TGI</strong> (HuggingFace)</td>
+<td>Production-ready, good observability, easy HF integration</td>
+<td>HF-centric stacks</td>
+</tr>
+<tr>
+<td><strong>SGLang</strong></td>
+<td>RadixAttention prefix caching, strong structured output</td>
+<td>Heavy prefix sharing, agents, constrained decoding</td>
+</tr>
+<tr>
+<td><strong>llama.cpp / Ollama</strong></td>
+<td>CPU and Apple Silicon, GGUF quantization</td>
+<td>Local development, edge</td>
+</tr>
+<tr>
+<td><strong>Managed APIs</strong></td>
+<td>Zero ops, elastic scale</td>
+<td>Variable load, small teams, frontier models</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># vLLM: offline batch inference
+from vllm import LLM, SamplingParams
+
+llm = LLM(
+    model=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;,
+    dtype=&quot;bfloat16&quot;,
+    gpu_memory_utilization=0.90,   # fraction of VRAM for weights + KV cache
+    max_model_len=8192,            # caps KV cache per sequence
+    enable_prefix_caching=True,    # big win for shared system prompts
+    tensor_parallel_size=1,
+)
+params = SamplingParams(temperature=0.7, max_tokens=512)
+outputs = llm.generate(prompts, params)   # continuous batching is automatic
+</code></pre>
+<p><strong>Self-host vs API</strong> is a cost-and-control question, not an ideology. Self-hosting wins on high, steady volume (a dedicated GPU amortizes well above roughly 20-30% utilization), on data residency requirements, and when you need a custom fine-tune. APIs win on spiky or low volume, on access to frontier models, and on avoiding an on-call rotation for GPU infrastructure. Model the break-even explicitly: an A100 at roughly $1-2/hour is ~$1,000/month, which buys a substantial number of API tokens.</p>
+<hr />
+<h2 id="cost-modeling">Cost Modeling</h2>
+<pre><code class="language-python">def monthly_cost_api(requests_per_day, in_tokens, out_tokens, price_in, price_out):
+    &quot;&quot;&quot;price_* in dollars per 1M tokens.&quot;&quot;&quot;
+    daily = requests_per_day * (in_tokens * price_in + out_tokens * price_out) / 1e6
+    return daily * 30
+
+def monthly_cost_self_hosted(gpu_hourly, num_gpus, utilization=1.0):
+    return gpu_hourly * num_gpus * 24 * 30 / max(utilization, 1e-9)
+
+# Break-even sanity check
+api  = monthly_cost_api(50_000, 2000, 500, price_in=0.25, price_out=1.25)   # ≈ $1,690/mo
+host = monthly_cost_self_hosted(gpu_hourly=1.20, num_gpus=1)                # ≈ $864/mo
+</code></pre>
+<p>Two structural points that matter more than the arithmetic:</p>
+<ol>
+<li><strong>Input tokens usually dominate</strong> in RAG and agent systems. A 4,000-token retrieved context with a 200-token answer is 95% input. Optimizing output length is the wrong lever; trimming retrieved context, reranking to fewer chunks, and caching the prompt prefix are the right ones.</li>
+<li><strong>Prompt/prefix caching changes the economics.</strong> Providers charge a fraction (often ~10%) for cached input tokens, and self-hosted prefix caching skips the prefill compute entirely. Putting the stable system prompt and few-shot examples first, with the variable part last, is a design decision worth several times the effort of micro-optimizing wording.</li>
+</ol>
+<hr />
+<h2 id="application-level-optimizations">Application-Level Optimizations</h2>
+<p>Often larger wins than anything at the kernel level, and cheaper to implement:</p>
+<ul>
+<li><strong>Prompt caching</strong>: order prompts stable-prefix-first so the cache hits. Frequently a 50-90% input cost reduction for agents and RAG.</li>
+<li><strong>Semantic caching</strong>: embed the query, and if a near-identical past query exists, return its answer. Excellent for FAQ-style traffic; needs a similarity threshold tuned carefully and an invalidation strategy, or it will confidently serve stale answers.</li>
+<li><strong>Model routing</strong>: send easy requests to a small model and hard ones to a large one, with a classifier or heuristic in front. Typically 60-80% cost reduction with minimal quality impact when the routing signal is decent.</li>
+<li><strong>Shorter outputs</strong>: instruct the model to be concise, cap <code>max_tokens</code>, and return structured data rather than prose. Output tokens are usually 4-5x the price of input.</li>
+<li><strong>Streaming</strong>: doesn't change cost or total time, but it slashes <em>perceived</em> latency, which is often the actual complaint.</li>
+<li><strong>Batch APIs</strong>: providers offer roughly 50% discounts for asynchronous batch jobs with a 24-hour window. Free money for offline workloads.</li>
+<li><strong>Stop sequences and early termination</strong>: stop generating the moment the useful content ends.</li>
+<li><strong>Context trimming</strong>: retrieve 20, rerank, pass 5. Fewer tokens, and usually <em>better</em> answers, since irrelevant context measurably degrades quality.</li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-is-llm-inference-memory-bandwidth-bound-rather-than-compute-bound">Why is LLM inference memory-bandwidth-bound rather than compute-bound?</h4>
+<p>During decode, one token is generated per step per sequence, so each weight matrix participates in a matrix-<em>vector</em> product: a tiny amount of arithmetic per byte loaded. The GPU must stream every model weight from HBM for each step: ~26 GB for a 13B fp16 model. On an A100 at ~2 TB/s that's ~13 ms of pure memory traffic per token, while the arithmetic takes a fraction of that. The GPU sits idle waiting on memory.</p>
+<p>Prefill is different: the whole prompt is processed at once, so it's a matrix-matrix product with high arithmetic intensity and it is compute-bound. This is why prefill and decode have different optimizations, why batching multiplies decode throughput almost for free, and why quantization directly speeds up generation.</p>
+<h4 id="explain-the-kv-cache-and-why-it-can-be-larger-than-the-model">Explain the KV cache and why it can be larger than the model.</h4>
+<p>Attention needs the keys and values of every previous token. Without a cache, each new token requires recomputing them for the whole prefix: <code>O(n²)</code> per sequence. The KV cache stores them, making each step <code>O(n)</code>.</p>
+<p>Its size is <code>2 × layers × kv_heads × head_dim × seq_len × batch × dtype_bytes</code>, which grows linearly in <em>both</em> sequence length and batch size while the model weights are fixed. For Llama-3-8B at 8k context, one sequence costs ~1 GB; 32 concurrent sequences cost ~34 GB against 16 GB of fp16 weights. That's why long-context, high-concurrency serving is a KV cache capacity problem, and why GQA, cache quantization, and PagedAttention exist.</p>
+<h4 id="what-is-continuous-batching-and-why-is-it-such-a-large-win">What is continuous batching and why is it such a large win?</h4>
+<p>Static batching waits for a fixed group of requests, runs them together, and returns when the <em>longest</em> generation finishes. Real workloads have generation lengths varying by 100x, so most slots sit idle for most of the batch's life.</p>
+<p>Continuous (in-flight) batching operates at the token level: after every decode step, finished sequences are evicted and queued requests are admitted into the free slots. The GPU stays saturated regardless of length variance. Measured throughput improvements over static batching are typically 10-20x, which is why it's the defining feature of vLLM, TGI, and TensorRT-LLM rather than an optional tuning knob.</p>
+<h4 id="how-does-speculative-decoding-preserve-output-quality">How does speculative decoding preserve output quality?</h4>
+<p>The draft model proposes <code>k</code> tokens and the target model verifies them in one forward pass, which is nearly free because decode is bandwidth-bound. Each drafted token is accepted with probability <code>min(1, p_target(x)/p_draft(x))</code>; on rejection, the token is resampled from the normalized residual distribution <code>max(0, p_target - p_draft)</code>.</p>
+<p>That acceptance rule is exactly modified rejection sampling, and it makes the resulting sequence distribution <strong>provably identical</strong> to sampling from the target model alone. So it is a pure latency optimization with no quality tradeoff: the tradeoff is compute spent on the draft model and the fact that gains shrink at high batch sizes, where the GPU has no idle capacity to spend on verification.</p>
+<h4 id="your-chat-app-has-a-4-second-time-to-first-token-how-do-you-diagnose-and-fix-it">Your chat app has a 4-second time to first token. How do you diagnose and fix it?</h4>
+<p>TTFT is prefill plus queueing, so I'd first measure which one dominates: instrument queue wait, prefill time, and network separately before changing anything.</p>
+<p>If it's <strong>queueing</strong>, the server is saturated: add replicas, enable continuous batching if it isn't on, or use chunked prefill so long prompts stop head-of-line-blocking short ones.</p>
+<p>If it's <strong>prefill compute</strong>, the prompt is too long: enable prefix caching so the stable system prompt is computed once, trim retrieved context (rerank 20 down to 5), and drop verbose few-shot examples. Prefill scales with prompt length, so halving the prompt roughly halves TTFT.</p>
+<p>If it's <strong>model size</strong>, route easy requests to a smaller model, or use a smaller model with a larger context budget.</p>
+<p>Independently of all this, I'd make sure the response streams: a 4-second wall before any text is a much worse experience than 800 ms to first token and a slower stream, at the same total latency.</p>
+<h4 id="how-would-you-cut-llm-serving-costs-by-70-without-hurting-quality-much">How would you cut LLM serving costs by 70% without hurting quality much?</h4>
+<p>Layered, measuring at each step:</p>
+<ol>
+<li><strong>Prompt/prefix caching</strong>: often the single biggest win, since input tokens dominate RAG and agent workloads and cached input is roughly 10% of the price.</li>
+<li><strong>Trim context</strong>: retrieve 20, rerank, send 5. Cheaper <em>and</em> usually more accurate, since irrelevant context degrades answers.</li>
+<li><strong>Model routing</strong>: a small model handles the 70-80% of easy requests; escalate only when a classifier or confidence signal says so.</li>
+<li><strong>Semantic caching</strong> for repeated or near-repeated queries.</li>
+<li><strong>Cap output length</strong> and prefer structured output over prose; output tokens cost several times input.</li>
+<li><strong>Batch API</strong> (~50% discount) for anything that isn't interactive.</li>
+<li><strong>Quantize to int8/fp8</strong> if self-hosting, or move to 4-bit to fit a larger model on the same GPU.</li>
+</ol>
+<p>I'd hold a fixed eval set throughout, because every one of these can quietly degrade quality, and the point is cost reduction <em>at constant quality</em>.</p>
+<h4 id="when-should-you-self-host-a-model-instead-of-using-an-api">When should you self-host a model instead of using an API?</h4>
+<p>Self-host when volume is high and steady enough to amortize a GPU (a dedicated A100 is ~$1,000/month, so the break-even is a real calculation, not a preference), when data cannot leave your network for regulatory reasons, when you need a custom fine-tune or LoRA adapters served at scale, when you need latency guarantees a shared API can't promise, or when you require a specific quantization or sampling behavior.</p>
+<p>Use an API when load is spiky (you pay for idle GPUs otherwise), when you need frontier-model quality you can't self-host, when the team has no GPU operations capacity, or during early product development where the model choice is still changing weekly. The honest answer usually starts with an API and moves specific high-volume workloads in-house once the traffic shape is known.</p>
+<h4 id="what-quality-risk-does-4-bit-quantization-carry-and-how-do-you-validate-it">What quality risk does 4-bit quantization carry, and how do you validate it?</h4>
+<p>The risk is uneven: perplexity often moves very little, which makes quantization look safe, while task-level accuracy on reasoning, structured output, and tool calling can drop noticeably. Outlier activation channels are the usual culprit: a few dimensions with very large magnitudes dominate the quantization range, which is exactly what AWQ and SmoothQuant are designed to protect against.</p>
+<p>Validation: run the <em>application's</em> eval set, not a generic benchmark. Compare fp16 and quantized on task success rate, JSON schema validity, and tool-call correctness; check the tails, not just the mean. If quality holds, 4-bit is usually the right call, and a 4-bit 70B typically beats an fp16 13B at the same memory, which is the real reason to quantize.</p>
+<h4 id="whats-the-difference-between-flashattention-and-pagedattention">What's the difference between FlashAttention and PagedAttention?</h4>
+<p>They solve different problems and are used together. <strong>FlashAttention</strong> is a kernel optimization: it tiles attention computation in SRAM and uses online softmax so the <code>n × n</code> attention matrix is never written to HBM, reducing memory traffic and making attention 2-4x faster with memory linear rather than quadratic in sequence length. <strong>PagedAttention</strong> is a memory <em>allocator</em>: it stores the KV cache in fixed-size non-contiguous blocks with a block table, eliminating the internal fragmentation of preallocating max-length buffers and enabling copy-on-write sharing of common prefixes.</p>
+<p>FlashAttention makes each attention computation faster; PagedAttention lets more sequences fit in memory concurrently. Framing them as alternatives is a common mistake.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Optimizing FLOPs for decode</td>
+<td>Decode is bandwidth-bound; FLOPs barely matter</td>
+<td>Optimize bytes moved: quantization, GQA, batching</td>
+</tr>
+<tr>
+<td>Using <code>model.generate()</code> in a loop for serving</td>
+<td>No continuous batching, ~10-20x throughput lost</td>
+<td>vLLM, TGI, or TensorRT-LLM</td>
+</tr>
+<tr>
+<td>Setting <code>max_model_len</code> to the model maximum by default</td>
+<td>KV cache reservation collapses concurrency</td>
+<td>Set it to the real p99 context you serve</td>
+</tr>
+<tr>
+<td>Sizing a GPU by model weights only</td>
+<td>KV cache often exceeds weights at scale</td>
+<td>Budget weights + KV for target concurrency</td>
+</tr>
+<tr>
+<td>Variable content at the start of the prompt</td>
+<td>Destroys prefix cache hits</td>
+<td>Stable system prompt first, variable input last</td>
+</tr>
+<tr>
+<td>One deployment for interactive and batch traffic</td>
+<td>The batch config ruins interactive latency</td>
+<td>Separate deployments with different batch settings</td>
+</tr>
+<tr>
+<td>Measuring average latency only</td>
+<td>Tail latency is what users and SLOs feel</td>
+<td>Track p50/p95/p99 for TTFT and TPOT separately</td>
+</tr>
+<tr>
+<td>Trusting perplexity to validate quantization</td>
+<td>Task accuracy can drop while perplexity barely moves</td>
+<td>Run the application eval set on the quantized model</td>
+</tr>
+<tr>
+<td>Stuffing all retrieved context &quot;just in case&quot;</td>
+<td>More cost <em>and</em> worse answers</td>
+<td>Rerank and pass fewer, better chunks</td>
+</tr>
+<tr>
+<td>Semantic cache with no invalidation</td>
+<td>Confidently serves stale answers</td>
+<td>TTL, source-change invalidation, tuned threshold</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_llm_fundamentals.html">LLM Fundamentals</a></li>
+<li><a href="intro_llmops.html">LLMOps</a></li>
+<li><a href="intro_multi_model_orchestration.html">Multi-Model Orchestration</a></li>
+<li><a href="intro_embeddings.html">Embeddings</a></li>
+<li><a href="../frameworks/intro_vllm.html">vLLM</a></li>
+<li><a href="../frameworks/intro_ollama.html">Ollama</a></li>
+<li><a href="../deep_learning/intro_transformers.html">Transformers</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../system_design/intro_backend_ai_system_design.html">Backend AI System Design</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_embeddings.html"><small>Previous</small>Embeddings</a><a rel="next" class="next" href="intro_llmops.html"><small>Next</small>LLMOps</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/ai_genai/intro_llm_inference_optimization.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

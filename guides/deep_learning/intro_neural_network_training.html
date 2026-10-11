@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural Network Training: Optimization and Regularization | Cracking ML Interviews</title>
+<meta name="description" content="Architecture gets the headlines; training dynamics decide whether the model works. This guide covers what interviewers actually probe when they ask &quot;your…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_neural_network_training.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Neural Network Training: Optimization and Regularization | Cracking ML Interviews">
+<meta property="og:description" content="Architecture gets the headlines; training dynamics decide whether the model works. This guide covers what interviewers actually probe when they ask &quot;your…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_neural_network_training.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Neural Network Training: Optimization and Regularization | Cracking ML Interviews">
+<meta name="twitter:description" content="Architecture gets the headlines; training dynamics decide whether the model works. This guide covers what interviewers actually probe when they ask &quot;your…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Neural Network Training: Optimization and Regularization",
+   "description": "Architecture gets the headlines; training dynamics decide whether the model works. This guide covers what interviewers actually probe when they ask \"your…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_neural_network_training.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "NN Training & Optimization",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_neural_network_training.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">NN Training &amp; Optimization</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_neural_network_training.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 8 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="neural-network-training-optimization-and-regularization">Neural Network Training: Optimization and Regularization</h1>
+<p>Architecture gets the headlines; training dynamics decide whether the model works. This guide covers what interviewers actually probe when they ask &quot;your loss is NaN, what now?&quot;: initialization, optimizers, learning rate schedules, normalization, regularization, and the debugging playbook for a model that won't converge.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#backpropagation-and-the-gradient-problems">Backpropagation and the Gradient Problems</a></li>
+<li><a href="#weight-initialization">Weight Initialization</a></li>
+<li><a href="#activation-functions">Activation Functions</a></li>
+<li><a href="#optimizers">Optimizers</a></li>
+<li><a href="#learning-rate-schedules">Learning Rate Schedules</a></li>
+<li><a href="#normalization-layers">Normalization Layers</a></li>
+<li><a href="#regularization">Regularization</a></li>
+<li><a href="#batch-size-and-its-effects">Batch Size and Its Effects</a></li>
+<li><a href="#mixed-precision-and-memory">Mixed Precision and Memory</a></li>
+<li><a href="#a-debugging-playbook">A Debugging Playbook</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="backpropagation-and-the-gradient-problems">Backpropagation and the Gradient Problems</h2>
+<p>Backprop is the chain rule applied over a computation graph. For an <code>L</code>-layer network the gradient at layer 1 contains a product of <code>L</code> Jacobians:</p>
+<pre><code>∂Loss/∂W₁ = ∂Loss/∂aL · ∂aL/∂a(L-1) · ... · ∂a2/∂a1 · ∂a1/∂W₁
+</code></pre>
+<p>Products of many terms are unstable:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Cause</th>
+<th>Symptom</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vanishing gradients</strong></td>
+<td>Jacobian norms &lt; 1 compound toward 0</td>
+<td>Early layers stop learning; loss plateaus high</td>
+<td>ReLU-family activations, residual connections, normalization, careful init, LSTM/GRU gates</td>
+</tr>
+<tr>
+<td><strong>Exploding gradients</strong></td>
+<td>Jacobian norms &gt; 1 compound upward</td>
+<td>Loss spikes to NaN/Inf; weights blow up</td>
+<td>Gradient clipping, lower LR, normalization, better init</td>
+</tr>
+</tbody>
+</table></div>
+<p>Residual connections are the most important structural fix: <code>y = x + F(x)</code> gives the gradient an identity path (<code>∂y/∂x = I + ∂F/∂x</code>), so gradients reach early layers even when <code>F</code>'s Jacobian is small. This is why 100+ layer networks became trainable at all.</p>
+<pre><code class="language-python">torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  # after backward(), before step()
+</code></pre>
+<hr />
+<h2 id="weight-initialization">Weight Initialization</h2>
+<p>Initialization sets the scale of activations and gradients at step 0. Get it wrong and the network is dead or diverging before training starts.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scheme</th>
+<th>Variance</th>
+<th>Use with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Xavier / Glorot</strong></td>
+<td><code>2 / (fan_in + fan_out)</code></td>
+<td>tanh, sigmoid, linear</td>
+</tr>
+<tr>
+<td><strong>He / Kaiming</strong></td>
+<td><code>2 / fan_in</code></td>
+<td>ReLU, LeakyReLU, GELU</td>
+</tr>
+<tr>
+<td><strong>LeCun</strong></td>
+<td><code>1 / fan_in</code></td>
+<td>SELU</td>
+</tr>
+<tr>
+<td><strong>Orthogonal</strong></td>
+<td>orthogonal matrix</td>
+<td>RNNs, where repeated multiplication needs norm preservation</td>
+</tr>
+</tbody>
+</table></div>
+<p>He initialization uses <code>2/fan_in</code> rather than <code>1/fan_in</code> because ReLU zeroes roughly half its inputs, halving the output variance; the factor of 2 compensates.</p>
+<pre><code class="language-python">import torch.nn as nn
+
+def init_weights(m):
+    if isinstance(m, nn.Linear):
+        nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
+        if m.bias is not None:
+            nn.init.zeros_(m.bias)
+
+model.apply(init_weights)
+</code></pre>
+<p>Never initialize all weights to the same constant: every neuron in a layer would receive identical gradients and stay identical forever (the symmetry-breaking problem). Zero-initializing <em>biases</em> is fine and standard.</p>
+<hr />
+<h2 id="activation-functions">Activation Functions</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Activation</th>
+<th>Formula</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sigmoid</td>
+<td><code>1/(1+e^-x)</code></td>
+<td>Bounded, probabilistic reading</td>
+<td>Saturates → vanishing gradient; not zero-centered</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td><code>(e^x - e^-x)/(e^x + e^-x)</code></td>
+<td>Zero-centered</td>
+<td>Still saturates</td>
+</tr>
+<tr>
+<td><strong>ReLU</strong></td>
+<td><code>max(0, x)</code></td>
+<td>Cheap, no positive saturation, sparse</td>
+<td>Dying ReLU; not zero-centered</td>
+</tr>
+<tr>
+<td>LeakyReLU</td>
+<td><code>max(αx, x)</code></td>
+<td>No dead units</td>
+<td>Extra hyperparameter</td>
+</tr>
+<tr>
+<td><strong>GELU</strong></td>
+<td><code>x · Φ(x)</code></td>
+<td>Smooth, strong in transformers</td>
+<td>Slightly more expensive</td>
+</tr>
+<tr>
+<td><strong>SiLU/Swish</strong></td>
+<td><code>x · σ(x)</code></td>
+<td>Smooth, strong empirically</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>normalized exponentials</td>
+<td>Output distribution</td>
+<td>Output layer only</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Dying ReLU</strong>: a unit whose pre-activation is negative for every input outputs 0 and receives zero gradient forever: permanently dead. Usually caused by too-high a learning rate driving a large negative bias. LeakyReLU, GELU, or lowering the LR all fix it.</p>
+<p>Modern transformers use GELU or SwiGLU; the smoothness near zero gives slightly better gradients than ReLU's kink and empirically improves language-model quality at the same parameter count.</p>
+<hr />
+<h2 id="optimizers">Optimizers</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Optimizer</th>
+<th>Update rule (essence)</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SGD</strong></td>
+<td><code>w ← w - η∇</code></td>
+<td>Simple; often best final accuracy in vision</td>
+<td>Slow; LR-sensitive</td>
+</tr>
+<tr>
+<td><strong>SGD + momentum</strong></td>
+<td><code>v ← βv + ∇; w ← w - ηv</code></td>
+<td>Dampens oscillation, escapes plateaus</td>
+<td>Two hyperparameters</td>
+</tr>
+<tr>
+<td><strong>RMSProp</strong></td>
+<td>Per-parameter scaling by RMS of gradients</td>
+<td>Handles varying gradient scales</td>
+<td>No momentum</td>
+</tr>
+<tr>
+<td><strong>Adam</strong></td>
+<td>Momentum + RMSProp + bias correction</td>
+<td>Fast, robust defaults</td>
+<td>Can generalize worse than SGD; weight decay is wrong</td>
+</tr>
+<tr>
+<td><strong>AdamW</strong></td>
+<td>Adam with <strong>decoupled</strong> weight decay</td>
+<td>The default for transformers</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Adafactor / 8-bit Adam</strong></td>
+<td>Factored or quantized optimizer state</td>
+<td>Large memory savings at scale</td>
+<td>Slight quality cost</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="adam-precisely">Adam, precisely</h3>
+<pre><code>m_t = β₁ m_{t-1} + (1-β₁) g_t            # first moment (momentum)
+v_t = β₂ v_{t-1} + (1-β₂) g_t²           # second moment (per-parameter scale)
+m̂_t = m_t/(1-β₁^t),  v̂_t = v_t/(1-β₂^t)  # bias correction: m,v start at 0
+w_t = w_{t-1} - η · m̂_t / (√v̂_t + ε)
+</code></pre>
+<p>Bias correction matters most in the first few hundred steps: without it, <code>m</code> and <code>v</code> are biased toward zero, making early effective steps far too small.</p>
+<h3 id="why-adamw-instead-of-adam">Why AdamW instead of Adam</h3>
+<p>In Adam, L2 regularization added to the loss gets divided by <code>√v̂</code>, so parameters with large historical gradients get <em>less</em> decay: the opposite of the intent. AdamW decouples it:</p>
+<pre><code>w ← w - η(m̂/(√v̂ + ε) + λw)     # decay applied directly to the weight
+</code></pre>
+<p>This is not a minor detail; it is why AdamW is the standard for transformer training. Typical settings: <code>lr=1e-4</code> to <code>3e-4</code> for transformers from scratch, <code>1e-5</code> to <code>5e-5</code> for fine-tuning, <code>betas=(0.9, 0.95)</code> for large language models (lower <code>β₂</code> than the 0.999 default responds faster to loss spikes), <code>weight_decay=0.1</code>, and <strong>no weight decay on biases or LayerNorm parameters</strong>.</p>
+<pre><code class="language-python">decay, no_decay = [], []
+for name, param in model.named_parameters():
+    if not param.requires_grad:
+        continue
+    if param.ndim &lt; 2 or 'bias' in name or 'norm' in name.lower():
+        no_decay.append(param)      # biases and norm scales: no decay
+    else:
+        decay.append(param)
+
+optimizer = torch.optim.AdamW(
+    [{'params': decay, 'weight_decay': 0.1},
+     {'params': no_decay, 'weight_decay': 0.0}],
+    lr=3e-4, betas=(0.9, 0.95), eps=1e-8,
+)
+</code></pre>
+<p><strong>Memory cost</strong>: Adam stores two extra float32 tensors per parameter (8 bytes/param). For a 7B model with mixed-precision AdamW that is ~14 GB of bf16 weights + ~28 GB of fp32 master weights + ~28 GB of fp32 gradients + ~56 GB of Adam state, roughly 126 GB (18 bytes/param) before activations, which is why full fine-tuning of a 7B model does not fit on a 24 GB GPU and LoRA (with the base model frozen) does.</p>
+<hr />
+<h2 id="learning-rate-schedules">Learning Rate Schedules</h2>
+<p>The learning rate is the single most important hyperparameter. Tune it first, and by orders of magnitude (1e-5, 1e-4, 1e-3), not by 10%.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Schedule</th>
+<th>Shape</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linear warmup</strong></td>
+<td>0 → peak over N steps</td>
+<td>Essential for transformers; Adam's variance estimate is unreliable early</td>
+</tr>
+<tr>
+<td><strong>Cosine decay</strong></td>
+<td>Peak → ~0 on a cosine curve</td>
+<td>Default for LLM pretraining and fine-tuning</td>
+</tr>
+<tr>
+<td><strong>Step decay</strong></td>
+<td>Drop by 10x at milestones</td>
+<td>Classic vision recipes</td>
+</tr>
+<tr>
+<td><strong>ReduceLROnPlateau</strong></td>
+<td>Drop when validation stalls</td>
+<td>When you can't predict the schedule</td>
+</tr>
+<tr>
+<td><strong>One-cycle</strong></td>
+<td>Up then down, with momentum inverted</td>
+<td>Fast convergence on small budgets</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">from torch.optim.lr_scheduler import LambdaLR
+import math
+
+def cosine_with_warmup(optimizer, warmup_steps, total_steps, min_ratio=0.1):
+    def lr_lambda(step):
+        if step &lt; warmup_steps:
+            return step / max(1, warmup_steps)
+        progress = (step - warmup_steps) / max(1, total_steps - warmup_steps)
+        return min_ratio + (1 - min_ratio) * 0.5 * (1 + math.cos(math.pi * progress))
+    return LambdaLR(optimizer, lr_lambda)
+
+scheduler = cosine_with_warmup(optimizer, warmup_steps=500, total_steps=20_000)
+# step the scheduler every optimizer step, not every epoch
+</code></pre>
+<p><strong>Why warmup?</strong> At step 0, Adam's second-moment estimate <code>v</code> is based on almost no data and is noisy. Large early steps in a random direction can push the model into a bad region it never escapes. Warmup also matters more with large batches, where each step is more confident and therefore more damaging if wrong.</p>
+<p><strong>Finding the LR empirically</strong>: run an LR range test: increase the LR exponentially over a few hundred steps and plot loss. Pick roughly an order of magnitude below where the loss starts diverging.</p>
+<hr />
+<h2 id="normalization-layers">Normalization Layers</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Normalizes over</th>
+<th>Batch dependence</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BatchNorm</strong></td>
+<td>Batch dimension, per channel</td>
+<td>Yes: different train/eval behavior</td>
+<td>CNNs</td>
+</tr>
+<tr>
+<td><strong>LayerNorm</strong></td>
+<td>Feature dimension, per sample</td>
+<td>No</td>
+<td>Transformers, RNNs</td>
+</tr>
+<tr>
+<td><strong>RMSNorm</strong></td>
+<td>Feature dimension, no mean subtraction</td>
+<td>No</td>
+<td>Modern LLMs (Llama, Mistral): cheaper</td>
+</tr>
+<tr>
+<td><strong>GroupNorm</strong></td>
+<td>Groups of channels</td>
+<td>No</td>
+<td>Small-batch vision, segmentation</td>
+</tr>
+<tr>
+<td><strong>InstanceNorm</strong></td>
+<td>Per sample, per channel</td>
+<td>No</td>
+<td>Style transfer</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why transformers use LayerNorm, not BatchNorm</strong>: sequences have variable length, so batch statistics are computed over a ragged, padded tensor and become noisy and length-dependent. LayerNorm normalizes within one token's feature vector, so it behaves identically for batch size 1 and batch size 512: critical when training and inference batch sizes differ wildly.</p>
+<p><strong>BatchNorm's train/eval trap</strong>: at training time it uses batch statistics; at eval it uses running averages. Forgetting <code>model.eval()</code> at inference means predictions depend on whatever else is in the batch: a common production bug that also breaks batch-size-1 serving.</p>
+<p><strong>Pre-norm vs post-norm</strong>: the original transformer applied LayerNorm after the residual add (post-norm), which needs careful warmup to train deeply. Modern models use pre-norm (<code>x + Attention(LN(x))</code>), which keeps a clean identity path through the residual stream and trains stably at depth. Pre-norm is why you can train a 70-layer transformer without an elaborate warmup schedule.</p>
+<hr />
+<h2 id="regularization">Regularization</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Mechanism</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L2 / weight decay</strong></td>
+<td>Penalizes large weights</td>
+<td>Use AdamW's decoupled form; exclude biases and norms</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>Penalizes absolute weights</td>
+<td>Induces sparsity; rare in deep nets</td>
+</tr>
+<tr>
+<td><strong>Dropout</strong></td>
+<td>Randomly zeroes activations, scales the rest</td>
+<td><code>p=0.1</code> in transformers, <code>0.5</code> in old MLP heads</td>
+</tr>
+<tr>
+<td><strong>Early stopping</strong></td>
+<td>Halts at best validation</td>
+<td>Effectively limits capacity; always worth it</td>
+</tr>
+<tr>
+<td><strong>Data augmentation</strong></td>
+<td>Expands the effective dataset</td>
+<td>Usually the most effective option</td>
+</tr>
+<tr>
+<td><strong>Label smoothing</strong></td>
+<td>Target <code>1-ε</code> instead of <code>1</code></td>
+<td>Reduces overconfidence, improves calibration</td>
+</tr>
+<tr>
+<td><strong>Stochastic depth</strong></td>
+<td>Randomly skips residual blocks</td>
+<td>Very deep vision networks</td>
+</tr>
+<tr>
+<td><strong>Mixup / CutMix</strong></td>
+<td>Trains on convex combinations of examples</td>
+<td>Strong vision regularizer</td>
+</tr>
+<tr>
+<td><strong>Gradient noise / EMA of weights</strong></td>
+<td>Smooths the optimization path</td>
+<td>EMA is nearly free and often helps</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Dropout's inverted scaling</strong>: at train time, surviving activations are divided by <code>(1-p)</code> so the expected value matches inference, where dropout is off. This is why <code>model.eval()</code> is required: without it you keep dropping units at inference and get noisy, degraded predictions.</p>
+<p>Dropout and BatchNorm interact badly (dropout changes the variance BatchNorm estimated), which is part of why modern architectures use much less dropout than 2015-era networks and rely on weight decay, augmentation, and scale instead.</p>
+<hr />
+<h2 id="batch-size-and-its-effects">Batch Size and Its Effects</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Batch size</th>
+<th>Gradient noise</th>
+<th>Steps/epoch</th>
+<th>Generalization</th>
+<th>Hardware use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small (8-64)</td>
+<td>High</td>
+<td>Many</td>
+<td>Often better (noise regularizes)</td>
+<td>Underutilized GPU</td>
+</tr>
+<tr>
+<td>Large (1k-8k+)</td>
+<td>Low</td>
+<td>Few</td>
+<td>Needs LR scaling and warmup</td>
+<td>Efficient</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>linear scaling rule</strong>: multiply the batch size by <code>k</code>, multiply the learning rate by <code>k</code> (with warmup). It holds well up to a point and then breaks: beyond a critical batch size, extra examples per step stop improving the gradient estimate and you're just burning compute.</p>
+<p><strong>Gradient accumulation</strong> simulates a large batch on small hardware:</p>
+<pre><code class="language-python">accum_steps = 8
+optimizer.zero_grad(set_to_none=True)
+for i, batch in enumerate(loader):
+    with torch.autocast('cuda', dtype=torch.bfloat16):
+        loss = model(**batch).loss / accum_steps       # divide to keep the gradient scale right
+    loss.backward()
+    if (i + 1) % accum_steps == 0:
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad(set_to_none=True)
+</code></pre>
+<p>Note the <code>/ accum_steps</code>: forgetting it makes the effective gradient <code>accum_steps</code> times too large, which usually presents as a mysterious divergence after switching to accumulation.</p>
+<hr />
+<h2 id="mixed-precision-and-memory">Mixed Precision and Memory</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Bits</th>
+<th>Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fp32</td>
+<td>32</td>
+<td>Wide</td>
+<td>Baseline, 4 bytes/param</td>
+</tr>
+<tr>
+<td><strong>fp16</strong></td>
+<td>16</td>
+<td>Narrow</td>
+<td>2x faster, needs loss scaling to avoid gradient underflow</td>
+</tr>
+<tr>
+<td><strong>bf16</strong></td>
+<td>16</td>
+<td>Same exponent range as fp32</td>
+<td>Preferred on A100/H100: no loss scaling needed</td>
+</tr>
+<tr>
+<td>fp8</td>
+<td>8</td>
+<td>Very narrow</td>
+<td>H100+ training, still specialized</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># bf16: the modern default where supported
+with torch.autocast('cuda', dtype=torch.bfloat16):
+    loss = model(**batch).loss
+loss.backward()
+
+# fp16 requires a GradScaler because small gradients underflow to zero
+scaler = torch.amp.GradScaler()
+with torch.autocast('cuda', dtype=torch.float16):
+    loss = model(**batch).loss
+scaler.scale(loss).backward()
+scaler.unscale_(optimizer)
+torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+scaler.step(optimizer)
+scaler.update()
+</code></pre>
+<p><strong>Where training memory goes</strong> (per parameter, mixed-precision AdamW): 2 bytes fp16 weights + 4 bytes fp32 master weights + 4 bytes fp32 gradients + 8 bytes optimizer state ≈ <strong>18 bytes/param</strong>, before activations (keeping gradients in 16-bit gives the often-quoted 16 bytes/param). Activations often dominate and scale with <code>batch × sequence_length × hidden × layers</code>.</p>
+<p>Levers when you hit OOM, in order of cost to quality: reduce batch size with gradient accumulation (free), gradient checkpointing (recompute activations, ~30% slower, big memory win), bf16 (free on modern GPUs), 8-bit optimizer states, LoRA/QLoRA instead of full fine-tuning, then model/tensor parallelism.</p>
+<hr />
+<h2 id="a-debugging-playbook">A Debugging Playbook</h2>
+<p><strong>Loss is NaN.</strong>
+Check in this order: learning rate too high (most common); fp16 overflow (switch to bf16 or add loss scaling); division by zero or <code>log(0)</code> in a custom loss (add epsilon); a corrupt batch with NaN inputs; missing gradient clipping. Bisect by running with <code>torch.autograd.set_detect_anomaly(True)</code> to find the offending op.</p>
+<p><strong>Loss doesn't decrease at all.</strong>
+First: can the model overfit a single batch to near-zero loss? If not, the bug is in the code, not the hyperparameters: check that the optimizer sees the parameters, that <code>loss.backward()</code> is called, that <code>zero_grad()</code> isn't clearing after backward, that labels align with inputs, and that the LR isn't ~0.</p>
+<p><strong>Training loss falls, validation loss rises.</strong>
+Standard overfitting: more data or augmentation, more regularization, smaller model, early stopping. If validation loss rises from the very first epoch, suspect a train/validation distribution mismatch or a broken validation transform instead.</p>
+<p><strong>Training loss is much worse than validation loss.</strong>
+Usually dropout/BatchNorm accounting (training loss includes regularization noise; eval doesn't): normal early on. If persistent, the validation set may be easier or leaking.</p>
+<p><strong>Loss spikes mid-training.</strong>
+Common in LLM training: reduce <code>β₂</code> to 0.95, clip gradients harder, skip the batch, or resume from the last checkpoint with a lower LR. Repeated spikes at the same data offset means a bad shard.</p>
+<p><strong>GPU utilization is low.</strong>
+Data loading is the bottleneck: raise <code>num_workers</code>, enable <code>pin_memory=True</code> and <code>persistent_workers=True</code>, pre-tokenize offline, and check you aren't synchronizing with <code>.item()</code> or <code>.cpu()</code> inside the loop.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="explain-vanishing-gradients-and-three-ways-to-fix-them">Explain vanishing gradients and three ways to fix them.</h4>
+<p>In a deep network, the gradient at an early layer is a product of many Jacobians. When those factors have norm below 1 (sigmoid's derivative never exceeds 0.25, and tanh's is 1 only at zero and near 0 once saturated) the product shrinks exponentially with depth, and early layers receive effectively no learning signal.</p>
+<p>Fixes: (1) <strong>ReLU-family activations</strong>, whose derivative is exactly 1 on the positive side, so no shrinkage per layer; (2) <strong>residual connections</strong>, which add an identity path so the gradient reaches early layers regardless of what the block does; (3) <strong>normalization layers</strong>, which keep activation scales stable across depth so Jacobians stay near unit norm. Careful initialization (He/Xavier) and, for RNNs specifically, gated architectures (LSTM/GRU) with additive cell-state updates are the other standard answers.</p>
+<h4 id="adam-vs-sgd-with-momentum-which-do-you-pick">Adam vs SGD with momentum, which do you pick?</h4>
+<p>AdamW for transformers and anything with sparse or badly scaled gradients; it adapts per-parameter step sizes and works near-default, which matters when a training run costs real money. SGD with momentum for convolutional vision models trained long, where it still often reaches a better final test accuracy: the usual explanation is that its noisier, non-adaptive updates favor flatter minima.</p>
+<p>I'd note that the comparison is often unfair: Adam works well with almost no tuning, while SGD needs a well-tuned LR and schedule to show its advantage. If tuning budget is small, Adam wins by default.</p>
+<h4 id="why-do-transformers-need-learning-rate-warmup">Why do transformers need learning rate warmup?</h4>
+<p>Two reasons. First, Adam's second-moment estimate is computed from very few samples at the start, so the per-parameter scaling is unreliable and early updates can be wildly wrong in magnitude. Warmup keeps steps small until the estimate stabilizes. Second, with post-norm architectures the residual path is poorly conditioned early in training, and large steps push the model into a region it doesn't recover from. Pre-norm architectures need less warmup, which is one reason they became standard, but warmup still helps at large batch sizes where each step is taken with high confidence.</p>
+<h4 id="what-is-the-difference-between-batchnorm-and-layernorm-and-why-do-transformers-use-layernorm">What is the difference between BatchNorm and LayerNorm, and why do transformers use LayerNorm?</h4>
+<p>BatchNorm normalizes each feature across the batch dimension; LayerNorm normalizes each sample across its feature dimension. The consequence is that BatchNorm's output for one example depends on the other examples in the batch, and it must maintain running statistics for a separate inference-time behavior.</p>
+<p>Transformers use LayerNorm because sequences are variable-length and padded, making batch statistics noisy and length-dependent; because inference often runs at batch size 1 where batch statistics are meaningless; and because it removes the train/eval discrepancy entirely. Modern LLMs go further to RMSNorm, dropping the mean-subtraction step for a small speedup with no measured quality loss.</p>
+<h4 id="your-training-loss-goes-to-nan-after-200-steps-walk-me-through-the-diagnosis">Your training loss goes to NaN after 200 steps. Walk me through the diagnosis.</h4>
+<p>I'd bisect systematically rather than guess. First reproduce deterministically with a fixed seed and find the exact step. Then:</p>
+<ol>
+<li><strong>Lower the LR by 10x</strong>: if it survives, the LR was too high. This is the most common cause by a wide margin.</li>
+<li><strong>Check precision</strong>: in fp16, activations or gradients can overflow; switching to bf16 (same exponent range as fp32) rules this in or out immediately.</li>
+<li><strong>Inspect the batch at the failure step</strong>: NaNs or infinities in the inputs, or an empty/degenerate label.</li>
+<li><strong>Check the loss for <code>log(0)</code> or division by zero</strong>, especially in custom losses; add epsilon.</li>
+<li><strong>Add gradient clipping</strong> at norm 1.0 and log the pre-clip gradient norm: a spike right before the NaN confirms exploding gradients.</li>
+</ol>
+<p>If none of that fixes it, <code>torch.autograd.set_detect_anomaly(True)</code> will name the operation that first produced a NaN in the backward pass.</p>
+<h4 id="how-do-you-train-a-model-that-doesnt-fit-in-gpu-memory">How do you train a model that doesn't fit in GPU memory?</h4>
+<p>Escalating in order of cost:</p>
+<ol>
+<li><strong>Gradient accumulation</strong>: small micro-batches with the same effective batch size; free.</li>
+<li><strong>Mixed precision (bf16)</strong>: halves weight and activation memory, usually faster too.</li>
+<li><strong>Gradient checkpointing</strong>: store only some activations and recompute the rest in the backward pass; roughly 30% slower for a large memory saving.</li>
+<li><strong>8-bit optimizer states</strong> (bitsandbytes): cuts the 8 bytes/param of Adam state to 2.</li>
+<li><strong>Parameter-efficient fine-tuning (LoRA/QLoRA)</strong>: train small adapter matrices while the base model stays frozen and quantized; this is what makes 7B-70B fine-tuning possible on consumer GPUs.</li>
+<li><strong>Sharding across GPUs</strong>: ZeRO/FSDP partitions optimizer state, gradients, then parameters; tensor and pipeline parallelism for models too large for one device even at inference.</li>
+</ol>
+<h4 id="what-does-weight-decay-actually-do-and-why-exclude-biases-from-it">What does weight decay actually do, and why exclude biases from it?</h4>
+<p>Weight decay shrinks weights toward zero each step, penalizing large-magnitude parameters and favoring simpler functions. In AdamW it is applied directly to the weight rather than through the loss, so the adaptive denominator doesn't distort it.</p>
+<p>Biases and normalization scale parameters are excluded because they don't contribute to model complexity in the same way: a bias just shifts the activation, and decaying LayerNorm's gain toward zero actively fights the normalization it's supposed to perform. Decaying them typically costs a little accuracy for no regularization benefit.</p>
+<h4 id="how-does-batch-size-interact-with-learning-rate">How does batch size interact with learning rate?</h4>
+<p>Larger batches give lower-variance gradient estimates, so you can safely take larger steps. The linear scaling rule (<code>k×</code> batch → <code>k×</code> LR, with warmup) captures this and works well up to a critical batch size that depends on the task. Beyond it, gradient noise is already negligible and further increases buy no convergence speedup per example: you're paying compute for nothing.</p>
+<p>Small batches inject noise that acts as a regularizer and often generalizes slightly better; large batches are hardware-efficient. In practice I'd pick the largest batch that fits and trains stably, then tune the LR around the scaling rule's prediction.</p>
+<h4 id="what-is-gradient-checkpointing-and-what-does-it-cost">What is gradient checkpointing and what does it cost?</h4>
+<p>During the forward pass, activations are normally kept for the backward pass, and they often dominate memory. Gradient checkpointing stores activations only at chosen boundaries and recomputes the intermediate ones during backward. Memory for activations drops from <code>O(n)</code> to roughly <code>O(√n)</code> with optimal placement; the cost is one extra forward pass through the checkpointed segments, typically 25-40% slower wall-clock. It's the standard first move when you want a larger batch or longer sequences and are activation-bound rather than parameter-bound.</p>
+<h4 id="why-is-bf16-usually-preferred-over-fp16-for-training">Why is bf16 usually preferred over fp16 for training?</h4>
+<p>bf16 has the same 8-bit exponent as fp32, so it covers the same dynamic range with less mantissa precision. fp16 has a much narrower range, so small gradients underflow to zero and large activations overflow to infinity, which is why fp16 training requires a <code>GradScaler</code> that multiplies the loss, checks for infinities, and adapts the scale. bf16 needs none of that machinery and just works, at the cost of ~3 fewer mantissa bits that neural network training turns out not to need. On hardware that supports both (A100 and later), bf16 is the default.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forgetting <code>model.eval()</code> at inference</td>
+<td>Dropout stays on and BatchNorm uses batch stats: predictions depend on batch contents</td>
+<td><code>model.eval()</code> + <code>torch.no_grad()</code></td>
+</tr>
+<tr>
+<td><code>zero_grad()</code> after <code>backward()</code></td>
+<td>Wipes the gradients you just computed</td>
+<td>Zero at the start of the step</td>
+</tr>
+<tr>
+<td>Not dividing loss by accumulation steps</td>
+<td>Effective gradient is <code>k×</code> too large</td>
+<td><code>loss = loss / accum_steps</code></td>
+</tr>
+<tr>
+<td>Stepping the scheduler per epoch when it expects steps</td>
+<td>LR decays far too slowly</td>
+<td>Match the scheduler's assumed unit</td>
+</tr>
+<tr>
+<td>Weight decay on biases and LayerNorm</td>
+<td>Fights normalization, costs accuracy</td>
+<td>Parameter groups with <code>weight_decay=0</code> for those</td>
+</tr>
+<tr>
+<td>Tuning LR in 10% increments</td>
+<td>The useful range spans orders of magnitude</td>
+<td>Search 1e-5 / 1e-4 / 1e-3, then refine</td>
+</tr>
+<tr>
+<td>No gradient clipping on transformers</td>
+<td>A single bad batch NaNs the run</td>
+<td><code>clip_grad_norm_(..., 1.0)</code></td>
+</tr>
+<tr>
+<td>Validating with training-time augmentation</td>
+<td>Validation loss is noise, not signal</td>
+<td>Separate eval transform pipeline</td>
+</tr>
+<tr>
+<td>Not checking you can overfit one batch</td>
+<td>Hours spent tuning a model with a code bug</td>
+<td>Overfit 1 batch to ~0 loss before any real run</td>
+</tr>
+<tr>
+<td>Data loader starving the GPU</td>
+<td>20% utilization, 5x longer runs</td>
+<td>More workers, <code>pin_memory</code>, pre-tokenize</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_applied_deep_learning.html">Applied Deep Learning Roadmap</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="intro_fine_tuning.html">Fine-Tuning</a></li>
+<li><a href="intro_computer_vision.html">Computer Vision</a></li>
+<li><a href="../frameworks/intro_pytorch.html">PyTorch</a></li>
+<li><a href="../ai_genai/intro_llm_inference_optimization.html">LLM Inference Optimization</a></li>
+<li><a href="./">Deep Learning Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_fine_tuning.html"><small>Previous</small>Fine-Tuning</a><a rel="next" class="next" href="intro_generative_models.html"><small>Next</small>Generative Models (VAE/GAN/Diffusion)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_neural_network_training.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

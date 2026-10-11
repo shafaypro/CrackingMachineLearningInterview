@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Labeling, Active Learning &amp; Weak Supervision | Cracking ML Interviews</title>
+<meta name="description" content="Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so &quot;you have 10 million unlabeled…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_labeling_active_learning.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Data Labeling, Active Learning &amp; Weak Supervision | Cracking ML Interviews">
+<meta property="og:description" content="Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so &quot;you have 10 million unlabeled…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_labeling_active_learning.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Labeling, Active Learning &amp; Weak Supervision | Cracking ML Interviews">
+<meta name="twitter:description" content="Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so &quot;you have 10 million unlabeled…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Data Labeling, Active Learning & Weak Supervision",
+   "description": "Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so \"you have 10 million unlabeled…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_labeling_active_learning.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Data Labeling & Active Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_data_labeling_active_learning.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Data Labeling &amp; Active Learning</span></nav>
+<p class="meta"><a href="../../#mlops/intro_data_labeling_active_learning.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 11 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="data-labeling-active-learning--weak-supervision">Data Labeling, Active Learning &amp; Weak Supervision</h1>
+<p>Most production ML teams spend more time and money getting labels than choosing architectures. Interviewers know this, so &quot;you have 10 million unlabeled examples and a $50k budget: what do you do?&quot; is a common system design and MLOps question. A good answer shows you can write a labeling spec, measure whether annotators agree, find bad labels, spend the budget where the model is weakest (active learning), stretch it with programmatic and model-generated labels (weak supervision, pseudo-labeling, LLM annotators, synthetic data), and keep the whole thing versioned and reproducible.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#data-centric-ai-framing">Data-Centric AI Framing</a></li>
+<li><a href="#labeling-guidelines-and-ontology-design">Labeling Guidelines and Ontology Design</a></li>
+<li><a href="#annotation-workflows">Annotation Workflows</a></li>
+<li><a href="#inter-annotator-agreement">Inter-Annotator Agreement</a></li>
+<li><a href="#gold-questions-and-adjudication">Gold Questions and Adjudication</a></li>
+<li><a href="#label-noise-and-how-to-find-it">Label Noise and How to Find It</a></li>
+<li><a href="#active-learning">Active Learning</a></li>
+<li><a href="#weak-supervision">Weak Supervision</a></li>
+<li><a href="#semi-supervised-learning">Semi-Supervised Learning</a></li>
+<li><a href="#llms-as-annotators">LLMs as Annotators</a></li>
+<li><a href="#synthetic-data">Synthetic Data</a></li>
+<li><a href="#class-imbalance-at-labeling-time">Class Imbalance at Labeling Time</a></li>
+<li><a href="#data-versioning-and-lineage">Data Versioning and Lineage</a></li>
+<li><a href="#cost-and-budget-estimation">Cost and Budget Estimation</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="data-centric-ai-framing">Data-Centric AI Framing</h2>
+<p>Model-centric work holds the data fixed and iterates on the model. Data-centric work holds the model fixed (usually a strong off-the-shelf baseline) and iterates on the data: fixing labels, clarifying the definition of each class, adding examples where the model fails.</p>
+<p>More or better data usually beats a better model when:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>What it tells you</th>
+<th>Data action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Learning curve still rising at full dataset size</td>
+<td>Model is data-starved</td>
+<td>Label more, ideally targeted</td>
+</tr>
+<tr>
+<td>Train and val error both high, several architectures plateau at the same point</td>
+<td>Ceiling is set by label noise or ambiguous classes</td>
+<td>Audit labels, tighten guidelines</td>
+</tr>
+<tr>
+<td>Errors cluster in specific slices (a language, a device, a rare class)</td>
+<td>Coverage gap</td>
+<td>Collect or label that slice</td>
+</tr>
+<tr>
+<td>Human agreement is low on the task</td>
+<td>Task definition is fuzzy</td>
+<td>Fix the ontology before anything else</td>
+</tr>
+<tr>
+<td>Model beats humans on val but fails in production</td>
+<td>Val set labels or distribution are wrong</td>
+<td>Rebuild the eval set from production traffic</td>
+</tr>
+</tbody>
+</table></div>
+<p>A better model is usually the right move when the learning curve has flattened, labels are clean (agreement is high and audits find few errors), and the error analysis points to a capability gap such as long context, missing features, or wrong inductive bias.</p>
+<p>A useful rule of thumb: <strong>label noise sets a ceiling on measured accuracy</strong>. If 8% of your test labels are wrong, a perfect model scores about 92% and a model that learned the same mistakes can score higher. Clean the test set before comparing models.</p>
+<pre><code class="language-python"># Learning curve: is more data likely to help?
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import learning_curve
+
+X, y = make_classification(n_samples=5000, n_features=30, n_informative=10, random_state=0)
+sizes, _, val_scores = learning_curve(
+    LogisticRegression(max_iter=1000), X, y,
+    train_sizes=np.linspace(0.05, 1.0, 8), cv=5, scoring=&quot;accuracy&quot;,
+)
+for n, s in zip(sizes, val_scores.mean(axis=1)):
+    print(f&quot;{n:5d} examples -&gt; val acc {s:.3f}&quot;)
+# If the last few points are still climbing, more labels will likely pay off.
+</code></pre>
+<hr />
+<h2 id="labeling-guidelines-and-ontology-design">Labeling Guidelines and Ontology Design</h2>
+<p>The ontology is the set of labels and their structure. The guidelines are the document annotators follow. Both are product decisions, and most label quality problems trace back to them rather than to careless annotators.</p>
+<p><strong>Ontology design rules</strong></p>
+<ul>
+<li><strong>Mutually exclusive and collectively exhaustive</strong> for single-label tasks. Add an explicit <code>other</code> and an <code>unsure / cannot tell</code> option so annotators don't force a guess.</li>
+<li><strong>Match the granularity to the decision the model drives.</strong> If the product only acts on &quot;spam vs not spam,&quot; a 14-way spam taxonomy costs money and lowers agreement.</li>
+<li><strong>Hierarchical labels</strong> (<code>vehicle &gt; car &gt; sedan</code>) let you label coarse first and refine later, and let you back off to the parent when the child is ambiguous.</li>
+<li><strong>Multi-label vs multi-class</strong> must be decided up front. Switching later means relabeling.</li>
+<li><strong>Version the ontology.</strong> When a class is split or merged, old labels need a mapping or a relabel.</li>
+</ul>
+<p><strong>What a good guideline document contains</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task purpose</td>
+<td>One paragraph on what the model does with these labels</td>
+</tr>
+<tr>
+<td>Label definitions</td>
+<td>Precise definition per class, with the decision rule</td>
+</tr>
+<tr>
+<td>Positive and negative examples</td>
+<td>3-5 each, including near misses</td>
+</tr>
+<tr>
+<td>Edge cases</td>
+<td>Explicit rulings: &quot;sarcastic praise counts as negative&quot;</td>
+</tr>
+<tr>
+<td>Tie-breakers</td>
+<td>Priority order when two labels seem to apply</td>
+</tr>
+<tr>
+<td>When to escalate</td>
+<td>What to mark <code>unsure</code> vs guess</td>
+</tr>
+<tr>
+<td>Changelog</td>
+<td>Every rule change, dated, so old labels can be interpreted</td>
+</tr>
+</tbody>
+</table></div>
+<p>Write the first draft, have 3-5 people label the same 100-200 items, measure agreement, read every disagreement, update the guidelines, repeat. Two or three rounds of this pilot usually fix most ambiguity before you spend real money.</p>
+<hr />
+<h2 id="annotation-workflows">Annotation Workflows</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Best for</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>In-house experts</strong></td>
+<td>Medical, legal, policy, security; small high-stakes sets; building the gold set</td>
+<td>Deep domain knowledge, tight feedback loop, confidentiality</td>
+<td>Expensive, slow to scale, expert time is scarce</td>
+</tr>
+<tr>
+<td><strong>Managed vendor</strong></td>
+<td>Large volume with moderate complexity; ongoing production labeling</td>
+<td>Trained workforce, project management, QA built in, SLAs</td>
+<td>Ramp-up time, less direct control, data must leave your org</td>
+</tr>
+<tr>
+<td><strong>Crowdsourcing</strong></td>
+<td>Simple, objective tasks at scale (bounding boxes, sentiment, relevance)</td>
+<td>Cheap, fast, elastic</td>
+<td>Noisy, needs redundancy and heavy QA, unsuitable for sensitive data</td>
+</tr>
+<tr>
+<td><strong>Programmatic / model</strong></td>
+<td>Bootstrapping, high volume, stable patterns</td>
+<td>Near-zero marginal cost</td>
+<td>Systematic errors; needs human-labeled data to validate</td>
+</tr>
+</tbody>
+</table></div>
+<p>Common production pattern: experts write guidelines and label the gold set; a vendor or crowd labels volume with gold questions mixed in; a model pre-labels to speed humans up (humans correct instead of labeling from scratch); disagreements and low-confidence items go to experts.</p>
+<p><strong>Pre-labeling caveat:</strong> showing annotators a model's suggestion speeds them up but anchors them. They accept wrong suggestions more often than they would make the same mistake unaided. Measure this by sending a small random sample through without pre-labels and comparing.</p>
+<hr />
+<h2 id="inter-annotator-agreement">Inter-Annotator Agreement</h2>
+<p>Raw percent agreement is misleading because some agreement happens by chance, especially with imbalanced classes. If 95% of items are &quot;not toxic,&quot; two annotators who both always say &quot;not toxic&quot; agree 95% of the time while learning nothing.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Raters</th>
+<th>Handles missing ratings</th>
+<th>Label types</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cohen's kappa</strong></td>
+<td>Exactly 2</td>
+<td>No</td>
+<td>Nominal (weighted variant for ordinal)</td>
+<td>κ = (p_o − p_e) / (1 − p_e)</td>
+</tr>
+<tr>
+<td><strong>Fleiss' kappa</strong></td>
+<td>Fixed number per item, can be different people per item</td>
+<td>No</td>
+<td>Nominal</td>
+<td>Generalizes Scott's pi to many raters</td>
+</tr>
+<tr>
+<td><strong>Krippendorff's alpha</strong></td>
+<td>Any number</td>
+<td>Yes</td>
+<td>Nominal, ordinal, interval, ratio</td>
+<td>α = 1 − D_observed / D_expected; most flexible</td>
+</tr>
+</tbody>
+</table></div>
+<p>Here <code>p_o</code> is observed agreement and <code>p_e</code> is the agreement expected if both raters labeled independently at their own marginal rates.</p>
+<p>A commonly quoted interpretation scale (Landis and Koch) calls 0.41-0.60 moderate, 0.61-0.80 substantial, and above 0.80 almost perfect. Treat these as rough conventions, not thresholds with statistical meaning. Kappa also depends on class prevalence: with very skewed classes you can get low kappa despite high raw agreement, so report both.</p>
+<pre><code class="language-python">import numpy as np
+from sklearn.metrics import cohen_kappa_score
+
+a = np.array([1, 0, 0, 1, 2, 2, 0, 1, 1, 0, 2, 0])
+b = np.array([1, 0, 1, 1, 2, 1, 0, 1, 0, 0, 2, 0])
+
+def cohens_kappa(r1, r2):
+    labels = np.union1d(r1, r2)
+    p_o = np.mean(r1 == r2)
+    p_e = sum(np.mean(r1 == k) * np.mean(r2 == k) for k in labels)
+    return (p_o - p_e) / (1 - p_e)
+
+print(f&quot;percent agreement: {np.mean(a == b):.3f}&quot;)
+print(f&quot;manual kappa:      {cohens_kappa(a, b):.3f}&quot;)
+print(f&quot;sklearn kappa:     {cohen_kappa_score(a, b):.3f}&quot;)
+# For ordinal labels (e.g. 1-5 ratings) penalize distant disagreements more:
+# cohen_kappa_score(a, b, weights=&quot;quadratic&quot;)
+</code></pre>
+<p>For Fleiss' kappa, <code>statsmodels.stats.inter_rater.fleiss_kappa</code> takes an items × categories count table. For Krippendorff's alpha, the <code>krippendorff</code> package on PyPI handles missing ratings.</p>
+<p><strong>Low agreement is information.</strong> Before blaming annotators, check whether disagreements concentrate on particular classes or item types. That usually points to a guideline gap or a ambiguous task, in which case soft labels (the distribution of annotator votes) may be a better training target than a forced majority label.</p>
+<hr />
+<h2 id="gold-questions-and-adjudication">Gold Questions and Adjudication</h2>
+<p><strong>Gold questions</strong> (also called honeypots or test questions) are items with known, expert-verified answers mixed invisibly into the annotation queue.</p>
+<ul>
+<li>Use them to qualify annotators before they start and to monitor them continuously.</li>
+<li>Keep 5-10% of the queue as gold early on; reduce once quality is stable.</li>
+<li>Rotate the gold set. Annotators share answers and memorize repeated items.</li>
+<li>Make gold items representative, including hard cases. A gold set of only easy items tells you who is paying attention, not who understands the guidelines.</li>
+</ul>
+<p><strong>Adjudication</strong> resolves disagreements when multiple people label the same item.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How it works</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Majority vote</td>
+<td>Most common label wins</td>
+<td>Crowd tasks with 3-5 labels per item</td>
+</tr>
+<tr>
+<td>Weighted vote</td>
+<td>Weight annotators by gold-question accuracy</td>
+<td>Annotator quality varies a lot</td>
+</tr>
+<tr>
+<td>Probabilistic (Dawid-Skene style)</td>
+<td>EM jointly estimates true labels and per-annotator confusion matrices</td>
+<td>Many annotators, no reliable gold</td>
+</tr>
+<tr>
+<td>Expert adjudicator</td>
+<td>A senior reviewer decides disagreements</td>
+<td>High-stakes labels, small volume</td>
+</tr>
+<tr>
+<td>Keep the distribution</td>
+<td>Train on soft labels</td>
+<td>Subjective tasks</td>
+</tr>
+</tbody>
+</table></div>
+<p>A cost-saving pattern is <strong>dynamic redundancy</strong>: label once, get a second label only if the first annotator has low accuracy or the model disagrees with them, and escalate to a third or an expert only if the first two disagree.</p>
+<hr />
+<h2 id="label-noise-and-how-to-find-it">Label Noise and How to Find It</h2>
+<p>Real datasets contain wrong labels. Estimates of a few percent label errors in widely used benchmark test sets have been published, and internal datasets built under deadline pressure are usually worse.</p>
+<p><strong>Types of noise</strong></p>
+<ul>
+<li><strong>Uniform (symmetric):</strong> label flipped to a random class. Mostly lowers the ceiling; models are fairly robust to moderate amounts.</li>
+<li><strong>Class-conditional:</strong> specific confusions, such as &quot;wolf&quot; labeled as &quot;husky&quot;. More damaging because it is systematic and the model learns it.</li>
+<li><strong>Instance-dependent:</strong> hard or ambiguous items get mislabeled more often. The most realistic and hardest case.</li>
+</ul>
+<p><strong>Detection approaches</strong></p>
+<ol>
+<li><strong>Loss-based filtering.</strong> Examples a model cannot fit, or fits only late in training, are disproportionately mislabeled. Rank by per-example loss and review the top.</li>
+<li><strong>Confident learning.</strong> Get out-of-sample predicted probabilities via cross-validation. For each class compute a threshold equal to the model's average confidence on examples labeled as that class. An example is flagged if the model is confidently (above threshold) predicting a different class than its given label. This estimates the joint distribution of given vs true labels and flags likely errors without needing clean data. The open-source <code>cleanlab</code> library implements this (<code>cleanlab.filter.find_label_issues(labels, pred_probs)</code>).</li>
+<li><strong>Annotator disagreement.</strong> Items where annotators split, or where one annotator disagrees with the consensus, are candidates.</li>
+<li><strong>Embedding neighbors.</strong> An item whose label differs from most of its nearest neighbors is suspicious.</li>
+</ol>
+<pre><code class="language-python">import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_predict
+
+X, y_true = make_classification(n_samples=2000, n_features=20, n_informative=8, n_classes=3,
+                                n_clusters_per_class=1, class_sep=2.0, random_state=0)
+rng = np.random.default_rng(0)
+y = y_true.copy()
+flip = rng.choice(len(y), size=100, replace=False)       # inject 5% noise
+y[flip] = (y[flip] + rng.integers(1, 3, size=100)) % 3
+
+# Out-of-sample probabilities: never score an example with a model trained on it
+probs = cross_val_predict(LogisticRegression(max_iter=1000), X, y, cv=5, method=&quot;predict_proba&quot;)
+
+# Simplified confident-learning rule: per-class thresholds = mean self-confidence
+thresholds = np.array([probs[y == k, k].mean() for k in range(3)])
+pred = probs.argmax(axis=1)
+confident_other = (pred != y) &amp; (probs[np.arange(len(y)), pred] &gt;= thresholds[pred])
+flagged = np.where(confident_other)[0]
+
+precision = np.isin(flagged, flip).mean()
+recall = np.isin(flip, flagged).mean()
+print(f&quot;flagged {len(flagged)}: precision {precision:.0%}, recall {recall:.0%}&quot;)
+# Roughly 85% precision / 75% recall here; much lower on a harder task where the
+# model itself is weak, which is why flagged items go to review, not deletion.
+</code></pre>
+<p><strong>What to do with flagged examples:</strong> send them to review rather than deleting them automatically. Automatic removal tends to discard hard but correct examples and the minority class. If you must act automatically, prefer removing from training data over editing labels, and never auto-clean the test set without human review.</p>
+<hr />
+<h2 id="active-learning">Active Learning</h2>
+<p>Active learning chooses which unlabeled examples to send to annotators so that each label improves the model as much as possible. The standard setting is <strong>pool-based</strong>: a large unlabeled pool, a small labeled seed, and a loop of train → score pool → query → label → retrain.</p>
+<h3 id="query-strategies">Query Strategies</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Score (higher = query first)</th>
+<th>Intuition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Least confidence</strong></td>
+<td><code>1 − max_k p(k|x)</code></td>
+<td>Model's top guess is weak</td>
+</tr>
+<tr>
+<td><strong>Margin</strong></td>
+<td><code>−(p_top1 − p_top2)</code></td>
+<td>Top two classes are close; good for multi-class</td>
+</tr>
+<tr>
+<td><strong>Entropy</strong></td>
+<td><code>−Σ p_k log p_k</code></td>
+<td>Uncertainty spread over all classes</td>
+</tr>
+<tr>
+<td><strong>Query-by-committee</strong></td>
+<td>Disagreement among an ensemble (vote entropy or KL to the mean)</td>
+<td>Committee members disagree where the hypothesis space is unconstrained</td>
+</tr>
+<tr>
+<td><strong>Bayesian (e.g. BALD)</strong></td>
+<td>Mutual information between prediction and model parameters, often via MC dropout</td>
+<td>Separates model uncertainty from inherent noise</td>
+</tr>
+<tr>
+<td><strong>Diversity / core-set</strong></td>
+<td>Pick points that cover embedding space, e.g. k-center greedy</td>
+<td>Avoid redundant queries; works without calibrated probabilities</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>Cluster the uncertain candidates, pick one per cluster</td>
+<td>Uncertain and diverse; common default in practice</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="practical-issues">Practical Issues</h3>
+<ul>
+<li><strong>Batch mode.</strong> Retraining after every label is impractical. When you pick the top-B uncertain points at once, they tend to be near-duplicates from the same region. Fix by pre-filtering to the top few × B uncertain points and then choosing a diverse subset (clustering, k-center, or methods like BADGE that combine gradient magnitude with diversity).</li>
+<li><strong>Cold start.</strong> With very few labels the model's uncertainty is unreliable. Seed with a random or stratified sample, or a diversity-based selection over pretrained embeddings, before switching to uncertainty.</li>
+<li><strong>Outliers.</strong> Pure uncertainty sampling loves junk: corrupted images, off-language text, spam. Filter the pool or weight by density.</li>
+<li><strong>Sampling bias.</strong> The labeled set is no longer a random sample of the data. Keep a separate, randomly sampled test set for evaluation and never evaluate on actively selected data.</li>
+<li><strong>Transfer.</strong> Data chosen to be informative for one model is not guaranteed to be informative for a different architecture trained later.</li>
+<li><strong>Stopping.</strong> Stop when validation performance plateaus, when the maximum uncertainty in the pool drops, or when the budget runs out.</li>
+</ul>
+<h3 id="pool-based-loop-in-scikit-learn">Pool-Based Loop in scikit-learn</h3>
+<pre><code class="language-python">import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+X, y = make_classification(n_samples=6000, n_features=20, n_informative=6,
+                           n_classes=3, n_clusters_per_class=2, random_state=0)
+X_pool, X_test, y_pool, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+def entropy(p):
+    return -(p * np.log(p + 1e-12)).sum(axis=1)
+
+def run(strategy, seed_size=30, batch=20, rounds=15):
+    rng = np.random.default_rng(0)      # same random seed set for both strategies
+    labeled = list(rng.choice(len(X_pool), size=seed_size, replace=False))  # cold start: random
+    accs = []
+    for _ in range(rounds):
+        model = LogisticRegression(max_iter=1000).fit(X_pool[labeled], y_pool[labeled])
+        accs.append(model.score(X_test, y_test))
+        unlabeled = np.setdiff1d(np.arange(len(X_pool)), labeled)
+        if strategy == &quot;entropy&quot;:
+            scores = entropy(model.predict_proba(X_pool[unlabeled]))
+            pick = unlabeled[np.argsort(-scores)[:batch]]
+        else:
+            pick = rng.choice(unlabeled, size=batch, replace=False)
+        labeled.extend(pick)            # &quot;annotator&quot; reveals y_pool[pick]
+    return accs
+
+for s in [&quot;random&quot;, &quot;entropy&quot;]:
+    accs = run(s)
+    print(f&quot;{s:8s} start {accs[0]:.3f} -&gt; after {30 + 20 * 14} labels {accs[-1]:.3f}&quot;)
+</code></pre>
+<p>To swap in margin sampling, sort the probabilities and use <code>-(p[:, -1] - p[:, -2])</code> as the score. For query-by-committee, train several models on bootstrap samples of the labeled set and score by vote entropy. Libraries such as <code>modAL</code> and <code>small-text</code> wrap these patterns.</p>
+<hr />
+<h2 id="weak-supervision">Weak Supervision</h2>
+<p>Weak supervision replaces hand labels with many cheap, noisy sources and then combines them. The Snorkel framework popularized the approach.</p>
+<ol>
+<li><strong>Labeling functions (LFs):</strong> small programs that vote on a label or abstain. Sources include keyword rules, regexes, heuristics, existing knowledge bases (distant supervision), older models, and LLM prompts.</li>
+<li><strong>Label model:</strong> learns how accurate each LF is and how LFs correlate, using only their agreements and disagreements on unlabeled data (no ground truth needed). It outputs a probabilistic label per example.</li>
+<li><strong>End model:</strong> a normal discriminative model trained on the probabilistic labels. It generalizes beyond the LFs because it learns from features, not from the rules themselves, so it can cover examples where every LF abstained.</li>
+</ol>
+<pre><code class="language-python">import numpy as np
+ABSTAIN, HAM, SPAM = -1, 0, 1
+
+def lf_has_link(t):     return SPAM if &quot;http&quot; in t else ABSTAIN
+def lf_free_money(t):   return SPAM if &quot;free&quot; in t and &quot;$&quot; in t else ABSTAIN
+def lf_short_reply(t):  return HAM if len(t.split()) &lt; 5 else ABSTAIN
+def lf_mentions_you(t): return HAM if &quot;you mentioned&quot; in t else ABSTAIN
+
+lfs = [lf_has_link, lf_free_money, lf_short_reply, lf_mentions_you]
+texts = [&quot;free $ at http://x.co&quot;, &quot;thanks!&quot;, &quot;as you mentioned, see http://docs&quot;,
+         &quot;claim your free $ prize before midnight&quot;, &quot;meeting moved to 3pm today please confirm&quot;]
+
+L = np.array([[lf(t) for lf in lfs] for t in texts])   # label matrix: n_items x n_lfs
+coverage = (L != ABSTAIN).mean(axis=0)
+print(&quot;LF coverage:&quot;, {f.__name__: round(float(c), 2) for f, c in zip(lfs, coverage)})
+
+def majority_vote(row):
+    votes = row[row != ABSTAIN]
+    return ABSTAIN if len(votes) == 0 else np.bincount(votes).argmax()
+
+print(&quot;labels:&quot;, [int(majority_vote(r)) for r in L])  # ties go to the lower class id
+# A real label model (e.g. snorkel.labeling.model.LabelModel) weights LFs by
+# estimated accuracy instead of counting votes equally.
+</code></pre>
+<p><strong>LF diagnostics to track:</strong> coverage (fraction of items it labels), overlap and conflict with other LFs, and empirical accuracy on a small hand-labeled dev set. You still need a few hundred human labels to develop LFs and to evaluate the end model.</p>
+<p><strong>When it works well:</strong> domain experts can express knowledge as rules, labels are needed in bulk, and the task definition changes often (edit an LF and relabel everything in minutes). <strong>When it struggles:</strong> tasks with no expressible heuristics (fine-grained visual categories) or where the LFs share one blind spot, which the label model cannot detect.</p>
+<hr />
+<h2 id="semi-supervised-learning">Semi-Supervised Learning</h2>
+<p>Semi-supervised learning trains on labeled and unlabeled data together.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Idea</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pseudo-labeling / self-training</strong></td>
+<td>Train, predict on unlabeled data, add high-confidence predictions as labels, retrain</td>
+<td>Confirmation bias: the model reinforces its own mistakes. Use high thresholds and per-class thresholds</td>
+</tr>
+<tr>
+<td><strong>Consistency regularization</strong></td>
+<td>Penalize different predictions for two augmentations of the same unlabeled input (Pi-model, Mean Teacher, UDA)</td>
+<td>Needs meaningful augmentations for the modality</td>
+</tr>
+<tr>
+<td><strong>FixMatch-style</strong></td>
+<td>Pseudo-label from a weakly augmented view if confidence exceeds a threshold, train the strongly augmented view to match</td>
+<td>Threshold tuning; class imbalance in pseudo-labels</td>
+</tr>
+<tr>
+<td><strong>Self-supervised pretraining + fine-tune</strong></td>
+<td>Learn representations from unlabeled data first, then fine-tune on labels</td>
+<td>Often the strongest option today; many teams start from a pretrained foundation model instead</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.semi_supervised import SelfTrainingClassifier
+
+X, y = make_classification(n_samples=3000, n_features=20, random_state=1)
+y_partial = y.copy()
+rng = np.random.default_rng(1)
+y_partial[rng.random(len(y)) &lt; 0.97] = -1       # only ~3% labeled; -1 means unlabeled
+
+base = LogisticRegression(max_iter=1000)
+self_train = SelfTrainingClassifier(base, threshold=0.9).fit(X, y_partial)
+supervised = LogisticRegression(max_iter=1000).fit(X[y_partial != -1], y[y_partial != -1])
+print(f&quot;supervised only: {supervised.score(X, y):.3f}  self-training: {self_train.score(X, y):.3f}&quot;)
+</code></pre>
+<p>Semi-supervised learning helps most when unlabeled data comes from the same distribution as the labeled data and the classes are reasonably separated. It can hurt when the unlabeled pool contains classes that are absent from the labeled set.</p>
+<hr />
+<h2 id="llms-as-annotators">LLMs as Annotators</h2>
+<p>Large language models can label text (and, with multimodal models, images) at a fraction of human cost and far faster. Treat an LLM as one more annotator whose quality you measure, not as ground truth.</p>
+<p><strong>Workflow</strong></p>
+<ol>
+<li>Write the prompt from the human labeling guidelines, including definitions, edge-case rulings, and a few examples.</li>
+<li>Build a human-labeled gold set of a few hundred items, stratified to include rare classes and hard cases.</li>
+<li>Run the LLM on gold. Report accuracy, per-class precision and recall, confusion matrix, and Cohen's kappa against humans. Compare to human-human agreement, which is the realistic ceiling.</li>
+<li>Calibrate: check whether the model's stated confidence, the agreement across several samples, or token log-probabilities actually predict correctness. Route low-confidence items to humans.</li>
+<li>Keep auditing a random sample of LLM labels in production. Re-run the gold evaluation whenever you change the prompt or the model version.</li>
+</ol>
+<p><strong>Cost math (illustrative numbers; plug in current prices)</strong></p>
+<pre><code class="language-python">n_items = 200_000
+tokens_per_item = 400 + 50            # prompt incl. guidelines + output
+price_per_m_tokens = 1.00             # blended $ per million tokens (placeholder)
+llm_cost = n_items * tokens_per_item / 1e6 * price_per_m_tokens
+
+human_cost_per_label = 0.08           # $ per label (placeholder)
+redundancy = 3                        # humans typically need multiple labels per item
+human_cost = n_items * human_cost_per_label * redundancy
+
+review_rate = 0.15                    # share routed to humans because LLM is unsure
+hybrid_cost = llm_cost + n_items * review_rate * human_cost_per_label * redundancy
+print(f&quot;LLM ${llm_cost:,.0f} | human ${human_cost:,.0f} | hybrid ${hybrid_cost:,.0f}&quot;)
+</code></pre>
+<p>Prompt caching of the shared guideline prefix and batch APIs can reduce LLM cost further. The cost that is easy to forget is the human gold set and ongoing audits, which you need either way.</p>
+<p><strong>Risks</strong></p>
+<ul>
+<li><strong>Systematic bias:</strong> LLM errors are correlated across items, unlike independent human mistakes, so they do not average out with more volume. Known tendencies include favoring certain positions or answer orderings, verbosity, and cultural or dialect bias.</li>
+<li><strong>Self-preference:</strong> using the same model family to label training data and to judge outputs can inflate scores.</li>
+<li><strong>Distillation ceiling:</strong> a model trained on LLM labels will learn the LLM's mistakes, and will rarely exceed the labeler on the task.</li>
+<li><strong>Terms and privacy:</strong> check provider terms on using outputs to train models, and whether the data can be sent to an external API at all.</li>
+<li><strong>Drift:</strong> a provider model update can silently change label distributions. Pin model versions and log them with every label.</li>
+</ul>
+<hr />
+<h2 id="synthetic-data">Synthetic Data</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Examples</th>
+<th>Good for</th>
+<th>Main risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Augmentation</strong></td>
+<td>Flips, crops, color jitter, mixup, back-translation, synonym swap, SpecAugment</td>
+<td>Invariances you know hold; small datasets</td>
+<td>Transform changes the label (flipping a &quot;6&quot;, negating a sentence)</td>
+</tr>
+<tr>
+<td><strong>Simulation / rendering</strong></td>
+<td>Game engines for driving and robotics, rendered product images, simulated sensor data</td>
+<td>Rare or dangerous scenarios, perfect labels for free</td>
+<td>Sim-to-real gap; mitigate with domain randomization and real fine-tuning data</td>
+</tr>
+<tr>
+<td><strong>Generative models</strong></td>
+<td>Diffusion images, LLM-written examples, instruction data, tabular generators (CTGAN-style)</td>
+<td>Rare classes, privacy-preserving stand-ins, bootstrapping a new task</td>
+<td>Low diversity, factual errors, leaks of training data</td>
+</tr>
+<tr>
+<td><strong>Rule-based / templated</strong></td>
+<td>Fill-in templates, programmatic fraud patterns</td>
+<td>Structured formats, unit tests for models</td>
+<td>Model learns the template, not the task</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Using LLM-generated data well:</strong> vary personas, topics, lengths, and difficulty explicitly in the prompt; deduplicate (exact and near-duplicate); filter with a verifier or classifier; check that synthetic examples do not overlap your test set; and always evaluate on real data.</p>
+<p><strong>Model collapse.</strong> When models are trained repeatedly on data produced by earlier models, the tails of the distribution get underrepresented at each generation and the output distribution narrows, eventually losing rare modes. Research published in 2024 (Shumailov et al., Nature) demonstrated this for recursively trained generative models. Mitigations: keep a stable pool of real data in every training mix rather than replacing it, track provenance so you know which examples are synthetic, and monitor diversity metrics on generated data.</p>
+<hr />
+<h2 id="class-imbalance-at-labeling-time">Class Imbalance at Labeling Time</h2>
+<p>If positives are 0.1% of traffic, labeling a random sample of 10,000 items yields about 10 positives. Fix this at sampling time, not only at training time.</p>
+<ul>
+<li><strong>Pre-filter with a cheap signal:</strong> keyword rules, an existing model's score, user reports. Label the enriched pool.</li>
+<li><strong>Stratified sampling by model score:</strong> sample from score buckets so you get positives from the top and hard negatives from the middle.</li>
+<li><strong>Active learning</strong> naturally oversamples the uncertain boundary region, which often contains the minority class.</li>
+<li><strong>Record the sampling weights.</strong> When you enrich, the labeled set's class ratio no longer matches production. Keep a separate random sample to estimate true prevalence and to compute unbiased precision and recall, or apply importance weights.</li>
+<li><strong>Don't forget hard negatives.</strong> An enriched set that is all obvious negatives plus positives teaches the model the wrong boundary.</li>
+</ul>
+<hr />
+<h2 id="data-versioning-and-lineage">Data Versioning and Lineage</h2>
+<p>Labels change: guidelines get revised, noise gets fixed, vendors relabel. Without versioning you cannot reproduce a model or explain why metrics moved.</p>
+<p>What to record for every label:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item ID and content hash</td>
+<td>Detect when the underlying item changed</td>
+</tr>
+<tr>
+<td>Label and label schema / ontology version</td>
+<td>Interpret old labels after class splits</td>
+</tr>
+<tr>
+<td>Guideline version</td>
+<td>Know which rules the annotator followed</td>
+</tr>
+<tr>
+<td>Source: annotator ID, vendor, LF name, model name and version, prompt version</td>
+<td>Audit and re-weight sources; remove a bad annotator's labels</td>
+</tr>
+<tr>
+<td>Timestamp and confidence</td>
+<td>Filter stale or low-confidence labels</td>
+</tr>
+<tr>
+<td>Adjudication history</td>
+<td>Show how disagreements were resolved</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tools: DVC or lakeFS for versioning datasets alongside code, Delta Lake or Iceberg tables with time travel for labels stored in the warehouse, and your experiment tracker (for example MLflow) to log the dataset version each model was trained on. Freeze the test set per evaluation cycle and change it deliberately, with a version bump, so model comparisons stay valid.</p>
+<hr />
+<h2 id="cost-and-budget-estimation">Cost and Budget Estimation</h2>
+<p>A back-of-the-envelope estimate interviewers expect you to be able to produce:</p>
+<pre><code class="language-python">def labeling_budget(n_items, seconds_per_item, hourly_rate, redundancy=1.0,
+                    gold_rate=0.07, review_rate=0.10, overhead=0.25):
+    &quot;&quot;&quot;Rough cost of a human labeling project.&quot;&quot;&quot;
+    effective_items = n_items * redundancy * (1 + gold_rate)   # extra labels on gold items
+    hours = effective_items * seconds_per_item / 3600
+    hours *= (1 + review_rate)                                # QA / expert review
+    cost = hours * hourly_rate * (1 + overhead)               # PM, tooling, vendor margin
+    return round(hours), round(cost)
+
+# Example: 50k text items, 20 s each, 2x redundancy, $15/hr workforce
+hours, cost = labeling_budget(50_000, 20, 15, redundancy=2)
+print(f&quot;~{hours:,} annotator-hours, ~${cost:,}&quot;)
+</code></pre>
+<p>Things that dominate real budgets:</p>
+<ul>
+<li><strong>Time per item</strong> varies by orders of magnitude: a binary sentiment label takes seconds, a polygon segmentation mask can take many minutes, a medical read can need a specialist. Time a pilot rather than guessing.</li>
+<li><strong>Redundancy</strong> multiplies everything. Use dynamic redundancy instead of a flat 3x.</li>
+<li><strong>Pilot and guideline iteration</strong> is a fixed cost that saves rework later.</li>
+<li><strong>Expert time</strong> for gold sets and adjudication is expensive per hour but small in volume.</li>
+<li><strong>Relabeling</strong> after an ontology change. Design the ontology carefully to avoid paying twice.</li>
+</ul>
+<p>Then ask which lever buys the most accuracy per dollar: more random labels, actively selected labels, cleaning existing labels, or a weak or LLM labeler plus human review. A small experiment on each, measured on the same clean test set, answers this better than intuition.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="you-have-1m-unlabeled-examples-and-budget-for-10k-labels-how-do-you-spend-it">You have 1M unlabeled examples and budget for 10k labels. How do you spend it?</h4>
+<p>First, spend a small fraction on a pilot: write guidelines, have several annotators label the same few hundred items, measure agreement, and fix the guidelines. Second, set aside a random, carefully labeled test set (often 1-2k items, more if classes are rare) that is never touched by selection. Third, get a strong baseline cheaply: a pretrained model, zero-shot or few-shot, or an LLM labeler checked against the gold set. Then spend the remaining budget in active learning rounds using uncertainty plus diversity sampling, seeded with a random or stratified sample to avoid cold-start problems. Consider pseudo-labeling or weak supervision on the rest of the pool. Track the learning curve per round so you can show where extra labels stop paying off.</p>
+<h4 id="why-use-cohens-kappa-instead-of-percent-agreement">Why use Cohen's kappa instead of percent agreement?</h4>
+<p>Percent agreement ignores agreement that happens by chance. Kappa subtracts the agreement expected if both raters labeled independently at their own class rates: κ = (p_o − p_e)/(1 − p_e). With a 95/5 class split, two raters can agree 90%+ while kappa is near zero, which exposes that they don't agree on the rare class, usually the one you care about. Report both, because kappa is sensitive to prevalence and can look low even when agreement is good on skewed data.</p>
+<h4 id="when-would-you-use-fleiss-kappa-or-krippendorffs-alpha-instead">When would you use Fleiss' kappa or Krippendorff's alpha instead?</h4>
+<p>Cohen's kappa is for exactly two raters. Fleiss' kappa handles more raters when each item gets the same number of ratings, even if different people rate different items, which fits crowd setups. Krippendorff's alpha is the most general: any number of raters, missing ratings, and different distance functions for nominal, ordinal, interval, or ratio labels. For a crowd project where items get a variable number of labels, alpha is usually the right choice.</p>
+<h4 id="annotator-agreement-is-low-what-do-you-do">Annotator agreement is low. What do you do?</h4>
+<p>Read the disagreements before changing anything. If they cluster in specific classes or item types, the guidelines are ambiguous there: add definitions, edge-case rulings, and examples, then re-pilot. If one or two annotators account for most disagreements, retrain or remove them using gold-question accuracy. If the task is inherently subjective (toxicity, humor, relevance grades), accept that, collect multiple labels per item, and consider training on soft labels. Low agreement also caps the model's achievable score, which matters when setting targets.</p>
+<h4 id="how-do-you-find-mislabeled-examples-in-a-large-dataset">How do you find mislabeled examples in a large dataset?</h4>
+<p>Get out-of-sample predicted probabilities using cross-validation, then flag examples where the model confidently predicts a different class than the given label. Confident learning makes this principled with per-class confidence thresholds and an estimate of the noise joint distribution; cleanlab implements it. Complementary signals are high per-example training loss, annotator disagreement, and label disagreement with nearest neighbors in embedding space. Send flagged items to review rather than auto-deleting, because hard-but-correct and minority-class examples look similar to noise.</p>
+<h4 id="explain-uncertainty-sampling-and-its-failure-modes">Explain uncertainty sampling and its failure modes.</h4>
+<p>Train on the labeled set, score each unlabeled example by how unsure the model is (least confidence, margin between the top two classes, or entropy), and label the most uncertain. Failure modes: it is unreliable at cold start when the model is poor; it picks redundant near-duplicates in batch mode; it is drawn to outliers and junk; poorly calibrated probabilities (common in deep nets) make the ranking noisy; and the resulting labeled set is biased, so it cannot be used as a test set. Fixes are random seeding, diversity-aware batch selection, outlier filtering, and a separate random test set.</p>
+<h4 id="what-is-query-by-committee">What is query-by-committee?</h4>
+<p>Train several models (a committee) that are all consistent with the labeled data, for example by bootstrapping or using different architectures, and query the examples where they disagree most, measured by vote entropy or average KL divergence from the consensus. Disagreement marks regions where the labeled data hasn't yet pinned down the decision boundary. It is more robust than a single model's uncertainty but costs several times more training per round.</p>
+<h4 id="how-does-weak-supervision-differ-from-just-using-heuristic-rules">How does weak supervision differ from just using heuristic rules?</h4>
+<p>A heuristic used directly is only as good as its own coverage and accuracy. Weak supervision combines many overlapping, conflicting labeling functions and uses a label model to estimate each one's accuracy and correlations from their agreement patterns, without ground truth, producing probabilistic labels. An end model trained on those labels learns from features, so it generalizes to examples no rule covered and often outperforms the rules. It still needs a small hand-labeled dev set to develop LFs and a test set to evaluate.</p>
+<h4 id="what-is-the-risk-in-pseudo-labeling-and-how-do-you-control-it">What is the risk in pseudo-labeling and how do you control it?</h4>
+<p>Confirmation bias: the model's wrong predictions become training labels, and it gets more confident in its mistakes. It is worse for minority classes, which get fewer and less accurate pseudo-labels. Controls include a high confidence threshold (or per-class thresholds), using a teacher model that is stronger or an ensemble, consistency with augmented views (FixMatch), limiting the pseudo-label share, and validating every round on a clean human-labeled set.</p>
+<h4 id="can-you-replace-human-annotators-with-an-llm">Can you replace human annotators with an LLM?</h4>
+<p>Partly, and only after measuring. Treat the LLM as an annotator: build a human gold set, measure its accuracy and kappa against humans, and compare with human-human agreement. Use it where it matches humans, route low-confidence or disagreeing items to people, and keep auditing a random sample. Human labels are still needed for the gold set, for evaluation, and for subjective or high-stakes classes. The main risk is correlated systematic errors that don't average out, plus drift when the provider updates the model, so pin versions and log them.</p>
+<h4 id="when-does-synthetic-data-help-and-when-does-it-hurt">When does synthetic data help and when does it hurt?</h4>
+<p>It helps when real data is rare, expensive, dangerous, or private: rare failure modes, edge cases in driving, fraud patterns, or bootstrapping a new task. It hurts when it doesn't match the real distribution (sim-to-real gap), lacks diversity, contains errors, or leaks into evaluation. Recursive training on model outputs can cause model collapse, where distribution tails disappear. Always evaluate on real data, mix in real data, deduplicate, and track which examples are synthetic.</p>
+<h4 id="how-would-you-estimate-the-cost-of-a-labeling-project">How would you estimate the cost of a labeling project?</h4>
+<p>Items × labels per item × time per label ÷ 3600 × hourly rate, then add gold-question overhead, QA review, project management and tooling, and a pilot. Time per label must come from a timed pilot, since it varies by orders of magnitude across tasks. Then compare against alternatives: fewer labels with active learning, an LLM labeler with human review, or weak supervision, and pick based on accuracy per dollar measured on a clean test set.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Starting to label before guidelines are piloted</td>
+<td>Inconsistent labels; expensive relabeling</td>
+<td>Pilot with several annotators, measure agreement, iterate</td>
+</tr>
+<tr>
+<td>Reporting only percent agreement</td>
+<td>Chance agreement hides disagreement on rare classes</td>
+<td>Report kappa or alpha alongside raw agreement</td>
+</tr>
+<tr>
+<td>Evaluating on actively selected data</td>
+<td>Biased sample; metrics don't reflect production</td>
+<td>Keep a separate random test set</td>
+</tr>
+<tr>
+<td>Pure uncertainty sampling in batch mode</td>
+<td>Redundant near-duplicate queries waste budget</td>
+<td>Add diversity (clustering, k-center) to batch selection</td>
+</tr>
+<tr>
+<td>Using uncertainty sampling at cold start</td>
+<td>Untrained model's uncertainty is meaningless</td>
+<td>Seed with random or diversity-based samples</td>
+</tr>
+<tr>
+<td>Auto-deleting examples flagged as noisy</td>
+<td>Removes hard, correct, and minority-class examples</td>
+<td>Human review of flagged items</td>
+</tr>
+<tr>
+<td>Trusting LLM labels without a gold set</td>
+<td>Correlated errors silently corrupt the dataset</td>
+<td>Measure against human gold; audit continuously</td>
+</tr>
+<tr>
+<td>Not pinning the LLM or prompt version</td>
+<td>Label distribution shifts without anyone noticing</td>
+<td>Log model and prompt version with every label</td>
+</tr>
+<tr>
+<td>Enriched sampling without recording weights</td>
+<td>Prevalence and precision estimates are wrong</td>
+<td>Keep a random sample; store sampling weights</td>
+</tr>
+<tr>
+<td>Pre-labels shown to annotators without checks</td>
+<td>Anchoring makes annotators accept model errors</td>
+<td>Compare against a pre-label-free sample</td>
+</tr>
+<tr>
+<td>Replacing real data with synthetic data</td>
+<td>Model collapse; sim-to-real gap</td>
+<td>Keep real data in every mix; evaluate on real data</td>
+</tr>
+<tr>
+<td>Labels stored without guideline or source version</td>
+<td>Can't reproduce models or trace bad labels</td>
+<td>Version labels, ontology, guidelines, and sources</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_data_quality.html">Data Quality &amp; Validation</a></li>
+<li><a href="intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="intro_mlflow.html">MLflow</a></li>
+<li><a href="intro_llm_evaluation.html">LLM Evaluation</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation</a></li>
+<li><a href="../classical_ml/intro_anomaly_detection.html">Anomaly Detection</a></li>
+<li><a href="../deep_learning/intro_fine_tuning.html">Fine-Tuning</a></li>
+<li><a href="../deep_learning/intro_generative_models.html">Generative Models</a></li>
+<li><a href="../data_engineering/intro_data_engineering_for_ai.html">Data Engineering for AI</a></li>
+<li><a href="../data_engineering/intro_delta_lake.html">Delta Lake</a></li>
+<li><a href="../system_design/ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="./">MLOps Overview</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_ab_testing.html"><small>Previous</small>A/B Testing</a><a rel="next" class="next" href="intro_responsible_ai_fairness.html"><small>Next</small>Responsible AI &amp; Fairness</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_data_labeling_active_learning.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

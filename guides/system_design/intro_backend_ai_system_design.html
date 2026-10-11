@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backend and System Design for AI Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide focuses on the backend engineering patterns required to turn AI models into scalable, reliable products.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/intro_backend_ai_system_design.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Backend and System Design for AI Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide focuses on the backend engineering patterns required to turn AI models into scalable, reliable products.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/intro_backend_ai_system_design.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backend and System Design for AI Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide focuses on the backend engineering patterns required to turn AI models into scalable, reliable products.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Backend and System Design for AI",
+   "description": "This guide focuses on the backend engineering patterns required to turn AI models into scalable, reliable products.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/intro_backend_ai_system_design.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Backend AI Systems",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/intro_backend_ai_system_design.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Backend AI Systems</span></nav>
+<p class="meta"><a href="../../#system_design/intro_backend_ai_system_design.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="backend-and-system-design-for-ai">Backend and System Design for AI</h1>
+<p>This guide focuses on the backend engineering patterns required to turn AI models into scalable, reliable products.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>AI systems fail in production for backend reasons as often as for model reasons. A strong ML or AI engineer should be able to design low-latency APIs, asynchronous pipelines, caching layers, distributed workers, and resilient failure handling.</p>
+<p>This matters because models only create value when the surrounding system is stable under real traffic.</p>
+<p>For a broader interview-prep view of backend concepts that sit around ML systems, see the dedicated <a href="backend_system_design_interview_guide.html">Backend System Design Interview Guide</a>. It expands the general system design layer with 32 interview concepts spanning scalability, databases, caching, distributed systems, messaging, networking, storage, reliability, and search.</p>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="scalable-architectures">Scalable architectures</h3>
+<p>A scalable AI architecture separates concerns across the API layer, orchestration layer, model inference layer, storage and retrieval layer, and observability layer.</p>
+<h3 id="api-design">API design</h3>
+<p>Good AI APIs expose clear request and response contracts, idempotency where needed, streaming when latency matters, and structured errors.</p>
+<h3 id="distributed-systems">Distributed systems</h3>
+<p>Many AI tasks are too slow or expensive for synchronous request-response design. Distributed systems patterns like queues, workers, and event-driven processing become necessary.</p>
+<h3 id="data-modeling-and-domain-boundaries">Data modeling and domain boundaries</h3>
+<p>Production AI systems still need clean entities, ownership boundaries, and data contracts. You should be able to explain which service owns which data, what the write model looks like, and where denormalized read models or analytics views come from.</p>
+<h3 id="caching-strategies">Caching strategies</h3>
+<p>Caching reduces cost and latency for repeated work: prompt-response cache, embedding cache, feature cache, and retrieval result cache.</p>
+<h3 id="fault-tolerance">Fault tolerance</h3>
+<p>Production AI needs timeouts, retries, circuit breakers, fallbacks, and graceful degradation.</p>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="designing-low-latency-systems">Designing low-latency systems</h3>
+<p>In practice, this means minimizing synchronous dependencies, using streaming where appropriate, and keeping the hot path narrow.</p>
+<h3 id="handling-concurrency">Handling concurrency</h3>
+<p>You should know when to use async APIs, worker queues, batch processing, and background tasks.</p>
+<h3 id="load-balancing">Load balancing</h3>
+<p>This includes balancing across stateless API replicas and sometimes across different inference backends.</p>
+<h3 id="data-driven-development">Data-driven development</h3>
+<p>A strong backend engineer also designs observability and product feedback loops: event schemas, experiment variants, funnel metrics, feature freshness, and operational telemetry.</p>
+<h3 id="fault-tolerance-1">Fault tolerance</h3>
+<p>A strong engineer defines timeout budgets, fallback behavior, retry scopes, and partial failure handling.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastAPI</td>
+<td>High-performance Python API framework</td>
+<td>AI backends and inference services</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>Cache and lightweight state store</td>
+<td>Response caching, rate limiting, queues</td>
+</tr>
+<tr>
+<td>Kafka</td>
+<td>Event streaming platform</td>
+<td>High-volume asynchronous pipelines</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>Container orchestration</td>
+<td>Scalable multi-service production systems</td>
+</tr>
+<tr>
+<td>Postgres</td>
+<td>Transactional data store</td>
+<td>Metadata, job state, user/application data</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="scalable-ai-api">Scalable AI API</h3>
+<ul>
+<li>Goal: Build an inference API that supports rate limiting, caching, and observability.</li>
+<li>Key components: FastAPI service, authentication, structured outputs, metrics, tracing.</li>
+<li>Suggested tech stack: FastAPI, Redis, Postgres, Docker.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="real-time-inference-system">Real-time inference system</h3>
+<ul>
+<li>Goal: Serve predictions with tight latency budgets.</li>
+<li>Key components: optimized model serving, request batching, timeout handling, autoscaling.</li>
+<li>Suggested tech stack: FastAPI, model server, Redis, Kubernetes.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="streaming-pipeline">Streaming pipeline</h3>
+<ul>
+<li>Goal: Process events continuously for enrichment, ranking, or anomaly detection.</li>
+<li>Key components: Kafka topics, workers, state store, online features.</li>
+<li>Suggested tech stack: Kafka, Python consumers, Redis, Prometheus.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="high-load-backend-system">High-load backend system</h3>
+<ul>
+<li>Goal: Handle bursty traffic for an AI product with graceful degradation.</li>
+<li>Key components: queue buffering, load shedding, caching, provider fallback.</li>
+<li>Suggested tech stack: FastAPI, Redis, Kafka, Kubernetes.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class InferenceRequest(BaseModel):
+    prompt: str
+
+@app.post(&quot;/infer&quot;)
+async def infer(request: InferenceRequest):
+    return {&quot;status&quot;: &quot;ok&quot;, &quot;prompt_length&quot;: len(request.prompt)}
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">scalable-ai-api/
+├── app/
+│   ├── main.py
+│   ├── routes.py
+│   ├── services/
+│   ├── cache.py
+│   └── metrics.py
+├── tests/
+├── docker/
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="design-an-api-that-serves-an-llm-feature-to-10000-concurrent-users-where-do-you-start">Design an API that serves an LLM feature to 10,000 concurrent users. Where do you start?</h4>
+<p>With numbers, before architecture. Ask for the request rate, the prompt and output token distributions, the latency SLO, and the cost budget: those four determine everything else. 10,000 concurrent users is not 10,000 requests per second; if each user sends a request every 30 seconds, that's ~330 RPS, which is a very different system.</p>
+<p>Then the shape: a stateless API layer behind a load balancer (so it scales horizontally and any instance can serve any request), an async request path since LLM calls take seconds and blocking a thread per request destroys throughput, a queue with backpressure so overload degrades rather than collapses, streaming responses to cut perceived latency, and a caching layer: exact-match first, then semantic caching if the traffic repeats.</p>
+<p>The parts that separate a strong answer: <strong>admission control</strong> (reject early with a clear error rather than queueing indefinitely), <strong>per-user rate and spend limits</strong>, <strong>timeouts at every hop</strong> with values that sum to less than the client's timeout, and an explicit <strong>degradation path</strong>: a smaller model or a cached response when the primary is saturated.</p>
+<h4 id="why-is-async-io-particularly-important-for-ai-backends">Why is async I/O particularly important for AI backends?</h4>
+<p>Because the service spends nearly all its wall-clock time waiting on a network call to a model, not computing. In a synchronous thread-per-request server, a 3-second LLM call occupies a thread for 3 seconds; a few hundred concurrent requests exhausts the pool and new requests queue behind idle threads.</p>
+<p>With async, one process handles thousands of in-flight requests because each awaits its I/O and yields. The practical caveats worth stating: any blocking call in an async handler (a synchronous DB driver, a CPU-heavy tokenization, <code>time.sleep</code>) stalls the whole event loop, so it must move to a thread or process pool. And async raises concurrency, not per-request speed: it doesn't make the model faster.</p>
+<h4 id="how-do-you-handle-a-request-that-takes-60-seconds">How do you handle a request that takes 60 seconds?</h4>
+<p>Don't hold an HTTP connection open for it. Switch to an asynchronous job pattern: accept the request, return <code>202</code> with a job ID immediately, process on a worker pool, and let the client poll a status endpoint or receive a webhook or SSE push on completion. Persist job state so a worker restart doesn't lose it, and make the work idempotent by job ID so retries are safe.</p>
+<p>If the output is incrementally useful (generated text usually is) streaming is the better answer: the connection stays open but the user sees progress within a second, which changes the experience entirely even though total time is unchanged.</p>
+<h4 id="what-caching-layers-would-you-use-and-what-are-their-risks">What caching layers would you use, and what are their risks?</h4>
+<p>Four, from cheapest to riskiest:</p>
+<ul>
+<li><strong>Exact-match response cache</strong> keyed by a hash of the full request (prompt, model, parameters). Safe and effective for repeated identical requests.</li>
+<li><strong>Prompt/prefix cache</strong> at the model provider or inference server, which requires ordering the prompt with the stable prefix first, often the single largest cost reduction in a RAG or agent system.</li>
+<li><strong>Retrieval cache</strong> for embeddings and search results, keyed by content hash.</li>
+<li><strong>Semantic cache</strong>, returning a previous answer for a sufficiently similar query. Powerful and the most dangerous: a threshold set too loosely serves confidently wrong answers to subtly different questions.</li>
+</ul>
+<p>Every cache needs an invalidation story tied to the underlying data, a TTL, and per-user scoping when responses are personalized or permission-dependent. A cache that ignores the requesting user is a data-leak vector, not just a correctness bug.</p>
+<h4 id="how-do-you-make-an-ai-backend-fail-gracefully">How do you make an AI backend fail gracefully?</h4>
+<p>Assume the model call fails, is slow, or is rate-limited, because it will be. Layer the defenses: timeouts at every hop; retries with exponential backoff and <strong>full jitter</strong>; a <strong>circuit breaker</strong> so a failing dependency stops absorbing every request's full timeout; <strong>bulkheads</strong> so one slow provider doesn't exhaust the shared connection pool; a <strong>fallback chain</strong> to an alternate provider, a smaller model, or a cached or templated response; and <strong>load shedding</strong> that rejects low-priority traffic early to protect the SLO for the rest.</p>
+<p>The framing that lands: decide in advance what &quot;degraded&quot; looks like and make it a designed state, not an accident. A user-visible &quot;we're operating in reduced mode&quot; beats a timeout, and both beat a cascade.</p>
+<h4 id="how-would-you-design-for-cost-as-a-first-class-constraint">How would you design for cost as a first-class constraint?</h4>
+<p>Instrument cost per request end to end, attributed by feature, route, and tenant: you cannot control what you don't measure, and LLM cost is unusual in that it varies per request rather than being a fixed serving cost.</p>
+<p>Then design the controls in: per-user and per-tenant rate limits and spend caps, a global budget circuit breaker, <code>max_tokens</code> bounds, a step limit on any agent loop, prompt ordering that maximizes cache hits, and routing that sends the easy majority of traffic to a small model. Push offline work to batch APIs.</p>
+<p>The architectural point: cost belongs in the same category as latency and availability: it needs SLOs, monitoring, and alerting, not a monthly invoice surprise.</p>
+<h4 id="how-do-you-handle-multi-tenancy-safely">How do you handle multi-tenancy safely?</h4>
+<p>Tenant identity must be established at the edge from an authenticated token and carried through every layer as an explicit parameter: never inferred from a request body field a client controls. Every data access filters on it, including vector search, where post-filtering can both return empty pages and leak the existence of documents.</p>
+<p>Beyond correctness: per-tenant rate limits and spend caps so one tenant cannot exhaust shared capacity (the noisy-neighbor problem), per-tenant cache namespacing, and separate storage for tenants under regulatory isolation requirements. For a security-sensitive design, separate indexes per tenant is the defensible choice over a shared index with a mandatory filter: one missed filter in one code path is a breach.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synchronous handlers around LLM calls</td>
+<td>Thread pool exhausts at low concurrency</td>
+<td>Async I/O; move blocking work to a thread pool</td>
+</tr>
+<tr>
+<td>A blocking call inside an async handler</td>
+<td>Stalls the entire event loop</td>
+<td>Audit for sync DB drivers, CPU work, <code>time.sleep</code></td>
+</tr>
+<tr>
+<td>Holding HTTP connections for long generations</td>
+<td>Proxy timeouts, wasted resources, poor UX</td>
+<td>Stream, or return a job ID and poll/webhook</td>
+</tr>
+<tr>
+<td>No timeout on an upstream model call</td>
+<td>One hung request occupies capacity indefinitely</td>
+<td>Timeouts at every hop, summing under the client's</td>
+</tr>
+<tr>
+<td>Retries without jitter or a circuit breaker</td>
+<td>Retry storms turn a partial outage into a full one</td>
+<td>Exponential backoff with full jitter + circuit breaker</td>
+</tr>
+<tr>
+<td>Unbounded queues</td>
+<td>Latency grows until everything times out</td>
+<td>Bounded queues with admission control and load shedding</td>
+</tr>
+<tr>
+<td>Semantic cache threshold set loosely</td>
+<td>Serves confidently wrong answers</td>
+<td>Tune the threshold on real queries; scope per user; add TTL</td>
+</tr>
+<tr>
+<td>Cache not scoped by user or tenant</td>
+<td>Personalized or permissioned data leaks across users</td>
+<td>Include identity in the cache key</td>
+</tr>
+<tr>
+<td>Tenant ID taken from the request body</td>
+<td>Trivially spoofable; cross-tenant access</td>
+<td>Derive from the authenticated token at the edge</td>
+</tr>
+<tr>
+<td>Stateful API instances</td>
+<td>Cannot scale horizontally or restart safely</td>
+<td>Keep session state in Redis or a database</td>
+</tr>
+<tr>
+<td>Cost measured only on the monthly invoice</td>
+<td>No way to attribute or control spend</td>
+<td>Per-request cost telemetry with budgets and alerts</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="backend_system_design_interview_guide.html">Backend System Design Interview Guide</a></li>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="../data_engineering/intro_data_engineering_for_ai.html">Data Engineering for AI</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../ai_genai/intro_agent_tool_use.html">Agent Systems and Tool Use</a></li>
+<li><a href="../ai_genai/intro_multi_model_orchestration.html">Multi-Model Orchestration</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Design Framework</a><a rel="next" class="next" href="backend_system_design_interview_guide.html"><small>Next</small>Backend Interview Guide</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/intro_backend_ai_system_design.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

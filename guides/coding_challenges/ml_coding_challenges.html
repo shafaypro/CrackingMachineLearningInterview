@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Coding Challenges: Implement From Scratch | Cracking ML Interviews</title>
+<meta name="description" content="Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/ml_coding_challenges.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ML Coding Challenges: Implement From Scratch | Cracking ML Interviews">
+<meta property="og:description" content="Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/ml_coding_challenges.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ML Coding Challenges: Implement From Scratch | Cracking ML Interviews">
+<meta name="twitter:description" content="Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ML Coding Challenges: Implement From Scratch",
+   "description": "Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/ml_coding_challenges.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#coding-challenges"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "ML Coding Challenges",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/coding_challenges/ml_coding_challenges.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#coding-challenges">Coding Challenges</a> <span aria-hidden="true">/</span> <span aria-current="page">ML Coding Challenges</span></nav>
+<p class="meta"><a href="../../#coding_challenges/ml_coding_challenges.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ml-coding-challenges-implement-from-scratch">ML Coding Challenges: Implement From Scratch</h1>
+<p>Many ML interviews include a round where you implement an algorithm with NumPy only: no scikit-learn, no PyTorch. The point is not memorization; it is whether you understand the math well enough to translate it into code, and whether you can reason about shapes, numerical stability, and complexity out loud.</p>
+<p>Each challenge below gives the problem, a reference solution, and the follow-up questions interviewers actually ask.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-to-approach-these-rounds">How to Approach These Rounds</a></li>
+<li><a href="#1-linear-regression-with-gradient-descent">Linear Regression with Gradient Descent</a></li>
+<li><a href="#2-logistic-regression">Logistic Regression</a></li>
+<li><a href="#3-k-means">K-Means</a></li>
+<li><a href="#4-k-nearest-neighbors">K-Nearest Neighbors</a></li>
+<li><a href="#5-decision-tree-split-gini-and-entropy">Decision Tree Split (Gini and Entropy)</a></li>
+<li><a href="#6-traintest-split-and-k-fold-cross-validation">Train/Test Split and K-Fold Cross-Validation</a></li>
+<li><a href="#7-metrics-from-scratch">Metrics from Scratch</a></li>
+<li><a href="#8-pca">PCA</a></li>
+<li><a href="#9-softmax-and-cross-entropy-numerically-stable">Softmax and Cross-Entropy (Numerically Stable)</a></li>
+<li><a href="#10-a-two-layer-neural-network-with-backprop">A Two-Layer Neural Network with Backprop</a></li>
+<li><a href="#11-scaled-dot-product-attention">Scaled Dot-Product Attention</a></li>
+<li><a href="#12-cosine-similarity-search">Cosine Similarity Search</a></li>
+<li><a href="#13-text-chunking-with-overlap">Text Chunking with Overlap</a></li>
+<li><a href="#14-rate-limiter-with-exponential-backoff">Rate Limiter with Exponential Backoff</a></li>
+<li><a href="#15-reciprocal-rank-fusion">Reciprocal Rank Fusion</a></li>
+<li><a href="#complexity-reference">Complexity Reference</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="how-to-approach-these-rounds">How to Approach These Rounds</h2>
+<ol>
+<li><strong>Clarify the contract first.</strong> Input shapes, dtypes, whether a bias term is expected, what happens on empty input. Thirty seconds here prevents a rewrite.</li>
+<li><strong>State the math before typing.</strong> &quot;Gradient of MSE with respect to w is <code>2/n · Xᵀ(Xw - y)</code>&quot;: this earns credit even if the code has a bug.</li>
+<li><strong>Write shapes as comments.</strong> <code># (n, d) @ (d,) -&gt; (n,)</code>. Shape errors are the number one failure in these rounds, and annotating prevents most of them.</li>
+<li><strong>Vectorize, but get it correct first.</strong> A working loop beats a broken broadcast. Then say &quot;this loop is <code>O(n·k)</code>; here's the vectorized version&quot; and rewrite it.</li>
+<li><strong>Mention numerical stability unprompted.</strong> Subtract the max before <code>exp</code>, clip before <code>log</code>, add epsilon to denominators. Interviewers weight this heavily because it separates people who have shipped models from people who have read about them.</li>
+<li><strong>Test on a tiny example out loud.</strong> Two points, two clusters: walk through one iteration.</li>
+</ol>
+<hr />
+<h2 id="1-linear-regression-with-gradient-descent">1. Linear Regression with Gradient Descent</h2>
+<p><strong>Problem</strong>: Implement linear regression trained by batch gradient descent. Support a bias term.</p>
+<pre><code class="language-python">import numpy as np
+
+class LinearRegressionGD:
+    def __init__(self, lr=0.01, n_iters=1000, fit_intercept=True):
+        self.lr = lr
+        self.n_iters = n_iters
+        self.fit_intercept = fit_intercept
+
+    def _add_bias(self, X):
+        return np.c_[np.ones(len(X)), X] if self.fit_intercept else X
+
+    def fit(self, X, y):
+        X = self._add_bias(np.asarray(X, dtype=float))   # (n, d+1)
+        y = np.asarray(y, dtype=float)                   # (n,)
+        n, d = X.shape
+        self.w = np.zeros(d)
+        self.history = []
+
+        for _ in range(self.n_iters):
+            y_pred = X @ self.w                          # (n, d) @ (d,) -&gt; (n,)
+            error = y_pred - y                           # (n,)
+            grad = (2 / n) * (X.T @ error)               # (d, n) @ (n,) -&gt; (d,)
+            self.w -= self.lr * grad
+            self.history.append(np.mean(error ** 2))
+        return self
+
+    def predict(self, X):
+        return self._add_bias(np.asarray(X, dtype=float)) @ self.w
+</code></pre>
+<p><strong>Closed form</strong> (the normal equation): know both:</p>
+<pre><code class="language-python">def fit_closed_form(X, y, ridge=0.0):
+    &quot;&quot;&quot;w = (XᵀX + λI)⁻¹ Xᵀy: O(d³), exact, no learning rate.&quot;&quot;&quot;
+    X = np.c_[np.ones(len(X)), X]
+    d = X.shape[1]
+    reg = ridge * np.eye(d)
+    reg[0, 0] = 0.0                              # never penalize the intercept
+    return np.linalg.solve(X.T @ X + reg, X.T @ y)   # solve beats inv(): cheaper and stabler
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>When use gradient descent over the closed form?</em> The normal equation is <code>O(d³)</code> and needs <code>XᵀX</code> in memory, so it's impractical above a few thousand features; it also requires <code>XᵀX</code> to be invertible, which fails with collinear features (ridge fixes that). Gradient descent scales to large <code>n</code> and <code>d</code>, works out-of-core, and generalizes to non-convex models.</li>
+<li><em>Why <code>np.linalg.solve</code> instead of <code>np.linalg.inv</code>?</em> Solving the system directly (one LU factorization plus triangular solves) does fewer operations than forming the full inverse and is numerically more stable: explicitly inverting amplifies conditioning problems.</li>
+<li><em>What if the loss diverges?</em> Learning rate too high, or features on wildly different scales. Standardize, or lower the LR.</li>
+</ul>
+<hr />
+<h2 id="2-logistic-regression">2. Logistic Regression</h2>
+<p><strong>Problem</strong>: Binary logistic regression with gradient descent and L2 regularization.</p>
+<pre><code class="language-python">class LogisticRegressionGD:
+    def __init__(self, lr=0.1, n_iters=1000, l2=0.0):
+        self.lr, self.n_iters, self.l2 = lr, n_iters, l2
+
+    @staticmethod
+    def _sigmoid(z):
+        # Stable: avoid exp() overflow on large-magnitude z
+        out = np.empty_like(z, dtype=float)
+        pos, neg = z &gt;= 0, z &lt; 0
+        out[pos] = 1.0 / (1.0 + np.exp(-z[pos]))
+        ez = np.exp(z[neg])
+        out[neg] = ez / (1.0 + ez)
+        return out
+
+    def fit(self, X, y):
+        X = np.c_[np.ones(len(X)), np.asarray(X, dtype=float)]
+        y = np.asarray(y, dtype=float)
+        n, d = X.shape
+        self.w = np.zeros(d)
+
+        for _ in range(self.n_iters):
+            p = self._sigmoid(X @ self.w)
+            grad = (X.T @ (p - y)) / n            # same form as linear regression!
+            grad[1:] += self.l2 * self.w[1:]      # no penalty on the intercept
+            self.w -= self.lr * grad
+        return self
+
+    def predict_proba(self, X):
+        return self._sigmoid(np.c_[np.ones(len(X)), X] @ self.w)
+
+    def predict(self, X, threshold=0.5):
+        return (self.predict_proba(X) &gt;= threshold).astype(int)
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why is the gradient identical in form to linear regression's?</em> Both are generalized linear models; for a GLM with the canonical link, the gradient of the log-likelihood is always <code>Xᵀ(prediction - y)</code>. Nice result to state.</li>
+<li><em>Why not squared error for classification?</em> With a sigmoid, squared error is non-convex in <code>w</code> and its gradient vanishes when predictions are confidently wrong (the sigmoid saturates). Log loss is convex and its gradient stays proportional to the error.</li>
+<li><em>How do you extend to multiclass?</em> Softmax regression with cross-entropy, or one-vs-rest.</li>
+</ul>
+<hr />
+<h2 id="3-k-means">3. K-Means</h2>
+<p><strong>Problem</strong>: Implement K-Means with k-means++ initialization.</p>
+<pre><code class="language-python">def kmeans(X, k, n_iters=100, tol=1e-4, seed=0):
+    rng = np.random.default_rng(seed)
+    X = np.asarray(X, dtype=float)
+    n, d = X.shape
+
+    # --- k-means++ init: spread initial centroids by D² sampling ---
+    centroids = [X[rng.integers(n)]]
+    for _ in range(k - 1):
+        d2 = np.min(((X[:, None, :] - np.array(centroids)[None, :, :]) ** 2).sum(-1), axis=1)
+        # Fewer distinct points than k makes d2 all zero; fall back to uniform
+        probs = d2 / d2.sum() if d2.sum() &gt; 0 else np.full(n, 1.0 / n)
+        centroids.append(X[rng.choice(n, p=probs)])
+    centroids = np.array(centroids)                      # (k, d)
+
+    for _ in range(n_iters):
+        # Assignment: squared distance from every point to every centroid
+        dists = ((X[:, None, :] - centroids[None, :, :]) ** 2).sum(-1)   # (n, k)
+        labels = dists.argmin(axis=1)                                    # (n,)
+
+        # Update: mean of each cluster; keep old centroid if a cluster empties
+        new_centroids = np.array([
+            X[labels == j].mean(axis=0) if np.any(labels == j) else centroids[j]
+            for j in range(k)
+        ])
+        if np.linalg.norm(new_centroids - centroids) &lt; tol:
+            centroids = new_centroids
+            break
+        centroids = new_centroids
+
+    inertia = ((X - centroids[labels]) ** 2).sum()
+    return labels, centroids, inertia
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Memory problem with this distance computation?</em> <code>X[:, None, :] - centroids[None, :, :]</code> materializes an <code>(n, k, d)</code> array. For n=1M, k=100, d=128 in float64 that's 10⁶ × 100 × 128 × 8 bytes ≈ 100 GB. Use the identity <code>‖x-c‖² = ‖x‖² - 2x·c + ‖c‖²</code> to compute distances with one <code>(n,d)@(d,k)</code> matmul.</li>
+<li><em>Why k-means++?</em> Random initialization frequently converges to a poor local minimum; k-means++ samples each new centroid proportional to squared distance from existing ones, giving an <code>O(log k)</code> approximation guarantee in expectation and much more stable results.</li>
+<li><em>Convergence?</em> Both steps monotonically decrease inertia and there are finitely many assignments, so it always converges: to a local optimum, which is why you run it with several seeds (<code>n_init</code>).</li>
+<li><em>Empty cluster?</em> Reinitialize it to the point farthest from its centroid, or keep the old centroid (as above).</li>
+</ul>
+<hr />
+<h2 id="4-k-nearest-neighbors">4. K-Nearest Neighbors</h2>
+<pre><code class="language-python">def knn_predict(X_train, y_train, X_test, k=5, task='classification'):
+    X_train, X_test = np.asarray(X_train, float), np.asarray(X_test, float)
+
+    # ‖a - b‖² = ‖a‖² - 2a·b + ‖b‖²: avoids the (n_test, n_train, d) tensor
+    d2 = (
+        (X_test ** 2).sum(axis=1)[:, None]
+        - 2 * X_test @ X_train.T
+        + (X_train ** 2).sum(axis=1)[None, :]
+    )                                                    # (n_test, n_train)
+
+    idx = np.argpartition(d2, kth=k - 1, axis=1)[:, :k]  # O(n) per row, not O(n log n)
+    neighbor_labels = np.asarray(y_train)[idx]           # (n_test, k)
+
+    if task == 'regression':
+        return neighbor_labels.mean(axis=1)
+    # Majority vote
+    return np.array([np.bincount(row).argmax() for row in neighbor_labels])
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why <code>argpartition</code> over <code>argsort</code>?</em> You need the k smallest, not a full ordering: <code>O(n)</code> vs <code>O(n log n)</code> per row.</li>
+<li><em>Why does KNN fail in high dimensions?</em> Distance concentration: as <code>d</code> grows, the ratio between nearest and farthest neighbor distances approaches 1, so &quot;nearest&quot; stops being meaningful. Reduce dimensions first (PCA) or use a learned metric.</li>
+<li><em>Scaling required?</em> Yes: KNN is distance-based, so a feature measured in dollars swamps one in fractions. Always standardize.</li>
+</ul>
+<hr />
+<h2 id="5-decision-tree-split-gini-and-entropy">5. Decision Tree Split (Gini and Entropy)</h2>
+<p><strong>Problem</strong>: Find the best split for a node.</p>
+<pre><code class="language-python">def gini(y):
+    if len(y) == 0:
+        return 0.0
+    p = np.bincount(y) / len(y)
+    return 1.0 - (p ** 2).sum()
+
+def entropy(y):
+    if len(y) == 0:
+        return 0.0
+    p = np.bincount(y) / len(y)
+    p = p[p &gt; 0]                       # avoid log(0)
+    return -(p * np.log2(p)).sum()
+
+def best_split(X, y, criterion=gini):
+    n, d = X.shape
+    parent_impurity = criterion(y)
+    best = {'gain': -np.inf, 'feature': None, 'threshold': None}
+
+    for feature in range(d):
+        # Candidate thresholds: midpoints between consecutive unique values
+        values = np.unique(X[:, feature])
+        thresholds = (values[:-1] + values[1:]) / 2
+
+        for t in thresholds:
+            left = X[:, feature] &lt;= t
+            n_left = left.sum()
+            if n_left == 0 or n_left == n:
+                continue
+            # Weighted child impurity
+            child = (n_left / n) * criterion(y[left]) + ((n - n_left) / n) * criterion(y[~left])
+            gain = parent_impurity - child
+            if gain &gt; best['gain']:
+                best = {'gain': gain, 'feature': feature, 'threshold': t}
+    return best
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Gini vs entropy?</em> They agree on the chosen split the overwhelming majority of the time. Gini is cheaper (no logarithm) and is scikit-learn's default; entropy is grounded in information theory. Not a decision worth agonizing over.</li>
+<li><em>Complexity?</em> This is <code>O(d · n²)</code> because of the inner loop over thresholds recomputing impurity. Sorting each feature once and updating class counts incrementally as the threshold sweeps gives <code>O(d · n log n)</code>. Say this: it's the optimization interviewers look for.</li>
+<li><em>How would you handle continuous vs categorical?</em> Continuous uses thresholds as above; categorical either uses subset splits (exponential, so usually restricted) or is ordered by mean target value first.</li>
+</ul>
+<hr />
+<h2 id="6-traintest-split-and-k-fold-cross-validation">6. Train/Test Split and K-Fold Cross-Validation</h2>
+<pre><code class="language-python">def train_test_split_manual(X, y, test_size=0.2, stratify=False, seed=0):
+    rng = np.random.default_rng(seed)
+    n = len(X)
+
+    if not stratify:
+        idx = rng.permutation(n)
+        cut = int(n * (1 - test_size))
+        train_idx, test_idx = idx[:cut], idx[cut:]
+    else:
+        train_idx, test_idx = [], []
+        for cls in np.unique(y):                      # preserve class ratio per split
+            cls_idx = rng.permutation(np.where(y == cls)[0])
+            cut = int(len(cls_idx) * (1 - test_size))
+            train_idx.extend(cls_idx[:cut])
+            test_idx.extend(cls_idx[cut:])
+        # dtype=int so an empty split still works as an index array
+        train_idx, test_idx = np.array(train_idx, dtype=int), np.array(test_idx, dtype=int)
+
+    return X[train_idx], X[test_idx], y[train_idx], y[test_idx]
+
+
+def k_fold_indices(n, k=5, seed=0):
+    idx = np.random.default_rng(seed).permutation(n)
+    folds = np.array_split(idx, k)                    # handles n not divisible by k
+    for i in range(k):
+        val = folds[i]
+        train = np.concatenate([folds[j] for j in range(k) if j != i])
+        yield train, val
+</code></pre>
+<p><strong>Follow-up</strong>: <em>What changes for time series?</em> Nothing about this works: shuffling leaks the future. Use forward chaining: fold <code>i</code> trains on <code>[0..i]</code> and validates on <code>[i+1]</code>, with a gap equal to the label latency.</p>
+<hr />
+<h2 id="7-metrics-from-scratch">7. Metrics from Scratch</h2>
+<pre><code class="language-python">def confusion(y_true, y_pred):
+    y_true, y_pred = np.asarray(y_true), np.asarray(y_pred)
+    tp = int(((y_pred == 1) &amp; (y_true == 1)).sum())
+    fp = int(((y_pred == 1) &amp; (y_true == 0)).sum())
+    fn = int(((y_pred == 0) &amp; (y_true == 1)).sum())
+    tn = int(((y_pred == 0) &amp; (y_true == 0)).sum())
+    return tp, fp, fn, tn
+
+def precision_recall_f1(y_true, y_pred, eps=1e-12):
+    tp, fp, fn, _ = confusion(y_true, y_pred)
+    precision = tp / (tp + fp + eps)
+    recall = tp / (tp + fn + eps)
+    f1 = 2 * precision * recall / (precision + recall + eps)
+    return precision, recall, f1
+
+def roc_auc(y_true, y_score):
+    &quot;&quot;&quot;AUC == P(score of a random positive &gt; score of a random negative).
+    Computed via the rank-sum (Mann-Whitney U) identity: O(n log n), no curve needed.&quot;&quot;&quot;
+    y_true = np.asarray(y_true)
+    order = np.argsort(y_score)
+    ranks = np.empty(len(y_score), dtype=float)
+    ranks[order] = np.arange(1, len(y_score) + 1)
+
+    # Average ranks within ties so tied scores don't bias the result
+    scores_sorted = np.asarray(y_score)[order]
+    i = 0
+    while i &lt; len(scores_sorted):
+        j = i
+        while j + 1 &lt; len(scores_sorted) and scores_sorted[j + 1] == scores_sorted[i]:
+            j += 1
+        if j &gt; i:
+            ranks[order[i:j + 1]] = (i + j + 2) / 2
+        i = j + 1
+
+    n_pos, n_neg = int(y_true.sum()), int((1 - y_true).sum())
+    if n_pos == 0 or n_neg == 0:
+        return float('nan')
+    return (ranks[y_true == 1].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg)
+</code></pre>
+<p><strong>Follow-up</strong>: <em>Why the rank-sum formula rather than integrating the ROC curve?</em> It's the same quantity, computed in one sort with no threshold sweep, and it makes the probabilistic interpretation of AUC explicit.</p>
+<hr />
+<h2 id="8-pca">8. PCA</h2>
+<pre><code class="language-python">def pca(X, n_components):
+    X = np.asarray(X, dtype=float)
+    X_centered = X - X.mean(axis=0)                  # centering is mandatory
+
+    # SVD is more numerically stable than eigendecomposing the covariance matrix
+    U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
+
+    components = Vt[:n_components]                   # (n_components, d)
+    explained_variance = (S ** 2) / (len(X) - 1)
+    explained_ratio = explained_variance / explained_variance.sum()
+
+    X_transformed = X_centered @ components.T        # (n, n_components)
+    return X_transformed, components, explained_ratio[:n_components]
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why SVD over eigendecomposition of <code>XᵀX</code>?</em> Forming <code>XᵀX</code> squares the condition number, losing precision; SVD works on <code>X</code> directly. It's also cheaper when <code>d &gt;&gt; n</code>.</li>
+<li><em>Must you standardize as well as center?</em> Center always. Standardize when features are on different scales, otherwise the component with the largest units dominates the variance and PCA just finds that axis.</li>
+<li><em>Choosing <code>n_components</code>?</em> Cumulative explained variance (e.g. 95%), an elbow in the scree plot, or downstream task performance.</li>
+</ul>
+<hr />
+<h2 id="9-softmax-and-cross-entropy-numerically-stable">9. Softmax and Cross-Entropy (Numerically Stable)</h2>
+<pre><code class="language-python">def softmax(z, axis=-1):
+    z = np.asarray(z, dtype=float)
+    z_shifted = z - np.max(z, axis=axis, keepdims=True)   # prevents exp() overflow
+    e = np.exp(z_shifted)
+    return e / e.sum(axis=axis, keepdims=True)
+
+def cross_entropy(logits, labels, eps=1e-12):
+    &quot;&quot;&quot;logits: (n, k) raw scores. labels: (n,) integer class indices.&quot;&quot;&quot;
+    probs = softmax(logits, axis=1)
+    n = len(labels)
+    return -np.log(probs[np.arange(n), labels] + eps).mean()
+
+def cross_entropy_grad(logits, labels):
+    &quot;&quot;&quot;dL/dlogits = (softmax(logits) - onehot(labels)) / n: strikingly simple.&quot;&quot;&quot;
+    probs = softmax(logits, axis=1)
+    n = len(labels)
+    probs[np.arange(n), labels] -= 1
+    return probs / n
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why subtract the max?</em> <code>softmax(z) == softmax(z - c)</code> for any constant <code>c</code>, and subtracting the max caps the largest exponent at <code>e^0 = 1</code>, preventing overflow. Costs nothing, prevents NaNs. Interviewers specifically watch for this.</li>
+<li><em>Why do frameworks fuse softmax and cross-entropy?</em> <code>log(softmax(z))</code> computed separately loses precision when probabilities are tiny; the fused log-sum-exp form is stable, which is why PyTorch's <code>CrossEntropyLoss</code> takes raw logits and applying softmax first is a bug.</li>
+</ul>
+<hr />
+<h2 id="10-a-two-layer-neural-network-with-backprop">10. A Two-Layer Neural Network with Backprop</h2>
+<pre><code class="language-python">class TwoLayerNet:
+    &quot;&quot;&quot;input -&gt; Linear -&gt; ReLU -&gt; Linear -&gt; softmax cross-entropy&quot;&quot;&quot;
+
+    def __init__(self, d_in, d_hidden, d_out, seed=0):
+        rng = np.random.default_rng(seed)
+        self.W1 = rng.normal(0, np.sqrt(2 / d_in), (d_in, d_hidden))   # He init for ReLU
+        self.b1 = np.zeros(d_hidden)
+        self.W2 = rng.normal(0, np.sqrt(2 / d_hidden), (d_hidden, d_out))
+        self.b2 = np.zeros(d_out)
+
+    def forward(self, X):
+        self.X = X
+        self.z1 = X @ self.W1 + self.b1        # (n, h)
+        self.a1 = np.maximum(0, self.z1)       # ReLU
+        self.z2 = self.a1 @ self.W2 + self.b2  # (n, k) logits
+        return self.z2
+
+    def backward(self, labels, lr=0.01):
+        n = len(labels)
+        # dL/dz2 for softmax + cross-entropy
+        dz2 = softmax(self.z2, axis=1)
+        dz2[np.arange(n), labels] -= 1
+        dz2 /= n                                # (n, k)
+
+        dW2 = self.a1.T @ dz2                   # (h, n) @ (n, k) -&gt; (h, k)
+        db2 = dz2.sum(axis=0)
+
+        da1 = dz2 @ self.W2.T                   # (n, k) @ (k, h) -&gt; (n, h)
+        dz1 = da1 * (self.z1 &gt; 0)               # ReLU derivative is the mask
+
+        dW1 = self.X.T @ dz1
+        db1 = dz1.sum(axis=0)
+
+        for param, grad in ((self.W1, dW1), (self.b1, db1), (self.W2, dW2), (self.b2, db2)):
+            param -= lr * grad
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why is the ReLU backward pass just a mask?</em> Its derivative is 1 for positive inputs and 0 otherwise, so the incoming gradient is passed through or zeroed. (The derivative at exactly 0 is undefined; any convention works in practice.)</li>
+<li><em>Why He initialization here?</em> ReLU zeroes about half its inputs, halving the output variance per layer; the <code>2/fan_in</code> variance compensates so activations neither vanish nor explode with depth.</li>
+<li><em>Gradient check?</em> Compare the analytic gradient with <code>(L(w+ε) - L(w-ε)) / 2ε</code> for a few random coordinates; relative error below ~1e-7 means the backward pass is right.</li>
+</ul>
+<hr />
+<h2 id="11-scaled-dot-product-attention">11. Scaled Dot-Product Attention</h2>
+<pre><code class="language-python">def scaled_dot_product_attention(Q, K, V, mask=None):
+    &quot;&quot;&quot;Q: (..., n_q, d_k)  K: (..., n_k, d_k)  V: (..., n_k, d_v)&quot;&quot;&quot;
+    d_k = Q.shape[-1]
+    scores = Q @ np.swapaxes(K, -1, -2) / np.sqrt(d_k)      # (..., n_q, n_k)
+
+    if mask is not None:
+        scores = np.where(mask, scores, -np.inf)            # causal or padding mask
+
+    weights = softmax(scores, axis=-1)                      # (..., n_q, n_k)
+    return weights @ V, weights                             # (..., n_q, d_v)
+
+
+def causal_mask(n):
+    &quot;&quot;&quot;Position i may attend only to positions &lt;= i.&quot;&quot;&quot;
+    return np.tril(np.ones((n, n), dtype=bool))
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why divide by <code>√d_k</code>?</em> If <code>q</code> and <code>k</code> have i.i.d. components with unit variance, their dot product has variance <code>d_k</code>. Without scaling, logits grow with dimension, softmax saturates into a near-one-hot distribution, and gradients vanish. The <code>√d_k</code> keeps the variance at 1.</li>
+<li><em>Complexity?</em> <code>O(n² · d)</code> time and <code>O(n²)</code> memory for the score matrix: the reason long context is expensive, and what FlashAttention addresses by never materializing that matrix.</li>
+<li><em>Multi-head?</em> Project to <code>h</code> sets of (Q,K,V) of dimension <code>d/h</code>, attend in parallel, concatenate, and apply an output projection. The point is letting different heads attend to different relationships.</li>
+</ul>
+<hr />
+<h2 id="12-cosine-similarity-search">12. Cosine Similarity Search</h2>
+<pre><code class="language-python">def top_k_similar(query_vec, doc_matrix, k=5):
+    &quot;&quot;&quot;query_vec: (d,)   doc_matrix: (n, d)&quot;&quot;&quot;
+    q = query_vec / (np.linalg.norm(query_vec) + 1e-12)
+    docs = doc_matrix / (np.linalg.norm(doc_matrix, axis=1, keepdims=True) + 1e-12)
+
+    sims = docs @ q                                   # (n, d) @ (d,) -&gt; (n,)
+    idx = np.argpartition(-sims, kth=min(k, len(sims) - 1))[:k]
+    idx = idx[np.argsort(-sims[idx])]                 # sort only the k survivors
+    return idx, sims[idx]
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why is the epsilon there?</em> A zero vector (empty document, failed embedding) would divide by zero and produce NaNs that silently propagate through the ranking.</li>
+<li><em>Scaling past a few million vectors?</em> Exact search is <code>O(n·d)</code> per query. Move to an ANN index: HNSW for high recall at moderate memory, IVF-PQ for large corpora with tight memory budgets. Both trade a small recall loss for orders-of-magnitude speedup.</li>
+</ul>
+<hr />
+<h2 id="13-text-chunking-with-overlap">13. Text Chunking with Overlap</h2>
+<p>A frequent practical question in AI engineering interviews.</p>
+<pre><code class="language-python">def chunk_text(text, chunk_size=500, overlap=50):
+    &quot;&quot;&quot;Character-based chunking with overlap, respecting word boundaries.&quot;&quot;&quot;
+    if overlap &gt;= chunk_size:
+        raise ValueError(&quot;overlap must be smaller than chunk_size&quot;)
+
+    chunks, start = [], 0
+    while start &lt; len(text):
+        end = min(start + chunk_size, len(text))
+
+        # Don't cut mid-word: back off to the last space, unless that loses too much
+        if end &lt; len(text):
+            space = text.rfind(' ', start, end)
+            if space &gt; start + chunk_size // 2:
+                end = space
+
+        chunk = text[start:end].strip()
+        if chunk:
+            chunks.append(chunk)
+
+        if end &gt;= len(text):
+            break
+        # Step forward keeping `overlap` characters, but always advance: backing off
+        # to a space can make the chunk shorter than `overlap`
+        start = max(end - overlap, start + 1)
+    return chunks
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why overlap at all?</em> An answer straddling a boundary would otherwise be split across two chunks and match neither query well. 10-20% overlap is the usual range.</li>
+<li><em>Why does the <code>end &gt;= len(text)</code> break matter?</em> Without it, when <code>overlap</code> is large relative to the final chunk, <code>start</code> can fail to advance and the loop never terminates. The <code>max(..., start + 1)</code> guards the same failure mid-text: if the word-boundary back-off leaves a chunk shorter than <code>overlap</code> (for example <code>chunk_size=10, overlap=8</code>), <code>end - overlap</code> moves <code>start</code> backwards (even below zero) and the loop never terminates. Infinite-loop edge cases are exactly what interviewers probe.</li>
+<li><em>Better than character-based?</em> Token-based chunking matches what the model actually sees; structural splitting (headers, functions) preserves coherence better than either.</li>
+</ul>
+<hr />
+<h2 id="14-rate-limiter-with-exponential-backoff">14. Rate Limiter with Exponential Backoff</h2>
+<pre><code class="language-python">import time
+import random
+
+def call_with_backoff(fn, max_retries=5, base_delay=1.0, max_delay=60.0):
+    &quot;&quot;&quot;Retry with exponential backoff and full jitter.&quot;&quot;&quot;
+    for attempt in range(max_retries + 1):
+        try:
+            return fn()
+        except (RateLimitError, TransientError) as exc:
+            if attempt == max_retries:
+                raise
+            delay = min(base_delay * (2 ** attempt), max_delay)
+            time.sleep(random.uniform(0, delay))      # full jitter, not a fixed delay
+
+
+class TokenBucket:
+    &quot;&quot;&quot;Allows bursts up to `capacity` while enforcing an average `rate` per second.&quot;&quot;&quot;
+
+    def __init__(self, rate, capacity):
+        self.rate, self.capacity = rate, capacity
+        self.tokens = float(capacity)
+        self.last = time.monotonic()
+
+    def acquire(self, tokens=1):
+        now = time.monotonic()
+        self.tokens = min(self.capacity, self.tokens + (now - self.last) * self.rate)
+        self.last = now
+        if self.tokens &gt;= tokens:
+            self.tokens -= tokens
+            return True
+        return False
+</code></pre>
+<p><strong>Follow-up</strong>: <em>Why jitter?</em> Without it, every client that got rate-limited at the same moment retries at the same moment, producing a synchronized thundering herd that re-triggers the limit. Randomizing the delay spreads the retries out: this is why AWS's guidance is &quot;full jitter&quot;, and it's a strong signal to mention it.</p>
+<hr />
+<h2 id="15-reciprocal-rank-fusion">15. Reciprocal Rank Fusion</h2>
+<p>Combining a keyword ranking and a vector ranking: the standard hybrid-search question.</p>
+<pre><code class="language-python">def reciprocal_rank_fusion(rankings, k=60):
+    &quot;&quot;&quot;rankings: list of ranked doc-id lists, best first. Returns fused ids, best first.&quot;&quot;&quot;
+    scores = {}
+    for ranking in rankings:
+        for rank, doc_id in enumerate(ranking, start=1):
+            scores[doc_id] = scores.get(doc_id, 0.0) + 1.0 / (k + rank)
+    return sorted(scores, key=scores.get, reverse=True)
+</code></pre>
+<p><strong>Follow-ups</strong></p>
+<ul>
+<li><em>Why fuse ranks instead of scores?</em> BM25 scores and cosine similarities live on incomparable scales, and normalizing them requires per-query calibration that is fragile. Ranks are unitless and directly comparable.</li>
+<li><em>What does <code>k=60</code> do?</em> It damps the influence of the very top ranks so a single system can't dominate the fusion. The value is empirical, from the original RRF paper, and is a reasonable default.</li>
+</ul>
+<hr />
+<h2 id="complexity-reference">Complexity Reference</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Train</th>
+<th>Predict (per sample)</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear regression (closed form)</td>
+<td><code>O(nd² + d³)</code></td>
+<td><code>O(d)</code></td>
+<td><code>O(d²)</code></td>
+</tr>
+<tr>
+<td>Linear/logistic regression (GD)</td>
+<td><code>O(nd)</code> per iteration</td>
+<td><code>O(d)</code></td>
+<td><code>O(d)</code></td>
+</tr>
+<tr>
+<td>KNN</td>
+<td><code>O(1)</code> (lazy)</td>
+<td><code>O(nd)</code></td>
+<td><code>O(nd)</code></td>
+</tr>
+<tr>
+<td>K-Means</td>
+<td><code>O(nkdi)</code></td>
+<td><code>O(kd)</code></td>
+<td><code>O(nd + kd)</code></td>
+</tr>
+<tr>
+<td>Decision tree</td>
+<td><code>O(dn log n)</code> (sorted)</td>
+<td><code>O(depth)</code></td>
+<td><code>O(nodes)</code></td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td><code>O(T · dn log n)</code></td>
+<td><code>O(T · depth)</code></td>
+<td><code>O(T · nodes)</code></td>
+</tr>
+<tr>
+<td>PCA (SVD)</td>
+<td><code>O(min(n²d, nd²))</code></td>
+<td><code>O(dc)</code></td>
+<td><code>O(nd)</code></td>
+</tr>
+<tr>
+<td>Self-attention</td>
+<td><code>O(n²d)</code></td>
+<td>-</td>
+<td><code>O(n²)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exp()</code> without subtracting the max</td>
+<td>Overflow → <code>inf</code> → NaN</td>
+<td><code>z - z.max(axis, keepdims=True)</code></td>
+</tr>
+<tr>
+<td><code>log(0)</code> in cross-entropy</td>
+<td><code>-inf</code> propagates through the loss</td>
+<td>Add epsilon, or use the fused log-sum-exp form</td>
+</tr>
+<tr>
+<td>Broadcasting to an <code>(n, k, d)</code> tensor</td>
+<td>Blows up memory on real data</td>
+<td>Expand <code>‖a-b‖²</code> into matmuls</td>
+</tr>
+<tr>
+<td><code>argsort</code> when you need top-k</td>
+<td><code>O(n log n)</code> instead of <code>O(n)</code></td>
+<td><code>np.argpartition</code>, then sort the k survivors</td>
+</tr>
+<tr>
+<td>Forgetting to center before PCA</td>
+<td>The first component points at the mean</td>
+<td>Subtract the column means</td>
+</tr>
+<tr>
+<td>Regularizing the intercept</td>
+<td>Biases predictions toward zero</td>
+<td>Exclude index 0 from the penalty</td>
+</tr>
+<tr>
+<td>Not standardizing for distance-based models</td>
+<td>Large-scale features dominate</td>
+<td>Standardize for KNN, K-Means, SVM; not needed for trees</td>
+</tr>
+<tr>
+<td>Mutating an input array in place</td>
+<td>Caller's data silently changes</td>
+<td>Copy, or document it clearly</td>
+</tr>
+<tr>
+<td>Off-by-one in a chunking loop</td>
+<td>Infinite loop or dropped tail</td>
+<td>Explicit termination check on the final chunk</td>
+</tr>
+<tr>
+<td>Skipping shape comments</td>
+<td>Shape bugs are the #1 failure mode</td>
+<td>Annotate every matmul</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="python_coding_challenges.html">Python Coding Challenges</a></li>
+<li><a href="sql_coding_challenges.html">SQL Coding Challenges</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_ensemble_methods.html">Ensemble Methods</a></li>
+<li><a href="../classical_ml/intro_clustering.html">Clustering</a></li>
+<li><a href="../classical_ml/intro_dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li><a href="../deep_learning/intro_neural_network_training.html">Neural Network Training</a></li>
+<li><a href="../deep_learning/intro_transformers.html">Transformers</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="python_coding_challenges.html"><small>Previous</small>Python Coding Challenges</a><a rel="next" class="next" href="pandas_numpy_challenges.html"><small>Next</small>Pandas &amp; NumPy Challenges</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/coding_challenges/ml_coding_challenges.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

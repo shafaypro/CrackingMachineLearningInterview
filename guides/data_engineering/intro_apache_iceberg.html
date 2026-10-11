@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apache Iceberg Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Apache Iceberg is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_iceberg.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Apache Iceberg Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Apache Iceberg is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_iceberg.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache Iceberg Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Apache Iceberg is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Apache Iceberg",
+   "description": "Apache Iceberg is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_iceberg.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Apache Iceberg",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_iceberg.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Apache Iceberg</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_apache_iceberg.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="apache-iceberg">Apache Iceberg</h1>
+<p><strong>Apache Iceberg</strong> is an open table format for huge analytic datasets. It brings SQL table semantics (ACID transactions, schema evolution, hidden partitioning, and time travel) to data lake files on S3/GCS/ADLS. In 2026, Iceberg has become the <strong>default open table format</strong> for the data lakehouse.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-apache-iceberg">What is Apache Iceberg?</a></li>
+<li><a href="#iceberg-vs-delta-lake-vs-hudi">Iceberg vs Delta Lake vs Hudi</a></li>
+<li><a href="#core-architecture">Core Architecture</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#core-operations">Core Operations</a></li>
+<li><a href="#schema-evolution">Schema Evolution</a></li>
+<li><a href="#partitioning--hidden-partitioning">Partitioning &amp; Hidden Partitioning</a></li>
+<li><a href="#time-travel--snapshots">Time Travel &amp; Snapshots</a></li>
+<li><a href="#table-maintenance">Table Maintenance</a></li>
+<li><a href="#iceberg-catalogs">Iceberg Catalogs</a></li>
+<li><a href="#iceberg-in-2026">Iceberg in 2026</a></li>
+<li><a href="#cheat-sheet">Cheat Sheet</a></li>
+</ol>
+<hr />
+<h2 id="what-is-apache-iceberg">What is Apache Iceberg?</h2>
+<p>Before open table formats, data lakes had three options:</p>
+<ol>
+<li><strong>Raw Parquet/ORC files</strong>: fast reads, but no ACID, no schema, no history</li>
+<li><strong>Hive Metastore tables</strong>: basic metadata, but terrible at scale</li>
+<li><strong>Proprietary formats</strong>: vendor lock-in</li>
+</ol>
+<p>Iceberg solves this by adding a <strong>metadata layer</strong> on top of existing file formats:</p>
+<pre><code>Your Data (Parquet/ORC/Avro files on S3)
+           +
+Iceberg Metadata Layer
+           =
+A &quot;proper&quot; SQL table with ACID, schema, history, and fast queries
+</code></pre>
+<h3 id="why-iceberg-won-vs-delta-lake-vs-hudi">Why Iceberg Won (vs Delta Lake vs Hudi)</h3>
+<p>Iceberg has become the industry standard because:</p>
+<ul>
+<li><strong>Truly open</strong>: Apache Software Foundation, no single vendor owns it</li>
+<li><strong>Catalog-agnostic</strong>: works with Hive Metastore, Glue, Nessie, REST, JDBC</li>
+<li><strong>Engine-agnostic</strong>: Spark, Flink, Trino, Snowflake, Athena, DuckDB, BigQuery all read it</li>
+<li><strong>Multi-writer support</strong>: designed for concurrent writes from multiple engines</li>
+<li><strong>Column statistics</strong>: fine-grained stats for query pruning</li>
+<li><strong>Partition evolution</strong>: change partition strategy without rewriting data</li>
+</ul>
+<hr />
+<h2 id="iceberg-vs-delta-lake-vs-hudi">Iceberg vs Delta Lake vs Hudi</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Apache Iceberg</th>
+<th>Delta Lake</th>
+<th>Apache Hudi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>License</strong></td>
+<td>Apache 2.0 (ASF)</td>
+<td>Apache 2.0 (Linux Foundation)</td>
+<td>Apache 2.0 (ASF)</td>
+</tr>
+<tr>
+<td><strong>Primary backer</strong></td>
+<td>Netflix, Apple, Databricks, etc.</td>
+<td>Databricks</td>
+<td>Uber</td>
+</tr>
+<tr>
+<td><strong>Engine support</strong></td>
+<td>Spark, Flink, Trino, DuckDB, Snowflake, BigQuery...</td>
+<td>Spark, Databricks, Trino, Flink, delta-rs (Rust/Python)</td>
+<td>Spark, Flink</td>
+</tr>
+<tr>
+<td><strong>ACID</strong></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>Time travel</strong></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>Schema evolution</strong></td>
+<td>✓ (most flexible)</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>Partition evolution</strong></td>
+<td>✓ (unique)</td>
+<td>Partial</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td><strong>Multi-engine writes</strong></td>
+<td>✓</td>
+<td>Limited</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td><strong>Row-level deletes</strong></td>
+<td>✓ (v2: Delete Files)</td>
+<td>✓</td>
+<td>✓ (MOR tables)</td>
+</tr>
+<tr>
+<td><strong>2026 adoption</strong></td>
+<td><strong>Industry standard</strong></td>
+<td>Strong (Databricks)</td>
+<td>Streaming CDC use cases</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-architecture">Core Architecture</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                        Iceberg Table                            │
+├─────────────────────────────────────────────────────────────────┤
+│ Catalog Layer   │  Hive / Glue / Nessie / REST / JDBC          │
+│                 │  → stores: table location + current metadata  │
+├─────────────────────────────────────────────────────────────────┤
+│ Metadata Layer  │  metadata/v3.metadata.json                   │
+│                 │  → schema, partition spec, snapshot history   │
+├─────────────────────────────────────────────────────────────────┤
+│ Manifest Layer  │  snap-123.avro  (manifest list)              │
+│                 │  → list of manifest files                     │
+│                 │  m1.avro, m2.avro  (manifests)               │
+│                 │  → list of data files + column stats          │
+├─────────────────────────────────────────────────────────────────┤
+│ Data Layer      │  part-00001.parquet, part-00002.parquet, ... │
+│                 │  → actual data (Parquet / ORC / Avro)         │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="key-metadata-concepts">Key Metadata Concepts</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snapshot</strong></td>
+<td>Immutable point-in-time state of the table. Every write creates a new snapshot.</td>
+</tr>
+<tr>
+<td><strong>Manifest List</strong></td>
+<td>Points to all manifests for a snapshot</td>
+</tr>
+<tr>
+<td><strong>Manifest File</strong></td>
+<td>Lists data files + their column-level statistics</td>
+</tr>
+<tr>
+<td><strong>Data File</strong></td>
+<td>The actual Parquet/ORC/Avro file with rows</td>
+</tr>
+<tr>
+<td><strong>Delete File</strong></td>
+<td>Records which rows are deleted (v2 format: avoids rewriting)</td>
+</tr>
+<tr>
+<td><strong>Sequence Number</strong></td>
+<td>Monotonically increasing version counter for ordering snapshots</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="with-pyspark">With PySpark</h3>
+<pre><code class="language-bash">pip install pyspark pyiceberg
+</code></pre>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName(&quot;Iceberg Demo&quot;) \
+    .master(&quot;local[*]&quot;) \
+    .config(&quot;spark.jars.packages&quot;,
+            &quot;org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.6.0&quot;) \
+    .config(&quot;spark.sql.extensions&quot;,
+            &quot;org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions&quot;) \
+    .config(&quot;spark.sql.catalog.local&quot;, &quot;org.apache.iceberg.spark.SparkCatalog&quot;) \
+    .config(&quot;spark.sql.catalog.local.type&quot;, &quot;hadoop&quot;) \
+    .config(&quot;spark.sql.catalog.local.warehouse&quot;, &quot;/tmp/iceberg-warehouse&quot;) \
+    .getOrCreate()
+</code></pre>
+<h3 id="with-pyiceberg-no-spark-needed-for-reads">With PyIceberg (no Spark needed for reads)</h3>
+<pre><code class="language-bash">pip install &quot;pyiceberg[s3fs,glue,duckdb]&quot;
+</code></pre>
+<pre><code class="language-python">from pyiceberg.catalog import load_catalog
+
+# Load from REST catalog
+catalog = load_catalog(&quot;my_catalog&quot;, **{
+    &quot;type&quot;: &quot;rest&quot;,
+    &quot;uri&quot;: &quot;https://my-iceberg-catalog.com&quot;,
+    &quot;credential&quot;: &quot;token:my-token&quot;,
+})
+
+# Load from AWS Glue
+catalog = load_catalog(&quot;glue&quot;, **{
+    &quot;type&quot;: &quot;glue&quot;,
+    &quot;region_name&quot;: &quot;us-east-1&quot;,
+})
+
+# List tables
+catalog.list_namespaces()
+catalog.list_tables(&quot;my_db&quot;)
+
+# Load a table
+table = catalog.load_table(&quot;my_db.orders&quot;)
+</code></pre>
+<hr />
+<h2 id="core-operations">Core Operations</h2>
+<h3 id="create-table">Create Table</h3>
+<pre><code class="language-sql">-- SQL (via Spark)
+CREATE TABLE local.db.orders (
+    order_id    BIGINT,
+    customer_id BIGINT,
+    amount      DECIMAL(18, 2),
+    status      STRING,
+    created_at  TIMESTAMP
+)
+USING iceberg
+PARTITIONED BY (days(created_at))    -- hidden partition!
+TBLPROPERTIES (
+    'write.format.default' = 'parquet',
+    'write.parquet.compression-codec' = 'snappy'
+);
+</code></pre>
+<pre><code class="language-python"># Python (PyIceberg)
+from pyiceberg.schema import Schema
+from pyiceberg.types import (
+    NestedField, LongType, DecimalType, StringType, TimestampType
+)
+from pyiceberg.partitioning import PartitionSpec, PartitionField
+from pyiceberg.transforms import DayTransform
+
+schema = Schema(
+    NestedField(1, &quot;order_id&quot;, LongType(), required=True),
+    NestedField(2, &quot;customer_id&quot;, LongType()),
+    NestedField(3, &quot;amount&quot;, DecimalType(18, 2)),
+    NestedField(4, &quot;status&quot;, StringType()),
+    NestedField(5, &quot;created_at&quot;, TimestampType()),
+)
+
+partition_spec = PartitionSpec(
+    PartitionField(source_id=5, field_id=1000, transform=DayTransform(), name=&quot;created_at_day&quot;)
+)
+
+table = catalog.create_table(
+    identifier=&quot;my_db.orders&quot;,
+    schema=schema,
+    partition_spec=partition_spec,
+    location=&quot;s3://my-bucket/iceberg/orders/&quot;,
+)
+</code></pre>
+<h3 id="read-and-write">Read and Write</h3>
+<pre><code class="language-python"># Write with Spark
+df = spark.createDataFrame([
+    (1, 100, 99.99, &quot;completed&quot;, &quot;2025-01-15 10:00:00&quot;),
+    (2, 101, 149.50, &quot;pending&quot;, &quot;2025-01-15 11:30:00&quot;),
+], [&quot;order_id&quot;, &quot;customer_id&quot;, &quot;amount&quot;, &quot;status&quot;, &quot;created_at&quot;])
+
+df.writeTo(&quot;local.db.orders&quot;).append()
+df.writeTo(&quot;local.db.orders&quot;).overwritePartitions()
+
+# Read with Spark
+orders = spark.table(&quot;local.db.orders&quot;)
+orders.filter(&quot;status = 'completed'&quot;).show()
+
+# Read with PyIceberg (no Spark!)
+table = catalog.load_table(&quot;my_db.orders&quot;)
+scan = table.scan(row_filter=&quot;status = 'completed'&quot;, limit=100)
+df = scan.to_pandas()           # → Pandas DataFrame
+arrow_table = scan.to_arrow()   # → PyArrow Table
+</code></pre>
+<h3 id="write-modes">Write Modes</h3>
+<pre><code class="language-python"># Append: add rows
+df.writeTo(&quot;local.db.orders&quot;).append()
+
+# Dynamic overwrite: replace only the partitions present in df
+df.writeTo(&quot;local.db.orders&quot;).overwritePartitions()
+
+# Overwrite rows matching a filter (keep it aligned with partition boundaries)
+from pyspark.sql import functions as F
+df.writeTo(&quot;local.db.orders&quot;).overwrite(
+    (F.col(&quot;created_at&quot;) &gt;= &quot;2025-01-15&quot;) &amp; (F.col(&quot;created_at&quot;) &lt; &quot;2025-01-16&quot;)
+)
+
+# Create or replace table
+df.writeTo(&quot;local.db.orders&quot;).createOrReplace()
+</code></pre>
+<h3 id="merge-upsert">MERGE (Upsert)</h3>
+<pre><code class="language-sql">MERGE INTO local.db.orders AS target
+USING updates AS source
+ON target.order_id = source.order_id
+WHEN MATCHED AND source.status = 'cancelled' THEN DELETE
+WHEN MATCHED THEN UPDATE SET
+    target.amount = source.amount,
+    target.status = source.status
+WHEN NOT MATCHED THEN INSERT *;
+</code></pre>
+<pre><code class="language-python"># Python upsert (PyIceberg 0.9+); new_df is a PyArrow table
+from pyiceberg.expressions import EqualTo
+
+table = catalog.load_table(&quot;my_db.orders&quot;)
+table.upsert(new_df, join_cols=[&quot;order_id&quot;])
+
+# Or replace every row matching a filter with new_df
+table.overwrite(new_df, overwrite_filter=EqualTo(&quot;status&quot;, &quot;pending&quot;))
+</code></pre>
+<hr />
+<h2 id="schema-evolution">Schema Evolution</h2>
+<p>Iceberg's schema evolution is <strong>lossless</strong>: you can safely:</p>
+<ul>
+<li><strong>Add columns</strong> (new reads get NULL for old rows)</li>
+<li><strong>Drop columns</strong> (old files still have the data, just hidden)</li>
+<li><strong>Rename columns</strong>: tracked by column ID, not name</li>
+<li><strong>Promote types</strong>: int → long, float → double</li>
+<li><strong>Reorder columns</strong>: cosmetic only</li>
+</ul>
+<pre><code class="language-sql">-- Add column
+ALTER TABLE local.db.orders
+ADD COLUMN discount DECIMAL(18, 2);
+
+-- Rename column
+ALTER TABLE local.db.orders
+RENAME COLUMN discount TO discount_amount;
+
+-- Drop column
+ALTER TABLE local.db.orders
+DROP COLUMN discount_amount;
+
+-- Change type (widening only)
+ALTER TABLE local.db.orders
+ALTER COLUMN amount TYPE DECIMAL(24, 2);
+
+-- Add nested column
+ALTER TABLE local.db.orders
+ADD COLUMN metadata.source STRING;
+</code></pre>
+<pre><code class="language-python"># Python schema evolution
+from pyiceberg.types import DecimalType
+
+table = catalog.load_table(&quot;my_db.orders&quot;)
+
+with table.update_schema() as update:
+    update.add_column(&quot;discount&quot;, DecimalType(18, 2))
+    update.rename_column(&quot;status&quot;, &quot;order_status&quot;)
+</code></pre>
+<hr />
+<h2 id="partitioning--hidden-partitioning">Partitioning &amp; Hidden Partitioning</h2>
+<p>Iceberg's <strong>hidden partitioning</strong> is a major advantage over Hive-style partitioning.</p>
+<h3 id="hive-partitioning-old-way-avoid">Hive Partitioning (old way: avoid)</h3>
+<pre><code class="language-sql">-- Hive: partition column IS a real column
+-- Users must write: WHERE dt = '2025-01-15'
+-- Changing partition granularity requires rewriting ALL data
+CREATE TABLE orders (order_id INT, amount FLOAT)
+PARTITIONED BY (dt STRING);  -- user must manage this manually
+</code></pre>
+<h3 id="iceberg-hidden-partitioning-new-way">Iceberg Hidden Partitioning (new way)</h3>
+<pre><code class="language-sql">-- Iceberg: partition is derived from existing column
+-- Iceberg automatically prunes the right partitions
+-- Changing granularity is non-breaking!
+CREATE TABLE orders (order_id INT, amount FLOAT, created_at TIMESTAMP)
+USING iceberg
+PARTITIONED BY (days(created_at));  -- hidden! User just queries on created_at
+
+-- Query: no need to know about partitions
+SELECT * FROM orders WHERE created_at BETWEEN '2025-01-01' AND '2025-01-31';
+-- Iceberg automatically scans only January partition files
+</code></pre>
+<h3 id="partition-transforms">Partition Transforms</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Transform</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity(col)</code></td>
+<td><code>identity(region)</code></td>
+<td>Direct value (like Hive)</td>
+</tr>
+<tr>
+<td><code>year(ts)</code></td>
+<td><code>year(created_at)</code></td>
+<td>Year of timestamp</td>
+</tr>
+<tr>
+<td><code>month(ts)</code></td>
+<td><code>month(created_at)</code></td>
+<td>Month of timestamp</td>
+</tr>
+<tr>
+<td><code>day(ts)</code></td>
+<td><code>day(created_at)</code></td>
+<td>Day of timestamp</td>
+</tr>
+<tr>
+<td><code>hour(ts)</code></td>
+<td><code>hour(event_time)</code></td>
+<td>Hour of timestamp</td>
+</tr>
+<tr>
+<td><code>bucket(N, col)</code></td>
+<td><code>bucket(16, user_id)</code></td>
+<td>Hash bucket (good for high-cardinality)</td>
+</tr>
+<tr>
+<td><code>truncate(W, col)</code></td>
+<td><code>truncate(4, zip_code)</code></td>
+<td>Prefix truncation</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="partition-evolution">Partition Evolution</h3>
+<pre><code class="language-sql">-- Change from day to hour partitioning: zero data rewrite!
+ALTER TABLE local.db.orders
+REPLACE PARTITION FIELD days(created_at)
+WITH hours(created_at);
+
+-- Old data stays in day partitions
+-- New data goes into hour partitions
+-- Queries work transparently across both
+</code></pre>
+<hr />
+<h2 id="time-travel--snapshots">Time Travel &amp; Snapshots</h2>
+<pre><code class="language-sql">-- View snapshot history
+SELECT * FROM local.db.orders.history;
+
+-- Query at specific snapshot ID
+SELECT * FROM local.db.orders
+VERSION AS OF 4654808683286204734;
+
+-- Query at specific timestamp
+SELECT * FROM local.db.orders
+TIMESTAMP AS OF '2025-01-15 10:00:00';
+
+-- View all snapshots
+SELECT * FROM local.db.orders.snapshots;
+
+-- View data files for current snapshot
+SELECT * FROM local.db.orders.files;
+
+-- View manifests
+SELECT * FROM local.db.orders.manifests;
+</code></pre>
+<pre><code class="language-python"># Python time travel
+table = catalog.load_table(&quot;my_db.orders&quot;)
+
+# List snapshots
+for snapshot in table.history():
+    print(snapshot.snapshot_id, snapshot.timestamp_ms)
+
+# Scan at specific snapshot
+scan = table.scan(snapshot_id=4654808683286204734)
+df = scan.to_pandas()
+</code></pre>
+<hr />
+<h2 id="table-maintenance">Table Maintenance</h2>
+<pre><code class="language-sql">-- Compact small files (bin-packing)
+CALL local.system.rewrite_data_files('db.orders');
+
+-- Compact with options
+CALL local.system.rewrite_data_files(
+    table =&gt; 'db.orders',
+    strategy =&gt; 'sort',
+    sort_order =&gt; 'zorder(customer_id, created_at)'
+);
+
+-- Remove old snapshots (expire)
+CALL local.system.expire_snapshots(
+    table =&gt; 'db.orders',
+    older_than =&gt; TIMESTAMP '2025-01-01 00:00:00',
+    retain_last =&gt; 5
+);
+
+-- Remove orphan files (files not referenced by any snapshot)
+CALL local.system.remove_orphan_files(
+    table =&gt; 'db.orders',
+    older_than =&gt; TIMESTAMP '2025-01-01 00:00:00'
+);
+
+-- Rewrite manifests for faster planning
+CALL local.system.rewrite_manifests('db.orders');
+</code></pre>
+<p>PyIceberg's maintenance support is newer and version-dependent (recent releases add a
+<code>table.maintenance</code> API for snapshot expiry), so check the docs for your version. Compaction
+and orphan-file cleanup are usually run through the Spark (or Flink) procedures above.</p>
+<hr />
+<h2 id="iceberg-catalogs">Iceberg Catalogs</h2>
+<p>A <strong>catalog</strong> tracks table locations and the current metadata pointer.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Catalog</th>
+<th>Description</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hive Metastore</strong></td>
+<td>Traditional warehouse catalog</td>
+<td>On-prem, legacy systems</td>
+</tr>
+<tr>
+<td><strong>AWS Glue</strong></td>
+<td>Fully managed on AWS</td>
+<td>AWS data lakes</td>
+</tr>
+<tr>
+<td><strong>Nessie</strong></td>
+<td>Git-like version control for data</td>
+<td>Data versioning, branching</td>
+</tr>
+<tr>
+<td><strong>REST Catalog</strong></td>
+<td>HTTP API (Tabular, Polaris)</td>
+<td>Cloud-native, multi-engine</td>
+</tr>
+<tr>
+<td><strong>JDBC</strong></td>
+<td>Any SQL database as catalog</td>
+<td>Simple self-hosted</td>
+</tr>
+<tr>
+<td><strong>Unity Catalog</strong></td>
+<td>Databricks unified catalog</td>
+<td>Databricks environments</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="aws-glue-catalog">AWS Glue Catalog</h3>
+<pre><code class="language-python">spark = SparkSession.builder \
+    .config(&quot;spark.sql.catalog.glue&quot;, &quot;org.apache.iceberg.spark.SparkCatalog&quot;) \
+    .config(&quot;spark.sql.catalog.glue.catalog-impl&quot;, &quot;org.apache.iceberg.aws.glue.GlueCatalog&quot;) \
+    .config(&quot;spark.sql.catalog.glue.warehouse&quot;, &quot;s3://my-bucket/iceberg/&quot;) \
+    .config(&quot;spark.sql.catalog.glue.io-impl&quot;, &quot;org.apache.iceberg.aws.s3.S3FileIO&quot;) \
+    .getOrCreate()
+
+spark.sql(&quot;CREATE TABLE glue.mydb.orders (...) USING iceberg&quot;)
+</code></pre>
+<h3 id="nessie-git-for-data">Nessie (Git for Data)</h3>
+<pre><code class="language-python"># Nessie lets you create branches of your data!
+spark = SparkSession.builder \
+    .config(&quot;spark.sql.catalog.nessie&quot;, &quot;org.apache.iceberg.spark.SparkCatalog&quot;) \
+    .config(&quot;spark.sql.catalog.nessie.catalog-impl&quot;, &quot;org.apache.iceberg.nessie.NessieCatalog&quot;) \
+    .config(&quot;spark.sql.catalog.nessie.uri&quot;, &quot;http://localhost:19120/api/v2&quot;) \
+    .config(&quot;spark.sql.catalog.nessie.ref&quot;, &quot;main&quot;) \
+    .getOrCreate()
+
+# Work on a branch: isolates your changes
+# (USE REFERENCE needs the Nessie Spark SQL extensions in spark.sql.extensions)
+spark.sql(&quot;USE REFERENCE my_feature_branch IN nessie&quot;)
+spark.sql(&quot;UPDATE nessie.db.orders SET status = 'v2' WHERE ...&quot;)
+
+# Merge branch to main after validation
+# (via Nessie API or CLI)
+</code></pre>
+<hr />
+<h2 id="duckdb--iceberg">DuckDB + Iceberg</h2>
+<p>DuckDB can query Iceberg tables <strong>without Spark</strong>: perfect for local development and ad-hoc queries.</p>
+<pre><code class="language-sql">-- Install extension
+INSTALL iceberg;
+LOAD iceberg;
+
+-- Query Iceberg table on S3
+SELECT *
+FROM iceberg_scan('s3://my-bucket/iceberg/orders/')
+WHERE created_at &gt;= '2025-01-01'
+LIMIT 100;
+
+-- Time travel
+SELECT * FROM iceberg_scan(
+    's3://my-bucket/iceberg/orders/',
+    snapshot_from_id = 4654808683286204734
+);
+
+-- Via catalog (REST): the first argument is the warehouse name
+ATTACH 'my_warehouse' AS iceberg_catalog (
+    TYPE ICEBERG,
+    ENDPOINT 'https://my-rest-catalog.com'
+);
+SELECT * FROM iceberg_catalog.my_db.orders LIMIT 10;
+</code></pre>
+<hr />
+<h2 id="iceberg-in-2026">Iceberg in 2026</h2>
+<h3 id="what-changed">What Changed</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status in 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Iceberg v3</strong></td>
+<td>Row lineage, default values, multi-arg transforms, variant type</td>
+</tr>
+<tr>
+<td><strong>REST Catalog standard</strong></td>
+<td>The default catalog API: most major engines support it</td>
+</tr>
+<tr>
+<td><strong>Apache Polaris</strong></td>
+<td>Open-source REST catalog, originally from Snowflake and donated to the Apache Software Foundation</td>
+</tr>
+<tr>
+<td><strong>Uniform read</strong></td>
+<td>Snowflake, BigQuery, Athena all read Iceberg natively</td>
+</tr>
+<tr>
+<td><strong>Delta UniForm</strong></td>
+<td>Delta tables expose Iceberg metadata, bridging the gap</td>
+</tr>
+<tr>
+<td><strong>Streaming support</strong></td>
+<td>Flink + Iceberg is production-standard for streaming ETL</td>
+</tr>
+<tr>
+<td><strong>PyIceberg 0.8+</strong></td>
+<td>Native Python reads without Spark: DuckDB integration</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="adoption-in-2026">Adoption in 2026</h3>
+<ul>
+<li><strong>AWS</strong>: S3 Tables (native Iceberg tables in S3), Athena + Glue</li>
+<li><strong>GCP</strong>: BigQuery supports Iceberg as external tables</li>
+<li><strong>Azure</strong>: ADLS + Iceberg via Fabric</li>
+<li><strong>Snowflake</strong>: Iceberg tables in Snowflake (data lives in your S3)</li>
+<li><strong>Databricks</strong>: Full Iceberg read/write support alongside Delta</li>
+</ul>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-sql">-- Create
+CREATE TABLE catalog.db.tbl (col1 TYPE, ...) USING iceberg
+PARTITIONED BY (days(ts_col));
+
+-- Write
+INSERT INTO catalog.db.tbl VALUES (...);
+INSERT INTO catalog.db.tbl SELECT * FROM other_tbl;
+
+-- Merge/Upsert
+MERGE INTO target USING source ON condition
+WHEN MATCHED THEN UPDATE SET ...
+WHEN NOT MATCHED THEN INSERT *;
+
+-- Time travel
+SELECT * FROM tbl VERSION AS OF &lt;snapshot_id&gt;;
+SELECT * FROM tbl TIMESTAMP AS OF '&lt;timestamp&gt;';
+
+-- Schema
+ALTER TABLE tbl ADD COLUMN new_col TYPE;
+ALTER TABLE tbl RENAME COLUMN old TO new;
+ALTER TABLE tbl DROP COLUMN col;
+
+-- History / Snapshots
+SELECT * FROM tbl.history;
+SELECT * FROM tbl.snapshots;
+SELECT * FROM tbl.files;
+SELECT * FROM tbl.manifests;
+
+-- Maintenance
+CALL catalog.system.rewrite_data_files('db.tbl');
+CALL catalog.system.expire_snapshots('db.tbl', TIMESTAMP '2025-01-01', 5);
+CALL catalog.system.remove_orphan_files('db.tbl');
+
+-- Partition evolution
+ALTER TABLE tbl REPLACE PARTITION FIELD days(ts) WITH hours(ts);
+</code></pre>
+<pre><code class="language-python"># PyIceberg quick reference
+from pyiceberg.catalog import load_catalog
+from pyiceberg.types import StringType
+
+catalog = load_catalog(&quot;my_catalog&quot;, type=&quot;rest&quot;, uri=&quot;https://...&quot;)
+table = catalog.load_table(&quot;db.tbl&quot;)
+
+# Scan
+scan = table.scan(row_filter=&quot;col &gt; 0&quot;, limit=100)
+df = scan.to_pandas()
+
+# Schema evolution
+with table.update_schema() as upd:
+    upd.add_column(&quot;new_col&quot;, StringType())
+
+# Snapshots
+for snap in table.history():
+    print(snap.snapshot_id, snap.timestamp_ms)
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="interview_dbt.html"><small>Previous</small>dbt Interview Q&amp;A</a><a rel="next" class="next" href="intro_delta_lake.html"><small>Next</small>Delta Lake</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_apache_iceberg.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

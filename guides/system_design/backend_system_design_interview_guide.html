@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backend System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide adapts the provided standalone HTML system design guide into the repo&#x27;s existing markdown-driven study flow. It is meant to complement the…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/backend_system_design_interview_guide.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Backend System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide adapts the provided standalone HTML system design guide into the repo&#x27;s existing markdown-driven study flow. It is meant to complement the…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/backend_system_design_interview_guide.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backend System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide adapts the provided standalone HTML system design guide into the repo&#x27;s existing markdown-driven study flow. It is meant to complement the…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Backend System Design Interview Guide",
+   "description": "This guide adapts the provided standalone HTML system design guide into the repo's existing markdown-driven study flow. It is meant to complement the…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/backend_system_design_interview_guide.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Backend Interview Guide",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/backend_system_design_interview_guide.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Backend Interview Guide</span></nav>
+<p class="meta"><a href="../../#system_design/backend_system_design_interview_guide.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 32 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="backend-system-design-interview-guide">Backend System Design Interview Guide</h1>
+<p>This guide adapts the provided standalone HTML system design guide into the repo's existing markdown-driven study flow. It is meant to complement the ML-first design framework with a broader backend interview checklist.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#at-a-glance">At a Glance</a></li>
+<li><a href="#top-10-to-memorize-first">Top 10 to Memorize First</a></li>
+<li><a href="#how-to-use-this-guide">How to Use This Guide</a></li>
+<li><a href="#reference-backend-architecture">Reference Backend Architecture</a></li>
+<li><a href="#how-to-explain-architecture-in-an-interview">How to Explain Architecture in an Interview</a></li>
+<li><a href="#interview-qa-scalability-and-databases">Interview Q&amp;A (Scalability and Databases)</a>
+<ul>
+<li><a href="#1-scalability">Scalability</a></li>
+<li><a href="#2-databases">Databases</a></li>
+</ul>
+</li>
+<li><a href="#data-modeling-ddd-and-data-driven-development">Data Modeling, DDD, and Data-Driven Development</a></li>
+<li><a href="#interview-qa-caching-distribution-and-reliability">Interview Q&amp;A (Caching, Distribution, and Reliability)</a>
+<ul>
+<li><a href="#3-caching">Caching</a></li>
+<li><a href="#4-distributed-systems">Distributed Systems</a></li>
+<li><a href="#5-messaging-and-events">Messaging and Events</a></li>
+<li><a href="#6-networking-and-apis">Networking and APIs</a></li>
+<li><a href="#7-storage">Storage</a></li>
+<li><a href="#8-reliability-and-fault-tolerance">Reliability and Fault Tolerance</a></li>
+<li><a href="#9-search-and-real-time-systems">Search and Real-Time Systems</a></li>
+</ul>
+</li>
+<li><a href="#worked-architecture-examples">Worked Architecture Examples</a></li>
+<li><a href="#operational-review-checklist">Operational Review Checklist</a></li>
+<li><a href="#key-trade-off-cheat-sheet">Key Trade-Off Cheat Sheet</a></li>
+<li><a href="#suggested-interview-walkthrough">Suggested Interview Walkthrough</a></li>
+<li><a href="#common-mistakes-in-backend-interviews">Common Mistakes in Backend Interviews</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#recommended-follow-ups-in-this-repo">Recommended Follow-Ups in This Repo</a></li>
+</ol>
+<hr />
+<h2 id="at-a-glance">At a Glance</h2>
+<ul>
+<li>Scope: 32 high-yield backend system design concepts</li>
+<li>Priority set: 10 concepts worth memorizing first</li>
+<li>Coverage: scalability, databases, caching, distributed systems, messaging, networking, storage, reliability, and search</li>
+<li>Best use: review this page before system design interviews, then go deeper into the case-study files in this track</li>
+</ul>
+<hr />
+<h2 id="top-10-to-memorize-first">Top 10 to Memorize First</h2>
+<ol>
+<li>Load balancing</li>
+<li>Caching strategies</li>
+<li>SQL vs NoSQL</li>
+<li>Database sharding</li>
+<li>CAP theorem</li>
+<li>Consistent hashing</li>
+<li>Message queues and Kafka</li>
+<li>Horizontal vs vertical scaling</li>
+<li>Circuit breaker pattern</li>
+<li>REST vs GraphQL vs gRPC</li>
+</ol>
+<p>Why these first:</p>
+<ul>
+<li>They show up repeatedly in product, platform, and infrastructure interviews.</li>
+<li>They give you enough vocabulary to explain most trade-offs in larger system design answers.</li>
+<li>They form the backbone of common discussions around scale, reliability, and data architecture.</li>
+</ul>
+<hr />
+<h2 id="how-to-use-this-guide">How to Use This Guide</h2>
+<p>For each concept, focus on five things:</p>
+<ol>
+<li>Definition: what the concept is in plain language</li>
+<li>Why it matters: why interviewers care</li>
+<li>Example: where it appears in real systems</li>
+<li>Common prompts: how it shows up in interview questions</li>
+<li>Trade-off: when it helps and what it costs</li>
+</ol>
+<hr />
+<h2 id="reference-backend-architecture">Reference Backend Architecture</h2>
+<p>Most interview systems can be explained as a variation of this baseline:</p>
+<pre><code class="language-text">Client
+  |
+  v
+DNS / CDN / Edge
+  |
+  v
+Load Balancer / API Gateway
+  |
+  v
+Stateless Application Services
+  |                 \
+  |                  \--&gt; Cache (Redis / Memcached)
+  |
+  +--&gt; Primary Database / Search Index / Object Store
+  |
+  +--&gt; Message Queue / Event Stream
+          |
+          v
+       Async Workers / Consumers
+          |
+          v
+   Secondary Stores / Notifications / Analytics / ML Pipelines
+</code></pre>
+<h3 id="what-each-layer-does">What each layer does</h3>
+<ul>
+<li>Client: browser, mobile app, internal service, or batch producer making requests</li>
+<li>DNS / CDN / Edge: routes the request and offloads static assets or geo-distributed traffic</li>
+<li>Load Balancer / API Gateway: terminates TLS, routes traffic, applies auth, rate limits, and observability hooks</li>
+<li>Stateless application services: enforce business logic and stay horizontally scalable</li>
+<li>Cache: reduces read latency and protects the database from repeated hot queries</li>
+<li>Primary datastore: holds the source of truth for transactional or user-facing state</li>
+<li>Queue / event bus: moves slow, high-volume, or decoupled work off the synchronous path</li>
+<li>Workers: process async jobs such as notifications, indexing, retries, or media processing</li>
+<li>Secondary systems: analytics stores, search indexes, object stores, ML pipelines, or third-party integrations</li>
+</ul>
+<h3 id="hot-path-versus-async-path">Hot path versus async path</h3>
+<p>A strong answer usually distinguishes:</p>
+<ul>
+<li>the latency-sensitive path: what must happen before the user gets a response</li>
+<li>the deferred path: what can happen after the response</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>In checkout, charging the card may be on the hot path, but sending an email is async.</li>
+<li>In a feed system, writing the post may be synchronous, but fan-out and ranking can be async.</li>
+<li>In media upload, generating thumbnails and indexing metadata are usually async.</li>
+</ul>
+<h3 id="a-simple-request-lifecycle">A simple request lifecycle</h3>
+<p>For a read-heavy endpoint:</p>
+<ol>
+<li>Client sends request</li>
+<li>Load balancer routes to an app instance</li>
+<li>App checks cache</li>
+<li>On cache hit, return immediately</li>
+<li>On cache miss, query database</li>
+<li>Store result in cache</li>
+<li>Return response</li>
+</ol>
+<p>For a write-heavy endpoint:</p>
+<ol>
+<li>Client sends mutation request</li>
+<li>App validates auth and business rules</li>
+<li>App writes durable state to source-of-truth store</li>
+<li>App emits event to queue or stream</li>
+<li>Background workers update search, notifications, analytics, or downstream materialized views</li>
+</ol>
+<hr />
+<h2 id="how-to-explain-architecture-in-an-interview">How to Explain Architecture in an Interview</h2>
+<p>Interviewers are not looking for a giant diagram first. They want a sequence of defensible decisions.</p>
+<h3 id="good-explanation-order">Good explanation order</h3>
+<ol>
+<li>Clarify requirements</li>
+<li>State system APIs or core entities</li>
+<li>Draw the happy path</li>
+<li>Choose storage</li>
+<li>Add scale controls</li>
+<li>Add failure handling</li>
+<li>Add observability and operations</li>
+</ol>
+<h3 id="questions-you-should-ask-first">Questions you should ask first</h3>
+<ul>
+<li>What is the scale in users, QPS, write rate, and storage growth?</li>
+<li>What latency matters: p50 only, or p95/p99?</li>
+<li>Is the system read-heavy or write-heavy?</li>
+<li>Is correctness strict or is eventual consistency acceptable?</li>
+<li>Do we need multi-region or is one region enough?</li>
+<li>Are there compliance, privacy, or audit constraints?</li>
+</ul>
+<h3 id="what-strong-answers-sound-like">What strong answers sound like</h3>
+<p>Instead of saying:</p>
+<ul>
+<li>&quot;I'll use microservices and Kafka and Redis.&quot;</li>
+</ul>
+<p>Say:</p>
+<ul>
+<li>&quot;The API tier stays stateless behind a load balancer so we can scale horizontally.&quot;</li>
+<li>&quot;The primary write goes to a transactional store because correctness matters.&quot;</li>
+<li>&quot;Search indexing and notifications are moved to Kafka consumers so the user-facing path stays under 100 ms.&quot;</li>
+<li>&quot;We'll place Redis in front of the hot read endpoints because traffic is skewed and repeated.&quot;</li>
+</ul>
+<h3 id="capacity-estimation-you-should-be-able-to-do-quickly">Capacity estimation you should be able to do quickly</h3>
+<p>Even rough math earns points if it is directionally correct.</p>
+<p>Examples:</p>
+<ul>
+<li><code>10M</code> daily active users with <code>5</code> requests per day is about <code>50M</code> requests/day.</li>
+<li><code>50M / 86400</code> is roughly <code>580</code> requests/sec average.</li>
+<li>If peak is <code>5x</code> average, design for about <code>3K</code> requests/sec.</li>
+<li>If each write is <code>2 KB</code>, and there are <code>20M</code> writes/day, raw write volume is about <code>40 GB/day</code> before replication and indexing overhead.</li>
+</ul>
+<p>You do not need exact precision. You need enough math to justify architecture choices.</p>
+<hr />
+<h2 id="interview-qa-scalability-and-databases">Interview Q&amp;A (Scalability and Databases)</h2>
+<p>The 32 core concepts are written as interview questions. Each answer covers the definition, why it matters, an example, common prompts, and the trade-off.</p>
+<h3 id="1-scalability">1. Scalability</h3>
+<h4 id="q1-what-is-the-difference-between-horizontal-and-vertical-scaling">Q1: What is the difference between horizontal and vertical scaling?</h4>
+<ul>
+<li>Definition: Vertical scaling adds more CPU, RAM, or disk to one machine. Horizontal scaling adds more machines and distributes load across them.</li>
+<li>Why it matters: Almost every &quot;design for millions of users&quot; problem starts with a scaling decision.</li>
+<li>Example: Netflix scales service fleets horizontally across many instances instead of relying on a single oversized server.</li>
+<li>Common prompts: &quot;How would you scale this API by 10x?&quot; &quot;Design YouTube, Twitter, or Instagram.&quot;</li>
+<li>Trade-off: Vertical scaling is simpler but capped. Horizontal scaling removes the single-box limit but introduces distributed systems complexity.</li>
+</ul>
+<h4 id="q2-what-is-load-balancing-and-which-strategies-are-common">Q2: What is load balancing and which strategies are common?</h4>
+<ul>
+<li>Definition: A load balancer distributes incoming requests across multiple backends. Common strategies include round robin, least connections, and layer-7 routing.</li>
+<li>Why it matters: It is usually the first scaling component interviewers expect you to mention.</li>
+<li>Example: Ride requests can be routed through regional load balancers before reaching matching services.</li>
+<li>Common prompts: URL shortener, API gateway, &quot;How do you handle traffic spikes?&quot;</li>
+<li>Trade-off: Stateless backends are easier to balance; sticky sessions reduce rehydration costs but can create hot spots.</li>
+</ul>
+<h4 id="q3-what-is-rate-limiting-and-which-algorithms-implement-it">Q3: What is rate limiting and which algorithms implement it?</h4>
+<ul>
+<li>Definition: Rate limiting constrains how many requests a client can issue in a time window. Common algorithms include token bucket, leaky bucket, fixed window, and sliding window.</li>
+<li>Why it matters: Protects against abuse, DDoS-style bursts, and noisy neighbors.</li>
+<li>Example: Public APIs often enforce per-user or per-key quotas to keep traffic fair.</li>
+<li>Common prompts: &quot;Design a rate limiter.&quot; &quot;How would you protect a shared API platform?&quot;</li>
+<li>Trade-off: Tight limits protect infrastructure but can punish legitimate bursty traffic. Token bucket is a common compromise.</li>
+</ul>
+<h4 id="q4-what-is-auto-scaling-and-what-metrics-should-drive-it">Q4: What is auto-scaling and what metrics should drive it?</h4>
+<ul>
+<li>Definition: Auto-scaling changes capacity dynamically based on metrics like CPU, request rate, queue depth, or latency.</li>
+<li>Why it matters: Shows you understand cost control as well as performance.</li>
+<li>Example: Order-processing workers can scale with queue backlog during peak traffic.</li>
+<li>Common prompts: &quot;How would the system respond to seasonal spikes?&quot; &quot;How do you size workers for bursty workloads?&quot;</li>
+<li>Trade-off: Aggressive scaling reduces latency but can increase cost and thrash if policies are noisy.</li>
+</ul>
+<hr />
+<h3 id="2-databases">2. Databases</h3>
+<h4 id="q5-how-do-you-choose-between-sql-and-nosql">Q5: How do you choose between SQL and NoSQL?</h4>
+<ul>
+<li>Definition: SQL databases favor relational structure, transactions, and rich querying. NoSQL systems favor flexible schemas and scale-oriented access patterns.</li>
+<li>Why it matters: Database choice is foundational in almost every design.</li>
+<li>Example: Payment ledgers fit relational databases; social activity feeds often lean toward NoSQL stores.</li>
+<li>Common prompts: &quot;Which database would you choose and why?&quot; &quot;How do you store user content at scale?&quot;</li>
+<li>Trade-off: SQL is strong on joins, consistency, and transactions. NoSQL is strong on horizontal scale and schema flexibility.</li>
+</ul>
+<h4 id="q6-how-does-database-indexing-work-and-what-does-it-cost">Q6: How does database indexing work and what does it cost?</h4>
+<ul>
+<li>Definition: Indexes create fast access paths for lookups, sorting, and filtering without scanning the full table.</li>
+<li>Why it matters: Interviewers often check whether you understand how queries stay fast as data grows.</li>
+<li>Example: A composite index on <code>(user_id, created_at)</code> can speed timeline or order-history queries.</li>
+<li>Common prompts: &quot;Why is the query slow?&quot; &quot;How do you optimize lookup latency?&quot;</li>
+<li>Trade-off: Indexes improve reads but increase storage and write amplification.</li>
+</ul>
+<h4 id="q7-what-is-replication-and-what-trade-offs-does-it-introduce">Q7: What is replication and what trade-offs does it introduce?</h4>
+<ul>
+<li>Definition: Replication copies data across multiple nodes for availability, durability, and read scaling.</li>
+<li>Why it matters: It is one of the first tools for high availability.</li>
+<li>Example: Primary-replica databases send writes to the primary and spread reads across replicas.</li>
+<li>Common prompts: &quot;How do you improve read throughput?&quot; &quot;How do you survive node failure?&quot;</li>
+<li>Trade-off: Replication improves resilience but introduces lag, failover complexity, and consistency questions.</li>
+</ul>
+<h4 id="q8-what-is-sharding-and-when-do-you-need-it">Q8: What is sharding and when do you need it?</h4>
+<ul>
+<li>Definition: Sharding partitions data across multiple databases so one machine does not hold all data or traffic.</li>
+<li>Why it matters: Eventually many fast-growing systems outgrow a single database instance.</li>
+<li>Example: User data can be distributed by hashed user ID across many shards.</li>
+<li>Common prompts: &quot;One database is too large. What now?&quot; &quot;How do you scale writes?&quot;</li>
+<li>Trade-off: Sharding removes single-node limits but complicates joins, resharding, and hot key management.</li>
+</ul>
+<hr />
+<h2 id="data-modeling-ddd-and-data-driven-development">Data Modeling, DDD, and Data-Driven Development</h2>
+<p>These topics sit between &quot;database choice&quot; and &quot;service design.&quot; Strong candidates do not just pick Postgres or Kafka; they define the domain, model the data correctly, and design feedback loops so the product can improve with evidence.</p>
+<h3 id="data-modeling-fundamentals">Data Modeling Fundamentals</h3>
+<p>Good backend design starts with the right data model.</p>
+<p>Core questions:</p>
+<ul>
+<li>What are the main entities?</li>
+<li>What is the system-of-record for each entity?</li>
+<li>What is the write path and source of truth?</li>
+<li>What is the read pattern and access pattern?</li>
+<li>What is the grain of the data?</li>
+</ul>
+<p>Example entities for an e-commerce system:</p>
+<ul>
+<li><code>users</code></li>
+<li><code>products</code></li>
+<li><code>orders</code></li>
+<li><code>order_items</code></li>
+<li><code>payments</code></li>
+<li><code>shipments</code></li>
+</ul>
+<p>Typical relational model:</p>
+<pre><code class="language-text">users (user_id)
+orders (order_id, user_id, status, created_at)
+order_items (order_item_id, order_id, product_id, quantity, unit_price)
+payments (payment_id, order_id, provider, amount, status)
+shipments (shipment_id, order_id, carrier, status, tracking_number)
+</code></pre>
+<p>Why this matters:</p>
+<ul>
+<li>It makes ownership and consistency boundaries explicit.</li>
+<li>It helps you reason about transactions and failure recovery.</li>
+<li>It prevents mixing user-level, order-level, and item-level facts incorrectly.</li>
+</ul>
+<h3 id="normalized-versus-read-optimized-models">Normalized versus Read-Optimized Models</h3>
+<p>Operational systems usually begin with normalized data because:</p>
+<ul>
+<li>writes are simpler to keep correct</li>
+<li>duplication is reduced</li>
+<li>transactional guarantees are easier to reason about</li>
+</ul>
+<p>Read-heavy systems often add denormalized views because:</p>
+<ul>
+<li>user-facing pages need fewer joins</li>
+<li>analytics or dashboard queries become cheaper</li>
+<li>cache keys and search documents often want pre-joined shapes</li>
+</ul>
+<p>A strong answer distinguishes:</p>
+<ul>
+<li>write model: optimized for correctness</li>
+<li>read model: optimized for latency and query simplicity</li>
+</ul>
+<p>This is one reason patterns like CQRS, materialized views, and search indexes appear so often.</p>
+<h3 id="data-modeling-pitfalls-to-call-out">Data Modeling Pitfalls to Call Out</h3>
+<ul>
+<li>using one table for multiple unrelated entity types</li>
+<li>unclear primary key or business key</li>
+<li>storing mutable aggregate state without an event trail where audit matters</li>
+<li>mixing transactional tables and analytics tables as if they serve the same purpose</li>
+<li>ignoring timestamps, versioning, or status transitions</li>
+</ul>
+<h3 id="domain-driven-design-ddd">Domain-Driven Design (DDD)</h3>
+<p>DDD is useful when the domain is complex and the hardest problems are not technical primitives but business rules and model boundaries.</p>
+<p>Key ideas:</p>
+<ul>
+<li>ubiquitous language: use the same terms in code, docs, and conversations</li>
+<li>bounded context: each domain area owns its own model and vocabulary</li>
+<li>aggregate: a consistency boundary for related entities</li>
+<li>entity versus value object: persistent identity versus descriptive structure</li>
+<li>domain service: logic that spans multiple entities but belongs to the domain</li>
+</ul>
+<h3 id="bounded-contexts">Bounded Contexts</h3>
+<p>A common backend mistake is to pretend the whole company shares one global model.</p>
+<p>Example:</p>
+<ul>
+<li>Ordering context: cart, checkout, order lifecycle</li>
+<li>Payment context: authorization, capture, refund, chargeback</li>
+<li>Fulfillment context: warehouse picking, packing, shipment, delivery</li>
+<li>Recommendation context: candidate generation, ranking, experimentation</li>
+</ul>
+<p><code>Order status</code> in the ordering context does not need to mean the same thing as <code>payment status</code> in the payments context.</p>
+<p>That separation gives you:</p>
+<ul>
+<li>cleaner service ownership</li>
+<li>fewer accidental coupling points</li>
+<li>more explicit integration contracts</li>
+</ul>
+<h3 id="aggregates-and-consistency-boundaries">Aggregates and Consistency Boundaries</h3>
+<p>An aggregate defines what must be changed together atomically.</p>
+<p>Example:</p>
+<ul>
+<li><code>Order</code> plus its <code>order_items</code> may be one aggregate for checkout integrity</li>
+<li><code>Payment</code> is often a separate aggregate because it follows a different lifecycle and interacts with external systems</li>
+</ul>
+<p>Strong interview point:</p>
+<ul>
+<li>not everything that relates conceptually should be in one transaction</li>
+<li>choose small consistency boundaries, then coordinate bigger workflows asynchronously when possible</li>
+</ul>
+<h3 id="context-mapping">Context Mapping</h3>
+<p>When domains talk to each other, define the contract clearly.</p>
+<p>Common choices:</p>
+<ul>
+<li>synchronous API call</li>
+<li>asynchronous event publication</li>
+<li>replicated read model</li>
+<li>anti-corruption layer when integrating with legacy systems</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>Payments emits <code>payment_authorized</code></li>
+<li>Ordering consumes it and moves the order to the next state</li>
+<li>Fulfillment only starts after the ordering context publishes <code>order_confirmed</code></li>
+</ul>
+<p>This is where DDD and event-driven architecture connect naturally.</p>
+<h3 id="data-driven-development">Data-Driven Development</h3>
+<p>Data-driven development means product and engineering decisions are shaped by instrumentation, experiments, and observed behavior rather than intuition alone.</p>
+<p>In backend interviews, this usually shows up as:</p>
+<ul>
+<li>event schema design</li>
+<li>metric definitions</li>
+<li>experiment support</li>
+<li>observability and product analytics</li>
+<li>feedback loops into ranking, recommendations, or abuse detection</li>
+</ul>
+<h3 id="what-to-instrument">What to Instrument</h3>
+<p>At minimum, track:</p>
+<ul>
+<li>request received</li>
+<li>request succeeded or failed</li>
+<li>key domain actions completed</li>
+<li>downstream retries or fallback paths triggered</li>
+<li>user-visible outcomes</li>
+</ul>
+<p>Example for checkout:</p>
+<ul>
+<li><code>checkout_started</code></li>
+<li><code>payment_attempted</code></li>
+<li><code>payment_authorized</code></li>
+<li><code>order_confirmed</code></li>
+<li><code>notification_sent</code></li>
+</ul>
+<p>Why this matters:</p>
+<ul>
+<li>you can debug conversion drops</li>
+<li>you can distinguish product issues from infrastructure issues</li>
+<li>you can support A/B tests and funnel analysis</li>
+</ul>
+<h3 id="event-schema-design">Event Schema Design</h3>
+<p>A good event usually includes:</p>
+<ul>
+<li>event name</li>
+<li>event timestamp</li>
+<li>entity identifiers</li>
+<li>user identifier when appropriate</li>
+<li>correlation or trace identifier</li>
+<li>version number</li>
+<li>context metadata such as device, region, provider, experiment variant</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-json">{
+  &quot;event_name&quot;: &quot;payment_authorized&quot;,
+  &quot;event_time&quot;: &quot;2026-04-10T10:15:00Z&quot;,
+  &quot;order_id&quot;: &quot;ord_123&quot;,
+  &quot;payment_id&quot;: &quot;pay_456&quot;,
+  &quot;user_id&quot;: &quot;usr_789&quot;,
+  &quot;provider&quot;: &quot;stripe&quot;,
+  &quot;experiment_variant&quot;: &quot;checkout_v2&quot;,
+  &quot;schema_version&quot;: 3
+}
+</code></pre>
+<p>Strong interview point:</p>
+<ul>
+<li>event schemas need versioning just like APIs do</li>
+</ul>
+<h3 id="metrics-and-product-feedback-loops">Metrics and Product Feedback Loops</h3>
+<p>Data-driven systems usually define:</p>
+<ul>
+<li>north-star metrics</li>
+<li>guardrail metrics</li>
+<li>operational metrics</li>
+</ul>
+<p>Example for search:</p>
+<ul>
+<li>north-star: successful search sessions</li>
+<li>guardrail: latency and zero-result rate</li>
+<li>operational: index freshness lag, query errors, cache hit rate</li>
+</ul>
+<p>Example for recommendations:</p>
+<ul>
+<li>north-star: watch time or conversion</li>
+<li>guardrail: diversity, complaint rate, latency</li>
+<li>operational: feature freshness, model timeout rate, serving cost</li>
+</ul>
+<h3 id="data-driven-development-in-practice">Data-Driven Development in Practice</h3>
+<p>A mature backend answer may include:</p>
+<ul>
+<li>feature flags to roll out safely</li>
+<li>A/B testing support in request or event metadata</li>
+<li>warehouse or stream pipelines for analytics</li>
+<li>dashboards for funnel health and regressions</li>
+<li>batch jobs or online learning loops informed by observed outcomes</li>
+</ul>
+<h3 id="example-checkout-domain-with-ddd-and-data-driven-design">Example: Checkout Domain with DDD and Data-Driven Design</h3>
+<pre><code class="language-text">Ordering Context
+  - owns cart, checkout, order lifecycle
+
+Payments Context
+  - owns authorization, capture, refund
+
+Fulfillment Context
+  - owns shipping and delivery workflow
+
+Shared Data / Events
+  - checkout_started
+  - payment_authorized
+  - order_confirmed
+  - shipment_dispatched
+</code></pre>
+<p>How this helps:</p>
+<ul>
+<li>DDD gives clean ownership and consistency boundaries</li>
+<li>the data model gives clear tables and keys</li>
+<li>instrumentation gives funnel visibility and experiment support</li>
+</ul>
+<h3 id="interview-questions-these-topics-help-with">Interview Questions These Topics Help With</h3>
+<ul>
+<li>&quot;How would you model the data for this system?&quot;</li>
+<li>&quot;What should be one service and what should be multiple services?&quot;</li>
+<li>&quot;What would you store in the transactional database versus the warehouse?&quot;</li>
+<li>&quot;How would you support experiments and product iteration?&quot;</li>
+<li>&quot;How do you keep your event schema maintainable over time?&quot;</li>
+</ul>
+<hr />
+<h2 id="interview-qa-caching-distribution-and-reliability">Interview Q&amp;A (Caching, Distribution, and Reliability)</h2>
+<h3 id="3-caching">3. Caching</h3>
+<h4 id="q9-what-is-the-cache-aside-pattern">Q9: What is the cache-aside pattern?</h4>
+<ul>
+<li>Definition: The application checks the cache first, falls back to the database on a miss, then writes the result into cache.</li>
+<li>Why it matters: It is the most common caching pattern in production systems.</li>
+<li>Example: Product detail pages are often cached in Redis after the first database read.</li>
+<li>Common prompts: &quot;How do you reduce read load?&quot; &quot;How would you speed up a feed or profile page?&quot;</li>
+<li>Trade-off: Simple to implement, but cache invalidation and staleness management become your responsibility.</li>
+</ul>
+<h4 id="q10-what-are-write-through-and-write-behind-caching">Q10: What are write-through and write-behind caching?</h4>
+<ul>
+<li>Definition: Write-through updates cache and backing store together. Write-behind writes to cache first and persists asynchronously later.</li>
+<li>Why it matters: Interviewers look for whether you understand caching on the write path, not only reads.</li>
+<li>Example: Session state may use write-through; high-volume counters may use write-behind buffering.</li>
+<li>Common prompts: &quot;How do you cache hot writes?&quot; &quot;How would you handle very frequent updates?&quot;</li>
+<li>Trade-off: Write-through improves consistency but increases write latency. Write-behind boosts throughput but risks data loss on failure.</li>
+</ul>
+<h4 id="q11-how-do-cdn-and-edge-caching-work">Q11: How do CDN and edge caching work?</h4>
+<ul>
+<li>Definition: A CDN caches content near users at edge locations to reduce latency and origin load.</li>
+<li>Why it matters: Global systems nearly always rely on edge caching for static and semi-static assets.</li>
+<li>Example: Images, JavaScript bundles, and video chunks are served from edge POPs instead of origin servers.</li>
+<li>Common prompts: &quot;How do you improve global latency?&quot; &quot;How would you scale an image or video platform?&quot;</li>
+<li>Trade-off: Excellent for read-heavy content, but invalidation and personalization can be difficult.</li>
+</ul>
+<h4 id="q12-what-is-consistent-hashing-and-why-use-it">Q12: What is consistent hashing and why use it?</h4>
+<ul>
+<li>Definition: Consistent hashing maps keys to cache or storage nodes so that adding or removing nodes remaps only a small fraction of keys.</li>
+<li>Why it matters: It is a standard answer for distributed caches and partitioned key-value systems.</li>
+<li>Example: Memcached clusters commonly use consistent hashing to spread keys.</li>
+<li>Common prompts: &quot;How do you distribute keys across many cache nodes?&quot; &quot;What happens when one node is added or removed?&quot;</li>
+<li>Trade-off: Great for minimizing churn, but poor virtual-node strategy can still create uneven distribution.</li>
+</ul>
+<hr />
+<h3 id="4-distributed-systems">4. Distributed Systems</h3>
+<h4 id="q13-what-is-the-cap-theorem">Q13: What is the CAP theorem?</h4>
+<ul>
+<li>Definition: In the presence of a network partition, a distributed system can prioritize consistency or availability, but not fully guarantee both.</li>
+<li>Why it matters: It gives a framework for discussing consistency trade-offs clearly.</li>
+<li>Example: A banking ledger leans toward consistency; a social feed often leans toward availability.</li>
+<li>Common prompts: &quot;Would you choose CP or AP here?&quot; &quot;What happens during a partition?&quot;</li>
+<li>Trade-off: The theorem is not a design recipe, but it forces you to decide what the system sacrifices under failure.</li>
+</ul>
+<h4 id="q14-what-is-the-difference-between-strong-and-eventual-consistency">Q14: What is the difference between strong and eventual consistency?</h4>
+<ul>
+<li>Definition: Strong consistency means every read reflects the latest successful write. Eventual consistency means replicas converge over time.</li>
+<li>Why it matters: Many interview questions hinge on whether stale reads are acceptable.</li>
+<li>Example: Inventory counts often need strong consistency; like counts can usually tolerate eventual consistency.</li>
+<li>Common prompts: &quot;Can users see stale data?&quot; &quot;How much inconsistency can the product tolerate?&quot;</li>
+<li>Trade-off: Strong consistency improves correctness but usually costs latency and availability.</li>
+</ul>
+<h4 id="q15-what-is-leader-election-and-where-is-it-used">Q15: What is leader election and where is it used?</h4>
+<ul>
+<li>Definition: A distributed system may elect one node as leader to coordinate writes, scheduling, or ownership.</li>
+<li>Why it matters: It appears in consensus systems, schedulers, and service coordination.</li>
+<li>Example: Kubernetes control-plane components rely on leader election for safe coordination.</li>
+<li>Common prompts: &quot;How do you prevent two coordinators from acting at once?&quot; &quot;How does failover happen?&quot;</li>
+<li>Trade-off: Central leadership simplifies coordination but creates failover and split-brain considerations.</li>
+</ul>
+<h4 id="q16-what-is-consensus-and-how-does-raft-achieve-it">Q16: What is consensus, and how does Raft achieve it?</h4>
+<ul>
+<li>Definition: Consensus protocols let distributed nodes agree on a sequence of operations even when some nodes fail. Raft is a commonly discussed protocol because it is easier to reason about than Paxos.</li>
+<li>Why it matters: It comes up when discussing metadata stores, configuration management, and distributed locks.</li>
+<li>Example: etcd uses Raft for replicated metadata and leader election.</li>
+<li>Common prompts: &quot;How do you keep replicas in sync?&quot; &quot;How does a distributed lock service work?&quot;</li>
+<li>Trade-off: Consensus gives stronger guarantees but requires quorum and increases write-path coordination cost.</li>
+</ul>
+<h4 id="q17-what-is-two-phase-commit-2pc">Q17: What is two-phase commit (2PC)?</h4>
+<ul>
+<li>Definition: Two-phase commit coordinates atomic changes across multiple participants by asking each to prepare, then commit or abort.</li>
+<li>Why it matters: Interviewers may ask how to preserve consistency across systems.</li>
+<li>Example: Legacy financial workflows sometimes used 2PC for cross-database updates.</li>
+<li>Common prompts: &quot;How do you commit changes across services atomically?&quot; &quot;How do you avoid partial updates?&quot;</li>
+<li>Trade-off: Strong but blocking, coordinator-dependent, and often avoided in large microservice architectures.</li>
+</ul>
+<h4 id="q18-what-is-the-saga-pattern">Q18: What is the saga pattern?</h4>
+<ul>
+<li>Definition: A saga models a distributed transaction as a sequence of local transactions with compensating actions if a later step fails.</li>
+<li>Why it matters: It is the modern answer when 2PC is too rigid for microservices.</li>
+<li>Example: Travel booking can reserve a room, authorize payment, and compensate prior steps if later steps fail.</li>
+<li>Common prompts: &quot;How do you handle partial failure in an order flow?&quot; &quot;How do services coordinate without a global transaction?&quot;</li>
+<li>Trade-off: More resilient and scalable than 2PC, but harder to reason about and debug end to end.</li>
+</ul>
+<hr />
+<h3 id="5-messaging-and-events">5. Messaging and Events</h3>
+<h4 id="q19-what-are-message-queues-and-event-streaming-and-how-do-they-differ">Q19: What are message queues and event streaming, and how do they differ?</h4>
+<ul>
+<li>Definition: Message queues decouple producers and consumers for task processing. Event streams provide durable logs (ordered within a partition, in Kafka) that multiple consumers can replay.</li>
+<li>Why it matters: Async communication is core to modern large systems.</li>
+<li>Example: Kafka powers activity feeds, audit streams, and analytics pipelines in many companies.</li>
+<li>Common prompts: Notification service, analytics pipeline, &quot;How do you decouple services with different speeds?&quot;</li>
+<li>Trade-off: Improves resilience and throughput, but increases operational complexity and requires idempotent consumers.</li>
+</ul>
+<h4 id="q20-what-is-event-sourcing">Q20: What is event sourcing?</h4>
+<ul>
+<li>Definition: Instead of storing only current state, the system stores the sequence of events that produced that state.</li>
+<li>Why it matters: Useful for auditability, replay, and debugging in domains with strict history requirements.</li>
+<li>Example: Ledger-like systems can reconstruct balances by replaying transaction events.</li>
+<li>Common prompts: &quot;How do you support audit trails?&quot; &quot;How would you implement time travel or rollback?&quot;</li>
+<li>Trade-off: Great for history and recovery, but current-state queries usually require snapshots or derived views.</li>
+</ul>
+<h4 id="q21-what-is-cqrs">Q21: What is CQRS?</h4>
+<ul>
+<li>Definition: Command Query Responsibility Segregation separates the write model from the read model so each can be optimized independently.</li>
+<li>Why it matters: Often paired with event-driven architectures when reads and writes have very different shapes.</li>
+<li>Example: Feed systems may precompute read-optimized timelines while writes flow through a separate command path.</li>
+<li>Common prompts: &quot;How do you optimize for heavy reads and different write semantics?&quot; &quot;How do you support many query patterns?&quot;</li>
+<li>Trade-off: Strong read optimization, but eventual consistency and extra infrastructure become part of the design.</li>
+</ul>
+<hr />
+<h3 id="6-networking-and-apis">6. Networking and APIs</h3>
+<h4 id="q22-how-do-you-choose-between-rest-graphql-and-grpc">Q22: How do you choose between REST, GraphQL, and gRPC?</h4>
+<ul>
+<li>Definition: REST is resource-oriented over HTTP. GraphQL lets clients request exactly the fields they need. gRPC uses strongly typed schemas and efficient binary transport, usually over HTTP/2.</li>
+<li>Why it matters: API protocol choice affects latency, evolution, client ergonomics, and caching.</li>
+<li>Example: Internal service-to-service calls may use gRPC; public developer APIs may use REST or GraphQL.</li>
+<li>Common prompts: &quot;How do you design the API?&quot; &quot;What protocol should mobile clients use?&quot;</li>
+<li>Trade-off: REST is simple and cache-friendly, GraphQL reduces over-fetching, and gRPC is fast and typed but less browser-native.</li>
+</ul>
+<h4 id="q23-when-do-you-use-websockets-versus-long-polling">Q23: When do you use WebSockets versus long polling?</h4>
+<ul>
+<li>Definition: WebSockets keep a persistent bidirectional connection open. Long polling keeps an HTTP request open until data is available and then reconnects.</li>
+<li>Why it matters: Real-time systems need a push mechanism.</li>
+<li>Example: Chat apps use persistent connections to deliver messages and presence updates.</li>
+<li>Common prompts: Chat system, live sports, collaborative editing, &quot;How do you push updates in real time?&quot;</li>
+<li>Trade-off: WebSockets are efficient at scale for bidirectional traffic but require connection state management.</li>
+</ul>
+<h4 id="q24-how-do-dns-and-anycast-routing-work-in-large-systems">Q24: How do DNS and anycast routing work in large systems?</h4>
+<ul>
+<li>Definition: DNS maps names to addresses. Anycast advertises the same IP from many locations so traffic naturally reaches the nearest healthy edge.</li>
+<li>Why it matters: Global systems start with traffic steering before application logic even runs.</li>
+<li>Example: Edge providers route users to the closest data center to reduce latency and absorb attacks.</li>
+<li>Common prompts: &quot;How does a request reach your system?&quot; &quot;How do you design a global service?&quot;</li>
+<li>Trade-off: Powerful for geo-routing and resilience, but routing behavior can be difficult to debug.</li>
+</ul>
+<hr />
+<h3 id="7-storage">7. Storage</h3>
+<h4 id="q25-what-is-the-difference-between-object-block-and-file-storage">Q25: What is the difference between object, block, and file storage?</h4>
+<ul>
+<li>Definition: Object storage handles blobs at large scale, block storage acts like attached disks, and file storage exposes shared hierarchical file systems.</li>
+<li>Why it matters: Choosing the wrong storage type can hurt latency, cost, and operational simplicity.</li>
+<li>Example: Media files often live in object storage while transactional metadata lives in a database.</li>
+<li>Common prompts: &quot;How would you store uploads?&quot; &quot;Where should user-generated media live?&quot;</li>
+<li>Trade-off: Object storage is cheap and durable but higher latency; block storage is fast but less elastic; file storage is convenient but not always the most scalable.</li>
+</ul>
+<h4 id="q26-what-data-partitioning-strategies-exist-and-how-do-you-choose-one">Q26: What data partitioning strategies exist and how do you choose one?</h4>
+<ul>
+<li>Definition: Range, hash, and list partitioning distribute data based on different keying schemes.</li>
+<li>Why it matters: Partitioning strategy strongly affects balance, query efficiency, and hot spot risk.</li>
+<li>Example: Time-series systems often partition by time range, while general key-value systems often partition by hashed key.</li>
+<li>Common prompts: &quot;Why is one shard 10x hotter?&quot; &quot;How do you support efficient range scans?&quot;</li>
+<li>Trade-off: Hashing balances load but hurts range locality; range partitioning helps range queries but risks hot partitions.</li>
+</ul>
+<hr />
+<h3 id="8-reliability-and-fault-tolerance">8. Reliability and Fault Tolerance</h3>
+<h4 id="q27-what-is-the-circuit-breaker-pattern">Q27: What is the circuit breaker pattern?</h4>
+<ul>
+<li>Definition: A circuit breaker stops repeated calls to a failing dependency after an error threshold and retries only after a cooldown window.</li>
+<li>Why it matters: Prevents cascading failures in service meshes and microservice graphs.</li>
+<li>Example: A checkout service can fast-fail calls to a degraded recommendation service instead of exhausting threads.</li>
+<li>Common prompts: &quot;What happens if a downstream service is failing?&quot; &quot;How do you contain blast radius?&quot;</li>
+<li>Trade-off: Improves system stability, but threshold tuning matters or you risk false opens or slow protection.</li>
+</ul>
+<h4 id="q28-what-is-idempotency-and-why-does-it-matter">Q28: What is idempotency and why does it matter?</h4>
+<ul>
+<li>Definition: An operation is idempotent if repeating it does not change the final result beyond the first successful application.</li>
+<li>Why it matters: Safe retries depend on idempotency.</li>
+<li>Example: Payment APIs use idempotency keys so retrying a timed-out request does not double charge the user.</li>
+<li>Common prompts: &quot;How do you handle duplicate requests?&quot; &quot;How do retries avoid creating duplicate orders?&quot;</li>
+<li>Trade-off: Usually requires request tracking, deduplication state, and careful API contract design.</li>
+</ul>
+<h4 id="q29-how-should-you-design-health-checks-timeouts-and-retries">Q29: How should you design health checks, timeouts, and retries?</h4>
+<ul>
+<li>Definition: Health checks remove unhealthy instances, timeouts bound waiting time, and retries recover from transient faults.</li>
+<li>Why it matters: These are baseline reliability controls for any production system.</li>
+<li>Example: A load balancer stops routing to a slow or unhealthy instance while clients retry with backoff.</li>
+<li>Common prompts: &quot;How do you handle slow dependencies?&quot; &quot;What do you do when a service becomes flaky?&quot;</li>
+<li>Trade-off: Retries improve transient-failure handling but can create retry storms without backoff, jitter, and circuit breakers.</li>
+</ul>
+<h4 id="q30-what-are-replication-factor-and-quorum">Q30: What are replication factor and quorum?</h4>
+<ul>
+<li>Definition: Replication factor decides how many copies of data exist. Quorum reads and writes require a majority or another chosen threshold.</li>
+<li>Why it matters: It lets you tune durability, availability, and consistency explicitly.</li>
+<li>Example: Distributed databases can offer consistency levels like <code>ONE</code>, <code>QUORUM</code>, or <code>ALL</code>.</li>
+<li>Common prompts: &quot;How do you guarantee durability?&quot; &quot;How do you balance consistency and latency?&quot;</li>
+<li>Trade-off: Higher replication improves durability but increases storage cost and often write latency.</li>
+</ul>
+<hr />
+<h3 id="9-search-and-real-time-systems">9. Search and Real-Time Systems</h3>
+<h4 id="q31-how-do-search-indexes-work">Q31: How do search indexes work?</h4>
+<ul>
+<li>Definition: Inverted indexes map terms to documents so full-text search can run efficiently at scale.</li>
+<li>Why it matters: Traditional database indexes are not enough for large search products.</li>
+<li>Example: Restaurant or marketplace search often uses Elasticsearch for text, filters, and ranking.</li>
+<li>Common prompts: &quot;How would you build search?&quot; &quot;How do you implement autocomplete or faceted discovery?&quot;</li>
+<li>Trade-off: Search engines are powerful but create sync and consistency work between the primary database and the index.</li>
+</ul>
+<h4 id="q32-how-do-you-store-and-query-time-series-data">Q32: How do you store and query time-series data?</h4>
+<ul>
+<li>Definition: Time-series systems are optimized for append-heavy writes, retention policies, and range queries over timestamps.</li>
+<li>Why it matters: Monitoring, IoT, analytics, and location streams all produce time-based data.</li>
+<li>Example: Metrics platforms store CPU, memory, latency, and service health as time-series records.</li>
+<li>Common prompts: &quot;Design a metrics platform.&quot; &quot;How do you store and query high-volume telemetry?&quot;</li>
+<li>Trade-off: Time-series stores excel on time-based access patterns, but they are not general-purpose transactional databases.</li>
+</ul>
+<hr />
+<h2 id="worked-architecture-examples">Worked Architecture Examples</h2>
+<p>These are compact examples of how the concepts in this guide fit together in actual interview answers.</p>
+<h3 id="example-1-url-shortener">Example 1: URL Shortener</h3>
+<h4 id="requirements">Requirements</h4>
+<ul>
+<li>Create short links quickly</li>
+<li>Redirect with low latency</li>
+<li>Handle read traffic much higher than write traffic</li>
+<li>Avoid collisions in short-code generation</li>
+</ul>
+<h4 id="high-level-design">High-level design</h4>
+<pre><code class="language-text">Client -&gt; LB/API -&gt; Shortener Service -&gt; SQL/NoSQL Store
+                               |
+                               +-&gt; Cache for hot short codes
+                               +-&gt; Async analytics event stream
+</code></pre>
+<h4 id="key-decisions">Key decisions</h4>
+<ul>
+<li>Use a durable primary store for mapping <code>short_code -&gt; long_url</code></li>
+<li>Cache the hottest short codes because redirect traffic is skewed</li>
+<li>Keep analytics off the hot redirect path by sending click events asynchronously</li>
+<li>Pre-generate IDs or use a central ID service to avoid short-code collisions</li>
+</ul>
+<h4 id="trade-offs-to-discuss">Trade-offs to discuss</h4>
+<ul>
+<li>SQL is fine early because the entity is simple and correctness matters</li>
+<li>NoSQL becomes more attractive if partitioned key lookups dominate at very large scale</li>
+<li>Redirect latency should take priority over perfect real-time analytics</li>
+</ul>
+<h3 id="example-2-notification-system">Example 2: Notification System</h3>
+<h4 id="requirements-1">Requirements</h4>
+<ul>
+<li>Accept notification requests from many upstream services</li>
+<li>Support email, push, SMS, and in-app notifications</li>
+<li>Handle spikes without losing requests</li>
+<li>Support retries and provider fallback</li>
+</ul>
+<h4 id="high-level-design-1">High-level design</h4>
+<pre><code class="language-text">Producer Services
+    |
+    v
+Notification API -&gt; Queue / Topic -&gt; Channel Workers -&gt; External Providers
+                         |
+                         +-&gt; Status Store / Retry DLQ / Audit Log
+</code></pre>
+<h4 id="key-decisions-1">Key decisions</h4>
+<ul>
+<li>Use a queue because notifications are naturally asynchronous</li>
+<li>Separate workers by channel to isolate provider issues</li>
+<li>Store delivery attempts and status transitions for debugging and audit</li>
+<li>Use retry with backoff and dead-letter queues for poison messages</li>
+</ul>
+<h4 id="failure-cases-to-discuss">Failure cases to discuss</h4>
+<ul>
+<li>external SMS provider times out</li>
+<li>push provider rate-limits requests</li>
+<li>duplicate requests arrive from upstream callers</li>
+<li>user preference service is temporarily unavailable</li>
+</ul>
+<p>Strong interview point:</p>
+<ul>
+<li>mention idempotency early because notification systems are retry-heavy and duplicate sends are a common production failure</li>
+</ul>
+<h3 id="example-3-chat-or-real-time-messaging">Example 3: Chat or Real-Time Messaging</h3>
+<h4 id="requirements-2">Requirements</h4>
+<ul>
+<li>Low-latency send and receive</li>
+<li>Message persistence</li>
+<li>Online presence</li>
+<li>Ordering within a conversation</li>
+</ul>
+<h4 id="high-level-design-2">High-level design</h4>
+<pre><code class="language-text">Client &lt;-&gt; WebSocket Gateway &lt;-&gt; Chat Service
+                               |      \
+                               |       \-&gt; Presence Store (Redis)
+                               |
+                               +-&gt; Message Store
+                               +-&gt; Stream / Queue for fan-out, push, analytics
+</code></pre>
+<h4 id="key-decisions-2">Key decisions</h4>
+<ul>
+<li>Use WebSockets for bidirectional real-time communication</li>
+<li>Store message history durably in a database</li>
+<li>Use Redis or similar for ephemeral presence state</li>
+<li>Use async fan-out to notify other connected users or devices</li>
+</ul>
+<h4 id="trade-offs-to-discuss-1">Trade-offs to discuss</h4>
+<ul>
+<li>strict global ordering is expensive; per-conversation ordering is often enough</li>
+<li>presence is ephemeral and can tolerate some inaccuracy</li>
+<li>multi-device sync may require sequence numbers or message offsets</li>
+</ul>
+<h3 id="example-4-search-and-discovery-service">Example 4: Search and Discovery Service</h3>
+<h4 id="requirements-3">Requirements</h4>
+<ul>
+<li>Full-text search with filters</li>
+<li>Relevance ranking</li>
+<li>Near-real-time updates</li>
+<li>Support typo tolerance or stemming</li>
+</ul>
+<h4 id="high-level-design-3">High-level design</h4>
+<pre><code class="language-text">Writers -&gt; Primary DB -&gt; Change Events -&gt; Indexer -&gt; Search Engine
+Clients -&gt; API -&gt; Search Service -&gt; Search Engine
+</code></pre>
+<h4 id="key-decisions-3">Key decisions</h4>
+<ul>
+<li>Keep source-of-truth writes in the primary database</li>
+<li>Build the search index asynchronously</li>
+<li>Accept eventual consistency between DB and index</li>
+<li>Use specialized search infrastructure instead of stretching an OLTP database</li>
+</ul>
+<h4 id="common-follow-up">Common follow-up</h4>
+<p>Interviewers often ask how stale the index can be. Your answer should tie staleness budget to product expectations.</p>
+<hr />
+<h2 id="operational-review-checklist">Operational Review Checklist</h2>
+<p>Before finishing a backend design answer, quickly review these dimensions.</p>
+<h3 id="functional-shape">Functional shape</h3>
+<ul>
+<li>What are the core APIs?</li>
+<li>What are the main entities and their relationships?</li>
+<li>What is the read path?</li>
+<li>What is the write path?</li>
+</ul>
+<h3 id="scale">Scale</h3>
+<ul>
+<li>expected QPS and peak QPS</li>
+<li>storage growth over time</li>
+<li>read/write ratio</li>
+<li>request and payload size</li>
+</ul>
+<h3 id="reliability">Reliability</h3>
+<ul>
+<li>timeouts</li>
+<li>retries with backoff and jitter</li>
+<li>circuit breakers</li>
+<li>dead-letter queues</li>
+<li>graceful degradation path</li>
+</ul>
+<h3 id="data-correctness">Data correctness</h3>
+<ul>
+<li>consistency model</li>
+<li>idempotency strategy</li>
+<li>deduplication strategy</li>
+<li>backup and restore plan</li>
+<li>replication and failover</li>
+</ul>
+<h3 id="operations">Operations</h3>
+<ul>
+<li>metrics: QPS, latency, error rate, queue depth</li>
+<li>logs: structured request and failure logs</li>
+<li>tracing: cross-service call visibility</li>
+<li>alerts: SLO-based rather than noise-based</li>
+</ul>
+<h3 id="security">Security</h3>
+<ul>
+<li>auth and authz model</li>
+<li>rate limiting and abuse controls</li>
+<li>encryption in transit and at rest</li>
+<li>audit logging where needed</li>
+</ul>
+<hr />
+<h2 id="key-trade-off-cheat-sheet">Key Trade-Off Cheat Sheet</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trade-Off</th>
+<th>Choose A When...</th>
+<th>Choose B When...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consistency vs Availability</td>
+<td>Bank transfers, inventory, strict correctness</td>
+<td>Social feeds, shopping carts, graceful degradation matters more</td>
+</tr>
+<tr>
+<td>SQL vs NoSQL</td>
+<td>Complex joins, transactions, strong schema discipline</td>
+<td>Massive write scale, flexible schema, denormalized access</td>
+</tr>
+<tr>
+<td>Sync vs Async</td>
+<td>User needs immediate result on the hot path</td>
+<td>Throughput, decoupling, and resilience matter more</td>
+</tr>
+<tr>
+<td>Cache-Aside vs Write-Through</td>
+<td>Read-heavy workloads can tolerate some staleness</td>
+<td>Writes must keep cache close to source of truth</td>
+</tr>
+<tr>
+<td>Monolith vs Microservices</td>
+<td>Early stage product, small team, simpler deployment</td>
+<td>Independent scaling, team autonomy, bounded contexts</td>
+</tr>
+<tr>
+<td>Strong vs Eventual Consistency</td>
+<td>Correctness must dominate latency</td>
+<td>Slightly stale reads are acceptable</td>
+</tr>
+<tr>
+<td>Normalization vs Denormalization</td>
+<td>Write-heavy data with strong integrity constraints</td>
+<td>Read-heavy systems that benefit from precomputed views</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="suggested-interview-walkthrough">Suggested Interview Walkthrough</h2>
+<p>When answering a system design problem, move in this order:</p>
+<ol>
+<li>Clarify users, traffic, latency, and correctness requirements.</li>
+<li>Draw the happy path end to end.</li>
+<li>Choose storage and explain read and write patterns.</li>
+<li>Add caches, queues, and background workers where they remove pressure from the hot path.</li>
+<li>Explain scaling: load balancers, sharding, replication, and auto-scaling.</li>
+<li>Explain failure handling: retries, timeouts, circuit breakers, idempotency, and fallback behavior.</li>
+<li>Close with observability, cost, and the key trade-offs you deliberately chose.</li>
+</ol>
+<hr />
+<h2 id="common-mistakes-in-backend-interviews">Common Mistakes in Backend Interviews</h2>
+<ul>
+<li>jumping into microservices before establishing the core data model and traffic shape</li>
+<li>naming tools without explaining why they are needed</li>
+<li>forgetting the difference between the synchronous user path and the background path</li>
+<li>ignoring failure modes and only describing the happy path</li>
+<li>choosing strong consistency everywhere without discussing latency and availability cost</li>
+<li>choosing eventual consistency everywhere without checking whether correctness permits it</li>
+<li>omitting idempotency in retry-heavy workflows</li>
+<li>skipping observability entirely</li>
+<li>never mentioning backpressure, queue depth, or hot keys in high-scale designs</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>Designing Data-Intensive Applications, Martin Kleppmann</li>
+<li>System Design Interview, Alex Xu</li>
+<li>Web Scalability for Startup Engineers, Artur Ejsmont</li>
+<li>Release It!, Michael T. Nygard</li>
+<li>Site Reliability Engineering, Google</li>
+<li>The Architecture of Open Source Applications</li>
+<li>Kafka, Redis, PostgreSQL, and Elasticsearch official documentation</li>
+</ul>
+<hr />
+<h2 id="recommended-follow-ups-in-this-repo">Recommended Follow-Ups in This Repo</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="intro_backend_ai_system_design.html">Backend and System Design for AI</a></li>
+<li><a href="recommendation_system.html">Recommendation System</a></li>
+<li><a href="fraud_detection.html">Fraud Detection</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_backend_ai_system_design.html"><small>Previous</small>Backend AI Systems</a><a rel="next" class="next" href="recommendation_system.html"><small>Next</small>Recommendation System</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/backend_system_design_interview_guide.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

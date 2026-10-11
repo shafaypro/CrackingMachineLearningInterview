@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visual Search System Design Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="&quot;Design search by image&quot; (or &quot;shop the look&quot;, or &quot;show me similar products&quot;) comes up in e-commerce, marketplace, and photo-platform interviews. It looks…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/visual_search_system.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Visual Search System Design Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="&quot;Design search by image&quot; (or &quot;shop the look&quot;, or &quot;show me similar products&quot;) comes up in e-commerce, marketplace, and photo-platform interviews. It looks…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/visual_search_system.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Visual Search System Design Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="&quot;Design search by image&quot; (or &quot;shop the look&quot;, or &quot;show me similar products&quot;) comes up in e-commerce, marketplace, and photo-platform interviews. It looks…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Visual Search System Design",
+   "description": "\"Design search by image\" (or \"shop the look\", or \"show me similar products\") comes up in e-commerce, marketplace, and photo-platform interviews. It looks…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/visual_search_system.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "ML System Design",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#ml-system-design"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Visual Search",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/system_design/visual_search_system.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#ml-system-design">ML System Design</a> <span aria-hidden="true">/</span> <span aria-current="page">Visual Search</span></nav>
+<p class="meta"><a href="../../#system_design/visual_search_system.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 7 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="visual-search-system-design">Visual Search System Design</h1>
+<p>&quot;Design search by image&quot; (or &quot;shop the look&quot;, or &quot;show me similar products&quot;) comes up in e-commerce, marketplace, and photo-platform interviews. It looks like a computer vision question but is mostly a retrieval question: an embedding model, an approximate nearest neighbour index over hundreds of millions of vectors, and a re-ranker. Candidates who spend the whole interview on the CNN architecture and never mention index memory, embedding versioning, or how the training pairs are collected usually do poorly.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#clarify-the-problem-first">Clarify the Problem First</a></li>
+<li><a href="#high-level-architecture">High-Level Architecture</a></li>
+<li><a href="#query-processing-and-object-detection">Query Processing and Object Detection</a></li>
+<li><a href="#embedding-models">Embedding Models</a></li>
+<li><a href="#training-data">Training Data</a></li>
+<li><a href="#ann-indexing">ANN Indexing</a></li>
+<li><a href="#re-ranking">Re-Ranking</a></li>
+<li><a href="#near-duplicate-detection">Near-Duplicate Detection</a></li>
+<li><a href="#embedding-versioning-and-backfills">Embedding Versioning and Backfills</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#serving-and-latency-budget">Serving and Latency Budget</a></li>
+<li><a href="#capacity-and-cost">Capacity and Cost</a></li>
+<li><a href="#privacy-and-safety">Privacy and Safety</a></li>
+<li><a href="#monitoring">Monitoring</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="clarify-the-problem-first">Clarify the Problem First</h2>
+<p>The answers to these questions change the model, the index, and the latency budget, so ask them before drawing anything.</p>
+<p><strong>What is the query?</strong></p>
+<ul>
+<li><strong>Full image</strong>: a user uploads a photo of a product and wants the same or similar items.</li>
+<li><strong>Cropped region</strong>: the photo contains several objects (a street-style photo with a jacket, bag, and shoes) and the user wants results for one of them. This is &quot;shop the look&quot;.</li>
+<li><strong>Image plus text</strong>: &quot;this dress but in red&quot; or &quot;this sofa, under $500&quot;. The text modifies the image query or adds filters.</li>
+<li><strong>Item-to-item</strong>: &quot;similar products&quot; on a product page. The query is a catalog image, so it is already clean and its embedding can be precomputed.</li>
+</ul>
+<p><strong>What counts as a good result?</strong> Exact match (the same SKU), visually similar (same style, different brand), or complementary (items that go with it)? Exact match and similar are both retrieval problems with different training labels. Complementary items are closer to a recommendation problem and should be scoped out unless the interviewer asks for it.</p>
+<p><strong>Scale numbers to ask for:</strong></p>
+<ul>
+<li>Catalog size: 1M items fits in one machine's memory at full precision; hundreds of millions need compression and sharding</li>
+<li>Images per item: products often have 5-10 photos, which multiplies the index size</li>
+<li>QPS: uploaded-photo queries are usually a small fraction of text search traffic; &quot;similar items&quot; widgets can be much higher because they fire on page views</li>
+<li>Latency: users tolerate more for a photo upload than for typing, but end-to-end should still be under roughly 500 ms after the upload completes</li>
+<li>Freshness: how quickly must a newly listed item be findable? Minutes for a marketplace, a day may be fine for a retailer with a slow catalog</li>
+</ul>
+<p><strong>Constraints:</strong> Must results be in stock and ship to the user's region? Are user-uploaded photos stored, and for how long? Are there images of people (faces) in queries or catalog?</p>
+<p>For the rest of this guide, assume: <strong>e-commerce marketplace, 200M active items with an average of 3 indexed images each (600M vectors), 2k QPS peak for photo queries plus a precomputed &quot;similar items&quot; widget, p99 under 400 ms server-side, new items searchable within 15 minutes, optimizing for add-to-cart and purchase.</strong></p>
+<hr />
+<h2 id="high-level-architecture">High-Level Architecture</h2>
+<p>There are two paths. The offline path turns every catalog image into a vector and puts it in an index. The online path turns the query into a vector, looks up neighbours, and re-ranks them.</p>
+<pre><code>OFFLINE / NEAR-LINE (catalog side)
+─────────────────────────────────────────────────────────────────────
+Catalog DB ──► CDC stream ──► Image fetch ──► Safety + dedup filters
+                                   │
+                                   ▼
+                       ┌────────────────────────┐
+                       │ Detector + embedder    │  GPU batch jobs
+                       │ (same model version as │
+                       │  the query encoder)    │
+                       └───────────┬────────────┘
+                                   ▼
+             Embedding store (item_id, image_id, model_version, vector)
+                                   │
+                                   ▼
+             Index builder ──► ANN shards (HNSW or IVF-PQ) + attribute filters
+
+ONLINE (query side)
+─────────────────────────────────────────────────────────────────────
+Upload ──► Decode/resize ──► Safety check ──► Object detection
+                                                   │ user picks a box
+                                                   ▼
+                                          Crop ──► Query encoder (GPU)
+                                                   │ + optional text
+                                                   ▼
+                                  ANN search (all shards, filtered) ~1000
+                                                   │
+                                                   ▼
+                              Re-ranker (heavier model + business signals) ~50
+                                                   │
+                                                   ▼
+                              Dedup, diversity, stock filter ──► Results
+</code></pre>
+<p>Two rules hold the design together:</p>
+<ol>
+<li><strong>The query encoder and the catalog encoder must be the same model version.</strong> Vectors from different model versions are not comparable, even if the architectures match. Versioning is covered below.</li>
+<li><strong>Recall at the ANN stage is the ceiling.</strong> If the right item is not in the top 1000 candidates, the re-ranker cannot recover it.</li>
+</ol>
+<hr />
+<h2 id="query-processing-and-object-detection">Query Processing and Object Detection</h2>
+<p>User photos are messy: cluttered backgrounds, several objects, bad lighting, odd angles. Catalog photos are usually clean product shots on a white background. That gap between query domain and catalog domain is the main modelling problem.</p>
+<p><strong>Object detection.</strong> Run a detector (a Faster R-CNN, DETR, or YOLO-family model fine-tuned on your product categories) on the query image. It returns boxes with category labels such as <code>dress</code>, <code>handbag</code>, <code>sneaker</code>. Then:</p>
+<ul>
+<li>Show the boxes to the user and let them pick one. Default to the most prominent box by area and centrality.</li>
+<li>Crop the chosen box with some padding and embed the crop, not the full image.</li>
+<li>Use the predicted category as a soft filter or re-ranking feature. A hard filter is risky because detector mistakes then remove every correct result.</li>
+</ul>
+<p><strong>Run the detector on the catalog too.</strong> Catalog lifestyle photos (a model wearing the jacket) contain the same clutter as user photos. Detecting and cropping the product in catalog images makes the catalog side look more like the query side, and it lets you index several crops per image.</p>
+<p><strong>Preprocessing:</strong> fix EXIF orientation, resize on the client before upload (saves bandwidth and latency), and normalize colour space. Keep resizing identical between training and serving; a mismatch in interpolation method or aspect-ratio handling is a common silent cause of lower recall.</p>
+<p><strong>Text + image queries.</strong> Two options:</p>
+<ul>
+<li><strong>Structured text becomes filters.</strong> &quot;Under $500, in red&quot; becomes <code>price &lt; 500</code> and a colour attribute filter. Cheap and precise.</li>
+<li><strong>Free text modifies the embedding.</strong> With a joint image-text model (CLIP-style), you can combine the image and text embeddings, for example a weighted sum of normalized vectors, or train a small composition model that takes both and outputs a target embedding. The weighted sum is a reasonable baseline; a trained composition model does better on &quot;this but different&quot; queries because it learns which image features the text should override.</li>
+</ul>
+<hr />
+<h2 id="embedding-models">Embedding Models</h2>
+<p>The embedding model maps an image to a vector where similar items are close under cosine similarity. It is a backbone plus a projection head, trained with a metric learning loss.</p>
+<h3 id="backbone">Backbone</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Backbone</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CNN (ResNet, EfficientNet, ConvNeXt)</strong></td>
+<td>Strong, cheap to serve, well understood. Good default when latency and GPU cost are tight</td>
+</tr>
+<tr>
+<td><strong>ViT</strong></td>
+<td>Better at global context and scales well with data; usually better accuracy at larger sizes</td>
+</tr>
+<tr>
+<td><strong>Pretrained CLIP-style image tower</strong></td>
+<td>Strong general features and a text tower for free; a good starting point for fine-tuning</td>
+</tr>
+<tr>
+<td><strong>Self-supervised (DINO-style)</strong></td>
+<td>Good fine-grained visual features without labels; useful when labelled pairs are scarce</td>
+</tr>
+</tbody>
+</table></div>
+<p>Start from a pretrained backbone and fine-tune on your own pairs. Generic ImageNet features capture object category well but not the fine distinctions that matter in a catalog (this pattern vs that pattern, this cut vs that cut).</p>
+<p>Output dimension is usually 128-512. Lower dimension shrinks the index and speeds up search; measure recall at each size rather than assuming.</p>
+<h3 id="metric-learning-losses">Metric learning losses</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Loss</th>
+<th>Idea</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Contrastive (pairwise)</strong></td>
+<td>Pull positive pairs together; push negative pairs apart beyond a margin</td>
+<td>Simple; needs careful pair sampling</td>
+</tr>
+<tr>
+<td><strong>Triplet</strong></td>
+<td><code>d(a, p) + margin &lt; d(a, n)</code> for anchor, positive, negative</td>
+<td>Intuitive; most random triplets are already satisfied and give zero gradient, so it depends on mining</td>
+</tr>
+<tr>
+<td><strong>InfoNCE / in-batch softmax</strong></td>
+<td>Each anchor must pick its positive out of all other items in the batch</td>
+<td>Every batch gives B-1 negatives for free; large batches help. This is the CLIP loss</td>
+</tr>
+<tr>
+<td><strong>Proxy-based (Proxy-NCA, Proxy-Anchor)</strong></td>
+<td>Learn one proxy vector per class; pull samples to their proxy</td>
+<td>Fast convergence, no pair mining; needs class labels (e.g. product IDs)</td>
+</tr>
+<tr>
+<td><strong>Normalized softmax / ArcFace-style</strong></td>
+<td>Classification over product IDs with normalized weights and an angular margin</td>
+<td>Strong baseline when you have many images per product ID; weight matrix grows with the number of classes</td>
+</tr>
+</tbody>
+</table></div>
+<p>A practical recipe: start with an in-batch softmax loss over (query crop, catalog image) pairs with a learned temperature, add mined hard negatives, and compare against a normalized-softmax classifier over product IDs. Both are strong; the right choice depends on whether your labels look more like pairs or like classes.</p>
+<h3 id="hard-negative-mining">Hard-negative mining</h3>
+<p>Random negatives are too easy: a dress versus a lawnmower teaches nothing. Useful negatives look similar but are the wrong item.</p>
+<ul>
+<li><strong>In-batch negatives</strong>: free, but mostly easy unless batches are built by category.</li>
+<li><strong>Category-aware batching</strong>: fill each batch with items from the same category so in-batch negatives are harder.</li>
+<li><strong>Offline mined negatives</strong>: use the current model to retrieve top neighbours for each anchor and take the ones that are not positives.</li>
+<li><strong>Semi-hard negatives</strong>: negatives farther than the positive but inside the margin. The hardest negatives are often label noise (an unlabelled duplicate of the positive), and training on them can collapse the embedding.</li>
+</ul>
+<p>Filter mined negatives against known duplicates and same-product variants before using them. Otherwise you teach the model to separate two photos of the same item.</p>
+<h3 id="joint-image-text-embeddings">Joint image-text embeddings</h3>
+<p>A CLIP-style dual encoder trains an image tower and a text tower so that matching (image, text) pairs have high cosine similarity. It gives you:</p>
+<ul>
+<li><strong>Text-to-image search</strong> over the same image index, without a separate index.</li>
+<li><strong>Multimodal queries</strong> by combining image and text vectors.</li>
+<li><strong>Zero-shot attribute tagging</strong> (compare an image to &quot;a photo of a striped shirt&quot;).</li>
+</ul>
+<p>Fine-tune on your own (product image, title + attributes) pairs. Product titles are noisy but plentiful, and they carry the vocabulary your users use.</p>
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+def info_nce_loss(query_emb, item_emb, temperature=0.05):
+    &quot;&quot;&quot;In-batch softmax: row i's positive is column i; all other columns are negatives.&quot;&quot;&quot;
+    q = F.normalize(query_emb, dim=-1)
+    k = F.normalize(item_emb, dim=-1)
+    logits = q @ k.T / temperature                     # (B, B) cosine similarities
+    labels = torch.arange(q.size(0), device=q.device)
+    # Symmetric loss: query-&gt;item and item-&gt;query
+    return (F.cross_entropy(logits, labels) + F.cross_entropy(logits.T, labels)) / 2
+</code></pre>
+<p>If the same product appears twice in a batch, the loss treats one copy as a negative for the other. Deduplicate by product ID within each batch or mask those entries.</p>
+<hr />
+<h2 id="training-data">Training Data</h2>
+<p>The quality of the embedding depends mostly on the positive pairs. Several sources, each with different noise:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it gives</th>
+<th>Noise and caveats</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Catalog multi-view</strong></td>
+<td>Different photos of the same product ID are positives</td>
+<td>Clean, but all studio shots; doesn't teach the user-photo domain</td>
+</tr>
+<tr>
+<td><strong>Catalog duplicates</strong></td>
+<td>The same product listed by different sellers</td>
+<td>Must be found first (perceptual hashing, title matching); good exact-match signal</td>
+</tr>
+<tr>
+<td><strong>User photos linked to purchases</strong></td>
+<td>Review photos attached to a purchased item</td>
+<td>Very valuable: real user-photo domain paired with the correct catalog item</td>
+</tr>
+<tr>
+<td><strong>Co-click / co-purchase</strong></td>
+<td>Items clicked or bought in the same visual-search session</td>
+<td>Large volume; reflects &quot;similar&quot; but also &quot;complementary&quot; and position bias</td>
+</tr>
+<tr>
+<td><strong>Query-to-click logs</strong></td>
+<td>Uploaded query crop paired with the item the user clicked or added to cart</td>
+<td>Direct signal for the task; biased toward what the current system already retrieves</td>
+</tr>
+<tr>
+<td><strong>Human-labelled relevance</strong></td>
+<td>Graded judgments (exact / similar / irrelevant) on query-result pairs</td>
+<td>Expensive; use mainly for evaluation and a small high-quality fine-tuning set</td>
+</tr>
+<tr>
+<td><strong>Synthetic augmentation</strong></td>
+<td>Crop, colour jitter, blur, perspective warp, background pasting on catalog images</td>
+<td>Cheap way to simulate user-photo conditions; too much colour jitter destroys colour as a signal</td>
+</tr>
+</tbody>
+</table></div>
+<p>Points worth making in an interview:</p>
+<ul>
+<li><strong>Domain gap.</strong> Studio-to-studio pairs alone produce a model that works for &quot;similar items&quot; but fails on user photos. Get some real user-photo pairs (review photos, click logs) and use augmentation that pastes catalog products onto realistic backgrounds.</li>
+<li><strong>Feedback loop.</strong> Click logs only contain items the current system showed. As with text search, train on them with care: mix in other sources and keep a human-labelled set for evaluation.</li>
+<li><strong>Augmentations must respect the task.</strong> If colour matters to users (it does for fashion), don't apply strong hue shifts. Horizontal flips are fine for most products but not for items with text or logos.</li>
+<li><strong>Splits by product, not by image.</strong> If photos of the same product appear in both train and test, offline recall is inflated.</li>
+</ul>
+<hr />
+<h2 id="ann-indexing">ANN Indexing</h2>
+<p>Brute-force search over 600M vectors per query is too slow and too expensive, so use approximate nearest neighbour search. The trade-off is always between <strong>recall, latency, and memory</strong>.</p>
+<h3 id="hnsw-vs-ivf-pq">HNSW vs IVF-PQ</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>HNSW</th>
+<th>IVF-PQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Multi-layer proximity graph; greedy search from the top layer down</td>
+<td>Coarse k-means clusters (IVF) plus compressed residuals (product quantization)</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>High (often 0.95+ at reasonable settings)</td>
+<td>Lower, because PQ distances are approximate; recovered partly by re-scoring</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Very low at moderate scale</td>
+<td>Low; tunable through <code>nprobe</code> (clusters searched)</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>Full vectors plus graph links, the most memory-hungry option</td>
+<td>Very compact: tens of bytes per vector</td>
+</tr>
+<tr>
+<td><strong>Updates</strong></td>
+<td>Inserts supported; deletes are awkward (tombstones, periodic rebuild)</td>
+<td>Easy to add vectors to existing clusters; centroids go stale if the data distribution shifts</td>
+</tr>
+<tr>
+<td><strong>Knobs</strong></td>
+<td><code>M</code> (links per node), <code>efConstruction</code>, <code>efSearch</code></td>
+<td><code>nlist</code>, <code>nprobe</code>, number of PQ sub-vectors <code>m</code>, bits per code</td>
+</tr>
+<tr>
+<td><strong>Best when</strong></td>
+<td>Index fits in RAM and recall matters most</td>
+<td>Hundreds of millions to billions of vectors, memory is the constraint</td>
+</tr>
+</tbody>
+</table></div>
+<p>A common hybrid at large scale: IVF-PQ for candidate generation, then re-score the top few hundred candidates with full-precision vectors fetched from a separate store (sometimes on SSD). This gets most of HNSW's recall at a fraction of the memory. Graph indexes stored mostly on SSD (DiskANN-style) are another option when RAM is the constraint.</p>
+<h3 id="sharding">Sharding</h3>
+<p>At 600M vectors the index does not fit on one machine, so shard it.</p>
+<ul>
+<li><strong>Random / hash sharding by item ID</strong>: every query goes to every shard, results are merged. Load is balanced and recall is not affected by the sharding. p99 is set by the slowest shard, so use hedged requests and per-shard timeouts.</li>
+<li><strong>Sharding by category</strong>: a query only hits the shards for its predicted category. Cheaper, but a wrong category prediction means zero recall. Use it only with a fallback to broad search.</li>
+</ul>
+<p>Replicate each shard for throughput and availability.</p>
+<h3 id="filtering-by-attributes-and-availability">Filtering by attributes and availability</h3>
+<p>Results must usually be in stock, ship to the user's region, and sometimes match a price range or category.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Post-filter</strong> (search top-k, then drop)</td>
+<td>If most of the top-k are out of stock, the page comes back nearly empty</td>
+</tr>
+<tr>
+<td><strong>Pre-filter</strong> (brute force over the matching subset)</td>
+<td>Works when the filter is very selective; too slow when it is broad</td>
+</tr>
+<tr>
+<td><strong>Filtered ANN</strong> (filter checked during graph/cluster traversal)</td>
+<td>Best general answer; recall can drop for very selective filters because the graph gets disconnected</td>
+</tr>
+<tr>
+<td><strong>Partitioned indexes</strong> (one index per region or top-level category)</td>
+<td>Fast and exact on the partition key; multiplies memory if items belong to many partitions</td>
+</tr>
+</tbody>
+</table></div>
+<p>A practical setup: partition by a few coarse keys (region), filter during search on the rest, and over-fetch (ask for 3-5x more candidates than needed) when the filter is selective. Stock status changes constantly, so keep it in a fast attribute store checked at search time rather than baked into the index.</p>
+<h3 id="index-updates-for-new-items">Index updates for new items</h3>
+<ul>
+<li>New items flow through CDC, get embedded within minutes, and are inserted into a <strong>small fresh index</strong> that is searched alongside the main index. Results from both are merged.</li>
+<li>The main index is rebuilt periodically (daily or weekly) with the fresh items folded in. For IVF-PQ, rebuilding also retrains the centroids and codebooks on current data.</li>
+<li>Deleted or delisted items are tombstoned immediately and removed at the next rebuild. Monitor the tombstone fraction; a graph index with many tombstones gets slower and less accurate.</li>
+</ul>
+<hr />
+<h2 id="re-ranking">Re-Ranking</h2>
+<p>The ANN stage returns ~1000 candidates ranked by a single cosine similarity. The re-ranker has time for more.</p>
+<p><strong>Heavier visual model.</strong> Options include a larger embedding model applied only to the candidates, or a cross-attention model that takes the query crop and the candidate image together and outputs a match score. The cross model is more accurate for exact-match decisions (same pattern, same logo placement) but cannot be precomputed, so it only runs on the top few dozen.</p>
+<p><strong>Business and behavioural features.</strong> A gradient boosted tree or small neural ranker combining:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Visual similarity</strong></td>
+<td>ANN cosine score, re-ranker score, category match with the detector's prediction</td>
+</tr>
+<tr>
+<td><strong>Item quality</strong></td>
+<td>Rating, review count, return rate, image quality score, seller quality</td>
+</tr>
+<tr>
+<td><strong>Commerce</strong></td>
+<td>Price, price relative to the query item's price (if known), discount, stock level, shipping time</td>
+</tr>
+<tr>
+<td><strong>Behavioural</strong></td>
+<td>Historical CTR and add-to-cart rate from visual search, smoothed for low counts</td>
+</tr>
+<tr>
+<td><strong>User context</strong></td>
+<td>Region, price sensitivity, past brand preferences (use carefully; see below)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Train it on click and add-to-cart logs from visual search, with position debiasing as in text search.</p>
+<p><strong>Diversity.</strong> Visual search tends to return ten nearly identical items, often the same product from different sellers. Apply:</p>
+<ul>
+<li>Near-duplicate collapsing (group identical products, show the best offer)</li>
+<li>A per-seller or per-brand cap</li>
+<li>MMR (maximal marginal relevance), which trades off relevance against similarity to results already selected</li>
+</ul>
+<p>Keep personalization in the re-ranker and keep it mild. A user who uploads a photo has stated what they want; personalization should not override the visual match.</p>
+<hr />
+<h2 id="near-duplicate-detection">Near-Duplicate Detection</h2>
+<p>Marketplaces contain many copies of the same image: the same product from many sellers, re-uploaded stock photos, lightly edited copies. Without dedup, they fill the results and waste index memory.</p>
+<p><strong>Perceptual hashing</strong> (aHash, dHash, pHash) produces a short fingerprint (often 64 bits) that changes little under resizing, compression, and small edits. Two images are near-duplicates if the Hamming distance between their hashes is below a threshold.</p>
+<ul>
+<li><strong>Cheap and exact enough</strong> for re-uploads and re-compressions.</li>
+<li><strong>Weak against crops, rotations, and large edits.</strong> For those, use the embedding itself: pairs with cosine similarity above a high threshold, verified on a labelled sample.</li>
+<li><strong>Lookup at scale:</strong> split the 64-bit hash into bands and index each band, so candidate pairs share at least one band exactly (a locality-sensitive hashing trick), then check the full Hamming distance.</li>
+</ul>
+<p>Uses:</p>
+<ul>
+<li><strong>At ingestion:</strong> cluster duplicates, index one representative image per cluster, and keep the mapping to all item IDs.</li>
+<li><strong>At serving:</strong> collapse duplicates in results and show the best offer.</li>
+<li><strong>In training:</strong> remove duplicates from negative sets and add them as positives.</li>
+<li><strong>For safety:</strong> match against hash lists of known prohibited images.</li>
+</ul>
+<hr />
+<h2 id="embedding-versioning-and-backfills">Embedding Versioning and Backfills</h2>
+<p>Every time the embedding model changes, every vector in the index is invalid. Vectors from model v1 and v2 live in different spaces, and comparing a v2 query against v1 items gives meaningless scores. This is the operational problem interviewers most often probe.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>Store <code>model_version</code> with every vector, and route each query to the index built with the same version as its encoder.</li>
+<li>Never mix versions in one index.</li>
+</ul>
+<p><strong>Migration with dual indexes:</strong></p>
+<pre><code>1. Train v2; validate offline recall on the labelled set.
+2. Backfill: re-embed the full catalog with v2 (batch GPU job).
+   New/updated items during the backfill are embedded with BOTH v1 and v2.
+3. Build the v2 index alongside v1. Both are live; v1 serves all traffic.
+4. Shadow: send a copy of queries through v2 (query encoder + index);
+   compare recall, latency, and result overlap.
+5. A/B test: route a slice of users to the v2 encoder + v2 index.
+6. Ramp to 100%, keep v1 warm for rollback, then delete v1.
+</code></pre>
+<p>The cost is roughly twice the index memory during migration and a full re-embedding job. For 600M images that is a large GPU batch job, which is one reason teams don't retrain the embedding model weekly. The re-ranker, which sits on top of the embeddings, can be retrained much more often without a backfill.</p>
+<p><strong>Backward-compatible embeddings</strong> are an alternative: train v2 with an extra loss that keeps its query embeddings comparable to v1 item embeddings, so the new query encoder can be deployed before the backfill finishes. It avoids the dual-index period but constrains how much v2 can improve, so most teams use it only for small updates.</p>
+<hr />
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="offline">Offline</h3>
+<p>Build a labelled evaluation set of query images (real user uploads and crops, not just catalog images) with graded relevance judgments for their results: exact match, similar, not relevant.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recall@k</strong></td>
+<td>Fraction of relevant items that appear in the top k. Use k=1000 for the ANN stage, k=10 or 20 for the final list</td>
+</tr>
+<tr>
+<td><strong>mAP</strong></td>
+<td>Mean over queries of average precision; rewards putting all relevant items high</td>
+</tr>
+<tr>
+<td><strong>NDCG@k</strong></td>
+<td>Graded relevance with a position discount; the main metric for the re-ranked list</td>
+</tr>
+<tr>
+<td><strong>Exact-match hit rate@k</strong></td>
+<td>Whether the exact product appears in the top k; the key metric for &quot;find this item&quot;</td>
+</tr>
+<tr>
+<td><strong>ANN recall vs brute force</strong></td>
+<td>Overlap of ANN top-k with exact top-k for the same embedding; isolates index error from model error</td>
+</tr>
+</tbody>
+</table></div>
+<p>Keep the last two separate. If quality drops, you need to know whether the embedding model got worse or the index lost recall.</p>
+<p>The snippet below shows exact cosine search (the ground truth for measuring ANN recall) and recall@k against labelled relevant items.</p>
+<pre><code class="language-python">import numpy as np
+
+def normalize(x):
+    return x / np.linalg.norm(x, axis=1, keepdims=True).clip(min=1e-12)
+
+def brute_force_search(queries, catalog, k=10):
+    &quot;&quot;&quot;Exact top-k by cosine similarity. queries: (Q, d), catalog: (N, d).&quot;&quot;&quot;
+    q, c = normalize(queries), normalize(catalog)
+    sims = q @ c.T                                          # (Q, N)
+    top = np.argpartition(-sims, kth=k - 1, axis=1)[:, :k]  # unordered top-k
+    order = np.argsort(-np.take_along_axis(sims, top, axis=1), axis=1)
+    return np.take_along_axis(top, order, axis=1)           # (Q, k), best first
+
+def recall_at_k(retrieved, relevant, k):
+    &quot;&quot;&quot;retrieved: (Q, &gt;=k) item ids; relevant: list of sets of relevant ids.&quot;&quot;&quot;
+    scores = []
+    for row, rel in zip(retrieved, relevant):
+        if rel:
+            scores.append(len(set(row[:k]) &amp; rel) / len(rel))
+    return float(np.mean(scores))
+
+# Example: measure ANN recall against exact search on the same vectors
+rng = np.random.default_rng(0)
+catalog = rng.normal(size=(100_000, 256)).astype(np.float32)
+queries = rng.normal(size=(100, 256)).astype(np.float32)
+exact = brute_force_search(queries, catalog, k=10)
+ground_truth = [set(row) for row in exact]
+# ann_results = ann_index.search(queries, k=10)   # from HNSW / IVF-PQ
+# print(recall_at_k(ann_results, ground_truth, k=10))
+</code></pre>
+<p>For large N, brute force is done in chunks over the catalog or on a GPU, and only on a sample of queries.</p>
+<h3 id="online">Online</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CTR on results</strong></td>
+<td>Engagement with what was shown</td>
+</tr>
+<tr>
+<td><strong>Add-to-cart and purchase rate</strong></td>
+<td>The business outcome</td>
+</tr>
+<tr>
+<td><strong>Zero-result / low-confidence rate</strong></td>
+<td>Share of queries where the top score is below a threshold or filters removed everything</td>
+</tr>
+<tr>
+<td><strong>Box re-selection rate</strong></td>
+<td>Users picking a different box than the default suggests the detector's ranking is off</td>
+</tr>
+<tr>
+<td><strong>Query abandonment</strong></td>
+<td>Uploads with no interaction at all</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Guardrails:</strong> p99 latency, result diversity (share of the page from one seller), and the safety-filter block rate.</p>
+<hr />
+<h2 id="serving-and-latency-budget">Serving and Latency Budget</h2>
+<p>An example server-side budget for a photo query at p99 under 400 ms (upload time excluded):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Budget</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Decode, resize, validate</td>
+<td>15 ms</td>
+<td>Client already resized to ~512 px</td>
+</tr>
+<tr>
+<td>Safety check (NSFW, prohibited content)</td>
+<td>25 ms</td>
+<td>Small classifier, can run in parallel with detection</td>
+</tr>
+<tr>
+<td>Object detection</td>
+<td>40 ms</td>
+<td>GPU; batched with other requests</td>
+</tr>
+<tr>
+<td>Query embedding</td>
+<td>20 ms</td>
+<td>GPU; small batches for latency</td>
+</tr>
+<tr>
+<td>ANN search (scatter-gather over shards)</td>
+<td>40 ms</td>
+<td>Includes filtered search and merge; hedged requests</td>
+</tr>
+<tr>
+<td>Full-precision re-scoring of top candidates</td>
+<td>20 ms</td>
+<td>If using IVF-PQ</td>
+</tr>
+<tr>
+<td>Feature fetch for re-ranker</td>
+<td>25 ms</td>
+<td>Batched key-value lookups for price, stock, stats</td>
+</tr>
+<tr>
+<td>Re-ranking</td>
+<td>40 ms</td>
+<td>GBDT on ~500 items plus optional cross-model on top 30</td>
+</tr>
+<tr>
+<td>Dedup, diversity, response</td>
+<td>15 ms</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~240 ms</strong></td>
+<td>Leaves headroom for tail latency and retries</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tactics:</p>
+<ul>
+<li><strong>Parallelize</strong> the safety check with detection, and the feature fetch with the ANN search where possible.</li>
+<li><strong>Dynamic batching</strong> on GPU servers (collect requests for a few milliseconds) raises throughput a lot at a small latency cost.</li>
+<li><strong>Precompute item-to-item results.</strong> &quot;Similar items&quot; on a product page uses catalog images, so compute neighbours offline for every item and serve from a key-value store. Only live filters (stock) are applied at request time.</li>
+<li><strong>Cache by image hash.</strong> Popular images get uploaded repeatedly (screenshots of the same influencer post); cache results keyed on the perceptual hash of the query.</li>
+</ul>
+<hr />
+<h2 id="capacity-and-cost">Capacity and Cost</h2>
+<h3 id="index-memory-worked-example">Index memory: worked example</h3>
+<p>Assume 600M vectors at 256 dimensions.</p>
+<pre><code>Full precision (fp32):
+  600e6 × 256 × 4 bytes = 614.4e9 bytes ≈ 614 GB
+fp16:
+  600e6 × 256 × 2 bytes ≈ 307 GB
+HNSW graph overhead (M = 32, ~2M links on layer 0, 4-byte ids):
+  600e6 × 64 × 4 bytes ≈ 154 GB  on top of the vectors
+
+IVF-PQ with m = 32 sub-vectors, 8 bits each (1 byte per sub-vector):
+  600e6 × 32 bytes ≈ 19.2 GB for codes
+  + 8-byte ids: 600e6 × 8 ≈ 4.8 GB
+  + centroids and codebooks: negligible (e.g. 65,536 × 256 × 4 ≈ 67 MB)
+  ≈ 24 GB total → compression ratio vs fp32 ≈ 1024 / 32 = 32×
+</code></pre>
+<p>So HNSW over fp32 vectors needs roughly 770 GB of RAM across shards (before replication), while IVF-PQ fits in about 24 GB. That is the core trade-off: PQ loses some recall, which is why the top few hundred candidates are re-scored with full-precision vectors kept on SSD or in a separate store.</p>
+<p>Other levers: reduce dimension (256 → 128 halves everything), dedupe images before indexing, and index only one or two images per item rather than all of them.</p>
+<h3 id="compute">Compute</h3>
+<ul>
+<li><strong>Query-side GPU inference:</strong> detection plus embedding per query. At 2k QPS with dynamic batching, a modest GPU pool handles it; the exact count depends on model size and should be measured with a load test, not guessed.</li>
+<li><strong>Catalog-side inference:</strong> new and updated items (steady, small) plus full backfills on model changes (large, occasional). Run backfills on spare or cheaper batch capacity.</li>
+<li><strong>Cheaper models:</strong> distil a large teacher embedder into a smaller student for the query path, and quantize to int8 or fp16 for inference. Keep query and catalog encoders compatible: if you distil the query encoder, the student must be trained to map into the teacher's embedding space, or the catalog must be re-embedded with the student.</li>
+</ul>
+<hr />
+<h2 id="privacy-and-safety">Privacy and Safety</h2>
+<p><strong>Faces and people.</strong> User photos often contain people. Decide explicitly:</p>
+<ul>
+<li>Do not build or allow person or face search unless that is the product and it has legal review. Visual search for products should not match faces.</li>
+<li>Detect the product region and embed the crop, not the whole image; this also reduces how much identity information goes into the embedding.</li>
+<li>Store uploaded query images briefly, or not at all, and state the retention policy. Using them for training needs consent under most privacy regimes.</li>
+</ul>
+<p><strong>NSFW and prohibited content.</strong> Run a safety classifier on both uploaded queries and catalog images. Block or down-rank flagged catalog items, and don't return results for flagged queries. Match against hash lists of known illegal content at ingestion.</p>
+<p><strong>Counterfeits.</strong> Exact-match visual search is very good at finding counterfeits of branded items, which is useful for trust-and-safety teams but a risk in the user-facing product. Seller quality and brand authorization belong in the re-ranker.</p>
+<p><strong>Adversarial listings.</strong> Sellers may copy popular product photos to attract traffic. Near-duplicate detection across sellers, combined with other listing signals, flags this.</p>
+<hr />
+<h2 id="monitoring">Monitoring</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>What</th>
+<th>How</th>
+<th>Signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Embedding drift</strong></td>
+<td>Track distribution of query embeddings (mean vector, norm, distance to catalog centroids) over time</td>
+<td>New camera types, new trends, a preprocessing bug</td>
+</tr>
+<tr>
+<td><strong>Top-1 similarity distribution</strong></td>
+<td>Histogram of the best cosine score per query</td>
+<td>A drop means queries are finding weaker matches</td>
+</tr>
+<tr>
+<td><strong>ANN recall regression</strong></td>
+<td>Daily job: sample queries, compute brute-force top-k, compare to ANN top-k</td>
+<td>Index degradation from tombstones, stale IVF centroids, bad parameters</td>
+</tr>
+<tr>
+<td><strong>Model-version consistency</strong></td>
+<td>Assert the query encoder version matches the index version at startup and per request</td>
+<td>Mixed-version bugs, which otherwise fail silently</td>
+</tr>
+<tr>
+<td><strong>Indexing lag</strong></td>
+<td>Time from item listing to searchable</td>
+<td>Stalled CDC or embedding pipeline</td>
+</tr>
+<tr>
+<td><strong>Detector health</strong></td>
+<td>Distribution of detected categories and box counts; box re-selection rate</td>
+<td>Detector failing on new product types</td>
+</tr>
+<tr>
+<td><strong>Online metrics</strong></td>
+<td>CTR, add-to-cart, zero-result rate, by category and by query source</td>
+<td>Business regressions, often concentrated in one category</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>p50/p99 per stage</td>
+<td>Slow shards, GPU saturation</td>
+</tr>
+</tbody>
+</table></div>
+<p>The recall regression job is cheap and catches problems no online metric will attribute correctly. Run it daily and alert on a drop.</p>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="why-not-just-use-a-pretrained-clip-or-imagenet-model-and-skip-fine-tuning">Why not just use a pretrained CLIP or ImageNet model and skip fine-tuning?</h4>
+<p>It is a good baseline and a reasonable first launch, but it is usually not enough for commerce. Generic models learn features that separate object categories (shoe vs bag) and broad concepts. Product search needs finer distinctions: this floral pattern vs that one, this sneaker model vs a lookalike, this cut of jeans vs another. Those differences matter to shoppers and are not what generic pretraining optimizes.</p>
+<p>Fine-tuning with metric learning on your own pairs (catalog multi-view, review photos matched to purchases, click logs) moves the embedding space toward those distinctions and closes the gap between user photos and studio catalog photos. The practical plan is to launch with the pretrained model to collect click data, then use that data to fine-tune.</p>
+<h4 id="how-do-you-choose-between-hnsw-and-ivf-pq">How do you choose between HNSW and IVF-PQ?</h4>
+<p>By memory budget first. HNSW stores full vectors plus graph links, so at hundreds of millions of vectors it needs hundreds of gigabytes of RAM. In return it gives high recall at low latency with simple tuning. IVF-PQ compresses each vector to a few dozen bytes, so the whole index can fit in tens of gigabytes, but PQ distances are approximate and recall drops.</p>
+<p>At moderate scale (tens of millions) or when recall is the top priority and the budget allows, HNSW is the simpler choice. At hundreds of millions or more, IVF-PQ with full-precision re-scoring of the top candidates is common. Either way, the choice should come from measured recall@k vs latency vs memory curves on your data, using brute-force search on a sample as ground truth.</p>
+<h4 id="what-happens-when-you-ship-a-new-embedding-model">What happens when you ship a new embedding model?</h4>
+<p>Every vector in the index becomes incompatible with the new query encoder, so you cannot swap the model in place. You re-embed the whole catalog with the new model, build a second index, and run both side by side. New items are embedded with both models during the transition. You shadow test the new stack, A/B test it, ramp it up, and only then delete the old index.</p>
+<p>This costs a full GPU backfill and double index memory for the migration period, so embedding model updates are infrequent. Tuning that can happen without a backfill (the re-ranker, filters, business logic) is where most iteration happens. If updates need to be frequent, a backward-compatible training loss lets a new query encoder work against old item vectors, at some cost to how much the new model can improve.</p>
+<h4 id="how-do-you-handle-a-query-photo-with-several-products-in-it">How do you handle a query photo with several products in it?</h4>
+<p>Run an object detector on the query, show the detected boxes, and let the user choose; default to the largest and most central box. Crop that region with a bit of padding and embed the crop. Embedding the whole image mixes features from every object and the results match none of them well.</p>
+<p>The detector's category label helps too, as a re-ranking feature or soft filter. A hard filter is risky because a detector mistake then removes all correct results. Run the same detector on catalog lifestyle photos, so the catalog side contains crops that look like user crops.</p>
+<h4 id="how-do-you-get-training-data-for-user-photo-to-catalog-item-matching">How do you get training data for user photo to catalog item matching?</h4>
+<p>The best source is data where a real user photo is already linked to a catalog item: review photos attached to a purchase, and uploaded queries followed by an add-to-cart or purchase of a specific item. These cover the domain gap directly.</p>
+<p>These sources are smaller and biased. Click logs only include what the current system showed, and review photos skew toward certain categories. So I would combine them with catalog multi-view pairs, duplicates across sellers as extra positives, and synthetic pairs created by augmenting catalog images (cropping, pasting on realistic backgrounds, blur, lighting changes). A human-labelled set of real queries is needed for evaluation regardless, because every other source is biased in some way.</p>
+<h4 id="results-are-relevant-but-half-of-them-are-out-of-stock-how-do-you-fix-it">Results are relevant but half of them are out of stock. How do you fix it?</h4>
+<p>This is a filtering problem, not a model problem. Post-filtering the ANN top-k removes most of the list when many near neighbours are out of stock. Options: filter during ANN traversal using an attribute bitmap for in-stock items, over-fetch candidates when filters are selective, and keep stock status in a fast attribute store updated in near real time rather than in the index itself, since it changes too often to rebuild for.</p>
+<p>I would also check whether out-of-stock items should be removed at all. For exact-match queries, showing &quot;this exact item, out of stock&quot; alongside similar in-stock alternatives can be better than hiding it.</p>
+<h4 id="how-would-you-detect-that-search-quality-dropped-and-whether-the-model-or-the-index-is-to-blame">How would you detect that search quality dropped, and whether the model or the index is to blame?</h4>
+<p>Separate the two with different measurements. For the index, run a daily job that samples queries, computes exact top-k with brute force, and compares with ANN results; a drop in overlap points at the index (tombstone buildup, stale IVF centroids, a parameter change). For the model, run the labelled evaluation set regularly and watch recall@k and NDCG; a drop there with stable ANN recall points at the model or the preprocessing.</p>
+<p>Online, watch the distribution of top-1 similarity scores and the zero-result rate by category. A sudden shift usually means a pipeline bug, such as a changed resize, a colour-space change, or a query encoder whose version doesn't match the index. Assert version compatibility at startup and log it with every request so that last case cannot happen silently.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embedding the whole query image</td>
+<td>Features from several objects blur together</td>
+<td>Detect, let the user pick, embed the crop</td>
+</tr>
+<tr>
+<td>Training only on studio catalog photos</td>
+<td>Fails on real user photos</td>
+<td>Review photos, click pairs, realistic augmentation</td>
+</tr>
+<tr>
+<td>Mixing embedding versions in one index</td>
+<td>Scores become meaningless, silently</td>
+<td>Version every vector; dual index during migration</td>
+</tr>
+<tr>
+<td>Treating the ANN index as exact</td>
+<td>Recall loss is invisible without measurement</td>
+<td>Monitor ANN recall against brute force on a sample</td>
+</tr>
+<tr>
+<td>Post-filtering stock and region</td>
+<td>Empty or near-empty result pages</td>
+<td>Filtered ANN, over-fetch, partitioned indexes</td>
+</tr>
+<tr>
+<td>Random negatives only</td>
+<td>Model learns easy distinctions</td>
+<td>Category-aware batches, mined semi-hard negatives</td>
+</tr>
+<tr>
+<td>Mined negatives that are actually duplicates</td>
+<td>Model learns to separate identical items</td>
+<td>Dedup with perceptual hashes before mining</td>
+</tr>
+<tr>
+<td>Train/test split by image</td>
+<td>Same product in both sets inflates recall</td>
+<td>Split by product ID</td>
+</tr>
+<tr>
+<td>Strong colour augmentation for fashion</td>
+<td>Model stops using colour</td>
+<td>Mild colour jitter; keep colour when users care</td>
+</tr>
+<tr>
+<td>No near-duplicate collapsing</td>
+<td>Page full of the same product from different sellers</td>
+<td>Hash-based clustering, show best offer, seller caps</td>
+</tr>
+<tr>
+<td>Ignoring index memory until the end</td>
+<td>Design doesn't fit in any realistic budget</td>
+<td>Do the N × d × bytes math early; plan PQ or lower dimension</td>
+</tr>
+<tr>
+<td>Retraining the embedder often</td>
+<td>Full backfill each time</td>
+<td>Iterate on the re-ranker; update embeddings less often</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">ML System Design Framework</a></li>
+<li><a href="search_ranking_system.html">Search and Ranking System Design</a></li>
+<li><a href="recommendation_system.html">Recommendation System Design</a></li>
+<li><a href="content_moderation_system.html">Content Moderation System Design</a></li>
+<li><a href="ml_system_design_patterns.html">ML System Design Patterns</a></li>
+<li><a href="../deep_learning/intro_computer_vision.html">Computer Vision</a></li>
+<li><a href="../deep_learning/intro_model_compression.html">Model Compression</a></li>
+<li><a href="../ai_genai/intro_embeddings.html">Embeddings</a></li>
+<li><a href="../ai_genai/intro_multimodal_ai.html">Multimodal AI</a></li>
+<li><a href="../ai_genai/intro_vector_databases_advanced.html">Vector Databases: Advanced</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../mlops/intro_model_monitoring.html">Model Monitoring</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../mlops/intro_ab_testing.html">A/B Testing</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="news_feed_ranking.html"><small>Previous</small>News Feed Ranking</a><a rel="next" class="next" href="enterprise_rag_search.html"><small>Next</small>Enterprise RAG Search</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/system_design/visual_search_system.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

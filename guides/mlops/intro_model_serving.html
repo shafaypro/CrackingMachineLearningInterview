@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Serving Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Model serving is the process of deploying a trained ML model to production so it can respond to inference requests. It covers architecture patterns…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_serving.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Serving Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Model serving is the process of deploying a trained ML model to production so it can respond to inference requests. It covers architecture patterns…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_serving.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Serving Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Model serving is the process of deploying a trained ML model to production so it can respond to inference requests. It covers architecture patterns…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Serving",
+   "description": "Model serving is the process of deploying a trained ML model to production so it can respond to inference requests. It covers architecture patterns…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_serving.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Model Serving",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_serving.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Model Serving</span></nav>
+<p class="meta"><a href="../../#mlops/intro_model_serving.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="model-serving">Model Serving</h1>
+<p>Model serving is the process of deploying a trained ML model to production so it can respond to inference requests. It covers architecture patterns, latency vs throughput tradeoffs, batching, scaling, and deployment strategies.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#serving-patterns">Serving Patterns</a></li>
+<li><a href="#rest-vs-grpc">REST vs gRPC</a></li>
+<li><a href="#batching-strategies">Batching Strategies</a></li>
+<li><a href="#model-versioning--deployment-strategies">Model Versioning &amp; Deployment Strategies</a></li>
+<li><a href="#serving-frameworks">Serving Frameworks</a></li>
+<li><a href="#hardware-considerations">Hardware Considerations</a></li>
+<li><a href="#scaling--autoscaling">Scaling &amp; Autoscaling</a></li>
+<li><a href="#latency-vs-throughput-tradeoffs">Latency vs Throughput Tradeoffs</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="serving-patterns">Serving Patterns</h2>
+<h3 id="real-time-synchronous-inference">Real-Time (Synchronous) Inference</h3>
+<pre><code>User Request → Load Balancer → Model Server → Response
+    ~100ms          ~1ms           ~50-100ms
+</code></pre>
+<p>Best for: interactive applications (recommendation, fraud detection, chatbots). Requires low latency. Scale horizontally with multiple instances.</p>
+<h3 id="batch-inference">Batch Inference</h3>
+<pre><code>Scheduled job → Load batch from DB/S3 → Model Server → Write predictions → DB/S3
+   (daily/hourly)   (millions of records)   (parallel)
+</code></pre>
+<p>Best for: non-time-sensitive predictions (email scores, ad targeting). High throughput, no latency requirement. Use GPU batching for maximum efficiency.</p>
+<h3 id="async--event-driven-inference">Async / Event-Driven Inference</h3>
+<pre><code>Event → Message Queue (Kafka/SQS) → Consumer (Model Server) → Write result → DB
+                                        (async workers)
+</code></pre>
+<p>Best for: workloads with variable load, long-running predictions (&lt; 30s acceptable latency). Decouples producers from consumers.</p>
+<h3 id="streaming-inference">Streaming Inference</h3>
+<pre><code>Kafka topic → Stream processor (Flink/Spark Streaming) → Model → Output Kafka topic
+              (real-time windowed features)
+</code></pre>
+<p>Best for: IoT, fraud detection, real-time personalization with feature computation.</p>
+<hr />
+<h2 id="rest-vs-grpc">REST vs gRPC</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>REST/HTTP</th>
+<th>gRPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Protocol</strong></td>
+<td>HTTP/1.1, JSON</td>
+<td>HTTP/2, Protocol Buffers</td>
+</tr>
+<tr>
+<td><strong>Serialization</strong></td>
+<td>JSON (human-readable)</td>
+<td>Protobuf (binary, ~5-10x smaller)</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Higher (JSON parsing)</td>
+<td>Lower (binary encoding)</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>Limited</td>
+<td>Native bidirectional streaming</td>
+</tr>
+<tr>
+<td><strong>Browser support</strong></td>
+<td>Native</td>
+<td>Needs gRPC-web proxy</td>
+</tr>
+<tr>
+<td><strong>Use case</strong></td>
+<td>External APIs, simple services</td>
+<td>Internal microservices, low-latency</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"># REST API with FastAPI
+from fastapi import FastAPI
+import numpy as np
+import joblib
+from pydantic import BaseModel
+
+app = FastAPI()
+model = joblib.load(&quot;model.pkl&quot;)
+
+class PredictRequest(BaseModel):
+    features: list[float]
+
+class PredictResponse(BaseModel):
+    prediction: float
+    confidence: float
+
+@app.post(&quot;/predict&quot;, response_model=PredictResponse)
+async def predict(request: PredictRequest):
+    X = np.array(request.features).reshape(1, -1)
+    pred = model.predict(X)[0]
+    conf = model.predict_proba(X).max()
+    return PredictResponse(prediction=float(pred), confidence=float(conf))
+
+# Run: uvicorn serve:app --host 0.0.0.0 --port 8080 --workers 4
+</code></pre>
+<hr />
+<h2 id="batching-strategies">Batching Strategies</h2>
+<h3 id="static-batching">Static Batching</h3>
+<p>All inputs must arrive before processing starts. Used in offline batch inference.</p>
+<pre><code class="language-python">import numpy as np
+import joblib
+
+model = joblib.load(&quot;model.pkl&quot;)
+
+def batch_predict(records: list[dict]) -&gt; list[float]:
+    X = np.array([[r['age'], r['salary'], r['score']] for r in records])
+    return model.predict(X).tolist()
+
+# Process in chunks to control memory
+def predict_large_dataset(data, chunk_size=10000):
+    results = []
+    for i in range(0, len(data), chunk_size):
+        chunk = data[i:i+chunk_size]
+        preds = batch_predict(chunk)
+        results.extend(preds)
+    return results
+</code></pre>
+<h3 id="dynamic-batching-server-side">Dynamic Batching (Server-Side)</h3>
+<p>Accumulate requests over a time window, then process as a batch. Maximizes GPU utilization without increasing individual request latency much.</p>
+<pre><code class="language-python">import asyncio
+import time
+from collections import deque
+
+class DynamicBatchingServer:
+    def __init__(self, model, max_batch_size=64, max_wait_ms=10):
+        self.model = model
+        self.max_batch_size = max_batch_size
+        self.max_wait_ms = max_wait_ms / 1000
+        self.queue = deque()
+        asyncio.create_task(self._batch_processor())
+
+    async def predict(self, features):
+        future = asyncio.Future()
+        self.queue.append((features, future))
+        return await future
+
+    async def _batch_processor(self):
+        while True:
+            await asyncio.sleep(self.max_wait_ms)
+            if not self.queue:
+                continue
+
+            # Drain queue up to max_batch_size
+            batch = []
+            futures = []
+            while self.queue and len(batch) &lt; self.max_batch_size:
+                features, future = self.queue.popleft()
+                batch.append(features)
+                futures.append(future)
+
+            # Run batch inference
+            import numpy as np
+            X = np.array(batch)
+            predictions = self.model.predict(X)
+
+            # Resolve futures
+            for future, pred in zip(futures, predictions):
+                future.set_result(float(pred))
+</code></pre>
+<hr />
+<h2 id="model-versioning--deployment-strategies">Model Versioning &amp; Deployment Strategies</h2>
+<h3 id="blue-green-deployment">Blue-Green Deployment</h3>
+<pre><code>Traffic (100%) → Blue (v1)    →    switch    →  Traffic (100%) → Green (v2)
+                                (instant rollback available)
+</code></pre>
+<p>Zero downtime. Full instant rollback. Requires 2x infrastructure temporarily.</p>
+<h3 id="canary-deployment">Canary Deployment</h3>
+<pre><code>Traffic → 95% → v1 (stable)
+       → 5%  → v2 (canary)
+    (gradually shift traffic after validating metrics)
+</code></pre>
+<p>Reduces risk. Monitor error rates, latency, and business metrics before full rollout.</p>
+<h3 id="shadow-mode">Shadow Mode</h3>
+<pre><code>All traffic → v1 (serves response to user)
+           → v2 (receives same request, runs in parallel, result discarded)
+</code></pre>
+<p>Validate v2 in production without user impact. Compare outputs between v1 and v2.</p>
+<pre><code class="language-python"># Shadow mode implementation
+import threading
+import logging
+
+class ShadowModeServer:
+    def __init__(self, primary_model, shadow_model):
+        self.primary = primary_model
+        self.shadow = shadow_model
+
+    def predict(self, X):
+        primary_pred = self.primary.predict(X)
+
+        # Run shadow asynchronously: don't block
+        def run_shadow():
+            try:
+                shadow_pred = self.shadow.predict(X)
+                # Log discrepancies
+                if abs(primary_pred - shadow_pred) &gt; 0.1:
+                    logging.info(f&quot;Shadow disagreement: primary={primary_pred}, shadow={shadow_pred}&quot;)
+            except Exception as e:
+                logging.error(f&quot;Shadow model error: {e}&quot;)
+
+        threading.Thread(target=run_shadow, daemon=True).start()
+        return primary_pred  # Return primary immediately
+</code></pre>
+<hr />
+<h2 id="serving-frameworks">Serving Frameworks</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Best For</th>
+<th>Highlights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FastAPI</strong></td>
+<td>Custom REST APIs, small models</td>
+<td>Simple, async, Pydantic validation</td>
+</tr>
+<tr>
+<td><strong>TensorFlow Serving</strong></td>
+<td>TensorFlow/Keras models</td>
+<td>High performance, gRPC, batching</td>
+</tr>
+<tr>
+<td><strong>TorchServe</strong></td>
+<td>PyTorch models (legacy deployments)</td>
+<td>Managed lifecycle, REST/gRPC; in limited maintenance, so prefer another server for new projects</td>
+</tr>
+<tr>
+<td><strong>Triton Inference Server</strong></td>
+<td>Multi-framework GPU serving</td>
+<td>NVIDIA, dynamic batching, ensemble</td>
+</tr>
+<tr>
+<td><strong>BentoML</strong></td>
+<td>Any framework, packaging</td>
+<td>Easy deployment, cloud-native</td>
+</tr>
+<tr>
+<td><strong>Ray Serve</strong></td>
+<td>Distributed, complex pipelines</td>
+<td>Actor-based, Python-first</td>
+</tr>
+<tr>
+<td><strong>Seldon Core</strong></td>
+<td>Kubernetes-native</td>
+<td>A/B testing, monitoring built-in</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="bentoml-example">BentoML Example</h3>
+<pre><code class="language-python">import bentoml
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+
+# Save model to the BentoML model store
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+bentoml.sklearn.save_model(&quot;fraud_classifier&quot;, model)
+
+# service.py: BentoML 1.2+ class-based API
+# (bentoml.Service, runners and bentoml.io descriptors are the legacy 1.0/1.1 API)
+@bentoml.service(resources={&quot;cpu&quot;: &quot;2&quot;}, traffic={&quot;timeout&quot;: 10})
+class FraudDetection:
+    def __init__(self):
+        self.model = bentoml.sklearn.load_model(&quot;fraud_classifier:latest&quot;)
+
+    @bentoml.api
+    def predict(self, input_data: np.ndarray) -&gt; np.ndarray:
+        return self.model.predict(input_data)
+
+# Serve locally: bentoml serve service:FraudDetection
+# Package and containerize: bentoml build, then bentoml containerize &lt;bento_tag&gt;
+</code></pre>
+<hr />
+<h2 id="hardware-considerations">Hardware Considerations</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Recommended Hardware</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small tabular models</td>
+<td>CPU (multi-core)</td>
+<td>GPU overhead not worth it</td>
+</tr>
+<tr>
+<td>Deep learning inference</td>
+<td>GPU (T4, A10, A100)</td>
+<td>Matrix ops are massively parallel</td>
+</tr>
+<tr>
+<td>Large LLMs (70B+)</td>
+<td>Multi-GPU with NVLink</td>
+<td>Memory bandwidth bottleneck</td>
+</tr>
+<tr>
+<td>High-throughput batch</td>
+<td>Large GPU + dynamic batching</td>
+<td>Maximize utilization</td>
+</tr>
+<tr>
+<td>Low-latency real-time</td>
+<td>CPU or T4 + quantization</td>
+<td>Minimize cold start</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="quantization-for-faster-inference">Quantization for Faster Inference</h3>
+<pre><code class="language-python"># PyTorch model quantization (reduces model size, speeds up CPU inference)
+import io
+import torch
+
+# Loading a fully pickled model needs weights_only=False (default is True since PyTorch 2.6);
+# only do this for files you trust
+model = torch.load(&quot;model.pt&quot;, weights_only=False)
+model.eval()
+
+# Dynamic quantization (quantize weights; activations quantized at runtime)
+quantized_model = torch.quantization.quantize_dynamic(
+    model, {torch.nn.Linear}, dtype=torch.qint8
+)
+
+# Size comparison: serialize the state_dict, because quantized Linear weights
+# are packed and no longer show up in .parameters()
+def size_mb(m):
+    buf = io.BytesIO()
+    torch.save(m.state_dict(), buf)
+    return buf.getbuffer().nbytes / 1e6
+
+original_size, quantized_size = size_mb(model), size_mb(quantized_model)
+print(f&quot;Original: {original_size:.1f}MB, Quantized: {quantized_size:.1f}MB&quot;)
+</code></pre>
+<hr />
+<h2 id="scaling--autoscaling">Scaling &amp; Autoscaling</h2>
+<pre><code class="language-yaml"># Kubernetes HorizontalPodAutoscaler for model serving
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fraud-model-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fraud-model
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Pods
+    pods:
+      metric:
+        name: requests_per_second  # Custom metric from Prometheus
+      target:
+        type: AverageValue
+        averageValue: 100
+</code></pre>
+<hr />
+<h2 id="latency-vs-throughput-tradeoffs">Latency vs Throughput Tradeoffs</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Latency Impact</th>
+<th>Throughput Impact</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Batching</td>
+<td>Slight increase (wait time)</td>
+<td>Major increase</td>
+<td>Accept small latency hit for throughput</td>
+</tr>
+<tr>
+<td>Quantization</td>
+<td>Decrease (faster ops)</td>
+<td>Increase</td>
+<td>Slight accuracy decrease</td>
+</tr>
+<tr>
+<td>Model distillation</td>
+<td>Decrease</td>
+<td>Increase</td>
+<td>Accuracy decrease</td>
+</tr>
+<tr>
+<td>Caching predictions</td>
+<td>Major decrease (cache hit)</td>
+<td>Increase</td>
+<td>Stale predictions</td>
+</tr>
+<tr>
+<td>Async serving</td>
+<td>Decrease for client</td>
+<td>Increase</td>
+<td>Result not immediately available</td>
+</tr>
+<tr>
+<td>GPU vs CPU</td>
+<td>Decrease (for large batches)</td>
+<td>Increase</td>
+<td>Cost increase</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between batch and real-time inference?</strong>
+Batch inference processes a large dataset offline (e.g., nightly job scoring all customers). Real-time inference responds to individual requests with low latency (&lt; 100ms). Batch: high throughput, no latency constraint, GPU-efficient. Real-time: low latency, auto-scaling required, may need prediction caching.</p>
+<p><strong>Q2: What is dynamic batching and why is it important for GPU serving?</strong>
+Dynamic batching accumulates multiple incoming requests over a short time window (e.g., 5-10ms), then processes them as a single batch. GPUs are massively parallel: a single request uses &lt; 1% of a GPU's capacity, while a batch of 64 may use 80%. Dynamic batching dramatically improves GPU utilization and cost efficiency without significantly increasing P99 latency.</p>
+<p><strong>Q3: How do you do a canary deployment for an ML model?</strong>
+Route a small percentage (5-10%) of traffic to the new model version. Monitor key metrics: prediction latency, error rates, and most importantly business metrics (CTR, conversion, revenue). Use a load balancer or service mesh (Istio) to split traffic. Gradually increase canary traffic if metrics are good; roll back if they degrade.</p>
+<p><strong>Q4: What is shadow mode and when would you use it?</strong>
+Shadow mode routes all production traffic to both the current model (which serves users) and a new model (which runs in parallel but responses are discarded). You collect predictions from both and compare. Use it when: you want to validate a new model on real production traffic before it affects users, or when offline metrics don't translate well to production.</p>
+<p><strong>Q5: What are the tradeoffs between REST and gRPC for model serving?</strong>
+REST uses JSON over HTTP/1.1: human-readable, easy to debug, broad tooling support, but slower due to JSON serialization. gRPC uses Protocol Buffers over HTTP/2: 5-10x smaller payloads, faster parsing, native streaming, but requires generated client code and browser support via proxy. Use REST for external APIs; gRPC for internal high-throughput services.</p>
+<p><strong>Q6: How would you reduce serving latency for a large deep learning model?</strong></p>
+<ol>
+<li><strong>Quantization</strong>: INT8/FP16 instead of FP32: 2-4x speedup with minimal accuracy loss</li>
+<li><strong>Distillation</strong>: smaller student model trained on teacher outputs</li>
+<li><strong>Pruning</strong>: remove low-importance weights</li>
+<li><strong>TensorRT optimization</strong>: compile for specific GPU hardware</li>
+<li><strong>Prediction caching</strong>: cache frequent/identical inputs</li>
+<li><strong>Model parallelism</strong>: split large models across GPUs</li>
+</ol>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single model instance</td>
+<td>SPOF, latency spikes under load</td>
+<td>Multiple replicas + load balancer</td>
+</tr>
+<tr>
+<td>No health checks</td>
+<td>Dead pods serve traffic</td>
+<td>Liveness + readiness probes</td>
+</tr>
+<tr>
+<td>Loading model on every request</td>
+<td>Catastrophic latency</td>
+<td>Load model once at startup</td>
+</tr>
+<tr>
+<td>No versioning</td>
+<td>Can't roll back bad models</td>
+<td>Tag models with versions; use blue-green</td>
+</tr>
+<tr>
+<td>Ignoring cold start</td>
+<td>First request much slower</td>
+<td>Pre-warm instances; use min-replicas &gt; 0</td>
+</tr>
+<tr>
+<td>Not monitoring prediction distribution</td>
+<td>Silent model drift</td>
+<td>Log prediction distributions; alert on shift</td>
+</tr>
+<tr>
+<td>GPU idle at low traffic</td>
+<td>Expensive waste</td>
+<td>Scale to zero or use CPU for low-traffic</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_mlflow.html">MLflow</a></td>
+<td>Model registry manages versions deployed to serving</td>
+</tr>
+<tr>
+<td><a href="intro_feature_stores.html">Feature Stores</a></td>
+<td>Online feature store is queried during serving</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_kubernetes.html">Kubernetes</a></td>
+<td>Deployments, HPA, and services for model serving</td>
+</tr>
+<tr>
+<td><a href="../devops/intro_docker.html">Docker</a></td>
+<td>Containerizing model servers</td>
+</tr>
+<tr>
+<td><a href="../ai_genai/intro_llmops.html">LLMOps</a></td>
+<td>LLM-specific serving patterns (streaming, batching)</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>Model Serving is an Advanced (🔴) MLOps topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_feature_store.html"><small>Previous</small>Feature Store Guide</a><a rel="next" class="next" href="intro_model_explainability.html"><small>Next</small>Explainability</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_model_serving.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

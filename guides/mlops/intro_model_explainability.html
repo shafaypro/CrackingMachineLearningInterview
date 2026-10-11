@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Explainability: SHAP, LIME, and Interpretability Techniques | Cracking ML Interviews</title>
+<meta name="description" content="Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model&#x27;s…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_explainability.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Explainability: SHAP, LIME, and Interpretability Techniques | Cracking ML Interviews">
+<meta property="og:description" content="Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model&#x27;s…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_explainability.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Explainability: SHAP, LIME, and Interpretability Techniques | Cracking ML Interviews">
+<meta name="twitter:description" content="Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model&#x27;s…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Explainability: SHAP, LIME, and Interpretability Techniques",
+   "description": "Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model's…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_explainability.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Explainability",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_explainability.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Explainability</span></nav>
+<p class="meta"><a href="../../#mlops/intro_model_explainability.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="model-explainability-shap-lime-and-interpretability-techniques">Model Explainability: SHAP, LIME, and Interpretability Techniques</h1>
+<p>Model explainability (also called interpretability or XAI: Explainable AI) refers to the degree to which humans can understand the causes of a model's decisions. As ML models are deployed in high-stakes domains (credit scoring, medical diagnosis, hiring, criminal justice) the ability to explain predictions has become both a technical and regulatory necessity.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-explainability-matters">Why Explainability Matters</a></li>
+<li><a href="#taxonomy-of-explanations">Taxonomy of Explanations</a></li>
+<li><a href="#feature-importance">Feature Importance (Permutation and Impurity-Based)</a></li>
+<li><a href="#shap-values">SHAP Values</a></li>
+<li><a href="#shap-plots">SHAP Plots</a></li>
+<li><a href="#lime">LIME</a></li>
+<li><a href="#integrated-gradients">Integrated Gradients</a></li>
+<li><a href="#partial-dependence-plots-and-ice-curves">Partial Dependence Plots and ICE Curves</a></li>
+<li><a href="#model-cards">Model Cards</a></li>
+<li><a href="#regulatory-compliance-and-the-eu-ai-act">Regulatory Compliance and the EU AI Act</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-explainability-matters">Why Explainability Matters</h2>
+<p><strong>Trust and adoption:</strong> Stakeholders (doctors, loan officers, judges) will not act on a model's output unless they can understand and verify its reasoning.</p>
+<p><strong>Debugging:</strong> Explainability reveals data leakage, spurious correlations, and feature engineering errors faster than aggregate metrics. A model predicting hospital readmission based on &quot;discharge day = Friday&quot; reveals a systematic bias that accuracy scores would miss.</p>
+<p><strong>Fairness and bias auditing:</strong> Understanding which features drive predictions allows identification of proxy discrimination (e.g., zip code as a proxy for race in lending).</p>
+<p><strong>Regulatory compliance:</strong> GDPR Article 22 grants individuals the right to an explanation for automated decisions. The EU AI Act mandates transparency for high-risk AI systems. US financial regulations (ECOA, FCRA) require adverse action notices explaining credit denials.</p>
+<p><strong>Model improvement:</strong> Feature importance explanations guide feature engineering and data collection priorities.</p>
+<hr />
+<h2 id="taxonomy-of-explanations">Taxonomy of Explanations</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope</td>
+<td>Global (entire model) vs. Local (single prediction)</td>
+</tr>
+<tr>
+<td>Model dependency</td>
+<td>Model-agnostic vs. Model-specific</td>
+</tr>
+<tr>
+<td>Output type</td>
+<td>Feature importance, rule extraction, example-based, counterfactual</td>
+</tr>
+<tr>
+<td>Fidelity</td>
+<td>Exact (inherent) vs. Approximate (post-hoc surrogate)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Global explanations</strong> describe overall model behavior: &quot;Which features does this model rely on most across the training set?&quot;</p>
+<p><strong>Local explanations</strong> describe a single prediction: &quot;Why did the model reject this specific loan application?&quot;</p>
+<hr />
+<h2 id="feature-importance">Feature Importance</h2>
+<h3 id="impurity-based-mean-decrease-in-impurity">Impurity-Based (Mean Decrease in Impurity)</h3>
+<p>Built into tree-based models. Each feature's importance is the total reduction in node impurity (Gini or entropy) weighted by the number of samples that pass through that node.</p>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+import matplotlib.pyplot as plt
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+importances = pd.Series(
+    model.feature_importances_,
+    index=X_train.columns
+).sort_values(ascending=False)
+
+importances.head(15).plot(kind=&quot;bar&quot;, figsize=(12, 5))
+plt.title(&quot;Impurity-Based Feature Importances&quot;)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p><strong>Limitation:</strong> Biased toward high-cardinality features (many unique values). A random ID column can appear important.</p>
+<h3 id="permutation-importance">Permutation Importance</h3>
+<p>More reliable: measures how much model performance drops when a feature's values are randomly shuffled, breaking its relationship with the target.</p>
+<pre><code class="language-python">from sklearn.inspection import permutation_importance
+
+result = permutation_importance(
+    model, X_val, y_val,
+    n_repeats=30,
+    random_state=42,
+    scoring=&quot;roc_auc&quot;
+)
+
+perm_df = pd.DataFrame({
+    &quot;feature&quot;: X_val.columns,
+    &quot;importance_mean&quot;: result.importances_mean,
+    &quot;importance_std&quot;: result.importances_std
+}).sort_values(&quot;importance_mean&quot;, ascending=False)
+
+print(perm_df.head(10))
+</code></pre>
+<p><strong>Limitation:</strong> Correlated features split importance between themselves, underestimating the combined importance of a feature group.</p>
+<hr />
+<h2 id="shap-values">SHAP Values</h2>
+<p>SHAP (SHapley Additive exPlanations) is grounded in cooperative game theory. For a prediction, the Shapley value of a feature is its <strong>average marginal contribution</strong> across all possible subsets (coalitions) of features.</p>
+<p><strong>Key property (SHAP axioms):</strong></p>
+<ul>
+<li><strong>Efficiency:</strong> All SHAP values sum to the difference between the prediction and the base rate (expected model output)</li>
+<li><strong>Symmetry:</strong> Features with identical contributions get identical SHAP values</li>
+<li><strong>Dummy:</strong> Features that never affect any prediction get SHAP value zero</li>
+<li><strong>Linearity:</strong> SHAP values are additive across models</li>
+</ul>
+<h3 id="the-core-formula">The Core Formula</h3>
+<pre><code>f(x) = base_value + SHAP_1 + SHAP_2 + ... + SHAP_n
+</code></pre>
+<p>Where <code>base_value = E[f(X)]</code> is the average prediction across the training set.</p>
+<h3 id="treeshap">TreeSHAP</h3>
+<p>TreeSHAP is an exact, polynomial-time algorithm for tree-based models (decision trees, random forests, XGBoost, LightGBM, CatBoost). It runs in O(TLD²) time where T is the number of trees, L is maximum leaves, and D is maximum depth.</p>
+<pre><code class="language-python">import shap
+import xgboost as xgb
+
+model = xgb.XGBClassifier(n_estimators=100, max_depth=6)
+model.fit(X_train, y_train)
+
+# Create the SHAP explainer
+explainer = shap.TreeExplainer(model)
+
+# Compute SHAP values for the test set
+shap_values = explainer.shap_values(X_test)
+# For classifiers: shap_values may be a list [class_0_shap, class_1_shap]
+# or a single array (XGBoost log-odds output)
+
+print(f&quot;SHAP values shape: {shap_values.shape}&quot;)  # (n_samples, n_features)
+print(f&quot;Base value: {explainer.expected_value:.4f}&quot;)
+
+# Verify additivity for one sample (TreeExplainer explains XGBoost in log-odds space)
+sample_idx = 0
+log_odds = model.predict(X_test.iloc[[sample_idx]], output_margin=True)[0]
+shap_sum = explainer.expected_value + shap_values[sample_idx].sum()
+print(f&quot;Model output (log-odds): {log_odds:.4f}&quot;)
+print(f&quot;Base + SHAP sum: {shap_sum:.4f}&quot;)  # Should match
+
+# Newer unified API: calling the explainer returns a shap.Explanation object
+# that the shap.plots.* functions (beeswarm, bar, waterfall) consume directly
+explanation = explainer(X_test)
+shap.plots.waterfall(explanation[0])
+</code></pre>
+<h3 id="kernelshap">KernelSHAP</h3>
+<p>Model-agnostic approximation using weighted linear regression on feature coalitions. Much slower than TreeSHAP: use only when TreeSHAP is not available.</p>
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+
+pipeline = Pipeline([(&quot;scaler&quot;, StandardScaler()), (&quot;svc&quot;, SVC(probability=True))])
+pipeline.fit(X_train, y_train)
+
+# Use a background dataset (summarized for speed)
+background = shap.kmeans(X_train, 50)  # 50 representative samples
+
+explainer = shap.KernelExplainer(pipeline.predict_proba, background)
+
+# Compute SHAP values for a small test set (KernelSHAP is slow)
+shap_values = explainer.shap_values(X_test[:100], nsamples=500)
+</code></pre>
+<h3 id="deepshap">DeepSHAP</h3>
+<p>For neural networks: uses a modified backpropagation approach based on DeepLIFT:</p>
+<pre><code class="language-python">import torch
+import shap
+
+# background = sample of training data as tensor
+background = torch.tensor(X_train.values[:100], dtype=torch.float32)
+test_input = torch.tensor(X_test.values[:10], dtype=torch.float32)
+
+explainer = shap.DeepExplainer(pytorch_model, background)
+shap_values = explainer.shap_values(test_input)
+</code></pre>
+<hr />
+<h2 id="shap-plots">SHAP Plots</h2>
+<h3 id="summary-plot-global">Summary Plot (Global)</h3>
+<p>Shows feature importance and direction of effect across the whole dataset:</p>
+<pre><code class="language-python">import shap
+
+# Bar plot: mean absolute SHAP value per feature
+shap.summary_plot(shap_values, X_test, plot_type=&quot;bar&quot;)
+
+# Beeswarm plot: each point is one sample, color = feature value
+shap.summary_plot(shap_values, X_test)
+# Red = high feature value, Blue = low feature value
+# X-axis = SHAP value (impact on model output)
+</code></pre>
+<p><strong>Reading a beeswarm plot:</strong> A feature with red dots on the right means high values of that feature increase the prediction. Blue dots on the left means low values of that feature decrease the prediction.</p>
+<h3 id="waterfall-plot-local">Waterfall Plot (Local)</h3>
+<p>Explains a single prediction by showing each feature's contribution from the base value to the final prediction:</p>
+<pre><code class="language-python"># Explain a single prediction
+shap.waterfall_plot(shap.Explanation(
+    values=shap_values[0],
+    base_values=explainer.expected_value,
+    data=X_test.iloc[0],
+    feature_names=X_test.columns.tolist()
+))
+</code></pre>
+<h3 id="force-plot-local">Force Plot (Local)</h3>
+<p>An alternative single-prediction visualization that shows forces pushing toward and away from the base value:</p>
+<pre><code class="language-python">shap.force_plot(
+    explainer.expected_value,
+    shap_values[0],
+    X_test.iloc[0],
+    matplotlib=True
+)
+</code></pre>
+<h3 id="dependence-plot">Dependence Plot</h3>
+<p>Shows how one feature's SHAP value changes as the feature value changes, with interaction effects colored by a second feature:</p>
+<pre><code class="language-python"># Automatic interaction feature selection
+shap.dependence_plot(&quot;age&quot;, shap_values, X_test)
+
+# Explicitly set interaction feature
+shap.dependence_plot(&quot;income&quot;, shap_values, X_test, interaction_index=&quot;credit_score&quot;)
+</code></pre>
+<hr />
+<h2 id="lime">LIME</h2>
+<p>LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the black-box model locally with an interpretable model (typically a sparse linear model).</p>
+<p><strong>Algorithm:</strong></p>
+<ol>
+<li>Take the instance to explain</li>
+<li>Generate perturbed samples around it</li>
+<li>Get the black-box model's predictions for those samples</li>
+<li>Weight samples by proximity to the original instance</li>
+<li>Fit a sparse linear model on the weighted samples</li>
+<li>Return coefficients as feature importances for that prediction</li>
+</ol>
+<pre><code class="language-python">import lime
+import lime.lime_tabular
+
+explainer = lime.lime_tabular.LimeTabularExplainer(
+    training_data=X_train.values,
+    feature_names=X_train.columns.tolist(),
+    class_names=[&quot;Legitimate&quot;, &quot;Fraud&quot;],
+    mode=&quot;classification&quot;,
+    discretize_continuous=True
+)
+
+# Explain a single prediction
+instance = X_test.iloc[0].values
+explanation = explainer.explain_instance(
+    data_row=instance,
+    predict_fn=model.predict_proba,
+    num_features=10,
+    num_samples=5000
+)
+
+# Show explanation
+explanation.show_in_notebook()
+
+# Get feature contributions as a list of (feature, weight) tuples
+print(explanation.as_list())
+</code></pre>
+<p><strong>LIME for text classification:</strong></p>
+<pre><code class="language-python">from lime.lime_text import LimeTextExplainer
+
+text_explainer = LimeTextExplainer(class_names=[&quot;Negative&quot;, &quot;Positive&quot;])
+exp = text_explainer.explain_instance(
+    text_instance=&quot;The product exceeded my expectations&quot;,
+    classifier_fn=vectorizer_and_model_pipeline.predict_proba,
+    num_features=10
+)
+exp.show_in_notebook(text=True)
+</code></pre>
+<p><strong>SHAP vs. LIME:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>SHAP</th>
+<th>LIME</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Theoretical basis</td>
+<td>Game theory (Shapley values)</td>
+<td>Local linear approximation</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>Always consistent</td>
+<td>Can vary with sampling</td>
+</tr>
+<tr>
+<td>Global explanations</td>
+<td>Yes (aggregate SHAP)</td>
+<td>No (local only)</td>
+</tr>
+<tr>
+<td>Speed (trees)</td>
+<td>Fast (TreeSHAP)</td>
+<td>Slow (many model calls)</td>
+</tr>
+<tr>
+<td>Speed (black-box)</td>
+<td>Slow (KernelSHAP)</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>Feature interactions</td>
+<td>Captured</td>
+<td>Not captured</td>
+</tr>
+<tr>
+<td>Text/image support</td>
+<td>Limited</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="integrated-gradients">Integrated Gradients</h2>
+<p>Integrated Gradients (IG) is an attribution method for differentiable models (neural networks). It computes the integral of gradients along a path from a baseline input to the actual input.</p>
+<pre><code>IG_i(x) = (x_i - x'_i) * integral[0→1] of (∂F(x' + α(x - x')) / ∂x_i) dα
+</code></pre>
+<p>Where <code>x'</code> is the baseline (e.g., all-zeros or all-black image) and <code>x</code> is the actual input.</p>
+<pre><code class="language-python"># Using Captum (PyTorch interpretability library)
+from captum.attr import IntegratedGradients
+import torch
+
+model.eval()
+ig = IntegratedGradients(model)
+
+input_tensor = torch.tensor(X_test.values[:1], dtype=torch.float32, requires_grad=True)
+baseline = torch.zeros_like(input_tensor)  # Baseline: all-zero input
+
+attributions, delta = ig.attribute(
+    inputs=input_tensor,
+    baselines=baseline,
+    target=1,  # Explain class 1 prediction
+    n_steps=300,
+    return_convergence_delta=True
+)
+
+print(f&quot;Convergence delta: {delta.item():.6f}&quot;)  # Should be close to 0
+print(f&quot;Attribution magnitudes: {attributions.detach().numpy()}&quot;)
+</code></pre>
+<p><strong>Completeness axiom:</strong> IG attributions sum to <code>F(x) - F(x')</code> (exactly in the limit; the convergence delta measures the numerical error), unlike plain gradients.</p>
+<hr />
+<h2 id="partial-dependence-plots-and-ice-curves">Partial Dependence Plots and ICE Curves</h2>
+<h3 id="partial-dependence-plots-pdp">Partial Dependence Plots (PDP)</h3>
+<p>Show the marginal effect of one or two features on the model's prediction, averaging over the distribution of all other features:</p>
+<pre><code class="language-python">from sklearn.inspection import PartialDependenceDisplay
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# 1D PDP
+PartialDependenceDisplay.from_estimator(
+    model,
+    X_train,
+    features=[&quot;income&quot;, &quot;age&quot;],
+    ax=axes
+)
+plt.suptitle(&quot;Partial Dependence Plots&quot;)
+plt.tight_layout()
+
+# 2D interaction PDP
+PartialDependenceDisplay.from_estimator(
+    model,
+    X_train,
+    features=[(&quot;income&quot;, &quot;age&quot;)],  # Tuple for 2D
+)
+</code></pre>
+<p><strong>Limitation:</strong> PDPs show average effects and can be misleading when features are correlated (the averaged combinations may be unrealistic).</p>
+<h3 id="individual-conditional-expectation-ice-curves">Individual Conditional Expectation (ICE) Curves</h3>
+<p>ICE plots show the PDP for each individual sample, revealing heterogeneous effects:</p>
+<pre><code class="language-python">PartialDependenceDisplay.from_estimator(
+    model,
+    X_train,
+    features=[&quot;income&quot;],
+    kind=&quot;both&quot;,  # &quot;average&quot; = PDP, &quot;individual&quot; = ICE, &quot;both&quot; = both
+    subsample=200,  # Plot 200 random samples
+    alpha=0.1  # Transparency for individual lines
+)
+</code></pre>
+<hr />
+<h2 id="model-cards">Model Cards</h2>
+<p>A Model Card is a short document accompanying a trained model that provides transparency about its intended use, performance, limitations, and ethical considerations. Introduced by Google in 2019.</p>
+<p><strong>Standard sections:</strong></p>
+<ul>
+<li>Model details (architecture, training data, date, version)</li>
+<li>Intended use and out-of-scope uses</li>
+<li>Factors and disaggregated evaluation (performance by subgroup)</li>
+<li>Metrics and evaluation data</li>
+<li>Ethical considerations</li>
+<li>Caveats and recommendations</li>
+</ul>
+<pre><code class="language-python"># Using the model-card-toolkit library
+from model_card_toolkit import ModelCardToolkit
+
+mct = ModelCardToolkit()
+model_card = mct.scaffold_assets()
+
+model_card.model_details.name = &quot;Fraud Detection Model v2.3&quot;
+model_card.model_details.overview = (
+    &quot;XGBoost classifier predicting transaction fraud probability. &quot;
+    &quot;Trained on 12 months of transaction data.&quot;
+)
+
+# Add quantitative analysis (fields are Python dataclasses/lists in toolkit 2.x)
+import model_card_toolkit as mctlib
+model_card.quantitative_analysis.performance_metrics.append(
+    mctlib.PerformanceMetric(type=&quot;AUC-ROC&quot;, value=&quot;0.934&quot;, slice=&quot;Overall&quot;)
+)
+
+mct.update_model_card(model_card)
+mct.export_format(model_card=model_card, template_path=&quot;template.html&quot;)
+</code></pre>
+<hr />
+<h2 id="regulatory-compliance-and-the-eu-ai-act">Regulatory Compliance and the EU AI Act</h2>
+<h3 id="eu-ai-act-2024">EU AI Act (2024)</h3>
+<p>The EU AI Act classifies AI systems by risk level:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk Level</th>
+<th>Examples</th>
+<th>Requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unacceptable</td>
+<td>Social scoring, real-time biometric surveillance</td>
+<td>Prohibited</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Credit scoring, hiring, medical diagnosis, law enforcement</td>
+<td>Transparency, human oversight, explainability, data governance</td>
+</tr>
+<tr>
+<td>Limited</td>
+<td>Chatbots, deepfakes</td>
+<td>Disclosure obligations</td>
+</tr>
+<tr>
+<td>Minimal</td>
+<td>Spam filters, AI in games</td>
+<td>No specific obligations</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Technical requirements for high-risk systems:</strong></p>
+<ul>
+<li>Logging of operations (audit trail)</li>
+<li>Accuracy, robustness, and cybersecurity measures</li>
+<li>Transparency documentation (technical documentation + instructions for use)</li>
+<li>Human oversight mechanisms</li>
+<li>Conformity assessment before market deployment</li>
+</ul>
+<h3 id="gdpr-article-22-right-to-explanation">GDPR Article 22: Right to Explanation</h3>
+<p>When a decision is based solely on automated processing and produces legal or similarly significant effects, the data subject has the right to:</p>
+<ul>
+<li>Obtain human intervention</li>
+<li>Express their point of view</li>
+<li>Contest the decision</li>
+</ul>
+<p>The &quot;explanation&quot; part comes from Recital 71 and from Articles 13-15, which require &quot;meaningful information about the logic involved&quot;. Its exact legal scope is debated, so treat per-decision explanations as good practice rather than a precisely defined obligation.</p>
+<p><strong>Technical implementation:</strong> Local explanations (SHAP waterfall, LIME) per prediction satisfy the spirit of the right to explanation. Store explanations alongside predictions in your serving logs.</p>
+<h3 id="us-regulations">US Regulations</h3>
+<ul>
+<li><strong>ECOA / Regulation B:</strong> Adverse action notices must include specific reasons for credit denial</li>
+<li><strong>FCRA:</strong> Consumers must be notified of adverse decisions based on credit reports</li>
+<li><strong>SR 11-7 (Fed guidance on model risk):</strong> Requires conceptual soundness validation, including understanding of model drivers</li>
+</ul>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between global and local explainability? Give an example of each.</strong></p>
+<p>Global explainability describes the overall behavior of a model across all predictions. Example: a SHAP summary plot showing that <code>income</code> is the most important feature overall. Local explainability describes why the model made a specific individual prediction. Example: a SHAP waterfall plot showing that for applicant #4521, a low credit score contributed -0.3 and high debt-to-income ratio contributed -0.2 to their denial.</p>
+<p><strong>Q2: Why are SHAP values theoretically superior to permutation importance?</strong></p>
+<p>SHAP values satisfy four game-theoretic axioms (efficiency, symmetry, dummy, linearity) that provide mathematical guarantees about fairness of attribution. Permutation importance suffers from: correlated features splitting importance arbitrarily, dependence on the choice of evaluation metric, and sensitivity to the number of permutation repeats. SHAP is also additive (individual SHAP values sum to the prediction minus the base value), making it directly interpretable as contributions.</p>
+<p><strong>Q3: What is the computational complexity of TreeSHAP vs. KernelSHAP?</strong></p>
+<p>TreeSHAP runs in O(TLD²): polynomial in the number of trees T, leaves L, and depth D. It can explain a prediction in milliseconds. KernelSHAP runs in O(2^M) in the worst case (exponential in M features), but in practice uses sampling, making it O(S × M) where S is the number of samples. For a model with 100 features, KernelSHAP might require minutes per prediction while TreeSHAP takes milliseconds.</p>
+<p><strong>Q4: How does LIME ensure that local explanations are faithful to the black-box model?</strong></p>
+<p>LIME weights perturbed samples by their proximity to the explained instance using an exponential kernel: <code>w(z) = exp(-D(x, z)² / σ²)</code>. Points closer to x get higher weight, so the sparse linear model is primarily fitted on the local neighborhood of x. However, faithfulness is not guaranteed: LIME is an approximation. The <code>num_samples</code> parameter controls the quality of the approximation.</p>
+<p><strong>Q5: What is the baseline in Integrated Gradients and how do you choose it?</strong></p>
+<p>The baseline is the reference input representing &quot;absence of information&quot; or &quot;neutral input.&quot; Common choices: all-zeros for tabular/image data, the all-black image for vision, the all-[PAD] token sequence for text, or the mean training example. The choice significantly affects attributions: the baseline should represent a &quot;no information&quot; state for the problem domain. For text, the [MASK] token is often preferred over [PAD].</p>
+<p><strong>Q6: How would you use SHAP to debug a data leakage problem?</strong></p>
+<p>Train the model and compute SHAP values. If a feature with extremely high SHAP importance is one that should not be causally related to the target (e.g., a timestamp, an ID, or a feature computed after the prediction time), this signals leakage. Plot the SHAP dependence plot for that feature: if it shows an unnaturally perfect relationship, investigate the feature's data pipeline. TreeSHAP makes this fast enough to run in CI/CD after every training run.</p>
+<p><strong>Q7: What is a partial dependence plot and when would you prefer ICE curves?</strong></p>
+<p>A PDP shows the average marginal effect of a feature by averaging predictions over all other feature values. ICE curves show this effect for each individual data point. Prefer ICE when you suspect the relationship is heterogeneous: for example, if income increases prediction for some customers but decreases it for others (a crossing pattern in ICE reveals an interaction that the PDP would average away). PDPs can be misleading when features are highly correlated.</p>
+<p><strong>Q8: Under GDPR, what does &quot;right to explanation&quot; require technically?</strong></p>
+<p>The regulation does not mandate a specific technical method, but requires &quot;meaningful information about the logic involved&quot; in automated decisions. In practice: (1) store local explanations (e.g., top-N SHAP features) alongside each prediction in a log, (2) build an API to retrieve explanations for a given decision ID, (3) translate technical attributions into human-readable language (e.g., &quot;Your application was primarily affected by your debt-to-income ratio (45%) which exceeds our threshold of 35%&quot;).</p>
+<p><strong>Q9: How can you use SHAP for feature selection?</strong></p>
+<p>Compute mean absolute SHAP values across the training set. Features with near-zero mean |SHAP| can be safely removed. This is more reliable than impurity-based importance because: it is not biased toward high-cardinality features, it accounts for interactions, and it directly measures impact on the model's output in interpretable units. You can also plot SHAP interaction values to identify redundant correlated features.</p>
+<p><strong>Q10: What is a model card and what should it contain for a high-risk AI system?</strong></p>
+<p>A model card is a brief transparency document for a model. For high-risk AI systems (under the EU AI Act), it should include: (1) model architecture and training details, (2) intended use cases and explicitly out-of-scope uses, (3) training data description including known biases, (4) performance metrics disaggregated by relevant subgroups (age, gender, race, geographic region), (5) fairness metrics and known failure modes, (6) ethical considerations and mitigation strategies, (7) human oversight requirements, and (8) versioning and update history.</p>
+<p><strong>Q11: When would SHAP give misleading explanations?</strong></p>
+<p>Common estimators (KernelSHAP, interventional TreeSHAP) treat features as independent: the &quot;absent features&quot; in a coalition are filled with values drawn from their marginal (background) distribution. When features are highly correlated, this creates feature combinations that never occur naturally, and the model's behavior on those off-manifold points drives the attribution. For example, if height and weight are correlated, a model may rely on either one, and SHAP can assign high importance to one and near-zero to the other depending on what the model happened to learn, not on their real-world relevance.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<p><strong>1. Confusing model explanations with causal explanations</strong>
+SHAP, LIME, and PDP describe the model's behavior, not the real-world causal structure. A high SHAP value for &quot;zip code&quot; explains the model's decision but does not mean zip code causes fraud. Never present model explanations as causal claims without a causal analysis.</p>
+<p><strong>2. Trusting impurity-based importance for feature selection</strong>
+Impurity-based importance inflates the importance of high-cardinality features and is measured on training data, making it unreliable. Always use permutation importance or SHAP for reliable feature selection.</p>
+<p><strong>3. Using KernelSHAP on large datasets without sampling</strong>
+KernelSHAP makes <code>nsamples</code> calls to the model per explained instance. For 10,000 test samples and <code>nsamples=500</code>, that is 5 million model calls. Always use TreeSHAP for tree models and only use KernelSHAP on a representative subsample.</p>
+<p><strong>4. Ignoring SHAP interaction effects</strong>
+The main SHAP value for a feature includes its interaction effects with other features, which can be misleading. Use SHAP interaction values (<code>shap.TreeExplainer(model).shap_interaction_values(X)</code>) to separate main effects from pairwise interaction effects explicitly.</p>
+<p><strong>5. Presenting PDPs for correlated features</strong>
+A PDP for income marginalized over all other features may show effects for income levels that never co-occur with realistic values of correlated features (e.g., very high income with very high debt). Use Accumulated Local Effects (ALE) plots as a PDP alternative when features are correlated.</p>
+<p><strong>6. Not checking LIME stability</strong>
+LIME uses random sampling, so explanations can vary between runs. Always run LIME multiple times and check consistency. If explanations change significantly across runs, increase <code>num_samples</code> or use SHAP instead.</p>
+<p><strong>7. Applying explanation methods to the wrong model stage</strong>
+Always explain the model used in production, including preprocessing pipelines and post-processing steps. Explaining only the core model while ignoring imputation, scaling, or calibration gives an incomplete picture.</p>
+<p><strong>8. Treating SHAP as ground truth for debugging</strong>
+SHAP explains what the model learned, not what is correct. A model that perfectly memorized spurious correlations will have high-confidence SHAP explanations pointing to irrelevant features. Always validate SHAP findings against domain knowledge.</p>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="intro_mlflow.html">Intro to MLflow</a>: Tracking experiments and managing model lifecycle</li>
+<li><a href="intro_model_serving.html">Intro to Model Serving</a>: Deploying models and logging predictions for explanation storage</li>
+<li><a href="intro_data_quality.html">Intro to Data Quality</a>: Data drift detection and validation</li>
+<li><a href="intro_feature_stores.html">Intro to Feature Stores</a>: Managing features that feed into explainability analyses</li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a>: Metric choice, calibration, and slicing metrics by segment to surface bias</li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_model_serving.html"><small>Previous</small>Model Serving</a><a rel="next" class="next" href="intro_data_quality.html"><small>Next</small>Data Quality</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_model_explainability.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

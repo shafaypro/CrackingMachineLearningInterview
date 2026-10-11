@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ollama: Run LLMs Locally Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to Ollama: the simplest way to run large language models on your local machine.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_ollama.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Ollama: Run LLMs Locally Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to Ollama: the simplest way to run large language models on your local machine.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_ollama.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ollama: Run LLMs Locally Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to Ollama: the simplest way to run large language models on your local machine.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Ollama: Run LLMs Locally",
+   "description": "A guide to Ollama: the simplest way to run large language models on your local machine.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_ollama.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Frameworks & Tools",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#frameworks--tools"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Ollama",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/frameworks/intro_ollama.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#frameworks--tools">Frameworks &amp; Tools</a> <span aria-hidden="true">/</span> <span aria-current="page">Ollama</span></nav>
+<p class="meta"><a href="../../#frameworks/intro_ollama.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ollama-run-llms-locally">Ollama: Run LLMs Locally</h1>
+<p>A guide to Ollama: the simplest way to run large language models on your local machine.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-ollama">What is Ollama</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#cli-commands">CLI Commands</a></li>
+<li><a href="#popular-models">Popular Models</a></li>
+<li><a href="#modelfile-custom-models">Modelfile: Custom Models</a></li>
+<li><a href="#rest-api">REST API</a></li>
+<li><a href="#python-integration">Python Integration</a></li>
+<li><a href="#langchain--ollama">LangChain + Ollama</a></li>
+<li><a href="#llamaindex--ollama">LlamaIndex + Ollama</a></li>
+<li><a href="#multi-modal-vision-with-llava">Multi-Modal Vision with LLaVA</a></li>
+<li><a href="#embedding-models">Embedding Models</a></li>
+<li><a href="#performance-tuning">Performance Tuning</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="what-is-ollama">What is Ollama</h2>
+<p>Ollama is an open-source tool that allows you to run large language models (LLMs) locally on your machine. It handles model downloading, quantization, hardware detection (CPU/GPU), and provides a simple CLI and REST API: all with a single command.</p>
+<p><strong>Why Ollama?</strong></p>
+<ul>
+<li>Zero-cost inference after download</li>
+<li>Privacy: data never leaves your machine</li>
+<li>Works offline</li>
+<li>OpenAI-compatible REST API</li>
+<li>Supports macOS (Apple Silicon), Linux, and Windows</li>
+</ul>
+<hr />
+<h2 id="installation">Installation</h2>
+<h3 id="macos">macOS</h3>
+<pre><code class="language-bash"># Option 1: Download the installer from ollama.com
+# Option 2: Homebrew
+brew install ollama
+
+# Start the Ollama server
+ollama serve
+</code></pre>
+<h3 id="linux">Linux</h3>
+<pre><code class="language-bash"># Official install script
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Ollama runs as a systemd service automatically
+# Check status
+systemctl status ollama
+</code></pre>
+<h3 id="windows">Windows</h3>
+<p>Download the installer from <a href="https://ollama.com/download">ollama.com/download</a> and run it. Ollama will start as a background service.</p>
+<h3 id="verify-installation">Verify Installation</h3>
+<pre><code class="language-bash">ollama --version
+# ollama version is 0.x.y
+</code></pre>
+<hr />
+<h2 id="cli-commands">CLI Commands</h2>
+<h3 id="core-commands">Core Commands</h3>
+<pre><code class="language-bash"># Run a model interactively (pulls if not present)
+ollama run llama3.2
+
+# Run with a specific prompt (non-interactive)
+ollama run llama3.2 &quot;Explain quantum computing in simple terms&quot;
+
+# Pull a model without running it
+ollama pull mistral
+
+# List downloaded models
+ollama list
+
+# Show model information and metadata
+ollama show llama3.2
+
+# Show running models and their memory usage
+ollama ps
+
+# Remove a model
+ollama rm mistral
+
+# Copy a model
+ollama cp llama3.2 my-custom-llama
+
+# Push a model to Ollama Hub (requires account)
+ollama push username/mymodel
+
+# Start the API server (default: http://localhost:11434)
+ollama serve
+</code></pre>
+<h3 id="running-models">Running Models</h3>
+<pre><code class="language-bash"># Basic chat
+ollama run llama3.2
+
+# With a system prompt: `ollama run` has no --system flag. Inside the
+# interactive session use /set system, or bake it into a Modelfile (below)
+ollama run llama3.2
+&gt;&gt;&gt; /set system &quot;You are a senior Python developer&quot;
+
+# One-shot completion
+echo &quot;Write a Python fibonacci function&quot; | ollama run codellama
+
+# Pipe input from file
+cat code.py | ollama run codellama &quot;Review this code for bugs&quot;
+
+# Specify model variant (parameter count)
+ollama run llama3.2:3b        # 3 billion parameter model
+ollama run llama3.2:latest    # Default (latest)
+ollama run mistral:7b-instruct-q4_0  # Specific quantization
+</code></pre>
+<hr />
+<h2 id="popular-models">Popular Models</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Parameters</th>
+<th>Size (4-bit)</th>
+<th>Strengths</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama3.2</strong></td>
+<td>3B / 1B</td>
+<td>~2GB / ~0.8GB</td>
+<td>Fast, great for low-end hardware</td>
+<td><code>ollama run llama3.2</code></td>
+</tr>
+<tr>
+<td><strong>llama3.1</strong></td>
+<td>8B / 70B</td>
+<td>~4.7GB / ~40GB</td>
+<td>Strong general reasoning</td>
+<td><code>ollama run llama3.1</code></td>
+</tr>
+<tr>
+<td><strong>mistral</strong></td>
+<td>7B</td>
+<td>~4GB</td>
+<td>Fast, great instruction following</td>
+<td><code>ollama run mistral</code></td>
+</tr>
+<tr>
+<td><strong>mistral-nemo</strong></td>
+<td>12B</td>
+<td>~7GB</td>
+<td>Multilingual, long context</td>
+<td><code>ollama run mistral-nemo</code></td>
+</tr>
+<tr>
+<td><strong>gemma2</strong></td>
+<td>9B / 27B</td>
+<td>~5.5GB / ~15GB</td>
+<td>Google's model, strong benchmarks</td>
+<td><code>ollama run gemma2</code></td>
+</tr>
+<tr>
+<td><strong>phi3</strong></td>
+<td>3.8B / 14B</td>
+<td>~2.2GB / ~8GB</td>
+<td>Microsoft, small but capable</td>
+<td><code>ollama run phi3</code></td>
+</tr>
+<tr>
+<td><strong>phi4</strong></td>
+<td>14B</td>
+<td>~8.5GB</td>
+<td>Microsoft, strong reasoning for its size</td>
+<td><code>ollama run phi4</code></td>
+</tr>
+<tr>
+<td><strong>qwen2.5</strong></td>
+<td>7B / 72B</td>
+<td>~4.4GB / ~44GB</td>
+<td>Alibaba, strong in code and math</td>
+<td><code>ollama run qwen2.5</code></td>
+</tr>
+<tr>
+<td><strong>codellama</strong></td>
+<td>7B / 13B</td>
+<td>~3.8GB / ~7.4GB</td>
+<td>Meta's code-specialized model</td>
+<td><code>ollama run codellama</code></td>
+</tr>
+<tr>
+<td><strong>deepseek-r1</strong></td>
+<td>8B / 70B</td>
+<td>~5GB / ~42GB</td>
+<td>Reasoning model, chain-of-thought</td>
+<td><code>ollama run deepseek-r1</code></td>
+</tr>
+<tr>
+<td><strong>deepseek-coder</strong></td>
+<td>6.7B / 33B</td>
+<td>~3.8GB / ~19GB</td>
+<td>Strong code generation</td>
+<td><code>ollama run deepseek-coder</code></td>
+</tr>
+<tr>
+<td><strong>llava</strong></td>
+<td>7B / 13B</td>
+<td>~4.5GB</td>
+<td>Vision+language (multimodal)</td>
+<td><code>ollama run llava</code></td>
+</tr>
+<tr>
+<td><strong>moondream</strong></td>
+<td>1.8B</td>
+<td>~1.2GB</td>
+<td>Lightweight vision model</td>
+<td><code>ollama run moondream</code></td>
+</tr>
+<tr>
+<td><strong>nomic-embed-text</strong></td>
+<td>-</td>
+<td>~270MB</td>
+<td>Text embeddings</td>
+<td><code>ollama run nomic-embed-text</code></td>
+</tr>
+<tr>
+<td><strong>mxbai-embed-large</strong></td>
+<td>-</td>
+<td>~670MB</td>
+<td>High-quality embeddings</td>
+<td><code>ollama run mxbai-embed-large</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="modelfile-custom-models">Modelfile: Custom Models</h2>
+<p>A Modelfile is a configuration file that defines how to build a custom Ollama model: similar to a Dockerfile.</p>
+<h3 id="basic-modelfile">Basic Modelfile</h3>
+<pre><code class="language-dockerfile"># Modelfile
+FROM llama3.2
+
+# Set system prompt
+SYSTEM &quot;&quot;&quot;
+You are an expert Python developer and code reviewer.
+You provide concise, accurate code reviews and follow PEP 8 standards.
+Always explain your reasoning.
+&quot;&quot;&quot;
+
+# Set parameters
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER num_ctx 4096
+PARAMETER num_predict 1024
+</code></pre>
+<h3 id="build-and-run-custom-model">Build and Run Custom Model</h3>
+<pre><code class="language-bash">ollama create python-reviewer -f Modelfile
+ollama run python-reviewer
+</code></pre>
+<h3 id="advanced-modelfile-options">Advanced Modelfile Options</h3>
+<pre><code class="language-dockerfile">FROM llama3.1:8b
+
+# Quantization level
+# FROM llama3.1:8b-instruct-q4_K_M
+
+# System prompt
+SYSTEM &quot;&quot;&quot;You are a helpful AI assistant specializing in data science.&quot;&quot;&quot;
+
+# Temperature (creativity): 0.0 = deterministic, 1.0 = very creative
+PARAMETER temperature 0.8
+
+# Top-p nucleus sampling
+PARAMETER top_p 0.95
+
+# Top-k: number of tokens to consider at each step
+PARAMETER top_k 50
+
+# Context window size (tokens)
+PARAMETER num_ctx 8192
+
+# Max tokens to generate
+PARAMETER num_predict 2048
+
+# Stop sequences
+PARAMETER stop &quot;&lt;|eot_id|&gt;&quot;
+PARAMETER stop &quot;&lt;|end_of_text|&gt;&quot;
+
+# Number of layers to offload to GPU (default: chosen automatically)
+PARAMETER num_gpu 35
+
+# Number of threads for CPU
+PARAMETER num_thread 8
+</code></pre>
+<h3 id="modelfile-with-gguf">Modelfile with GGUF</h3>
+<pre><code class="language-dockerfile"># Use your own GGUF model file
+FROM /path/to/model.gguf
+
+SYSTEM &quot;You are a specialized assistant.&quot;
+PARAMETER temperature 0.7
+</code></pre>
+<hr />
+<h2 id="rest-api">REST API</h2>
+<p>Ollama exposes an HTTP API at <code>http://localhost:11434</code>.</p>
+<h3 id="generate-non-streaming">Generate (Non-Streaming)</h3>
+<pre><code class="language-bash">curl http://localhost:11434/api/generate \
+  -d '{
+    &quot;model&quot;: &quot;llama3.2&quot;,
+    &quot;prompt&quot;: &quot;Why is the sky blue?&quot;,
+    &quot;stream&quot;: false
+  }'
+</code></pre>
+<h3 id="generate-streaming">Generate (Streaming)</h3>
+<pre><code class="language-bash">curl http://localhost:11434/api/generate \
+  -d '{
+    &quot;model&quot;: &quot;llama3.2&quot;,
+    &quot;prompt&quot;: &quot;Explain backpropagation step by step&quot;,
+    &quot;stream&quot;: true
+  }'
+</code></pre>
+<h3 id="chat-completion-native-api">Chat Completion (Native API)</h3>
+<pre><code class="language-bash"># Ollama's native chat endpoint (messages list, similar to but not the same as OpenAI's format)
+curl http://localhost:11434/api/chat \
+  -d '{
+    &quot;model&quot;: &quot;llama3.2&quot;,
+    &quot;messages&quot;: [
+      {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+      {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is gradient descent?&quot;}
+    ],
+    &quot;stream&quot;: false
+  }'
+</code></pre>
+<h3 id="openai-compatible-api-endpoint">OpenAI-Compatible API Endpoint</h3>
+<pre><code class="language-bash"># Ollama also exposes an OpenAI-compatible endpoint
+curl http://localhost:11434/v1/chat/completions \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;model&quot;: &quot;llama3.2&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}]
+  }'
+</code></pre>
+<h3 id="embeddings">Embeddings</h3>
+<pre><code class="language-bash"># /api/embed replaces the older /api/embeddings endpoint and accepts a
+# string or a list of strings in &quot;input&quot;
+curl http://localhost:11434/api/embed \
+  -d '{
+    &quot;model&quot;: &quot;nomic-embed-text&quot;,
+    &quot;input&quot;: &quot;Machine learning is fascinating&quot;
+  }'
+</code></pre>
+<h3 id="list-models">List Models</h3>
+<pre><code class="language-bash">curl http://localhost:11434/api/tags
+</code></pre>
+<hr />
+<h2 id="python-integration">Python Integration</h2>
+<h3 id="using-the-ollama-python-package">Using the <code>ollama</code> Python Package</h3>
+<pre><code class="language-bash">pip install ollama
+</code></pre>
+<pre><code class="language-python">import ollama
+
+# Simple generation
+response = ollama.generate(
+    model='llama3.2',
+    prompt='What is the capital of France?'
+)
+print(response['response'])
+
+# Chat interface
+response = ollama.chat(
+    model='llama3.2',
+    messages=[
+        {'role': 'system', 'content': 'You are a helpful assistant.'},
+        {'role': 'user', 'content': 'Explain transformers in ML.'}
+    ]
+)
+print(response['message']['content'])
+
+# Streaming response
+for chunk in ollama.chat(
+    model='llama3.2',
+    messages=[{'role': 'user', 'content': 'Write a Python web scraper'}],
+    stream=True
+):
+    print(chunk['message']['content'], end='', flush=True)
+</code></pre>
+<h3 id="using-openai-python-client">Using OpenAI Python Client</h3>
+<p>Point the OpenAI client at Ollama's API: perfect for code that already uses the OpenAI SDK.</p>
+<pre><code class="language-python">from openai import OpenAI
+
+# Point to local Ollama server
+client = OpenAI(
+    base_url='http://localhost:11434/v1',
+    api_key='ollama'  # Required but not used
+)
+
+# Use any Ollama model as if it were OpenAI
+response = client.chat.completions.create(
+    model='llama3.2',
+    messages=[
+        {'role': 'system', 'content': 'You are a Python expert.'},
+        {'role': 'user', 'content': 'Write a binary search function.'}
+    ],
+    temperature=0.7,
+    max_tokens=500
+)
+print(response.choices[0].message.content)
+</code></pre>
+<h3 id="async-with-httpx">Async with httpx</h3>
+<pre><code class="language-python">import httpx
+import asyncio
+import json
+
+async def generate_async(prompt: str, model: str = &quot;llama3.2&quot;):
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        response = await client.post(
+            &quot;http://localhost:11434/api/generate&quot;,
+            json={&quot;model&quot;: model, &quot;prompt&quot;: prompt, &quot;stream&quot;: False}
+        )
+        return response.json()[&quot;response&quot;]
+
+# Batch processing
+async def batch_generate(prompts: list[str]):
+    tasks = [generate_async(p) for p in prompts]
+    results = await asyncio.gather(*tasks)
+    return results
+
+results = asyncio.run(batch_generate([
+    &quot;What is machine learning?&quot;,
+    &quot;What is deep learning?&quot;,
+    &quot;What is reinforcement learning?&quot;
+]))
+</code></pre>
+<h3 id="embeddings-with-python">Embeddings with Python</h3>
+<pre><code class="language-python">import ollama
+import numpy as np
+
+def get_embedding(text: str, model: str = &quot;nomic-embed-text&quot;) -&gt; list[float]:
+    response = ollama.embed(model=model, input=text)  # ollama.embeddings() is the older API
+    return response['embeddings'][0]
+
+def cosine_similarity(a: list[float], b: list[float]) -&gt; float:
+    a, b = np.array(a), np.array(b)
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+# Compare semantic similarity
+emb1 = get_embedding(&quot;machine learning is about algorithms&quot;)
+emb2 = get_embedding(&quot;artificial intelligence uses computational methods&quot;)
+emb3 = get_embedding(&quot;I love eating pizza&quot;)
+
+print(f&quot;ML vs AI similarity: {cosine_similarity(emb1, emb2):.4f}&quot;)
+print(f&quot;ML vs pizza similarity: {cosine_similarity(emb1, emb3):.4f}&quot;)
+</code></pre>
+<hr />
+<h2 id="langchain--ollama">LangChain + Ollama</h2>
+<pre><code class="language-bash">pip install langchain langchain-ollama langchain-community langchain-chroma langchain-text-splitters
+</code></pre>
+<h3 id="basic-langchain-with-ollama">Basic LangChain with Ollama</h3>
+<pre><code class="language-python">from langchain_ollama import OllamaLLM, ChatOllama
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate
+
+# Basic LLM
+llm = OllamaLLM(model=&quot;llama3.2&quot;)
+response = llm.invoke(&quot;What is the capital of Japan?&quot;)
+print(response)
+
+# Chat model
+chat = ChatOllama(model=&quot;llama3.2&quot;, temperature=0.7)
+messages = [
+    SystemMessage(content=&quot;You are a helpful ML tutor.&quot;),
+    HumanMessage(content=&quot;Explain gradient descent.&quot;)
+]
+response = chat.invoke(messages)
+print(response.content)
+</code></pre>
+<h3 id="langchain-rag-pipeline-with-ollama">LangChain RAG Pipeline with Ollama</h3>
+<pre><code class="language-python">from langchain_ollama import OllamaEmbeddings, ChatOllama
+from langchain_chroma import Chroma
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import TextLoader
+
+# 1. Load documents
+loader = TextLoader(&quot;my_document.txt&quot;)
+documents = loader.load()
+
+# 2. Split into chunks
+splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+chunks = splitter.split_documents(documents)
+
+# 3. Create embeddings with Ollama
+embeddings = OllamaEmbeddings(model=&quot;nomic-embed-text&quot;)
+
+# 4. Store in vector database
+vectorstore = Chroma.from_documents(chunks, embeddings)
+retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;: 3})
+
+# 5. Create RAG chain
+llm = ChatOllama(model=&quot;llama3.2&quot;)
+
+prompt = ChatPromptTemplate.from_template(&quot;&quot;&quot;
+Answer the question based only on the following context:
+
+Context: {context}
+
+Question: {question}
+
+Answer:&quot;&quot;&quot;)
+
+rag_chain = (
+    {&quot;context&quot;: retriever, &quot;question&quot;: RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+# 6. Query
+answer = rag_chain.invoke(&quot;What is the main topic of the document?&quot;)
+print(answer)
+</code></pre>
+<h3 id="langchain-streaming">LangChain Streaming</h3>
+<pre><code class="language-python">from langchain_ollama import ChatOllama
+
+llm = ChatOllama(model=&quot;llama3.2&quot;)
+
+# .stream() streams tokens; no extra constructor flag is needed
+for chunk in llm.stream(&quot;Write a short poem about machine learning&quot;):
+    print(chunk.content, end=&quot;&quot;, flush=True)
+</code></pre>
+<hr />
+<h2 id="llamaindex--ollama">LlamaIndex + Ollama</h2>
+<pre><code class="language-bash">pip install llama-index llama-index-llms-ollama llama-index-embeddings-ollama
+</code></pre>
+<pre><code class="language-python">from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+
+# Configure Ollama as the LLM and embedding model
+Settings.llm = Ollama(model=&quot;llama3.2&quot;, request_timeout=60.0)
+Settings.embed_model = OllamaEmbedding(model_name=&quot;nomic-embed-text&quot;)
+
+# Load documents from a directory
+documents = SimpleDirectoryReader(&quot;./docs&quot;).load_data()
+
+# Build index
+index = VectorStoreIndex.from_documents(documents)
+
+# Create query engine
+query_engine = index.as_query_engine()
+
+# Query
+response = query_engine.query(&quot;What is the main topic?&quot;)
+print(response)
+</code></pre>
+<hr />
+<h2 id="multi-modal-vision-with-llava">Multi-Modal Vision with LLaVA</h2>
+<p>LLaVA (Large Language and Vision Assistant) can understand images and answer questions about them.</p>
+<pre><code class="language-bash"># Pull the vision model
+ollama pull llava
+</code></pre>
+<h3 id="cli-vision">CLI Vision</h3>
+<pre><code class="language-bash"># Include the image file path in the prompt (there is no --image flag)
+ollama run llava &quot;What is in this image? /path/to/image.jpg&quot;
+</code></pre>
+<h3 id="python-vision">Python Vision</h3>
+<pre><code class="language-python">import ollama
+import base64
+from pathlib import Path
+
+def encode_image(image_path: str) -&gt; str:
+    &quot;&quot;&quot;Convert image to base64 for API submission.&quot;&quot;&quot;
+    with open(image_path, &quot;rb&quot;) as f:
+        return base64.b64encode(f.read()).decode(&quot;utf-8&quot;)
+
+# Method 1: Using the ollama package
+response = ollama.chat(
+    model='llava',
+    messages=[{
+        'role': 'user',
+        'content': 'Describe what you see in this image in detail.',
+        'images': ['/path/to/image.jpg']  # File path
+    }]
+)
+print(response['message']['content'])
+
+# Method 2: Using base64 encoded image via API
+import requests
+
+image_data = encode_image(&quot;chart.png&quot;)
+
+response = requests.post(
+    &quot;http://localhost:11434/api/generate&quot;,
+    json={
+        &quot;model&quot;: &quot;llava&quot;,
+        &quot;prompt&quot;: &quot;What does this chart show? What are the key trends?&quot;,
+        &quot;images&quot;: [image_data],
+        &quot;stream&quot;: False
+    }
+)
+print(response.json()[&quot;response&quot;])
+</code></pre>
+<hr />
+<h2 id="embedding-models">Embedding Models</h2>
+<p>Ollama supports dedicated embedding models for semantic search and RAG.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Dimensions</th>
+<th>Size</th>
+<th>Strengths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nomic-embed-text</code></td>
+<td>768</td>
+<td>~270MB</td>
+<td>General purpose, fast</td>
+</tr>
+<tr>
+<td><code>mxbai-embed-large</code></td>
+<td>1024</td>
+<td>~670MB</td>
+<td>High quality, MTEB top</td>
+</tr>
+<tr>
+<td><code>all-minilm</code></td>
+<td>384</td>
+<td>~45MB</td>
+<td>Very lightweight</td>
+</tr>
+<tr>
+<td><code>bge-m3</code></td>
+<td>1024</td>
+<td>~1.2GB</td>
+<td>Multilingual, best quality</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import ollama
+import numpy as np
+
+# Generate embeddings
+def embed_texts(texts: list[str], model: str = &quot;nomic-embed-text&quot;) -&gt; np.ndarray:
+    # ollama.embed accepts a batch of inputs in one call
+    response = ollama.embed(model=model, input=texts)
+    return np.array(response['embeddings'])
+
+# Simple semantic search
+def semantic_search(query: str, documents: list[str], top_k: int = 3):
+    query_emb = embed_texts([query])[0]
+    doc_embs = embed_texts(documents)
+
+    # Cosine similarity
+    scores = doc_embs @ query_emb / (
+        np.linalg.norm(doc_embs, axis=1) * np.linalg.norm(query_emb)
+    )
+
+    top_indices = np.argsort(scores)[::-1][:top_k]
+    return [(documents[i], scores[i]) for i in top_indices]
+
+documents = [
+    &quot;Machine learning is a subset of artificial intelligence.&quot;,
+    &quot;Python is a programming language used widely in data science.&quot;,
+    &quot;Neural networks are inspired by the human brain.&quot;,
+    &quot;I enjoy hiking in the mountains on weekends.&quot;
+]
+
+results = semantic_search(&quot;What is AI?&quot;, documents)
+for doc, score in results:
+    print(f&quot;Score: {score:.4f} | {doc}&quot;)
+</code></pre>
+<hr />
+<h2 id="performance-tuning">Performance Tuning</h2>
+<h3 id="gpu-layers">GPU Layers</h3>
+<p>Ollama decides GPU offload automatically based on free VRAM. To override it,
+set the <code>num_gpu</code> option (number of layers to offload). There is no
+<code>OLLAMA_GPU_LAYERS</code> environment variable.</p>
+<pre><code class="language-bash"># Inside an interactive session
+ollama run llama3.2
+&gt;&gt;&gt; /set parameter num_gpu 20
+
+# Per request via the API
+curl http://localhost:11434/api/generate \
+  -d '{&quot;model&quot;: &quot;llama3.2&quot;, &quot;prompt&quot;: &quot;Hi&quot;, &quot;options&quot;: {&quot;num_gpu&quot;: 20}}'
+</code></pre>
+<p>In Modelfile:</p>
+<pre><code class="language-dockerfile">PARAMETER num_gpu 999   # A value above the layer count offloads all layers
+</code></pre>
+<h3 id="context-size">Context Size</h3>
+<pre><code class="language-dockerfile"># Larger context = more memory, allows longer conversations
+PARAMETER num_ctx 8192   # Default varies by Ollama version (older releases used 2048)
+</code></pre>
+<h3 id="threads-cpu-inference">Threads (CPU Inference)</h3>
+<pre><code class="language-dockerfile"># Match to physical CPU cores (not hyperthreaded)
+PARAMETER num_thread 8
+</code></pre>
+<h3 id="quantization-levels">Quantization Levels</h3>
+<pre><code class="language-bash"># Q4_K_M: Good balance of speed and quality (recommended)
+ollama pull llama3.2:latest      # Uses Q4_K_M by default
+
+# Q8_0: Better quality, more memory
+ollama pull llama3.1:8b-instruct-q8_0
+
+# F16: Full precision (needs lots of RAM/VRAM)
+ollama pull llama3.1:8b-instruct-fp16
+</code></pre>
+<h3 id="environment-variables">Environment Variables</h3>
+<pre><code class="language-bash"># Set number of parallel requests Ollama can handle
+OLLAMA_NUM_PARALLEL=4 ollama serve
+
+# Set maximum loaded models in memory
+OLLAMA_MAX_LOADED_MODELS=2 ollama serve
+
+# Custom host
+OLLAMA_HOST=0.0.0.0:11434 ollama serve
+
+# Keep models loaded in memory (prevent cold starts)
+OLLAMA_KEEP_ALIVE=10m ollama serve
+
+# Flash attention (when supported)
+OLLAMA_FLASH_ATTENTION=1 ollama serve
+</code></pre>
+<hr />
+<h2 id="docker">Docker</h2>
+<h3 id="run-ollama-in-docker-cpu">Run Ollama in Docker (CPU)</h3>
+<pre><code class="language-bash">docker run -d \
+  -v ollama:/root/.ollama \
+  -p 11434:11434 \
+  --name ollama \
+  ollama/ollama
+
+# Pull and run a model
+docker exec -it ollama ollama run llama3.2
+</code></pre>
+<h3 id="run-ollama-in-docker-nvidia-gpu">Run Ollama in Docker (NVIDIA GPU)</h3>
+<pre><code class="language-bash">docker run -d \
+  --gpus=all \
+  -v ollama:/root/.ollama \
+  -p 11434:11434 \
+  --name ollama \
+  ollama/ollama
+</code></pre>
+<h3 id="docker-compose">Docker Compose</h3>
+<pre><code class="language-yaml"># docker-compose.yml (the top-level `version:` key is obsolete in Compose v2)
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - &quot;11434:11434&quot;
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # Optional: Open WebUI for browser-based chat
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - &quot;3000:8080&quot;
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - ollama
+
+volumes:
+  ollama_data:
+</code></pre>
+<h3 id="pre-pull-models-in-docker">Pre-pull Models in Docker</h3>
+<pre><code class="language-bash"># Pull models into the container at startup
+docker exec ollama ollama pull llama3.2
+docker exec ollama ollama pull nomic-embed-text
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is Ollama and what problem does it solve?</strong> 🟢 Beginner</p>
+<p>Ollama is an open-source tool that simplifies running large language models locally. It handles model downloading, hardware detection (CPU/GPU), quantization management, and exposes a simple CLI and REST API. It solves the problem of complex LLM setup by abstracting away CUDA configuration, model format handling, and server management into a single <code>ollama run &lt;model&gt;</code> command.</p>
+<hr />
+<p><strong>Q2: How does Ollama differ from using the OpenAI API?</strong> 🟢 Beginner</p>
+<p>Ollama runs models locally on your own hardware (no cloud costs, no data sent externally, works offline), while OpenAI API sends requests to OpenAI's servers. Trade-offs: Ollama is free after initial setup but limited to hardware you own; OpenAI API requires payment but provides access to GPT-4 class models without hardware requirements. Ollama is best for development, privacy-sensitive data, and offline use.</p>
+<hr />
+<p><strong>Q3: What is a Modelfile in Ollama?</strong> 🟡 Intermediate</p>
+<p>A Modelfile is analogous to a Dockerfile: it defines how to build a custom Ollama model. It specifies the base model (<code>FROM</code>), system prompt (<code>SYSTEM</code>), inference parameters (<code>PARAMETER temperature</code>, <code>PARAMETER num_ctx</code>), and stop sequences. You build it with <code>ollama create model-name -f Modelfile</code> and run it like any other model.</p>
+<hr />
+<p><strong>Q4: How do you use Ollama with existing OpenAI-based code?</strong> 🟡 Intermediate</p>
+<p>Ollama exposes an OpenAI-compatible API at <code>http://localhost:11434/v1</code>. Simply change the <code>base_url</code> in the OpenAI client and set <code>api_key='ollama'</code> (any non-empty string). All OpenAI chat completion calls will then route to your local Ollama model with no other code changes needed.</p>
+<hr />
+<p><strong>Q5: What is the difference between Ollama and vLLM for serving LLMs?</strong> 🟡 Intermediate</p>
+<p>Ollama prioritizes simplicity and local development. It works great for single-user workloads, quick experimentation, and desktop use. vLLM uses PagedAttention for KV cache management, enabling high-throughput multi-user inference with continuous batching. vLLM typically delivers much higher throughput under many concurrent requests. For production APIs serving many users: vLLM. For local development and single-user tools: Ollama.</p>
+<hr />
+<p><strong>Q6: What is quantization in the context of Ollama models?</strong> 🟡 Intermediate</p>
+<p>Quantization reduces the precision of model weights (e.g., from float32 to 4-bit integers) to decrease memory usage and increase inference speed. Ollama uses GGUF models with quantization levels like Q4_K_M (a llama.cpp &quot;k-quant&quot;: block-wise ~4-bit quantization with per-block scales, where <code>_M</code> is the medium mix that keeps some tensors at higher precision), Q8_0 (8-bit), or F16 (half precision). Q4_K_M is the common sweet spot: roughly 70% smaller than F16 with small quality loss.</p>
+<hr />
+<p><strong>Q7: How would you set up a private RAG system using Ollama?</strong> 🔴 Advanced</p>
+<pre><code>1. Install Ollama and pull models:
+   - LLM: ollama pull llama3.2
+   - Embeddings: ollama pull nomic-embed-text
+
+2. Load and chunk documents (LangChain or LlamaIndex)
+
+3. Generate embeddings using Ollama's embedding API
+
+4. Store vectors in local Chroma or Qdrant
+
+5. At query time:
+   - Embed the query with nomic-embed-text
+   - Retrieve top-k relevant chunks from vector DB
+   - Build a prompt with context + question
+   - Send to llama3.2 via Ollama API
+
+6. All computation runs locally: 100% private
+</code></pre>
+<hr />
+<p><strong>Q8: What are the hardware requirements for running LLMs with Ollama?</strong> 🟡 Intermediate</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model Size</th>
+<th>VRAM Needed (4-bit)</th>
+<th>CPU RAM (CPU-only)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-3B params</td>
+<td>~1-2 GB</td>
+<td>~2-4 GB RAM</td>
+</tr>
+<tr>
+<td>7-8B params</td>
+<td>~4-5 GB</td>
+<td>~8-10 GB RAM</td>
+</tr>
+<tr>
+<td>13B params</td>
+<td>~7-8 GB</td>
+<td>~16 GB RAM</td>
+</tr>
+<tr>
+<td>30-34B params</td>
+<td>~18-20 GB</td>
+<td>~32 GB RAM</td>
+</tr>
+<tr>
+<td>70B params</td>
+<td>~40+ GB</td>
+<td>~64+ GB RAM</td>
+</tr>
+</tbody>
+</table></div>
+<p>Apple Silicon (M1/M2/M3/M4) uses unified memory: RAM and VRAM are shared, making Macs excellent for local LLM inference.</p>
+<hr />
+<p><strong>Q9: How do you run a vision model with Ollama?</strong> 🟡 Intermediate</p>
+<p>Pull a multimodal model like LLaVA (<code>ollama pull llava</code>) and pass images via the CLI (include the file path in the prompt: <code>ollama run llava &quot;Describe ./photo.jpg&quot;</code>) or via the API/Python SDK. In the Python <code>ollama</code> library, include an <code>images</code> field in the message with file paths or base64-encoded image data. The model processes both the image and text prompt together.</p>
+<hr />
+<p><strong>Q10: What is <code>OLLAMA_KEEP_ALIVE</code> and when would you change it?</strong> 🔴 Advanced</p>
+<p><code>OLLAMA_KEEP_ALIVE</code> controls how long Ollama keeps a model loaded in memory after the last request. Default is 5 minutes. If it expires, the model is unloaded and must be reloaded on the next request (cold start latency of several seconds).</p>
+<p>Set it higher (e.g., <code>OLLAMA_KEEP_ALIVE=1h</code>) for interactive development to avoid cold starts. Set to <code>0</code> in resource-constrained environments to free memory immediately after each request. Set to <code>-1</code> to keep models loaded indefinitely.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://ollama.com">Ollama Official Website</a></li>
+<li><a href="https://github.com/ollama/ollama">Ollama GitHub Repository</a></li>
+<li><a href="https://ollama.com/library">Ollama Model Library</a></li>
+<li><a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama REST API Documentation</a></li>
+<li><a href="https://github.com/ollama/ollama-python">Ollama Python Library</a></li>
+<li><a href="https://github.com/open-webui/open-webui">Open WebUI: Browser UI for Ollama</a></li>
+<li><a href="https://python.langchain.com/docs/integrations/llms/ollama">LangChain + Ollama Integration</a></li>
+<li><a href="https://docs.llamaindex.ai/en/stable/examples/llm/ollama/">LlamaIndex + Ollama Integration</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_huggingface.html"><small>Previous</small>HuggingFace</a><a rel="next" class="next" href="intro_vllm.html"><small>Next</small>vLLM</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/frameworks/intro_ollama.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

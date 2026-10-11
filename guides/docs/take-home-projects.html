@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Take-Home Projects and Case Studies | Cracking ML Interviews</title>
+<meta name="description" content="The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/take-home-projects.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="ML Take-Home Projects and Case Studies | Cracking ML Interviews">
+<meta property="og:description" content="The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/take-home-projects.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ML Take-Home Projects and Case Studies | Cracking ML Interviews">
+<meta name="twitter:description" content="The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "ML Take-Home Projects and Case Studies",
+   "description": "The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/take-home-projects.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Roadmap & Study Guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#roadmap--study-guides"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Take-Home Projects",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/docs/take-home-projects.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#roadmap--study-guides">Roadmap &amp; Study Guides</a> <span aria-hidden="true">/</span> <span aria-current="page">Take-Home Projects</span></nav>
+<p class="meta"><a href="../../#docs/take-home-projects.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ml-take-home-projects-and-case-studies">ML Take-Home Projects and Case Studies</h1>
+<p>The take-home is the highest-variance stage of an ML loop. Candidates with strong fundamentals routinely score poorly on it, not because the modeling was wrong but because they optimized the wrong thing, chasing an extra point of AUC while shipping a notebook nobody can run, no baseline to compare against, and no statement of what they would do next.</p>
+<p>This guide covers what reviewers actually score, how to budget your time, the structure that reads well, and the presentation round that usually follows.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-reviewers-actually-score">What Reviewers Actually Score</a></li>
+<li><a href="#time-budget">Time Budget</a></li>
+<li><a href="#repository-structure">Repository Structure</a></li>
+<li><a href="#the-readme-is-the-deliverable">The README Is the Deliverable</a></li>
+<li><a href="#modeling-approach">Modeling Approach</a></li>
+<li><a href="#common-take-home-types">Common Take-Home Types</a></li>
+<li><a href="#the-follow-up-presentation">The Follow-Up Presentation</a></li>
+<li><a href="#scope-and-boundaries">Scope and Boundaries</a></li>
+<li><a href="#self-review-checklist">Self-Review Checklist</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="what-reviewers-actually-score">What Reviewers Actually Score</h2>
+<p>Most rubrics weight roughly like this. Note where accuracy sits.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Weight</th>
+<th>What earns the marks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem framing</strong></td>
+<td>High</td>
+<td>Restated the business problem, chose a metric and justified it, defined success</td>
+</tr>
+<tr>
+<td><strong>Data understanding</strong></td>
+<td>High</td>
+<td>Found the leakage, the imbalance, the duplicates, the temporal structure</td>
+</tr>
+<tr>
+<td><strong>Methodology soundness</strong></td>
+<td>High</td>
+<td>Valid splits, a real baseline, honest evaluation, no leakage</td>
+</tr>
+<tr>
+<td><strong>Communication</strong></td>
+<td>High</td>
+<td>README a stranger can follow; conclusions stated plainly</td>
+</tr>
+<tr>
+<td><strong>Reproducibility</strong></td>
+<td>Medium-high</td>
+<td>Runs end to end from a clean checkout</td>
+</tr>
+<tr>
+<td><strong>Code quality</strong></td>
+<td>Medium</td>
+<td>Readable, structured, tested where it matters</td>
+</tr>
+<tr>
+<td><strong>Model performance</strong></td>
+<td><strong>Low-medium</strong></td>
+<td>Reasonable; the gap between 0.85 and 0.87 rarely decides anything</td>
+</tr>
+<tr>
+<td><strong>Production thinking</strong></td>
+<td>Medium</td>
+<td>How it would deploy, monitor, fail, and be retrained</td>
+</tr>
+</tbody>
+</table></div>
+<p>The single most common mis-calibration is spending 80% of the time on the model and 20% on everything else. Reviewers can see modeling ability from a clean pipeline with a well-chosen baseline; they cannot recover framing, honesty, or communication from a high score.</p>
+<p><strong>What gets a submission rejected outright</strong>, regardless of accuracy: data leakage that inflates results, a random split on temporal data, code that does not run, no baseline, and a metric that does not match the stated problem.</p>
+<hr />
+<h2 id="time-budget">Time Budget</h2>
+<p>If the brief says &quot;about 4 hours,&quot; treat that as a real constraint. Reviewers compare submissions against the stated budget, and a 30-hour submission signals poor prioritization as much as it signals effort: it also disadvantages candidates who respected the limit, which reviewers notice.</p>
+<p>For a nominal 4-6 hours:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Share</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Understand the problem and data</td>
+<td>20%</td>
+<td>Framing, metric choice, data quirks found</td>
+</tr>
+<tr>
+<td>Baseline end to end</td>
+<td>15%</td>
+<td>A trivial model, scored, that the pipeline runs through</td>
+</tr>
+<tr>
+<td>Feature work and modeling</td>
+<td>30%</td>
+<td>One or two real iterations with a rationale</td>
+</tr>
+<tr>
+<td>Evaluation and error analysis</td>
+<td>15%</td>
+<td>Slices, confusion, where it fails and why</td>
+</tr>
+<tr>
+<td>Write-up and cleanup</td>
+<td>20%</td>
+<td>README, structure, reproducibility</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Build the baseline before the good model.</strong> A majority-class predictor, a simple heuristic, or a logistic regression gives you an end-to-end pipeline within the first hour and a number every later result is measured against. Candidates who skip it often discover at hour five that their pipeline has a bug, with nothing to compare against.</p>
+<p>If you run out of time, say so explicitly in the README with what you would have done. That reads as prioritization. Silence reads as not knowing.</p>
+<hr />
+<h2 id="repository-structure">Repository Structure</h2>
+<p>Structure signals engineering maturity before a reviewer reads a line of logic.</p>
+<pre><code>churn-prediction/
+├── README.md                  ← the deliverable; write it first, refine last
+├── requirements.txt           ← pinned versions
+├── Makefile                   ← make setup / make train / make evaluate
+├── data/
+│   ├── raw/                   ← immutable, gitignored
+│   └── processed/             ← generated, gitignored
+├── notebooks/
+│   └── 01_exploration.ipynb   ← EDA only, clearly labeled as exploratory
+├── src/
+│   ├── data.py                ← loading and splitting
+│   ├── features.py            ← transformations (importable, testable)
+│   ├── train.py               ← trains and saves a model
+│   └── evaluate.py            ← metrics, slices, plots
+├── tests/
+│   └── test_features.py       ← a few tests on the transformations that matter
+└── reports/
+    └── figures/
+</code></pre>
+<p>Two things reviewers check immediately and that cost you nothing:</p>
+<ul>
+<li><strong>Does it run?</strong> Clone into a fresh virtualenv, follow your own README literally, and run it. Absolute paths, an undeclared dependency, or a missing data step are the most common reasons a submission scores badly for reasons unrelated to skill.</li>
+<li><strong>Is logic in importable modules?</strong> A single 900-cell notebook cannot be tested, reviewed, or reused. Keep exploration in a notebook and put the pipeline in <code>src/</code>.</li>
+</ul>
+<hr />
+<h2 id="the-readme-is-the-deliverable">The README Is the Deliverable</h2>
+<p>Most reviewers spend 10-15 minutes on a submission, and much of it in the README. Write it for someone who will not run your code.</p>
+<p>A structure that works:</p>
+<pre><code class="language-markdown"># &lt;Problem&gt; Approach and Results
+
+## Problem framing
+What I understood the task to be, the metric I optimized, and why that metric
+fits the stated business context.
+
+## Data
+Size, shape, target balance. What I found: leakage risks, duplicates, missingness
+patterns, temporal structure. What I did about each.
+
+## Approach
+Baseline first, then what I tried and why. Alternatives I considered and rejected,
+with reasons.
+
+## Results
+| Model | PR-AUC | Recall @ 80% precision | Notes |
+|---|---|---|---|
+| Majority baseline | 0.031 | 0.00 | Prevalence floor |
+| Logistic regression | 0.284 | 0.19 | Interpretable reference |
+| Gradient boosting | 0.412 | 0.34 | Final |
+
+## Error analysis
+Where it fails, on which segments, and my hypothesis for why.
+
+## Assumptions and limitations
+Stated plainly. This section builds more trust than the results table.
+
+## What I'd do with more time
+Ranked by expected value, not by what is interesting.
+
+## How to run
+Exact commands, verified from a clean checkout.
+</code></pre>
+<p>Two sections carry disproportionate weight. <strong>Assumptions and limitations</strong> is where reviewers look for intellectual honesty: a candidate who names the weaknesses of their own work is one who can be trusted with an ambiguous problem. <strong>What I'd do next</strong>, ranked by expected value, demonstrates prioritization, which is most of senior ML work.</p>
+<hr />
+<h2 id="modeling-approach">Modeling Approach</h2>
+<p><strong>Framing before fitting.</strong> Write down the prediction target, the unit of prediction, when the prediction would be made in production, and what information is available at that moment. That last question is what prevents leakage, and stating it explicitly is worth marks by itself.</p>
+<p><strong>Choose the metric from the cost structure.</strong> Accuracy on an imbalanced problem is an immediate red flag. Ask what a false positive costs versus a false negative, then pick accordingly: PR-AUC and recall at a fixed precision for rare-event problems, calibration if scores drive decisions, MAE versus RMSE depending on outlier treatment. Say why in one sentence.</p>
+<p><strong>Split before you look.</strong> Fit every transformation (scalers, imputers, target encoders) inside a pipeline on the training fold only. If the data is temporal, split by time; if entities repeat (users, sessions, patients), split by group. A random split on temporal or grouped data is the most common disqualifying error in take-homes, and it produces suspiciously good numbers that reviewers recognize on sight.</p>
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+# Everything stateful lives inside the pipeline, so CV can never leak
+pipeline = Pipeline([
+    (&quot;prep&quot;, ColumnTransformer([
+        (&quot;num&quot;, numeric_pipeline, numeric_cols),
+        (&quot;cat&quot;, categorical_pipeline, categorical_cols),
+    ])),
+    (&quot;model&quot;, GradientBoostingClassifier(random_state=42)),
+])
+</code></pre>
+<p><strong>Error analysis beats one more model.</strong> Twenty minutes examining where the model fails (which segments, which feature ranges, what the false positives have in common) produces better material than another hour of hyperparameter search. It is also the part that transfers directly into the presentation round.</p>
+<p><strong>Seed everything and state the variance.</strong> Report <code>mean ± std</code> across folds rather than a single number. A candidate who reports 0.412 ± 0.03 is more credible than one who reports 0.4118.</p>
+<hr />
+<h2 id="common-take-home-types">Common Take-Home Types</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Real test</th>
+<th>Where candidates lose marks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tabular prediction</strong></td>
+<td>Framing, leakage detection, metric choice</td>
+<td>Random split on temporal data; accuracy on imbalanced target</td>
+</tr>
+<tr>
+<td><strong>Messy data cleaning</strong></td>
+<td>Judgment under ambiguity</td>
+<td>Silently dropping rows; not documenting decisions</td>
+</tr>
+<tr>
+<td><strong>NLP classification</strong></td>
+<td>Sensible baseline before transformers</td>
+<td>Fine-tuning BERT without a TF-IDF baseline to justify it</td>
+</tr>
+<tr>
+<td><strong>Recommendation</strong></td>
+<td>Evaluation design</td>
+<td>Random split instead of temporal; ignoring cold start</td>
+</tr>
+<tr>
+<td><strong>Time series forecasting</strong></td>
+<td>Validation strategy</td>
+<td>Any shuffling; no seasonal-naive baseline</td>
+</tr>
+<tr>
+<td><strong>Build a small service</strong></td>
+<td>Engineering practice</td>
+<td>No tests, no error handling, no input validation</td>
+</tr>
+<tr>
+<td><strong>RAG / LLM feature</strong></td>
+<td>Evaluation of a non-deterministic system</td>
+<td>No eval set; &quot;looks good&quot; as the evidence</td>
+</tr>
+<tr>
+<td><strong>Open-ended analysis</strong></td>
+<td>Prioritization and communication</td>
+<td>Exhaustive EDA with no conclusion</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two type-specific notes worth knowing. For <strong>NLP</strong>, a TF-IDF plus linear model baseline takes ten minutes and makes any subsequent transformer result meaningful; skipping it is a common and avoidable loss. For <strong>RAG or LLM take-homes</strong>, the whole test is usually whether you build an evaluation harness at all: 20 or 30 labeled question-answer pairs with retrieval recall and answer accuracy measured separately outweighs any amount of prompt polish.</p>
+<hr />
+<h2 id="the-follow-up-presentation">The Follow-Up Presentation</h2>
+<p>Most take-homes are followed by a 30-45 minute discussion. It is a real round with its own score, and it is where a mid-tier submission can be rescued or a strong one undermined.</p>
+<p><strong>Structure a 10-minute walkthrough</strong>: problem framing and metric choice (2 min), data findings (2 min), approach and baseline comparison (3 min), results and error analysis (2 min), limitations and next steps (1 min). Lead with framing, not with the model.</p>
+<p><strong>Questions to expect:</strong></p>
+<ul>
+<li>&quot;Why that metric?&quot;: have the cost reasoning ready.</li>
+<li>&quot;Why that model, and what else did you consider?&quot;</li>
+<li>&quot;What was your baseline, and how much did the model actually add over it?&quot;</li>
+<li>&quot;Where does it fail?&quot;: never answer &quot;I'm not sure&quot;; you did the error analysis.</li>
+<li>&quot;How would you deploy this?&quot;: features at serving time, latency, monitoring, retraining.</li>
+<li>&quot;What would break at 100x the data?&quot;</li>
+<li>&quot;What did you not have time to do?&quot;</li>
+<li>&quot;What would you do differently?&quot;</li>
+</ul>
+<p><strong>Defend and concede appropriately.</strong> If a reviewer challenges a choice you thought through, explain the reasoning and the alternative you rejected. If they identify a genuine mistake, acknowledge it directly and say what you would change: reviewers frequently probe a known weakness specifically to see whether you will defend the indefensible. Conceding a real error scores better than defending it.</p>
+<p><strong>Know your numbers.</strong> Dataset size, class balance, baseline score, final score, and runtime. Fumbling your own results undermines everything else.</p>
+<hr />
+<h2 id="scope-and-boundaries">Scope and Boundaries</h2>
+<p>A few boundary questions come up often enough to answer here.</p>
+<p><strong>Clarifying questions are usually welcome.</strong> One concise email asking about an ambiguous target definition or an unclear evaluation criterion signals engagement. Three rounds of questions signal an inability to act under ambiguity. If nobody responds, state your assumption in the README and proceed, that is the correct behavior, and reviewers score it well.</p>
+<p><strong>Going over the stated time</strong> is a real negative, not the neutral it feels like. If you spent longer, do not claim otherwise; say what you did within the budget and mark clearly anything added afterward.</p>
+<p><strong>On using AI assistance</strong>: follow whatever the brief says. If it is silent, use it as you would at work and be prepared to explain every line: the presentation round exposes code you cannot account for very quickly. Where a brief asks you to disclose usage, disclose it; being caught misrepresenting it ends the process regardless of the work's quality.</p>
+<p><strong>On external data and pretrained models</strong>: allowed unless the brief forbids it, but justify the choice and account for the added complexity. A pretrained model that adds two points over a simple baseline while tripling inference cost is a tradeoff worth discussing rather than an automatic win.</p>
+<hr />
+<h2 id="self-review-checklist">Self-Review Checklist</h2>
+<p>Run through this before submitting.</p>
+<p><strong>Reproducibility</strong></p>
+<ul>
+<li>[ ] Cloned to a fresh directory, new virtualenv, followed the README literally: it runs</li>
+<li>[ ] Dependencies pinned; no absolute paths; seeds set</li>
+<li>[ ] Large data and artifacts gitignored, with instructions for obtaining them</li>
+</ul>
+<p><strong>Methodology</strong></p>
+<ul>
+<li>[ ] A baseline exists and is reported alongside the final model</li>
+<li>[ ] Split respects time and entity structure</li>
+<li>[ ] Every transformation is fit inside the pipeline on training data only</li>
+<li>[ ] Metric matches the stated business problem, with the reason given</li>
+<li>[ ] Results reported as mean ± std, not a single decimal-heavy number</li>
+</ul>
+<p><strong>Communication</strong></p>
+<ul>
+<li>[ ] README answers: what problem, what approach, what result, what next</li>
+<li>[ ] Assumptions and limitations stated explicitly</li>
+<li>[ ] Next steps ranked by expected value</li>
+<li>[ ] A reader who never runs the code understands the conclusion</li>
+</ul>
+<p><strong>Code</strong></p>
+<ul>
+<li>[ ] Pipeline logic in importable modules, not only in notebooks</li>
+<li>[ ] Notebooks are clean and labeled as exploratory</li>
+<li>[ ] A few tests on the transformations that matter</li>
+<li>[ ] No commented-out dead code, no leftover debug prints</li>
+</ul>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it costs you</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No baseline</td>
+<td>Results are uninterpretable; reviewers cannot judge the gain</td>
+<td>Trivial baseline first, reported alongside</td>
+</tr>
+<tr>
+<td>Random split on temporal data</td>
+<td>Leaks the future; disqualifying</td>
+<td>Time-based split, with a gap for label latency</td>
+</tr>
+<tr>
+<td>Preprocessing fit before the split</td>
+<td>Leaks test statistics into training</td>
+<td>Fit everything inside a <code>Pipeline</code></td>
+</tr>
+<tr>
+<td>Accuracy on an imbalanced target</td>
+<td>Signals a fundamental gap</td>
+<td>PR-AUC, recall at fixed precision, and say why</td>
+</tr>
+<tr>
+<td>All logic in one notebook</td>
+<td>Cannot be tested, reviewed, or reused</td>
+<td>Modules in <code>src/</code>, notebook for EDA only</td>
+</tr>
+<tr>
+<td>README written last, in five minutes</td>
+<td>It is the most-read artifact</td>
+<td>Draft it first, refine at the end</td>
+</tr>
+<tr>
+<td>Chasing accuracy over everything else</td>
+<td>Weighted lowest in most rubrics</td>
+<td>Spend the time on framing, evaluation, write-up</td>
+</tr>
+<tr>
+<td>Massively exceeding the stated time</td>
+<td>Signals poor prioritization</td>
+<td>Respect the budget; list what you cut</td>
+</tr>
+<tr>
+<td>No error analysis</td>
+<td>Loses the strongest presentation material</td>
+<td>Twenty minutes on where and why it fails</td>
+</tr>
+<tr>
+<td>Unstated assumptions</td>
+<td>Reads as not noticing the ambiguity</td>
+<td>An explicit assumptions section</td>
+</tr>
+<tr>
+<td>Submission never run from a clean checkout</td>
+<td>The most common avoidable failure</td>
+<td>Fresh clone, fresh venv, follow your own README</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="behavioral-interview-guide.html">Behavioral and Project Deep-Dive Guide</a></li>
+<li><a href="2026-interview-roadmap.html">2026 Interview Roadmap</a></li>
+<li><a href="study-pattern.html">Study Pattern</a></li>
+<li><a href="../classical_ml/intro_model_evaluation.html">Model Evaluation and Metrics</a></li>
+<li><a href="../classical_ml/intro_ensemble_methods.html">Ensemble Methods</a></li>
+<li><a href="../coding_challenges/ml_coding_challenges.html">ML Coding Challenges</a></li>
+<li><a href="../project_setup/intro_project_structure.html">ML/AI Project Structure</a></li>
+<li><a href="../project_setup/intro_github_project_setup.html">GitHub Project Setup</a></li>
+<li><a href="../system_design/">ML System Design Framework</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="behavioral-interview-guide.html"><small>Previous</small>Behavioral &amp; Project Deep-Dive</a><a rel="next" class="next" href="resources-and-references.html"><small>Next</small>Resources &amp; References</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/docs/take-home-projects.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

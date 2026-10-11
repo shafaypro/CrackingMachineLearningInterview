@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apache Airflow Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Apache Airflow is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_airflow.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Apache Airflow Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Apache Airflow is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_airflow.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache Airflow Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Apache Airflow is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Apache Airflow",
+   "description": "Apache Airflow is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_airflow.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Apache Airflow",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_airflow.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Apache Airflow</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_apache_airflow.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="apache-airflow">Apache Airflow</h1>
+<p><strong>Apache Airflow</strong> is the most widely used workflow orchestration platform. It lets you define, schedule, and monitor data pipelines as code using Python.</p>
+<hr />
+<h2 id="what-is-airflow">What is Airflow?</h2>
+<p>Airflow orchestrates the <strong>when</strong> and <strong>how</strong> of running tasks:</p>
+<pre><code>Every day at 2am:
+  1. Extract data from Salesforce API     (3 min)
+  2. Load to S3                           (2 min)
+         ↓
+  3a. Run dbt models (staging)            (5 min) ─┐
+  3b. Run data quality checks             (2 min) ─┤
+         ↓                                          │
+  4. Run dbt models (marts)               (8 min) ←┘
+  5. Notify Slack on completion           (instant)
+</code></pre>
+<p>Airflow defines this as a <strong>DAG</strong> (Directed Acyclic Graph) in Python.</p>
+<h3 id="airflow-vs-alternatives">Airflow vs Alternatives</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Style</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Airflow</strong></td>
+<td>Python code, task-centric</td>
+<td>Complex pipelines, ML workflows</td>
+</tr>
+<tr>
+<td><strong>Prefect</strong></td>
+<td>Python code, flow-centric</td>
+<td>Developer experience, dynamic workflows</td>
+</tr>
+<tr>
+<td><strong>Dagster</strong></td>
+<td>Asset-centric, typed</td>
+<td>Data assets, lineage, testing</td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>Notebook-style</td>
+<td>Data engineers who love notebooks</td>
+</tr>
+<tr>
+<td><strong>Temporal</strong></td>
+<td>Workflow engine</td>
+<td>Long-running, stateful workflows</td>
+</tr>
+<tr>
+<td><strong>n8n</strong></td>
+<td>Visual workflow automation</td>
+<td>App integrations, webhooks, approval flows, operational AI workflows</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAG</strong></td>
+<td>Directed Acyclic Graph: a workflow defined in Python</td>
+</tr>
+<tr>
+<td><strong>Task</strong></td>
+<td>A unit of work within a DAG</td>
+</tr>
+<tr>
+<td><strong>Operator</strong></td>
+<td>Template for a task type (PythonOperator, BashOperator, etc.)</td>
+</tr>
+<tr>
+<td><strong>TaskFlow API</strong></td>
+<td>Modern way to write DAGs using <code>@task</code> decorators</td>
+</tr>
+<tr>
+<td><strong>Dependency</strong></td>
+<td><code>task_a &gt;&gt; task_b</code> means task_b runs after task_a</td>
+</tr>
+<tr>
+<td><strong>Schedule</strong></td>
+<td>When the DAG runs (cron, timedelta, or @daily)</td>
+</tr>
+<tr>
+<td><strong>DAG Run</strong></td>
+<td>A specific execution of a DAG</td>
+</tr>
+<tr>
+<td><strong>XCom</strong></td>
+<td>Cross-communication: pass data between tasks</td>
+</tr>
+<tr>
+<td><strong>Connection</strong></td>
+<td>Stored credentials for external systems</td>
+</tr>
+<tr>
+<td><strong>Variable</strong></td>
+<td>Key-value store for DAG configuration</td>
+</tr>
+<tr>
+<td><strong>Pool</strong></td>
+<td>Limit concurrency for resource-intensive tasks</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="installation">Installation</h2>
+<pre><code class="language-bash"># Local (virtualenv); pin a version with the official constraints file in real projects
+pip install &quot;apache-airflow&gt;=3.0&quot;
+
+# Quickest local setup: migrates the DB, creates a login, starts every component
+airflow standalone
+
+# Or run the Airflow 3 components individually
+airflow db migrate                 # `airflow db init` was removed in Airflow 3
+airflow api-server --port 8080 &amp;   # replaces `airflow webserver`
+airflow scheduler &amp;
+airflow dag-processor &amp;            # DAG parsing runs as its own process in Airflow 3
+
+# `airflow users create` needs the FAB auth manager provider; Airflow 3 defaults to
+# the simple auth manager, which `airflow standalone` configures for you
+</code></pre>
+<h3 id="docker-compose-recommended">Docker Compose (recommended)</h3>
+<pre><code class="language-bash">curl -LfO 'https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml'
+mkdir -p ./dags ./logs ./plugins
+echo &quot;AIRFLOW_UID=$(id -u)&quot; &gt; .env
+docker compose up -d
+</code></pre>
+<hr />
+<h2 id="writing-dags">Writing DAGs</h2>
+<h3 id="taskflow-api-modern-recommended">TaskFlow API (modern, recommended)</h3>
+<pre><code class="language-python"># dags/my_pipeline.py  (Airflow 3: DAG authoring imports come from airflow.sdk)
+from airflow.sdk import dag, task, Variable
+from datetime import timedelta
+import pendulum
+import requests
+
+@dag(
+    dag_id=&quot;daily_sales_pipeline&quot;,
+    description=&quot;Extract sales data, transform, load to warehouse&quot;,
+    schedule=&quot;0 2 * * *&quot;,          # 2am daily (cron)
+    start_date=pendulum.datetime(2025, 1, 1, tz=&quot;UTC&quot;),  # days_ago() was removed in Airflow 3
+    catchup=False,                  # don't backfill past runs (default in Airflow 3)
+    max_active_runs=1,              # prevent concurrent runs
+    tags=[&quot;sales&quot;, &quot;etl&quot;],
+    default_args={
+        &quot;owner&quot;: &quot;data-team&quot;,
+        &quot;retries&quot;: 2,
+        &quot;retry_delay&quot;: timedelta(minutes=5),
+        &quot;email_on_failure&quot;: True,
+        &quot;email&quot;: [&quot;data-alerts@company.com&quot;],
+    }
+)
+def daily_sales_pipeline():
+
+    @task
+    def extract_sales(ds=None) -&gt; list[dict]:
+        &quot;&quot;&quot;Extract sales from API.&quot;&quot;&quot;
+        # Jinja is not rendered inside a @task body; ask for context values
+        # such as `ds` (the logical date, YYYY-MM-DD) as keyword arguments
+        response = requests.get(
+            &quot;https://api.company.com/sales&quot;,
+            params={&quot;date&quot;: ds},
+            headers={&quot;Authorization&quot;: &quot;Bearer ...&quot;}
+        )
+        return response.json()[&quot;sales&quot;]
+
+    @task
+    def validate_data(sales: list[dict]) -&gt; list[dict]:
+        &quot;&quot;&quot;Validate and clean data.&quot;&quot;&quot;
+        valid = [s for s in sales if s.get(&quot;amount&quot;, 0) &gt; 0]
+        if len(valid) == 0:
+            raise ValueError(&quot;No valid sales records found!&quot;)
+        print(f&quot;Validated {len(valid)} / {len(sales)} records&quot;)
+        return valid
+
+    @task
+    def load_to_warehouse(sales: list[dict]) -&gt; str:
+        &quot;&quot;&quot;Load to Snowflake.&quot;&quot;&quot;
+        import snowflake.connector
+        conn = snowflake.connector.connect(
+            account=Variable.get(&quot;snowflake_account&quot;),
+            user=Variable.get(&quot;snowflake_user&quot;),
+            password=Variable.get(&quot;snowflake_password&quot;),
+        )
+        cursor = conn.cursor()
+        cursor.executemany(
+            &quot;INSERT INTO raw.sales VALUES (%s, %s, %s)&quot;,
+            [(s[&quot;id&quot;], s[&quot;amount&quot;], s[&quot;date&quot;]) for s in sales]
+        )
+        return f&quot;Loaded {len(sales)} records&quot;
+
+    @task
+    def run_dbt_models(load_result: str):
+        &quot;&quot;&quot;Run dbt transformations.&quot;&quot;&quot;
+        import subprocess
+        result = subprocess.run(
+            [&quot;dbt&quot;, &quot;run&quot;, &quot;--select&quot;, &quot;tag:sales&quot;, &quot;--profiles-dir&quot;, &quot;/etc/dbt&quot;],
+            capture_output=True, text=True
+        )
+        if result.returncode != 0:
+            raise Exception(f&quot;dbt failed: {result.stderr}&quot;)
+        print(result.stdout)
+
+    @task
+    def notify_success(dbt_result):
+        &quot;&quot;&quot;Send Slack notification.&quot;&quot;&quot;
+        import requests
+        requests.post(
+            Variable.get(&quot;slack_webhook_url&quot;),
+            json={&quot;text&quot;: &quot;✅ Daily sales pipeline completed successfully!&quot;}
+        )
+
+    # Define dependencies using &gt;&gt; operator
+    sales = extract_sales()
+    validated = validate_data(sales)
+    loaded = load_to_warehouse(validated)
+    dbt_result = run_dbt_models(loaded)
+    notify_success(dbt_result)
+
+# Instantiate the DAG
+daily_sales_pipeline()
+</code></pre>
+<h3 id="classic-operators-older-style-still-widely-used">Classic Operators (older style, still widely used)</h3>
+<pre><code class="language-python"># Airflow 3: core operators moved to the apache-airflow-providers-standard package
+from airflow.sdk import DAG
+from airflow.providers.standard.operators.python import PythonOperator
+from airflow.providers.standard.operators.bash import BashOperator
+from airflow.providers.http.operators.http import HttpOperator  # replaces SimpleHttpOperator
+import pendulum
+
+def my_python_fn(**context):
+    ds = context[&quot;ds&quot;]   # logical date; `execution_date` was removed in Airflow 3
+    print(f&quot;Running for date: {ds}&quot;)
+
+with DAG(
+    &quot;classic_dag&quot;,
+    schedule=&quot;@daily&quot;,
+    start_date=pendulum.datetime(2025, 1, 1, tz=&quot;UTC&quot;),
+    catchup=False,
+) as dag:
+
+    extract = HttpOperator(
+        task_id=&quot;extract&quot;,
+        http_conn_id=&quot;sales_api&quot;,
+        endpoint=&quot;/api/sales&quot;,
+        method=&quot;GET&quot;,
+        response_filter=lambda r: r.json(),
+    )
+
+    transform = PythonOperator(
+        task_id=&quot;transform&quot;,
+        python_callable=my_python_fn,
+    )
+
+    dbt_run = BashOperator(
+        task_id=&quot;dbt_run&quot;,
+        bash_command=&quot;dbt run --select tag:sales --profiles-dir /etc/dbt&quot;,
+    )
+
+    # Dependencies
+    extract &gt;&gt; transform &gt;&gt; dbt_run
+</code></pre>
+<hr />
+<h2 id="common-operators">Common Operators</h2>
+<pre><code class="language-python"># Airflow 3 import paths (most core operators now live in the standard provider)
+
+# Python
+from airflow.providers.standard.operators.python import PythonOperator, BranchPythonOperator
+from airflow.sdk import task
+
+# Bash
+from airflow.providers.standard.operators.bash import BashOperator
+
+# dbt
+from cosmos import DbtTaskGroup, ProjectConfig, ProfileConfig, ExecutionConfig  # astronomer-cosmos
+
+# Email (SMTP provider)
+from airflow.providers.smtp.operators.smtp import EmailOperator
+
+# Trigger another DAG
+from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator
+
+# Sensors (wait for something to be true)
+from airflow.providers.standard.sensors.filesystem import FileSensor
+from airflow.providers.standard.sensors.time_delta import TimeDeltaSensor
+from airflow.providers.http.sensors.http import HttpSensor
+
+# Data warehouse (generic SQL operator replaces SnowflakeOperator / RedshiftSQLOperator)
+from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
+from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator
+
+# Cloud
+from airflow.providers.amazon.aws.operators.s3 import S3CreateBucketOperator
+from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobOperator
+</code></pre>
+<hr />
+<h2 id="advanced-dag-patterns">Advanced DAG Patterns</h2>
+<h3 id="dynamic-task-mapping">Dynamic Task Mapping</h3>
+<pre><code class="language-python">import subprocess
+import pendulum
+from airflow.sdk import dag, task
+
+@dag(schedule=&quot;@daily&quot;, start_date=pendulum.datetime(2025, 1, 1, tz=&quot;UTC&quot;))
+def parallel_processing():
+
+    @task
+    def get_tables() -&gt; list[str]:
+        return [&quot;orders&quot;, &quot;customers&quot;, &quot;products&quot;, &quot;returns&quot;]
+
+    @task
+    def process_table(table: str) -&gt; str:
+        # This will create one task per table, running in parallel
+        print(f&quot;Processing table: {table}&quot;)
+        subprocess.run([&quot;dbt&quot;, &quot;run&quot;, &quot;--select&quot;, table], check=True)
+        return f&quot;Done: {table}&quot;
+
+    @task
+    def summarize(results: list[str]):
+        print(f&quot;All done! Processed: {results}&quot;)
+
+    tables = get_tables()
+    processed = process_table.expand(table=tables)   # dynamic task mapping!
+    summarize(processed)
+
+parallel_processing()
+</code></pre>
+<h3 id="branching">Branching</h3>
+<pre><code class="language-python">@dag(schedule=&quot;@daily&quot;, start_date=pendulum.datetime(2025, 1, 1, tz=&quot;UTC&quot;))
+def branching_dag():
+
+    @task.branch
+    def decide_branch(**context) -&gt; str:
+        day = context[&quot;logical_date&quot;].weekday()
+        if day == 6:  # Sunday
+            return &quot;full_load&quot;
+        return &quot;incremental_load&quot;
+
+    @task
+    def full_load():
+        print(&quot;Running full load (Sunday)&quot;)
+
+    @task
+    def incremental_load():
+        print(&quot;Running incremental load&quot;)
+
+    branch = decide_branch()
+    branch &gt;&gt; [full_load(), incremental_load()]
+
+branching_dag()
+</code></pre>
+<h3 id="sensors">Sensors</h3>
+<pre><code class="language-python">from airflow.providers.standard.sensors.filesystem import FileSensor
+
+wait_for_file = FileSensor(
+    task_id=&quot;wait_for_file&quot;,
+    filepath=&quot;/data/input/{{ ds }}/sales.csv&quot;,
+    poke_interval=300,   # check every 5 minutes
+    timeout=3600,        # fail after 1 hour
+    mode=&quot;reschedule&quot;,   # don't hold a worker slot while waiting
+)
+</code></pre>
+<h3 id="xcoms-cross-task-communication">XComs (cross-task communication)</h3>
+<pre><code class="language-python">@task
+def extract() -&gt; dict:
+    return {&quot;count&quot;: 1234, &quot;source&quot;: &quot;salesforce&quot;}
+
+@task
+def report(stats: dict):
+    # stats is the return value of extract()
+    print(f&quot;Extracted {stats['count']} records from {stats['source']}&quot;)
+
+# In TaskFlow, return values are automatically XComs
+stats = extract()
+report(stats)
+</code></pre>
+<hr />
+<h2 id="dbt--airflow-integration">dbt + Airflow Integration</h2>
+<h3 id="using-astronomer-cosmos">Using Astronomer Cosmos</h3>
+<pre><code class="language-python">from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
+from cosmos.profiles import SnowflakeUserPasswordProfileMapping
+from pathlib import Path
+import pendulum
+
+dbt_dag = DbtDag(
+    dag_id=&quot;dbt_pipeline&quot;,
+    project_config=ProjectConfig(
+        dbt_project_path=Path(&quot;/usr/local/airflow/dbt&quot;),
+    ),
+    profile_config=ProfileConfig(
+        profile_name=&quot;my_profile&quot;,
+        target_name=&quot;prod&quot;,
+        profile_mapping=SnowflakeUserPasswordProfileMapping(
+            conn_id=&quot;snowflake_conn&quot;,
+            profile_args={&quot;database&quot;: &quot;PROD&quot;, &quot;schema&quot;: &quot;ANALYTICS&quot;},
+        ),
+    ),
+    execution_config=ExecutionConfig(
+        dbt_executable_path=&quot;/usr/local/bin/dbt&quot;,
+    ),
+    render_config=RenderConfig(
+        select=[&quot;tag:daily&quot;],     # only run daily-tagged models
+    ),
+    schedule=&quot;@daily&quot;,
+    start_date=pendulum.datetime(2025, 1, 1, tz=&quot;UTC&quot;),
+)
+</code></pre>
+<hr />
+<h2 id="variables--connections">Variables &amp; Connections</h2>
+<pre><code class="language-python">from airflow.sdk import Variable   # Airflow 3 (was airflow.models.Variable)
+
+# In DAG code
+my_var = Variable.get(&quot;my_variable&quot;)
+json_var = Variable.get(&quot;my_json_var&quot;, deserialize_json=True)
+
+# With default (the Task SDK uses `default`; Airflow 2 used `default_var`)
+api_key = Variable.get(&quot;api_key&quot;, default=&quot;fallback_key&quot;)
+</code></pre>
+<pre><code class="language-bash"># CLI
+airflow variables set my_variable &quot;hello&quot;
+airflow variables get my_variable
+
+# Connections
+airflow connections add snowflake_prod \
+  --conn-type snowflake \
+  --host myaccount.snowflakecomputing.com \
+  --login myuser \
+  --password secret
+</code></pre>
+<hr />
+<h2 id="monitoring--alerts">Monitoring &amp; Alerts</h2>
+<pre><code class="language-python">from datetime import timedelta
+from airflow.sdk import Variable
+
+def on_failure_callback(context):
+    dag_id = context[&quot;dag&quot;].dag_id
+    task_id = context[&quot;task&quot;].task_id
+    exec_date = context[&quot;ds&quot;]
+    exception = context.get(&quot;exception&quot;)
+
+    # Send Slack alert
+    import requests
+    requests.post(
+        Variable.get(&quot;slack_webhook&quot;),
+        json={
+            &quot;text&quot;: f&quot;❌ Task Failed!\nDAG: {dag_id}\nTask: {task_id}\nDate: {exec_date}\nError: {exception}&quot;
+        }
+    )
+
+# Use in DAG default_args
+default_args = {
+    &quot;on_failure_callback&quot;: on_failure_callback,
+    &quot;retries&quot;: 2,
+    &quot;retry_delay&quot;: timedelta(minutes=5),
+}
+</code></pre>
+<hr />
+<h2 id="deployment-kubernetes">Deployment (Kubernetes)</h2>
+<pre><code class="language-bash"># Install Airflow via Helm on Kubernetes
+helm repo add apache-airflow https://airflow.apache.org
+helm upgrade --install airflow apache-airflow/airflow \
+  --namespace airflow \
+  --create-namespace \
+  -f values.yaml
+
+# values.yaml key settings:
+# executor: KubernetesExecutor   ← each task in its own pod
+# dags.gitSync.enabled: true     ← sync DAGs from Git
+</code></pre>
+<hr />
+<h2 id="airflow-in-2026">Airflow in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Airflow 3.0</strong></td>
+<td>Major release (April 2025): new React UI, DAG versioning, Task Execution API, API server replaces the webserver; SubDAGs, <code>execution_date</code>, and <code>days_ago</code> removed</td>
+</tr>
+<tr>
+<td><strong>Assets</strong></td>
+<td>Datasets were renamed to assets in Airflow 3: schedule DAGs based on data readiness, not just time</td>
+</tr>
+<tr>
+<td><strong>ObjectStoragePath</strong></td>
+<td>fsspec-based path abstraction for reading and writing cloud object storage from tasks</td>
+</tr>
+<tr>
+<td><strong>Task SDK</strong></td>
+<td><code>airflow.sdk</code>: the stable authoring interface, and a separate package so tasks can run without the full Airflow install</td>
+</tr>
+<tr>
+<td><strong>Astronomer</strong></td>
+<td>Managed Airflow cloud service (most popular)</td>
+</tr>
+<tr>
+<td><strong>MWAA</strong></td>
+<td>AWS Managed Workflows for Apache Airflow</td>
+</tr>
+<tr>
+<td><strong>Cloud Composer</strong></td>
+<td>GCP's managed Airflow</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="asset-based-scheduling-airflow-30">Asset-based Scheduling (Airflow 3.0)</h3>
+<pre><code class="language-python">from airflow.sdk import Asset, dag, task
+
+sales_asset = Asset(&quot;s3://bucket/sales/&quot;)   # asset URIs are static, not Jinja-templated
+
+@dag(schedule=sales_asset)   # runs when asset is updated
+def process_sales():
+    ...
+
+@dag(schedule=&quot;@daily&quot;)
+def extract_sales():
+    @task(outlets=[sales_asset])  # marks asset as updated on completion
+    def extract():
+        ...
+</code></pre>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-bash"># CLI
+airflow dags list
+airflow dags trigger my_dag
+airflow dags trigger my_dag --logical-date 2025-01-01
+airflow backfill create --dag-id my_dag --from-date 2025-01-01 --to-date 2025-01-31  # Airflow 3
+airflow tasks test my_dag my_task 2025-01-01
+airflow dags pause my_dag
+airflow dags unpause my_dag
+
+# Variables
+airflow variables set KEY VALUE
+airflow variables get KEY
+airflow variables import vars.json
+airflow variables export vars.json
+</code></pre>
+<pre><code class="language-python"># Schedule strings
+schedule = &quot;0 2 * * *&quot;      # 2am daily
+schedule = &quot;@daily&quot;          # midnight daily
+schedule = &quot;@weekly&quot;         # midnight Sunday
+schedule = &quot;@monthly&quot;        # midnight 1st of month
+schedule = &quot;@hourly&quot;         # top of every hour
+schedule = None              # manual trigger only
+schedule = timedelta(hours=6) # every 6 hours
+
+# Task dependencies
+a &gt;&gt; b           # a then b
+a &gt;&gt; [b, c]      # a then b and c in parallel
+[a, b] &gt;&gt; c      # both a and b must complete before c
+a.set_downstream(b)   # same as a &gt;&gt; b
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_apache_kafka.html"><small>Previous</small>Apache Kafka</a><a rel="next" class="next" href="intro_dbt.html"><small>Next</small>dbt</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_apache_airflow.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

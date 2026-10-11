@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Applied Deep Learning Roadmap Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="This guide turns deep learning from theory into portfolio-ready engineering. Use it alongside the core Deep Learning overview and Transformers guide when…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_applied_deep_learning.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Applied Deep Learning Roadmap Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="This guide turns deep learning from theory into portfolio-ready engineering. Use it alongside the core Deep Learning overview and Transformers guide when…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_applied_deep_learning.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Applied Deep Learning Roadmap Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="This guide turns deep learning from theory into portfolio-ready engineering. Use it alongside the core Deep Learning overview and Transformers guide when…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Applied Deep Learning Roadmap",
+   "description": "This guide turns deep learning from theory into portfolio-ready engineering. Use it alongside the core Deep Learning overview and Transformers guide when…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_applied_deep_learning.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Applied Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_applied_deep_learning.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Applied Deep Learning</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_applied_deep_learning.md">Open in the interactive study hub</a> <span aria-hidden="true">·</span> 6 interview questions, also in the <a href="../../practice.html">practice drill</a></p>
+<article class="md">
+<h1 id="applied-deep-learning-roadmap">Applied Deep Learning Roadmap</h1>
+<p>This guide turns deep learning from theory into portfolio-ready engineering. Use it alongside the core <a href="./">Deep Learning overview</a> and <a href="intro_transformers.html">Transformers guide</a> when preparing for modern ML engineer and applied AI interviews.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Deep learning is the practice of learning hierarchical representations from data using neural networks trained with gradient-based optimization. It matters because modern AI systems for vision, language, ranking, recommendation, speech, and multimodal reasoning are all built on deep learning foundations.</p>
+<p>In interviews, the expected bar is no longer &quot;define a neural network.&quot; You should be able to explain:</p>
+<ul>
+<li>why one architecture is a better fit than another</li>
+<li>how training becomes stable at scale</li>
+<li>where GPU bottlenecks appear</li>
+<li>how to move from notebook experiments to reliable inference</li>
+</ul>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="neural-networks-and-representation-learning">Neural networks and representation learning</h3>
+<p>A deep network learns multiple layers of features. Early layers learn simple patterns; later layers learn task-specific abstractions. In practice, this means the network replaces hand-written feature engineering with learned representations.</p>
+<h3 id="backpropagation">Backpropagation</h3>
+<p>Backpropagation computes gradients of the loss with respect to parameters using the chain rule. Practically, this is what makes end-to-end training possible across millions or billions of parameters.</p>
+<h3 id="cnns-rnns-and-transformers">CNNs, RNNs, and Transformers</h3>
+<ul>
+<li>CNNs are efficient for local spatial structure, especially images and video frames.</li>
+<li>RNNs process sequences recurrently and are still relevant for some streaming or low-resource sequence tasks.</li>
+<li>Transformers dominate modern NLP and many multimodal tasks because self-attention models long-range dependencies better than recurrent architectures.</li>
+</ul>
+<h3 id="training-pipelines">Training pipelines</h3>
+<p>A production-grade training pipeline includes:</p>
+<ul>
+<li>dataset versioning</li>
+<li>train/validation/test splits</li>
+<li>preprocessing and augmentation</li>
+<li>distributed training or mixed precision</li>
+<li>checkpointing</li>
+<li>evaluation</li>
+<li>model packaging for inference</li>
+</ul>
+<hr />
+<h2 id="key-skills">Key Skills</h2>
+<h3 id="model-architecture-design">Model architecture design</h3>
+<p>In practice, this means selecting the smallest architecture that can meet the quality target. You should know when to use a CNN backbone, a simple MLP, a sequence model, or a transformer encoder/decoder setup.</p>
+<h3 id="gpu-training">GPU training</h3>
+<p>This includes understanding:</p>
+<ul>
+<li>batch size vs memory tradeoffs</li>
+<li>mixed precision</li>
+<li>gradient accumulation</li>
+<li>data loader throughput</li>
+<li>multi-GPU scaling limitations</li>
+</ul>
+<h3 id="hyperparameter-tuning">Hyperparameter tuning</h3>
+<p>Strong candidates can explain which hyperparameters matter first:</p>
+<ul>
+<li>learning rate</li>
+<li>weight decay</li>
+<li>batch size</li>
+<li>scheduler choice</li>
+<li>dropout or regularization strength</li>
+</ul>
+<h3 id="model-optimization">Model optimization</h3>
+<p>This means reducing latency or cost without destroying accuracy. Common techniques include quantization, pruning, distillation, compilation, and smaller serving-friendly architectures.</p>
+<hr />
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PyTorch</td>
+<td>Flexible deep learning framework with strong research and production adoption</td>
+<td>Default choice for most modern DL and LLM work</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>Graph-based ML ecosystem with good deployment integrations</td>
+<td>Teams already standardized on TensorFlow or TFX</td>
+</tr>
+<tr>
+<td>Keras</td>
+<td>High-level API for rapid model iteration</td>
+<td>Fast prototyping and teaching</td>
+</tr>
+<tr>
+<td>PyTorch Lightning</td>
+<td>Structured training loops and experiment organization</td>
+<td>When training code becomes repetitive</td>
+</tr>
+<tr>
+<td>Optuna</td>
+<td>Hyperparameter search automation</td>
+<td>Systematic tuning beyond manual sweeps</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="projects">Projects</h2>
+<h3 id="image-classifier">Image classifier</h3>
+<ul>
+<li>Goal: Build a classifier for a custom image dataset and ship both training and inference.</li>
+<li>Key components: data augmentation, CNN backbone, experiment tracking, evaluation report, REST or batch inference.</li>
+<li>Suggested tech stack: PyTorch, torchvision, Weights &amp; Biases, FastAPI.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="text-classifier">Text classifier</h3>
+<ul>
+<li>Goal: Classify support tickets, reviews, or forum posts using a transformer encoder.</li>
+<li>Key components: tokenization, class balancing, fine-tuning, threshold tuning, confusion-matrix analysis.</li>
+<li>Suggested tech stack: Hugging Face Transformers, PyTorch, scikit-learn.</li>
+<li>Difficulty: Intermediate.</li>
+</ul>
+<h3 id="transformer-from-scratch">Transformer from scratch</h3>
+<ul>
+<li>Goal: Implement a minimal transformer encoder-decoder to understand attention mechanics.</li>
+<li>Key components: token embeddings, positional encoding, multi-head attention, masking, training loop.</li>
+<li>Suggested tech stack: PyTorch only.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<h3 id="training-and-inference-pipeline">Training and inference pipeline</h3>
+<ul>
+<li>Goal: Show how a model moves from raw data to packaged inference artifact.</li>
+<li>Key components: data preprocessing script, training script, checkpoint export, inference service, monitoring hooks.</li>
+<li>Suggested tech stack: PyTorch, MLflow, Docker, FastAPI.</li>
+<li>Difficulty: Advanced.</li>
+</ul>
+<hr />
+<h2 id="example-code">Example Code</h2>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader
+
+class SimpleClassifier(nn.Module):
+    def __init__(self, input_dim: int, hidden_dim: int, num_classes: int):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(hidden_dim, num_classes),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+model = SimpleClassifier(input_dim=768, hidden_dim=256, num_classes=5).cuda()
+optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
+criterion = nn.CrossEntropyLoss()
+
+for batch in DataLoader(train_dataset, batch_size=64, shuffle=True):
+    features, labels = [x.cuda() for x in batch]
+    logits = model(features)
+    loss = criterion(logits, labels)
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+</code></pre>
+<hr />
+<h2 id="suggested-project-structure">Suggested Project Structure</h2>
+<pre><code class="language-text">image-classifier/
+├── data/
+├── notebooks/
+├── src/
+│   ├── dataset.py
+│   ├── model.py
+│   ├── train.py
+│   ├── evaluate.py
+│   └── inference.py
+├── tests/
+├── configs/
+├── Dockerfile
+└── README.md
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<h4 id="how-do-you-decide-between-training-from-scratch-fine-tuning-and-using-a-pretrained-model-as-is">How do you decide between training from scratch, fine-tuning, and using a pretrained model as-is?</h4>
+<p>Work down from cheapest. <strong>Pretrained as-is (or with a frozen backbone + new head)</strong> whenever the pretraining domain is close to yours and you have a few thousand labeled examples or fewer: this covers most real problems. <strong>Fine-tuning</strong> when you have enough labeled data (typically tens of thousands of examples) or when the domain differs meaningfully from the pretraining distribution: medical imaging, satellite imagery, industrial defect detection. <strong>From scratch</strong> almost never: only when the input modality has no relevant pretrained model at all, or when you have millions of labeled examples and a research budget.</p>
+<p>The related decision is <em>how much</em> to fine-tune: freezing early layers and training later ones is the standard middle ground, since early layers learn general features (edges, textures) and later layers learn task-specific ones. With very little data, freezing more prevents overfitting.</p>
+<h4 id="your-model-gets-95-training-accuracy-and-65-validation-accuracy-what-do-you-do">Your model gets 95% training accuracy and 65% validation accuracy. What do you do?</h4>
+<p>Confirm the gap is real before treating it. Check that the validation set isn't distributionally different (different source, different preprocessing, different time period) and that validation-time augmentation isn't applied: those look like overfitting and aren't.</p>
+<p>If it's genuine overfitting, in order of expected impact: <strong>more data or stronger augmentation</strong> (almost always the biggest win in vision), <strong>early stopping</strong> on validation loss, <strong>more regularization</strong> (weight decay, dropout, label smoothing), <strong>a smaller or more constrained model</strong>, and <strong>transfer learning with more layers frozen</strong> if you're training too much capacity for the data available.</p>
+<p>If the training accuracy itself is suspicious, check for leakage: duplicate or near-duplicate images across the split is extremely common in scraped datasets and inflates training metrics specifically.</p>
+<h4 id="how-do-you-structure-a-training-pipeline-that-others-can-reproduce">How do you structure a training pipeline that others can reproduce?</h4>
+<p>Configuration-driven rather than notebook-driven: one config file holding data paths, hyperparameters, and seeds; a deterministic data pipeline with a fixed, versioned split; seeded random number generators for Python, NumPy, and the framework; and an experiment tracker (MLflow, Weights &amp; Biases) recording config, metrics, the code commit, the data version, and the resulting artifact.</p>
+<p>Checkpointing matters more than people expect: save on every improvement with the optimizer and scheduler state included, so a run can resume rather than restart. And separate the pipeline into stages (data prep, train, evaluate, export), so a failure in one doesn't cost the others.</p>
+<p>Full determinism on GPU costs speed (deterministic kernels, no cuDNN autotuning), so the practical standard is seeded and versioned, with a note that exact bitwise reproduction requires the deterministic flags.</p>
+<h4 id="how-do-you-choose-a-batch-size-and-learning-rate-together">How do you choose a batch size and learning rate together?</h4>
+<p>Pick the largest batch that fits in memory and trains stably, then set the learning rate using the linear scaling rule: relative to a known-good configuration, scaling the batch by <code>k</code> means scaling the LR by roughly <code>k</code>, with warmup. Verify with a short LR range test: increase the LR exponentially over a few hundred steps and take roughly an order of magnitude below where the loss diverges.</p>
+<p>Two caveats worth raising: beyond a task-dependent critical batch size, larger batches stop improving the gradient estimate and you're spending compute for nothing; and small batches inject gradient noise that often generalizes slightly better, so the largest possible batch is not automatically the best batch.</p>
+<h4 id="how-do-you-speed-up-a-training-run-thats-taking-too-long">How do you speed up a training run that's taking too long?</h4>
+<p>Profile first: most &quot;slow training&quot; is a starved GPU, not a slow model. Check GPU utilization: if it's below 80%, the bottleneck is data loading, and the fixes are more <code>num_workers</code>, <code>pin_memory=True</code>, <code>persistent_workers=True</code>, pre-decoded or pre-tokenized data, and removing synchronization points like <code>.item()</code> inside the loop.</p>
+<p>Once the GPU is saturated: mixed precision (bf16) for a near-free 1.5-2x, larger batches, <code>torch.compile</code> for kernel fusion, and gradient accumulation only if you need a larger effective batch. Then algorithmic wins: a smaller model that meets the requirement, fewer epochs with early stopping, or a subset of the data for hyperparameter search before the full run. Distributed training is the last resort because it adds the most complexity per unit of speedup.</p>
+<h4 id="what-do-you-monitor-during-a-long-training-run">What do you monitor during a long training run?</h4>
+<p>Training and validation loss on the same axis (divergence tells you when to stop), learning rate (to confirm the schedule is doing what you think), gradient norm (spikes precede divergence and justify clipping), GPU utilization and memory, and throughput in samples per second so you notice a slowdown.</p>
+<p>For anything beyond a short run, add automatic alerting on NaN loss and on validation loss failing to improve for N evaluations, plus periodic checkpointing: discovering at hour 40 that the run diverged at hour 3 is an avoidable and expensive mistake.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Why it hurts</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not verifying the model can overfit one batch</td>
+<td>Hours of tuning spent on a code bug</td>
+<td>Overfit a single batch to near-zero loss first</td>
+</tr>
+<tr>
+<td>Augmentation applied to the validation set</td>
+<td>Validation loss becomes noise, not signal</td>
+<td>Separate train and eval transform pipelines</td>
+</tr>
+<tr>
+<td>Duplicate or near-duplicate images across splits</td>
+<td>Inflated metrics; the model memorized</td>
+<td>Deduplicate by perceptual hash before splitting</td>
+</tr>
+<tr>
+<td>Forgetting <code>model.eval()</code> at inference</td>
+<td>Dropout on and BatchNorm using batch statistics</td>
+<td><code>model.eval()</code> + <code>torch.no_grad()</code></td>
+</tr>
+<tr>
+<td>Tuning hyperparameters on the test set</td>
+<td>Reported performance is optimistic</td>
+<td>Separate validation and test sets</td>
+</tr>
+<tr>
+<td>Checkpointing weights without optimizer state</td>
+<td>A resumed run restarts the optimizer cold</td>
+<td>Save model, optimizer, scheduler, epoch, and RNG state</td>
+</tr>
+<tr>
+<td>Notebook-only training</td>
+<td>Not reproducible, not reviewable, not schedulable</td>
+<td>Config-driven scripts with experiment tracking</td>
+</tr>
+<tr>
+<td>Ignoring GPU utilization</td>
+<td>Runs take 3x longer than necessary</td>
+<td>Profile; fix data loading before touching the model</td>
+</tr>
+<tr>
+<td>No early stopping on a long run</td>
+<td>Wasted compute past the best checkpoint</td>
+<td>Early stopping on validation, plus alerting</td>
+</tr>
+<tr>
+<td>Class imbalance ignored in the loss</td>
+<td>The model collapses to the majority class</td>
+<td>Class weights, focal loss, or balanced sampling</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="./">Deep Learning Overview</a></li>
+<li><a href="intro_transformers.html">Transformers</a></li>
+<li><a href="../mlops/intro_model_serving.html">Model Serving</a></li>
+<li><a href="../system_design/intro_backend_ai_system_design.html">Backend &amp; System Design for AI</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="./"><small>Previous</small>Overview</a><a rel="next" class="next" href="intro_sequence_models.html"><small>Next</small>Sequence Models (RNN/LSTM/GRU)</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_applied_deep_learning.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transformers Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to the Transformer architecture: the foundation of modern NLP and AI.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_transformers.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Transformers Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to the Transformer architecture: the foundation of modern NLP and AI.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_transformers.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Transformers Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to the Transformer architecture: the foundation of modern NLP and AI.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Transformers",
+   "description": "A guide to the Transformer architecture: the foundation of modern NLP and AI.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_transformers.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Deep Learning",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#deep-learning"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Transformers",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/deep_learning/intro_transformers.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#deep-learning">Deep Learning</a> <span aria-hidden="true">/</span> <span aria-current="page">Transformers</span></nav>
+<p class="meta"><a href="../../#deep_learning/intro_transformers.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="transformers">Transformers</h1>
+<p>A guide to the Transformer architecture: the foundation of modern NLP and AI.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#attention-is-all-you-need-overview">&quot;Attention is All You Need&quot; Overview</a></li>
+<li><a href="#self-attention-mechanism">Self-Attention Mechanism</a></li>
+<li><a href="#multi-head-attention">Multi-Head Attention</a></li>
+<li><a href="#positional-encoding">Positional Encoding</a></li>
+<li><a href="#encoder-decoder-architecture">Encoder-Decoder Architecture</a></li>
+<li><a href="#encoder-only-decoder-only-encoder-decoder">Encoder-Only, Decoder-Only, Encoder-Decoder</a></li>
+<li><a href="#key-innovations">Key Innovations</a></li>
+<li><a href="#comparison-with-rnnslstms">Comparison with RNNs/LSTMs</a></li>
+<li><a href="#pytorch-implementation">PyTorch Implementation</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="attention-is-all-you-need-overview">&quot;Attention is All You Need&quot; Overview</h2>
+<p>Published in 2017 by Vaswani et al. at Google, this paper introduced the Transformer architecture, replacing recurrence entirely with attention mechanisms.</p>
+<p><strong>Key contributions:</strong></p>
+<ul>
+<li>Eliminated sequential processing (RNNs) with parallel attention</li>
+<li>Scaled to much larger models than RNNs due to parallelizability</li>
+<li>Introduced multi-head attention and positional encoding</li>
+<li>Became the foundation for BERT, GPT, T5, and all modern LLMs</li>
+</ul>
+<p><strong>Original use case:</strong> Machine translation (English → German/French). Outperformed all previous RNN/CNN-based systems.</p>
+<hr />
+<h2 id="self-attention-mechanism">Self-Attention Mechanism</h2>
+<p>Self-attention allows each token in a sequence to attend to all other tokens, capturing long-range dependencies in a single step.</p>
+<h3 id="intuition">Intuition</h3>
+<p>For the sentence &quot;The animal didn't cross the street because it was too tired&quot;:</p>
+<ul>
+<li>When encoding &quot;it&quot;, self-attention can directly relate it to &quot;animal&quot; with high weight</li>
+<li>RNNs must propagate this relationship through intermediate tokens (slow, information degradation)</li>
+</ul>
+<h3 id="mathematical-formulation">Mathematical Formulation</h3>
+<p><strong>Step 1:</strong> Create Query, Key, Value matrices from input embeddings X:</p>
+<pre><code>Q = X · Wq    (query: what am I looking for?)
+K = X · Wk    (key: what do I have to offer?)
+V = X · Wv    (value: what information do I contain?)
+</code></pre>
+<p><strong>Step 2:</strong> Compute attention scores:</p>
+<pre><code>scores = Q · Kᵀ              (dot product similarity)
+scores_scaled = scores / √dₖ  (scale by sqrt of key dimension)
+weights = softmax(scores_scaled)  (normalize to probabilities)
+</code></pre>
+<p><strong>Step 3:</strong> Apply weights to values:</p>
+<pre><code>Attention(Q, K, V) = softmax(QKᵀ / √dₖ) · V
+</code></pre>
+<p><strong>Why divide by √dₖ?</strong></p>
+<p>Without scaling, the dot products grow large in magnitude as dimension dₖ increases, pushing softmax into regions of very small gradients (saturation). Dividing by √dₖ keeps the scale manageable.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-python">import torch
+import torch.nn.functional as F
+import math
+
+def scaled_dot_product_attention(Q, K, V, mask=None):
+    &quot;&quot;&quot;
+    Q: (batch, seq_len, d_k)
+    K: (batch, seq_len, d_k)
+    V: (batch, seq_len, d_v)
+    &quot;&quot;&quot;
+    d_k = Q.size(-1)
+
+    # Scaled dot product scores
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
+    # scores shape: (batch, seq_len, seq_len)
+
+    # Apply optional mask (for causal attention in decoder)
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, float('-inf'))
+
+    # Attention weights
+    weights = F.softmax(scores, dim=-1)
+
+    # Weighted sum of values
+    output = torch.matmul(weights, V)
+    return output, weights
+</code></pre>
+<hr />
+<h2 id="multi-head-attention">Multi-Head Attention</h2>
+<p>Instead of one large attention, run multiple smaller attention operations in parallel (heads), allowing the model to attend to different aspects simultaneously.</p>
+<pre><code>MultiHead(Q, K, V) = Concat(head₁, head₂, ..., headₕ) · Wₒ
+
+where headᵢ = Attention(Q·Wqᵢ, K·Wkᵢ, V·Wvᵢ)
+</code></pre>
+<p><strong>Intuition:</strong> Different heads can specialize:</p>
+<ul>
+<li>Head 1: Syntactic dependencies</li>
+<li>Head 2: Semantic relationships</li>
+<li>Head 3: Coreference (pronoun resolution)</li>
+<li>Head 4: Local context</li>
+</ul>
+<p><strong>Dimensions:</strong> If model dim is d_model = 512 and h = 8 heads, each head operates on d_k = d_v = 64 dimensions.</p>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import math
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model: int, num_heads: int, dropout: float = 0.1):
+        super().__init__()
+        assert d_model % num_heads == 0
+
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads
+
+        # Linear projections for Q, K, V and output
+        self.W_q = nn.Linear(d_model, d_model)
+        self.W_k = nn.Linear(d_model, d_model)
+        self.W_v = nn.Linear(d_model, d_model)
+        self.W_o = nn.Linear(d_model, d_model)
+
+        self.dropout = nn.Dropout(dropout)
+
+    def split_heads(self, x: torch.Tensor) -&gt; torch.Tensor:
+        &quot;&quot;&quot;Reshape from (batch, seq, d_model) to (batch, heads, seq, d_k).&quot;&quot;&quot;
+        batch_size, seq_len, _ = x.size()
+        x = x.view(batch_size, seq_len, self.num_heads, self.d_k)
+        return x.transpose(1, 2)  # (batch, heads, seq, d_k)
+
+    def forward(self, query, key, value, mask=None):
+        batch_size = query.size(0)
+
+        # Linear projections
+        Q = self.split_heads(self.W_q(query))   # (batch, heads, seq, d_k)
+        K = self.split_heads(self.W_k(key))
+        V = self.split_heads(self.W_v(value))
+
+        # Scaled dot-product attention
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
+
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, float('-inf'))
+
+        weights = self.dropout(torch.softmax(scores, dim=-1))
+        attention_output = torch.matmul(weights, V)
+
+        # Concatenate heads
+        attention_output = attention_output.transpose(1, 2).contiguous()
+        attention_output = attention_output.view(batch_size, -1, self.d_model)
+
+        # Final linear projection
+        return self.W_o(attention_output)
+</code></pre>
+<hr />
+<h2 id="positional-encoding">Positional Encoding</h2>
+<p>Self-attention is order-agnostic: it treats &quot;cat sat mat&quot; the same as &quot;mat sat cat&quot;. Positional encodings add position information to token embeddings.</p>
+<h3 id="sinusoidal-positional-encoding-original-paper">Sinusoidal Positional Encoding (original paper)</h3>
+<pre><code>PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li>Unique encoding for each position</li>
+<li>Model can learn relative positions from linear combinations</li>
+<li>Works for sequences longer than seen in training</li>
+</ul>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import math
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model: int, max_seq_len: int = 5000, dropout: float = 0.1):
+        super().__init__()
+        self.dropout = nn.Dropout(dropout)
+
+        # Create position encodings
+        pe = torch.zeros(max_seq_len, d_model)
+        position = torch.arange(0, max_seq_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(
+            torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model)
+        )
+
+        pe[:, 0::2] = torch.sin(position * div_term)  # Even indices: sin
+        pe[:, 1::2] = torch.cos(position * div_term)  # Odd indices: cos
+
+        pe = pe.unsqueeze(0)  # (1, max_seq_len, d_model)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+        # Add positional encoding to token embeddings
+        x = x + self.pe[:, :x.size(1)]
+        return self.dropout(x)
+</code></pre>
+<h3 id="learned-positional-embeddings">Learned Positional Embeddings</h3>
+<p>Modern models like BERT use learned positional embeddings:</p>
+<pre><code class="language-python"># Simple learned positional embedding
+self.pos_embedding = nn.Embedding(max_seq_len, d_model)
+positions = torch.arange(seq_len).to(x.device)
+x = x + self.pos_embedding(positions)
+</code></pre>
+<h3 id="rope-rotary-positional-embedding">RoPE (Rotary Positional Embedding)</h3>
+<p>Used in Llama, Mistral, Gemma. Encodes relative position by rotating Q and K vectors in the attention calculation. Plain RoPE does not extrapolate well far beyond the training length; context extension relies on scaling methods such as position interpolation, NTK-aware scaling or YaRN, usually with some further training.</p>
+<hr />
+<h2 id="encoder-decoder-architecture">Encoder-Decoder Architecture</h2>
+<p>The original Transformer architecture for seq2seq tasks (translation):</p>
+<pre><code>Source Sequence (English)
+        ↓
+[Token Embedding + Positional Encoding]
+        ↓
+┌──────────────────────────────┐
+│         ENCODER              │ ← N layers (N=6 in original)
+│  [Self-Attention]            │
+│  [Feed-Forward Network]      │
+└──────────────────────────────┘
+        ↓ (encoder memory)
+Target Sequence (German) → [Embedding + PE]
+        ↓
+┌──────────────────────────────┐
+│         DECODER              │ ← N layers
+│  [Masked Self-Attention]     │ (causal: can't see future tokens)
+│  [Cross-Attention]           │ (Q from decoder, K/V from encoder)
+│  [Feed-Forward Network]      │
+└──────────────────────────────┘
+        ↓
+    Linear + Softmax
+        ↓
+    Output Probabilities
+</code></pre>
+<h3 id="encoder-layer">Encoder Layer</h3>
+<pre><code class="language-python">class EncoderLayer(nn.Module):
+    def __init__(self, d_model: int, num_heads: int, d_ff: int, dropout: float = 0.1):
+        super().__init__()
+        self.self_attention = MultiHeadAttention(d_model, num_heads, dropout)
+        self.feed_forward = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_ff, d_model)
+        )
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        # Pre-LayerNorm variant (more stable in practice)
+        # Self-attention with residual connection
+        attn_output = self.self_attention(self.norm1(x), self.norm1(x), self.norm1(x), mask)
+        x = x + self.dropout(attn_output)
+
+        # Feed-forward with residual connection
+        ff_output = self.feed_forward(self.norm2(x))
+        x = x + self.dropout(ff_output)
+
+        return x
+</code></pre>
+<hr />
+<h2 id="encoder-only-decoder-only-encoder-decoder">Encoder-Only, Decoder-Only, Encoder-Decoder</h2>
+<h3 id="encoder-only-bert-style">Encoder-Only (BERT-style)</h3>
+<ul>
+<li>Bidirectional: each token attends to all other tokens</li>
+<li>Pretraining: Masked Language Model (MLM): predict masked tokens</li>
+<li>Use case: Classification, NER, QA, embeddings</li>
+</ul>
+<pre><code class="language-python"># BERT: bidirectional, best for understanding tasks
+# Input: [CLS] token [MASK] more text [SEP]
+# Masked positions predicted from bidirectional context
+</code></pre>
+<h3 id="decoder-only-gpt-style">Decoder-Only (GPT-style)</h3>
+<ul>
+<li>Causal/autoregressive: each token attends only to previous tokens</li>
+<li>Pretraining: next token prediction</li>
+<li>Use case: Text generation, chat, code completion</li>
+</ul>
+<pre><code class="language-python"># GPT: causal mask prevents attending to future tokens
+# At each step, predict the next token given all previous tokens
+# Used in: GPT-series, Llama, Mistral, Gemma (and most chat LLMs)
+
+def create_causal_mask(seq_len):
+    &quot;&quot;&quot;Lower triangular mask (1 = may attend): prevents attending to future positions.&quot;&quot;&quot;
+    mask = torch.tril(torch.ones(seq_len, seq_len))
+    return mask.unsqueeze(0).unsqueeze(0)  # (1, 1, seq, seq)
+</code></pre>
+<h3 id="encoder-decoder-t5bart-style">Encoder-Decoder (T5/BART-style)</h3>
+<ul>
+<li>Encoder: bidirectional (processes source)</li>
+<li>Decoder: causal + cross-attention to encoder</li>
+<li>Use case: Translation, summarization, code generation from description</li>
+</ul>
+<hr />
+<h2 id="key-innovations">Key Innovations</h2>
+<h3 id="layer-normalization">Layer Normalization</h3>
+<p>Applied before (Pre-LN, modern) or after (Post-LN, original) each sublayer.</p>
+<pre><code class="language-python"># Pre-LN: more stable training (used in GPT-2/GPT-3; Llama uses pre-norm with RMSNorm)
+x = x + attention(LayerNorm(x))
+x = x + ffn(LayerNorm(x))
+
+# Post-LN: original paper
+x = LayerNorm(x + attention(x))
+x = LayerNorm(x + ffn(x))
+</code></pre>
+<h3 id="residual-connections">Residual Connections</h3>
+<p>Every sublayer has a skip connection: <code>output = LayerNorm(x + sublayer(x))</code>. Allows gradients to flow directly through, enabling training of deep networks (100+ layers).</p>
+<h3 id="feed-forward-sublayer">Feed-Forward Sublayer</h3>
+<p>Two linear transformations with ReLU in between:</p>
+<pre><code>FFN(x) = max(0, xW₁ + b₁)W₂ + b₂
+</code></pre>
+<p>d_ff is typically 4× d_model (512 → 2048 in original paper). Modern models use SwiGLU activation:</p>
+<pre><code>FFN_SwiGLU(x) = (SiLU(xW₁) ⊙ xW₂) W₃
+</code></pre>
+<h3 id="flash-attention">Flash Attention</h3>
+<p>An exact, memory-efficient attention implementation that uses tiling to avoid materializing the full N×N attention matrix in memory, so extra memory grows linearly rather than quadratically with sequence length. The original paper reports attention speedups of up to about 7x on some settings. Widely used in production (FlashAttention-2 in Llama, Mistral, etc.).</p>
+<hr />
+<h2 id="comparison-with-rnnslstms">Comparison with RNNs/LSTMs</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>RNN / LSTM</th>
+<th>Transformer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parallelization</strong></td>
+<td>Sequential (can't parallelize)</td>
+<td>Fully parallel</td>
+</tr>
+<tr>
+<td><strong>Long-range dependencies</strong></td>
+<td>Poor (vanishing gradient)</td>
+<td>Excellent (direct attention)</td>
+</tr>
+<tr>
+<td><strong>Training speed</strong></td>
+<td>Slow</td>
+<td>Fast (parallelizable)</td>
+</tr>
+<tr>
+<td><strong>Inference cost per token</strong></td>
+<td>Constant (fixed-size state)</td>
+<td>Grows with context length (attends over the KV cache)</td>
+</tr>
+<tr>
+<td><strong>Memory (training)</strong></td>
+<td>O(sequence length)</td>
+<td>O(sequence length²)</td>
+</tr>
+<tr>
+<td><strong>Positional information</strong></td>
+<td>Built-in (sequential)</td>
+<td>Requires explicit encoding</td>
+</tr>
+<tr>
+<td><strong>Context window</strong></td>
+<td>Theoretically unlimited</td>
+<td>Limited by context window</td>
+</tr>
+<tr>
+<td><strong>Scale</strong></td>
+<td>Hard to scale effectively</td>
+<td>Scales excellently (more params → better)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why Transformers won:</strong> The parallelization advantage on GPUs, combined with better handling of long-range dependencies, made it possible to train on vastly more data, achieving much better performance.</p>
+<hr />
+<h2 id="pytorch-implementation">PyTorch Implementation</h2>
+<p>A minimal but complete Transformer implementation:</p>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import math
+
+class TransformerModel(nn.Module):
+    def __init__(
+        self,
+        vocab_size: int,
+        d_model: int = 512,
+        num_heads: int = 8,
+        num_encoder_layers: int = 6,
+        num_decoder_layers: int = 6,
+        d_ff: int = 2048,
+        max_seq_len: int = 512,
+        dropout: float = 0.1
+    ):
+        super().__init__()
+
+        self.src_embedding = nn.Embedding(vocab_size, d_model)
+        self.tgt_embedding = nn.Embedding(vocab_size, d_model)
+        self.pos_encoding = PositionalEncoding(d_model, max_seq_len, dropout)
+
+        self.transformer = nn.Transformer(
+            d_model=d_model,
+            nhead=num_heads,
+            num_encoder_layers=num_encoder_layers,
+            num_decoder_layers=num_decoder_layers,
+            dim_feedforward=d_ff,
+            dropout=dropout,
+            batch_first=True
+        )
+
+        self.output_projection = nn.Linear(d_model, vocab_size)
+        self.d_model = d_model
+
+        self._init_weights()
+
+    def _init_weights(self):
+        for p in self.parameters():
+            if p.dim() &gt; 1:
+                nn.init.xavier_uniform_(p)
+
+    def forward(self, src, tgt, src_mask=None, tgt_mask=None,
+                src_key_padding_mask=None, tgt_key_padding_mask=None):
+        # Scale embeddings
+        src_emb = self.pos_encoding(self.src_embedding(src) * math.sqrt(self.d_model))
+        tgt_emb = self.pos_encoding(self.tgt_embedding(tgt) * math.sqrt(self.d_model))
+
+        # Transformer
+        output = self.transformer(
+            src_emb, tgt_emb,
+            src_mask=src_mask,
+            tgt_mask=tgt_mask,
+            src_key_padding_mask=src_key_padding_mask,
+            tgt_key_padding_mask=tgt_key_padding_mask
+        )
+
+        # Project to vocabulary
+        return self.output_projection(output)
+
+# Create causal mask for decoder
+def generate_causal_mask(seq_len: int, device: torch.device) -&gt; torch.Tensor:
+    &quot;&quot;&quot;Returns upper triangular mask for causal attention.&quot;&quot;&quot;
+    return torch.triu(
+        torch.ones(seq_len, seq_len, device=device) * float('-inf'),
+        diagonal=1
+    )
+
+# Usage
+model = TransformerModel(vocab_size=30000)
+src = torch.randint(0, 30000, (2, 20))  # (batch, src_len)
+tgt = torch.randint(0, 30000, (2, 15))  # (batch, tgt_len)
+
+tgt_mask = generate_causal_mask(tgt.size(1), tgt.device)
+output = model(src, tgt, tgt_mask=tgt_mask)
+print(output.shape)  # (2, 15, 30000)
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: Explain the self-attention mechanism.</strong> 🟡 Intermediate</p>
+<p>Self-attention computes <code>Attention(Q, K, V) = softmax(QKᵀ/√dₖ)V</code>. Each token creates a Query (what it's looking for), Key (what it offers), and Value (its information). Dot products between Q and K give similarity scores; softmax normalizes them to attention weights; the output is a weighted sum of Values. Dividing by √dₖ prevents vanishing gradients from large dot products. This allows each token to directly attend to any other token: unlike RNNs that must propagate information through intermediate steps.</p>
+<hr />
+<p><strong>Q2: Why divide attention scores by √dₖ?</strong> 🔴 Advanced</p>
+<p>For random Q and K vectors of dimension dₖ, the dot product Q·K has expected magnitude ≈ √dₖ (variance scales with dₖ). Without scaling, large dot products push softmax into regions of near-zero gradients (the function is nearly 0 or 1 everywhere), making learning difficult. Dividing by √dₖ keeps the input to softmax in a range where gradients are meaningful (~variance 1).</p>
+<hr />
+<p><strong>Q3: What is the difference between self-attention and cross-attention?</strong> 🟡 Intermediate</p>
+<p>In <strong>self-attention</strong>, Q, K, and V all come from the same sequence: each position attends to all other positions in the same sequence. Used in encoders and decoder's first sublayer.</p>
+<p>In <strong>cross-attention</strong>, Q comes from one sequence (decoder) and K, V come from another (encoder output). This allows the decoder to use encoder representations when generating the output. Used in the second sublayer of encoder-decoder architectures.</p>
+<hr />
+<p><strong>Q4: What is masked self-attention and why is it needed in the decoder?</strong> 🟡 Intermediate</p>
+<p>During training, the decoder receives the target sequence all at once. Without masking, each decoder position could attend to future positions, cheating by seeing the answer. Masked self-attention applies a causal mask that sets attention scores for future positions to -inf (after softmax → weight ≈ 0). This ensures each decoder position only attends to previous positions, matching the autoregressive inference behavior.</p>
+<hr />
+<p><strong>Q5: What are the computational complexity differences between self-attention and RNNs?</strong> 🔴 Advanced</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Self-Attention</th>
+<th>RNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per-layer computation</td>
+<td>O(n²·d)</td>
+<td>O(n·d²)</td>
+</tr>
+<tr>
+<td>Sequential operations</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Max path length between positions</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Self-attention: O(n²) in sequence length (attention matrix) but O(1) sequential depth: enables full parallelization. RNN: O(n) sequential depth: cannot parallelize across the sequence. For short sequences, RNNs are competitive; for long sequences, Transformers dominate due to parallelism.</p>
+<hr />
+<p><strong>Q6: Explain multi-head attention and why it's useful.</strong> 🟡 Intermediate</p>
+<p>Instead of one large attention computation, multi-head attention splits the model dimension into h smaller attention heads, each operating on d_model/h dimensions. Each head can learn different types of relationships: syntactic, semantic, coreference, local context. The heads' outputs are concatenated and projected back. This is more expressive than single-head attention of the same total dimension and at the same computational cost.</p>
+<hr />
+<p><strong>Q7: What is the feed-forward sublayer in a Transformer and what is its role?</strong> 🟡 Intermediate</p>
+<p>The FFN sublayer applies two linear transformations with a ReLU (original) or GELU/SwiGLU (modern) between them: <code>FFN(x) = ReLU(xW₁ + b₁)W₂ + b₂</code>. It is applied independently to each position. It acts as a position-wise learned transformation, where attention mixes information across positions, the FFN processes each position's representation independently. It typically has 4× the model dimension (d_ff = 4·d_model), providing most of the model's capacity in modern LLMs.</p>
+<hr />
+<p><strong>Q8: What is the difference between sinusoidal and learned positional encodings?</strong> 🟡 Intermediate</p>
+<p>Sinusoidal PE uses fixed mathematical functions (sin/cos at different frequencies): no learned parameters, generalizes to sequence lengths longer than training, relative positions have predictable relationships. Learned PE trains an embedding matrix: potentially better for the specific training distribution but doesn't generalize to longer sequences. Modern models use RoPE (Rotary Positional Embedding) which encodes relative positions by rotating Q/K vectors and generalizes better to long sequences through techniques like YaRN and RoPE scaling.</p>
+<hr />
+<p><strong>Q9: Why do Transformers scale better than RNNs?</strong> 🔴 Advanced</p>
+<ol>
+<li><strong>Parallelization:</strong> Transformers process all positions simultaneously on GPUs; RNNs are sequential</li>
+<li><strong>Gradient flow:</strong> Direct attention connections provide O(1) gradient paths between any positions; RNNs suffer vanishing gradients over long sequences</li>
+<li><strong>Parameter efficiency:</strong> Transformer layers are largely parallelizable; adding layers doesn't hurt training stability as much</li>
+<li><strong>Empirical observation (scaling laws):</strong> Model performance scales predictably as a power law with parameters, compute, and data, enabling systematic scaling</li>
+</ol>
+<hr />
+<p><strong>Q10: What is Flash Attention?</strong> 🔴 Advanced</p>
+<p>Flash Attention is an IO-aware exact attention implementation that avoids materializing the full N×N attention matrix. Standard attention writes the N×N matrix to HBM (slow) then reads it back. Flash Attention uses tiling: processes blocks of Q, K, V in SRAM (fast), computes attention incrementally using the softmax trick to maintain running statistics, and writes only the final output to HBM. Result: attention memory becomes linear instead of quadratic in sequence length (savings grow with length), and the paper reports wall-clock speedups of roughly 2-7x depending on setting. Critical for training on long context windows (&gt;4K tokens).</p>
+<hr />
+<p><strong>Q11: What is the context window of a Transformer and what limits it?</strong> 🟡 Intermediate</p>
+<p>The context window is the maximum number of tokens a Transformer can attend to at once. Limits: (1) quadratic memory and compute of attention (<code>O(n²)</code>), (2) positional encoding generalization: models trained on short sequences may perform poorly on longer ones. Modern techniques: sliding window attention (Mistral), sparse attention (Longformer), efficient attention approximations (Linformer), and RoPE with extended scaling (enabling 128K+ context). For example, GPT-4 Turbo offered 128K tokens and Claude 3.5 Sonnet 200K; several newer models offer 1M-token windows.</p>
+<hr />
+<p><strong>Q12: How does BERT's pretraining differ from GPT's?</strong> 🟡 Intermediate</p>
+<p><strong>BERT</strong> uses Masked Language Model (MLM): randomly masks 15% of tokens and trains to predict them using bidirectional context. Also uses Next Sentence Prediction (NSP). Result: bidirectional representations excellent for understanding tasks.</p>
+<p><strong>GPT</strong> uses Causal Language Model (CLM): predicts the next token given all previous tokens. Trained on standard left-to-right text. Result: strong autoregressive generation capability.</p>
+<p>The key difference: BERT sees the full context bidirectionally (knows the &quot;future&quot;), GPT sees only past context. BERT is better for classification/understanding; GPT is better for generation.</p>
+<hr />
+<p><strong>Q13: What is attention head pruning and why might you do it?</strong> 🔴 Advanced</p>
+<p>Research (Michel et al. 2019) showed many attention heads in trained Transformers are redundant: some heads have little effect on output. Attention head pruning removes low-importance heads to create smaller, faster models. Importance is measured by the effect of masking a head on the loss. A sizeable fraction of heads can often be removed with little accuracy loss, though attention heads are only part of the parameters, so the overall size reduction is modest; the main gain is inference speed. Used in model compression for deployment on resource-constrained hardware.</p>
+<hr />
+<p><strong>Q14: What is the difference between absolute and relative position encodings?</strong> 🔴 Advanced</p>
+<p><strong>Absolute positional encoding</strong> assigns a unique encoding to each absolute position (1, 2, 3, ...). Can struggle with generalization to positions not seen in training and doesn't explicitly model relative distances.</p>
+<p><strong>Relative positional encoding</strong> (Shaw et al., ALiBi, RoPE) encodes the relative distance between two positions rather than absolute positions. Key advantage: &quot;5 positions apart&quot; means the same regardless of where in the sequence. RoPE (used in Llama, Mistral) achieves this by rotating Q and K vectors by position-dependent angles: the dot product naturally depends only on the relative position.</p>
+<hr />
+<p><strong>Q15: What is the scaling law for Transformers?</strong> 🔴 Advanced</p>
+<p>Kaplan et al. (OpenAI, 2020) showed model performance (cross-entropy loss) scales as power laws with:</p>
+<ul>
+<li>Model parameters N: <code>L ~ N^(-0.076)</code></li>
+<li>Training tokens D: <code>L ~ D^(-0.095)</code></li>
+<li>Compute budget C: <code>L ~ C^(-0.050)</code></li>
+</ul>
+<p>These laws allow prediction of model performance before training. Chinchilla (DeepMind, 2022) refined this: parameters and training tokens should grow in roughly equal proportion with compute (about 20 tokens per parameter), so earlier large models were undertrained. Chinchilla (70B params, 1.4T tokens) outperformed Gopher (280B params, 300B tokens) at a similar compute budget. This led to data-efficient models like Llama, which prioritize large training datasets over large model sizes.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need: Vaswani et al. (2017)</a></li>
+<li><a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers, Devlin et al. (2018)</a></li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners (GPT-3): Brown et al. (2020)</a></li>
+<li><a href="https://arxiv.org/abs/2205.14135">FlashAttention: Dao et al. (2022)</a></li>
+<li><a href="https://arxiv.org/abs/2104.09864">RoFormer: Enhanced Transformer with Rotary Position Embedding (RoPE)</a></li>
+<li><a href="http://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer: Jay Alammar</a></li>
+<li><a href="http://web.stanford.edu/class/cs224n/">CS224n Stanford NLP: Lecture on Transformers</a></li>
+<li><a href="https://arxiv.org/abs/2001.08361">Scaling Laws for Neural Language Models: Kaplan et al. (2020)</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_sequence_models.html"><small>Previous</small>Sequence Models (RNN/LSTM/GRU)</a><a rel="next" class="next" href="intro_computer_vision.html"><small>Next</small>Computer Vision</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/deep_learning/intro_transformers.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

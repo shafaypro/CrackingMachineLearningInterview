@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Monitoring Guide | Cracking ML Interviews</title>
+<meta name="description" content="A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_monitoring.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Model Monitoring Guide | Cracking ML Interviews">
+<meta property="og:description" content="A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_monitoring.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Monitoring Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Model Monitoring Guide",
+   "description": "A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_monitoring.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Model Monitoring",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_model_monitoring.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">Model Monitoring</span></nav>
+<p class="meta"><a href="../../#mlops/intro_model_monitoring.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="model-monitoring-guide">Model Monitoring Guide</h1>
+<p>A guide to monitoring ML models in production, detecting drift, measuring performance, and knowing when to retrain.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#types-of-drift">Types of Drift</a></li>
+<li><a href="#statistical-tests-for-drift-detection">Statistical Tests for Drift Detection</a></li>
+<li><a href="#monitoring-metrics">Monitoring Metrics</a></li>
+<li><a href="#monitoring-tools">Monitoring Tools</a></li>
+<li><a href="#code-examples-with-evidently-ai">Code Examples with Evidently AI</a></li>
+<li><a href="#when-to-retrain">When to Retrain</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="types-of-drift">Types of Drift</h2>
+<h3 id="data-drift-covariate-shift">Data Drift (Covariate Shift)</h3>
+<p>The distribution of input features changes while the relationship between inputs and outputs remains the same.</p>
+<pre><code>P_train(X) ≠ P_prod(X)
+P_train(Y|X) = P_prod(Y|X)
+</code></pre>
+<p><strong>Example:</strong> A loan approval model trained on pre-pandemic data sees different income and debt distributions post-pandemic.</p>
+<p><strong>Detection:</strong> Statistical tests on feature distributions (KS test, PSI).</p>
+<h3 id="concept-drift">Concept Drift</h3>
+<p>The relationship between inputs and outputs changes.</p>
+<pre><code>P_train(Y|X) ≠ P_prod(Y|X)
+</code></pre>
+<p><strong>Example:</strong> Fraud patterns evolve, transactions that were previously legitimate are now fraudulent.</p>
+<p><strong>Detection:</strong> Requires ground truth labels (delayed feedback). Monitor proxy metrics or use windowed holdout sets.</p>
+<p><strong>Types of concept drift:</strong></p>
+<ul>
+<li><strong>Sudden drift:</strong> Abrupt change (e.g., system update, rule change)</li>
+<li><strong>Gradual drift:</strong> Slow shift over time</li>
+<li><strong>Recurring drift:</strong> Seasonal patterns (e.g., holiday fraud patterns)</li>
+<li><strong>Incremental drift:</strong> Monotonic progression</li>
+</ul>
+<h3 id="model-drift--performance-drift">Model Drift / Performance Drift</h3>
+<p>The downstream effect of data or concept drift: the model's predictions become less accurate or useful over time.</p>
+<p><strong>Detection:</strong> Monitor business KPIs, accuracy metrics (when labels available), and prediction score distributions.</p>
+<h3 id="label-shift-prior-probability-shift">Label Shift (Prior Probability Shift)</h3>
+<p>The distribution of the target variable changes while the class-conditional distribution stays the same.</p>
+<pre><code>P_train(Y) ≠ P_prod(Y)
+P_train(X|Y) = P_prod(X|Y)
+</code></pre>
+<p><strong>Example:</strong> The base rate of fraud increases during an economic crisis.</p>
+<hr />
+<h2 id="statistical-tests-for-drift-detection">Statistical Tests for Drift Detection</h2>
+<h3 id="kolmogorov-smirnov-ks-test">Kolmogorov-Smirnov (KS) Test</h3>
+<p>Tests whether two continuous distributions are drawn from the same distribution.</p>
+<p><strong>Null hypothesis:</strong> The two distributions are identical.</p>
+<pre><code class="language-python">from scipy import stats
+import numpy as np
+
+# Reference distribution (training data)
+reference = np.random.normal(0, 1, 1000)
+
+# Current distribution (production data)
+current = np.random.normal(0.5, 1.2, 500)
+
+ks_stat, p_value = stats.ks_2samp(reference, current)
+
+print(f&quot;KS Statistic: {ks_stat:.4f}&quot;)
+print(f&quot;P-value: {p_value:.4f}&quot;)
+
+if p_value &lt; 0.05:
+    print(&quot;DRIFT DETECTED: distributions are significantly different&quot;)
+else:
+    print(&quot;No significant drift detected&quot;)
+</code></pre>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li>KS statistic: 0 = identical distributions, 1 = completely different</li>
+<li>p-value &lt; 0.05: reject null hypothesis → drift detected</li>
+</ul>
+<h3 id="population-stability-index-psi">Population Stability Index (PSI)</h3>
+<p>Measures how much a distribution has shifted from a reference distribution. Widely used in banking/credit risk.</p>
+<pre><code class="language-python">import numpy as np
+
+def calculate_psi(reference, current, buckets=10):
+    &quot;&quot;&quot;Calculate PSI between reference and current distributions.&quot;&quot;&quot;
+    # Create bins based on reference distribution
+    breakpoints = np.percentile(reference, np.linspace(0, 100, buckets + 1))
+    breakpoints[0] = -np.inf
+    breakpoints[-1] = np.inf
+
+    ref_counts = np.histogram(reference, bins=breakpoints)[0]
+    cur_counts = np.histogram(current, bins=breakpoints)[0]
+
+    # Convert to proportions, avoid division by zero
+    ref_pct = ref_counts / len(reference)
+    cur_pct = cur_counts / len(current)
+
+    # Avoid log(0)
+    ref_pct = np.where(ref_pct == 0, 0.0001, ref_pct)
+    cur_pct = np.where(cur_pct == 0, 0.0001, cur_pct)
+
+    psi_values = (cur_pct - ref_pct) * np.log(cur_pct / ref_pct)
+    psi = np.sum(psi_values)
+    return psi
+
+psi = calculate_psi(reference_data, production_data)
+
+if psi &lt; 0.1:
+    status = &quot;No significant change&quot;
+elif psi &lt; 0.25:
+    status = &quot;Moderate change: investigate&quot;
+else:
+    status = &quot;Significant change: retrain required&quot;
+
+print(f&quot;PSI: {psi:.4f}, {status}&quot;)
+</code></pre>
+<h3 id="chi-squared-test-categorical-features">Chi-Squared Test (Categorical Features)</h3>
+<pre><code class="language-python">from scipy.stats import chi2_contingency
+import numpy as np
+
+# For categorical features
+reference_counts = np.array([150, 200, 100, 50])
+current_counts = np.array([120, 250, 80, 30])
+
+# Build contingency table
+contingency = np.array([reference_counts, current_counts])
+
+chi2, p_value, dof, expected = chi2_contingency(contingency)
+
+print(f&quot;Chi-squared: {chi2:.4f}&quot;)
+print(f&quot;P-value: {p_value:.4f}&quot;)
+print(f&quot;Degrees of freedom: {dof}&quot;)
+
+if p_value &lt; 0.05:
+    print(&quot;DRIFT DETECTED: categorical distribution has shifted&quot;)
+</code></pre>
+<h3 id="jensen-shannon-divergence">Jensen-Shannon Divergence</h3>
+<pre><code class="language-python">from scipy.spatial.distance import jensenshannon
+import numpy as np
+
+def js_divergence(p, q, bins=50):
+    &quot;&quot;&quot;Jensen-Shannon divergence between two distributions.&quot;&quot;&quot;
+    hist_p, bin_edges = np.histogram(p, bins=bins, density=True)
+    hist_q, _ = np.histogram(q, bins=bin_edges, density=True)
+
+    # Normalize
+    hist_p = hist_p / hist_p.sum() + 1e-10
+    hist_q = hist_q / hist_q.sum() + 1e-10
+
+    # scipy returns the JS *distance* (square root of the divergence);
+    # base=2 bounds it to [0, 1], so squaring gives the divergence in [0, 1]
+    return jensenshannon(hist_p, hist_q, base=2) ** 2
+
+js = js_divergence(reference, current)
+print(f&quot;JS Divergence: {js:.4f}&quot;)  # 0 = identical, 1 = completely different (base 2)
+</code></pre>
+<hr />
+<h2 id="monitoring-metrics">Monitoring Metrics</h2>
+<h3 id="infrastructure-metrics">Infrastructure Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+<th>Alert Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency (p95)</td>
+<td>95th percentile response time</td>
+<td>&gt; 200ms</td>
+</tr>
+<tr>
+<td>Latency (p99)</td>
+<td>99th percentile response time</td>
+<td>&gt; 500ms</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>Requests per second</td>
+<td>Drop &gt; 20%</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>% of requests returning 5xx</td>
+<td>&gt; 1%</td>
+</tr>
+<tr>
+<td>Memory usage</td>
+<td>Memory consumed by serving</td>
+<td>&gt; 80%</td>
+</tr>
+<tr>
+<td>GPU utilization</td>
+<td>GPU usage for inference</td>
+<td>&lt; 20% (underutilized)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="data-quality-metrics">Data Quality Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing rate</td>
+<td>% of null values per feature</td>
+</tr>
+<tr>
+<td>Schema violations</td>
+<td>Type mismatches, unexpected columns</td>
+</tr>
+<tr>
+<td>Out-of-range values</td>
+<td>Values outside expected min/max</td>
+</tr>
+<tr>
+<td>Feature drift (PSI)</td>
+<td>PSI score per feature</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="model-performance-metrics">Model Performance Metrics</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Requires Labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy / F1 / AUC</td>
+<td>Classification</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>MAE / RMSE</td>
+<td>Regression</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Prediction score distribution</td>
+<td>Any</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Calibration</td>
+<td>Classification</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Business KPIs</td>
+<td>Domain-specific</td>
+<td>Proxy available</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="monitoring-tools">Monitoring Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Strengths</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Evidently AI</strong></td>
+<td>Open source, rich reports, drift tests</td>
+<td>Quick setup, data scientists</td>
+</tr>
+<tr>
+<td><strong>WhyLogs</strong></td>
+<td>Lightweight, streaming, Apache license</td>
+<td>High-volume pipelines</td>
+</tr>
+<tr>
+<td><strong>Arize AI</strong></td>
+<td>Enterprise, model observability platform</td>
+<td>Production ML teams</td>
+</tr>
+<tr>
+<td><strong>Fiddler AI</strong></td>
+<td>Explainability + monitoring</td>
+<td>Regulated industries</td>
+</tr>
+<tr>
+<td><strong>Grafana + Prometheus</strong></td>
+<td>Infrastructure monitoring, customizable</td>
+<td>Engineering-focused teams</td>
+</tr>
+<tr>
+<td><strong>Seldon Alibi Detect</strong></td>
+<td>Statistical drift detection library</td>
+<td>Custom monitoring pipelines</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="code-examples-with-evidently-ai">Code Examples with Evidently AI</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="language-bash">pip install evidently
+</code></pre>
+<p>The examples below use the current API (Evidently 0.7+). The pre-0.7 API (<code>evidently.report</code>, <code>evidently.metric_preset</code>, <code>TestSuite</code>, <code>column_mapping</code>) is only available under <code>evidently.legacy</code> and appears in many older tutorials.</p>
+<h3 id="data-drift-report">Data Drift Report</h3>
+<pre><code class="language-python">import pandas as pd
+from evidently import Report
+from evidently.presets import DataDriftPreset, DataSummaryPreset
+
+# Reference data (training distribution)
+reference_data = pd.read_csv(&quot;train_data.csv&quot;)
+
+# Current data (recent production data)
+current_data = pd.read_csv(&quot;production_data.csv&quot;)
+
+# Create a drift report
+report = Report([
+    DataDriftPreset(),
+    DataSummaryPreset(),
+])
+
+# run() returns a Snapshot with the results; current data comes first
+snapshot = report.run(current_data=current_data, reference_data=reference_data)
+
+# Save HTML report
+snapshot.save_html(&quot;drift_report.html&quot;)
+
+# Get results as dict: each metric has &quot;metric_name&quot; and &quot;value&quot;
+results = snapshot.dict()
+drifted = results[&quot;metrics&quot;][0][&quot;value&quot;]  # DriftedColumnsCount: {&quot;count&quot;: ..., &quot;share&quot;: ...}
+print(f&quot;Drifted columns: {drifted}&quot;)
+</code></pre>
+<h3 id="column-level-drift">Column-Level Drift</h3>
+<pre><code class="language-python">from evidently import Report
+from evidently.metrics import ValueDrift
+
+# Check specific columns
+report = Report([
+    ValueDrift(column=&quot;age&quot;),
+    ValueDrift(column=&quot;income&quot;),
+    ValueDrift(column=&quot;credit_score&quot;),
+])
+
+snapshot = report.run(current_data=current_data, reference_data=reference_data)
+
+for metric in snapshot.dict()[&quot;metrics&quot;]:
+    # value is the drift score of the auto-selected test (e.g. a p-value or a distance)
+    print(f&quot;{metric['metric_name']}: score={metric['value']:.4f}&quot;)
+</code></pre>
+<h3 id="model-performance-monitoring">Model Performance Monitoring</h3>
+<pre><code class="language-python">from evidently import BinaryClassification, DataDefinition, Dataset, Report
+from evidently.presets import ClassificationPreset
+
+# When you have ground truth labels (delayed feedback).
+# DataDefinition replaces the old column_mapping argument.
+definition = DataDefinition(
+    classification=[BinaryClassification(target=&quot;label&quot;, prediction_labels=&quot;prediction&quot;)]
+)
+current_ds = Dataset.from_pandas(current_with_labels, data_definition=definition)
+reference_ds = Dataset.from_pandas(reference_with_labels, data_definition=definition)
+
+report = Report([ClassificationPreset()])
+snapshot = report.run(current_data=current_ds, reference_data=reference_ds)
+snapshot.save_html(&quot;classification_report.html&quot;)
+</code></pre>
+<h3 id="continuous-monitoring-pipeline">Continuous Monitoring Pipeline</h3>
+<pre><code class="language-python">from evidently import Report
+from evidently.metrics import DriftedColumnsCount
+from evidently.tests import lt
+
+def run_monitoring_check(reference_data, current_data, threshold=0.3):
+    &quot;&quot;&quot;Run drift checks and return alert status.&quot;&quot;&quot;
+
+    # Tests are attached to metrics (TestSuite was folded into Report)
+    report = Report([
+        DriftedColumnsCount(
+            tests=[lt(3)],                # Fail if 3 or more columns drift
+            share_tests=[lt(threshold)],  # Fail if the drifted share reaches 30%
+        ),
+    ])
+
+    snapshot = report.run(current_data=current_data, reference_data=reference_data)
+
+    results = snapshot.dict()
+    all_passed = all(
+        test[&quot;status&quot;] == &quot;SUCCESS&quot;
+        for test in results[&quot;tests&quot;]
+    )
+
+    return all_passed, results
+
+passed, results = run_monitoring_check(reference_data, production_data)
+if not passed:
+    print(&quot;ALERT: Model monitoring check failed, investigate drift&quot;)
+    # Send alert to Slack, PagerDuty, etc.
+</code></pre>
+<hr />
+<h2 id="when-to-retrain">When to Retrain</h2>
+<h3 id="trigger-conditions">Trigger Conditions</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Description</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PSI ≥ 0.25 on key features</td>
+<td>Significant data drift</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Model accuracy drops &gt; 5%</td>
+<td>Performance degradation</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Business KPI anomaly</td>
+<td>Conversion/revenue drop</td>
+<td>High</td>
+</tr>
+<tr>
+<td>PSI 0.1-0.25 on multiple features</td>
+<td>Moderate drift</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Scheduled interval</td>
+<td>Weekly/monthly safeguard</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>New data available (large batch)</td>
+<td>Proactive retraining</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="retraining-strategies">Retraining Strategies</h3>
+<p><strong>Full retraining:</strong> Train from scratch on all available data. Safe but slow.</p>
+<p><strong>Incremental/online learning:</strong> Update model weights with new data only. Fast but requires algorithms that support it.</p>
+<p><strong>Windowed retraining:</strong> Train on a sliding window of recent data. Balances historical and recent patterns.</p>
+<pre><code class="language-python"># Example: Triggering retraining based on PSI
+def check_and_trigger_retrain(psi_scores, threshold=0.25):
+    &quot;&quot;&quot;Check PSI scores and trigger retraining if needed.&quot;&quot;&quot;
+    drifted_features = [
+        feature for feature, psi in psi_scores.items()
+        if psi &gt;= threshold
+    ]
+
+    if drifted_features:
+        print(f&quot;Drift detected in: {drifted_features}&quot;)
+        print(&quot;Triggering retraining pipeline...&quot;)
+        # Trigger Airflow DAG, Kubeflow pipeline, etc.
+        trigger_training_pipeline(
+            reason=&quot;drift_detected&quot;,
+            affected_features=drifted_features
+        )
+        return True
+    return False
+</code></pre>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between data drift and concept drift?</strong> 🟡 Intermediate</p>
+<p>Data drift (covariate shift) is when the input feature distribution changes <code>P(X)</code> while the relationship <code>P(Y|X)</code> remains the same. Concept drift is when the relationship between inputs and outputs changes <code>P(Y|X)</code>. Both lead to model degradation but require different interventions. Data drift can often be handled by retraining on new data; concept drift may require rethinking features or model architecture.</p>
+<hr />
+<p><strong>Q2: What statistical tests would you use for drift detection?</strong> 🟡 Intermediate</p>
+<p>For continuous features: KS test (returns p-value and D-statistic) or PSI (interpretable thresholds). For categorical features: Chi-squared test. For probability distributions: Jensen-Shannon divergence or Wasserstein distance. The choice depends on feature type and interpretability requirements. PSI is preferred in banking because of its clear thresholds (&lt; 0.1, 0.1-0.25, &gt; 0.25).</p>
+<hr />
+<p><strong>Q3: How do you monitor a model when you don't have ground truth labels immediately?</strong> 🔴 Advanced</p>
+<p>When labels are delayed (e.g., fraud confirmed days later, loan default confirmed months later):</p>
+<ol>
+<li>Monitor input feature distributions using statistical tests (proxy for data drift)</li>
+<li>Monitor prediction score distributions: shifts indicate potential concept drift</li>
+<li>Monitor business proxy metrics (transaction decline rates, user complaints)</li>
+<li>Use a held-out labeled set for periodic evaluation</li>
+<li>Use model confidence scores as a proxy metric</li>
+<li>Once labels arrive, run retrospective evaluation and trigger retraining</li>
+</ol>
+<hr />
+<p><strong>Q4: What is PSI and what are its thresholds?</strong> 🟡 Intermediate</p>
+<p>PSI (Population Stability Index) measures distribution shift: <code>PSI = Σ (Actual% - Expected%) × ln(Actual%/Expected%)</code>. Thresholds: PSI &lt; 0.1 (no significant change), 0.1 ≤ PSI &lt; 0.25 (moderate change, investigate), PSI ≥ 0.25 (significant change, retrain). PSI is widely used in credit risk because it is interpretable and standardized.</p>
+<hr />
+<p><strong>Q5: What monitoring would you set up for a fraud detection model?</strong> 🔴 Advanced</p>
+<ul>
+<li><strong>Feature drift:</strong> Monitor all input features (transaction amount, merchant category, time of day) using PSI and KS tests</li>
+<li><strong>Score distribution:</strong> Watch for shifts in the fraud probability score distribution</li>
+<li><strong>Alert rate:</strong> Monitor % of transactions flagged as fraud, anomalies indicate drift</li>
+<li><strong>Business metrics:</strong> Track false positive rate (customer friction) and false negative rate (missed fraud)</li>
+<li><strong>Latency:</strong> Ensure real-time scoring meets SLA (&lt; 50ms)</li>
+<li><strong>Feedback loop:</strong> When fraud confirmed, update training data and check if model would have caught it</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.evidentlyai.com/">Evidently AI Documentation</a></li>
+<li><a href="https://whylogs.readthedocs.io/">WhyLogs Documentation</a></li>
+<li><a href="https://arize.com/blog/">Arize AI Blog on Model Monitoring</a></li>
+<li><a href="https://huyenchip.com/2022/02/07/data-distribution-shifts-and-monitoring.html">Chip Huyen: ML Monitoring (book chapter)</a></li>
+<li><a href="https://mwburke.github.io/data%20science/2018/04/29/population-stability-index.html">PSI and CSI: Understanding Population Stability Index</a></li>
+</ul>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_data_quality.html"><small>Previous</small>Data Quality</a><a rel="next" class="next" href="intro_llm_evaluation.html"><small>Next</small>LLM Evaluation</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_model_monitoring.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

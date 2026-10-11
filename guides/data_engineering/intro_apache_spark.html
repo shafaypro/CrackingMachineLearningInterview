@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apache Spark Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Apache Spark is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_spark.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Apache Spark Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Apache Spark is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_spark.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache Spark Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Apache Spark is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Apache Spark",
+   "description": "Apache Spark is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_spark.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Apache Spark",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_apache_spark.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">Apache Spark</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_apache_spark.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="apache-spark">Apache Spark</h1>
+<p><strong>Apache Spark</strong> is the leading distributed data processing engine. It processes massive datasets in parallel across a cluster, supporting batch processing, streaming, ML, and SQL: all in one unified engine.</p>
+<hr />
+<h2 id="what-is-spark">What is Spark?</h2>
+<p>Spark processes data that doesn't fit on a single machine by splitting work across many nodes:</p>
+<pre><code>Single Machine         →         Spark Cluster
+100GB CSV file                  ┌─ Worker 1: processes partition 1 ─┐
+(takes hours)                   ├─ Worker 2: processes partition 2  ├→ Result in minutes
+                                └─ Worker 3: processes partition 3 ─┘
+</code></pre>
+<h3 id="spark-vs-sql-databases-vs-pandas">Spark vs SQL Databases vs Pandas</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Data Size</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pandas</td>
+<td>GBs (fits in RAM)</td>
+<td>Local data analysis, prototyping</td>
+</tr>
+<tr>
+<td>SQL Database</td>
+<td>GBs-TBs</td>
+<td>OLTP, OLAP queries</td>
+</tr>
+<tr>
+<td><strong>Apache Spark</strong></td>
+<td>TBs-PBs</td>
+<td>Distributed processing, ETL, ML at scale</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│               Driver Program (SparkContext)           │
+│  - Creates SparkContext                              │
+│  - Builds DAG of transformations                    │
+│  - Schedules tasks                                   │
+└─────────────────────┬───────────────────────────────┘
+                      │
+              ┌───────▼────────┐
+              │  Cluster Manager│
+              │ (YARN/K8s/etc.) │
+              └───────┬────────┘
+                      │
+        ┌─────────────┼─────────────┐
+        ▼             ▼             ▼
+   ┌─────────┐   ┌─────────┐   ┌─────────┐
+   │Executor │   │Executor │   │Executor │
+   │ (Node 1)│   │ (Node 2)│   │ (Node 3)│
+   │ Tasks   │   │ Tasks   │   │ Tasks   │
+   └─────────┘   └─────────┘   └─────────┘
+</code></pre>
+<h3 id="key-concepts">Key Concepts</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RDD</strong></td>
+<td>Resilient Distributed Dataset: fundamental data structure, fault-tolerant, partitioned</td>
+</tr>
+<tr>
+<td><strong>DataFrame</strong></td>
+<td>Table with named columns and schema. Built on RDDs. Use this 99% of the time.</td>
+</tr>
+<tr>
+<td><strong>Dataset</strong></td>
+<td>Type-safe DataFrame (Scala/Java). In Python = DataFrame.</td>
+</tr>
+<tr>
+<td><strong>Partition</strong></td>
+<td>A chunk of data processed by one task on one executor</td>
+</tr>
+<tr>
+<td><strong>DAG</strong></td>
+<td>Directed Acyclic Graph: Spark's execution plan</td>
+</tr>
+<tr>
+<td><strong>Transformation</strong></td>
+<td>Lazy operation (filter, select, join): builds the DAG</td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td>Triggers execution (count, show, write, collect)</td>
+</tr>
+<tr>
+<td><strong>Catalyst</strong></td>
+<td>Spark's query optimizer: optimizes your execution plan</td>
+</tr>
+<tr>
+<td><strong>Tungsten</strong></td>
+<td>Memory management and code generation engine</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="getting-started">Getting Started</h2>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+
+# Create SparkSession (entry point)
+spark = (
+    SparkSession.builder
+    .appName(&quot;MyApp&quot;)
+    .master(&quot;local[*]&quot;)                               # local mode: use all CPU cores
+    .config(&quot;spark.sql.adaptive.enabled&quot;, &quot;true&quot;)     # AQE (already the default)
+    .getOrCreate()
+)
+
+sc = spark.sparkContext  # for low-level RDD operations (rarely needed)
+</code></pre>
+<hr />
+<h2 id="dataframes">DataFrames</h2>
+<h3 id="creating-dataframes">Creating DataFrames</h3>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
+from pyspark.sql import functions as F
+
+spark = SparkSession.builder.appName(&quot;demo&quot;).master(&quot;local[*]&quot;).getOrCreate()
+
+# From a list
+data = [(1, &quot;Alice&quot;, 85.0), (2, &quot;Bob&quot;, 92.5), (3, &quot;Charlie&quot;, 78.3)]
+df = spark.createDataFrame(data, [&quot;id&quot;, &quot;name&quot;, &quot;score&quot;])
+
+# With explicit schema
+schema = StructType([
+    StructField(&quot;id&quot;, IntegerType(), nullable=False),
+    StructField(&quot;name&quot;, StringType(), nullable=True),
+    StructField(&quot;score&quot;, DoubleType(), nullable=True),
+])
+df = spark.createDataFrame(data, schema)
+
+# From CSV
+df = spark.read.csv(&quot;data/sales.csv&quot;, header=True, inferSchema=True)
+
+# From Parquet (recommended for production)
+df = spark.read.parquet(&quot;data/events/&quot;)
+
+# From JSON
+df = spark.read.json(&quot;data/logs/*.json&quot;)
+
+# From Delta Lake
+df = spark.read.format(&quot;delta&quot;).load(&quot;s3://my-bucket/delta/orders/&quot;)
+
+# From JDBC (database)
+df = spark.read \
+    .format(&quot;jdbc&quot;) \
+    .option(&quot;url&quot;, &quot;jdbc:postgresql://localhost/mydb&quot;) \
+    .option(&quot;dbtable&quot;, &quot;orders&quot;) \
+    .option(&quot;user&quot;, &quot;postgres&quot;) \
+    .option(&quot;password&quot;, &quot;secret&quot;) \
+    .load()
+</code></pre>
+<h3 id="inspecting-dataframes">Inspecting DataFrames</h3>
+<pre><code class="language-python">df.show(5)               # display first 5 rows
+df.show(5, truncate=False)  # don't truncate long values
+df.printSchema()         # column names and types
+df.dtypes                # list of (column, type) tuples
+df.columns               # list of column names
+df.count()               # row count (action: triggers execution)
+df.describe().show()     # stats: count, mean, std, min, max
+df.schema                # full StructType schema
+</code></pre>
+<hr />
+<h2 id="transformations">Transformations</h2>
+<h3 id="column-operations">Column Operations</h3>
+<pre><code class="language-python">from pyspark.sql import functions as F
+
+# Select columns
+df.select(&quot;name&quot;, &quot;score&quot;)
+df.select(F.col(&quot;name&quot;), F.col(&quot;score&quot;) * 1.1)
+
+# Add / rename columns
+df.withColumn(&quot;score_pct&quot;, F.col(&quot;score&quot;) / 100)
+df.withColumnRenamed(&quot;score&quot;, &quot;exam_score&quot;)
+df.drop(&quot;unnecessary_col&quot;)
+
+# Type casting
+df.withColumn(&quot;id&quot;, F.col(&quot;id&quot;).cast(&quot;string&quot;))
+
+# String operations
+df.withColumn(&quot;name_upper&quot;, F.upper(F.col(&quot;name&quot;)))
+df.withColumn(&quot;first_name&quot;, F.split(F.col(&quot;full_name&quot;), &quot; &quot;)[0])
+df.withColumn(&quot;email_domain&quot;, F.regexp_extract(F.col(&quot;email&quot;), r&quot;@(.+)$&quot;, 1))
+
+# Date operations
+df.withColumn(&quot;year&quot;, F.year(F.col(&quot;created_at&quot;)))
+df.withColumn(&quot;month&quot;, F.month(F.col(&quot;created_at&quot;)))
+df.withColumn(&quot;date_trunc&quot;, F.date_trunc(&quot;month&quot;, F.col(&quot;created_at&quot;)))
+df.withColumn(&quot;days_ago&quot;, F.datediff(F.current_date(), F.col(&quot;created_at&quot;)))
+
+# Conditional
+df.withColumn(&quot;grade&quot;,
+    F.when(F.col(&quot;score&quot;) &gt;= 90, &quot;A&quot;)
+    .when(F.col(&quot;score&quot;) &gt;= 80, &quot;B&quot;)
+    .when(F.col(&quot;score&quot;) &gt;= 70, &quot;C&quot;)
+    .otherwise(&quot;F&quot;)
+)
+
+# Null handling
+df.fillna(0, subset=[&quot;score&quot;])
+df.dropna(subset=[&quot;name&quot;, &quot;score&quot;])
+df.withColumn(&quot;score&quot;, F.coalesce(F.col(&quot;score&quot;), F.lit(0)))
+</code></pre>
+<h3 id="filtering">Filtering</h3>
+<pre><code class="language-python">df.filter(F.col(&quot;score&quot;) &gt; 80)
+df.filter(&quot;score &gt; 80&quot;)                     # SQL string syntax
+df.filter((F.col(&quot;score&quot;) &gt; 80) &amp; (F.col(&quot;name&quot;) != &quot;Bob&quot;))
+df.where(F.col(&quot;status&quot;).isin([&quot;active&quot;, &quot;pending&quot;]))
+df.filter(F.col(&quot;name&quot;).like(&quot;%alice%&quot;))
+df.filter(F.col(&quot;email&quot;).rlike(r&quot;@gmail\.com$&quot;))
+df.filter(F.col(&quot;score&quot;).isNotNull())
+</code></pre>
+<h3 id="aggregations">Aggregations</h3>
+<pre><code class="language-python"># Simple aggregation
+df.agg(
+    F.count(&quot;*&quot;).alias(&quot;total&quot;),
+    F.avg(&quot;score&quot;).alias(&quot;avg_score&quot;),
+    F.sum(&quot;revenue&quot;).alias(&quot;total_revenue&quot;),
+    F.max(&quot;score&quot;).alias(&quot;max_score&quot;),
+    F.countDistinct(&quot;user_id&quot;).alias(&quot;unique_users&quot;)
+).show()
+
+# Group by
+df.groupBy(&quot;department&quot;) \
+  .agg(
+      F.count(&quot;*&quot;).alias(&quot;emp_count&quot;),
+      F.avg(&quot;salary&quot;).alias(&quot;avg_salary&quot;),
+      F.sum(&quot;revenue&quot;).alias(&quot;dept_revenue&quot;)
+  ) \
+  .orderBy(F.desc(&quot;dept_revenue&quot;)) \
+  .show()
+
+# Window functions
+from pyspark.sql.window import Window
+
+window = Window.partitionBy(&quot;department&quot;).orderBy(F.desc(&quot;salary&quot;))
+
+df.withColumn(&quot;rank&quot;, F.rank().over(window)) \
+  .withColumn(&quot;dense_rank&quot;, F.dense_rank().over(window)) \
+  .withColumn(&quot;row_number&quot;, F.row_number().over(window)) \
+  .withColumn(&quot;running_total&quot;, F.sum(&quot;salary&quot;).over(
+      Window.partitionBy(&quot;department&quot;).rowsBetween(Window.unboundedPreceding, Window.currentRow)
+  ))
+</code></pre>
+<h3 id="joins">Joins</h3>
+<pre><code class="language-python">orders = spark.read.parquet(&quot;orders/&quot;)
+customers = spark.read.parquet(&quot;customers/&quot;)
+
+# Inner join (default)
+result = orders.join(customers, orders.customer_id == customers.id, &quot;inner&quot;)
+
+# Left join
+result = orders.join(customers, &quot;customer_id&quot;, &quot;left&quot;)   # same-name column shorthand
+
+# Multiple conditions
+result = df1.join(df2,
+    (df1.order_id == df2.order_id) &amp; (df1.date == df2.date),
+    &quot;inner&quot;
+)
+
+# Broadcast join (for small tables: avoids shuffle)
+from pyspark.sql.functions import broadcast
+result = orders.join(broadcast(customers), &quot;customer_id&quot;)
+</code></pre>
+<hr />
+<h2 id="spark-sql">Spark SQL</h2>
+<pre><code class="language-python"># Register temp view
+df.createOrReplaceTempView(&quot;orders&quot;)
+customers.createOrReplaceTempView(&quot;customers&quot;)
+
+# Run SQL
+result = spark.sql(&quot;&quot;&quot;
+    SELECT
+        c.name,
+        COUNT(o.id) as order_count,
+        SUM(o.amount) as total_revenue,
+        AVG(o.amount) as avg_order_value
+    FROM orders o
+    INNER JOIN customers c ON o.customer_id = c.id
+    WHERE o.status = 'completed'
+      AND o.created_at &gt;= date_trunc('month', current_date())
+    GROUP BY c.name
+    ORDER BY total_revenue DESC
+    LIMIT 20
+&quot;&quot;&quot;)
+result.show()
+
+# Global temp view (accessible across SparkSessions)
+df.createOrReplaceGlobalTempView(&quot;global_orders&quot;)
+spark.sql(&quot;SELECT * FROM global_temp.global_orders&quot;)
+</code></pre>
+<hr />
+<h2 id="writing-data">Writing Data</h2>
+<pre><code class="language-python"># Write to Parquet (columnar, compressed: recommended)
+df.write.mode(&quot;overwrite&quot;).parquet(&quot;output/data/&quot;)
+df.write.mode(&quot;append&quot;).partitionBy(&quot;year&quot;, &quot;month&quot;).parquet(&quot;output/data/&quot;)
+
+# Write to Delta Lake
+df.write.format(&quot;delta&quot;).mode(&quot;overwrite&quot;).save(&quot;s3://bucket/delta/table/&quot;)
+
+# Write to CSV
+df.write.mode(&quot;overwrite&quot;).option(&quot;header&quot;, True).csv(&quot;output/csv/&quot;)
+
+# Write to JDBC
+df.write \
+  .format(&quot;jdbc&quot;) \
+  .option(&quot;url&quot;, &quot;jdbc:postgresql://localhost/mydb&quot;) \
+  .option(&quot;dbtable&quot;, &quot;results&quot;) \
+  .mode(&quot;overwrite&quot;) \
+  .save()
+
+# Control number of output files
+df.coalesce(1).write.parquet(&quot;single_file/&quot;)   # merge to 1 file
+df.repartition(10).write.parquet(&quot;10_files/&quot;)  # split to 10 files
+</code></pre>
+<hr />
+<h2 id="structured-streaming">Structured Streaming</h2>
+<p>Spark can process <strong>real-time streams</strong> with the same DataFrame API.</p>
+<pre><code class="language-python"># Read from Kafka stream
+stream_df = spark.readStream \
+    .format(&quot;kafka&quot;) \
+    .option(&quot;kafka.bootstrap.servers&quot;, &quot;localhost:9092&quot;) \
+    .option(&quot;subscribe&quot;, &quot;events&quot;) \
+    .load()
+
+# Parse JSON payload
+from pyspark.sql.types import StructType, StringType, TimestampType
+
+schema = StructType() \
+    .add(&quot;user_id&quot;, StringType()) \
+    .add(&quot;event&quot;, StringType()) \
+    .add(&quot;timestamp&quot;, TimestampType())
+
+events = stream_df \
+    .selectExpr(&quot;CAST(value AS STRING)&quot;) \
+    .select(F.from_json(F.col(&quot;value&quot;), schema).alias(&quot;data&quot;)) \
+    .select(&quot;data.*&quot;)
+
+# Aggregate: count events per minute
+windowed = events \
+    .withWatermark(&quot;timestamp&quot;, &quot;10 minutes&quot;) \
+    .groupBy(
+        F.window(&quot;timestamp&quot;, &quot;1 minute&quot;),
+        &quot;event&quot;
+    ) \
+    .count()
+
+# Write to Delta Lake
+query = windowed.writeStream \
+    .format(&quot;delta&quot;) \
+    .outputMode(&quot;append&quot;) \
+    .option(&quot;checkpointLocation&quot;, &quot;/checkpoints/events/&quot;) \
+    .start(&quot;s3://bucket/delta/event_counts/&quot;)
+
+query.awaitTermination()
+</code></pre>
+<hr />
+<h2 id="performance-tuning">Performance Tuning</h2>
+<h3 id="partitioning">Partitioning</h3>
+<pre><code class="language-python"># Check number of partitions
+df.rdd.getNumPartitions()
+
+# Repartition (full shuffle: for large skewed data)
+df.repartition(200)
+df.repartition(200, &quot;customer_id&quot;)  # partition by column for joins
+
+# Coalesce (reduce partitions, no full shuffle)
+df.coalesce(50)
+</code></pre>
+<h3 id="caching">Caching</h3>
+<pre><code class="language-python"># Cache in memory (use when DF is used multiple times)
+df.cache()
+df.persist()   # same as cache()
+
+# Control storage level
+from pyspark import StorageLevel
+df.persist(StorageLevel.MEMORY_AND_DISK)   # spill to disk if needed
+
+# Unpersist when done
+df.unpersist()
+</code></pre>
+<h3 id="broadcast-variables">Broadcast Variables</h3>
+<pre><code class="language-python"># Broadcast small lookup tables to all executors (avoids shuffle join)
+small_table = spark.read.parquet(&quot;dim_product/&quot;)
+result = large_table.join(broadcast(small_table), &quot;product_id&quot;)
+</code></pre>
+<h3 id="adaptive-query-execution-aqe">Adaptive Query Execution (AQE)</h3>
+<pre><code class="language-python"># Enable AQE (on by default since Spark 3.2)
+spark.conf.set(&quot;spark.sql.adaptive.enabled&quot;, &quot;true&quot;)
+
+# AQE automatically:
+# - Adjusts partition count after shuffles
+# - Converts sort-merge joins to broadcast joins when safe
+# - Handles data skew
+</code></pre>
+<hr />
+<h2 id="pyspark-on-databricks--spark-clusters">PySpark on Databricks / Spark Clusters</h2>
+<pre><code class="language-python"># On Databricks, SparkSession is already available as `spark`
+# No need to create it
+
+df = spark.read.table(&quot;catalog.schema.orders&quot;)  # Unity Catalog
+
+# Databricks utilities
+dbutils.fs.ls(&quot;dbfs:/data/&quot;)
+dbutils.secrets.get(scope=&quot;my-scope&quot;, key=&quot;db-password&quot;)
+dbutils.notebook.run(&quot;./other_notebook&quot;, timeout_seconds=300)
+</code></pre>
+<hr />
+<h2 id="spark-in-2026">Spark in 2026</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spark Connect</strong></td>
+<td>Remote Spark client: use PySpark from anywhere without running on the cluster</td>
+</tr>
+<tr>
+<td><strong>Delta Lake</strong></td>
+<td>Separate open-source library (not bundled with Apache Spark): ACID tables, liquid clustering</td>
+</tr>
+<tr>
+<td><strong>Python UDFs</strong></td>
+<td>Pandas UDFs and Arrow-optimized Python UDFs (<code>useArrow=True</code>) cut serialization overhead</td>
+</tr>
+<tr>
+<td><strong>Spark on K8s</strong></td>
+<td>Standard deployment method alongside YARN</td>
+</tr>
+<tr>
+<td><strong>Unity Catalog</strong></td>
+<td>Databricks' data governance layer across Delta Lake</td>
+</tr>
+<tr>
+<td><strong>Spark 4.0</strong></td>
+<td>ANSI SQL mode on by default, VARIANT type, Python data source API; requires Java 17+ and Python 3.9+; Mesos support removed</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="cheat-sheet">Cheat Sheet</h2>
+<pre><code class="language-python"># SparkSession
+spark = SparkSession.builder.appName(&quot;name&quot;).master(&quot;local[*]&quot;).getOrCreate()
+
+# Read
+df = spark.read.parquet(&quot;path/&quot;)
+df = spark.read.csv(&quot;path.csv&quot;, header=True, inferSchema=True)
+df = spark.read.format(&quot;delta&quot;).load(&quot;s3://bucket/path/&quot;)
+df = spark.read.table(&quot;schema.table&quot;)
+
+# Inspect
+df.show(10)
+df.printSchema()
+df.count()
+df.describe().show()
+
+# Transform
+df.select(&quot;col1&quot;, &quot;col2&quot;)
+df.filter(F.col(&quot;x&quot;) &gt; 0)
+df.withColumn(&quot;new&quot;, F.col(&quot;a&quot;) + F.col(&quot;b&quot;))
+df.groupBy(&quot;key&quot;).agg(F.sum(&quot;val&quot;).alias(&quot;total&quot;))
+df.join(other, &quot;key&quot;, &quot;left&quot;)
+df.orderBy(F.desc(&quot;col&quot;))
+df.limit(100)
+df.distinct()
+df.dropDuplicates([&quot;col1&quot;, &quot;col2&quot;])
+
+# Write
+df.write.mode(&quot;overwrite&quot;).parquet(&quot;output/&quot;)
+df.write.mode(&quot;append&quot;).partitionBy(&quot;date&quot;).parquet(&quot;output/&quot;)
+df.write.format(&quot;delta&quot;).mode(&quot;overwrite&quot;).save(&quot;s3://bucket/delta/&quot;)
+
+# SQL
+df.createOrReplaceTempView(&quot;my_table&quot;)
+spark.sql(&quot;SELECT * FROM my_table WHERE x &gt; 0&quot;)
+
+# Performance
+df.cache()
+df.repartition(N)
+df.coalesce(N)
+df.join(broadcast(small_df), &quot;key&quot;)
+</code></pre>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_sql_optimization.html"><small>Previous</small>SQL Query Optimization</a><a rel="next" class="next" href="intro_apache_kafka.html"><small>Next</small>Apache Kafka</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_apache_spark.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

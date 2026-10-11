@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistics &amp; Probability for ML Interviews | Cracking ML Interviews</title>
+<meta name="description" content="Statistics &amp; Probability for ML Interviews: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_statistics_probability.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Statistics &amp; Probability for ML Interviews | Cracking ML Interviews">
+<meta property="og:description" content="Statistics &amp; Probability for ML Interviews: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_statistics_probability.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Statistics &amp; Probability for ML Interviews | Cracking ML Interviews">
+<meta name="twitter:description" content="Statistics &amp; Probability for ML Interviews: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Statistics & Probability for ML Interviews",
+   "description": "Statistics & Probability for ML Interviews: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_statistics_probability.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Statistics & Probability",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_statistics_probability.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Statistics &amp; Probability</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_statistics_probability.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="statistics--probability-for-ml-interviews">Statistics &amp; Probability for ML Interviews</h1>
+<h2 id="probability-foundations">Probability Foundations</h2>
+<h3 id="key-definitions">Key Definitions</h3>
+<p><strong>Conditional Probability:</strong></p>
+<pre><code>P(A|B) = P(A ∩ B) / P(B)
+</code></pre>
+<p><strong>Bayes' Theorem:</strong></p>
+<pre><code>P(A|B) = P(B|A) × P(A) / P(B)
+</code></pre>
+<p>In ML terms: P(label|data) = P(data|label) × P(label) / P(data)</p>
+<ul>
+<li>P(label|data) = posterior</li>
+<li>P(data|label) = likelihood</li>
+<li>P(label) = prior</li>
+<li>P(data) = evidence (normalizing constant)</li>
+</ul>
+<p><strong>Independence:</strong> P(A ∩ B) = P(A) × P(B)</p>
+<p><strong>Law of Total Probability:</strong></p>
+<pre><code>P(B) = Σ_i P(B|A_i) × P(A_i)
+</code></pre>
+<h3 id="common-distributions">Common Distributions</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Distribution</th>
+<th>Use Case</th>
+<th>Parameters</th>
+<th>Mean</th>
+<th>Variance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bernoulli</td>
+<td>Binary outcomes</td>
+<td>p</td>
+<td>p</td>
+<td>p(1-p)</td>
+</tr>
+<tr>
+<td>Binomial</td>
+<td>k successes in n trials</td>
+<td>n, p</td>
+<td>np</td>
+<td>np(1-p)</td>
+</tr>
+<tr>
+<td>Poisson</td>
+<td>Count events in interval</td>
+<td>λ</td>
+<td>λ</td>
+<td>λ</td>
+</tr>
+<tr>
+<td>Normal</td>
+<td>Continuous measurements</td>
+<td>μ, σ²</td>
+<td>μ</td>
+<td>σ²</td>
+</tr>
+<tr>
+<td>Exponential</td>
+<td>Time between events</td>
+<td>λ</td>
+<td>1/λ</td>
+<td>1/λ²</td>
+</tr>
+<tr>
+<td>Uniform</td>
+<td>Equal probability range</td>
+<td>a, b</td>
+<td>(a+b)/2</td>
+<td>(b-a)²/12</td>
+</tr>
+<tr>
+<td>Beta</td>
+<td>Probability of probability</td>
+<td>α, β</td>
+<td>α/(α+β)</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>When to use each in ML:</strong></p>
+<ul>
+<li><strong>Bernoulli/Binomial:</strong> Binary classification outputs, A/B testing outcomes</li>
+<li><strong>Poisson:</strong> Click counts, fraud event counts, document word counts (NLP)</li>
+<li><strong>Normal:</strong> Modeling noise, weight initialization, Gaussian processes</li>
+<li><strong>Exponential:</strong> Time-to-event models, survival analysis</li>
+<li><strong>Beta:</strong> Prior on click-through rates, Bayesian A/B testing</li>
+</ul>
+<hr />
+<h2 id="descriptive-statistics">Descriptive Statistics</h2>
+<h3 id="measures-of-central-tendency">Measures of Central Tendency</h3>
+<pre><code class="language-python">import numpy as np
+
+data = [2, 4, 4, 4, 5, 5, 7, 9]
+
+mean   = np.mean(data)    # 5.0: sensitive to outliers
+median = np.median(data)  # 4.5: robust to outliers
+mode   = 4                # most frequent: categorical data
+
+# When to use which:
+# Symmetric distributions: mean ≈ median ≈ mode
+# Right-skewed (income): median preferred
+# Categorical data: mode
+</code></pre>
+<h3 id="measures-of-spread">Measures of Spread</h3>
+<pre><code class="language-python">variance = np.var(data, ddof=1)   # sample variance (ddof=1 for unbiased)
+std_dev  = np.std(data, ddof=1)
+iqr      = np.percentile(data, 75) - np.percentile(data, 25)  # robust to outliers
+
+# Coefficient of Variation: compare spread across different scales
+cv = std_dev / mean
+</code></pre>
+<h3 id="skewness-and-kurtosis">Skewness and Kurtosis</h3>
+<ul>
+<li><strong>Skewness &gt; 0</strong>: right tail is longer (income, housing prices)</li>
+<li><strong>Skewness &lt; 0</strong>: left tail is longer</li>
+<li><strong>Kurtosis &gt; 3</strong> (excess &gt; 0): heavy tails, more outliers (leptokurtic)</li>
+<li><strong>Kurtosis &lt; 3</strong> (excess &lt; 0): light tails (platykurtic)</li>
+</ul>
+<pre><code class="language-python">from scipy import stats
+skew = stats.skew(data)
+kurt = stats.kurtosis(data)  # excess kurtosis (normal = 0)
+</code></pre>
+<hr />
+<h2 id="hypothesis-testing">Hypothesis Testing</h2>
+<h3 id="framework">Framework</h3>
+<ol>
+<li><strong>State null hypothesis (H₀)</strong> and alternative (H₁)</li>
+<li><strong>Choose significance level α</strong> (typically 0.05 or 0.01)</li>
+<li><strong>Compute test statistic</strong></li>
+<li><strong>Find p-value</strong>: P(observing result this extreme | H₀ is true)</li>
+<li><strong>Decision</strong>: if p &lt; α, reject H₀</li>
+</ol>
+<p><strong>Errors:</strong></p>
+<ul>
+<li><strong>Type I (α):</strong> Reject H₀ when it's true (false positive), controlled by α</li>
+<li><strong>Type II (β):</strong> Fail to reject H₀ when it's false (false negative)</li>
+<li><strong>Power = 1 - β:</strong> Probability of correctly detecting an effect</li>
+</ul>
+<h3 id="t-test">t-test</h3>
+<p>Tests whether the mean of a sample is equal to a hypothesized value, or whether two samples have equal means.</p>
+<pre><code class="language-python">from scipy import stats
+
+# One-sample t-test: is mean different from 5.0?
+t_stat, p_value = stats.ttest_1samp(data, popmean=5.0)
+
+# Two-sample independent t-test
+control   = [82, 85, 88, 90, 91]
+treatment = [88, 92, 95, 97, 99]
+t_stat, p_value = stats.ttest_ind(control, treatment)
+
+# Paired t-test (before/after same subjects)
+before = [80, 85, 90, 88, 92]
+after  = [85, 88, 95, 90, 97]
+t_stat, p_value = stats.ttest_rel(before, after)
+
+print(f&quot;t={t_stat:.3f}, p={p_value:.3f}&quot;)
+# p &lt; 0.05 → statistically significant difference
+</code></pre>
+<p><strong>Assumptions:</strong> Normality (or n &gt; 30 by CLT), independence, equal variance (independent t-test).</p>
+<h3 id="chi-square-test">Chi-Square Test</h3>
+<p>Tests independence between two categorical variables.</p>
+<pre><code class="language-python">import numpy as np
+from scipy.stats import chi2_contingency
+
+# Contingency table: Button color vs Click
+#              Clicked  Not Clicked
+# Blue:          200       800
+# Red:           250       750
+observed = np.array([[200, 800], [250, 750]])
+chi2, p_value, dof, expected = chi2_contingency(observed)
+print(f&quot;χ²={chi2:.3f}, p={p_value:.3f}, df={dof}&quot;)
+# p &lt; 0.05 → button color and click are dependent (not independent)
+</code></pre>
+<p>Use case in ML: feature selection (test if a feature is independent of the target).</p>
+<h3 id="anova-analysis-of-variance">ANOVA (Analysis of Variance)</h3>
+<p>Tests if means of 3+ groups are equal.</p>
+<pre><code class="language-python">group_a = [85, 88, 90, 87]
+group_b = [78, 80, 82, 79]
+group_c = [92, 94, 91, 95]
+
+f_stat, p_value = stats.f_oneway(group_a, group_b, group_c)
+# Significant → at least one group differs; use post-hoc tests (Tukey) to find which
+</code></pre>
+<h3 id="multiple-comparisons-problem">Multiple Comparisons Problem</h3>
+<p>Running 20 tests at α=0.05 → expect ~1 false positive by chance.</p>
+<p><strong>Bonferroni correction:</strong> adjust α → α/n_tests</p>
+<pre><code class="language-python">n_tests = 20
+alpha_bonferroni = 0.05 / n_tests  # 0.0025
+
+# Benjamini-Hochberg (FDR control): less conservative
+from statsmodels.stats.multitest import multipletests
+reject, p_corrected, _, _ = multipletests(p_values, method='fdr_bh')
+</code></pre>
+<hr />
+<h2 id="statistical-inference-for-ml">Statistical Inference for ML</h2>
+<h3 id="confidence-intervals">Confidence Intervals</h3>
+<p>A 95% CI means: if we repeated sampling many times, 95% of intervals would contain the true parameter.</p>
+<pre><code class="language-python">import scipy.stats as stats
+import numpy as np
+
+data = np.array([2.1, 2.5, 3.0, 2.8, 2.3, 2.7])
+n = len(data)
+mean = np.mean(data)
+se = stats.sem(data)  # standard error = std / sqrt(n)
+
+ci_95 = stats.t.interval(0.95, df=n-1, loc=mean, scale=se)
+print(f&quot;Mean: {mean:.2f}, 95% CI: ({ci_95[0]:.2f}, {ci_95[1]:.2f})&quot;)
+
+# Bootstrap CI (model-agnostic, no distributional assumptions)
+def bootstrap_ci(data, statistic=np.mean, n_boot=1000, ci=0.95):
+    boot_stats = [statistic(np.random.choice(data, size=len(data), replace=True))
+                  for _ in range(n_boot)]
+    alpha = (1 - ci) / 2
+    return np.percentile(boot_stats, [alpha*100, (1-alpha)*100])
+
+ci_boot = bootstrap_ci(data)
+</code></pre>
+<h3 id="central-limit-theorem-clt">Central Limit Theorem (CLT)</h3>
+<p>The distribution of the <strong>sample mean</strong> approaches Normal as n → ∞, regardless of the population distribution.</p>
+<pre><code>X̄ ~ N(μ, σ²/n) as n → ∞
+</code></pre>
+<p>Why it matters for ML:</p>
+<ul>
+<li>Justifies using normal-based tests on large datasets</li>
+<li>Foundation for confidence intervals</li>
+<li>Why many ML metrics (averaged over samples) are approximately normal</li>
+</ul>
+<p><strong>Rule of thumb:</strong> n ≥ 30 is usually sufficient for CLT to hold for means.</p>
+<hr />
+<h2 id="correlation-and-covariance">Correlation and Covariance</h2>
+<pre><code class="language-python">import numpy as np
+
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([2, 4, 5, 4, 5])
+
+cov = np.cov(x, y)[0, 1]  # covariance
+corr = np.corrcoef(x, y)[0, 1]  # Pearson correlation [-1, 1]
+
+# Pearson r = Cov(X,Y) / (σ_X × σ_Y)
+</code></pre>
+<p><strong>Spearman vs Pearson:</strong></p>
+<ul>
+<li><strong>Pearson:</strong> linear relationships, sensitive to outliers; its standard significance test assumes approximate bivariate normality</li>
+<li><strong>Spearman:</strong> monotonic relationships, rank-based, robust to outliers</li>
+<li>Use Spearman when data has outliers or you only care about ordinal relationship</li>
+</ul>
+<p><strong>Correlation ≠ Causation:</strong> Always. A classic ML interview trap. Two variables can be correlated due to:</p>
+<ul>
+<li>Direct causation (X → Y)</li>
+<li>Reverse causation (Y → X)</li>
+<li>Common cause (Z → X and Z → Y, confounding)</li>
+<li>Coincidence (spurious correlation)</li>
+</ul>
+<hr />
+<h2 id="bayesian-statistics">Bayesian Statistics</h2>
+<h3 id="bayesian-vs-frequentist">Bayesian vs Frequentist</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Frequentist</th>
+<th>Bayesian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameters</td>
+<td>Fixed, unknown</td>
+<td>Random variables with distributions</td>
+</tr>
+<tr>
+<td>Probability</td>
+<td>Long-run frequency</td>
+<td>Degree of belief</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Point estimate + CI</td>
+<td>Posterior distribution</td>
+</tr>
+<tr>
+<td>Prior knowledge</td>
+<td>Not used</td>
+<td>Encoded as prior</td>
+</tr>
+<tr>
+<td>Computation</td>
+<td>Usually simpler</td>
+<td>Can be expensive</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="bayesian-updating">Bayesian Updating</h3>
+<pre><code class="language-python"># Example: Estimating click-through rate with Beta distribution
+# Prior: Beta(α=1, β=1) = Uniform (no prior knowledge)
+# Likelihood: Binomial (k clicks in n impressions)
+# Posterior: Beta(α + k, β + n - k)
+
+from scipy.stats import beta
+import numpy as np
+
+# Prior
+alpha_prior, beta_prior = 1, 1
+
+# Observed data: 30 clicks out of 100 impressions
+n, k = 100, 30
+
+# Posterior
+alpha_post = alpha_prior + k        # 31
+beta_post  = beta_prior + n - k     # 71
+
+# Posterior mean = α/(α+β) = 31/102 ≈ 0.304
+posterior_mean = alpha_post / (alpha_post + beta_post)
+
+# 95% credible interval
+ci_lower, ci_upper = beta.ppf([0.025, 0.975], alpha_post, beta_post)
+print(f&quot;Posterior mean: {posterior_mean:.3f}&quot;)
+print(f&quot;95% Credible Interval: ({ci_lower:.3f}, {ci_upper:.3f})&quot;)
+</code></pre>
+<h3 id="maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)</h3>
+<p>Find parameters θ that maximize P(data|θ):</p>
+<pre><code class="language-python"># MLE for Gaussian: sample mean and variance are the MLE estimates
+# Logistic regression uses MLE to find weights
+
+# In practice, we minimize negative log-likelihood (equivalent, numerically stable)
+# NLL = -Σ log P(y_i | x_i, θ)
+
+# For classification: cross-entropy loss IS the negative log-likelihood
+import torch.nn as nn
+criterion = nn.CrossEntropyLoss()  # maximizes likelihood of correct class
+</code></pre>
+<h3 id="maximum-a-posteriori-map">Maximum A Posteriori (MAP)</h3>
+<p>Extends MLE by incorporating a prior:</p>
+<pre><code>MAP: θ* = argmax P(θ|data) = argmax P(data|θ) × P(θ)
+</code></pre>
+<p><strong>L2 regularization = MAP with Gaussian prior:</strong></p>
+<pre><code>min NLL + λ||θ||²  ↔  MAP with prior θ ~ N(0, 1/(2λ))
+</code></pre>
+<p><strong>L1 regularization = MAP with Laplace prior:</strong></p>
+<pre><code>min NLL + λ||θ||₁  ↔  MAP with prior θ ~ Laplace(0, 1/λ)
+</code></pre>
+<p>This is why L1 produces sparse solutions: the Laplace prior has a sharp, non-differentiable peak (a cusp) at 0.</p>
+<hr />
+<h2 id="expected-value-variance-and-key-identities">Expected Value, Variance, and Key Identities</h2>
+<pre><code>E[X] = Σ x · P(X=x)           (discrete)
+E[X] = ∫ x · f(x) dx           (continuous)
+E[aX + b] = aE[X] + b          (linearity)
+E[X + Y] = E[X] + E[Y]         (always, even if correlated)
+E[XY] = E[X]E[Y]               (only if X, Y independent)
+
+Var(X) = E[X²] - (E[X])²
+Var(aX + b) = a²Var(X)
+Var(X + Y) = Var(X) + Var(Y) + 2Cov(X,Y)
+Var(X + Y) = Var(X) + Var(Y)   (if independent)
+</code></pre>
+<hr />
+<h2 id="common-interview-questions">Common Interview Questions</h2>
+<p><strong>Q: What is p-value and how do you interpret it?</strong>
+The p-value is the probability of observing a result as extreme as (or more extreme than) what was observed, <em>assuming the null hypothesis is true</em>. It is NOT the probability that H₀ is true. p = 0.03 means: if H₀ were true, we'd see this result only 3% of the time by chance. Since this is below our threshold α=0.05, we reject H₀.</p>
+<p><strong>Q: A/B test shows p=0.04. Is the new feature better?</strong>
+Not necessarily. Check: (1) Was the test pre-registered with a fixed sample size? (2) Did you correct for multiple comparisons if you tested multiple metrics? (3) Is the effect size practically significant? (4) Did you check for novelty effects? (5) Were there any confounders (day-of-week effects, etc.)? Statistical significance ≠ practical significance.</p>
+<p><strong>Q: Explain the bias-variance tradeoff using statistics.</strong>
+Test error = Bias² + Variance + Irreducible Noise. Bias: systematic error from wrong assumptions (high in underfitting). Variance: sensitivity to training data fluctuations (high in overfitting). The tradeoff: reducing bias (more complex model) increases variance and vice versa. Optimal model minimizes their sum.</p>
+<p><strong>Q: How does regularization connect to Bayesian priors?</strong>
+L2 regularization (Ridge) is equivalent to MAP estimation with a Gaussian prior on weights. L1 (Lasso) is MAP with a Laplace prior. The regularization strength λ is inversely proportional to the prior's variance (for L2, prior variance 1/(2λ)). This Bayesian view explains why L1 induces sparsity: the Laplace density has a sharp cusp at zero (finite height, but non-differentiable), so the MAP estimate sits exactly at zero whenever the likelihood's pull is weaker than λ.</p>
+<p><strong>Q: What is the difference between standard error and standard deviation?</strong>
+Standard deviation (σ) measures variability in the <em>population</em>. Standard error (SE = σ/√n) measures variability of the <em>sample mean</em>: how much the mean estimate varies across different samples. SE decreases with more data (√n in denominator), showing that larger samples give more precise estimates of the true mean.</p>
+<p><strong>Q: When would you use non-parametric tests?</strong>
+When data doesn't meet parametric assumptions: non-normality with small n, ordinal data, heavy outliers, or when you can't assume a specific distribution. Examples: Mann-Whitney U (vs t-test), Kruskal-Wallis (vs ANOVA), Spearman (vs Pearson). The trade-off is lower statistical power when assumptions actually hold.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_math_for_ml.html"><small>Previous</small>Math for ML</a><a rel="next" class="next" href="intro_model_evaluation.html"><small>Next</small>Model Evaluation &amp; Metrics</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_statistics_probability.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

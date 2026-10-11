@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A/B Testing &amp; Experimentation for ML Systems | Cracking ML Interviews</title>
+<meta name="description" content="A/B Testing &amp; Experimentation for ML Systems: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_ab_testing.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="A/B Testing &amp; Experimentation for ML Systems | Cracking ML Interviews">
+<meta property="og:description" content="A/B Testing &amp; Experimentation for ML Systems: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_ab_testing.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A/B Testing &amp; Experimentation for ML Systems | Cracking ML Interviews">
+<meta name="twitter:description" content="A/B Testing &amp; Experimentation for ML Systems: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "A/B Testing & Experimentation for ML Systems",
+   "description": "A/B Testing & Experimentation for ML Systems: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_ab_testing.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "MLOps",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#mlops"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "A/B Testing",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/mlops/intro_ab_testing.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#mlops">MLOps</a> <span aria-hidden="true">/</span> <span aria-current="page">A/B Testing</span></nav>
+<p class="meta"><a href="../../#mlops/intro_ab_testing.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="ab-testing--experimentation-for-ml-systems">A/B Testing &amp; Experimentation for ML Systems</h1>
+<h2 id="why-ab-testing-matters-for-ml">Why A/B Testing Matters for ML</h2>
+<p>Offline metrics (AUC, RMSE, NDCG) don't always predict online impact. A model with better offline metrics can hurt revenue due to:</p>
+<ul>
+<li>Training-serving skew</li>
+<li>Novelty effects</li>
+<li>Interaction with the full system</li>
+<li>Metrics that don't perfectly capture business goals</li>
+</ul>
+<p>A/B testing is the gold standard for measuring real user impact.</p>
+<hr />
+<h2 id="statistical-framework">Statistical Framework</h2>
+<h3 id="null-and-alternative-hypotheses">Null and Alternative Hypotheses</h3>
+<pre><code>H₀: μ_treatment = μ_control      (no difference)
+H₁: μ_treatment ≠ μ_control      (two-tailed: use when you don't know direction)
+H₁: μ_treatment &gt; μ_control      (one-tailed, when direction is expected)
+</code></pre>
+<p>Use two-tailed unless you have strong a priori reason for directionality. Two-tailed is more conservative and prevents p-hacking.</p>
+<h3 id="key-metrics">Key Metrics</h3>
+<p><strong>Primary metric:</strong> The one metric that determines launch decision (e.g., revenue per user, CTR)</p>
+<p><strong>Guardrail metrics:</strong> Metrics that must not decrease (e.g., latency, error rate, retention), these are non-negotiable</p>
+<p><strong>Secondary metrics:</strong> Informational, not part of decision criteria</p>
+<hr />
+<h2 id="sample-size-calculation">Sample Size Calculation</h2>
+<p>This is the most common interview question. You must calculate sample size <strong>before</strong> running the experiment.</p>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+def calculate_sample_size(
+    baseline_rate: float,    # current conversion rate e.g., 0.05
+    min_detectable_effect: float,  # relative change e.g., 0.10 = 10% lift
+    alpha: float = 0.05,     # Type I error rate (significance level)
+    power: float = 0.80      # 1 - Type II error rate
+) -&gt; int:
+    &quot;&quot;&quot;
+    Calculate required sample size per variant for a proportion test.
+    &quot;&quot;&quot;
+    p1 = baseline_rate
+    p2 = baseline_rate * (1 + min_detectable_effect)
+
+    # Pooled proportion under H₀
+    p_pooled = (p1 + p2) / 2
+
+    # Z-scores for alpha and beta
+    z_alpha = stats.norm.ppf(1 - alpha / 2)   # two-tailed
+    z_beta  = stats.norm.ppf(power)
+
+    # Sample size formula for proportions
+    numerator = (z_alpha * np.sqrt(2 * p_pooled * (1 - p_pooled)) +
+                 z_beta  * np.sqrt(p1*(1-p1) + p2*(1-p2))) ** 2
+    denominator = (p2 - p1) ** 2
+
+    n = numerator / denominator
+    return int(np.ceil(n))
+
+# Example: baseline CTR = 5%, want to detect 10% relative lift (to 5.5%)
+n = calculate_sample_size(0.05, 0.10)
+print(f&quot;Required n per variant: {n:,}&quot;)
+# Required n per variant: ~30,000
+
+# Total experiment duration = n_required / daily_traffic_per_variant
+daily_traffic = 10_000  # users per variant per day
+duration_days = n / daily_traffic
+print(f&quot;Experiment duration: {duration_days:.1f} days&quot;)
+</code></pre>
+<p><strong>Rule of thumb:</strong> Required sample size scales with 1/(effect size)², so it grows quadratically as the effect shrinks. A 1% lift takes ~100× more users than a 10% lift.</p>
+<hr />
+<h2 id="running-the-test">Running the Test</h2>
+<h3 id="randomization-unit">Randomization Unit</h3>
+<p>The unit you randomize on should match the unit you measure:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Randomize on</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI changes</td>
+<td>User ID</td>
+<td>Consistent experience per user</td>
+</tr>
+<tr>
+<td>Pricing experiments</td>
+<td>User ID</td>
+<td>Avoid same user seeing different prices</td>
+</tr>
+<tr>
+<td>Email campaigns</td>
+<td>User ID or email</td>
+<td>Independence between users</td>
+</tr>
+<tr>
+<td>Algorithm tests (search)</td>
+<td>Query ID</td>
+<td>Tests relevance per query</td>
+</tr>
+<tr>
+<td>Infrastructure changes</td>
+<td>Request</td>
+<td>Fine-grained, but no personalization data</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>User-level</strong> randomization is most common. Never randomize on time (biased by weekly patterns).</p>
+<h3 id="hash-based-assignment">Hash-Based Assignment</h3>
+<pre><code class="language-python">import hashlib
+
+def assign_variant(user_id: str, experiment_id: str, 
+                   n_variants: int = 2) -&gt; int:
+    &quot;&quot;&quot;
+    Deterministic assignment: same user always gets same variant.
+    &quot;&quot;&quot;
+    hash_input = f&quot;{experiment_id}:{user_id}&quot;.encode()
+    hash_value = int(hashlib.md5(hash_input).hexdigest(), 16)
+    return hash_value % n_variants
+
+# Usage
+variant = assign_variant(&quot;user_12345&quot;, &quot;exp_rec_model_v2&quot;)
+# 0 → control, 1 → treatment
+</code></pre>
+<p><strong>Why hash-based:</strong> Deterministic (reproducible), uniform distribution, no need to store assignments.</p>
+<h3 id="pre-experiment-checks">Pre-Experiment Checks</h3>
+<pre><code class="language-python">import pandas as pd
+from scipy import stats
+
+# 1. A/A Test: run experiment with identical variants
+# Both variants should show no significant difference
+# If they do, your randomization is broken
+
+# 2. Sample Ratio Mismatch (SRM) check: verify variant sizes match the planned split
+def check_balance(df, variant_col='variant', expected_split=0.5):
+    counts = df[variant_col].value_counts()
+    total = len(df)
+    for variant, count in counts.items():
+        actual_split = count / total
+        print(f&quot;Variant {variant}: {count:,} ({actual_split:.1%}, expected {expected_split:.1%})&quot;)
+
+    # Chi-square goodness-of-fit test (equal expected counts, i.e. a 50/50 split)
+    chi2, p = stats.chisquare(counts.values)
+    print(f&quot;Balance test: χ²={chi2:.3f}, p={p:.3f}&quot;)
+    if p &lt; 0.05:
+        print(&quot;WARNING: Variants are imbalanced!&quot;)
+
+# 3. Check pre-experiment equivalence of key covariates
+# If users are significantly different before the experiment, randomization may be broken
+</code></pre>
+<hr />
+<h2 id="statistical-analysis">Statistical Analysis</h2>
+<h3 id="z-test-for-proportions-eg-ctr">Z-Test for Proportions (e.g., CTR)</h3>
+<pre><code class="language-python">import numpy as np
+from scipy import stats
+
+def ab_test_proportions(
+    n_control: int, n_treatment: int,
+    conversions_control: int, conversions_treatment: int,
+    alpha: float = 0.05
+) -&gt; dict:
+    &quot;&quot;&quot;
+    Two-sample z-test for proportion difference.
+    &quot;&quot;&quot;
+    p_control   = conversions_control / n_control
+    p_treatment = conversions_treatment / n_treatment
+
+    # Pooled proportion (under H₀: p_c = p_t)
+    p_pooled = (conversions_control + conversions_treatment) / (n_control + n_treatment)
+
+    # Standard error of difference
+    se = np.sqrt(p_pooled * (1 - p_pooled) * (1/n_control + 1/n_treatment))
+
+    # Z-statistic
+    z = (p_treatment - p_control) / se
+    p_value = 2 * (1 - stats.norm.cdf(abs(z)))  # two-tailed
+
+    # Confidence interval for the difference
+    se_diff = np.sqrt(p_control*(1-p_control)/n_control +
+                      p_treatment*(1-p_treatment)/n_treatment)
+    ci_lower = (p_treatment - p_control) - 1.96 * se_diff
+    ci_upper = (p_treatment - p_control) + 1.96 * se_diff
+
+    relative_lift = (p_treatment - p_control) / p_control
+
+    return {
+        'p_control': p_control,
+        'p_treatment': p_treatment,
+        'relative_lift': relative_lift,
+        'z_statistic': z,
+        'p_value': p_value,
+        'significant': p_value &lt; alpha,
+        'ci_95': (ci_lower, ci_upper),
+    }
+
+# Example
+result = ab_test_proportions(
+    n_control=50_000, n_treatment=50_000,
+    conversions_control=2_400, conversions_treatment=2_650
+)
+print(f&quot;Control CTR: {result['p_control']:.3%}&quot;)
+print(f&quot;Treatment CTR: {result['p_treatment']:.3%}&quot;)
+print(f&quot;Relative lift: {result['relative_lift']:.1%}&quot;)
+print(f&quot;p-value: {result['p_value']:.4f}&quot;)
+print(f&quot;Significant: {result['significant']}&quot;)
+print(f&quot;95% CI for difference: ({result['ci_95'][0]:.4f}, {result['ci_95'][1]:.4f})&quot;)
+</code></pre>
+<h3 id="t-test-for-continuous-metrics-eg-revenue">T-Test for Continuous Metrics (e.g., Revenue)</h3>
+<pre><code class="language-python">from scipy import stats
+
+def ab_test_continuous(control_values, treatment_values, alpha=0.05):
+    t_stat, p_value = stats.ttest_ind(control_values, treatment_values)
+    
+    control_mean   = np.mean(control_values)
+    treatment_mean = np.mean(treatment_values)
+    
+    return {
+        'control_mean': control_mean,
+        'treatment_mean': treatment_mean,
+        'relative_lift': (treatment_mean - control_mean) / control_mean,
+        't_statistic': t_stat,
+        'p_value': p_value,
+        'significant': p_value &lt; alpha,
+    }
+</code></pre>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<h3 id="1-peeking-problem-optional-stopping">1. Peeking Problem (Optional Stopping)</h3>
+<p>If you look at results repeatedly and stop when p &lt; 0.05, your actual Type I error rate is much higher than 5%.</p>
+<pre><code class="language-python"># Simulation showing peeking inflates false positives
+import numpy as np
+
+def simulate_peeking(n_simulations=10_000, max_n=1_000, check_every=50):
+    false_positives = 0
+    for _ in range(n_simulations):
+        control   = np.random.normal(0, 1, max_n)
+        treatment = np.random.normal(0, 1, max_n)  # same distribution = no effect
+        for n in range(check_every, max_n+1, check_every):
+            _, p = stats.ttest_ind(control[:n], treatment[:n])
+            if p &lt; 0.05:
+                false_positives += 1
+                break
+    return false_positives / n_simulations
+
+# Fixed sample: ~5% false positive rate
+# Peeking every 50 samples up to 1000: ~20%+ false positive rate!
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li><strong>Pre-register</strong> sample size and analysis plan before starting</li>
+<li><strong>Sequential testing</strong> (alpha spending functions) if you need early stopping</li>
+<li><strong>Bayesian testing</strong>: update beliefs continuously without inflating error rates</li>
+</ul>
+<h3 id="2-multiple-testing-problem">2. Multiple Testing Problem</h3>
+<p>Testing 20 metrics at α=0.05 expects 1 false positive.</p>
+<pre><code class="language-python">from statsmodels.stats.multitest import multipletests
+
+p_values = [0.01, 0.04, 0.03, 0.20, 0.07, 0.15, 0.02]  # 7 metrics
+
+# Benjamini-Hochberg FDR correction (less conservative than Bonferroni)
+reject, p_corrected, _, _ = multipletests(p_values, alpha=0.05, method='fdr_bh')
+
+for i, (raw, corrected, sig) in enumerate(zip(p_values, p_corrected, reject)):
+    print(f&quot;Metric {i}: raw p={raw:.3f}, corrected p={corrected:.3f}, significant={sig}&quot;)
+</code></pre>
+<p><strong>Hierarchy rule:</strong> Define primary metric in advance. Only apply correction to secondary metrics. This prevents HARKing (Hypothesizing After Results are Known).</p>
+<h3 id="3-network-effects--sutva-violations">3. Network Effects / SUTVA Violations</h3>
+<p>SUTVA (Stable Unit Treatment Value Assumption): treatment of one unit doesn't affect others.</p>
+<p>Violated in:</p>
+<ul>
+<li>Social networks: user in treatment group affects their friends in control</li>
+<li>Marketplace: changing prices for some sellers affects overall market</li>
+<li>Email: viral content spread from treatment to control users</li>
+</ul>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li><strong>Cluster-based randomization:</strong> randomize entire social clusters together</li>
+<li><strong>Geo-based experiments:</strong> randomize by geography (city, country)</li>
+<li><strong>Time-based experiments:</strong> alternate treatment by time period (riskier)</li>
+</ul>
+<h3 id="4-simpsons-paradox">4. Simpson's Paradox</h3>
+<p>A trend can reverse when data is aggregated vs segmented.</p>
+<pre><code class="language-python">import pandas as pd
+
+# Example: New ML model looks better overall but worse in every segment
+data = {
+    'segment': ['Mobile', 'Mobile', 'Desktop', 'Desktop'],
+    'variant':  ['Control', 'Treatment', 'Control', 'Treatment'],
+    'users':    [9000, 1000, 1000, 9000],
+    'conversions': [450, 40, 100, 810]
+}
+df = pd.DataFrame(data)
+df['rate'] = df['conversions'] / df['users']
+
+# Segment view: Treatment worse in both segments!
+print(df[['segment', 'variant', 'rate']])
+# Mobile: Control=5%, Treatment=4%
+# Desktop: Control=10%, Treatment=9%
+
+# But aggregate: Control = 550/10000 = 5.5%, Treatment = 850/10000 = 8.5%
+# Treatment looks better overall because it got mostly high-converting desktop users
+# This is Simpson's Paradox: always analyze by segment
+</code></pre>
+<p><strong>Prevention:</strong> Always segment analysis by major user groups. Check if treatment groups are balanced across key dimensions.</p>
+<hr />
+<h2 id="advanced-techniques">Advanced Techniques</h2>
+<h3 id="variance-reduction-with-cuped">Variance Reduction with CUPED</h3>
+<p>CUPED (Controlled-experiment Using Pre-Experiment Data) reduces variance by subtracting out pre-experiment variation:</p>
+<pre><code class="language-python">def cuped_metric(
+    post_metric: np.ndarray,
+    pre_metric: np.ndarray
+) -&gt; np.ndarray:
+    &quot;&quot;&quot;
+    Adjust post-experiment metric using pre-experiment covariate.
+    Y_cuped = Y - θ × (X - E[X])
+    θ = Cov(Y, X) / Var(X): OLS estimate
+    &quot;&quot;&quot;
+    theta = np.cov(post_metric, pre_metric)[0, 1] / np.var(pre_metric, ddof=1)
+    return post_metric - theta * (pre_metric - np.mean(pre_metric))
+
+# Usage: if pre_metric is correlated with post_metric,
+# CUPED significantly reduces variance → smaller required sample size
+# Variance falls by a factor of (1 - ρ²), where ρ = corr(pre_metric, post_metric)
+</code></pre>
+<p><strong>Why it works:</strong> Pre-experiment user behavior is correlated with post-experiment behavior. By removing this systematic variation, you see the treatment effect more clearly.</p>
+<h3 id="multi-armed-bandits">Multi-Armed Bandits</h3>
+<p>When you want to minimize regret (opportunity cost) during experimentation rather than pure exploration:</p>
+<pre><code class="language-python">import numpy as np
+
+class ThompsonSampling:
+    &quot;&quot;&quot;
+    Bayesian bandit: model CTR as Beta distribution, sample to decide arm.
+    &quot;&quot;&quot;
+    def __init__(self, n_arms: int):
+        self.alpha = np.ones(n_arms)   # successes + 1
+        self.beta  = np.ones(n_arms)   # failures + 1
+
+    def select_arm(self) -&gt; int:
+        samples = np.random.beta(self.alpha, self.beta)
+        return np.argmax(samples)
+
+    def update(self, arm: int, reward: int):
+        self.alpha[arm] += reward
+        self.beta[arm]  += 1 - reward
+
+# Compare to fixed A/B: bandits continuously shift traffic to better arms
+# Trade-off: MAB minimizes regret, A/B gives cleaner statistical inference
+</code></pre>
+<p><strong>A/B Test vs Bandit trade-off:</strong></p>
+<ul>
+<li><strong>A/B Test:</strong> Clean inference, fixed allocation, high regret if one variant is much better</li>
+<li><strong>Bandit:</strong> Lower regret, adaptively allocates traffic, but inference is more complex</li>
+<li><strong>Use A/B</strong> for major feature decisions that need clear p-values for stakeholders</li>
+<li><strong>Use Bandits</strong> for ongoing optimization (content ranking, ad serving, recommendation)</li>
+</ul>
+<hr />
+<h2 id="ml-model-ab-testing-specifics">ML Model A/B Testing Specifics</h2>
+<h3 id="shadow-mode-testing">Shadow Mode Testing</h3>
+<p>Run new model in parallel without serving its results to users:</p>
+<pre><code class="language-python"># Pseudo-code for shadow mode
+def handle_request(user_request):
+    # Production: serve from current model
+    production_response = current_model.predict(user_request)
+    
+    # Shadow: run new model, log output but don't serve
+    shadow_response = new_model.predict(user_request)
+    logger.log({
+        'request': user_request,
+        'production': production_response,
+        'shadow': shadow_response,
+    })
+    
+    return production_response  # only serve production result
+</code></pre>
+<p>Use shadow mode to validate correctness and measure latency before any user exposure.</p>
+<h3 id="interleaving-for-ranking-systems">Interleaving for Ranking Systems</h3>
+<p>For ranking models (search, recommendations), interleaving is more sensitive than side-by-side A/B:</p>
+<ul>
+<li>Take top-N results from Model A and Model B</li>
+<li>Interleave them in a balanced way</li>
+<li>Show one combined list to the user</li>
+<li>Model that gets more clicks &quot;wins&quot;</li>
+</ul>
+<p>Requires ~10-100× fewer users to detect the same effect size vs A/B testing.</p>
+<h3 id="causal-impact-for-non-randomized-experiments">Causal Impact for Non-Randomized Experiments</h3>
+<p>When you can't randomize (e.g., a feature rolled out to all users at once):</p>
+<pre><code class="language-python"># CausalImpact uses Bayesian structural time series to estimate
+# counterfactual (what would have happened without the intervention)
+
+# pip install causalimpact
+from causalimpact import CausalImpact
+import pandas as pd
+
+# data: time series of metric, with pre/post periods marked
+pre_period  = ['2024-01-01', '2024-03-31']
+post_period = ['2024-04-01', '2024-06-30']
+
+ci = CausalImpact(data, pre_period, post_period)
+print(ci.summary())
+ci.plot()
+</code></pre>
+<hr />
+<h2 id="decision-framework">Decision Framework</h2>
+<pre><code>1. Pre-experiment
+   ├── Define primary metric (only 1)
+   ├── Define guardrail metrics
+   ├── Calculate required sample size
+   ├── Pre-register analysis plan
+   └── Check for data quality issues
+
+2. During experiment
+   ├── Do NOT peek at results (or use sequential testing)
+   ├── Monitor for sample ratio mismatch (SRM)
+   └── Check for data pipeline issues
+
+3. Post-experiment analysis
+   ├── Check SRM: was split as expected?
+   ├── Primary metric test (z-test or t-test)
+   ├── Segment analysis (mobile vs desktop, new vs returning)
+   ├── Guardrail metric check
+   └── Multiple testing correction if needed
+
+4. Decision
+   ├── Ship if: primary metric ↑, no guardrail violations
+   ├── Investigate if: mixed signals by segment
+   └── Hold if: guardrail metric ↓ (even if primary ↑)
+</code></pre>
+<hr />
+<h2 id="common-interview-questions">Common Interview Questions</h2>
+<p><strong>Q: How do you determine how long to run an A/B test?</strong>
+Calculate required sample size before running based on baseline conversion rate, minimum detectable effect (MDE), desired power (80-95%), and significance level (5%). Run until reaching that sample size, not based on time. Also run for full weekly cycles (multiples of 7 days) to avoid day-of-week bias.</p>
+<p><strong>Q: The test shows p=0.03 but you checked yesterday and p=0.06. What happened?</strong>
+This is the peeking problem. By checking early and stopping when p crossed the threshold, you inflated your Type I error rate. The true false positive rate with repeated peeking is much higher than 5%. You should have pre-committed to a sample size and only looked once at the end.</p>
+<p><strong>Q: How would you design an A/B test for a recommendation model?</strong>
+Define primary metric (e.g., CTR or session time), guardrails (latency p99, error rate). Randomize on user ID for personalization. Calculate sample size for the expected effect. Use interleaving for faster signal if testing ranking only. Run shadow mode first to check model correctness. Monitor for novelty effects in first 24-48 hours. Segment analysis by user type (new vs returning, mobile vs desktop).</p>
+<p><strong>Q: What is a Sample Ratio Mismatch (SRM) and why is it critical?</strong>
+SRM occurs when the actual split between variants differs significantly from the planned split. It indicates a bug in the randomization/logging/data pipeline. If 50/50 split gives you 45K control and 55K treatment, something is wrong: you cannot trust any of the experiment's results. Always check SRM first before looking at any metrics.</p>
+<p><strong>Q: When would you use CUPED?</strong>
+CUPED (pre-experiment covariate adjustment) is useful when users have highly variable baseline behavior. If pre-experiment purchase rate is highly correlated with post-experiment purchase rate, CUPED reduces variance by a fraction ρ² (the squared correlation between the pre- and post-period metric), allowing you to detect smaller effects or reach significance faster with fewer users. It's essentially regression adjustment: standard in large-scale experimentation.</p>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_evaluation_guardrails.html"><small>Previous</small>Evaluation &amp; Guardrails</a><a rel="next" class="next" href="intro_data_labeling_active_learning.html"><small>Next</small>Data Labeling &amp; Active Learning</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/mlops/intro_ab_testing.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

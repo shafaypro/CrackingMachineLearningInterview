@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dbt (Data Build Tool): Complete Reference Guide | Cracking ML Interviews</title>
+<meta name="description" content="dbt (Data Build Tool): Complete Reference Guide: concepts, worked examples and interview questions with answers.">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_dbt.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="dbt (Data Build Tool): Complete Reference Guide | Cracking ML Interviews">
+<meta property="og:description" content="dbt (Data Build Tool): Complete Reference Guide: concepts, worked examples and interview questions with answers.">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_dbt.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dbt (Data Build Tool): Complete Reference Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="dbt (Data Build Tool): Complete Reference Guide: concepts, worked examples and interview questions with answers.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "dbt (Data Build Tool): Complete Reference Guide",
+   "description": "dbt (Data Build Tool): Complete Reference Guide: concepts, worked examples and interview questions with answers.",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_dbt.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Data Engineering",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#data-engineering"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "dbt",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/data_engineering/intro_dbt.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#data-engineering">Data Engineering</a> <span aria-hidden="true">/</span> <span aria-current="page">dbt</span></nav>
+<p class="meta"><a href="../../#data_engineering/intro_dbt.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="dbt-data-build-tool-complete-reference-guide">dbt (Data Build Tool): Complete Reference Guide</h1>
+<blockquote>
+<p>A complete, beginner-to-advanced reference for dbt concepts. Click any section to expand it.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#what-is-dbt">What is dbt?</a></li>
+<li><a href="#how-dbt-fits-in-the-modern-data-stack">How dbt fits in the Modern Data Stack</a></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#core-concepts">Core Concepts</a>
+<ul>
+<li><a href="#models">Models</a></li>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#tests">Tests</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#macros">Macros</a></li>
+<li><a href="#seeds">Seeds</a></li>
+<li><a href="#snapshots">Snapshots</a></li>
+<li><a href="#the-dag">The DAG</a></li>
+</ul>
+</li>
+<li><a href="#the-layered-data-model">The Layered Data Model</a></li>
+<li><a href="#materializations">Materializations</a>
+<ul>
+<li><a href="#view-materialization">View</a></li>
+<li><a href="#table-materialization">Table</a></li>
+<li><a href="#incremental-materialization">Incremental</a></li>
+<li><a href="#ephemeral-materialization">Ephemeral</a></li>
+</ul>
+</li>
+<li><a href="#jinja--macros-in-depth">Jinja &amp; Macros</a></li>
+<li><a href="#packages">Packages</a></li>
+<li><a href="#variables">Variables</a></li>
+<li><a href="#environments--profiles">Environments &amp; Profiles</a></li>
+<li><a href="#advanced-topics">Advanced Topics</a>
+<ul>
+<li><a href="#snapshots-slowly-changing-dimensions">Snapshots (SCDs)</a></li>
+<li><a href="#exposures">Exposures</a></li>
+<li><a href="#semantic-layer--metrics">Semantic Layer &amp; Metrics</a></li>
+<li><a href="#custom-schemas">Custom Schemas</a></li>
+<li><a href="#cicd-with-dbt">CI/CD with dbt</a></li>
+</ul>
+</li>
+<li><a href="#key-commands">Key Commands</a></li>
+<li><a href="#quick-reference-cheatsheet">Quick Reference Cheatsheet</a></li>
+</ul>
+<hr />
+<h2 id="what-is-dbt">What is dbt?</h2>
+<p><strong>dbt (data build tool)</strong> is a transformation framework that lets data analysts and engineers write SQL <code>SELECT</code> statements to define transformations, and dbt handles the <code>CREATE TABLE / VIEW</code> logic, dependency resolution, testing, and documentation automatically.</p>
+<p>dbt is the <strong>T in ELT</strong>: it runs entirely inside your data warehouse. No data ever leaves.</p>
+<p><strong>Key principles:</strong></p>
+<ul>
+<li>Write <code>SELECT</code>: never <code>CREATE</code>, <code>DROP</code>, or <code>INSERT</code></li>
+<li>Every <code>.sql</code> file = one table or view in your warehouse</li>
+<li>Dependencies are declared with <code>ref()</code>: dbt resolves run order automatically</li>
+<li>Everything is version-controlled, tested, and documented</li>
+</ul>
+<hr />
+<h2 id="how-dbt-fits-in-the-modern-data-stack">How dbt fits in the Modern Data Stack</h2>
+<pre><code>┌─────────────┐     Load      ┌──────────────────┐   Transform   ┌──────────────┐   Query   ┌──────────────┐
+│   Sources   │ ────────────► │  Data Warehouse   │ ────────────► │     dbt      │ ────────► │  BI / ML     │
+│  DBs, APIs  │               │ Snowflake·BigQuery│               │  SQL + tests │           │ Looker·Metab.│
+│  CSVs, etc. │               │ Redshift·DuckDB   │               │  docs + DAG  │           │ Tableau etc. │
+└─────────────┘               └──────────────────┘               └──────────────┘           └──────────────┘
+                 ▲                                                       ▲
+                 │                                                       │
+            EL tools                                              dbt lives here
+         (Fivetran, Airbyte)                               runs SQL inside your warehouse
+</code></pre>
+<hr />
+<h2 id="project-structure">Project Structure</h2>
+<pre><code>my_dbt_project/
+├── models/                        ← your SQL lives here
+│   ├── staging/                   ← light cleaning of raw tables
+│   │   ├── stg_orders.sql
+│   │   ├── stg_customers.sql
+│   │   ├── _sources.yml           ← declare raw source tables
+│   │   └── _stg_models.yml        ← tests + docs for staging models
+│   ├── intermediate/              ← optional join/logic layer (not exposed to BI)
+│   │   └── int_orders_with_items.sql
+│   └── marts/                     ← business-level models (BI reads these)
+│       ├── orders.sql
+│       ├── customers.sql
+│       └── _marts.yml
+├── macros/                        ← reusable Jinja functions
+│   └── clean_string.sql
+├── seeds/                         ← CSV files loaded as warehouse tables
+│   └── country_codes.csv
+├── tests/                         ← custom singular test SQL files
+│   └── assert_orders_positive_amount.sql
+├── snapshots/                     ← slowly changing dimension configs
+│   └── orders_snapshot.sql
+├── analyses/                      ← ad-hoc SQL (compiled but not run)
+├── dbt_project.yml                ← project config (name, paths, materializations)
+└── profiles.yml                   ← warehouse connection (usually ~/.dbt/profiles.yml)
+</code></pre>
+<hr />
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="models">Models</h3>
+<details>
+<summary><strong>What is a model?</strong></summary>
+<p>A model is a single <code>.sql</code> file containing a <code>SELECT</code> statement. dbt executes it and creates a table or view in your warehouse. The filename becomes the table name.</p>
+<pre><code class="language-sql">-- models/staging/stg_orders.sql
+select
+    id              as order_id,
+    customer_id,
+    cast(created_at as timestamp) as ordered_at,
+    amount_cents / 100.0          as amount,
+    lower(trim(status))           as status
+from {{ source('raw', 'orders') }}
+where id is not null
+</code></pre>
+<p>dbt turns this into:</p>
+<pre><code class="language-sql">create or replace view dev.stg_orders as (
+    select
+        id              as order_id,
+        ...
+    from raw.orders
+    where id is not null
+);
+</code></pre>
+</details>
+<details>
+<summary><strong>The ref() function: the most important concept in dbt</strong></summary>
+<p><code>ref()</code> is how you reference another model. It does two things:</p>
+<ol>
+<li><strong>Resolves the correct table path</strong> for your environment (<code>dev.stg_orders</code> in dev, <code>prod.stg_orders</code> in prod)</li>
+<li><strong>Registers a dependency</strong> so dbt builds models in the correct order</li>
+</ol>
+<pre><code class="language-sql">-- models/marts/orders.sql
+select
+    o.order_id,
+    o.ordered_at,
+    o.amount,
+    c.full_name    as customer_name,
+    c.email        as customer_email
+from {{ ref('stg_orders') }} o          -- dependency on stg_orders
+left join {{ ref('stg_customers') }} c  -- dependency on stg_customers
+    on o.customer_id = c.customer_id
+</code></pre>
+<p>dbt sees the <code>ref()</code> calls and knows: run <code>stg_orders</code> and <code>stg_customers</code> before <code>orders</code>. Always. Automatically.</p>
+</details>
+<details>
+<summary><strong>Inline config block</strong></summary>
+<p>Add a <code>config()</code> block at the top of any model to override project-level settings:</p>
+<pre><code class="language-sql">{{
+  config(
+    materialized = 'table',
+    tags         = ['marts', 'finance'],
+    schema       = 'reporting'
+  )
+}}
+
+select * from {{ ref('stg_orders') }}
+</code></pre>
+<p>Config options include: <code>materialized</code>, <code>tags</code>, <code>schema</code>, <code>database</code>, <code>alias</code>, <code>unique_key</code>, <code>partition_by</code>, <code>cluster_by</code>, <code>indexes</code>.</p>
+</details>
+<details>
+<summary><strong>A complete staging model example</strong></summary>
+<pre><code class="language-sql">-- models/staging/stg_orders.sql
+{{
+  config(
+    materialized = 'view',
+    tags         = ['staging', 'orders']
+  )
+}}
+
+with source as (
+    select * from {{ source('raw', 'orders') }}
+),
+
+renamed as (
+    select
+        id                                   as order_id,
+        customer_id,
+        cast(created_at  as timestamp)       as ordered_at,
+        cast(updated_at  as timestamp)       as updated_at,
+        coalesce(amount_cents, 0) / 100.0    as amount,
+        lower(trim(status))                  as status,
+        _fivetran_deleted                    as is_deleted
+    from source
+    where id is not null
+      and _fivetran_deleted = false
+)
+
+select * from renamed
+</code></pre>
+</details>
+<details>
+<summary><strong>A complete mart model example</strong></summary>
+<pre><code class="language-sql">-- models/marts/orders.sql
+{{
+  config(
+    materialized = 'table',
+    tags         = ['marts', 'core']
+  )
+}}
+
+with orders as (
+    select * from {{ ref('stg_orders') }}
+),
+
+customers as (
+    select * from {{ ref('stg_customers') }}
+),
+
+final as (
+    select
+        o.order_id,
+        o.ordered_at,
+        o.amount,
+        o.status,
+        o.customer_id,
+        c.full_name                          as customer_name,
+        c.email                              as customer_email,
+        c.country_code,
+        date_trunc('month', o.ordered_at)    as order_month,
+        case
+            when o.amount &gt;= 100 then 'high_value'
+            when o.amount &gt;= 50  then 'mid_value'
+            else 'low_value'
+        end                                  as order_tier
+    from orders o
+    left join customers c on o.customer_id = c.customer_id
+)
+
+select * from final
+</code></pre>
+</details>
+<hr />
+<h3 id="sources">Sources</h3>
+<details>
+<summary><strong>What are sources?</strong></summary>
+<p>Sources are raw tables that dbt doesn't own: they're loaded by your EL tool (Fivetran, Airbyte, etc.). You declare them in a YAML file so dbt knows about them and can run freshness checks.</p>
+<pre><code class="language-yaml"># models/staging/_sources.yml
+version: 2
+
+sources:
+  - name: raw                          # logical name used in {{ source() }}
+    database: my_database              # optional: defaults to profile database
+    schema: raw                        # actual schema in your warehouse
+    tables:
+      - name: orders
+        description: &quot;Raw orders loaded by Fivetran from the production DB&quot;
+        loaded_at_field: _fivetran_synced
+        freshness:
+          warn_after:  {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+
+      - name: customers
+        description: &quot;Raw customer records from the production DB&quot;
+        loaded_at_field: _fivetran_synced
+        freshness:
+          warn_after:  {count: 24, period: hour}
+          error_after: {count: 48, period: hour}
+</code></pre>
+<p>Reference a source in a model:</p>
+<pre><code class="language-sql">select * from {{ source('raw', 'orders') }}
+--                         ▲       ▲
+--                    source name  table name (from YAML)
+</code></pre>
+<p>Check freshness:</p>
+<pre><code class="language-bash">dbt source freshness
+</code></pre>
+</details>
+<hr />
+<h3 id="tests">Tests</h3>
+<details>
+<summary><strong>Generic tests (built-in)</strong></summary>
+<p>Declared in YAML alongside your model under <code>data_tests:</code> (dbt 1.8+; older projects use <code>tests:</code>, which is still accepted). dbt ships with four built-in generic tests:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unique</code></td>
+<td>Every value in the column is distinct</td>
+</tr>
+<tr>
+<td><code>not_null</code></td>
+<td>No <code>NULL</code> values exist</td>
+</tr>
+<tr>
+<td><code>accepted_values</code></td>
+<td>All values are in a predefined list</td>
+</tr>
+<tr>
+<td><code>relationships</code></td>
+<td>Every value exists in another model's column (FK integrity)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-yaml"># models/marts/_marts.yml
+version: 2
+
+models:
+  - name: orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ['pending', 'shipped', 'delivered', 'cancelled']
+
+      - name: amount
+        data_tests:
+          - not_null
+</code></pre>
+</details>
+<details>
+<summary><strong>Singular tests (custom SQL)</strong></summary>
+<p>A singular test is a <code>.sql</code> file in the <code>tests/</code> folder. It should return <strong>zero rows</strong> to pass: any row returned is a failure.</p>
+<pre><code class="language-sql">-- tests/assert_orders_positive_amount.sql
+-- Fails if any order has a negative or zero amount
+select order_id
+from {{ ref('orders') }}
+where amount &lt;= 0
+</code></pre>
+<pre><code class="language-sql">-- tests/assert_no_orphaned_orders.sql
+-- Fails if any order references a non-existent customer
+select o.order_id
+from {{ ref('orders') }} o
+left join {{ ref('customers') }} c on o.customer_id = c.customer_id
+where c.customer_id is null
+</code></pre>
+</details>
+<details>
+<summary><strong>Running tests</strong></summary>
+<pre><code class="language-bash">dbt test                        # run all tests
+dbt test -s orders              # test one model
+dbt test -s tag:marts           # test all models tagged 'marts'
+dbt test --store-failures       # save failing rows to a table for inspection
+dbt build -s +orders            # run + test orders and all upstream models
+</code></pre>
+</details>
+<hr />
+<h3 id="documentation">Documentation</h3>
+<details>
+<summary><strong>schema.yml: tests + docs in one place</strong></summary>
+<pre><code class="language-yaml"># models/marts/_marts.yml
+version: 2
+
+models:
+  - name: orders
+    description: &gt;
+      One row per order. Joins stg_orders with stg_customers.
+      Source of truth for all order-level reporting.
+    columns:
+      - name: order_id
+        description: &quot;Primary key. Unique identifier for each order.&quot;
+      - name: ordered_at
+        description: &quot;Timestamp when the order was placed (UTC).&quot;
+      - name: amount
+        description: &quot;Order total in USD.&quot;
+      - name: order_tier
+        description: &quot;high_value (≥$100), mid_value ($50-$99), low_value (&lt;$50).&quot;
+</code></pre>
+</details>
+<details>
+<summary><strong>Generating and serving docs</strong></summary>
+<pre><code class="language-bash">dbt docs generate    # compile docs into target/catalog.json
+dbt docs serve       # open a local documentation site at localhost:8080
+</code></pre>
+<p>The docs site includes:</p>
+<ul>
+<li>Searchable model + column descriptions</li>
+<li>Auto-generated DAG / lineage graph</li>
+<li>Source freshness status</li>
+<li>Test results</li>
+</ul>
+</details>
+<details>
+<summary><strong>doc() blocks: reusable descriptions</strong></summary>
+<p>For long descriptions, write them in a <code>.md</code> file and reference them:</p>
+<pre><code class="language-markdown">&lt;!-- models/marts/docs.md --&gt;
+{% docs order_tier %}
+Bucketed order value:
+- **high_value**: order total ≥ $100
+- **mid_value**: order total $50-$99
+- **low_value**: order total &lt; $50
+{% enddocs %}
+</code></pre>
+<pre><code class="language-yaml"># Reference in schema.yml
+- name: order_tier
+  description: &quot;{{ doc('order_tier') }}&quot;
+</code></pre>
+</details>
+<hr />
+<h3 id="macros">Macros</h3>
+<details>
+<summary><strong>What are macros?</strong></summary>
+<p>Macros are Jinja-templated functions stored in <code>macros/</code>. They let you write reusable SQL logic: think of them as functions in a programming language.</p>
+<pre><code class="language-sql">-- macros/cents_to_dollars.sql
+{% macro cents_to_dollars(column_name) %}
+    coalesce({{ column_name }}, 0) / 100.0
+{% endmacro %}
+</code></pre>
+<p>Use it in any model:</p>
+<pre><code class="language-sql">select
+    id              as order_id,
+    {{ cents_to_dollars('amount_cents') }}  as amount
+from {{ source('raw', 'orders') }}
+</code></pre>
+</details>
+<details>
+<summary><strong>Macro with arguments and defaults</strong></summary>
+<pre><code class="language-sql">-- macros/date_spine.sql
+{% macro clean_string(column_name, replacement='unknown') %}
+    nullif(lower(trim({{ column_name }})), '')
+{% endmacro %}
+</code></pre>
+<pre><code class="language-sql">-- macros/generate_surrogate_key.sql
+{% macro generate_surrogate_key(field_list) %}
+    md5(
+        concat_ws('-',
+            {% for field in field_list %}
+                cast({{ field }} as varchar)
+                {% if not loop.last %}, {% endif %}
+            {% endfor %}
+        )
+    )
+{% endmacro %}
+</code></pre>
+<p>Usage:</p>
+<pre><code class="language-sql">select
+    {{ generate_surrogate_key(['order_id', 'line_item_id']) }} as surrogate_key
+from {{ ref('stg_order_items') }}
+</code></pre>
+</details>
+<hr />
+<h3 id="seeds">Seeds</h3>
+<details>
+<summary><strong>What are seeds?</strong></summary>
+<p>Seeds are CSV files in the <code>seeds/</code> directory that dbt loads as tables in your warehouse. Useful for static lookup data: country codes, mapping tables, cost rates, etc.</p>
+<pre><code class="language-csv">-- seeds/country_codes.csv
+country_code,country_name,region
+US,United States,North America
+GB,United Kingdom,Europe
+DE,Germany,Europe
+JP,Japan,Asia Pacific
+</code></pre>
+<p>Load them:</p>
+<pre><code class="language-bash">dbt seed                    # load all seeds
+dbt seed -s country_codes   # load one seed
+</code></pre>
+<p>Reference in a model:</p>
+<pre><code class="language-sql">select
+    o.*,
+    cc.country_name,
+    cc.region
+from {{ ref('orders') }} o
+left join {{ ref('country_codes') }} cc on o.country_code = cc.country_code
+</code></pre>
+<p>Configure in <code>dbt_project.yml</code>:</p>
+<pre><code class="language-yaml">seeds:
+  my_project:
+    country_codes:
+      +column_types:
+        country_code: varchar(2)
+</code></pre>
+</details>
+<hr />
+<h3 id="snapshots">Snapshots</h3>
+<details>
+<summary><strong>What are snapshots?</strong></summary>
+<p>Snapshots track changes to rows over time: useful for slowly changing dimensions (SCDs). dbt adds <code>dbt_valid_from</code> and <code>dbt_valid_to</code> columns to record when each version of a row was active.</p>
+<pre><code class="language-sql">-- snapshots/orders_snapshot.sql
+{% snapshot orders_snapshot %}
+
+{{
+  config(
+    target_schema = 'snapshots',
+    unique_key    = 'order_id',
+    strategy      = 'timestamp',
+    updated_at    = 'updated_at'
+  )
+}}
+
+select * from {{ source('raw', 'orders') }}
+
+{% endsnapshot %}
+</code></pre>
+<p>Run snapshots:</p>
+<pre><code class="language-bash">dbt snapshot
+</code></pre>
+<p>Result table includes:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>status</th>
+<th>dbt_valid_from</th>
+<th>dbt_valid_to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>pending</td>
+<td>2024-01-01</td>
+<td>2024-01-03</td>
+</tr>
+<tr>
+<td>1</td>
+<td>shipped</td>
+<td>2024-01-03</td>
+<td>null</td>
+</tr>
+</tbody>
+</table></div>
+</details>
+<hr />
+<h3 id="the-dag">The DAG</h3>
+<details>
+<summary><strong>How the DAG works</strong></summary>
+<p>dbt automatically builds a <strong>Directed Acyclic Graph</strong> from all your <code>ref()</code> and <code>source()</code> calls. It guarantees models run in the correct order: you never have to manage this manually.</p>
+<pre><code>raw.orders ──────► stg_orders ──────┐
+                                    ├──► orders (mart)
+raw.customers ───► stg_customers ───┘
+</code></pre>
+<p>View the DAG:</p>
+<pre><code class="language-bash">dbt docs generate &amp;&amp; dbt docs serve
+# navigate to the lineage graph in the UI
+</code></pre>
+<p>Select models using graph operators:</p>
+<pre><code class="language-bash">dbt run -s stg_orders          # just this model
+dbt run -s +orders             # orders + everything upstream
+dbt run -s orders+             # orders + everything downstream
+dbt run -s +orders+            # orders + all upstream + all downstream
+dbt run -s stg_orders+1        # stg_orders + one level downstream only
+</code></pre>
+</details>
+<hr />
+<h2 id="the-layered-data-model">The Layered Data Model</h2>
+<p>The industry-standard pattern for organising a dbt project:</p>
+<pre><code>Raw (sources)
+    │
+    ▼
+Staging  ──  1:1 with source tables. Rename, cast, clean. No joins. No business logic.
+    │         Materialized as: VIEW
+    ▼
+Intermediate  ──  Join staging models. Begin applying business logic.
+    │              Not exposed to BI tools.
+    │              Materialized as: VIEW (or ephemeral)
+    ▼
+Marts  ──  Business entities: Orders, Customers, Revenue.
+           BI tools, ML models, and analysts read these.
+           Materialized as: TABLE
+</code></pre>
+<p><strong>Naming conventions:</strong></p>
+<ul>
+<li><code>stg_[source]__[table].sql</code>: staging (e.g. <code>stg_shopify__orders.sql</code>)</li>
+<li><code>int_[entity]_[verb].sql</code>: intermediate (e.g. <code>int_orders_joined.sql</code>)</li>
+<li><code>[entity].sql</code> or <code>fct_[entity].sql</code> / <code>dim_[entity].sql</code>: marts</li>
+</ul>
+<hr />
+<h2 id="materializations">Materializations</h2>
+<h3 id="view-materialization">View Materialization</h3>
+<details>
+<summary><strong>How view materialization works</strong></summary>
+<p>dbt executes <code>CREATE OR REPLACE VIEW</code>. No data is stored: the SQL runs live every time something queries the view.</p>
+<pre><code class="language-sql">{{ config(materialized='view') }}
+
+with source as (
+    select * from {{ source('raw', 'orders') }}
+),
+renamed as (
+    select
+        id          as order_id,
+        customer_id,
+        cast(created_at as timestamp) as ordered_at,
+        amount_cents / 100.0          as amount
+    from source
+)
+select * from renamed
+</code></pre>
+<p><strong>Use when:</strong> staging layer, small tables, models not queried directly by BI tools.</p>
+<p><strong>Avoid when:</strong> the table is large (slow queries), or you have deep chains of views.</p>
+</details>
+<hr />
+<h3 id="table-materialization">Table Materialization</h3>
+<details>
+<summary><strong>How table materialization works</strong></summary>
+<p>dbt runs <code>CREATE TABLE AS SELECT</code>. Data is physically stored. On every run, dbt drops and recreates the full table.</p>
+<pre><code class="language-sql">{{ config(materialized='table') }}
+
+select
+    o.order_id,
+    o.ordered_at,
+    o.amount,
+    c.full_name as customer_name
+from {{ ref('stg_orders') }} o
+left join {{ ref('stg_customers') }} c on o.customer_id = c.customer_id
+</code></pre>
+<p><strong>Use when:</strong> marts, models queried by BI tools, large datasets where query speed matters.</p>
+<p><strong>Avoid when:</strong> the table is extremely large and a full rebuild is too slow (use incremental instead).</p>
+</details>
+<hr />
+<h3 id="incremental-materialization">Incremental Materialization</h3>
+<details>
+<summary><strong>How incremental materialization works</strong></summary>
+<p>On the first run, dbt builds the full table. On subsequent runs, it only processes new or changed rows and appends/upserts them.</p>
+<pre><code class="language-sql">{{
+  config(
+    materialized = 'incremental',
+    unique_key   = 'order_id'
+  )
+}}
+
+select
+    order_id,
+    customer_id,
+    ordered_at,
+    amount,
+    status
+from {{ ref('stg_orders') }}
+
+{% if is_incremental() %}
+  -- only process rows newer than the most recent row already in the table
+  where ordered_at &gt; (select max(ordered_at) from {{ this }})
+{% endif %}
+</code></pre>
+<p><strong>Incremental strategies:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Behaviour</th>
+<th>Supported by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>append</code></td>
+<td>Insert only new rows (no dedup)</td>
+<td>All warehouses</td>
+</tr>
+<tr>
+<td><code>merge</code></td>
+<td>Upsert rows by <code>unique_key</code></td>
+<td>Snowflake, BigQuery, Databricks</td>
+</tr>
+<tr>
+<td><code>delete+insert</code></td>
+<td>Delete matching rows, re-insert</td>
+<td>Snowflake, Redshift</td>
+</tr>
+<tr>
+<td><code>insert_overwrite</code></td>
+<td>Overwrite entire partitions</td>
+<td>BigQuery, Spark</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">{{ config(
+    materialized = 'incremental',
+    unique_key   = 'order_id',
+    incremental_strategy = 'merge'
+) }}
+</code></pre>
+<p>Force a full refresh:</p>
+<pre><code class="language-bash">dbt run -s orders --full-refresh
+</code></pre>
+<p><strong>Use when:</strong> large event tables, logs, any table where rebuilding everything each run is too slow/expensive.</p>
+</details>
+<hr />
+<h3 id="ephemeral-materialization">Ephemeral Materialization</h3>
+<details>
+<summary><strong>How ephemeral materialization works</strong></summary>
+<p>An ephemeral model is never written to the warehouse. Instead, dbt injects it as a CTE into any model that references it.</p>
+<pre><code class="language-sql">{{ config(materialized='ephemeral') }}
+
+select
+    order_id,
+    amount,
+    case
+        when amount &gt;= 100 then 'high_value'
+        when amount &gt;= 50  then 'mid_value'
+        else 'low_value'
+    end as order_tier
+from {{ ref('stg_orders') }}
+</code></pre>
+<p>When a downstream model calls <code>ref('orders_with_tier')</code>, dbt inlines the SQL as a CTE:</p>
+<pre><code class="language-sql">-- compiled output of downstream model
+with orders_with_tier as (
+    -- ephemeral model SQL injected here
+    select order_id, amount, case ... end as order_tier
+    from dev.stg_orders
+),
+final as (
+    select * from orders_with_tier where order_tier = 'high_value'
+)
+select * from final
+</code></pre>
+<p><strong>Use when:</strong> small helper transformations you don't want cluttering your warehouse schema.</p>
+<p><strong>Avoid when:</strong> multiple models reference it, the SQL gets duplicated into each.</p>
+</details>
+<hr />
+<h3 id="setting-materializations-globally-in-dbt_projectyml">Setting materializations globally in dbt_project.yml</h3>
+<pre><code class="language-yaml"># dbt_project.yml
+name: my_project
+version: '1.0.0'
+config-version: 2
+
+models:
+  my_project:
+    staging:
+      +materialized: view       # all models in staging/ → view
+    intermediate:
+      +materialized: view       # all models in intermediate/ → view
+    marts:
+      +materialized: table      # all models in marts/ → table
+      finance:
+        +materialized: table
+        +tags: ['finance']
+</code></pre>
+<p>The <code>+</code> prefix applies the config to the folder and all subfolders. An inline <code>config()</code> block in a model file always overrides the <code>dbt_project.yml</code> default.</p>
+<hr />
+<h2 id="jinja--macros-in-depth">Jinja &amp; Macros in Depth</h2>
+<details>
+<summary><strong>Jinja basics: if, for, variables</strong></summary>
+<p>dbt uses Jinja2 templating. Anything inside <code>{{ }}</code> is rendered; <code>{% %}</code> is control flow.</p>
+<pre><code class="language-sql">-- if statement
+{% if target.name == 'prod' %}
+    where is_deleted = false
+{% else %}
+    where true   -- include everything in dev
+{% endif %}
+
+-- for loop
+select
+    {% for payment_method in ['credit_card', 'bank_transfer', 'voucher'] %}
+        sum(case when payment_method = '{{ payment_method }}'
+                 then amount else 0 end)
+            as {{ payment_method }}_amount
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+from {{ ref('payments') }}
+
+-- set a variable
+{% set my_date = '2024-01-01' %}
+where ordered_at &gt;= '{{ my_date }}'
+</code></pre>
+</details>
+<details>
+<summary><strong>Writing and calling macros</strong></summary>
+<pre><code class="language-sql">-- macros/safe_divide.sql
+{% macro safe_divide(numerator, denominator) %}
+    case
+        when {{ denominator }} = 0 or {{ denominator }} is null then null
+        else {{ numerator }} / {{ denominator }}
+    end
+{% endmacro %}
+</code></pre>
+<pre><code class="language-sql">-- usage in a model
+select
+    order_id,
+    {{ safe_divide('revenue', 'items_count') }} as revenue_per_item
+from {{ ref('orders') }}
+</code></pre>
+</details>
+<details>
+<summary><strong>run_query: execute SQL inside a macro</strong></summary>
+<pre><code class="language-sql">{% macro get_column_values(table, column) %}
+    {% set query %}
+        select distinct {{ column }}
+        from {{ table }}
+        order by 1
+    {% endset %}
+    {% set results = run_query(query) %}
+    {% if execute %}
+        {{ return(results.columns[0].values()) }}
+    {% endif %}
+{% endmacro %}
+</code></pre>
+</details>
+<hr />
+<h2 id="packages">Packages</h2>
+<details>
+<summary><strong>Installing and using packages</strong></summary>
+<p>dbt packages are shared libraries of macros and models. Add them to <code>packages.yml</code>:</p>
+<pre><code class="language-yaml"># packages.yml
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.1.1
+  - package: calogica/dbt_expectations
+    version: 0.10.0
+  - package: dbt-labs/dbt_project_evaluator
+    version: 0.8.0
+</code></pre>
+<p>Install:</p>
+<pre><code class="language-bash">dbt deps
+</code></pre>
+<p><strong>dbt_utils: most-used macros:</strong></p>
+<pre><code class="language-sql">-- surrogate key from multiple columns
+{{ dbt_utils.generate_surrogate_key(['order_id', 'line_item_id']) }}
+
+-- pivot rows to columns
+{{ dbt_utils.pivot('payment_method', dbt_utils.get_column_values(ref('payments'), 'payment_method')) }}
+
+-- union multiple tables
+{{ dbt_utils.union_relations(relations=[ref('orders_2022'), ref('orders_2023')]) }}
+
+-- date spine (generate a row for every date in a range)
+{{ dbt_utils.date_spine(
+    datepart   = 'day',
+    start_date = &quot;'2024-01-01'&quot;,
+    end_date   = &quot;'2024-12-31'&quot;
+) }}
+</code></pre>
+<p><strong>dbt_expectations: Great Expectations-style tests:</strong></p>
+<pre><code class="language-yaml">- name: amount
+  data_tests:
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 100000
+    - dbt_expectations.expect_column_to_exist
+    - dbt_expectations.expect_column_values_to_not_be_null
+</code></pre>
+</details>
+<hr />
+<h2 id="variables">Variables</h2>
+<details>
+<summary><strong>Defining and using variables</strong></summary>
+<p>Variables let you pass dynamic values into your models.</p>
+<p><strong>Define in <code>dbt_project.yml</code>:</strong></p>
+<pre><code class="language-yaml">vars:
+  start_date: '2024-01-01'
+  payment_methods: ['credit_card', 'bank_transfer']
+  is_test_run: false
+</code></pre>
+<p><strong>Use in a model:</strong></p>
+<pre><code class="language-sql">where ordered_at &gt;= '{{ var(&quot;start_date&quot;) }}'
+
+{% if var(&quot;is_test_run&quot;) %}
+    limit 100
+{% endif %}
+</code></pre>
+<p><strong>Override at runtime:</strong></p>
+<pre><code class="language-bash">dbt run --vars '{&quot;start_date&quot;: &quot;2023-01-01&quot;, &quot;is_test_run&quot;: true}'
+</code></pre>
+<p><strong>Variable with default fallback:</strong></p>
+<pre><code class="language-sql">{{ var('start_date', '2020-01-01') }}
+-- uses 2020-01-01 if start_date is not set anywhere
+</code></pre>
+</details>
+<hr />
+<h2 id="environments--profiles">Environments &amp; Profiles</h2>
+<details>
+<summary><strong>profiles.yml: warehouse connections</strong></summary>
+<p>Located at <code>~/.dbt/profiles.yml</code> (outside the project, so credentials aren't checked into git):</p>
+<pre><code class="language-yaml"># ~/.dbt/profiles.yml
+my_project:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: xy12345.us-east-1
+      user: &quot;{{ env_var('DBT_USER') }}&quot;
+      password: &quot;{{ env_var('DBT_PASSWORD') }}&quot;
+      role: transformer
+      database: analytics
+      warehouse: dev_wh
+      schema: dbt_yourname        # personal dev schema
+      threads: 4
+
+    prod:
+      type: snowflake
+      account: xy12345.us-east-1
+      user: &quot;{{ env_var('DBT_PROD_USER') }}&quot;
+      password: &quot;{{ env_var('DBT_PROD_PASSWORD') }}&quot;
+      role: transformer_prod
+      database: analytics
+      warehouse: prod_wh
+      schema: prod
+      threads: 8
+</code></pre>
+<p>Run against a specific target:</p>
+<pre><code class="language-bash">dbt run --target prod
+dbt run --target dev    # default
+</code></pre>
+</details>
+<details>
+<summary><strong>target object: environment-aware SQL</strong></summary>
+<p>The <code>target</code> object exposes the current environment in Jinja:</p>
+<pre><code class="language-sql">-- limit rows in dev to keep things fast
+select * from {{ ref('events') }}
+{% if target.name != 'prod' %}
+    limit 1000
+{% endif %}
+
+-- use a cheaper warehouse in dev
+{{ config(
+    snowflake_warehouse = 'prod_wh' if target.name == 'prod' else 'dev_wh'
+) }}
+</code></pre>
+</details>
+<hr />
+<h2 id="advanced-topics">Advanced Topics</h2>
+<h3 id="snapshots-slowly-changing-dimensions">Snapshots (Slowly Changing Dimensions)</h3>
+<details>
+<summary><strong>Timestamp strategy</strong></summary>
+<p>Use when your source table has a reliable <code>updated_at</code> column:</p>
+<pre><code class="language-sql">{% snapshot customers_snapshot %}
+{{
+  config(
+    target_schema = 'snapshots',
+    unique_key    = 'customer_id',
+    strategy      = 'timestamp',
+    updated_at    = 'updated_at'
+  )
+}}
+select * from {{ source('raw', 'customers') }}
+{% endsnapshot %}
+</code></pre>
+</details>
+<details>
+<summary><strong>Check strategy</strong></summary>
+<p>Use when there's no <code>updated_at</code>: dbt hashes specified columns to detect changes:</p>
+<pre><code class="language-sql">{% snapshot orders_snapshot %}
+{{
+  config(
+    target_schema = 'snapshots',
+    unique_key    = 'order_id',
+    strategy      = 'check',
+    check_cols    = ['status', 'amount']
+  )
+}}
+select * from {{ source('raw', 'orders') }}
+{% endsnapshot %}
+</code></pre>
+</details>
+<hr />
+<h3 id="exposures">Exposures</h3>
+<details>
+<summary><strong>Documenting downstream consumers</strong></summary>
+<p>Exposures document what uses your dbt models: dashboards, ML models, reverse ETL, etc. They appear in the lineage graph so you can see the blast radius of a model change.</p>
+<pre><code class="language-yaml"># models/marts/exposures.yml
+version: 2
+
+exposures:
+  - name: orders_dashboard
+    type: dashboard
+    maturity: high
+    url: https://looker.mycompany.com/dashboards/42
+    description: &quot;Executive orders dashboard: refreshed daily&quot;
+    depends_on:
+      - ref('orders')
+      - ref('customers')
+    owner:
+      name: Data Team
+      email: data@mycompany.com
+
+  - name: churn_prediction_model
+    type: ml
+    maturity: medium
+    description: &quot;Propensity-to-churn model trained weekly&quot;
+    depends_on:
+      - ref('customers')
+    owner:
+      name: ML Team
+      email: ml@mycompany.com
+</code></pre>
+</details>
+<hr />
+<h3 id="semantic-layer--metrics">Semantic Layer &amp; Metrics</h3>
+<details>
+<summary><strong>Defining metrics with MetricFlow</strong></summary>
+<p>dbt's semantic layer (powered by MetricFlow) lets you define metrics once and query them consistently across any BI tool.</p>
+<pre><code class="language-yaml"># models/marts/metrics.yml
+semantic_models:
+  - name: orders
+    defaults:
+      agg_time_dimension: ordered_at
+    model: ref('orders')
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: ordered_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_tier
+        type: categorical
+    measures:
+      - name: order_count
+        agg: count
+        expr: order_id
+      - name: total_revenue
+        agg: sum
+        expr: amount
+
+metrics:
+  - name: total_revenue
+    type: simple
+    label: &quot;Total Revenue&quot;
+    type_params:
+      measure: total_revenue
+
+  - name: average_order_value
+    type: ratio
+    label: &quot;Average Order Value&quot;
+    type_params:
+      numerator: total_revenue
+      denominator: order_count
+</code></pre>
+</details>
+<hr />
+<h3 id="custom-schemas">Custom Schemas</h3>
+<details>
+<summary><strong>Controlling where models land in the warehouse</strong></summary>
+<p>By default, all models land in the schema defined in <code>profiles.yml</code>. Override with config:</p>
+<pre><code class="language-sql">{{ config(schema='finance') }}
+-- lands in: analytics.dbt_yourname_finance (dev) or analytics.finance (prod)
+</code></pre>
+<p>Customise the schema-naming logic by overriding <code>generate_schema_name</code> in <code>macros/</code>:</p>
+<pre><code class="language-sql">-- macros/generate_schema_name.sql
+{% macro generate_schema_name(custom_schema_name, node) -%}
+    {%- set default_schema = target.schema -%}
+    {%- if custom_schema_name is none -%}
+        {{ default_schema }}
+    {%- else -%}
+        {%- if target.name == 'prod' -%}
+            {{ custom_schema_name | trim }}           -- prod: just the custom name
+        {%- else -%}
+            {{ default_schema }}_{{ custom_schema_name | trim }}  -- dev: prefix with dev schema
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro %}
+</code></pre>
+</details>
+<hr />
+<h3 id="cicd-with-dbt">CI/CD with dbt</h3>
+<details>
+<summary><strong>GitHub Actions workflow</strong></summary>
+<pre><code class="language-yaml"># .github/workflows/dbt_ci.yml
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: pip install dbt-snowflake
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt build (slim CI: only changed models + downstream)
+        run: |
+          dbt build \
+            --select state:modified+ \
+            --defer \
+            --state ./prod-artifacts
+        env:
+          DBT_USER:     ${{ secrets.DBT_USER }}
+          DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+</code></pre>
+<p><strong>Slim CI</strong> with <code>state:modified+</code> only builds models that changed in the PR and their downstream dependencies: much faster than rebuilding everything.</p>
+</details>
+<hr />
+<h2 id="key-commands">Key Commands</h2>
+<pre><code class="language-bash"># ── Project setup ──────────────────────────────────────────────
+dbt init my_project          # scaffold a new project
+dbt debug                    # test warehouse connection
+dbt deps                     # install packages from packages.yml
+
+# ── Running models ─────────────────────────────────────────────
+dbt run                      # build all models
+dbt run -s stg_orders        # build one model
+dbt run -s +orders           # build orders + all upstream
+dbt run -s orders+           # build orders + all downstream
+dbt run -s staging.*         # build all models in the staging/ folder
+dbt run -s tag:finance       # build all models tagged 'finance'
+dbt run --target prod        # run against production
+dbt run --full-refresh       # rebuild incremental models from scratch
+
+# ── Testing ────────────────────────────────────────────────────
+dbt test                     # run all tests
+dbt test -s orders           # test one model
+dbt test --store-failures    # save failing rows to a table
+dbt source freshness         # check source table freshness
+
+# ── Building (run + test + seed + snapshot) ────────────────────
+dbt build                    # run everything
+dbt build -s +orders         # build and test orders + all upstream
+
+# ── Docs ───────────────────────────────────────────────────────
+dbt docs generate            # compile documentation
+dbt docs serve               # serve docs locally at localhost:8080
+
+# ── Utilities ──────────────────────────────────────────────────
+dbt compile -s orders        # compile SQL without running (writes to target/)
+dbt seed                     # load CSV seeds into warehouse
+dbt snapshot                 # run snapshots (SCD tracking)
+dbt clean                    # delete target/ and dbt_packages/
+dbt ls -s tag:staging        # list models matching a selector
+</code></pre>
+<hr />
+<h2 id="quick-reference-cheatsheet">Quick Reference Cheatsheet</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Purpose</th>
+<th>File location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>A SQL SELECT → table/view in warehouse</td>
+<td><code>models/**/*.sql</code></td>
+</tr>
+<tr>
+<td><code>source()</code></td>
+<td>Reference a raw table you don't own</td>
+<td><code>models/**/_sources.yml</code></td>
+</tr>
+<tr>
+<td><code>ref()</code></td>
+<td>Reference another dbt model</td>
+<td>Inside any <code>.sql</code> model</td>
+</tr>
+<tr>
+<td><code>config()</code></td>
+<td>Set materialization, tags, schema per model</td>
+<td>Top of <code>.sql</code> file</td>
+</tr>
+<tr>
+<td><code>schema.yml</code></td>
+<td>Declare tests + descriptions</td>
+<td><code>models/**/_*.yml</code></td>
+</tr>
+<tr>
+<td><code>macro</code></td>
+<td>Reusable Jinja function</td>
+<td><code>macros/*.sql</code></td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td>Load a CSV as a warehouse table</td>
+<td><code>seeds/*.csv</code></td>
+</tr>
+<tr>
+<td><code>snapshot</code></td>
+<td>Track row history (SCD type 2)</td>
+<td><code>snapshots/*.sql</code></td>
+</tr>
+<tr>
+<td><code>exposure</code></td>
+<td>Document downstream consumers</td>
+<td><code>models/**/*.yml</code></td>
+</tr>
+<tr>
+<td><code>packages.yml</code></td>
+<td>Install third-party macro libraries</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>dbt_project.yml</code></td>
+<td>Project-level config + folder materializations</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>profiles.yml</code></td>
+<td>Warehouse connection credentials</td>
+<td><code>~/.dbt/</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Materialization</th>
+<th>Stores data?</th>
+<th>Rebuilt how?</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>view</code></td>
+<td>No</td>
+<td>SQL re-runs on every query</td>
+<td>Staging, light transforms</td>
+</tr>
+<tr>
+<td><code>table</code></td>
+<td>Yes</td>
+<td>Full drop + recreate each run</td>
+<td>Marts, BI-facing models</td>
+</tr>
+<tr>
+<td><code>incremental</code></td>
+<td>Yes</td>
+<td>Append/upsert new rows only</td>
+<td>Large event tables, logs</td>
+</tr>
+<tr>
+<td><code>ephemeral</code></td>
+<td>No</td>
+<td>Injected as CTE into downstream</td>
+<td>Small helper logic</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://docs.getdbt.com">dbt Documentation</a></li>
+<li><a href="https://discourse.getdbt.com">dbt Discourse (community forum)</a></li>
+<li><a href="https://community.getdbt.com">dbt Slack community</a></li>
+<li><a href="https://hub.getdbt.com">dbt Package Hub</a></li>
+<li><a href="https://github.com/dbt-labs/dbt-utils">dbt_utils package</a></li>
+<li><a href="https://github.com/calogica/dbt-expectations">dbt_expectations package</a></li>
+<li><a href="https://docs.getdbt.com/docs/build/about-metricflow">MetricFlow (semantic layer)</a></li>
+</ul>
+<hr />
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_apache_airflow.html"><small>Previous</small>Apache Airflow</a><a rel="next" class="next" href="interview_dbt.html"><small>Next</small>dbt Interview Q&amp;A</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/data_engineering/intro_dbt.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>

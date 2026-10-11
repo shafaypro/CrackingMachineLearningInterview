@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimensionality Reduction Interview Guide | Cracking ML Interviews</title>
+<meta name="description" content="Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training…">
+<link rel="canonical" href="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_dimensionality_reduction.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cracking ML Interviews">
+<meta property="og:title" content="Dimensionality Reduction Interview Guide | Cracking ML Interviews">
+<meta property="og:description" content="Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training…">
+<meta property="og:url" content="https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_dimensionality_reduction.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dimensionality Reduction Interview Guide | Cracking ML Interviews">
+<meta name="twitter:description" content="Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training…">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cml-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="../assets/guide.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.hljs)hljs.highlightAll();});</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Dimensionality Reduction",
+   "description": "Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training…",
+   "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_dimensionality_reduction.html",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Cracking ML Interviews",
+    "url": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+   },
+   "author": {
+    "@type": "Organization",
+    "name": "Cracking ML Interviews",
+    "url": "https://github.com/shafaypro/CrackingMachineLearningInterview"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Study hub",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "All guides",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Classical ML",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/#classical-ml"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "name": "Dimensionality Reduction",
+     "item": "https://shafaypro.github.io/CrackingMachineLearningInterview/guides/classical_ml/intro_dimensionality_reduction.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../../"><span class="mark" aria-hidden="true">ML</span>Cracking ML Interviews</a>
+  <nav aria-label="Site">
+    <a href="../../">Study hub</a>
+    <a href="../">All guides</a>
+    <a href="../../practice.html">Practice</a>
+    <a href="../../flashcards.html">Flashcards</a>
+    <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>
+  </nav>
+</header>
+<main id="content">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../">Study hub</a> <span aria-hidden="true">/</span> <a href="../">All guides</a> <span aria-hidden="true">/</span> <a href="../#classical-ml">Classical ML</a> <span aria-hidden="true">/</span> <span aria-current="page">Dimensionality Reduction</span></nav>
+<p class="meta"><a href="../../#classical_ml/intro_dimensionality_reduction.md">Open in the interactive study hub</a></p>
+<article class="md">
+<h1 id="dimensionality-reduction">Dimensionality Reduction</h1>
+<p>Dimensionality reduction reduces the number of features while preserving meaningful structure. It combats the curse of dimensionality, speeds up training, enables visualization, and can improve model generalization by removing noise.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#why-dimensionality-reduction">Why Dimensionality Reduction?</a></li>
+<li><a href="#pca-principal-component-analysis">PCA: Principal Component Analysis</a></li>
+<li><a href="#lda-linear-discriminant-analysis">LDA: Linear Discriminant Analysis</a></li>
+<li><a href="#t-sne">t-SNE</a></li>
+<li><a href="#umap">UMAP</a></li>
+<li><a href="#autoencoders">Autoencoders</a></li>
+<li><a href="#when-to-use-each-method">When to Use Each Method</a></li>
+<li><a href="#interview-qa">Interview Q&amp;A</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#related-topics">Related Topics</a></li>
+</ol>
+<hr />
+<h2 id="why-dimensionality-reduction">Why Dimensionality Reduction?</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>How DR Helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Curse of dimensionality</td>
+<td>High-d spaces are sparse; distances lose meaning</td>
+</tr>
+<tr>
+<td>Slow training</td>
+<td>Fewer features = fewer parameters = faster models</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Remove noise dimensions</td>
+</tr>
+<tr>
+<td>Visualization</td>
+<td>Project to 2D/3D for exploration</td>
+</tr>
+<tr>
+<td>Storage/memory</td>
+<td>Smaller feature vectors</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="pca-principal-component-analysis">PCA: Principal Component Analysis</h2>
+<p>PCA is a <strong>linear, unsupervised</strong> technique that finds orthogonal directions of maximum variance.</p>
+<h3 id="step-by-step">Step-by-Step</h3>
+<pre><code>1. Center the data: subtract mean from each feature
+2. Compute covariance matrix: C = (1/n) * X^T * X
+3. Compute eigenvectors and eigenvalues of C
+4. Sort eigenvectors by descending eigenvalue
+5. Project data onto top-k eigenvectors (principal components)
+</code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="language-python">from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+# Standardize before PCA when features are on different scales
+X_scaled = StandardScaler().fit_transform(X)
+
+# Fit PCA
+pca = PCA()
+pca.fit(X_scaled)
+
+# Explained variance
+explained_var = pca.explained_variance_ratio_
+cumulative_var = np.cumsum(explained_var)
+
+print(&quot;Explained variance per component:&quot;, explained_var[:10])
+print(&quot;Cumulative explained variance:&quot;, cumulative_var[:10])
+
+# Choose k components explaining 95% of variance
+k = np.argmax(cumulative_var &gt;= 0.95) + 1
+print(f&quot;Components for 95% variance: {k}&quot;)
+
+# Project to k dimensions
+pca_k = PCA(n_components=k)
+X_reduced = pca_k.fit_transform(X_scaled)
+
+# For visualization (2D)
+pca_2d = PCA(n_components=2)
+X_2d = pca_2d.fit_transform(X_scaled)
+</code></pre>
+<h3 id="scree-plot">Scree Plot</h3>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+plt.bar(range(1, len(explained_var[:15]) + 1), explained_var[:15])
+plt.xlabel('Principal Component')
+plt.ylabel('Explained Variance Ratio')
+plt.title('Scree Plot')
+
+plt.subplot(1, 2, 2)
+plt.plot(range(1, len(cumulative_var[:15]) + 1), cumulative_var[:15], 'bo-')
+plt.axhline(y=0.95, color='r', linestyle='--', label='95% threshold')
+plt.xlabel('Number of Components')
+plt.ylabel('Cumulative Explained Variance')
+plt.title('Cumulative Explained Variance')
+plt.legend()
+</code></pre>
+<h3 id="pca-biplot-what-do-components-mean">PCA Biplot: What Do Components Mean?</h3>
+<pre><code class="language-python">import pandas as pd
+
+# Loadings: how much each original feature contributes to each PC
+loadings = pca_k.components_  # shape: (k, n_features)
+feature_names = [f&quot;feature_{i}&quot; for i in range(X.shape[1])]
+
+# Top contributing features for PC1
+pc1_loadings = pd.Series(loadings[0], index=feature_names).abs().sort_values(ascending=False)
+print(&quot;Top features for PC1:&quot;, pc1_loadings.head(5))
+</code></pre>
+<h3 id="incremental-pca-for-large-datasets">Incremental PCA (for large datasets)</h3>
+<pre><code class="language-python">from sklearn.decomposition import IncrementalPCA
+
+ipca = IncrementalPCA(n_components=50, batch_size=1000)
+for batch in np.array_split(X_large, 100):
+    ipca.partial_fit(batch)
+X_reduced = ipca.transform(X_large)
+</code></pre>
+<hr />
+<h2 id="lda-linear-discriminant-analysis">LDA: Linear Discriminant Analysis</h2>
+<p>LDA is a <strong>linear, supervised</strong> technique that finds directions maximizing class separability. Unlike PCA (maximizes variance), LDA maximizes the ratio of between-class to within-class scatter.</p>
+<pre><code class="language-python">from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+# LDA requires class labels y
+lda = LinearDiscriminantAnalysis(n_components=2)  # max components = n_classes - 1
+X_lda = lda.fit_transform(X_scaled, y)
+
+# Explained variance ratio for each discriminant
+print(&quot;Explained variance ratio:&quot;, lda.explained_variance_ratio_)
+</code></pre>
+<h3 id="pca-vs-lda">PCA vs LDA</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>PCA</th>
+<th>LDA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Supervised?</strong></td>
+<td>No</td>
+<td>Yes (needs labels)</td>
+</tr>
+<tr>
+<td><strong>Objective</strong></td>
+<td>Maximize variance</td>
+<td>Maximize class separability</td>
+</tr>
+<tr>
+<td><strong>Max components</strong></td>
+<td>min(n, p)</td>
+<td>n_classes - 1</td>
+</tr>
+<tr>
+<td><strong>Use case</strong></td>
+<td>Feature compression, visualization</td>
+<td>Classification preprocessing</td>
+</tr>
+<tr>
+<td><strong>Assumption</strong></td>
+<td>None about classes</td>
+<td>Gaussian classes, equal covariance</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="t-sne">t-SNE</h2>
+<p>t-SNE (t-Distributed Stochastic Neighbor Embedding) is a <strong>non-linear, unsupervised</strong> technique primarily for <strong>visualization</strong>. It preserves local structure (nearby points stay nearby) but can distort global structure.</p>
+<h3 id="how-it-works">How It Works</h3>
+<pre><code>1. Compute pairwise similarities in high-d space using Gaussian kernel: p(j|i) ∝ exp(-||xi - xj||² / 2σ²)
+2. Define pairwise similarities in low-d space using t-distribution: q(ij) ∝ (1 + ||yi - yj||²)^-1
+3. Minimize KL divergence between P and Q distributions via gradient descent
+</code></pre>
+<p>The t-distribution in low-d space has heavier tails than Gaussian: this allows moderate distances to be well-separated and avoids the &quot;crowding problem.&quot;</p>
+<pre><code class="language-python">from sklearn.manifold import TSNE
+
+# t-SNE for visualization only (not for preprocessing)
+tsne = TSNE(
+    n_components=2,
+    perplexity=30,        # Effective number of neighbors (typical: 5-50)
+    learning_rate='auto', # default since sklearn 1.2 (older examples used 200)
+    max_iter=1000,        # formerly n_iter, which recent sklearn no longer accepts
+    random_state=42
+)
+X_tsne = tsne.fit_transform(X_scaled)
+
+# Plot
+plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', alpha=0.6)
+plt.title('t-SNE Visualization')
+plt.colorbar(label='Class')
+</code></pre>
+<h3 id="t-sne-hyperparameter-guide">t-SNE Hyperparameter Guide</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Effect</th>
+<th>Typical Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>perplexity</strong></td>
+<td>Controls local vs global structure tradeoff</td>
+<td>5-50</td>
+</tr>
+<tr>
+<td><strong>learning_rate</strong></td>
+<td>Step size for optimization</td>
+<td>10-1000 (or 'auto')</td>
+</tr>
+<tr>
+<td><strong>max_iter</strong> (formerly <code>n_iter</code>)</td>
+<td>Number of optimization steps</td>
+<td>500-5000</td>
+</tr>
+<tr>
+<td><strong>early_exaggeration</strong></td>
+<td>Spread between clusters</td>
+<td>4-12</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Warning</strong>: t-SNE is <strong>non-deterministic</strong> and <strong>non-parametric</strong>: you cannot transform new data points without re-running the full algorithm. Use for exploration only.</p>
+<hr />
+<h2 id="umap">UMAP</h2>
+<p>UMAP (Uniform Manifold Approximation and Projection) is a <strong>non-linear</strong> technique that is faster than t-SNE and better preserves global structure.</p>
+<h3 id="umap-vs-t-sne">UMAP vs t-SNE</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>t-SNE</th>
+<th>UMAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Speed</strong></td>
+<td>Slow (O(n²) exact, O(n log n) Barnes-Hut)</td>
+<td>Faster in practice (approximate nearest neighbors)</td>
+</tr>
+<tr>
+<td><strong>Global structure</strong></td>
+<td>Poor</td>
+<td>Better</td>
+</tr>
+<tr>
+<td><strong>New data transform</strong></td>
+<td>No</td>
+<td>Yes (<code>.transform()</code>)</td>
+</tr>
+<tr>
+<td><strong>Use case</strong></td>
+<td>Visualization only</td>
+<td>Visualization + preprocessing</td>
+</tr>
+<tr>
+<td><strong>Reproducible run to run</strong></td>
+<td>Yes with <code>random_state</code> (still stochastic across seeds)</td>
+<td>Yes with <code>random_state</code> (which disables parallelism)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python">import umap
+
+reducer = umap.UMAP(
+    n_components=2,      # Can also use 10, 50 for preprocessing
+    n_neighbors=15,      # Controls local vs global structure (like perplexity)
+    min_dist=0.1,        # Minimum distance between embedded points
+    metric='euclidean',  # Or 'cosine' for text embeddings
+    random_state=42
+)
+
+X_umap = reducer.fit_transform(X_scaled)
+
+# UMAP supports out-of-sample transformation
+X_new_umap = reducer.transform(X_new_scaled)
+
+# UMAP for preprocessing (50 dimensions before clustering)
+reducer_50d = umap.UMAP(n_components=50, random_state=42)
+X_umap_50d = reducer_50d.fit_transform(X_scaled)
+</code></pre>
+<hr />
+<h2 id="autoencoders">Autoencoders</h2>
+<p>Autoencoders are <strong>non-linear</strong> neural network-based dimensionality reduction.</p>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras import layers, Model
+
+# Encoder: compress to bottleneck
+def build_autoencoder(input_dim, encoding_dim=32):
+    # Encoder
+    inputs = tf.keras.Input(shape=(input_dim,))
+    x = layers.Dense(128, activation='relu')(inputs)
+    x = layers.Dense(64, activation='relu')(x)
+    encoded = layers.Dense(encoding_dim, activation='relu', name='bottleneck')(x)
+
+    # Decoder
+    x = layers.Dense(64, activation='relu')(encoded)
+    x = layers.Dense(128, activation='relu')(x)
+    decoded = layers.Dense(input_dim, activation='linear')(x)   # linear: standardized inputs can be negative
+
+    autoencoder = Model(inputs, decoded)
+    encoder = Model(inputs, encoded)
+    return autoencoder, encoder
+
+autoencoder, encoder = build_autoencoder(input_dim=X.shape[1], encoding_dim=16)
+autoencoder.compile(optimizer='adam', loss='mse')
+autoencoder.fit(X_scaled, X_scaled, epochs=50, batch_size=256, validation_split=0.1, verbose=0)
+
+X_encoded = encoder.predict(X_scaled)  # Compressed representations
+</code></pre>
+<hr />
+<h2 id="when-to-use-each-method">When to Use Each Method</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Use When</th>
+<th>Avoid When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PCA</strong></td>
+<td>Linear relationships, need interpretability, preprocessing for models</td>
+<td>Non-linear manifold structure</td>
+</tr>
+<tr>
+<td><strong>LDA</strong></td>
+<td>Classification task, labeled data, need class-aware projection</td>
+<td>No labels; non-Gaussian classes</td>
+</tr>
+<tr>
+<td><strong>t-SNE</strong></td>
+<td>Visualization only, exploring cluster structure</td>
+<td>New data transforms needed; preprocessing</td>
+</tr>
+<tr>
+<td><strong>UMAP</strong></td>
+<td>Visualization + preprocessing, out-of-sample data, speed matters</td>
+<td>Need exact reproducibility across libraries</td>
+</tr>
+<tr>
+<td><strong>Autoencoder</strong></td>
+<td>Non-linear structure, images/sequences, denoising</td>
+<td>Small datasets (risk of overfitting)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<p><strong>Q1: What is the difference between PCA and t-SNE?</strong>
+PCA is linear, deterministic, unsupervised, and maximizes variance. It's interpretable (principal components have loadings) and supports out-of-sample transformation. t-SNE is non-linear, stochastic, and optimized for 2D/3D visualization: it preserves local neighborhood structure but distorts global distances. PCA is used for preprocessing; t-SNE is used only for visualization.</p>
+<p><strong>Q2: What does the perplexity parameter in t-SNE control?</strong>
+Perplexity roughly corresponds to the number of effective nearest neighbors considered for each point. Low perplexity (5-10) focuses on very local structure; high perplexity (30-50) considers broader neighborhoods. The optimal value depends on dataset size and density. Always try multiple values and compare.</p>
+<p><strong>Q3: Why do you usually standardize before PCA?</strong>
+PCA finds directions of maximum variance. If one feature has range 0-1000 and another 0-1, the first will dominate the first principal components purely due to scale, not because it's more informative. StandardScaler puts all features on an equal footing (PCA on the correlation matrix). If features already share meaningful units, unscaled PCA can be the right choice.</p>
+<p><strong>Q4: How many principal components should you keep?</strong>
+Two common rules:</p>
+<ul>
+<li>Keep components explaining ≥95% of cumulative variance (for compression)</li>
+<li>Use the scree plot: keep components before the &quot;elbow&quot; (where adding more gives diminishing returns)
+For downstream ML tasks, treat k as a hyperparameter and tune via cross-validation.</li>
+</ul>
+<p><strong>Q5: What is the difference between PCA and LDA?</strong>
+PCA is unsupervised: finds directions of maximum variance regardless of class labels. LDA is supervised: finds directions that best separate classes (maximizes between-class / within-class scatter ratio). LDA is better for classification preprocessing; PCA is better for general compression or when labels are unavailable.</p>
+<p><strong>Q6: Can you use t-SNE for feature extraction (preprocessing for a classifier)?</strong>
+No. t-SNE is designed for visualization and has two major limitations: (1) it's non-parametric (you can't transform new test points without re-running from scratch); (2) it's stochastic (different seeds give different embeddings, and the axes and cluster distances carry no stable meaning). Use PCA or UMAP for preprocessing. Use t-SNE only for visualization.</p>
+<p><strong>Q7: When would you use UMAP over t-SNE?</strong>
+UMAP when: you need to transform new data points (<code>.transform()</code>), you want better global structure preservation, you have large datasets (UMAP is faster), or you're using it as preprocessing for clustering/classification. t-SNE when: you specifically want local neighborhood visualization and global distortion is acceptable.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not standardizing before PCA</td>
+<td>Scale-dominated components</td>
+<td>Always <code>StandardScaler</code> before PCA</td>
+</tr>
+<tr>
+<td>Interpreting t-SNE global distances</td>
+<td>Cluster distances are meaningless</td>
+<td>Only trust local neighborhoods</td>
+</tr>
+<tr>
+<td>Using t-SNE for preprocessing</td>
+<td>Non-parametric; can't transform new data</td>
+<td>Use PCA or UMAP instead</td>
+</tr>
+<tr>
+<td>Running t-SNE only once</td>
+<td>Stochastic; may give different structure</td>
+<td>Run multiple times; compare</td>
+</tr>
+<tr>
+<td>Choosing k=2 for PCA always</td>
+<td>Discards most variance</td>
+<td>Use explained variance to choose k</td>
+</tr>
+<tr>
+<td>Not using LDA when you have labels</td>
+<td>Leaving signal on the table</td>
+<td>LDA often outperforms PCA for classification</td>
+</tr>
+<tr>
+<td>PCA before distance-based methods without re-scaling</td>
+<td>PCA output may still need scaling</td>
+<td>Scale after PCA too</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="related-topics">Related Topics</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Why It's Related</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="intro_clustering.html">Clustering</a></td>
+<td>PCA/UMAP often precedes clustering to reduce noise</td>
+</tr>
+<tr>
+<td><a href="intro_feature_engineering.html">Feature Engineering</a></td>
+<td>DR is a form of feature transformation</td>
+</tr>
+<tr>
+<td><a href="../readme.html#classic-question-bank">Classic Question Bank</a></td>
+<td>PCA, t-SNE, UMAP covered in Q&amp;A 59-62</td>
+</tr>
+<tr>
+<td><a href="../docs/study-pattern.html">Study Pattern</a></td>
+<td>DR is an Intermediate (🟡) topic</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+<nav class="pager" aria-label="Track"><a rel="prev" class="prev" href="intro_clustering.html"><small>Previous</small>Clustering</a><a rel="next" class="next" href="intro_feature_engineering.html"><small>Next</small>Feature Engineering</a></nav>
+<p class="edit"><a href="https://github.com/shafaypro/CrackingMachineLearningInterview/blob/master/classical_ml/intro_dimensionality_reduction.md">View or edit this guide on GitHub</a></p>
+</main>
+<footer class="foot">
+  <p>Free and open source on <a href="https://github.com/shafaypro/CrackingMachineLearningInterview">GitHub</a>. Corrections and new questions are welcome.</p>
+</footer>
+</body>
+</html>
